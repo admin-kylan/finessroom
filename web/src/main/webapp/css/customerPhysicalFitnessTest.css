@@ -1,0 +1,291 @@
+#customerPhysicalFitnessTest{
+	
+}
+html,body{
+	overflow-x: auto;
+}
+#customerPhysicalFitnessTest .top{
+	height:40px;
+	border-bottom:1px solid #ccc;
+	line-height:40px;
+	text-indent: 10px;
+}
+#customerPhysicalFitnessTest .content{
+	position: relative;
+}
+#customerPhysicalFitnessTest .content::after{
+	display:block;
+	content: '';
+	clear:both;
+}
+#customerPhysicalFitnessTest .left{
+	float:left;
+	width:15%;
+}
+#customerPhysicalFitnessTest .left .title{
+	height:45px;
+	border-bottom:1px solid #ccc;
+	line-height: 45px;
+	text-align: center;
+}
+#customerPhysicalFitnessTest .left li{
+	position: relative;
+	padding:10px;
+	border-bottom:1px solid #ccc;
+}
+#customerPhysicalFitnessTest .left li:first-child{
+	background:#0cc;
+	color:#fff;
+}
+#customerPhysicalFitnessTest .left li:first-child p{
+	color:#fff;
+}
+#customerPhysicalFitnessTest .left li span{
+	position: absolute;
+	top:3px;
+	right:3px;
+	background: #fc0;
+	width:40px;
+	height:22px;
+	text-align: center;
+	line-height: 22px;
+	color:#fff;
+}
+#customerPhysicalFitnessTest .right{
+	float:left;
+	width:85%;
+	border-left:1px solid #ccc;
+}
+#customerPhysicalFitnessTest .right h3{
+	text-align: center;
+}
+#customerPhysicalFitnessTest .right p{
+	text-align: right;
+	height:25px;
+}
+#customerPhysicalFitnessTest .right table{
+	text-align: center;
+}
+#customerPhysicalFitnessTest .right table tr{
+	height:30px;
+}
+#customerPhysicalFitnessTest .right table thead tr{
+	background:#0cc;
+	color:#fff;
+}
+#customerPhysicalFitnessTest .right table tbody td:first-child,#customerPhysicalFitnessTest .right table tbody td:nth-child(5){
+	background:#f6f6f6;
+}
+#customerPhysicalFitnessTest .right table tbody td.toWhite{
+	background:#fff;
+}
+#customerPhysicalFitnessTest .right table tbody td.toRed{
+	background:#f00;
+	color:#fff;
+}
+#customerPhysicalFitnessTest .right table tbody td.imgBox img{
+	float:left;
+	margin:5px;
+	width:135px;
+	height:112px;
+}
+#customerPhysicalFitnessTest .right table tbody tr.toH80{
+	height:80px;
+}
+#customerPhysicalFitnessTest .right table tbody tr.toH110{
+	height:110px;
+}
+#customerPhysicalFitnessTest .right table input{
+	width:140px;
+	height:40px;
+	border-radius:4px;
+	background:#169bd5;
+	color:#fff;
+	border:none;
+}
+#customerPhysicalFitnessTest .right table span{
+	display: inline-block;
+	margin-left:50px;
+	width:140px;
+	height:40px;
+	border-radius:4px;
+	border:1px solid #ccc;
+	cursor: pointer;
+	line-height: 40px;
+}
+#customerPhysicalFitnessTest .box{
+
+	display: none;
+
+	position: absolute;
+
+	top:60px;
+
+	top:0;
+
+	left:0;
+	right:0;
+	margin:auto;
+	width:600px;
+
+	height:auto;
+	background: #fff;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+	text-align: center;
+
+
+
+
+}
+
+#customerPhysicalFitnessTest .box span{
+	position: absolute;
+	top:2px;
+	right:8px;
+	font-size: 20px;
+	font-weight: bold;
+	-webkit-user-select: none;
+	cursor: pointer;
+}
+#customerPhysicalFitnessTest .box .title{
+	height:35px;
+	background: #00CCCC;
+	line-height: 35px;
+}
+#customerPhysicalFitnessTest .box .set{
+	padding:8px 0;
+}
+#customerPhysicalFitnessTest .box .set input[type=date]{
+	margin:0 5px;
+}
+#customerPhysicalFitnessTest .box .set input[type=submit]{
+	margin-left:50px;
+	width: 90px;
+	height:30px;
+	border: none;
+	border-radius: 5px;
+	background: #169bd5;
+	cursor: pointer;
+	color:#fff;
+}
+#customerPhysicalFitnessTest .box .details{
+	color:#f00;
+}
+#customerPhysicalFitnessTest .box .table-wrap{
+	padding:10px 10px 20px 10px;
+}
+#customerPhysicalFitnessTest .box table{
+	width: 100%;
+}
+#customerPhysicalFitnessTest .box table thead tr{
+	background: #00CCCC;
+}
+#customerPhysicalFitnessTest .box table tbody td:nth-child(5){
+	color:#fc0;
+}
+#customerPhysicalFitnessTest .box table tbody td:nth-child(6),#customerPhysicalFitnessTest .box table tbody td:nth-child(7){
+	color:#03f;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

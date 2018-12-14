@@ -1,0 +1,2232 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>健身团教设置</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<script type="text/javascript" src="js/head_css.js"></script>
+	<link rel="stylesheet" href="css/bootstrap-treeview/bootstrap-treeview.min.css" />
+	<link rel="stylesheet" href="css/fitness-setting.css" />
+	<style type="text/css">
+		#settingCurse .fieldset-info>.flex-box{margin-bottom: 12px;}
+		#settingCurse .fieldset-info + .fieldset-info>.flex-box {margin-bottom: 22px;}
+		.fieldset-info .form-control{border-color: #ccc;}
+		#settingCurse .btn-primary{padding: 5px 12px;}
+		#appointModal .modal-dialog{width: 326px;}
+		#appointModal .modal-dialog tr:hover{background-color: #02ffff;}
+		#appointModal .modal-footer{white-space: nowrap;}
+		#appointModal .modal-footer .btn{border-radius: 4px;padding: 11px;font-size: 13px;width: 130px;}
+		#appointModal .modal-footer .btn+.btn{margin-left: 30px;}
+		.add-kc{padding: 3px 6px;}
+		#privateClass .table-style thead td,#kcFilterModel .table-style thead td{background-color: #00ccff;border: 1px solid #e4e4e4!important;}
+		#privateClass .table-style tbody td{padding: 0 6px!important;}
+		#privateClass .course-img{width: 30px;}
+		#privateClass  .table-striped>tbody>tr,#kcFilterModel .table-striped>tbody>tr{background-color: #f4ffff;}
+		#privateClass  .table-striped>tbody>tr:nth-of-type(odd),#kcFilterModel .table-striped>tbody>tr:nth-of-type(odd){background-color: #fff;}
+		#privateTeachingPackage .table-striped>tbody>tr:nth-of-type(odd){background-color: #f4ffff;}
+		#kcFilterModel .modal-dialog{width: 1024px;}
+		#kcFilterModel .modal-content{border-radius: 0;min-height: 500px;}
+		#kcFilterModel .modal-body{padding: 0;}
+		#kcFilterModel .modal-header .close{position: absolute;width: 40px;height: 30px;background-color: #00cccc;right: 5px;top: 4px;color: #fff;border-radius: 6px;}
+		#kcFilterModel .one-level + .second-level{color: #333;}
+		#kcFilterModel .w130{border-right: 1px solid #ddd;min-height: 465px;}
+	</style>
+</head>
+
+<body>
+	<!-- 整个页面内容 -->
+	<div id="wrapper" v-cloak>
+		<!-- 顶部菜单 -->
+		<top-menu-bar></top-menu-bar>
+		<!-- END 顶部菜单 -->
+		
+		<!-- 左侧菜单  -->
+		<sidebar-nav></sidebar-nav>
+		<!-- END 左侧菜单 -->
+		
+		<!-- 右边容器 -->
+		<div class="main">
+			<!-- 主要内容 -->
+			<div class="main-content">
+				<!--真正开始写你的页面-->
+				<div class="ml3 min-height-page bgc-fff ptb13 border1-e4e4e4">
+				  <ul class="nav nav-tabs nav-style" role="tablist">
+				    <li role="presentation" class="active"><a href="#privateCategory" aria-controls="category" role="tab" data-toggle="tab">私教种类</a></li>
+				    <li role="presentation"><a href="#settingCurse" aria-controls="settingCurse" role="tab" data-toggle="tab">私教设置</a></li>
+				    <li role="presentation"><a href="#settingTrain" aria-controls="settingTrain" role="tab" data-toggle="tab">训练课程设置</a></li>
+				  </ul>
+				
+				  <!-- Tab panes -->
+				  <div class="tab-content">
+				    <div role="tabpanel" class="tab-pane tab-pane-style active" id="privateCategory">
+				      <div class="main-tabpanel" v-show="!addPrivate && !addPrivateCourse ">
+					      <ul class="nav nav-tabs sub-nav-style" role="tablist">
+						    <li role="presentation" class="active"><a href="#privateClass" aria-controls="privateClass" role="tab" data-toggle="tab">私教课程</a></li>
+						    <li role="presentation"><a href="#privateTeachingPackage" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">单节训练课程设置</a></li>
+						  </ul>
+						  <div class="tab-content">
+				    		<div role="tabpanel" class="tab-pane tab-pane-style active" id="privateClass">
+						    	<div class="plr10 ptb5">
+						    		课程种类： <span class="c-00cccc mr30">2</span>
+						    		<button class="btn btn-red add-kc" @click="addKcc">添加课程</button>
+						    	</div>
+				    			<table class="table table-striped table-bordered table-style mlr-1">
+				    				<thead>
+				    					<tr>
+				    						<td>序号</td>
+				    						<td>私教课名称</td>
+				    						<td>时长（分）</td>
+				    						<td>市场价</td>
+				    						<td>促销价</td>
+				    						<td>会员价</td>
+				    						<td>有效期</td>
+				    						<td>课程剩余提醒</td>
+				    						<td>是否【挂账】</td>
+				    						<td>提成设置</td>
+				    						<td>排课教师</td>
+				    						<td>提成比例</td>
+				    						<td>会员指定教师</td>
+				    						<td>前台显示</td>
+				    						<td>操作</td>
+				    					</tr>
+				    				</thead>
+				    				<tbody>
+				    					<tr>
+				    						<td>1</td>
+				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
+				    						<td>60</td>
+				    						<td><b>600.00</b></td>
+				    						<td><b class="c-ff0000">400.00</b></td>
+				    						<td><b class="c-ff9900">400.00</b></td>
+				    						<td><b class="c-0000ff">3</b>  天</td>
+				    						<td><b>0</b></td>
+				    						<td><b>是</b></td>
+				    						<td><span class="c-ffcc00">金额</span></td>
+				    						<td><span class="c-ffcc00">￥10.00</span></td>
+				    						<td>比例</td>
+				    						<td><b>2</b> %</td>
+				    						<td>是</td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>1</td>
+				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
+				    						<td>60</td>
+				    						<td><b>600.00</b></td>
+				    						<td><b class="c-ff0000">400.00</b></td>
+				    						<td><b class="c-ff9900">400.00</b></td>
+				    						<td><b class="c-0000ff">与卡同期</b></td>
+				    						<td><b>0</b></td>
+				    						<td><b>是</b></td>
+				    						<td>比例</td>
+				    						<td><b>2</b> %</td>
+				    						<td><span class="c-ffcc00">金额</span></td>
+				    						<td><span class="c-ffcc00">￥10.00</span></td>
+				    						<td>是</td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>1</td>
+				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
+				    						<td>60</td>
+				    						<td><b>600.00</b></td>
+				    						<td><b class="c-ff0000">400.00</b></td>
+				    						<td><b class="c-ff9900">400.00</b></td>
+				    						<td><b class="c-0000ff">与卡同期</b></td>
+				    						<td><b>0</b></td>
+				    						<td><b>是</b></td>
+				    						<td>比例</td>
+				    						<td><b>2</b> %</td>
+				    						<td><span class="c-ffcc00">金额</span></td>
+				    						<td><span class="c-ffcc00">￥10.00</span></td>
+				    						<td>是</td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>1</td>
+				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
+				    						<td>60</td>
+				    						<td><b>600.00</b></td>
+				    						<td><b class="c-ff0000">400.00</b></td>
+				    						<td><b class="c-ff9900">400.00</b></td>
+				    						<td><b class="c-0000ff">与卡同期</b></td>
+				    						<td><b>0</b></td>
+				    						<td><b>是</b></td>
+				    						<td>比例</td>
+				    						<td><b>2</b> %</td>
+				    						<td><span class="c-ffcc00">金额</span></td>
+				    						<td><span class="c-ffcc00">￥10.00</span></td>
+				    						<td>是</td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>1</td>
+				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
+				    						<td>60</td>
+				    						<td><b>600.00</b></td>
+				    						<td><b class="c-ff0000">400.00</b></td>
+				    						<td><b class="c-ff9900">400.00</b></td>
+				    						<td><b class="c-0000ff">与卡同期</b></td>
+				    						<td><b>0</b></td>
+				    						<td><b>是</b></td>
+				    						<td>比例</td>
+				    						<td><b>2</b> %</td>
+				    						<td><span class="c-ffcc00">金额</span></td>
+				    						<td><span class="c-ffcc00">￥10.00</span></td>
+				    						<td>是</td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    				</tbody>
+				    			</table>
+					    	</div>
+				    		<div role="tabpanel" class="tab-pane tab-pane-style" id="privateTeachingPackage">
+				    			<div class="plr10 ptb5">
+						    		课程种类： <span class="c-00cccc mr30">2</span>
+						    		<button class="btn btn-red add-kc" @click="addKc">添加课程</button>
+						    	</div>
+				    			<table class="table table-striped table-bordered table-style mlr-1">
+				    				<thead>
+				    					<tr>
+				    						<td>序号</td>
+				    						<td>套餐名称</td>
+				    						<td>总数量</td>
+				    						<td>市场价</td>
+				    						<td>促销价</td>
+				    						<td>会员价</td>
+				    						<td>有效期</td>
+				    						<td>课时计算数</td>
+				    						<td>课时计算说明</td>
+				    						<td>续购提醒</td>
+				    						<td>是否可以【挂账】消费</td>
+				    						<td>前台是否显示</td>
+				    						<td>可使用项目</td>
+				    						<td>操作</td>
+				    					</tr>
+				    				</thead>
+				    				<tbody>
+				    					<tr>
+				    						<td>1</td>
+				    						<td><span class="c-00ccff">减肥套餐</span></td>
+				    						<td><b class="c-009900">30</b></td>
+				    						<td><b>3000.00</b></td>
+				    						<td><b class="c-ff0000">2500.00</b></td>
+				    						<td><b class="c-ff9900">2400.00</b></td>
+				    						<td>12个月</td>
+				    						<td><b>1</b> 节</td>
+				    						<td>按1节12个月计算</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>2</td>
+				    						<td><span class="c-00ccff">减肥套餐</span></td>
+				    						<td><b class="c-009900">30</b></td>
+				    						<td><b>3000.00</b></td>
+				    						<td><b class="c-ff0000">2500.00</b></td>
+				    						<td><b class="c-ff9900">2400.00</b></td>
+				    						<td>12个月</td>
+				    						<td><b>1</b> 节</td>
+				    						<td>按1节12个月计算</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>3</td>
+				    						<td><span>私教套餐</span></td>
+				    						<td><b class="c-009900">30</b></td>
+				    						<td><b>3000.00</b></td>
+				    						<td><b class="c-ff0000">2500.00</b></td>
+				    						<td><b class="c-ff9900">2400.00</b></td>
+				    						<td>12个月</td>
+				    						<td><b>1</b> 节</td>
+				    						<td>按1节12个月计算</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>4</td>
+				    						<td><span class="c-00ccff">减肥套餐</span></td>
+				    						<td><b class="c-009900">30</b></td>
+				    						<td><b>3000.00</b></td>
+				    						<td><b class="c-ff0000">2500.00</b></td>
+				    						<td><b class="c-ff9900">2400.00</b></td>
+				    						<td>12个月</td>
+				    						<td><b>1</b> 节</td>
+				    						<td>按1节12个月计算</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    					<tr>
+				    						<td>5</td>
+				    						<td><span>私教套餐</span></td>
+				    						<td><b class="c-009900">30</b></td>
+				    						<td><b>3000.00</b></td>
+				    						<td><b class="c-ff0000">2500.00</b></td>
+				    						<td><b class="c-ff9900">2400.00</b></td>
+				    						<td>12个月</td>
+				    						<td><b>1</b> 节</td>
+				    						<td>按1节12个月计算</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td>是</td>
+				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
+				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					</tr>
+				    				</tbody>
+				    			</table>
+				    		</div>
+						  </div>
+						   <!--默认课程计划-->
+					    	<div class="modal fade modal-style" tabindex="-1" id="viewModal" role="dialog" data-backdrop="false">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        <h4 class="modal-title">套餐项目详情</h4>
+							      </div>
+							      <div class="modal-body p0">
+							      	<div class="p8">
+							      		套餐所包含课程数量：<b>3</b>
+							      	</div>
+							      	<div class="mlr-1">
+							      		<table class="table table-style table-bordered">
+								      		<thead>
+								      			<tr>
+								      				<td>序号</td>
+								      				<td>使用门店</td>
+								      				<td>使用场馆</td>
+								      				<td>使用项目</td>
+								      				<td>课程数量</td>
+								      				<td>每天限用数量</td>
+								      				<td>课程操作数量</td>
+								      			</tr>
+								      		</thead>
+								      		<tbody>
+								      			<tr>
+								      				<td>1</td>
+								      				<td>软件园店</td>
+								      				<td>私教场馆</td>
+								      				<td><span class="c-00ccff">减肥套餐</span></td>
+								      				<td><b>30</b> 节</td>
+								      				<td>1</td>
+								      				<td><span class="c-ff0000">删除</span></td>
+								      			</tr>
+								      			<tr>
+								      				<td>1</td>
+								      				<td>软件园店</td>
+								      				<td>私教场馆</td>
+								      				<td><span class="c-00ccff">减肥套餐</span></td>
+								      				<td><b>30</b> 节</td>
+								      				<td>1</td>
+								      				<td><span class="c-ff0000">删除</span></td>
+								      			</tr>
+								      			<tr>
+								      				<td>1</td>
+								      				<td>软件园店</td>
+								      				<td>私教场馆</td>
+								      				<td><span class="c-00ccff">减肥套餐</span></td>
+								      				<td><b>30</b> 节</td>
+								      				<td>1</td>
+								      				<td><span class="c-ff0000">删除</span></td>
+								      			</tr>
+								      		</tbody>
+								      	</table>
+							      	</div>
+							      </div>
+							    </div><!-- /.modal-content -->
+							  </div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+				      </div>
+				      <div id="addPrivate" v-show="addPrivateCourse">
+				      	<div class="p5">
+							<img src="img/goback.png" @click="addKcc" width="30px"><span class="c-999 ml10">私教种类</span>/添加私教套餐
+					  	</div>
+					  	<div class="add-private-course-box">
+					  		<div class="flex-box">
+					  			<div class="w575">
+							  		<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				<span class="c-ff0000">*</span>私教名称：
+							  			</div>
+							  			<div class="flex-box-item">
+							  				<input type="text" class="form-control w425" placeholder="私教名称" />
+							  			</div>
+							     	</div>
+							  		<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				<span class="c-ff0000">*</span>私教时长：
+							  			</div>
+							  			<div class="w400">
+							  				<input type="text" class="form-control" placeholder="私教时长" />
+							  			</div>
+							  			<b class="flex-box-item">&emsp;分</b>
+							     	</div>
+							  		<div class="flex-box">
+							  			<div class="flex-box-item flex-box mb0">
+							  				<div class="w150 text-right">
+								  				<span class="c-ff0000">*</span>市场价：
+								  			</div>
+								  			<div class="flex-box-item">
+								  				<input type="text" class="form-control w95" placeholder="市场价" />
+								  			</div>
+							  			</div>
+							  			<div class="flex-box mb0">
+							  				<div class="w70 text-right">
+								  				<span class="c-ff0000">*</span>促销价：
+								  			</div>
+								  			<div class="flex-box-item">
+								  				<input type="text" class="form-control w95" placeholder="促销价" />
+								  			</div>
+							  			</div>
+							  			<div class="flex-box mb0">
+							  				<div class="w70 text-right">
+								  				<span class="c-ff0000">*</span>会员价：
+								  			</div>
+								  			<div class="flex-box-item">
+								  				<input type="text" class="form-control w95" placeholder="会员价" />
+								  			</div>
+							  			</div>
+					  				</div>
+					  				<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				<span class="c-ff0000">*</span>有效期：
+							  			</div>
+							  			<div class="flex-box-item checkbox mtb0">
+							  				<label class="mr20"><input type="radio" />与卡同期</label>
+					  						<label><input type="radio" />选择期限&emsp;</label>
+							  				<input type="text" class="form-control w60 br0" /><select class="form-control w55 br0">
+							  					<option selected="selected">天</option>
+							  					<option>月</option>
+							  				</select>
+							  			</div>
+							     	</div>
+					  				<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				<span class="c-ff0000">*</span>是否挂账消费：
+							  			</div>
+							  			<div class="flex-box-item checkbox mtb0">
+							  				<label class="mr20"><input type="radio" />是</label>
+					  						<label><input type="radio" />否</label>
+							  			</div>
+							     	</div>
+					  				<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				排课老师提成设置：
+							  			</div>
+							  			<div class="flex-box-item checkbox mtb0">
+							  				<label><input type="radio" />比例&emsp;</label>
+							  				<input class="form-control w65 mr20" />
+					  						<label><input type="radio" />金额&emsp;</label>
+							  				<input class="form-control w65" />
+							  			</div>
+							     	</div>
+					  				<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				指定老师提成设置：
+							  			</div>
+							  			<div class="flex-box-item checkbox mtb0">
+							  				<label><input type="radio" />比例&emsp;</label>
+							  				<input class="form-control w65 mr20" />
+					  						<label><input type="radio" />金额&emsp;</label>
+							  				<input class="form-control w65" />
+							  			</div>
+							     	</div>
+					  				<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				<span class="c-ff0000">*</span>是否前台显示：
+							  			</div>
+							  			<div class="flex-box-item checkbox mtb0">
+							  				<label class="mr20"><input type="radio" />是</label>
+					  						<label><input type="radio" />否</label>
+							  			</div>
+							     	</div>
+					  				<div class="flex-box">
+							  			<div class="w150 text-right">
+							  				<span class="c-ff0000">*</span>默认课程计划：
+							  			</div>
+							  			<div class="flex-box-item">
+							  				<input type="text" style="background-color: #fff;" readonly="readonly" @click="defaultCurriculumPlanModal" placeholder="--选择课程计划--" class="form-control w375" />
+							  			</div>
+							     	</div>
+					  			</div>
+					  			<div class="flex-box-item flex-box flex-column">
+					  				<div class="file-box">
+						  				<img src="img/positive.png" width="300px" />
+					  					<input type="file" />
+					  				</div>
+					  				<div class="text-center ptb10">
+					  					<button class="btn btn-primary w200">上传私教图片</button>
+					  				</div>
+					  				<span class="c-ffcc00">支持JPG,PNG格式，大小不能大于1M</span>
+					  			</div>
+					  		</div>
+					  		<div class="flex-box flex-start">
+					  			<div class="w150 text-right">
+					  				<span class="c-ff0000">*</span>课程详情：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<p class="c-ffcc00">编辑课程详情，可让会员更了解该课程的具体信息，增加约课率</p>
+					  				<div id="eidt-area"></div>
+					  			</div>
+					     	</div>
+					  		<div class="flex-box pt20 pb10">
+					  			<div class="w150 text-right">
+					  			</div>
+					  			<div class="flex-box-item btn-lg-box">
+					  				<button class="btn btn-primary">保存</button>
+					  				<button class="btn btn-fff">取消</button>
+					  			</div>
+					     	</div>
+					   </div>
+					    <!--默认课程计划-->
+				    	<div class="modal fade modal-style" tabindex="-1" id="defaultCurriculumPlanModal" role="dialog" data-backdrop="false">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						        <h4 class="modal-title">选择动作</h4>
+						      </div>
+						      <div class="modal-body">
+						      	<div class="flex-box flex-stretch">
+						      		<div class="w200">
+						      			<ul class="action-tree-list">
+						      				<li>
+						      					<a><span class="reduce-icon">－</span>训练课程系列1</a>
+						      					<ul class="action-tree-child">
+						      						<li>
+						      							<a>
+						      								训练课程1
+						      							</a>
+						      						</li>
+						      						<li>
+						      							<a>
+						      								训练课程1
+						      							</a>
+						      						</li>
+						      						<li>
+						      							<a>
+						      								训练课程1
+						      							</a>
+						      						</li>
+						      						<li>
+						      							<a>
+						      								<span class="zdy-text">自定义训练课程</span>
+						      							</a>
+						      						</li>
+						      					</ul>
+						      				</li>
+						      				<li>
+						      					<a><span class="reduce-icon">－</span>训练训练课程1</a>
+						      					<ul class="action-tree-child">
+						      						<li>
+						      							<a>
+						      								训练课程1
+						      							</a>
+						      						</li>
+						      						<li>
+						      							<a>
+						      								训练课程1
+						      							</a>
+						      						</li>
+						      						<li>
+						      							<a>
+						      								训练课程1
+						      							</a>
+						      						</li>
+						      						<li>
+						      							<a>
+						      								<span class="zdy-text">自定义训练课程</span>
+						      							</a>
+						      						</li>
+						      					</ul>
+						      				</li>
+						      				<li>
+						      					<a><span class="reduce-icon">－</span><span class="zdy-text">自定义训练课程</span></a>
+						      				</li>
+						      			</ul>
+						      		</div>
+						      		<div class="flex-box-item">
+						      			<div class="p8">
+						      				<button class="btn btn-primary w140">添加选中</button>
+						      			</div>
+						      			<div class=" mlr-1">
+							      			<table class="table table-bordered table-style">
+							      				<thead>
+							      					<tr>
+							      						<td>序号</td>
+							      						<td></td>
+							      						<td>动作类型</td>
+							      						<td>动作名称</td>
+							      						<td>时间（分）</td>
+							      						<td>强度</td>
+							      						<td>次数</td>
+							      						<td class="w200">备注</td>
+							      					</tr>
+							      				</thead>
+							      				<tbody>
+							      					<tr>
+							      						<td>1</td>
+							      						<td><img src="img/addImg.png" width="80px"/></td>
+							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      						<td>难度增大型</td>
+							      						<td><b class="c-0000ff">20</b>分钟</td>
+							      						<td>一般</td>
+							      						<td><b class="c-0000ff">30</b></td>
+							      						<td></td>
+							      					</tr>
+							      					<tr>
+							      						<td>2</td>
+							      						<td><img src="img/addImg.png" width="80px"/></td>
+							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      						<td>难度增大型</td>
+							      						<td><b class="c-0000ff">20</b>分钟</td>
+							      						<td><span class="c-ccc">填写强度</span></td>
+							      						<td><b class="c-ccc">填写次数</b></td>
+							      						<td></td>
+							      					</tr>
+							      					<tr>
+							      						<td>3</td>
+							      						<td><img src="img/addImg.png" width="80px"/></td>
+							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      						<td>难度增大型</td>
+							      						<td><b class="c-0000ff">20</b>分钟</td>
+							      						<td><span class="c-ccc">填写强度</span></td>
+							      						<td><b class="c-ccc">填写次数</b></td>
+							      						<td></td>
+							      					</tr>
+							      					<tr>
+							      						<td>4</td>
+							      						<td><img src="img/addImg.png" width="80px"/></td>
+							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      						<td>难度增大型</td>
+							      						<td><b class="c-0000ff">20</b>分钟</td>
+							      						<td><span class="c-ccc">填写强度</span></td>
+							      						<td><b class="c-ccc">填写次数</b></td>
+							      						<td></td>
+							      					</tr>
+							      					<tr>
+							      						<td>5</td>
+							      						<td><img src="img/addImg.png" width="80px"/></td>
+							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      						<td>难度增大型</td>
+							      						<td><b class="c-0000ff">20</b>分钟</td>
+							      						<td><span class="c-ccc">填写强度</span></td>
+							      						<td><b class="c-ccc">填写次数</b></td>
+							      						<td></td>
+							      					</tr>
+							      					<tr>
+							      						<td>6</td>
+							      						<td><img src="img/addImg.png" width="80px"/></td>
+							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      						<td>难度增大型</td>
+							      						<td><b class="c-0000ff">20</b>分钟</td>
+							      						<td><span class="c-ccc">填写强度</span></td>
+							      						<td><b class="c-ccc">填写次数</b></td>
+							      						<td></td>
+							      					</tr>
+							      				</tbody>
+							      			</table>
+							      		</div>
+						      		</div>
+						      	</div>
+						      </div>
+						    </div><!-- /.modal-content -->
+						  </div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+				      </div>
+					  <div id="addPrivate" v-show="addPrivate">
+					  	<div class="p5">
+							<img src="img/goback.png" @click="addKc" width="30px"><span class="c-999 ml10">私教种类</span>/添加私教套餐
+					  	</div>
+					  	<div class="add-private-box">
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				套餐名称：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w300" value="减肥套餐" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				总数量：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w300" value="30" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				市场价：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w300" value="3000.00" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				促销价：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w300" value="2500.00" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				会员价：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w300" value="2400.00" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				有效期：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w220" value="2400.00" /><select class="form-control w80">
+					  					<option>天</option>
+					  					<option selected="selected">月</option>
+					  					<option>年</option>
+					  				</select>
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				课时计算数：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w300" value="按1节12个月计算" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box flex-start">
+					  			<div class="w160 text-right">
+					  				课时计算说明：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<textarea rows="5" class="form-control w300" ></textarea>
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				剩余课程数续购提醒数：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<input type="text" class="form-control w180" value="10" />
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				是否可以挂账消费：
+					  			</div>
+					  			<div class="flex-box-item checkbox mtb0">
+					  				<label class="mr20"><input type="radio" />是</label>
+					  				<label><input type="radio" />否</label>
+					  			</div>
+					  		</div>
+					  		<div class="flex-box">
+					  			<div class="w160 text-right">
+					  				前台是否显示：
+					  			</div>
+					  			<div class="flex-box-item checkbox mtb0">
+					  				<label class="mr20"><input type="radio" />是</label>
+					  				<label><input type="radio" />否</label>
+					  			</div>
+					  		</div>
+					  		<div class="flex-box flex-start">
+					  			<div class="w160 text-right mt3">
+					  				可使用项目：
+					  			</div>
+					  			<div class="flex-box-item">
+					  				<p>					  					
+					  					<button type="button" @click="kcFilterModel" class="btn btn-primary add-kc w85">添加课程</button>
+					  				</p>
+					  				<table class="table w600 table-style table-bordered">
+					  					<thead>
+					  						<tr>
+					  							<td>序号</td>
+					  							<td>使用门店</td>
+					  							<td>使用场馆</td>
+					  							<td>使用项目</td>
+					  							<td>课程数量</td>
+					  							<td>每天限用数量</td>
+					  							<td>操作</td>
+					  						</tr>
+					  					</thead>
+					  					<tbody>
+					  						<tr>
+					  							<td>1</td>
+					  							<td>软件园店</td>
+					  							<td>私教场馆</td>
+					  							<td><span class="c-00ccff">减肥套餐</span></td>
+					  							<td><b>30</b> 节</td>
+					  							<td>1</td>
+					  							<td><span class="c-ff0000">删除</span></td>
+					  						</tr>
+					  						<tr>
+					  							<td>2</td>
+					  							<td>软件园店</td>
+					  							<td>私教场馆</td>
+					  							<td><span class="c-00ccff">减肥套餐</span></td>
+					  							<td><span class="c-ccc">填写课程数量</span></td>
+					  							<td><span class="c-ccc">填写限购数量</span></td>
+					  							<td><span class="c-ff0000">删除</span></td>
+					  						</tr>
+					  					</tbody>
+					  				</table>
+					  			</div>
+					  		</div>
+					  		<div class="flex-box flex-start">
+					  			<div class="w120 text-right">
+					  			</div>
+					  			<div class="flex-box-item btn-lg-box">
+					  				<button class="btn btn-primary">保存</button>
+					  				<button class="btn btn-fff">取消</button>
+					  			</div>
+					  		</div>
+					  	</div>
+					  	<!--修改动作名称-->
+		    			<div class="modal fade modal-style" id="kcFilterModel" tabindex="-1" role="dialog" data-backdrop="false">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						      	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						        <h4 class="modal-title">选择指定消费的场馆</h4>
+						      </div>
+						      <div class="modal-body">
+						      	<div class="flex-box flex-stretch">
+							      	<div class="w130">
+							      		<div id="area_tree"></div>
+							      	</div>
+							       	<div class="flex-box-item mt40 mlr-1">
+							       		<table class="table table-striped table-bordered table-style">
+						    				<thead>
+						    					<tr>
+						    						<td class="w35"></td>
+						    						<td>序号</td>
+						    						<td>私教课名称</td>
+						    						<td>时长（分）</td>
+						    						<td>市场价</td>
+						    						<td>促销价</td>
+						    						<td>会员价</td>
+						    						<td>有效期</td>
+						    						<td>课程剩余提醒</td>
+						    						<td>是否【挂账】</td>
+						    					</tr>
+						    				</thead>
+						    				<tbody>
+						    					<tr>
+						    						<td><input type="checkbox"></td>
+						    						<td>1</td>
+						    						<td>私教一对一</td>
+						    						<td>30</td>
+						    						<td><b>3000.00</b></td>
+						    						<td><b class="c-ff0000">2500.00</b></td>
+						    						<td><b class="c-ff9900">2400.00</b></td>
+						    						<td><b class="c-0000ff">3</b> 天</td>
+						    						<td><b>0</b></td>
+						    						<td>是</td>
+						    					</tr>
+						    					<tr>
+						    						<td><input type="checkbox"></td>
+						    						<td>1</td>
+						    						<td>私教一对一</td>
+						    						<td>30</td>
+						    						<td><b>3000.00</b></td>
+						    						<td><b class="c-ff0000">2500.00</b></td>
+						    						<td><b class="c-ff9900">2400.00</b></td>
+						    						<td><b class="c-0000ff">3</b> 天</td>
+						    						<td><b>0</b></td>
+						    						<td>是</td>
+						    					</tr>
+						    					<tr>
+						    						<td><input type="checkbox"></td>
+						    						<td>1</td>
+						    						<td>私教一对一</td>
+						    						<td>30</td>
+						    						<td><b>3000.00</b></td>
+						    						<td><b class="c-ff0000">2500.00</b></td>
+						    						<td><b class="c-ff9900">2400.00</b></td>
+						    						<td><b class="c-0000ff">3</b> 天</td>
+						    						<td><b>0</b></td>
+						    						<td>是</td>
+						    					</tr>
+						    					<tr>
+						    						<td><input type="checkbox"></td>
+						    						<td>1</td>
+						    						<td>私教一对一</td>
+						    						<td>30</td>
+						    						<td><b>3000.00</b></td>
+						    						<td><b class="c-ff0000">2500.00</b></td>
+						    						<td><b class="c-ff9900">2400.00</b></td>
+						    						<td><b class="c-0000ff">与卡同期</b></td>
+						    						<td><b>0</b></td>
+						    						<td>是</td>
+						    					</tr>
+								       		</tbody>
+								       	</table>
+								       	<div class="p8 checkbox mtb0">
+								       		<label>
+								       			<input type="checkbox" class="ml-15" /> 全选
+								       		</label>
+								       		<button class="btn btn-primary ml15 w80">确定</button>
+								       	</div>
+							       	</div>
+							    </div>
+						      </div>
+						    </div><!-- /.modal-content -->
+						  </div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+					  </div>
+					</div>
+				    <div role="tabpanel" class="tab-pane tab-pane-style" id="settingCurse">
+				    	<div class="plr18">
+					    	<fieldset class="fieldset-info border1-ccc br4 pr30 pl60 ptb15 mt5">
+					    		<legend class="c-333 ml-40">预约限制</legend>
+					    		<div class="flex-box">
+					    			<div class="w340">
+					    				会员在私教开始前多少分钟不能预约？：
+					    			</div>
+					    			<div class="flex-box-item">
+					    				<input type="text" class="form-control w100" value="10" />&emsp;分钟
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w340">
+					    				会员在私教开始前多少分钟不能取消预约？：
+					    			</div>
+					    			<div class="flex-box-item">
+					    				<input type="text" class="form-control w100" value="60" />&emsp;分钟
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w340">
+					    				场馆是否打开了私教签课功能？：
+					    			</div>
+					    			<div class="flex-box-item">
+					    				<div class="checkbox mt0">
+								    		<label class="mr20"><input type="checkbox" value="1" />打开</label><label><input type="checkbox" value="0" />关闭</label>
+								    	</div>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="flex-box-item input-sm-box">
+					    				普通会员可以预约
+					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
+					    					<option>天</option>
+					    					<option>周</option>
+					    					<option>年</option>
+					    					<option>月</option>
+					    				</select>
+					    				天内的课程，同时可以存在
+					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				天预约。会员需缴纳
+					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				元/次  可解除冻结
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="flex-box-item input-sm-box">
+					    				银卡会员可以预约
+					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
+					    					<option>天</option>
+					    					<option>周</option>
+					    					<option>年</option>
+					    					<option>月</option>
+					    				</select>
+					    				天内的课程，同时可以存在
+					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				天预约。会员需缴纳
+					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				元/次  可解除冻结
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="flex-box-item input-sm-box">
+					    				金卡会员可以预约
+					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
+					    					<option>天</option>
+					    					<option>周</option>
+					    					<option>年</option>
+					    					<option>月</option>
+					    				</select>
+					    				天内的课程，同时可以存在
+					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				天预约。会员需缴纳
+					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				元/次  可解除冻结
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="flex-box-item input-sm-box">
+					    				砖卡会员可以预约
+					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
+					    					<option>天</option>
+					    					<option>周</option>
+					    					<option>年</option>
+					    					<option>月</option>
+					    				</select>
+					    				天内的课程，同时可以存在
+					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				天预约。会员需缴纳
+					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				元/次  可解除冻结
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="flex-box-item input-sm-box">
+					    				会员
+					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
+					    					<option>天</option>
+					    					<option>周</option>
+					    					<option>年</option>
+					    					<option>月</option>
+					    				</select>
+					    				天内有
+					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				次预约未取消未消费则
+					    				<input type="text" class="form-control br0 w60" value="100" /><select class="form-control w42 br0">
+					    					<option>天</option>
+					    					<option>周</option>
+					    					<option>年</option>
+					    					<option>月</option>
+					    				</select>
+					    				内，禁止预约，同时将取消已预约的课程
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="flex-box-item input-sm-box">	
+						    			会员信息修改：仅限在预约上课前
+						    			<input type="text" class="form-control w60 br0" value="20" />
+						    			小时以前可以修改
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			上课信息：未来预约
+						    			<label class="mr15 ml3">
+						    				<input type="radio" name="access" />允许
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="access" />不允许&emsp;上课 
+					    				</label>
+						    		</div>
+						    	</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			前台开课
+						    			<label class="mr15 ml3">
+						    				<input type="radio" name="access" />允许
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="access" />不允许 
+					    				</label>
+					    				&emsp;修改上课教练
+						    		</div>
+						    	</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			卡种次数或余额不足时
+						    			<label class="mr15 ml3">
+						    				<input type="radio" name="access" />允许现金单次支付继续消费
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="access" />不允许继续消费 
+					    				</label>
+						    		</div>
+						    	</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			会员消费本模块仅限凭证（可多选）：
+						    			<label class="mr15 ml3">
+						    				<input type="checkbox" name="access" />会员卡
+					    				</label>
+						    			<label class="mr15">
+						    				<input type="checkbox" name="access" />密码
+					    				</label>
+						    			<label>
+						    				<input type="checkbox" name="access" />指纹 
+					    				</label>
+						    		</div>
+						    	</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			会员消费结账时是否需要输入凭证：
+						    			<label class="mr15 ml3">
+						    				<input type="radio" name="access" />需要输入
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="access" />不需要输入 
+					    				</label>
+						    		</div>
+						    	</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			教练开始时是否需要输入指纹：
+						    			<label class="mr15 ml3">
+						    				<input type="radio" name="access" />需要
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="access" />不需要
+					    				</label>
+						    		</div>
+						    	</div>
+					    		<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">						    			
+						    			模块消费前是否限制：
+						    			<label class="ml10">
+						    				<input type="radio" name="access" />启用，仅当会员卡在
+					    				</label>
+					    				<button class="btn btn-primary" @click="appointModal">指定场馆（单击选择）</button> 消费后才可以在本模块消费<br />
+						    			<label style="margin-left: 134px;margin-top: 8px;">
+						    				<input type="radio" name="access" />不启用
+					    				</label>
+						    		</div>
+						    	</div>
+					    	</fieldset>
+					    	<fieldset class="fieldset-info  border1-ccc br4 pr30 pl60 ptb15 mt5 mb0">
+					    		<legend class="c-333 ml-40">私教通知</legend>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				会员预约私教预约后，是否提醒教练？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="keman" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="keman" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				会员预约私教预约后，是否提醒会员？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="tuanke" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="tuanke" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				会员取消私教预约后，是否提醒教练？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="txjl" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="txjl" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				会员取消私教预约后，是否提醒会员？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="txhy" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="txhy" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				教练/工作人员为会员代约私教时，是否提醒会员？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="dkhy" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="dkhy" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				教练/工作人员为会员代约私教时，是否提醒教练？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="dkjl" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="dkjl" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				教练/工作人员为会员取消私教时，是否提醒教练？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="dkqx" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="dkqx" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				教练/工作人员为会员取消私教时，是否提醒会员？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="dktx" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="dktx" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				会员在私教开始前是否收到通知？：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<label class="mr20 ml3">
+						    				<input type="radio" name="kstz" />打开
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="kstz" />关闭
+					    				</label>
+					    			</div>
+					    		</div>
+					    		<div class="flex-box">
+					    			<div class="w500">
+					    				会员在私教开课前多少分钟收到通知：
+					    			</div>
+					    			<div class="flex-box-item checkbox mtb0">
+					    				<input class="form-control w100" value="10" />&emsp;分钟
+					    			</div>
+					    		</div>
+					    	</fieldset>
+				    	</div>
+				    	<!--修改动作名称-->
+		    			<div class="modal fade modal-style" id="appointModal" tabindex="-1" role="dialog" data-backdrop="false">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h4 class="modal-title">选择指定消费的场馆</h4>
+						      </div>
+						      <div class="modal-body">
+						       	<table class="table table-style table-bordered">
+						       		<tbody>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>场馆</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>私教</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>健身</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>私教</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>健身</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>健身</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>私教</td>
+						       			</tr>
+						       			<tr>
+						       				<td class="w70"><input type="checkbox"></td>
+						       				<td>健身</td>
+						       			</tr>
+						       		</tbody>
+						       	</table>
+						       	<span class="c-ff0000" style="font-size: 14px;">但选择多个场馆时，仅在一个场馆消费即可</span>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-primary">修改</button>
+						        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+						      </div>
+						    </div><!-- /.modal-content -->
+						  </div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+				    </div>
+				    <div role="tabpanel" class="tab-pane tab-pane-style" id="settingTrain">
+				    	 <ul class="nav nav-tabs sub-nav-style" role="tablist">
+						    <li role="presentation" class="active"><a href="#settingAction" aria-controls="settingAction" role="tab" data-toggle="tab">动作设置</a></li>
+						    <li role="presentation"><a href="#simpleLinkSetting" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">单节训练课程设置</a></li>
+						    <li role="presentation"><a href="#setMealSetting" aria-controls="setMealSetting" role="tab" data-toggle="tab">训练套餐设置</a></li>
+						  </ul>
+						  <div class="tab-content">
+				    		<div role="tabpanel" class="tab-pane tab-pane-style active" id="settingAction">
+				    			<div class="flex-box flex-start">
+				    				<div class="w200 min-height-page-sm">
+						    			<button class="btn btn-red btn-add-action" @click="addAction">新增动作系列</button>
+						    			<ul class="action-list">
+						    				<li class="active"><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    			</ul>
+						    		</div>
+						    		<div class="flex-box-item p10">
+						    			<fieldset class="fieldset-info mtb0 br4 pb20">
+						    				<legend class="c-ffcc00 ml8">新增动作名称</legend>
+				    						<div class="flex-box flex-start">
+				    							<div class="flex-box-item">
+				    								<div class="flex-box">
+						    							<div class="w100 text-right">
+						    								<span class="c-ff0000">*</span>动作名称：
+						    							</div>
+						    							<div class="flex-box-item">
+						    								<input class="form-control br0" placeholder="填写动作名称（限制15个字符）" />
+						    							</div>
+				    								</div>
+				    								<div class="flex-box">
+				    									<div class="w100 text-right">
+						    								<span class="c-ff0000">*</span>难度：
+						    							</div>
+						    							<div class="flex-box-item">
+						    								<input class="form-control br0" placeholder="填写难度（限制5个字符）" />
+						    							</div>
+				    								</div>
+				    								<div class="flex-box flex-start">
+						    							<div class="w100 text-right">
+						    								<span class="c-ff0000">*</span>实例图片/gif图：
+						    							</div>
+						    							<div class="flex-box-item">
+						    								<div class="file-box">
+							    								<input class="form-control br0" type="file" />
+						    									<b>＋</b>
+						    								</div>
+						    								<span class="file-prompt">上传实例图片/gif图</span>
+						    							</div>
+				    								</div>
+				    							</div>
+				    							<div class="flex-box-item">
+				    								<div class="flex-box flex-start">
+					    								<div class="w100 text-right">
+						    								<span class="c-ff0000">*</span>动作效果原理：
+						    							</div>
+						    							<div class="flex-box-item">
+						    								<textarea class="form-control br0" rows="9"></textarea>
+						    							</div>
+				    								</div>
+				    							</div>
+				    						</div>
+				    						<div class="flex-box flex-start">
+			    								<div class="w100 text-right"></div>
+		    									<div class="flex-box-item">
+				    								<button class="btn btn-red w60 btn-sm">新增</button>
+				    							</div>
+				    						</div>
+						    			</fieldset>
+						    			<div class="p5">
+						    				将选中选项移动到：
+						    				<select class="form-control w140 br0" style="display: inline-block;">
+						    					<option>动作系列1</option>
+						    					<option>动作系列2</option>
+						    					<option>动作系列3</option>
+						    				</select>
+						    				<button class="btn btn-primary w80 remove-item">确定</button>
+						    			</div>
+						    			<div class="mlr-11">
+								    		<table class="table table-bordered table-style">
+								    			<thead>
+								    				<tr>
+								    					<td class="w35"><input type="checkbox" /></td>
+								    					<td>序号</td>
+								    					<td>动作名称</td>
+								    					<td>实例图片/gif图</td>
+								    					<td>难度</td>
+								    					<td>动作效果/原理</td>
+								    					<td>操作</td>
+								    				</tr>
+								    			</thead>
+								    			<tbody>
+								    				<tr>
+								    					<td><input type="checkbox" /></td>
+								    					<td>1</td>
+								    					<td>动作1</td>
+								    					<td><img src="img/addImg.png" width="75px" /></td>
+								    					<td>简单</td>
+								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
+								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
+								    				</tr>
+								    				<tr>
+								    					<td><input type="checkbox" /></td>
+								    					<td>1</td>
+								    					<td>动作1</td>
+								    					<td><img src="img/addImg.png" width="75px" /></td>
+								    					<td>简单</td>
+								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
+								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
+								    				</tr>
+								    				<tr>
+								    					<td><input type="checkbox" /></td>
+								    					<td>1</td>
+								    					<td>动作1</td>
+								    					<td><img src="img/addImg.png" width="75px" /></td>
+								    					<td>简单</td>
+								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
+								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
+								    				</tr>
+								    				<tr>
+								    					<td><input type="checkbox" /></td>
+								    					<td>1</td>
+								    					<td>动作1</td>
+								    					<td><img src="img/addImg.png" width="75px" /></td>
+								    					<td>简单</td>
+								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
+								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
+								    				</tr>
+								    				<tr>
+								    					<td><input type="checkbox" /></td>
+								    					<td>1</td>
+								    					<td>动作1</td>
+								    					<td><img src="img/addImg.png" width="75px" /></td>
+								    					<td>简单</td>
+								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
+								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
+								    				</tr>
+								    				<tr>
+								    					<td><input type="checkbox" /></td>
+								    					<td>1</td>
+								    					<td>动作1</td>
+								    					<td><img src="img/addImg.png" width="75px" /></td>
+								    					<td>简单</td>
+								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
+								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
+								    				</tr>
+								    			</tbody>
+								    		</table>
+						    			</div>
+					    			</div>
+				    			</div>
+								<!--修改动作名称-->
+				    			<div class="modal fade modal-style" id="modifyActionModal" tabindex="-1" role="dialog" data-backdrop="false">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title">修改动作名称</h4>
+								      </div>
+								      <div class="modal-body">
+								       	<div class="flex-box">
+								       		<div class="w120 text-right">
+								       			<span class="c-ff0000">*</span>动作名称：
+								       		</div>
+								       		<div class="flex-box-item">
+								       			<input type="text" class="form-control w300" value="动作" />
+								       		</div>
+								       	</div>
+								       	<div class="flex-box">
+								       		<div class="w120 text-right">
+								       			<span class="c-ff0000">*</span>难度：
+								       		</div>
+								       		<div class="flex-box-item">
+								       			<input type="text" class="form-control w300" value="动作" />
+								       		</div>
+								       	</div>
+								       	<div class="flex-box flex-start">
+								       		<div class="w120 text-right">
+								       			<span class="c-ff0000">*</span>实例图片/gif图：
+								       		</div>
+								       		<div class="flex-box-item">
+			    								<div class="file-box">
+				    								<input class="form-control br0" type="file" />
+			    									<!--<b>＋</b>-->
+			    									<img src="img/addImg.png" width="84px" />
+			    								</div>
+			    								<span class="file-prompt">上传实例图片/gif图</span>
+								       		</div>
+								       	</div>
+								       	<div class="flex-box flex-start">
+								       		<div class="w120 text-right">
+								       			动作效果原理：
+								       		</div>
+								       		<div class="flex-box-item">
+								       			<textarea class="form-control w380" rows="10">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</textarea>
+								       		</div>
+								       	</div>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-red">修改</button>
+								        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+				    		</div>
+				    		<div role="tabpanel" class="tab-pane tab-pane-style" id="simpleLinkSetting">
+				    			<div class="flex-box flex-stretch">
+						    		<div class="w200 min-height-page-sm">
+						    			<button class="btn btn-red btn-add-action" @click="addAction">新增</button>
+						    			<ul class="action-list">
+						    				<li class="active">
+						    					<a>动作系列1<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></a>
+						    					<ul class="sub-action-list">
+						    						<li>+新增训练计划</li>
+						    						<li class="active">08单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+						    						<li>09单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+						    						<li>10单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+						    					</ul>
+						    				</li>
+						    				<li><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    			</ul>
+						    		</div>
+						    		<div class="flex-box-item">
+						    			<div class="p8">
+						    				<button class="btn btn-grey w60">保存</button>
+						    				<button class="btn btn-red w140 ml5" @click="addActionTypeOneModal">添加动作类型</button>
+						    			</div>
+						    			<table class="table table-bordered table-style mlr-1">
+						    				<thead>
+						    					<tr>
+						    						<td>序号</td>
+						    						<td>动作图片</td>
+						    						<td>动作类型</td>
+						    						<td>动作名称</td>
+						    						<td>时间（分）</td>
+						    						<td>强度</td>
+						    						<td>次数</td>
+						    						<td class="w160">备注</td>
+						    						<td>操作</td>
+						    					</tr>
+						    				</thead>
+						    				<tbody>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td>一般</td>
+						    						<td><b class="c-0000ff">30</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td>一般</td>
+						    						<td><b class="c-0000ff">30</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-0000ff">30</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    				</tbody>
+						    			</table>
+						    		</div>
+						    	</div>
+						    	<!--添加动作类型-->
+						    	<div class="modal fade modal-style" tabindex="-1" id="addActionTypeOneModal" role="dialog" data-backdrop="false">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title">选择动作</h4>
+								      </div>
+								      <div class="modal-body">
+								      	<div class="flex-box flex-stretch">
+								      		<div class="w180 plr5">
+								      			<ul class="action-list mt0">
+								    				<li class="active">
+								    					<a>动作系列1<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></a>
+								    					<ul class="sub-action-list">
+								    						<li>+新增训练计划</li>
+								    						<li class="active">08单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+								    						<li>09单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+								    						<li>10单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+								    					</ul>
+								    				</li>
+								    				<li><a>动作系列1</a></li>
+								    				<li><a>动作系列1</a></li>
+								    				<li><a>动作系列1</a></li>
+								    			</ul>
+								      		</div>
+								      		<div class="flex-box-item">
+								      			<div class="p8">
+								      				<button class="btn btn-primary w140">添加选中</button>
+								      			</div>
+								      			<div class=" mlr-1">
+									      			<table class="table table-bordered table-style">
+									      				<thead>
+									      					<tr>
+									      						<td class="w35"><input type="checkbox"></td>
+									      						<td>序号</td>
+									      						<td>动作名称</td>
+									      						<td>图片/gif动画</td>
+									      						<td>难度</td>
+									      						<td>动作效果/原理</td>
+									      					</tr>
+									      				</thead>
+									      				<tbody>
+									      					<tr>
+									      						<td class="w35"><input type="checkbox"></td>
+									      						<td>1</td>
+									      						<td>动作1</td>
+									      						<td><img src="img/positive.png" width="210px"></td>
+									      						<td>简单</td>
+									      						<td>变得很炫酷</td>
+									      					</tr>
+									      					<tr>
+									      						<td class="w35"><input type="checkbox"></td>
+									      						<td>1</td>
+									      						<td>动作1</td>
+									      						<td><img src="img/positive.png" width="210px"></td>
+									      						<td>简单</td>
+									      						<td>变得很炫酷</td>
+									      					</tr>
+									      				</tbody>
+									      			</table>
+									      		</div>
+								      		</div>
+								      	</div>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+				    		</div>
+				    		<div role="tabpanel" class="tab-pane tab-pane-style" id="setMealSetting">
+				    			<div class="flex-box flex-stretch">
+						    		<div class="w200 min-height-page-sm">
+						    			<button class="btn btn-red btn-add-action" @click="addAction">新增训练课程系列</button>
+						    			<ul class="action-list">
+						    				<li class="active">
+						    					<a>动作系列1<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></a>
+						    					<ul class="sub-action-list">
+						    						<li>+新增训练计划</li>
+						    						<li class="active">08单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+						    						<li>09单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+						    						<li>10单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
+						    					</ul>
+						    				</li>
+						    				<li><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    				<li><a>动作系列1</a></li>
+						    			</ul>
+						    		</div>
+						    		<div class="flex-box-item">
+						    			<div class="p8">
+						    				<button class="btn btn-grey w60">保存</button>
+						    				<button class="btn btn-red w140 ml5" @click="addActionTypeModal">添加动作类型</button>
+						    			</div>
+						    			<table class="table table-bordered table-style mlr-1">
+						    				<thead>
+						    					<tr>
+						    						<td>序号</td>
+						    						<td>训练时间</td>
+						    						<td></td>
+						    						<td>动作类型</td>
+						    						<td>动作名称</td>
+						    						<td>时间（分）</td>
+						    						<td>强度</td>
+						    						<td>次数</td>
+						    						<td class="w160">备注</td>
+						    						<td>操作</td>
+						    					</tr>
+						    				</thead>
+						    				<tbody>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td>一般</td>
+						    						<td><b class="c-0000ff">30</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    					<tr>
+						    						<td>1</td>
+						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
+						    						<td><img src="img/addImg.png" width="85px"></td>
+						    						<td><span class="c-ff9900">腹部肌群</span></td>
+						    						<td>难度增大型</td>
+						    						<td><b class="c-009900">20</b>分钟</td>
+						    						<td><span class="c-ccc">填写强度</span></td>
+						    						<td><b class="c-ccc">填写分钟数</b></td>
+						    						<td></td>
+						    						<td><button class="btn btn-order delete-action">删除</button></td>
+						    					</tr>
+						    				</tbody>
+						    			</table>
+						    		</div>
+						    	</div>
+						    	<!--添加动作类型-->
+						    	<div class="modal fade modal-style" tabindex="-1" id="addActionTypeModal" role="dialog" data-backdrop="false">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title">选择动作</h4>
+								      </div>
+								      <div class="modal-body">
+								      	<div class="flex-box flex-stretch">
+								      		<div class="w150">
+								      			<ul class="action-tree-list">
+								      				<li>
+								      					<a>肱三头肌</a>
+								      					<ul class="action-tree-child">
+								      						<li>
+								      							<a class="checkbox">
+								      								<label><input type="checkbox" />动作1</label>
+								      							</a>
+								      						</li>
+								      						<li>
+								      							<a class="checkbox">
+								      								<label><input type="checkbox" />动作2</label>
+								      							</a>
+								      						</li>
+								      						<li>
+								      							<a class="checkbox">
+								      								<label><input type="checkbox" />动作3</label>
+								      							</a>
+								      						</li>
+								      					</ul>
+								      				</li>
+								      				<li>
+								      					<a>手臂肌群</a>
+								      					<ul class="action-tree-child">
+								      						<li>
+								      							<a class="checkbox">
+								      								<label><input type="checkbox" />动作1</label>
+								      							</a>
+								      						</li>
+								      						<li>
+								      							<a class="checkbox">
+								      								<label><input type="checkbox" />动作2</label>
+								      							</a>
+								      						</li>
+								      						<li>
+								      							<a class="checkbox">
+								      								<label><input type="checkbox" />动作3</label>
+								      							</a>
+								      						</li>
+								      					</ul>
+								      				</li>
+								      			</ul>
+								      		</div>
+								      		<div class="flex-box-item">
+								      			<div class="p8">
+								      				<button class="btn btn-primary w140">添加选中</button>
+								      			</div>
+								      			<div class=" mlr-1">
+									      			<table class="table table-bordered table-style">
+									      				<thead>
+									      					<tr>
+									      						<td class="w35"><input type="checkbox"></td>
+									      						<td>序号</td>
+									      						<td>动作名称</td>
+									      						<td>图片/gif动画</td>
+									      						<td>难度</td>
+									      						<td>动作效果/原理</td>
+									      					</tr>
+									      				</thead>
+									      				<tbody>
+									      					<tr>
+									      						<td class="w35"><input type="checkbox"></td>
+									      						<td>1</td>
+									      						<td>动作1</td>
+									      						<td><img src="img/positive.png" width="210px"></td>
+									      						<td>简单</td>
+									      						<td>变得很炫酷</td>
+									      					</tr>
+									      					<tr>
+									      						<td class="w35"><input type="checkbox"></td>
+									      						<td>1</td>
+									      						<td>动作1</td>
+									      						<td><img src="img/positive.png" width="210px"></td>
+									      						<td>简单</td>
+									      						<td>变得很炫酷</td>
+									      					</tr>
+									      				</tbody>
+									      			</table>
+									      		</div>
+								      		</div>
+								      	</div>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+						    	
+				    		</div>
+				    	</div>
+				    </div>
+				  </div>
+				  <!--新增动作系列-->
+	    			<div class="modal fade modal-style" id="addActionModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title">新增动作系列</h4>
+					      </div>
+					      <div class="modal-body">
+					        <input type="text" class="form-control"  placeholder="新增动作系列（限15个字）"/>
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-primary">确定</button>
+					        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+					      </div>
+					    </div><!-- /.modal-content -->
+					  </div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
+				</div>
+			</div>
+			<!-- END 主要内容 -->
+		</div>
+		<!-- END 右边容器 -->
+		
+		<div class="clearfix"></div>
+		
+		<!--<footer>
+			<div class="container-fluid">
+				<p class="copyright">Copyright &copy; 2017-2019xxx版权所有</p>
+			</div>
+		</footer>-->
+	</div>
+	<!-- END 整个页面内容 -->
+	
+	<script type="text/javascript" src="js/post_js.js"></script>
+	<script type="text/javascript" src="js/bootstrap-treeview/bootstrap-treeview.js"></script>
+	<script type="text/javascript" src="js/wangEditor/wangEditor.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			new Vue({
+				el:'#wrapper',
+				data:{
+					isAuth:false,
+					isAll:false,
+					storeData:[
+						{
+							value:1,
+							text:'厦门市',
+							selected:false,
+							children:[
+								{
+									value:10000,
+									text:'软件园店',
+									selected:false,
+								},
+								{
+									value:10001,
+									text:'集美店',
+									selected:false,
+								},
+								{
+									value:10002,
+									text:'思明店',
+									selected:false,
+								}
+							]
+						},
+						{
+							value:2,
+							text:'泉州市',
+							selected:false,
+							children:[
+								{
+									value:20000,
+									text:'丰泽区',
+									selected:false,
+								},
+								{
+									value:20001,
+									text:'鲤城区',
+									selected:false,
+								},
+								{
+									value:20002,
+									text:'东海区',
+									selected:false,
+								}
+							]
+						}
+					],
+					courseSeriess : [
+			          {
+			            text: '单车系类',
+			            href: '',
+			            tags: ['3'],
+			            nodes: [
+			              {
+			                text: '+新增课程',
+			                href: '',
+			                tags: ['0'],
+			              },
+			              {
+			                text: '动感单车',
+			                href: '',
+			                tags: ['0']
+			              },
+			              {
+			                text: '丛林穿越',
+			                href: '',
+			                tags: ['0']
+			              }
+			            ]
+			          },
+			          {
+			            text: '单车系类',
+			            href: '',
+			            tags: ['3'],
+			            nodes: [
+			              {
+			                text: '+新增课程',
+			                href: '',
+			                tags: ['0'],
+			              },
+			              {
+			                text: '动感单车',
+			                href: '',
+			                tags: ['0']
+			              },
+			              {
+			                text: '丛林穿越',
+			                href: '',
+			                tags: ['0']
+			              }
+			            ]
+			          }
+			        ],
+			        areaDatas : [
+			          {
+			            text: '软件园店',
+			            href: '',
+			            tags: ['3'],
+			            nodes: [
+			              {
+			                text: '健身房',
+			                href: '',
+			                tags: ['0'],
+			              },
+			              {
+			                text: '健身私教',
+			                href: '',
+			                tags: ['0']
+			              },
+			              {
+			                text: '游泳私教',
+			                href: '',
+			                tags: ['0']
+			              }
+			            ]
+			          },
+			          {
+			            text: '集美店',
+			            href: '',
+			            tags: ['3'],
+			            nodes: [
+			              {
+			                text: '健身房',
+			                href: '',
+			                tags: ['0'],
+			              },
+			              {
+			                text: '健身私教',
+			                href: '',
+			                tags: ['0']
+			              },
+			              {
+			                text: '游泳私教',
+			                href: '',
+			                tags: ['0']
+			              }
+			            ]
+			          }
+			        ],
+			        addPrivate:false,//新增私教课程
+			        addPrivateCourse:false,
+			        deleteStr:'<span class="delete-node">删除</span>',
+			        editor:null
+				},
+				mounted:function(){
+					this.initSelectableTree();
+				},
+				methods:{
+					viewModal:function(){
+						$('#viewModal').modal('show');
+					},
+//					默认课程计划
+					defaultCurriculumPlanModal:function(){
+						$('#defaultCurriculumPlanModal').modal('show');
+					},
+					//新增私教课程
+					addKcc:function(){
+						this.addPrivateCourse=!this.addPrivateCourse;
+						if(this.addPrivateCourse && !this.editor) this.initEdit();
+					},
+					initEdit:function(){
+						var E = window.wangEditor
+					    !this.editor && (this.editor = new E('#eidt-area'));
+					    this.editor.customConfig.uploadImgShowBase64 = true
+					   	this.editor.create()
+					},
+					//新增私教套餐
+					addKc:function(){
+						this.addPrivate = !this.addPrivate;
+					},
+					kcFilterModel:function(){
+						$('#kcFilterModel').modal('show');
+						this.areaTree();
+					},
+					appointModal:function(){
+						$("#appointModal").modal('show')
+					},
+					addActionTypeOneModal:function(){
+						$("#addActionTypeOneModal").modal('show')
+					},
+//					套餐新增
+					addActionTypeModal:function(){
+						$("#addActionTypeModal").modal('show')
+					},
+					modifyAction:function(){
+						$('#modifyActionModal').modal('show')
+					},
+//					新增动作
+					addAction:function(){						
+						$('#addActionModal').modal('show');
+					},
+//					座位设置
+					seatSetting:function(){						
+						$("#settingModal").modal('show')
+					},
+					areaTree:function(){
+						var vm=this;
+//						修改插件527-529行
+			          	$('#area_tree').treeview({
+				            data: vm.areaDatas,
+				            isShowModiyf:false,//是否显示修改
+				            selectedColor:"#2d9bd2",//选择时的颜色
+				            selectedBackColor:"#f0f5f7",//选中时的背景颜色
+				            expandIcon: "glyphicon glyphicon-triangle-right",//收起时的图标
+			          		collapseIcon: "glyphicon glyphicon-triangle-bottom",//展开时的图标
+			          		showBorder: false,//是否显示边框
+			  				backColor:"#FFFFFF",
+				            onNodeSelected: function(event, node) {
+	//			            	在点击选中节点加删除字眼,不要可删除
+	//							(deleteMode && $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.indexOf(vm.deleteStr)===-1?node.text+=vm.deleteStr:node.text}])) || $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.replace(vm.deleteStr,'')}]);
+				            	console.log('节点选中')
+				            },
+				            onNodeUnselected: function (event, node) {
+				            	console.log('节点未选中')
+				            }
+			          	});
+					},
+//					树形图
+					initSelectableTree:function(){
+						var vm=this;
+//						修改插件527-529行
+			          	$('#course_tree').treeview({
+				            data: vm.courseSeriess,
+				            isShowModiyf:true,
+				            selectedColor:"#2d9bd2",//选择时的颜色
+				            selectedBackColor:"#f0f5f7",//选中时的背景颜色
+				            expandIcon: "glyphicon glyphicon-triangle-right",//收起时的图标
+			          		collapseIcon: "glyphicon glyphicon-triangle-bottom",//展开时的图标
+			          		showBorder: false,//是否显示边框
+			  				backColor:"#FFFFFF",
+				            onNodeSelected: function(event, node) {
+	//			            	在点击选中节点加删除字眼,不要可删除
+	//							(deleteMode && $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.indexOf(vm.deleteStr)===-1?node.text+=vm.deleteStr:node.text}])) || $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.replace(vm.deleteStr,'')}]);
+				            	console.log('节点选中')
+				            },
+				            onNodeUnselected: function (event, node) {
+				            	console.log('节点未选中')
+				            }
+			          	});
+			        }
+				},
+				watch:{
+					isAuth:function(val){
+						if(val){
+							for(var i in this.storeData){
+								this.storeData[i].selected=false;
+								var children=this.storeData[i].children;
+								if(children && children.length){
+									for(var j in children){
+										this.storeData[i].children[j].selected=false;
+									}
+								}
+							}
+							this.isAll=false;
+						}
+					},
+					isAll:function(val){
+						if(val){
+							for(var i in this.storeData){
+								this.storeData[i].selected=true;
+								var children=this.storeData[i].children;
+								if(children && children.length){
+									for(var j in children){
+										this.storeData[i].children[j].selected=true;
+									}
+								}
+							}
+						}else{
+							for(var i in this.storeData){
+								this.storeData[i].selected=false;
+								var children=this.storeData[i].children;
+								if(children && children.length){
+									for(var j in children){
+										this.storeData[i].children[j].selected=false;
+									}
+								}
+							}
+						}
+					}
+				}
+			})
+//			修改
+			$treeNode=$('#course_tree');
+			$treeNode.on('click','.modify-tree',function(event){
+				//禁止选中节点
+	        	event.stopPropagation();
+	        	event.stopImmediatePropagation();
+				$('#modifyModal').modal('show');
+			})
+		});
+	</script>
+	</script>
+</body>
+
+</html>

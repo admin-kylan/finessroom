@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardNumMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardNum">
+        <id column="id" property="id" />
+        <result column="start_no" property="startNo" />
+        <result column="end_no" property="endNo" />
+        <result column="batch_num" property="batchNum" />
+        <result column="flag" property="flag" />
+        <result column="type" property="type" />
+        <result column="is_using" property="isUsing" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="use_limit_num" property="useLimitNum" />
+        <result column="limit_num" property="limitNum" />
+        <result column="use_middle_num" property="useMiddleNum" />
+        <result column="middle_num" property="middleNum" />
+        <result column="use_tail_num" property="useTailNum" />
+        <result column="tail_num" property="tailNum" />
+        <result column="use_head_num" property="useHeadNum" />
+        <result column="head_num" property="headNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        start_no AS startNo, end_no AS endNo, batch_num AS batchNum, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, use_limit_num AS useLimitNum, limit_num AS limitNum, use_middle_num AS useMiddleNum, middle_num AS middleNum, use_tail_num AS useTailNum, tail_num AS tailNum, use_head_num AS useHeadNum, head_num AS headNum, id
+    </sql>
+    <select id="selectRoleList" resultType="com.yj.dal.dto.NumRoleDTO">
+        SELECT
+            cn.id,
+            sum(case when c.is_using = 1 then 1 else 0 end ) usedCount,
+            sum(case when c.is_using = 0 then 1 else 0 end ) invalidCount,
+            cn.start_no startNo,
+            cn.end_no endNo,
+            cn.batch_num batchNum,
+            cn.limit_num limitNum
+        FROM
+            fr_card c,
+            fr_card_num cn
+        WHERE
+             c.CustomerCode = #{code}
+            and cn.is_using = 1
+            and cn.CustomerCode = c.CustomerCode
+            and c.card_no BETWEEN cn.start_no and cn.end_no
+        GROUP BY
+            cn.id,
+            cn.start_no,
+            cn.end_no,
+            cn.batch_num,
+            cn.limit_num
+    </select>
+
+</mapper>

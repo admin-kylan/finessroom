@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>身体</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/employee.css">
+
+
+</head>
+
+<body>
+    <div id="employee">
+        <div class="main_top">会员卡设置</div>
+        <div class="main_box">
+            <div class="common">
+                <span class="common_span">修改卡种信息</span>
+                <div class="form">
+                    <form action="" id="form">
+
+                        <div class="form_box">
+                            <div class="form_box_left">卡种名称：</div>
+                            <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="卡类名称"></div>
+                        </div>
+                        <div class="form_box">
+                            <div class="form_box_left">操作人：</div>
+                            <div class="form_box_right"><strong class="form_box_right_red">Klaus</strong></div>
+                        </div>
+                        <div class="form_box">
+                            <div class="form_box_left">上次操作时间：</div>
+                            <div class="form_box_right">{{time}}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="main_sub"> <a href="#" class="on" v-on:click="update">修改</a><a href="#">取消</a></div>
+        </div>
+    </div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    var kid = window.parent.getParam('kid');
+    var employee = new Vue({
+        el: '#employee',
+        data: {
+            time:'',//上次修改卡种时间
+        },
+        created:function () {
+            var that = this;
+            var userName = $.cookie('name');
+            $(".form_box_right_red").html(userName);
+            Loading.prototype.show();
+            var url = $.stringFormat("{0}/frCardType/selectFrCardTypeTime",$.cookie('url'));
+            $.get(url, {
+                    type:1,
+                },
+                function(res) {
+                    if(res.code == 200) {
+                        if(res.data.data.updateTime){
+                            that.time = that.fmtDate(res.data.data.updateTime);
+                            Loading.prototype.hide();
+                        }
+
+                    } else {
+                        alert(res.msg);
+                        Loading.prototype.hide();
+                        //$('#tip').text(res.msg);//异常处理
+                    }
+
+                }
+
+            );
+        },
+        methods: {
+            update: function () {
+                //获取卡种id
+                var thisUrl = document.URL;
+                var id = thisUrl.split('=')[1];
+                var cardTypeName = $(".form_box_right_inp").val();
+                if(cardTypeName == ''|| cardTypeName == null || cardTypeName.length<1){
+                    alert("卡种名称不能为空");
+                    return;
+                }
+                //获取当前登入用户ID
+                var updateUserName = $.cookie('name');
+                var CustomerCode = $.cookie("code");
+                var updateUserId = $.cookie("id");
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/frCardType/updateFrCard",$.cookie('url'));
+                $.post(url, {
+                        id:id,
+                        cardTypeName:cardTypeName,//卡种名称
+                        updateUserId:updateUserId,//修改人ID，当前登入操作人id
+                        updateUserName:updateUserName,
+                        CustomerCode:CustomerCode,
+
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            alert("修改成功！");
+                            window.location.reload();
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                        } else {
+                            alert(res.msg);
+                            Loading.prototype.hide();
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+
+                );
+            },
+            //时间戳转指定格式
+            fmtDate:function (inputTime) {
+                var date = new Date(inputTime);
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            },
+        },
+    })
+    // employee.yo();
+    $(function () {
+
+
+    })
+</script>
+
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>潜在客户</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/reset.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/potentialCustomers.css" />
+	<link rel="stylesheet" href="../css/combobox.css" />
+	<link rel="stylesheet" href="../css/myPagination.css" />
+	<style>
+		table td img {
+			vertical-align: middle;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="wrap" id="pcapp">
+		<div class="header">
+			<div class="screening">
+				筛选条件：
+				<select name="" id="customerLevel" v-model="customerFilter.customerLevel">
+					<option value="">--客户等级--</option>
+					<option :value="index" v-for="(item,index) in levelList" >{{item}}</option>
+					<!--<option value="">很好</option>-->
+					<!--<option value="">一般</option>-->
+					<!--<option value="">很差</option>-->
+				</select>
+				<select name="" id="purchaseIntention" v-model="customerFilter.purchaseWill">
+					<option value="">--购买意向--</option>
+					<option value="0">肯定买</option>
+					<option value="1">有点想</option>
+					<option value="2">不清楚</option>
+					<option value="3">确定不买</option>
+				</select>
+				<select name="" id="resourceType" v-model="customerFilter.sourceId">
+					<option value="">--全部资源--</option>
+					<option :value="item.id" v-for="(item,index) in sourceList">{{item.sourceName}}</option>
+					<!--<option value="">自动上门WI</option>-->
+					<!--<option value="">团会员优购</option>-->
+					<!--<option value="">团会员积分</option>-->
+					<!--<option value="">团会员问卷</option>-->
+					<!--<option value="">团会员竞博</option>-->
+					<!--<option value="">团会员积分</option>-->
+					<!--<option value="">公众号活动</option>-->
+					<!--<option value="">派票</option>-->
+					<!--<option value="">现在带访</option>-->
+				</select>
+				<select name="" id="isReferrer" v-model="customerFilter.isReferrer">
+					<option value="">--推荐人--</option>
+					<option value="1">有推荐人</option>
+					<option value="0">无推荐人</option>
+				</select>
+				<select name="" id="presale" v-model="customerFilter.presaleStatus">
+					<option value="">--预售--</option>
+					<option value="1">已交定金</option>
+					<option value="3">定金已替换</option>
+					<option value="2">定金已退</option>
+					<option value="0">无交定金</option>
+				</select>
+			</div>
+			<div class="follow">
+				<select name="" id="dateType" v-model="customerFilter.dateType">
+					<option value="0">下跟进次</option>
+					<option value="1">计划来访</option>
+					<option value="2">实际来访</option>
+					<option value="3">计划购买</option>
+					<option value="4">建档日期</option>
+					<option value="5">客户认领</option>
+					<option value="6">客户分配</option>
+				</select>
+				<input type="text" class="jeinput startDate" placeholder="开始日期" v-model="customerFilter.startTime" readonly/>至
+				<input type="text" class="jeinput endDate" placeholder="结束日期" v-model="customerFilter.endTime"  readonly/>
+				<input type="text"  placeholder="销售顾问/教练" v-model="customerFilter.consultantName" @keyup.enter="buildFilterDate"/>
+				<input type="text"  placeholder="操作员" v-model="customerFilter.updateUserName" @keyup.enter="buildFilterDate"/>
+			</div>
+			<div class="search">
+				<input type="text" placeholder="姓名/手机号码" v-model="customerFilter.keyword" @keyup.enter="buildFilterDate"/>
+				<input type="button" class="btn btn-primary" value="搜索" @click="buildFilterDate"/>
+			</div>
+		</div>
+		<div class="content">
+			<a class="btn" href="leadCustomerEntry.html" target="rightFrame">+ 新建</a>
+			<div class="tab">
+				<div class="tabWrap">
+					<table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+						<thead>
+							<tr>
+								<td>序号</td>
+								<td>姓名</td>
+								<td>性别</td>
+								<td>联系方式</td>
+								<td>微信</td>
+								<td>总联系数</td>
+								<td>建档日期</td>
+								<td>最近跟进日期</td>
+								<td>客户等级</td>
+								<td>客户来源</td>
+								<td>购买意向</td>
+								<td>意向卡类别</td>
+								<td>意向会员卡</td>
+								<td>意向价格</td>
+								<td>下次跟进</td>
+								<td>计划来访</td>
+								<td>实际来访</td>
+								<td>计划购买</td>
+								<td>资源类型</td>
+								<!-- <td>最近跟进时间</td> -->
+								<td>推荐人</td>
+								<td>服务会籍</td>
+								<td>销售顾问</td>
+								<td>是否预售</td>
+								<td>跟进人</td>
+								<td>操作人</td>
+								<td>操作状态</td>
+							</tr>
+						<tbody>
+							<tr v-for="(item,index) in customerTable.list">
+								<td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
+								<td>
+									<img  :src="avatarUrl(item.picLink)">
+									<a :href="'LeadCustomerInformation.html?id='+item.id" >
+									<span>{{item.clientName}}</span>
+									</a>
+								</td>
+								<td class="toblue">{{item.sex==0?'男':'女'}}</td>
+								<td>{{item.mobile}}</td>
+								<td>{{item.wechat}}</td>
+								<td>{{item.contactCount}}</td>
+								<td>{{item.createTime}}</td>
+								<td>{{item.followTime}}</td>
+								<td>
+									<span v-if="item.vipLevel == index1" v-for="(level,index1) in levelList">{{level}}</span>
+								</td>
+								<td>{{item.customerSource}}</td>
+								<td>
+									<span v-if="item.purchaseWill == 0">肯定买</span>
+									<span v-else-if="item.purchaseWill == 1">有点想</span>
+									<span v-else-if="item.purchaseWill == 2">不清楚</span>
+									<span v-else-if="item.purchaseWill == 3">确定不买</span>
+								</td>
+								<td>{{item.willingCardType}}</td>
+								<td></td>
+								<td class="tored">{{unitNormalization(item.willingPrice,2)}}</td>
+								<td>{{item.nextFollowTime}}</td>
+								<td>{{item.planVisitTime}}</td>
+								<td>{{item.visitingTime}}</td>
+								<td>{{item.planPurchaseTime}}</td>
+								<td></td>
+								<!-- <td>{{item.followTime}}</td> -->
+								<td>{{item.referenceName}}</td>
+								<td>{{item.fwhjName}}</td>
+								<td>{{item.consultantName}}</td>
+								<td class="toyen">
+									<span v-if="item.presaleStatus == 0">无交定金</span>
+									<span v-else-if="item.presaleStatus == 1">已交定金</span>
+									<span v-else-if="item.presaleStatus == 2">定金已退</span>
+									<span v-else-if="item.presaleStatus == 3">定金已退换</span>
+								</td>
+								<td>{{item.followName}}</td>
+								<td>{{item.updateUserName}}</td>
+								<td class="tored" @click="delPotentialCustomers(item.id,index)">删除</td>
+							</tr>
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="toblue">男</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+							<!--<tr>-->
+								<!--<td>1</td>-->
+								<!--<td>王一</td>-->
+								<!--<td class="tored">女</td>-->
+								<!--<td>18677789054</td>-->
+								<!--<td>demacia</td>-->
+								<!--<td>0</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>2018-06-14 10:00</td>-->
+								<!--<td>优质</td>-->
+								<!--<td>现场来访</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>年卡</td>-->
+								<!--<td>一年卡</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>微信公众号</td>-->
+								<!--<td>2018-06-14</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="toyen">无</td>-->
+								<!--<td>keven</td>-->
+								<!--<td>keven</td>-->
+								<!--<td class="tored">删除</td>-->
+							<!--</tr>-->
+						</tbody>
+						</thead>
+					</table>
+					<div id="pagination" class="pagination"></div>
+				</div>
+
+				<!--<div class="page clearfix">-->
+					<!--<p class="fl">【共5页/总100条】</p>-->
+					<!--<ul class="fr">-->
+						<!--<li>首页</li>-->
+						<!--<li>上一页</li>-->
+						<!--<li>1</li>-->
+						<!--<li>下一个</li>-->
+						<!--<li>尾页</li>-->
+						<!--<li>第<input type="text" />页</li>-->
+					<!--</ul>-->
+				<!--</div>-->
+			</div>
+		</div>
+	</div>
+	<!--基础-->
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/vue.js"></script>
+	<script src="../js/axios.min.js"></script>
+	<!--插件-->
+	<script src="../js/loading.js"></script>
+	<script src="../js/jedate.js"></script>
+	<script src="../js/combobox.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/dateUtil.js"></script>
+	<script src="../js/jquery.cookie.js"></script>
+	<script src="../js/jquery-confirm.js"></script>
+	<script src="../js/extendjQuery.js"></script>
+	<script src="../js/setCookie.js"></script>
+	<script src="../js/myPagination.js"></script>
+	<script src="potentialCustomers.js"></script>
+
+	<script type="text/javascript">
+		//			.tab表格删除
+		(function () {
+			$('.tab tbody td:last-child').click(function () {
+				$(this).parent().remove();
+			})
+		})();
+	</script>
+</body>
+
+</html>

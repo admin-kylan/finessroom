@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOriginalSetMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOriginalSet">
+        <id column="a.id" property="id" />
+        <result column="a.card_id" property="cardId" />
+        <result column="a.service_life" property="serviceLife" />
+        <result column="a.swiping_interval" property="swipingInterval" />
+        <result column="a.swiping_time" property="swipingTime" />
+        <result column="a.used_num" property="usedNum" />
+        <result column="a.pzfs" property="pzfs" />
+        <result column="a.original_price" property="originalPrice" />
+        <result column="a.sales_price" property="salesPrice" />
+        <result column="a.total_num" property="totalNum" />
+        <result column="a.stop_num" property="stopNum" />
+        <result column="a.stop_days" property="stopDays" />
+        <result column="a.total_days" property="totalDays" />
+        <result column="a.out_price" property="outPrice" />
+        <result column="a.qt_xxjg_update" property="qtXxjgUpdate" />
+        <result column="a.qt_xxqy_update" property="qtXxqyUpdate" />
+        <result column="a.qt_zsqy_update" property="qtZsqyUpdate" />
+        <result column="a.qt_lrzp_update" property="qtLrzpUpdate" />
+        <result column="a.qt_zdxxjg" property="qtZdxxjg" />
+        <result column="a.qt_zdqy" property="qtZdqy" />
+        <result column="a.can_transfer" property="canTransfer" />
+        <result column="a.can_change_type" property="canChangeType" />
+        <result column="a.transfer_fee" property="transferFee" />
+        <result column="a.renew_common_price" property="renewCommonPrice" />
+        <result column="a.renew_level1_price" property="renewLevel1Price" />
+        <result column="a.renew_level2_price" property="renewLevel2Price" />
+        <result column="a.renew_level3_price" property="renewLevel3Price" />
+        <result column="a.renew_level4_price" property="renewLevel4Price" />
+        <result column="a.qt_can_renew" property="qtCanRenew" />
+        <result column="a.zk_num" property="zkNum" />
+        <result column="a.zk_cyfs" property="zkCyfs" />
+        <result column="a.zk_tkqy" property="zkTkqy" />
+        <result column="a.zk_xffs" property="zkXffs" />
+        <result column="a.zk_clfs" property="zkClfs" />
+        <result column="a.zk_sjjg" property="zkSjjg" />
+        <result column="a.card_flag_id" property="cardFlagId" />
+        <result column="a.card_type_name" property="cardTypeName" />
+        <result column="a.card_type" property="cardType" />
+        <result column="a.card_type_id" property="cardTypeId" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.change_transfer_fee" property="changeTransferFee" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_id AS cardId,
+        a.service_life AS serviceLife,
+        a.swiping_interval AS swipingInterval,
+        a.swiping_time AS swipingTime,
+        a.used_num AS usedNum,
+        a.pzfs,
+        a.original_price AS originalPrice,
+        a.sales_price AS salesPrice,
+        a.total_num AS totalNum,
+        a.stop_num AS stopNum,
+        a.stop_days AS stopDays,
+        a.total_days AS totalDays,
+        a.out_price AS outPrice,
+        a.qt_xxjg_update AS qtXxjgUpdate,
+        a.qt_xxqy_update AS qtXxqyUpdate,
+        a.qt_zsqy_update AS qtZsqyUpdate,
+        a.qt_lrzp_update AS qtLrzpUpdate,
+        a.qt_zdxxjg AS qtZdxxjg,
+        a.qt_zdqy AS qtZdqy,
+        a.can_transfer AS canTransfer,
+        a.can_change_type AS canChangeType,
+        a.transfer_fee AS transferFee,
+        a.renew_common_price AS renewCommonPrice,
+        a.renew_level1_price AS renewLevel1Price,
+        a.renew_level2_price AS renewLevel2Price,
+        a.renew_level3_price AS renewLevel3Price,
+        a.renew_level4_price AS renewLevel4Price,
+        a.qt_can_renew AS qtCanRenew,
+        a.zk_num AS zkNum,
+        a.zk_cyfs AS zkCyfs,
+        a.zk_tkqy AS zkTkqy,
+        a.zk_xffs AS zkXffs,
+        a.zk_clfs AS zkClfs,
+        a.zk_sjjg AS zkSjjg,
+        a.card_flag_id AS cardFlagId,
+        a.card_type_name AS cardTypeName,
+        a.card_type AS cardType,
+        a.card_type_id AS cardTypeId,
+        a.CustomerCode,
+        a.change_transfer_fee AS changeTransferFee,
+        a.id
+    </sql>
+
+    <select id="querySelectOneFrCard" resultType="java.util.Map">
+        SELECT  Top 1
+          (SELECT Top 1 b.status FROM fr_card b WHERE b.id = a.card_id ) fcStatus,
+          (SELECT Top 1 b.card_no FROM fr_card b WHERE b.id = a.card_id ) cardNo,
+          (SELECT Top 1 b.card_type_name FROM fr_card_type b WHERE b.id = a.card_flag_id ) cardFlag,
+          <include refid="Base_Column_List" />
+        FROM fr_card_original_set a
+        WHERE a.card_id = #{cardId}
+    </select>
+
+</mapper>

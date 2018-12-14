@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/jquery-confirm.css" />
+		<link rel="stylesheet" href="../css/reset.css" />
+		<link rel="stylesheet" href="../css/base.css" />
+		<link rel="stylesheet" href="../css/individual.css" />
+	</head>
+	<body>
+		<div class="wrap" id="app">
+			<!-- <div class="header">基础设置  </div> -->
+			<div class="tab">
+				<span class="on">单个门店设置</span>
+				<span>门店通用设置</span>
+			</div>
+			<div class="content">
+				<div class="list list1 clearfix">
+					<ul class="left fl">
+						<li class="on"><a href="#lis1">所在门店</a></li>
+						<li><a href="#lis2">新建客户认领设置</a></li>
+						<li><a href="#lis3">客户认领保护天数</a></li>
+						<li><a href="#lis4">客户认领设置</a></li>
+						<li><a href="#lis5">销售设置</a></li>
+						<li><a href="#lis6">现有会员跟进管理</a></li>
+						<li><a href="#lis7">潜在客户跟进管理</a></li>
+						<li><a href="#lis8">跟进记录关键字设置</a></li>
+					</ul>
+					<div class="right fl">
+						<p class="title">
+							<span class="time" >
+								上次修改时间：
+								<span class="years" >{{storeSingleSet.updateTime}}</span>
+								<!-- - -->
+								<!--<span class="month">09</span>- -->
+								<!--<span class="date">18</span>:-->
+								<!--<span class="hours">09</span>:-->
+								<!--<span class="minutes">16</span>-->
+							</span>
+							<span class="operator">
+								操作人：
+								<span class="name">{{storeSingleSet.updateUserName}}</span>
+							</span> 
+						</p>
+						<form action="">
+							<fieldset class="section1" id="lis1">
+								<legend>所在门店（单店设置）</legend>
+								<div class="xiamen" v-for="itemA in whereShop.list">
+									<span class="address" >{{itemA.cityName}}</span>
+									<p class="region">
+										<label v-for="itemB in itemA.list"><input type="checkbox" v-model="itemB.singleStatus"> <span>{{itemB.shopName}}</span></label>
+									</p>
+								</div>
+								<!--<div class="quanzhou">-->
+									<!--<span class="address">泉州市</span>-->
+									<!--<p class="region">-->
+											<!--<label><input type="checkbox"> <span>鲤城店</span></label>-->
+											<!--<label><input type="checkbox"> <span>丰泽店</span></label>-->
+											<!--<label><input type="checkbox"> <span>万达店</span></label>-->
+											<!--<label><input type="checkbox"> <span>思明店</span></label>-->
+									<!--</p>-->
+								<!--</div>-->
+							</fieldset>
+							<fieldset class="section2" id="lis2">
+								<legend>新建客户认领设置</legend>
+								<p class="p1">
+									新建现有客户<input type="text" value="24" class="txt" v-model="storeSingleSet.xyGjHour"/>小时内没有添加跟进记录，则
+									<label><input type="radio" name="ifenter1" value="true" v-model="storeSingleSet.xyGjStatus"> <span>进入会员认领平台</span></label>
+									<label><input type="radio" name="ifenter1" value="false" v-model="storeSingleSet.xyGjStatus"> <span>不进入会员认领平台</span></label>
+								</p>
+								<p class="p2">
+									新建潜在客户<input type="text" value="24" class="txt" v-model="storeSingleSet.qzGjHour"/>小时内没有添加跟进记录，则
+									<label><input type="radio" name="ifenter2" value="true" v-model="storeSingleSet.qzGjStatus"> <span>进入会员认领平台</span></label>
+									<label><input type="radio" name="ifenter2" value="false" v-model="storeSingleSet.qzGjStatus"> <span>不进入会员认领平台</span></label>
+								</p>
+							</fieldset>
+							<fieldset class="section3" id="lis3">
+								<legend>客户认领保护天数设置</legend>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>行业类型</td>
+											<td>角色类型</td>
+											<td>认领客户类型</td>
+											<td>保护天数</td>
+											<td>备注</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="item in protectionDaysSet.list">
+											<td>{{item.industry}}</td>
+											<td>{{item.role}}</td>
+											<td>{{item.customerType==0?'现有客户':'潜在客户'}}</td>
+											<td><input type="text" class="txt" v-model="item.days"/></td>
+											<td>{{item.note}}</td>
+											<!--<td>健身游泳</td>-->
+											<!--<td>游泳教练</td>-->
+											<!--<td>现有客户</td>-->
+											<!--<td>30</td>-->
+											<!--<td>没有跟进记录则可由其他游泳教练认领</td>-->
+										</tr>
+									</tbody>
+								</table>
+							</fieldset>
+							<fieldset class="section4" id="lis4">
+								<legend>客户认领设置</legend>
+								<table border="1" bordercolor="#ccc">
+									<tbody>
+										<tr v-for="item in claimSet.list">
+											<td>{{item.industry}}</td>
+											<td>{{item.role}}</td>
+											<td>每<input type="text" class="txt" v-model="item.rlHours" />小时内可认领<input type="text" v-model="item.rlNum"  class="txt"/>个客户</td>
+										</tr>
+										<!--<tr>-->
+											<!--<td>健身游泳</td>-->
+											<!--<td>游泳教练</td>-->
+											<!--<td>每<input type="text" class="txt"/>小时内可认领<input type="text" class="txt"/>个客户</td>-->
+										<!--</tr>-->
+									</tbody>
+								</table>
+							</fieldset>
+							<fieldset class="section5" id="lis5">
+								<legend>销售设置</legend>
+								<p class="p1">
+									授权人显示：
+									<label><input type="radio" name="ifenter3" value="true" v-model="storeSingleSet.showSqr"> <span>仅显示本店授权人</span></label>
+									<label><input type="radio" name="ifenter3" value="false" v-model="storeSingleSet.showSqr"> <span>显示所有门店授权人</span></label>
+								</p>
+								<p class="p2">
+									新建会员卡时销售人员显示：
+									<label><input type="radio" name="ifenter4" value="true" v-model="storeSingleSet.showXsr"> <span>仅显示本店销售人员</span></label>
+									<label><input type="radio" name="ifenter4" value="false" v-model="storeSingleSet.showXsr"> <span>显示所有门店销售人员</span></label>
+								</p>
+							</fieldset>
+							<fieldset class="section6" id="lis6">
+								<legend>现有会员跟进管理</legend>
+								<table border="1" bordercolor="#ccc">
+									<tbody>
+										<tr v-for="item in xyFollowSet.list">
+											<td>{{item.industry}}</td>
+											<td>{{item.role}}</td>
+											<td>每天可以手动跟进<input type="text" class="txt" v-model="item.xyGjNum"/>个现有客户</td>
+										</tr>
+									</tbody>
+								</table>
+							</fieldset>
+							<fieldset class="section7" id="lis7">
+								<legend>潜在客户跟进管理</legend>
+								<table border="1" bordercolor="#ccc">
+									<tbody>
+										<tr v-for="item in qzFollowSet.list">
+											<td>{{item.industry}}</td>
+											<td>{{item.role}}</td>
+											<td>每天可以手动跟进<input type="text" class="txt" v-model="item.qzGjNum"/>个潜在客户</td>
+										</tr>
+									</tbody>
+								</table>
+							</fieldset>
+							<fieldset class="section8" id="lis8">
+								<legend>跟进记录关键字设置</legend>
+								<p>
+									<input type="text" class="txt1" placeholder="最多20个字符" v-model="keywordList.keyword"/>
+									<input type="button" class="submit" value="增加" @click="addKeyword();"/>
+								</p>
+								<div class="clearfix" id="delete1">
+									<p v-for="(item,index) in keywordList.list" @mouseenter="SpanMouseenter($event,index)" @mouseleave="SpanMouseleave($event,index)" >{{item.content}}<span @click="deleteKeyword(item.id,index)" > X </span></p>
+									<!--<p>经常出差2<span> X </span></p>-->
+									<!--<p>经常出差3<span> X </span></p>-->
+									<!--<p>经常出差4<span> X </span></p>-->
+									<!--<p>经常出差5<span> X </span></p>-->
+									<!--<p>经常出差6<span> X </span></p>-->
+									<!--<p>经常出差7<span> X </span></p>-->
+									<!--<p>经常出差8<span> X </span></p>-->
+									<!--<p>经常出差9<span> X </span></p>-->
+									<!--<p>经常出差10<span> X </span></p>-->
+									<!--<p>经常出差11<span> X </span></p>-->
+									<!--<p>经常出差12<span> X </span></p>-->
+								</div>
+							</fieldset>
+							<input type="button" value="保存" class="save" @click="
+							updateWhereStore();
+							updateProtectionDaysSet();
+							updateClaimSet();
+							updateFollowSet();
+							updateStoreSingleSet();"/>
+							<!--updateWhereStore();updateProtectionDaysSet();updateClaimSet();updateFollowSet();-->
+						</form>
+					</div>
+				</div>
+				<div class="list list2 clearfix noshow">
+					<ul class="left fl">
+						<li class="on"><a href="#lis10">现有会员信息安全/会员卡管理</a></li>
+						<li><a href="#lis11">潜在客户信息安全管理</a></li>
+						<li><a href="#lis12">潜在客户等级设置</a></li>
+						<li><a href="#lis13">推荐人管理</a></li>
+						<li><a href="#lis14">会员储值消费管理</a></li>
+						<li><a href="#lis15">其他管理</a></li>
+						<li><a href="#lis16">作废协议号处理</a></li>
+						<li><a href="#lis17">作废会员卡号处理</a></li>
+						<li><a href="#lis18">协议号管理</a></li>
+						<li><a href="#lis19">会员卡号管理</a></li>
+					</ul>
+					<div class="right fl">
+						<p class="title">
+							<span class="time">
+								上次修改时间：
+								<span class="years">{{commonSet.updateTime}}</span>
+								<!-- - -->
+								<!--<span class="month">09</span>- -->
+								<!--<span class="date">18</span>-->
+								<!--<span class="hours">09</span>:-->
+								<!--<span class="minutes">15</span>-->
+							</span>
+							<span class="operator">
+								操作人：
+								<span class="name" >{{commonSet.updateUserName}}</span>
+							</span> 
+						</p>
+						<form action="">
+							<fieldset class="section1" id="lis10">
+								<legend>现有会员信息安全/会员卡管理</legend>
+								<p class="p1">
+									现有客户列表显示手机号码:
+									<label><input type="radio" name="show1" value="true" v-model="commonSet.xyShowMobile"> <span>显示</span></label>
+									<label><input type="radio" name="show1" value="false" v-model="commonSet.xyShowMobile"> <span>不显示</span></label>
+								</p>
+								<p class="p2">
+									现有客户列表显示外部卡号:
+									<label><input type="radio" name="show2" value="true" v-model="commonSet.showCardNum"> <span>显示</span></label>
+									<label><input type="radio" name="show2" value="false" v-model="commonSet.showCardNum"> <span>不显示</span></label>
+								</p>
+								<p class="p3">
+									会员转让:
+									<label><input type="radio" name="transfer" value="true" v-model="commonSet.memberTransfer"> <span>可以转给潜在客户</span></label>
+									<label><input type="radio" name="transfer" value="false" v-model="commonSet.memberTransfer"> <span>不可以转给潜在客户</span></label>
+								</p>
+								<p class="p4">
+									潜在客户在其他店办卡，销售人员是否可以修改:
+									<label><input type="radio" name="set1" value="true" v-model="commonSet.xsUpdate"> <span>可以</span></label>
+									<label><input type="radio" name="set1" value="false" v-model="commonSet.xsUpdate"> <span>不可以</span></label>
+								</p>
+								<p class="p5">
+									会员卡失效日期前<input type="text" value="" v-model="commonSet.redDisabled" class="txt"/>天，在会员消费界面红色字体显示
+								</p>
+								<p class="p6">
+									会员生日前<input type="text" value="" v-model="commonSet.redBirthday" class="txt"/>天，在会员消费界面红色字体显示
+								</p>
+								<p class="p7">
+									会员卡开卡时间是否允许修改:
+									<label><input type="radio" name="set2" value="true" v-model="commonSet.openUpdate"> <span>可以修改</span></label>
+									<label><input type="radio" name="set2" value="false" v-model="commonSet.openUpdate"> <span>不可以修改，以系统当前时间为准</span></label>
+								</p>
+								<p class="p8">
+									会员卡停卡开始时间是否允许修改:
+									<label><input type="radio" name="set3" value="true" v-model="commonSet.stopUpdate"> <span>可以修改</span></label>
+									<label><input type="radio" name="set3" value="false" v-model="commonSet.stopUpdate"> <span>不可以修改，以系统当前时间为准</span></label>
+								</p>
+								<p class="p9">
+									储值退款:
+									<label><input type="radio" name="set4" value="0" v-model="commonSet.cztk"> <span>禁止退款</span></label>
+									<label><input type="radio" name="set5" :value="commonSet.cztk" :checked="commonSet.cztk>0" @click="commonSet.cztk=1" > <span>允许退款</span></label>
+									(<label><input type="radio" name="set4" value="1" v-model="commonSet.cztk"> <span>按比例</span></label>
+									 <label><input type="radio" name="set4" value="2" v-model="commonSet.cztk"> <span>全部</span></label>)
+								</p>
+								<p class="p10">
+									会员办卡时是否允许修改发票信息:
+									<label><input type="radio" name="set6" value="true" v-model="commonSet.invoiceUpdate"> <span>可以</span></label>
+									<label><input type="radio" name="set6" value="false" v-model="commonSet.invoiceUpdate"> <span>不可以</span></label>
+								</p>
+								<p class="p11">
+									转让/合并:
+									<label><input type="radio" name="set7" value="0" v-model="commonSet.zrhb"> <span>禁止转让/合并</span></label>
+									<label><input type="radio" name="set8" :checked="commonSet.zrhb>0" @click="commonSet.zrhb=1"> <span>允许转让/合并</span></label>
+									(<label><input type="radio" name="set7" value="1" v-model="commonSet.zrhb"> <span>按比例</span></label>
+									<label><input type="radio" name="set7" value="2" v-model="commonSet.zrhb"> <span>按现金</span></label>
+									<label><input type="radio" name="set7" value="3" v-model="commonSet.zrhb"> <span>全部</span></label>)
+								</p>
+							</fieldset>
+							<fieldset class="section2" id="lis11">
+								<legend>潜在客户信息安全管理</legend>
+								<p class="p1">
+									潜在客户列表显示手机号码：
+									<label><input type="radio" name="show3" value="true" v-model="commonSet.qzShowMobile"> <span>显示</span></label>
+									<label><input type="radio" name="show3" value="false" v-model="commonSet.qzShowMobile"> <span>不显示</span></label>
+								</p>
+								<p class="p2">
+									潜在客户的销售顾问:
+									<label><input type="radio" name="show4" value="true" v-model="commonSet.qzXsgwUpdate"> <span>可以修改</span></label>
+									<label><input type="radio" name="show4" value="false" v-model="commonSet.qzXsgwUpdate"> <span>不可以修改</span></label>
+								</p>
+							</fieldset>
+							<fieldset class="section3" id="lis12">
+								<legend>潜在客户等级设置（设置所有门店）</legend>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td v-for="(qzLevel,index) in commonSet.qzLevels">等级{{toChinese(index+1)}}</td>
+											<!--<td>等级二</td>-->
+											<!--<td>等级三</td>-->
+											<!--<td>等级四</td>-->
+											<!--<td></td>-->
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td v-for="qzLevel in commonSet.qzLevels">{{qzLevel}}</td>
+											<!--<td>很好</td>-->
+											<!--<td>一般</td>-->
+											<!--<td>很差</td>-->
+										</tr>
+									</tbody>
+								</table>
+							</fieldset>
+							<fieldset class="section4" id="lis13">
+								<legend>推荐人管理</legend>
+								<p class="p1">
+									现有会员推荐人：
+									<label><input type="radio" name="show5" value="true" v-model="commonSet.xytjrUpdate"> <span>可以修改</span></label>
+									<label><input type="radio" name="show5" value="false" v-model="commonSet.xytjrUpdate"> <span>不可以修改</span></label>
+								</p>
+								<p class="p2">
+									潜在客户建档<input type="text" class="txt" v-model="commonSet.tjyInputTime"/>分中内可以录入推荐人（0分钟则视为必须建立的时候录入）
+								</p>
+							</fieldset>
+							<fieldset class="section5" id="lis14">
+								<legend>会员储值消费管理</legend>
+									会员储值金额仅以下卡使用：
+									<label><input type="checkbox" name="ifenter5_0" value="0" v-model="commonSet.czjeUses"> <span>正常</span></label>
+									<label><input type="checkbox" name="ifenter5_1" value="1" v-model="commonSet.czjeUses"> <span>停卡</span></label>
+									<label><input type="checkbox" name="ifenter5_2" value="2" v-model="commonSet.czjeUses"> <span>冻结</span></label>
+									<label><input type="checkbox" name="ifenter5_3" value="3" v-model="commonSet.czjeUses"> <span>已过期</span></label>
+									<label><input type="checkbox" name="ifenter5_4" value="4" v-model="commonSet.czjeUses"> <span>未开卡</span></label>
+									<label><input type="checkbox" name="ifenter5_5" value="5" v-model="commonSet.czjeUses"> <span>待补余</span></label>
+									<label><input type="checkbox" name="ifenter5_6" value="6" v-model="commonSet.czjeUses"> <span>历史</span></label>
+							</fieldset>
+							<!--<fieldset class="section5" id="lis114">-->
+								<!--<legend>会员储值消费管理</legend>-->
+									<!--会员储值金额仅以下卡使用：-->
+									<!--<label><input type="checkbox" name="ifenter5_0" value="false" v-model="commonSet.czjeUses"> <span>正常</span></label>-->
+									<!--<label><input type="checkbox" name="ifenter5_1" value="true" v-model="commonSet.czjeUses"> <span>停卡</span></label>-->
+									<!--<label><input type="checkbox" name="ifenter5_2" value="2" v-model="commonSet.czjeUses"> <span>冻结</span></label>-->
+									<!--<label><input type="checkbox" name="ifenter5_3" value="3" v-model="commonSet.czjeUses"> <span>已过期</span></label>-->
+									<!--<label><input type="checkbox" name="ifenter5_4" value="4" v-model="commonSet.czjeUses"> <span>未开卡</span></label>-->
+									<!--<label><input type="checkbox" name="ifenter5_5" value="5" v-model="commonSet.czjeUses"> <span>待补余</span></label>-->
+									<!--<label><input type="checkbox" name="ifenter5_6" value="6" v-model="commonSet.czjeUses"> <span>历史</span></label>-->
+							<!--</fieldset>-->
+							<fieldset class="section6" id="lis15">
+								<legend>其他管理</legend>
+								<p class="p1">
+									所有报表手机号显示：
+									<label><input type="radio" name="show6" value="true" v-model="commonSet.showMobile"> <span>显示</span></label>
+									<label><input type="radio" name="show6" value="false" v-model="commonSet.showMobile"> <span>不显示</span></label>
+								</p>
+							</fieldset>
+							<fieldset class="section7" id="lis16">
+								<legend>作废协议号设置（前台禁止录入）</legend>
+								<p>
+									<input type="text" class="txt1" v-model="invalidProtocolSet.invalidProtocolNo"/>
+									<input type="button" class="submit" value="增加"  @click="addInvalidProtocolNo()"/>
+								</p>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>作废协议号</td>
+											<td>创建时间</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(invalidProtocol,index) in invalidProtocolSet.list" >
+											<td>{{index+1}}</td>
+											<td>{{invalidProtocol.protocolNo}}</td>
+											<td>{{invalidProtocol.createTime}}</td>
+											<td style="color:red;cursor:pointer;" @click="deleteProtocolNo(invalidProtocol.id,index)">删除</td>
+										</tr>
+									</tbody>
+								</table>
+								<!--分页-->
+								<div class="page-bar">
+								</div>
+
+							</fieldset>
+							<fieldset class="section7" id="lis17">
+								<legend>作废会员卡号设置（前台禁止录入）</legend>
+								<p>
+									<input type="text" class="txt1" v-model="invalidVIPCardSet.invalidVIPCardNo"/>
+									<input type="button" class="submit" value="增加" @click="addInvalidVIPCardNo()"/>
+								</p>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>作废会员卡号</td>
+											<td>创建时间</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(card,index) in invalidVIPCardSet.list" >
+											<td>{{index+1}}</td>
+											<td>{{card.cardNo}}</td>
+											<td>{{card.createTime}}</td>
+											<td style="color:red;cursor:pointer;" @click="deleteInvalidVIPCard(card.id,index)">删除</td>
+										</tr>
+									</tbody>
+
+								</table>
+								<!--分页-->
+								<div class="cardPageBox"></div>
+
+							</fieldset>
+							<fieldset class="section9" id="lis18">
+								<legend>协议号管理</legend>
+								<p class="p1">
+									数量：<input type="number" oninput="if(value.length>5)value=value.slice(0,5)" placeholder="最多99999" class="txt1 width110" v-model="protocolNumMgt.batchNum" />
+									开始编号：<input type="number" placeholder="长度9~12位" oninput="if(value.length>12)value=value.slice(0,12)" class="txt1 width110" v-model="protocolNumMgt.startNo" />
+									结束编号：<input type="number" placeholder="长度9~12位" readonly oninput="if(value.length>12)value=value.slice(0,12)" class="txt1 width110" v-model="protocolNumMgtEndNoResult" />
+								</p>
+								<p class="p2">
+										<label><input type="checkbox" v-model="protocolNumMgt.useLimitNum"> <span>协议号</span></label>
+										<label><input type="checkbox" name="ifenter6" :disabled="!protocolNumMgt.useLimitNum" v-model="protocolNumMgt.useHeadNum" value="1"> <span>首号</span></label>
+										<label><input type="checkbox" name="ifenter6" :disabled="!protocolNumMgt.useLimitNum" v-model="protocolNumMgt.useMiddleNum" value="2"> <span>中间</span></label>
+										<label><input type="checkbox" name="ifenter6" :disabled="!protocolNumMgt.useLimitNum" v-model="protocolNumMgt.useTailNum" value="3"> <span>尾号，去除带</span></label>
+									<input type="text"  v-model="protocolNumMgt.limitNum" value="3" :disabled="!protocolNumMgt.useLimitNum" class="txt1 width40"/>
+									<input type="button" class="submit" value="增加" @click="addProtocols()"/>
+								</p>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>数量</td>
+											<td>开始编号</td>
+											<td>结束编号</td>
+											<td>已用数量</td>
+											<td>作废数量</td>
+											<td>协议号不包含数字</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(item,index) in protocolNumMgt.list">
+											<td>{{index+1}}</td>
+											<td>{{item.batchNum}}</td>
+											<td>{{item.startNo}}</td>
+											<td>{{item.endNo}}</td>
+											<td>{{item.usedCount}}</td>
+											<td>{{item.invalidCount}}</td>
+											<td>{{item.limitNum}}</td>
+											<td style="color:#999;cursor:pointer;">删除</td>
+										</tr>
+									</tbody>
+								</table>
+							</fieldset>
+							<fieldset class="section10" id="lis19">
+								<legend>会员卡号管理</legend>
+								<p class="p1">
+									数量：<input type="number" oninput="if(value.length>5)value=value.slice(0,5)" placeholder="最多99999" class="txt1 width110" v-model="VIPCardMgt.batchNum" />
+									开始编号：<input type="number" placeholder="长度9~12位" oninput="if(value.length>12)value=value.slice(0,12)" class="txt1 width110" v-model="VIPCardMgt.startNo" />
+									结束编号：<input type="number" placeholder="长度9~12位" readonly oninput="if(value.length>12)value=value.slice(0,12)" class="txt1 width110" v-model="VIPCardMgtEndNoResult" />
+								</p>
+								<p class="p2">
+									<label><input type="checkbox" v-model="VIPCardMgt.useLimitNum" > <span>会员卡号</span></label>
+									<label><input type="checkbox" name="ifenter6" :disabled="!VIPCardMgt.useLimitNum" v-model="VIPCardMgt.useHeadNum"><span>首号</span></label>
+									<label><input type="checkbox" name="ifenter6" :disabled="!VIPCardMgt.useLimitNum" v-model="VIPCardMgt.useMiddleNum"><span>中间</span></label>
+									<label><input type="checkbox" name="ifenter6" :disabled="!VIPCardMgt.useLimitNum" v-model="VIPCardMgt.useTailNum"><span>尾号，去除带</span></label>
+									<input type="text" v-model="VIPCardMgt.limitNum" value="4" :disabled="!VIPCardMgt.useLimitNum" class="txt1 width40"/>
+									<input type="button" class="submit" value="增加" @click="addVIPCard()"/>
+								</p>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>数量</td>
+											<td>开始编号</td>
+											<td>结束编号</td>
+											<td>已用数量</td>
+											<td>作废数量</td>
+											<td>会员卡号不包含数字</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(item,index) in VIPCardMgt.list">
+											<td>{{index+1}}</td>
+											<td>{{item.batchNum}}</td>
+											<td>{{item.startNo}}</td>
+											<td>{{item.endNo}}</td>
+											<td>{{item.usedCount}}</td>
+											<td>{{item.invalidCount}}</td>
+											<td>{{item.limitNum}}</td>
+											<td style="color:#999;cursor:pointer;">删除</td>
+										</tr>
+									</tbody>
+								</table>
+							</fieldset>
+							<input type="button" value="保存" class="save" @click="saveCommonSet()"/>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-3.3.1.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/jquery.cookie.js"></script>
+		<script src="../js/setCookie.js"></script>
+		<script src="../js/jquery-confirm.js"></script>
+		<script src="../js/jquery.paging.js"></script>
+		<script src="../js/extendjQuery.js"></script>
+		<script src="../js/vue.js"></script>
+		<script src="../js/axios.min.js"></script>
+		<script src="../js/toZhDigit.js"></script>
+		<script src="../js/loading.js"></script>
+		<script src="individual.js"></script>
+		<script type="text/javascript">
+//			门店选项卡切换    40是right的上下padding
+			(function (){
+				$('.tab span').click(function () {
+					$(this).addClass('on').siblings().removeClass('on');
+					$('.list').eq($(this).index()).removeClass('noshow').siblings().addClass('noshow');
+					$('.list').eq($(this).index()).find('.left').height($('.list').eq($(this).index()).find('.right').height()+40); 
+				});
+//			左侧右边框线的高度    40是right的上下padding
+				var h=$('.right').height()+40;
+//				console.log(h);
+				$('.left').height(h);
+//			左侧导航栏选中状态
+				$('.left li').click(function () {
+					$(this).addClass('on').siblings().removeClass('on');
+				});
+//			单门店section8的删除
+				$('#delete1 span').click(function (){
+					$(this).parent().remove();
+				})
+//			通用门店section7的删除
+				$('#lis16 tbody td:nth-child(4)').click(function (){
+					$(this).parent().remove();
+				})
+//			通用门店section8的删除
+				$('#lis17 tbody td:nth-child(4)').click(function (){
+					$(this).parent().remove();
+				})
+//			通用门店section9的删除
+				$('#lis18 tbody td:nth-child(8)').click(function (){
+					$(this).parent().remove();
+				})
+//			通用门店section10的删除
+				$('#lis19 tbody td:nth-child(8)').click(function (){
+					$(this).parent().remove();
+				})
+			})();
+
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrClientPersonnelRelateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrClientPersonnelRelate">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="personal_id" property="personalId"/>
+        <result column="flag" property="flag"/>
+        <result column="type" property="type"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="update_user_name" property="updateUserName"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="role_id" property="roleId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        client_id AS clientId, shop_id AS shopId, personal_id AS personalId, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, role_id AS roleId, id
+    </sql>
+    <delete id="deleteByClient" parameterType="java.lang.String">
+        delete from fr_client_personnel_relate where client_id=#{id}
+    </delete>
+
+
+</mapper>

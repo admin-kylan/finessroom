@@ -1,0 +1,1678 @@
+#customerCourseProject .topNav span{
+	float:left;
+	margin:5px 0 5px 10px;
+	width:96px;
+	height:30px;
+	text-align: center;
+	line-height: 30px;
+	background: #9cf;
+	color:#fff;
+	cursor: pointer;
+}
+#customerCourseProject .topNav span.on{
+	background: #f00;
+}
+#customerCourseProject .list{
+	display: none;
+}
+#customerCourseProject li.on{
+	display: block;
+}
+#customerCourseProject .list fieldset{
+	border-color: #00f;
+}
+#customerCourseProject .list fieldset > div{
+	margin-bottom: 15px;
+	line-height: 25px;
+}
+#customerCourseProject .list .lh25{
+	line-height: 25px;
+}
+#customerCourseProject .list legend{
+	color:#00f;
+}
+#customerCourseProject .list .lef{
+	float:left;
+	line-height: 20px;
+}
+#customerCourseProject .list .rig{
+	float:left;
+	margin-left: 30px;
+	line-height: 20px;
+}
+#customerCourseProject .list .title,#customerCourseProject .list .category{
+	float: left;
+}
+#customerCourseProject .list .category span{
+	float: left;
+	margin-left: 10px;
+	width: 60px;
+	height: 30px;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	cursor: pointer;
+	line-height: 30px;
+	text-align: center;
+}
+#customerCourseProject .list .category span.on{
+	background: #090;
+	border:none;
+	color:#fff;
+}
+#customerCourseProject .list input{
+	height: 30px;
+}
+#customerCourseProject .list select{
+	height: 30px;
+}
+#customerCourseProject .list .search{
+	margin-left: 10px;
+	width: 60px;
+	height: 30px;
+	color:#fff;
+	background: #169bd5;
+	border: none;
+	border-radius: 2px;
+	outline: none;
+	line-height: 30px;
+}
+#customerCourseProject .list .tab{
+	text-align: center;
+}
+#customerCourseProject .list .tab thead{
+	background: #0cc;
+}
+#customerCourseProject .list .tab tr{
+	height:30px;
+}
+#customerCourseProject .list .tab td{
+	padding: 0;
+	line-height: 30px;
+}
+#customerCourseProject .list .tab span{
+	display: inline-block;
+	cursor: pointer;
+	margin: 0 3px;
+}
+#customerCourseProject .list .tab .lightBlue{
+	color:#9cf;
+}
+#customerCourseProject .list .tab .red{
+	color:#f00;
+}
+#customerCourseProject .list .tab .blue{
+	color:#0cf;
+}
+#customerCourseProject .list .tab .green{
+	color:#0c0;
+}
+#customerCourseProject .list .tab .yellow{
+	color:#fc0;
+}
+#customerCourseProject .list .tab .deepBlue{
+	color:#06f;
+}
+#customerCourseProject .list .tab .grey{
+	color:#ccc;
+}
+#customerCourseProject .list3 .boxNav span{
+	float:left;
+	margin: 10px 0 0 10px;
+	width:125px;
+	height:25px;
+	line-height: 25px;
+	border:1px solid #9cf;
+	border-radius: 5px 5px 0 0;
+	border-bottom: none;
+	cursor: pointer;
+	color: #00f;
+	text-align: center;
+}
+#customerCourseProject .list3 .boxNav span.on{
+	float:left;
+	background:#c1e5fa;
+	color:#fff;
+}
+#customerCourseProject .list3 .boxChoose{
+	display: none;
+	border:1px solid #9cf;
+}
+#customerCourseProject .list3 div.on{
+	display: block;
+}
+#customerCourseProject .list3 .boxChoose .line{
+	margin-top:15px;
+}
+#customerCourseProject .list3 .boxChoose label:first-child span{
+	display: inline-block;
+	width:130px;
+	text-align: right;
+}
+#customerCourseProject .list3 .boxChoose label + label{
+	margin-left:30px;
+}
+#customerCourseProject .list3 .boxChoose select{
+	width:140px;
+	height: 30px;
+}
+#customerCourseProject .list3 .boxChoose input{
+	height: 30px;
+	text-align: center;
+}
+#customerCourseProject .list3 .boxChoose .random{
+	float:right;
+	width:75px;
+	height: 30px;
+	line-height: 28px;
+	background: #999;
+	cursor: pointer;
+	color: #fff;
+	text-align: center;
+}
+#customerCourseProject .list3 .boxChoose .distribution{
+	float:right;
+	width:58px !important;
+	height: 30px;
+	background: #fc0;
+	cursor: pointer;
+	color: #fff;
+	line-height: 30px;
+	text-align: center !important;
+}
+#customerCourseProject .list3 .boxChoose .project{
+	float:right;
+	width:105px !important;
+	height: 30px;
+	background: #999;
+	cursor: pointer;
+	color: #fff;
+	line-height: 30px;
+	color: #fff;
+	text-align: center !important;
+}
+#customerCourseProject .list3 .boxChoose input[type=radio]{
+	position: relative;
+	top:10px;
+	margin:0 2px 0 10px;
+}
+#customerCourseProject .list3 .boxChoose .red{
+    width: initial !important;
+	color:#f00;
+}
+#customerCourseProject .list3 .boxChoose .to50{
+	width:50px;
+}
+#customerCourseProject .list3 .boxChoose .check{
+	margin: 0 0 15px 130px;
+	width:130px;
+	height: 30px;
+	background:#f00;
+	border: none;
+	border-radius: 5px;
+	line-height: 30px;
+	color: #fff;
+}
+#customerCourseProject .list3 .boxChoose table{
+	float: right;
+	margin-left: 4px;
+	width:500px;
+	border-collapse: collapse;
+	text-align: center;
+}
+#customerCourseProject .list3 .boxChoose table thead{
+	background: #f0f0ff;
+}
+#customerCourseProject .list3 .boxChoose table td{
+	width:100px;
+	height:28px;
+}
+#customerCourseProject .list3 .tab{
+	overflow: inherit;
+	
+}
+#customerCourseProject .list3 .tab .tabWrap{
+	overflow-x:scroll;
+}
+#customerCourseProject .list3 .tab .tabWrap table{
+	min-width: 2100px;
+}
+#customerCourseProject .list4 .fieldset1{
+	border:1px dashed #f00;
+}
+#customerCourseProject .list4 .fieldset1 select{
+	width:100%;
+}
+#customerCourseProject .list4 .fieldset1 legend{
+	color:#f00;
+}
+#customerCourseProject .list4 .fieldset1 option{
+	margin:10px 0;
+}
+#customerCourseProject .list4 .fieldset1 .yellow{
+	color:#FFCC00;
+}
+#customerCourseProject .list4 .fieldset1 .blod{
+	font-weight: bold;
+	color:#666;
+}
+#customerCourseProject .list4 .fieldset2{
+	border:1px dashed #ccc;
+}
+#customerCourseProject .list4 .fieldset2 legend{
+	color:#333;
+}
+#customerCourseProject .list4 .fieldset2 p{
+	line-height: 28px;
+}
+#customerCourseProject .list4 .fieldset2 label{
+	font-weight: normal;
+}
+#customerCourseProject .list4 .fieldset2 label + label{
+	margin-left:30px;
+}
+#customerCourseProject .list4 .fieldset2 .useful{
+	display: inline-block;
+	padding:0 15px;
+	height: 30px;
+	background: #f00;
+	cursor: pointer;
+	text-align: center;
+	line-height: 30px;
+	color:#fff;
+}
+#customerCourseProject .list4 .tabTitle{
+	font-weight: bold;
+	line-height: 32px;;
+}
+#customerCourseProject .list4 table{
+	width: 100%;
+	text-align: center;
+}
+#customerCourseProject .list4 table tr{
+	height:30px;
+}
+#customerCourseProject .list4 table thead{
+	background: #0cc;
+}
+#customerCourseProject .list4 table tbody tr:nth-child(even){
+	background: #f1fafe;
+}
+#customerCourseProject .list5 .yellow{
+	color:#fc0;
+}
+#customerCourseProject .list5 .red{
+	color:#f00;
+}
+#customerCourseProject .list input[type=checkbox]{
+	position: relative;
+	top:8px;
+}
+#customerCourseProject .list6 textarea{
+	vertical-align: top;
+	width:550px;
+	height:90px;
+	resize: none;
+}
+#customerCourseProject .list8  .red{
+	color:#f00;
+}
+#customerCourseProject .list7 .fieldsetWrap{
+	margin:5px;
+}
+#customerCourseProject .list7 .fieldset3,#customerCourseProject .list7 .fieldset4,#customerCourseProject .list7 .fieldset5{
+	border:1px dashed #ccc;
+}
+#customerCourseProject .list7 .fieldset3 legend,#customerCourseProject .list7 .fieldset4 legend{
+	color: #fc0;
+}
+#customerCourseProject .list7 .fieldset5{
+	margin:auto;
+	width: 300px;
+	height:150px;
+}
+#customerCourseProject .list7 .fieldset3 input ,#customerCourseProject .list7 .fieldset3 select{
+	width:140px;
+}
+#customerCourseProject .list7 .fieldset3 .btn{
+    display: block;
+    margin: auto;
+    height: 35px;
+    background: #f00;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+}
+#customerCourseProject .list7 .fieldset3 .red{
+	color:#f00;
+}
+#customerCourseProject .list7 .fieldset5 legend{
+	color: #0c0;
+}
+#customerCourseProject .list7 .fieldset3{
+	margin:0 1% 0 0;
+	width:29%;
+}
+#customerCourseProject .list7 .fieldset3 label{
+	display: block;
+	margin:15px 0;
+	font-weight: normal;
+}
+#customerCourseProject .list7 .fieldset4{
+	margin:0;
+	width:70%;
+}
+#customerCourseProject .newCustomers_maskLayer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: none;
+}
+
+#customerCourseProject .newCustomers_maskLayer .newCustomers_maskLayer_box_top {
+    line-height: 36px;
+    background-color: rgba(0, 153, 255, 1);
+    text-align: center;
+}
+
+#customerCourseProject .newCustomers_maskLayer .newCustomers_maskLayer_box_top span {
+    color: #fff;
+}
+
+#customerCourseProject .newCustomers_maskLayer .newCustomers_maskLayer_box_top a {
+    position: absolute;
+    right: 0px;
+    color: #000;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 0 10px;
+}
+
+/* <!-- 业绩分配弹窗 --> */
+#NewPurchase .newCustomers_maskLayer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: none;
+}
+#performance .newCustomers_maskLayer_box{
+    top: 20%;
+    max-width: 600px;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+}
+
+#performance .newCustomers_maskLayer_box_shen{
+    padding: 5px 0;
+}
+
+#performance .newCustomers_maskLayer_box_botton a{
+    text-align: center;
+}
+
+#performance .newCustomers_maskLayer_box_shen input[type=text]{
+    max-width: 60px;
+    padding: 5px 10px;
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen .btn-primary{
+   padding: 4px 10px;
+}
+
+#performance .newCustomers_maskLayer_box_shen .table{
+    line-height: 26px;
+    width: 90%;
+    margin: 0 auto;
+}
+#performance .newCustomers_maskLayer_box_shen .table thead{
+    background-color: #00ccff;
+}
+#performance .newCustomers_maskLayer_box_shen .table thead th{
+    text-align: center;
+    font-weight: 500;
+}
+#performance .newCustomers_maskLayer_box_shen .table td{
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen div{
+    margin-bottom: 10px;
+}
+#performance .newCustomers_maskLayer_box label{
+    margin-right: 10px;
+    font-weight:500;
+}
+#performance .newCustomers_maskLayer_box select{
+    min-width: 90px;
+    padding: 5px 10px;
+}
+#performance .newCustomers_maskLayer_box_botton{
+    text-align: center;
+    padding-bottom: 15px;
+}
+#performance .newCustomers_maskLayer_box_botton .btn-success{
+    background-color: #169BD5;
+    border-color: #169BD5;
+}
+#performance .newCustomers_maskLayer_box_shen fieldset:nth-child(2) input[type=text]{
+    min-width: 100px;
+    text-align: center;
+}
+#performances{
+    text-decoration: underline;
+    color: #1639ff;
+}
+
+/*<!-- 选择会员卡弹窗 --> */
+#product .newCustomers_maskLayer_box{
+    top: 20%;
+    max-width: 600px;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+    min-height: 400px;
+}
+#product .newCustomers_maskLayer_box .shen_top{
+    overflow: hidden;
+    margin: 5px 0;
+    padding: 0 10px;
+}
+#product .newCustomers_maskLayer_box .shen_top>span{
+   margin-right: 15px;
+}
+
+#product .newCustomers_maskLayer_box .shen_top select{
+    padding: 5px 10px;
+    min-width: 100px;
+}
+#product .newCustomers_maskLayer_box .shen_top input{
+    padding: 5px 10px;
+    min-width: 100px;
+    float: right;
+}
+#product .newCustomers_maskLayer_box .shen_top a{
+    padding: 7px 10px;
+    float: right;
+}
+#product .newCustomers_maskLayer_box .table thead{
+    background-color: #00ccff;
+}
+#product .newCustomers_maskLayer_box .table th{
+    text-align: center;
+}
+#product .newCustomers_maskLayer_box .table td{
+    text-align: center;
+}
+/* //颜色 */
+
+/* <!-- 选择优惠 --> */
+#offer  .section2_boxs1_right {
+    float: right;
+}
+#offer .section2_boxs1_right .section2_boxs1_top>div {
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    line-height: 30px;
+}
+#offer .section2_boxs1_right .section2_boxs1_top {
+    float: left;
+    width: 30%;
+    text-align: center;
+    background: #ecffff;
+}
+#offer .section2_boxs1_right .section2_boxs1_botton {
+    float: left;
+    width: 70%;
+}
+#offer .newCustomers_maskLayer_box{
+    top: 0%;
+    width: 95%;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+    min-height: 645px;
+    max-height: 740px;
+}
+#offer .maskLayerAlert_box_alert{
+    display: none;
+    position: absolute;
+    top: 40%;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 40%;
+    background-color: #fff;
+    text-align: center;
+    height: 180px;
+    box-shadow: 3px 3px 20px 1px #000; 
+    min-width: 480px;
+    z-index: 10;
+}
+#offer .maskLayerAlert_box_alert .maskLayerAlert_box_alert_a{
+    background-color: #B1DBFF;
+    margin-bottom: 15px;
+    line-height: 30px;
+    font-size: 13px;
+    text-align: center;
+}
+
+#offer .maskLayerAlert_box_alert .maskLayerAlert_box_alert_a .setting_hide_a{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #000;
+    padding: 0 15px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+#offer .maskLayerAlert_box_alert input{
+    width: 80px;
+}
+#offer .maskLayerAlert_box_alert .btn-success{
+    margin-right: 15px;
+}
+#offer .maskLayerAlert_box_alert p{
+    margin-bottom: 10px;
+}
+
+
+
+#offer .maskLayerAlert_box_alert2{
+    display: none;
+    position: absolute;
+    top: 10%;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 60%;
+    background-color: #fff;
+    box-shadow: 3px 3px 20px 1px #000; 
+    z-index: 10;
+}
+#offer .maskLayerAlert_box_alert2 .maskLayerAlert_box_alert_a{
+    background-color: #B1DBFF;
+    margin-bottom: 15px;
+    line-height: 30px;
+    font-size: 13px;
+}
+
+#offer .maskLayerAlert_box_alert2 .maskLayerAlert_box_alert_a .setting_hide_a{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #000;
+    padding: 0 15px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+#offer .maskLayerAlert_box_alert2 input{
+    width: 80px;
+}
+
+#offer .maskLayerAlert_box_alert2 p{
+    margin-bottom: 10px;
+}
+
+#offer .maskLayerAlert_footer .category_span_red {
+    color: red;
+    margin-top: 20px;
+}
+#offer .maskLayerAlert_footer .category_span_red p{
+    color: red;
+    text-indent: 20px;
+}
+#offer .newCustomers_maskLayer_box_shen{
+    padding: 10px 0;
+}
+#offer .maskLayerAlert_box_alert2 .maskLayerAlert{
+    padding: 10px;
+}
+#offer .page {
+    margin: 15px 0;
+}
+
+#offer .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+#offer .page ul li:last-child {
+    border: none;
+    
+}
+#offer .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+
+#offer .table th{
+    text-align: center;
+    font-weight: 500;
+}
+#offer .table thead{
+    background-color: #0CC;
+}
+
+#offer .table label{
+    width: 100%;
+}
+#offer .table input{
+    width: 100%;
+    border: none;
+    text-align: center;
+	line-height: 26px;
+	height: auto;
+    top: 0 !important;
+}
+
+#offer .payment_method{
+    overflow: hidden;
+}
+#offer .payment_method fieldset{
+    padding: 5px;
+}
+#offer .newCustomers_maskLayer_box_shen .btn-default{
+    background-color: #ddd;
+    padding: 5px 10px;
+    border: none;
+}
+#offer .newCustomers_maskLayer_box_shen select{
+    padding: 5px 10px;
+    min-width: 100px;
+}
+
+#offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div{
+    margin: 0px 0;
+    overflow: hidden;
+    line-height: 20px;
+    margin-bottom: 5px;
+}
+#offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div span{
+   float: left;
+   margin-right: 15px;
+   line-height: 30px;
+}
+#offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div a{
+    float: left;
+    margin-right: 15px;
+    min-width: 80px;
+ } 
+ #offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div select{
+    float: left;
+    margin-right: 15px;
+ }
+ #offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong{
+     font-size: 20px;
+ }
+ #offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong.red{
+    color: red
+}
+#offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong.green{
+    color:  #0ae60a;
+}
+#offer .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong.yellow{
+    color: rgb(233, 233, 27);
+}
+#offer .newCustomers_maskLayer_box_shen .btn-red{
+    background-color: red;
+    min-width: 100px;
+    text-align: center;
+    margin: 0 auto;
+    display: inline-block;
+    color: #fff;
+}
+#offer .section2{
+    border-color: red;
+    padding: 5px 10px;
+}
+#offer .section2 legend{
+    color: #FF9900
+}
+#offer .section3 legend{
+    color: #FF9900
+}
+#offer .section3{
+    border-color: #00cccc;
+    padding: 5px 10px;
+}
+#offer .section3 .section3_box{
+    border:1px solid #ccc;
+}
+#offer .section3 .section3_box_top{
+    border-bottom:1px solid #ccc;
+    padding: 0 10px;;
+    background-color: rgb(236, 245, 255);
+}
+#offer .section3 .section3_box_top span{
+    margin-right: 15px;
+    line-height: 30px;
+}
+#offer .section3 .section3_box_top strong{
+    color: #FF9900
+}
+#offer .section3 .section3_box_botton{
+    overflow: hidden;
+}
+#offer .section3 .section3_box_botton .section3_box_botton_rigth{
+    width: 90%;
+    float: left;
+    line-height: 30px;
+}
+#offer .section3 .section3_box_botton .section3_box_botton_rigth span{
+    margin-right: 20px;
+}
+#offer .section3 .section3_box_botton .section3_box_botton_rigth span strong{
+    color: red;
+}
+#offer .section3 .section3_box_botton .section3_box_botton_rigth span p{
+    color: red;
+    display: inline-block;
+}
+#offer .section3 .section3_box_botton .section3_box_botton_left{
+    padding: 10px;
+    width: 10%;
+    float: left;
+}
+#offer .section3 .section3_box_botton .section3_box_botton_left img{
+    width: 70px;
+    height: 70px;
+}
+
+
+#offer .section4 legend{
+    color: #FF9900
+}
+#offer .section4{
+    /* min-height: 600px; */
+    border-color: rgba(255, 204, 0, 1);
+    padding: 0px 10px;
+}
+#offer .section4 fieldset{
+    padding: 5px;
+}
+#offer .section4_box_top{
+    line-height: 24px;
+}
+#offer .section4_box_top .btn{
+    padding: 4px 12px;
+    margin: 0 10px;
+    background-color: rgba(22, 155, 213, 1);
+    border-color: rgba(22, 155, 213, 1);
+}
+#offer .section4_box_top div{
+    line-height: 24px;
+    margin: 5px 0;
+}
+#offer .section4_box_top span{
+    color: red;
+    margin-right: 15px;
+}
+#offer .section4_box_top label{
+    margin: 0 5px;
+}
+#offer .section4_box_top strong{
+    color: red;
+    font-size: 20px;
+}
+#offer .section4_box_botton fieldset{
+    display: none;
+    border: 1px dashed red;
+}
+#offer .section4_box_botton fieldset label{
+    margin-right: 10px;
+    line-height: 30px;
+}
+#offer .section4_box_botton fieldset select{
+    padding: 5px 10px;
+    margin-right: 10px;
+    min-width: 100px;
+}
+#offer .section4_box_botton fieldset input{
+	padding: 5px 10px;
+	height: auto;
+}
+#offer .section4_box_botton fieldset input[type=text]{
+    min-width: 150px;
+    float: left;
+    height: 30px;
+}
+#offer .section4_box_botton .fieldset3 span{
+    min-width: 150px;
+    display: inline-block;
+    text-align: right;
+}
+#offer .section4_box_botton .fieldset3 div{
+    margin-bottom: 10px;
+}
+
+
+/* 头 */
+#offer .payment_method_top ul{
+    overflow: hidden;
+    padding: 0 5px;
+}
+#offer .payment_method_top ul li{
+    float: left;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-right: 10px;
+    padding: 5px 15px;
+    border-bottom: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+#offer .payment_method_top ul li.on{
+  
+    background-color: #0CC;
+}
+/* 左 */
+#offer .payment_method_left{
+    width: 47%;
+}
+#offer .payment_method_left ul{
+    padding: 0 5px;
+}
+#offer .payment_method_left ul li{
+    display: none;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    line-height: 26px; 
+    height: 290px;
+    max-height: 290px;
+}
+#offer .payment_method_left ul li.on{
+    display: block;
+}
+#offer .payment_method_left .col-md7{
+    float: left;
+    width: 60%;
+}
+#offer .payment_method_left .col-md5{
+    float: left;
+    width: 40%;
+}
+#offer .payment_method_left .col-md12{
+  
+}
+#offer .payment_method_left ul .li1 .table{
+    margin: 0;
+}
+#offer .payment_method_left ul .li1 .table th{
+    line-height: 10px;
+}
+#offer .payment_method_left ul .li1 .table td{
+    line-height: 12px;
+    padding: 6px 0 0;
+}
+#offer .payment_method_left ul .li1 .col_md7_botton{
+    overflow-y: auto;
+    height: 240px;
+    text-align: center;
+    padding: 0 5px;
+}
+#offer .payment_method_left ul .li1 .col_md7_top{
+    margin: 10px 0;
+    padding: 0 15px;
+}
+#offer .payment_method_left ul .li1 .col_md7_top .btn-success{
+    padding: 5px 10px;
+    background-color: rgba(22, 155, 213, 1);
+    border: none;
+    float: right;
+}
+#offer .payment_method_left ul .li1 .col-md5>div div{
+    line-height: 24px;
+    margin: 8px 0;
+    padding: 0 10px;
+}
+#offer .payment_method_left ul .li1 .col-md5>div div input{
+    max-width: 60px;
+}
+#offer .payment_method_left ul .li1 .col-md5>div div span{
+    color: red;
+    font-weight: 600;
+}
+
+
+#offer .payment_method_left ul .li2 .table{
+    margin: 0;
+}
+#offer .payment_method_left ul .li2 .table th{
+    line-height: 10px;
+}
+#offer .payment_method_left ul .li2 .table td{
+    line-height: 12px;
+}
+#offer .payment_method_left ul .li2 .col_md7_botton{
+    overflow-y: auto;
+    height: 240px;
+    text-align: center;
+    padding: 0 5px;
+}
+#offer .payment_method_left ul .li2 .col_md7_top{
+    margin: 10px 0;
+    padding: 0 15px;
+}
+#offer .payment_method_left ul .li2 .col_md7_top .btn-success{
+    padding: 5px 10px;
+    background-color: rgba(22, 155, 213, 1);
+    border: none;
+    float: right;
+}
+#offer .payment_method_left ul .li2 .col-md5>div div{
+    line-height: 24px;
+    margin: 4px 0;
+    padding: 0 10px;
+}
+#offer .payment_method_left ul .li2 .col-md5>div div input{
+    max-width: 60px;
+}
+#offer .payment_method_left ul .li2 .col-md5>div div span{
+    color: red;
+    font-weight: 600;
+}
+#offer .payment_method_left ul .li2 .col-md5 fieldset{
+    border: 1px solid #cfcf07;
+    padding: 0 5px;
+}
+#offer .payment_method_left ul .li2 .col-md5 fieldset p{
+   line-height: 17px;
+}
+#offer .payment_method_left ul .li2 .col-md5 fieldset div{
+    margin: 0;
+    padding: 0 5px;
+ }
+ #offer .payment_method_left ul .li2 .col-md5 fieldset legend{
+     color: #dbdd19;
+ }
+ #offer .payment_method_left ul li .col-md12{
+     padding: 10px;;
+     text-align: center;
+ }
+ #offer .payment_method_left ul li .col-md12 .col-md3{
+     width: 33%;
+     float: left;
+ }
+ #offer .payment_method_left ul li .col-md12 .col-md3 select{
+    min-width: 150px;
+    min-width: 120px;
+}
+ #offer .payment_method_left ul li .col-md12 fieldset>div{
+     overflow: hidden;
+ }
+ #offer .payment_method_left ul li .col-md12 fieldset legend{
+    text-align: left;
+ }
+ #offer .payment_method_left ul li .col-md12>div{
+    margin: 20px 0;
+ }
+ #offer .payment_method_left ul li .col-md12 input{
+     min-width: 200px;
+     padding: 5px 10px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+ }
+ #offer .payment_method_left ul li .col-md12 a{
+     margin-right: 15px;
+     color: #fff;
+     min-width: 60px;
+ }
+ #offer .payment_method_left ul li .col-md12 a:nth-child(1){
+    background-color: rgba(255, 153, 0, 1);
+}
+#offer .payment_method_left ul li .col-md12 a:nth-child(2){
+    background-color: rgba(22, 155, 213, 1);
+}
+#offer .payment_method_left ul li .col-md12 a:nth-child(3){
+    background-color: rgba(0, 153, 0, 1);
+}
+#offer .payment_method_left ul li .col-md12 a:nth-child(4){
+    background-color: red;
+}
+#offer .payment_method_left ul li .col-md12 a:nth-child(5){
+    background-color: #ddd;
+    margin: 0;
+}
+#offer .payment_method_left ul .li4 .col-md7>div{
+    margin: 17px 0px;
+    text-align: center;
+}
+#offer .payment_method_left ul .li4 .col-md7>div input{
+    padding: 5px 10px;
+    min-width: 280px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+#offer .payment_method_left ul .li4  .col-md5 div{
+    margin: 17px 0;
+}
+#offer .payment_method_left ul .li4  .col-md5 input{
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    min-width: 130px;
+}
+/* 中 */
+#offer .payment_method_box{
+    width: 19%;
+}
+#offer .payment_method_box .section2_boxs1_right {
+    width: 100%;
+    border: 1px solid #ccc;
+    height: 100%;
+    overflow: hidden; 
+    border-bottom: none;
+}
+#offer .section2_boxs1_botton{
+    border-bottom: none;
+}
+#offer .section2_boxs1_right .section2_boxs1_botton a {
+    padding: 4px 5px;
+    background-color: rgba(153, 0, 255, 1);
+    border-radius: 5px;
+    color: #fff;
+    float: right;
+}
+#offer .section2_boxs1_right .section2_boxs1_botton>div {
+    border-bottom: 1px solid #ccc;
+    line-height: 30px;
+    text-indent: 0;
+}
+#offer .section2_boxs1_right .section2_boxs1_botton>div span{
+    color: red;
+    margin-left: 10px;
+}
+#offer .section2_boxs1_right .section2_boxs1_top {
+    background: #fff;
+}
+#offer .section2_boxs1_right .section2_boxs1_top div:nth-child(1){
+    background-color: #0ae60a;
+}
+#offer .section2_boxs1_right .section2_boxs1_botton div:nth-child(1){
+    background-color: #0ae60a;
+    text-align: center;
+}
+#offer .section2_boxs1_right .section2_boxs1_botton input {
+    width: 50%;
+    height: 30px;
+    border: none;
+}
+
+/* 右 */
+#offer .payment_method_rigth{
+    width: 15%;
+    line-height: 20px;
+}
+#offer .payment_method_rigth input{
+	max-width: 80px;
+    padding: 2px 10px;
+    top: 0 !important;
+    height: auto;
+    margin: 2px 0 0;
+}
+#offer .payment_method_rigth label {
+    overflow: hidden;
+}
+#offer .payment_method_rigth label span{
+    float: left;
+}
+#offer .payment_method_rigth label input{
+    float: left;
+}
+#offer .payment_method_rigth li{
+    margin: 5px 0;
+    text-align: right
+}
+#offer .payment_method_rigth fieldset{
+    min-height: 287px;
+}
+#offer .payment_method_rigth2{
+    width: 19%;
+    line-height: 20px;
+}
+#offer .payment_method_rigth2 .rows>div{
+    overflow: hidden;
+    border-bottom: 1px dashed #ccc;
+}
+#offer .payment_method_rigth2 .col-md-6{
+    padding: 4px 0;
+}
+#offer .payment_method_rigth2 .col-md-6 span{
+    color: red;
+}
+#offer .payment_method_rigth2 .col-md-12{
+    text-align: center;
+    padding: 0;
+}
+#offer .payment_method_rigth2 .col-md-12 a{
+    padding: 4px 10px;
+    width: 95%;
+    background-color: rgba(0, 153, 0, 1);
+}
+
+#offer .payment_method_rigth2 .col-md-12 label{
+    float: left;
+}
+#offer .payment_method_rigth2 .col-md-12 label input{
+	float: left;
+    margin-left: 5px;
+    height: auto;
+	top: 2px;
+	margin: 0;
+}
+#offer .payment_method_rigth2 .col-md-12 label span{
+    float: left;
+}
+
+#offer .maskLayerAlert_box_alert2 .btn-default{
+    background-color: red;
+    border-color: red;
+    color: #fff;
+    margin: 10px 0;
+}
+#offer .payment_method_rigth2 .btn-default{
+    margin: 0 auto;
+    text-align: center;
+    display: inherit;
+    width: 90%;
+}
+#offer fieldset>div {
+	margin-bottom: 0px !important;
+	line-height: initial !important;
+}
+#offer .section4_box_top label input{
+    height: auto;
+}
+
+
+
+
+
+
+
+/* <!-- 选择优惠 --> */
+#Refund  .section2_boxs1_right {
+    float: right;
+}
+#Refund .section2_boxs1_right .section2_boxs1_top>div {
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    line-height: 30px;
+}
+#Refund .section2_boxs1_right .section2_boxs1_top {
+    float: left;
+    width: 30%;
+    text-align: center;
+    background: #ecffff;
+}
+#Refund .section2_boxs1_right .section2_boxs1_botton {
+    float: left;
+    width: 70%;
+}
+#Refund .newCustomers_maskLayer_box{
+    top: 5%;
+	width: 60%;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+	min-height: 580px;
+}
+#Refund .maskLayerAlert_box_alert{
+    display: none;
+    position: absolute;
+    top: 40%;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 40%;
+    background-color: #fff;
+    text-align: center;
+    height: 180px;
+    box-shadow: 3px 3px 20px 1px #000; 
+    min-width: 480px;
+    z-index: 10;
+}
+#Refund .maskLayerAlert_box_alert .maskLayerAlert_box_alert_a{
+    background-color: #B1DBFF;
+    margin-bottom: 15px;
+    line-height: 30px;
+    font-size: 13px;
+    text-align: center;
+}
+
+#Refund .maskLayerAlert_box_alert .maskLayerAlert_box_alert_a .setting_hide_a{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #000;
+    padding: 0 15px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+#Refund .maskLayerAlert_box_alert input{
+    width: 80px;
+}
+#Refund .maskLayerAlert_box_alert .btn-success{
+    margin-right: 15px;
+}
+#Refund .maskLayerAlert_box_alert p{
+    margin-bottom: 10px;
+}
+
+
+
+#Refund .maskLayerAlert_box_alert2{
+    display: none;
+    position: absolute;
+    top: 10%;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 60%;
+    background-color: #fff;
+    box-shadow: 3px 3px 20px 1px #000; 
+    z-index: 10;
+}
+#Refund .maskLayerAlert_box_alert2 .maskLayerAlert_box_alert_a{
+    background-color: #B1DBFF;
+    margin-bottom: 15px;
+    line-height: 30px;
+    font-size: 13px;
+}
+
+#Refund .maskLayerAlert_box_alert2 .maskLayerAlert_box_alert_a .setting_hide_a{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #000;
+    padding: 0 15px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+#Refund .maskLayerAlert_box_alert2 input{
+    width: 80px;
+}
+
+#Refund .maskLayerAlert_box_alert2 p{
+    margin-bottom: 10px;
+}
+
+#Refund .maskLayerAlert_footer .category_span_red {
+    color: red;
+    margin-top: 20px;
+}
+#Refund .maskLayerAlert_footer .category_span_red p{
+    color: red;
+    text-indent: 20px;
+}
+#Refund .newCustomers_maskLayer_box_shen{
+    padding: 10px 0;
+}
+#Refund .maskLayerAlert_box_alert2 .maskLayerAlert{
+    padding: 10px;
+}
+#Refund .page {
+    margin: 15px 0;
+}
+
+#Refund .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+#Refund .page ul li:last-child {
+    border: none;
+    
+}
+#Refund .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+
+#Refund .table th{
+    text-align: center;
+    font-weight: 500;
+}
+#Refund .table thead{
+    background-color: #0CC;
+}
+
+#Refund .table label{
+    width: 100%;
+}
+#Refund .table input{
+    width: 100%;
+    border: none;
+    text-align: center;
+	line-height: 26px;
+	height: auto;
+    top: 0 !important;
+}
+
+#Refund .payment_method{
+    overflow: hidden;
+}
+#Refund .payment_method fieldset{
+    padding: 5px;
+}
+#Refund .newCustomers_maskLayer_box_shen .btn-default{
+    background-color: #ddd;
+    padding: 5px 10px;
+    border: none;
+}
+#Refund .newCustomers_maskLayer_box_shen select{
+    padding: 5px 10px;
+    min-width: 100px;
+}
+
+#Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div{
+    margin: 0px 0;
+    overflow: hidden;
+    line-height: 20px;
+    margin-bottom: 5px;
+}
+#Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div span{
+   float: left;
+   margin-right: 15px;
+   line-height: 30px;
+}
+#Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div a{
+    float: left;
+    margin-right: 15px;
+    min-width: 80px;
+ } 
+ #Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div select{
+    float: left;
+    margin-right: 15px;
+ }
+ #Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong{
+     font-size: 20px;
+ }
+ #Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong.red{
+    color: red
+}
+#Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong.green{
+    color:  #0ae60a;
+}
+#Refund .newCustomers_maskLayer_box_shen fieldset:nth-child(4) div>div strong.yellow{
+    color: rgb(233, 233, 27);
+}
+#Refund .newCustomers_maskLayer_box_shen .btn-red{
+    background-color: red;
+    min-width: 100px;
+    text-align: center;
+    margin: 0 auto;
+    display: inline-block;
+    color: #fff;
+}
+#Refund .section2{
+    border-color: red;
+    padding: 5px 10px;
+}
+#Refund .section2 legend{
+    color: #FF9900
+}
+
+#Refund .section3 legend{
+    color: #FF9900
+}
+#Refund .section3{
+    border-color: #00cccc;
+    padding: 5px 10px;
+}
+#Refund .section3 .section3_box{
+    border:1px solid #ccc;
+}
+#Refund .section3 .section3_box_top{
+    border-bottom:1px solid #ccc;
+    padding: 0 10px;;
+    background-color: rgb(236, 245, 255);
+}
+#Refund .section3 .section3_box_top span{
+    margin-right: 15px;
+    line-height: 30px;
+}
+#Refund .section3 .section3_box_top strong{
+    color: #FF9900
+}
+#Refund .section3 .section3_box_botton{
+    overflow: hidden;
+}
+#Refund .section3 .section3_box_botton .section3_box_botton_rigth{
+	width: 80%;
+    float: left;
+    line-height: 30px;
+}
+#Refund .section3 .section3_box_botton .section3_box_botton_rigth span{
+    margin-right: 20px;
+}
+#Refund .section3 .section3_box_botton .section3_box_botton_rigth span strong{
+    color: red;
+}
+#Refund .section3 .section3_box_botton .section3_box_botton_rigth span p{
+    color: red;
+    display: inline-block;
+}
+#Refund .section3 .section3_box_botton .section3_box_botton_left{
+    padding: 10px;
+	width: 15%;
+    float: left;
+}
+#Refund .section3 .section3_box_botton .section3_box_botton_left img{
+    width: 70px;
+    height: 70px;
+}
+
+
+/* /左 */
+
+#Refund .payment_method_left {
+	width: 30%;
+}
+/* 中 */
+#Refund .payment_method_box{
+	width: 40%;
+}
+#Refund .payment_method_box .section2_boxs1_right {
+    width: 100%;
+    border: 1px solid #ccc;
+    height: 100%;
+    overflow: hidden; 
+    border-bottom: none;
+}
+#Refund .section2_boxs1_botton{
+    border-bottom: none;
+}
+#Refund .section2_boxs1_right .section2_boxs1_botton a {
+    padding: 4px 5px;
+    background-color: rgba(153, 0, 255, 1);
+    border-radius: 5px;
+    color: #fff;
+    float: right;
+}
+#Refund .section2_boxs1_right .section2_boxs1_botton>div {
+    border-bottom: 1px solid #ccc;
+    line-height: 30px;
+    text-indent: 0;
+}
+#Refund .section2_boxs1_right .section2_boxs1_botton>div span{
+    color: red;
+    margin-left: 10px;
+}
+#Refund .section2_boxs1_right .section2_boxs1_top {
+    background: #fff;
+}
+#Refund .section2_boxs1_right .section2_boxs1_top div:nth-child(1){
+    background-color: #0ae60a;
+}
+#Refund .section2_boxs1_right .section2_boxs1_botton div:nth-child(1){
+    background-color: #0ae60a;
+    text-align: center;
+}
+#Refund .section2_boxs1_right .section2_boxs1_botton input {
+    width: 50%;
+    height: 30px;
+    border: none;
+}
+
+#Refund .payment_method_left .section2_boxs1_top{
+	background: #fff;
+}
+#Refund .payment_method_left .section2_boxs1_top div:nth-child(1){
+    background: #fff;
+}
+#Refund .payment_method_left .section2_boxs1_botton input {
+    width: 80%;
+	border: 1px solid #ccc;
+}#Refund .payment_method_left .section2_boxs1_botton>div {
+	border-bottom: none;
+	margin: 10px 0;
+}
+#Refund .payment_method_left .section2_boxs1_botton div:nth-child(1){
+    background-color: #fff;
+}
+#Refund .payment_method_left .section2_boxs1_top>div {
+    border-bottom: none;
+	border-right: none;
+	margin: 10px 0;
+}
+/* 右 */
+#Refund .payment_method_rigth2{
+    width: 30%;
+    line-height: 20px;
+}
+#Refund .payment_method_rigth2 .rows>div{
+    overflow: hidden;
+	border-bottom: 1px dashed #ccc;
+	margin: 28px 0;
+}
+#Refund .payment_method_rigth2 .col-md-6{
+    padding: 4px 0;
+}
+#Refund .payment_method_rigth2 .col-md-6 span{
+    color: red;
+}
+#Refund .payment_method_rigth2 .col-md-12{
+    text-align: center;
+    padding: 0;
+}
+#Refund .payment_method_rigth2 .col-md-12 a{
+    padding: 4px 10px;
+    width: 95%;
+    background-color: rgba(0, 153, 0, 1);
+}
+
+#Refund .payment_method_rigth2 .col-md-12 label{
+    float: left;
+}
+#Refund .payment_method_rigth2 .col-md-12 label input{
+	float: left;
+    margin-left: 5px;
+    height: auto;
+    top: 2px;
+}
+#Refund .payment_method_rigth2 .col-md-12 label span{
+    float: left;
+}
+
+#Refund .maskLayerAlert_box_alert2 .btn-default{
+    background-color: red;
+    border-color: red;
+    color: #fff;
+    margin: 10px 0;
+}
+#Refund .payment_method_rigth2 .btn-default{
+    margin: 0 auto;
+    text-align: center;
+    display: inherit;
+    width: 90%;
+}
+#Refund fieldset>div {
+	margin-bottom: 0 !important;
+	line-height: initial !important;
+}
+
+
+#Refund .section2 div{
+	line-height: 40px !important;
+ }
+.MembershipCard-list {
+	display: block;
+	height: 40px;
+	margin-top: 11px;
+	margin-bottom: 3px;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	background: #e4e4e4;
+}
+.MembershipCard-list li {
+	float: left;
+	display: block;
+	min-width: 98px;
+	padding: 0 10px;
+	line-height:  38px;
+	font-size: 12px;
+	text-align: center;
+	color: #333;
+	cursor: pointer;
+}
+.MembershipCard-list li.active,
+.MembershipCard-list li:hover {
+	color: #0cc;
+	border-bottom: 2px solid #0cc;
+	background: #fff;
+}
+.MembershipCard-list li img {
+	vertical-align: middle;
+	margin-right: 5px;
+}

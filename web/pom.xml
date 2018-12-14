@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fitness</artifactId>
+        <groupId>com.yj</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>web</artifactId>
+
+    <packaging>war</packaging>
+
+    <description>后台工程</description>
+
+    <properties>
+        <!--跳过测试类-->
+        <skipTests>true</skipTests>
+    </properties>
+
+    <dependencies>
+        <!--添加依赖工程:数据访问工程-->
+        <dependency>
+            <groupId>com.yj</groupId>
+            <artifactId>dal</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--添加依赖工程:公共工程-->
+        <dependency>
+            <groupId>com.yj</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--添加依赖工程:业务逻辑工程-->
+        <dependency>
+            <groupId>com.yj</groupId>
+            <artifactId>service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>web</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--重新打包-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <fork>true</fork>
+                    <!--指定该Main Class为全局的唯一入口-->
+                    <mainClass>com.yj.web.WebApplication</mainClass>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+
+    </build>
+</project>

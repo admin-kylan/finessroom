@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderStorageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderStorage">
+        <id column="a.id" property="id" />
+        <result column="a.card_id" property="cardId" />
+        <result column="a.order_no" property="orderNo" />
+        <result column="a.client_id" property="clientId" />
+        <result column="a.shop_id" property="shopId" />
+        <result column="a.personnel_id" property="personnelId" />
+        <result column="a.store_price" property="storePrice" />
+        <result column="a.ticket_price" property="ticketPrice" />
+        <result column="a.give_price" property="givePrice" />
+        <result column="a.total_price" property="totalPrice" />
+        <result column="a.flag" property="flag" />
+        <result column="a.storage_status" property="storageStatus" />
+        <result column="a.type" property="type" />
+        <result column="a.give_name" property="giveName" />
+        <result column="a.give_phone" property="givePhone" />
+        <result column="a.cancel_note" property="cancelNote" />
+        <result column="a.refund_user_id" property="refundUserId" />
+        <result column="a.refund_note" property="refundNote" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.status" property="status" />
+        <result column="a.audit_status" property="auditStatus" />
+        <result column="a.status_user_id" property="statusUserId" />
+        <result column="a.audit_user_id" property="auditUserId" />
+        <result column="a.surplus_price" property="surplusPrice" />
+        <result column="a.give_user_id" property="giveUserId" />
+        <result column="a.give_card_id" property="giveCardId" />
+        <result column="a.give_storage_id" property="giveStorageId" />
+        <result column="a.storage_price" property="storagePrice" />
+        <result column="a.storage_card_id" property="storageCardId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_id AS cardId,
+        a.order_no AS orderNo,
+        a.client_id AS clientId,
+        a.shop_id AS shopId,
+        a.personnel_id AS personnelId,
+        a.store_price AS storePrice,
+        a.ticket_price AS ticketPrice,
+        a.give_price AS givePrice,
+        a.total_price AS totalPrice,
+        a.flag,
+        a.storage_status AS storageStatus,
+        a.type,
+        a.give_name AS giveName,
+        a.give_phone AS givePhone,
+        a.cancel_note AS cancelNote,
+        a.refund_user_id AS refundUserId,
+        a.refund_note AS refundNote,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.status, audit_status AS auditStatus,
+        a.status_user_id AS statusUserId,
+        a.audit_user_id AS auditUserId,
+        a.surplus_price AS surplusPrice,
+        a.give_user_id AS giveUserId,
+        a.give_card_id AS giveCardId,
+        a.give_storage_id AS giveStorageId,
+        a.storage_price AS storagePrice,
+        a.storage_card_id AS storageCardId,
+        a.id
+    </sql>
+
+    <select id="queryStorageCardLis"  resultType="java.util.Map">
+        SELECT
+          (SELECT p.RelName FROM PersonnelInfo p WHERE a.refund_user_id = p.id) refundUserName,
+          (SELECT s.ShopName FROM Shop s WHERE a.shop_id = s.id) shopName,
+          (SELECT STUFF(
+                (SELECT ','+ltrim(cast(
+                  CASE
+                      WHEN pay_mode =1 THEN '支付宝'
+                      WHEN pay_mode =2  THEN '刷卡'
+                      WHEN pay_mode =3  THEN '微信'
+                      WHEN pay_mode =4 THEN '现金'
+                      WHEN pay_mode =5 THEN '转账'
+                      WHEN pay_mode =6 THEN '花呗'
+                      WHEN pay_mode =7 THEN '其他'
+                   ELSE '未设置'
+                 END as varchar(10))+':'+cast(pay_price as varchar(10)))
+                 FROM fr_card_order_pay_mode WHERE order_id = t.order_id and order_type ='5' FOR XML PATH('')), 1, 1, '') AS keyword
+          FROM fr_card_order_pay_mode t
+          WHERE t.order_id = a.id
+          GROUP BY t.order_id, t.order_type ) paymentMoney,
+          <include refid="Base_Column_List" />
+          FROM  fr_card_order_storage a
+          WHERE  a.is_using = 1
+           AND a.CustomerCode = #{CustomerCode}
+           AND a.client_id = #{clientId}
+           AND a.card_id = #{cardId}
+          ORDER BY a.create_time DESC
+    </select>
+
+
+</mapper>

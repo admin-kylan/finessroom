@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>基础设置</title>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    function setParam(val) {
+        $("#topFrame").attr("data-param",val);
+    }
+    function getParam(val) {
+        return $("#topFrame").attr("data-param");
+    }
+</script>
+</head>
+
+        <frameset frameborder="no" border="0" framespacing="0" id="top_frameset" scrolling="No" rows="50,*">
+            <frame name="topFrame" id="topFrame" scrolling="no" noresize="noresize" src="top.html" data-param="1">
+            <frameset frameborder="no" border="0" framespacing="0" id="main_frameset"  cols="0,*">
+                <!--<frame name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame" title="leftFrame" src="c_lef.html" >-->
+                <frame name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame" title="leftFrame" src="top.html" >
+                <frame  name="rightFrame" scrolling="No" id="rightFrame" title="rightFrame" src="individual.html">
+            </frameset>
+        </frameset>
+        <noframes>
+            <body>
+            </body>
+        </noframes>
+</html>

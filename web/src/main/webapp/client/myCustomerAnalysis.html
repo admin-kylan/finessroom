@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>客户信息分析</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/base.css"/>
+    <link rel="stylesheet" href="../css/skin/jedate.css"/>
+    <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../css/myCustomerAnalysis.css"/>
+    <link rel="stylesheet" href="../css/myPagination.css"/>
+</head>
+
+<body>
+<div id="myCustomerAnalysis">
+    <div class="tab clearfix">
+        <a href="myCustomerPotential.html" target="rightFrame">我的潜在客户</a>
+        <a href="myCustomer.html" target="rightFrame">我的客户</a>
+        <a class="on" href="myCustomerAnalysis.html" target="rightFrame">客户信息分析</a>
+    </div>
+    <div class="follow">
+        <div class="screening">
+            筛选条件：
+            <select name="" id="sex" v-model="customerFilter.sex">
+                <option value="">--性别--</option>
+                <option value="0">男</option>
+                <option value="1">女</option>
+            </select>
+            <select name="" id="resourceType" v-model="customerFilter.sourceId">
+                <option value="">--了解渠道--</option>
+                <option :value="item.id" v-for="(item,index) in SourceInfo">{{item.sourceName}}</option>
+                <!--<option value="未定义资源">未定义资源</option>-->
+                <!--<option value="自动上门">自动上门</option>-->
+                <!--<option value="团会员优购">团会员优购</option>-->
+                <!--<option value="团会员积分">团会员积分</option>-->
+                <!--<option value="团会员问卷">团会员问卷</option>-->
+                <!--<option value="团会员竞博">团会员竞博</option>-->
+                <!--<option value="团会员竞拍">团会员竞拍</option>-->
+                <!--<option value="微信公总号">微信公总号</option>-->
+                <!--<option value="派票">派票</option>-->
+                <!--<option value="现场带访">现场带访</option>-->
+                <!--<option value="市场活动">市场活动</option>-->
+                <!--<option value="转介绍PT">转介绍PT</option>-->
+                <!--<option value="协议客户">协议客户</option>-->
+                <!--<option value="合作单位">合作单位</option>-->
+                <!--<option value="社交软件">社交软件</option>-->
+                <!--<option value="团购网">团购网</option>-->
+                <!--<option value="其他">其他</option>-->
+
+            </select>
+            <select name="" id="vehicle" v-model="customerFilter.vehicleId">
+                <option value="">--交通工具--</option>
+                <option :value="item.id" v-for="(item,index) in VehicleInfo">{{item.lifeName}}</option>
+                <!--<option value="驾车">驾车</option>-->
+                <!--<option value="公交车">公交车</option>-->
+                <!--<option value="出租车">出租车</option>-->
+                <!--<option value="地铁">地铁</option>-->
+                <!--<option value="摩托车">摩托车</option>-->
+                <!--<option value="电动车">电动车</option>-->
+                <!--<option value="自行车">自行车</option>-->
+                <!--<option value="步行">步行</option>-->
+                <!--<option value="班车">班车</option>-->
+                <!--<option value="其他">其他</option>-->
+            </select>
+            <select name="" id="industry" v-model="customerFilter.industryId">
+                <option value="">--从事行业--</option>
+                <option :value="item.id" v-for="(item,index) in IndustryInfo">{{item.workName}}</option>
+                <!--<option value="健身游泳">健身游泳</option>-->
+            </select>
+            累计金额：<input type="text" placeholder="0" v-model="customerFilter.beginMoney">~
+            <input type="text" placeholder="0"  v-model="customerFilter.endMoney">
+            <input type="text" placeholder="购卡数量赛选" style="min-width: 115px;"  v-model="customerFilter.cardCount">
+        </div>
+        <div class="search">
+            <span>搜索条件：</span>
+            <input type="text" placeholder="卡系列/卡名称/姓名/服务会籍" v-model="customerFilter.keyword"
+                   @keyup.enter="buildFilterDate"/>
+            <input type="button" class="btn btn-primary" value="搜索" @click="buildFilterDate"/>
+        </div>
+    </div>
+    <p class="operation">
+        总计：消费总计：<span>182000000.00</span>元 购卡消费金额：<span>100000000.00</span>元 项目消费金额：<span>82000000.00</span>元
+    </p>
+
+    <div class="tableWrap">
+        <div class="tabW" style="overflow-x: auto;">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <td>序号</td>
+                    <td>客户排名</td>
+                    <td>客户类型</td>
+                    <td>姓名</td>
+                    <td>性别</td>
+                    <td>联系方式</td>
+                    <td>了解渠道</td>
+                    <td>购卡数</td>
+                    <td>购卡总金额</td>
+                    <td>最贵会员卡</td>
+                    <td>最低会员卡</td>
+                    <td>消费总次数</td>
+                    <td>消费总金额</td>
+                    <td>最高消费</td>
+                    <td>最低消费</td>
+                    <td>服务人员</td>
+                    <td>服务会籍</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item,index) in customerTable.list">
+                    <td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
+                    <td>{{item.clientRanking}}</td>
+                    <td>{{item.clientType}}</td>
+                    <td class="toBlock1" @mouseover="lookClient(item.clientInformation,$event)" @mouseout="outClient">
+                        <a :href="'customerInformation.html?id='+item.id" target="rightFrame">
+                            <span>{{item.clientName}}</span>
+                        </a>
+                    </td>
+                    <td>{{item.sex==0?'男':'女'}}</td>
+                    <td>{{item.mobile}}</td>
+                    <td>{{item.customerSource}}</td>
+                    <td @mouseover="lookCard(item.cardInformation,$event)" @mouseout="outCard" class="toBlock3">{{item.cardCount}}</td>
+                    <td class="toyellow">{{item.cardMoneyCount}}</td>
+                    <td>{{item.mostPriceCard}}</td>
+                    <td class="toyen">{{item.mostCheapCard}}</td>
+                    <td class="toBlock0">6</td>
+                    <td class="tored">28162.00</td>
+                    <td>2600.00</td>
+                    <td class="toyen">5.00</td>
+                        <!--<td class="toBlock2" :data-service="item.servicePersonal"><a>查看</a>-->
+                    <!--@mouseout="changeMask(props.rowIndex)"-->
+                         <td  @mouseover="lookService(item.servicePersonal,$event)" @mouseleave="outService" class="toBlock2" ><a>查看</a>
+                            <!--<span class="span1">{{item.id}}</span>-->
+                        <!--<span class="span2">{{item.sex}}</span>-->
+                        <!--<span class="span3">{{item.cardMoneyCount}}</span>-->
+                    </td>
+                    <td>{{item.fwhjName}}</td>
+                </tr>
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>1</td>-->
+                <!--<td>1</td>-->
+                <!--<td>现有客户</td>-->
+                <!--<td class="toBlock1">-->
+                <!--<a href="customerInformation.html" target="rightFrame">-->
+                <!--<span>王一</span>-->
+                <!--</a>-->
+                <!--</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18760671221</td>-->
+                <!--<td>推荐注册</td>-->
+                <!--<td class="toblue toBlock3">3</td>-->
+                <!--<td class="toyellow">1804.00</td>-->
+                <!--<td>2085.00</td>-->
+                <!--<td class="toyen">351.00</td>-->
+                <!--<td class="toBlock0">6</td>-->
+                <!--<td class="tored">28162.00</td>-->
+                <!--<td>2600.00</td>-->
+                <!--<td class="toyen">5.00</td>-->
+                <!--<td class="toBlock2"><a href="#">查看</a></td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+
+                </tbody>
+
+            </table>
+            <div class="tabBox tabBox0">
+                <table class="sub table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>序号</td>
+                        <td>消费时间</td>
+                        <td>结束时间</td>
+                        <td>消费门店</td>
+                        <td>消费场馆</td>
+                        <td>使用人</td>
+                        <td>使用人手机</td>
+                        <td>使用项目</td>
+                        <td>数量</td>
+                        <td>消费金额</td>
+                        <td>付费方式</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2018-06-18</td>
+                        <td>2018-06-18</td>
+                        <td>万达店</td>
+                        <td>健身</td>
+                        <td>无改</td>
+                        <td>12356554621</td>
+                        <td>健身私教</td>
+                        <td>1</td>
+                        <td>3600</td>
+                        <td>
+                            <a class="blue">查看</a>
+                        </td>
+                    </tr>
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>2018-06-18</td>-->
+                    <!--<td>万达店</td>-->
+                    <!--<td>健身</td>-->
+                    <!--<td>无改</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>健身私教</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>3600</td>-->
+                    <!--<td>-->
+                    <!--<a class="blue">查看</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="tabBox tabBox1">
+                <h4>客户基本信息</h4>
+                <div>
+                    <div class="tabBox1_top">
+                        <div class="tabBox1_top_l">
+                            <div>姓名: {{ClientInfo.clientName}}</div>
+                            <div>性别: {{ClientInfo.sex==0?'男':'女'}}</div>
+                            <div>生日:{{ClientInfo.birthday}}</div>
+                            <div>健康状态：{{ClientInfo.healthy}}</div>
+                        </div>
+                        <div class="tabBox1_top_r">
+                            <img v-bind:src="ClientInfo.pic" alt="">
+                        </div>
+                    </div>
+                    <div>
+                        居住地址：{{ClientInfo.home}}
+                    </div>
+                    <div>
+                        从事行业：{{ClientInfo.industry}}
+                    </div>
+                    <div>
+                        交通工具：{{ClientInfo.vehicle}}
+                    </div>
+                    <div>
+                        兴趣爱好：{{ClientInfo.hobby}}
+                    </div>
+                </div>
+            </div>
+            <div class="tabBox tabBox2">
+                <div>
+                    <li v-for="item in ServicePersonnelInfo" v-if="ServicePersonnelInfo.length >0">
+                        {{item.key}}: <strong>{{item.val}}</strong></li>
+                    <li  v-if="ServicePersonnelInfo.length ==0">
+                        无相关人员信息</li>
+                </div>
+            </div>
+            <div class="tabBox tabBox3">
+                <div>即将过期会员卡:<span class="red">0</span>款未结会员卡:<span class="red">0</span></div>
+                <table class="sub table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>序号</td>
+                        <td>归属门店</td>
+                        <td>卡系列</td>
+                        <td>会员卡名称</td>
+                        <td>会员卡</td>
+                        <td>外部卡号</td>
+                        <td>购卡金额</td>
+                        <td>剩余金额</td>
+                        <td>剩余权欲</td>
+                        <td>建卡时间</td>
+                        <td>开卡日期</td>
+                        <td>失效日期</td>
+                        <td>状态</td>
+                        <td>财务审核</td>
+                        <td>相关复核</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item,index) in CardInfo">
+                        <td>{{index+1}}</td>
+                        <td>{{item.shopName}}</td>
+                        <td class="red">{{item.cardFlag}}</td>
+                        <td class="blue">{{item.cardTypeName}}</td>
+                        <td class="orange">{{item.cardNo}}</td>
+                        <td>{{item.externalNo}}</td>
+                        <td>{{item.b_needPrice}}</td>
+                        <td v-if="item.b_needPrice==null || item.b_buyRightsNum==null || item.b_giveRightsNum==null ||  item.orderRightsNum ==null">
+
+                        </td>
+                        <td v-if="item.b_needPrice!=null || item.b_buyRightsNum!=null || item.b_giveRightsNum!=null ||  item.orderRightsNum !=null">
+                            {{((item.b_needPrice/(item.b_buyRightsNum+item.b_giveRightsNum))*item.orderRightsNum).toFixed(2)}}
+                        </td>
+                        <td>{{item.orderRightsNum}}</td>
+                        <td>{{item.createTime}}</td>
+                        <td> {{item.bindTime}}</td>
+                        <td> {{item.bindTime== null? '':item.invalidTime}}</td>
+                        <td class="green"><span v-for="items in parameterList.status" v-if="items.vue==item.status">{{items.lav}}</span></td>
+                        <td class="sblue" >
+                            <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.b_status">{{items.lav}}</span></td>
+                        <td class="ablue"><span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.b_auditStatus">{{items.lav}}</span></td>
+                    </tr>
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>软件园店</td>-->
+                    <!--<td class="red">年卡</td>-->
+                    <!--<td class="blue">1年卡</td>-->
+                    <!--<td class="orange">12356554621</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>365</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td class="yin">历史</td>-->
+                    <!--<td class="sblue">已审核</td>-->
+                    <!--<td class="ablue">已审核</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>软件园店</td>-->
+                    <!--<td class="red">年卡</td>-->
+                    <!--<td class="blue">1年卡</td>-->
+                    <!--<td class="orange">12356554621</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>365</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>未开卡</td>-->
+                    <!--<td class="sblue">已审核</td>-->
+                    <!--<td class="ablue">已审核</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>软件园店</td>-->
+                    <!--<td class="red">年卡</td>-->
+                    <!--<td class="blue">1年卡</td>-->
+                    <!--<td class="orange">12356554621</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>365</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td class="red">过期</td>-->
+                    <!--<td class="sblue">已审核</td>-->
+                    <!--<td class="ablue">已审核</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>软件园店</td>-->
+                    <!--<td class="red">年卡</td>-->
+                    <!--<td class="blue">1年卡</td>-->
+                    <!--<td class="orange">12356554621</td>-->
+                    <!--<td>12356554621</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>2061.15</td>-->
+                    <!--<td>365</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td>2018-10-15</td>-->
+                    <!--<td class="red">停卡</td>-->
+                    <!--<td class="sblue">已审核</td>-->
+                    <!--<td class="ablue">已审核</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="pagination" class="pagination"></div>
+        <!--<div class="page clearfix">-->
+        <!--<p class="fl">【共5页/总100条】</p>-->
+        <!--<ul class="fr">-->
+        <!--<li>首页</li>-->
+        <!--<li>上一页</li>-->
+        <!--<li>1</li>-->
+        <!--<li>下一个</li>-->
+        <!--<li>尾页</li>-->
+        <!--<li>第<input type="text">页</li>-->
+        <!--</ul>-->
+        <!--</div>-->
+    </div>
+</div>
+<!--基础-->
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<!--插件-->
+<script src="../js/loading.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="/js/myPagination.js"></script>
+<script src="myCustomerAnalysis.js"></script>
+<script>
+    myCustomerAnalysis.init();
+    console.log($(this))
+    $('body').on('mouseenter','.toBlock0',function () {
+        // 滑动滚动条
+        $('.tabBox0').css({
+            'display': 'block',
+            'top': $(this).offset().top + $('.tableWrap').scrollTop() - 135
+        });
+    });
+    $('body').on('mouseleave','.toBlock0',function () {
+        $('.tabBox0').css({
+            'display': 'none'
+        });
+    })
+
+    $('body').on('mouseenter','.toBlock1',function () {
+        // 滑动滚动条
+        $('.tabBox1').css({
+            'display': 'block',
+            'top': $(this).offset().top + $('.tableWrap').scrollTop() - 135
+        });
+    });
+    $('body').on('mouseleave','.toBlock1',function () {
+        $('.tabBox1').css({
+            'display': 'none'
+        });
+    })
+
+//    @mouseover="changeMask(props.rowIndex)" @mouseout="changeMask(props.rowIndex)"
+
+//    $('body').on('mouseover','.toBlock2',function () {
+//        console.log('666');
+//        // 滑动滚动条
+//        $('.tabBox2').css({
+//            'display': 'block',
+//            'top': $(this).offset().top + $('.tableWrap').scrollTop() - 135
+//        });
+//        console.log($(this).attr("data-service"))
+    /*    console.log($(this).find('.span1').html())
+        $('.tabBox2 .div1').html($(this).find('.span1').html())
+        $('.tabBox2 .div2').html($(this).find('.span2').html())
+        $('.tabBox2 .div3').html($(this).find('.span3').html())*/
+
+//    })
+//    $('body').on('mouseleave','.toBlock2',function () {
+//        $('.tabBox2').css({
+//            'display': 'none'
+//        });
+//    })
+    $('body').on('mouseenter','.toBlock3',function () {
+        // 滑动滚动条
+        $('.tabBox3').css({
+            'display': 'block',
+            'top': $(this).offset().top + $('.tableWrap').scrollTop() - 135
+        });
+    });
+    $('body').on('mouseleave','.toBlock3',function () {
+        $('.tabBox3').css({
+            'display': 'none'
+        });
+    })
+    $('.tableWrap').height($(window).height() - 172);
+    $(window).resize(function () {
+        $('.tableWrap').height($(window).height() - 172);
+        console.log($(window).height() - 172);
+    });
+
+</script>
+</body>
+
+</html>

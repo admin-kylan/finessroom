@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>身体</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/main.css">
+
+
+</head>
+
+<body>
+    <div id="main">
+        <div class="main_top">会员卡设置</div>
+        <div class="main_box">
+            <div class="common">
+                <span class="common_span">修改卡系列</span>
+                <div class="form">
+                    <form action="" id="form">
+                        <div class="form_box">
+                            <div class="form_box_left">卡类别名称：</div>
+                            <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="添加卡类别名称"></div>
+
+                        </div>
+                        <div class="form_box">
+                            <div class="form_box_left">操作人：</div>
+                            <div class="form_box_right"><strong class="form_box_right_red">Klaus</strong></div>
+                        </div>
+                        <div class="form_box">
+                            <div class="form_box_left">上次操作时间：</div>
+                            <div class="form_box_right">{{updateTime}}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="main_sub xinzheng"> <a href="#" class="on" v-on:click="update()">修改</a><a href="#">取消</a></div>
+            <!--<div class="common yuangong">-->
+                <!--<span class="common_span">员工卡设置(系统启用员工卡之后，每创建一个员工就给予生成对应的员工用卡)</span>-->
+                <!--<div class="form">-->
+                    <!--<form action="" id="form2">-->
+                        <!--<div class="form_box">-->
+                            <!--<div class="form_box_left">启用员工卡门店:</div>-->
+                            <!--<div class="form_box_right on">-->
+                                <!--<div class="form_box_right_cb">-->
+                                    <!--<div><label>-->
+                                            <!--<input type="checkbox">-->
+                                            <!--<span>软件园店</span>-->
+                                        <!--</label></div>-->
+                                    <!--<ul>-->
+                                        <!--<li><label>-->
+                                                <!--<input type="checkbox">-->
+                                                <!--<span>软件园店</span>-->
+                                            <!--</label></li>-->
+                                    <!--</ul>-->
+                                    <!--<div><label>-->
+                                            <!--<input type="checkbox">-->
+                                            <!--<span>软件园店</span>-->
+                                        <!--</label></div>-->
+                                    <!--<ul>-->
+                                        <!--<li><label>-->
+                                                <!--<input type="checkbox">-->
+                                                <!--<span>软件园店</span>-->
+                                            <!--</label></li>-->
+                                        <!--<li><label>-->
+                                                <!--<input type="checkbox">-->
+                                                <!--<span>软件园店</span>-->
+                                            <!--</label></li>-->
+                                    <!--</ul>-->
+                                    <!--<div><label>-->
+                                            <!--<input type="checkbox">-->
+                                            <!--<span>软件园店</span>-->
+                                        <!--</label></div>-->
+                                    <!--<ul>-->
+                                        <!--<li><label>-->
+                                                <!--<input type="checkbox">-->
+                                                <!--<span>软件园店</span>-->
+                                            <!--</label></li>-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                                <!--<div><label>-->
+                                        <!--<input type="checkbox">-->
+                                        <!--<span>全选</span>-->
+                                    <!--</label></div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="main_sub yuangong"> <a href="#" class="on">保存</a></div>-->
+        </div>
+    </div>
+    <div class="maskLayer"></div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    //var kid = window.parent.getParam('kid');
+    var main = new Vue({
+        el: '#main',
+        data: {
+            updateTime:'',//上次修改时间
+        },
+        created:function () {
+            var that = this;
+            var userName = $.cookie('name');
+            $(".form_box_right_red").html(userName);
+            //that.url = $.stringFormat("{0}/JiejingMerchantLogins/GetJiejingMerchantLogin", $.cookie("url"));
+            var url = $.stringFormat("{0}/shop/getStoreList",$.cookie('url'));
+            Loading.prototype.show();
+            $.get(url, {
+                    type:1,//修改操作
+                },
+                function(res) {
+                    if(res.code == 200) {
+                        //that.storeList = res.data.data.list;
+                        if(res.data.data.time.updateTime){
+                            that.updateTime = that.fmtDate(res.data.data.time.updateTime);
+                            Loading.prototype.hide();
+                        }
+
+                    } else {
+                        //alert(res.msg);
+                        Loading.prototype.hide();
+                        //$('#tip').text(res.msg);//异常处理
+                    }
+
+                }
+            );
+            //获取当前登入用户并赋值姓名
+
+        },
+        methods: {
+            update: function () {
+                //获取卡系列id
+                var thisUrl = document.URL;
+                var data = thisUrl.split('?')[1].split("&");
+                var id = data[0].split("=")[1];
+                var shopId = data[1].split("=")[1];
+                var name = $(".form_box_right_inp").val();
+                if(name == '' || name==null || name.length<0){
+                    alert("卡系列名称不能为空")
+                    return;
+                }
+                //debugger
+//                console.log(id);
+                //获取当前登入用户ID
+                var updateUserName = $.cookie('name');
+                var CustomerCode = $.cookie("code");
+                var updateUserId = $.cookie("id");
+                var url = $.stringFormat("{0}/frCardType/updateFrCardType",$.cookie('url'));
+                Loading.prototype.show();
+                $.post(url, {
+                        id:id,//卡系列id
+                        shopId:shopId,//门店id
+                        cardTypeName:name,//卡名称
+                        updateUserName:updateUserName,
+                        CustomerCode:CustomerCode,
+                        updateUserId:updateUserId,
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            alert("修改成功！")
+                            window.location.reload()
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                        } else {
+                            alert(res.msg);
+                            Loading.prototype.hide();
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+            },
+            //时间戳转指定格式
+            fmtDate:function (inputTime) {
+                var date = new Date(inputTime);
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            },
+        },
+    })
+    
+</script>
+
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>客户信息</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/base.css"/>
+    <link rel="stylesheet" href="../css/skin/jedate.css"/>
+    <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../css/customerInformation.css"/>
+    <style>
+        .topDiv{
+            position: absolute;
+            top: 5%;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: 0 auto;
+            width: 95%;
+            height: 92%;
+            background-color: #ffffff;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<div id="customerInformation">
+    <div id="customerInformationTop">
+        <div class="customerInformationTop">
+            <div class="customerrightFrame_top">
+                客户信息
+            </div>
+            <div class="customerrightFrame_box">
+                <div><img src="../img/u3174.jpg" alt="" class="img-responsive" id="clientURL"></div>
+                <ul>
+                    <li>客户姓名：<strong id="clientUserName"></strong></li>
+                    <li>客户性别：<strong id="clientSet"></strong></li>
+                    <li>联系方式：<strong id="clientPhone"></strong></li>
+                    <li>微信号：<strong></strong></li>
+                    <li>服务会籍：<strong></strong></li>
+                    <li>生日：<strong></strong></li>
+                    <li>建档时间：<strong></strong></li>
+                    <li>申请时间：<strong></strong></li>
+                    <li>客户等级：<strong></strong><img src="../img/u1506.png"  id="customer_level" ></li>
+                    <!--<li>最近来访：<strong></strong> </li>-->
+                </ul>
+            </div>
+            <div class="customerrightFrame_botton">
+                <ul>
+                    <li ><a href="customerMemberBenefits.html" target="customerrightFrame">会员权益</a></li>
+                    <li class="on">
+                        <a href="customerMembershipCard.html" target="customerrightFrame">会员卡</a>
+                    </li>
+                    <li><a href="customerCourseProject.html" target="customerrightFrame">课程项目/产品</a></li>
+                    <li><a href="customerTicketPoint.html" target="customerrightFrame">票券/积分</a></li>
+                    <li><a href="customerConsumptionHistory.html" target="customerrightFrame">消费历史</a></li>
+                    <li><a href="customerPersonalDetails.html" target="customerrightFrame">个人详情</a></li>
+                    <li><a href="customerPhysicalFitnessTest.html" target="customerrightFrame">体能测试</a></li>
+                    <li><a href="customerFollowUpRecord.html" target="customerrightFrame">跟进记录</a></li>
+                    <li><a href="customerTrainingPlan.html" target="customerrightFrame">训练计划</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div id="customerInformationBotton">
+        <div class="customerInformationBotton">
+            <iframe src="customerMembershipCard.html" name="customerrightFrame" id="customerrightFrame"></iframe>
+        </div>
+    </div>
+    <div class="topDiv" id="newPopup">
+        <iframe src="" style="width: 100%;height: 100%" ></iframe>
+    </div>
+    <!-- 会员等级获取途径及信息 -->
+    <div id="performance" class="newCustomers_maskLayer">
+        <div class="newCustomers_maskLayer_box">
+            <div class="newCustomers_maskLayer_box_top">
+                <span>会员等级获取途径及信息</span><a href="#" class="newCustomers_maskLayer_X"  onclick="newCustomers_maskLayer_X()">X</a>
+            </div>
+            <div class="newCustomers_maskLayer_box_shen">
+                <table class="table table-bordered table1">
+                    <tbody>
+                    <tr style="background-color:#0cc ">
+                        <td rowspan="3" style="line-height: 84px">类型设置</td>
+                        <td colspan="3">方式一</td>
+                        <!-- <td>3</td> -->
+                        <!-- <td>54</td> -->
+                        <td>方式二</td>
+                        <td colspan="3">方式三</td>
+                        <!-- <td>54</td> -->
+                        <!-- <td>54</td> -->
+                        <td>方式四</td>
+                    </tr>
+                    <tr style="background-color:#0cc ">
+                        <!-- <td>24</td> -->
+                        <td colspan="3">消费达到金额等级</td>
+                        <!-- <td>3</td> -->
+                        <!-- <td>54</td> -->
+                        <td rowspan="3" style="line-height: 84px">自然年度累计年限升级</td>
+                        <td colspan="3">推荐朋友消费达到金额等级</td>
+                        <!-- <td>54</td> -->
+                        <!-- <td>54</td> -->
+                        <td rowspan="3" style="line-height: 84px">推荐有效签字按客户数量</td>
+                    </tr>
+                    <tr style="background-color:#0cc ">
+                        <!-- <td>01</td> -->
+                        <td>按次累计</td>
+                        <td>阶段累计</td>
+                        <td>金额累计</td>
+                        <!-- <td >54</td> -->
+                        <td>按次推荐</td>
+                        <td>阶段推荐</td>
+                        <td>累计推荐</td>
+                        <!-- <td>54</td> -->
+                    </tr>
+                    <tr style="background-color:#0cc ">
+                        <td>客户等级</td>
+                        <td>1次</td>
+                        <td>3个月</td>
+                        <td>金额</td>
+                        <!-- <td>54</td> -->
+                        <td>1次</td>
+                        <td>3个月</td>
+                        <td>金额</td>
+                        <!-- <td>54</td> -->
+                    </tr>
+                    <tr>
+                        <td>普通会员</td>
+                        <td>2000.00</td>
+                        <td>4000.00</td>
+                        <td>8000.00</td>
+                        <td>1年</td>
+                        <td>1000.00</td>
+                        <td>8000.00</td>
+                        <td>10000.00</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>银卡会员</td>
+                        <td>4000.00</td>
+                        <td>10000.00</td>
+                        <td>16000.00</td>
+                        <td>2年</td>
+                        <td>8000.00</td>
+                        <td>16000.00</td>
+                        <td>28000.00</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>金卡会员</td>
+                        <td>10000.00</td>
+                        <td>20000.00</td>
+                        <td>260000.00</td>
+                        <td>4年</td>
+                        <td>16000.00</td>
+                        <td>26000.00</td>
+                        <td>40000.00</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>钻卡会员</td>
+                        <td>20000.00</td>
+                        <td>30000.00</td>
+                        <td>40000.00</td>
+                        <td>6年</td>
+                        <td>28000.00</td>
+                        <td>46000.00</td>
+                        <td>60000.00</td>
+                        <td>8</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div>
+                    当前等级：<span class="color_jin">金卡</span> 升级时间：<strong>2018-08-27</strong> 下一等级：<span
+                        class="color_red">钻卡会员</span>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>类别</th>
+                        <th>按次累计</th>
+                        <th>阶段累计</th>
+                        <th>金额累计</th>
+                        <th>自然年度累计</th>
+                        <th>按次推荐</th>
+                        <th>阶段推荐</th>
+                        <th>累计推荐</th>
+                        <th>推荐有效潜在客户</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>当前贡献</td>
+                        <td>16000.00</td>
+                        <td>25000.00</td>
+                        <td>25000.00</td>
+                        <td>311天</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>1位</td>
+                    </tr>
+                    <tr>
+                        <td>还需贡献</td>
+                        <td>4000.00</td>
+                        <td>5000.00</td>
+                        <td>15000.00</td>
+                        <td>还需1879天</td>
+                        <td>27700.00</td>
+                        <td>45700.00</td>
+                        <td>57700.00</td>
+                        <td>7位</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 会员等级获取途径及信息 -->
+</div>
+
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    //修复高度
+    function mainheight() {
+        var mainheight = parseInt($(window).height()) - 206;
+        $('#customerInformationBotton').height(mainheight);
+    }
+
+    // 关闭弹窗
+    function newCustomers_maskLayer_X() {
+        $('.newCustomers_maskLayer').hide();
+    }
+
+    $(function () {
+        mainheight();
+        $('.customerrightFrame_botton li').click(function () {
+            $(this).addClass('on').siblings().removeClass('on');
+            mainheight();
+        })
+        $('#customer_level').mouseenter(function () {
+            $('#performance').show();
+        })
+        $('#performance .newCustomers_maskLayer_box').mouseleave(function () {
+            $('#performance').hide();
+        })
+        $(window).resize(function () {
+            mainheight();
+        })
+        //渲染用户信息
+        getClient();
+    })
+    
+    //获取客户信息
+    function getClient() {
+        //获取该用户id
+
+        var url = $.stringFormat("{0}/frClient/getClient", $.cookie('url'));
+        var id = document.URL.split("=")[1];
+        $.cookie('cid', id)  //存入值
+        $.get(url, {id: id}, function (res) {
+                if (res.code == 200) {
+                    $.cookie('clientName', res.data.clientName)  //存入值
+                    $(".customerrightFrame_box").find("li").eq(0).find("strong").html(res.data.clientName);
+                    $(".customerrightFrame_box").find("li").eq(1).find("strong").html((res.data.sex == 0 ? '男' : '女'));
+                    $(".customerrightFrame_box").find("li").eq(2).find("strong").html(res.data.mobile);
+                    $(".customerrightFrame_box").find("li").eq(3).find("strong").html(res.data.wechat);
+                    $(".customerrightFrame_box").find("li").eq(4).find("strong").html(res.data.fwhjName);
+                    $(".customerrightFrame_box").find("li").eq(5).find("strong").html(res.data.birthday);
+                    $(".customerrightFrame_box").find("li").eq(6).find("strong").html(res.data.buildDate);
+                    $(".customerrightFrame_box").find("li").eq(7).find("strong").html(res.data.applyTime);
+                    $(".customerrightFrame_box").find("li").eq(8).find("strong").html(res.data.flag);
+                    if (res.data.clientPic) {
+                        var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, $.cookie('url'), $.cookie('imgPath'))
+                        if (res.data.clientPic.picLink) {
+                            $(".img-responsive").attr("src", stc)
+                        }
+                    }
+                    $(".customerrightFrame_botton a").eq(0).attr("href", 'customerMemberBenefits.html?id=' + id)
+                    $(".customerrightFrame_botton a").eq(1).attr("href", 'customerMembershipCard.html?id=' + id)
+                } else {
+
+                }
+
+            }
+        );
+    }
+    function customerrightFrame_botton_li(t) {
+        $('.customerrightFrame_botton li').eq(t).addClass('on').siblings().removeClass('on');
+        mainheight();
+    }
+    function toSubChild(val,mess,type){
+        //不是新购、不是续卡返回
+        if(type != 1 && type != 2){
+            return ;
+        }
+        //给子页面返回信息
+        console.log(val+':'+mess+':'+type);
+            //不是新购、不是续卡返回)
+        var customerrightFrame =  window.frames['customerrightFrame'];
+        if(customerrightFrame){
+            var toChildSub = customerrightFrame.document.getElementById('toChildSub');
+            var _mess = customerrightFrame.document.getElementById('mess');
+            var _toFlag = customerrightFrame.document.getElementById('val');
+            if(toChildSub){
+                $(_mess).val(mess);
+                $(_toFlag).val(val);
+                $(toChildSub).click();
+            }
+        }
+    }
+</script>
+
+</html>

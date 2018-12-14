@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderPayModeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderPayMode">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="order_type" property="orderType" />
+        <result column="pay_mode" property="payMode" />
+        <result column="pay_price" property="payPrice" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_id AS orderId, order_type AS orderType, pay_mode AS payMode, pay_price AS payPrice, type, id
+    </sql>
+
+</mapper>

@@ -1,0 +1,279 @@
+#LeadCustomerFollowUpRecord{
+	position: relative;
+}
+#LeadCustomerFollowUpRecord fieldset{
+	padding:10px 70px;
+}
+#LeadCustomerFollowUpRecord fieldset legend{
+	text-indent: -60px;
+}
+#LeadCustomerFollowUpRecord fieldset p{
+	margin:5px 0;
+}
+#LeadCustomerFollowUpRecord fieldset p:nth-child(5){
+	margin:15px 0;
+}
+#LeadCustomerFollowUpRecord fieldset input[type=checkbox]{
+	position: relative;
+	top:2px;
+}
+#LeadCustomerFollowUpRecord fieldset .toRed{
+	margin-left:8px;
+	color:#f00;
+}
+#LeadCustomerFollowUpRecord fieldset label + label{
+	margin-left:40px;
+}
+#LeadCustomerFollowUpRecord fieldset textarea{
+	width:590px;
+	height:60px;
+	vertical-align: top;
+	border-radius:3px;
+	resize:none;
+}
+#LeadCustomerFollowUpRecord fieldset img{
+	display: inline-block;
+	width:121px;
+	height:118px;
+	margin:0 4px;
+	vertical-align: top;
+}
+#LeadCustomerFollowUpRecord fieldset input[type=submit]{
+	margin-left:65px;
+	width:100px;
+	height:32px;
+	background:#169bd5;
+	color:#fff;
+	border: none;
+	border-radius:3px;
+	outline: none;
+	line-height: 32px;
+	text-align: center;
+}
+#LeadCustomerFollowUpRecord table{
+	margin:25px 0;
+	width:100%;
+	text-align: center;
+}
+#LeadCustomerFollowUpRecord table thead{
+	background: #9cf;
+}
+#LeadCustomerFollowUpRecord table tbody tr:nth-child(even){
+	background: #f0ffff;
+}
+#LeadCustomerFollowUpRecord table tr{
+	height:30px;
+}
+#LeadCustomerFollowUpRecord table tbody td:nth-child(3){
+	color:#0066FF;
+}
+#LeadCustomerFollowUpRecord table tbody td:nth-child(4){
+	color:#0000FF;
+	cursor: pointer;
+}
+#LeadCustomerFollowUpRecord table tbody td:nth-child(7){
+	color:#ccc;
+}
+#LeadCustomerFollowUpRecord table tbody td:nth-child(9){
+	color:#ccc;
+}
+#LeadCustomerFollowUpRecord table tbody td:nth-child(10){
+	color:#ccc;
+}
+/*#LeadCustomerFollowUpRecord table tbody td:nth-child(11){*/
+	/*color:#ccc;*/
+/*}*/
+#LeadCustomerFollowUpRecord table tbody td:nth-child(11){
+	color:#ccc;
+}
+#LeadCustomerFollowUpRecord table tbody td:nth-child(13) p{
+	color:#009900;
+	cursor: pointer;
+}
+#LeadCustomerFollowUpRecord .box{
+	display: none;
+	position: absolute;
+	top:150px;
+	left:0;
+	right:0;
+	margin:auto;
+	width:550px;
+	background: #fff;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+	text-align: center;
+}
+#LeadCustomerFollowUpRecord .box .title{
+	height:35px;
+	background: #00CCCC;
+	line-height: 35px;
+}
+#LeadCustomerFollowUpRecord .box .close{
+	position: absolute;
+	top:2px;
+	right:8px;
+	font-size: 20px;
+	font-weight: bold;
+	-webkit-user-select: none;
+	cursor: pointer;
+}
+#LeadCustomerFollowUpRecord .box1 .imgWrap{
+	overflow: hidden;
+	padding:35px 20px;
+}
+#LeadCustomerFollowUpRecord .box1 img{
+	float:left;
+	margin:0 6px;
+	width:115px;
+	height:120px;
+}
+#LeadCustomerFollowUpRecord .box2 ul{
+	overflow: hidden;
+	padding:20px 90px 30px;
+	text-align: left;
+}
+#LeadCustomerFollowUpRecord .box2 li{
+	height:36px;
+	line-height: 36px;
+}
+/*#LeadCustomerFollowUpRecord .box2 li:nth-child(3){*/
+	/*height:48px;*/
+/*}*/
+#LeadCustomerFollowUpRecord .box2 li:nth-child(3){
+	height:100px;
+}
+#LeadCustomerFollowUpRecord .box2 li:nth-child(4){
+	text-align: center;
+}
+#LeadCustomerFollowUpRecord .box2 li input[type=text]{
+	width:290px;
+	height:34px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+}
+#LeadCustomerFollowUpRecord .box2 li textarea{
+	width:290px;
+	height:72px;
+	vertical-align: top;
+	border-radius: 5px;
+	resize: none;
+}
+#LeadCustomerFollowUpRecord .box2 li input[type=submit]{
+	width: 140px;
+	height:40px;
+	border: none;
+	border-radius: 5px;
+	background: #169bd5;
+	color: #fff;
+}
+#LeadCustomerFollowUpRecord .box2 li:nth-child(5) span{
+	display: inline-block;
+	margin-left: 35px;
+	width: 140px;
+	height:40px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	line-height: 40px;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

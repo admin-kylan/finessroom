@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>潜在客户录入</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/reset.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/leadCustomerEntry.css" />
+	<link rel="stylesheet" href="../css/combobox.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />
+</head>
+
+<body>
+	<div id="leadCustomerEntry">
+		<h3>潜在客户录入</h3>
+		<div class="section">
+			<div class="section1">
+				<fieldset>
+					<legend>客户资料</legend>
+					<div class="section1_box">
+						<div class="col_box">
+							<div>
+								<div><span>*</span>会员姓名</div>
+								<div><span>*</span>手机号码</div>
+								<div>微信</div>
+								<div>身高</div>
+								<div>婚姻状况</div>
+								<div>证件类型</div>
+								<div>证件号码</div>
+								<div>证件地址</div>
+								<div>家庭地址</div>
+								<div>电子邮件</div>
+								<div style="line-height: 240px;">了解渠道资料来源</div>
+								<div>公司名称</div>
+								<div>职务名称</div>
+								<div>公司地址</div>
+								<div>经营范围</div>
+								<div>车牌号码</div>
+							</div>
+							<div>
+								<div><input type="text" placeholder="填写会员姓名" v-model="customerData.base.clientName"> </div>
+								<div><input type="text" placeholder="填写手机号码" v-model="customerData.base.mobile"> </div>
+								<div><input type="text" placeholder="填写微信" v-model="customerData.base.wechat"> </div>
+								<div><input type="text" placeholder="身高" v-model="customerData.base.stature"
+											onkeyup="
+													if(this.value.length==1){
+													    this.value=this.value.replace(/[^1-9]/g,'')
+													}else{
+													    this.value=this.value.replace(/\D/g,'')
+													}"
+								>cm</div>
+								<div>
+									<select name="marriage" id="marriage" v-model="customerData.base.maritalStatus">
+										<option value="">未选择</option>
+										<option value="0">未婚</option>
+										<option value="1">已婚</option>
+									</select>
+								</div>
+								<div>
+									<select name="id_type" id="id_type" v-model="customerData.base.idType">
+										<option value="0">身份证</option>
+										<option value="1">港澳通行证</option>
+										<option value="2">台湾通行证</option>
+										<option value="3">军人证</option>
+										<option value="4">护照</option>
+									</select>
+								</div>
+								<div class="wid500"><input type="text" placeholder="无" v-model="customerData.base.idNo"></div>
+								<div class="wid500"><input type="text" placeholder="无" v-model="customerData.base.idAddress"></div>
+								<div class="wid500"><input type="text" placeholder="无" v-model="customerData.base.homeAdd"></div>
+								<div class="wid500"><input type="text" placeholder="无" v-model="customerData.base.email"></div>
+								<div class="liaojie">
+									<div v-for="(item,index) in resourceList">
+										<div class="pull-left">
+											<label>
+												<input type="radio" name="resourceType" :value="index" v-model="resourceIndex">
+												<span>{{item.sourceName}}：</span>
+											</label>
+										</div>
+										<div class="pull-right"><input type="text" :placeholder="item.prompt" v-model="item.sourceText" ></div>
+									</div>
+									<!--<div>-->
+										<!--<div class="pull-left">-->
+											<!--<label>-->
+												<!--<input type="radio" name="resourceType" value="1" v-model="customerData.resourceType">-->
+												<!--<span>派票：</span>-->
+											<!--</label>-->
+										<!--</div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="输入地点" v-model="customerData.resourceTypeText1"></div>-->
+									<!--</div>-->
+									<!--<div>-->
+										<!--<div class="pull-left"><label>-->
+												<!--<input type="radio" name="resourceType" value="2" v-model="customerData.resourceType">-->
+												<!--<span>现场专访：</span>-->
+											<!--</label></div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="输入地点" v-model="customerData.resourceTypeText2"></div>-->
+									<!--</div>-->
+									<!--<div>-->
+										<!--<div class="pull-left"><label>-->
+												<!--<input type="radio" name="resourceType" value="3" v-model="customerData.resourceType">-->
+												<!--<span>转介绍PT-BR：</span>-->
+											<!--</label></div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="填写姓名、教练姓名" v-model="customerData.resourceTypeText3"></div>-->
+									<!--</div>-->
+									<!--<div>-->
+										<!--<div class="pull-left"><label>-->
+												<!--<input type="radio" name="resourceType" value="4" v-model="customerData.resourceType">-->
+												<!--<span>市场活动：</span>-->
+											<!--</label></div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="输入 活动名称+年月日"  v-model="customerData.resourceTypeText4"></div>-->
+									<!--</div>-->
+									<!--<div>-->
+										<!--<div class="pull-left"><label>-->
+												<!--<input type="radio" name="resourceType" value="5" v-model="customerData.resourceType">-->
+												<!--<span>合作单位DI：</span>-->
+											<!--</label></div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="输入单位名称" v-model="customerData.resourceTypeText5"></div>-->
+									<!--</div>-->
+									<!--<div>-->
+										<!--<div class="pull-left"><label>-->
+												<!--<input type="radio" name="resourceType" value="6" v-model="customerData.resourceType">-->
+												<!--<span>社交软件：</span>-->
+											<!--</label></div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="输入微信、QQ"  v-model="customerData.resourceTypeText6"></div>-->
+									<!--</div>-->
+									<!--<div>-->
+										<!--<div class="pull-left"><label>-->
+												<!--<input type="radio" name="resourceType" value="7" v-model="customerData.resourceType">-->
+												<!--<span>团购网：</span>-->
+											<!--</label></div>-->
+										<!--<div class="pull-right"><input type="text" placeholder="显示网购网站名称"  v-model="customerData.resourceTypeText7"></div>-->
+									<!--</div>-->
+								</div>
+								<div class="wid500"><input type="text" placeholder="无" v-model="customerData.base.companyName"></div>
+								<div class="wid500">
+									<div><input type="text" placeholder="无" v-model="customerData.base.jobTitle"></div>
+									<div>公司电话</div>
+									<div><input type="text" placeholder="无" v-model="customerData.base.companyTel"></div>
+								</div>
+								<div class="wid500">
+										<div><input type="text" placeholder="无" v-model="customerData.base.companyAddress"></div>
+										<div>大约收入</div>
+										<div><input type="text" placeholder="无" v-model="customerData.base.income"></div>
+								</div>
+								<div class="wid500">
+									<input type="text" placeholder="无" v-model="customerData.base.businessScope">
+								</div>
+								<div class="wid500">
+										<div><input type="text" placeholder="无" v-model="customerData.base.carNum"></div>
+										<div>车辆品牌</div>
+										<div><input type="text" placeholder="无" v-model="customerData.base.carBrand"></div>
+								</div>
+							</div>
+							<div>
+								<div><span>*</span>性别</div>
+								<div>联系电话</div>
+								<div>QQ</div>
+								<div>体重</div>
+								<div>籍贯</div>
+								<div>出生年月</div>
+							</div>
+							<div>
+								<div>
+									<label>
+										<input type="radio" name="sex" value="0" v-model="customerData.base.sex">
+										男
+									</label>
+									<label>
+										<input type="radio" name="sex" value="1" v-model="customerData.base.sex">
+										女
+									</label>
+								</div>
+								<div><input type="text" placeholder="填写联系电话" v-model="customerData.base.tel"></div>
+								<div><input type="text" placeholder="填写QQ" v-model="customerData.base.qq"></div>
+								<div><input type="text" placeholder="体重" v-model="customerData.base.weight"
+											onkeyup="
+													if(this.value.length==1){
+													    this.value=this.value.replace(/[^1-9]+(.[0-9]{2})?$/g,'')
+//													    this.value=this.value.replace(/^[0-9]+(.[0-9]{2})?$ /g,'')
+													}else{
+													    this.value=this.value.replace(/\D/g,'')
+													}"
+								>kg</div>
+								<div><input type="text" placeholder="填写籍贯" v-model="customerData.base.nativePlace"></div>
+								<!--<div><input type="date" v-model="customerData.base.birthday"></div>-->
+								<div><input type="text" class="jeinput birthday"  value="" v-model="customerData.base.birthday" readonly/></div>
+
+							</div>
+							<div>
+								<img :src="imgUrl==null?'../img/u601.png':imgUrl" alt="" class="img-responsive" id="img_avatar" @click="pictureSelected" >
+								<a class="btn btn-primary" @click="uploadAvatar">上传图片</a>
+								<input id="file-fr" style="display: none;" ref="avatar" name="file" type="file" multiple @change="pictureShow($event)" accept="image/png,image/jpeg,image/gif,image/jpg">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			<div class="section2">
+				<fieldset>
+					<legend>客户意向</legend>
+					<div class="section2_box">
+						<div class="section2_boxs">
+							<div class="section2_boxs1 on">
+								<div class="section2_boxs1_right">
+									<div class="section2_boxs1_top">
+										<div>客户等级</div>
+										<div>购买意向</div>
+										<div>连锁店</div>
+										<div>意向卡类别</div>
+										<div>意向卡名称</div>
+										<div>意向价格</div>
+										<div><span>*</span>销售顾问</div>
+										<div>建档日期</div>
+										<div>推荐人电话</div>
+										<div>推荐人姓名</div>
+										<div>关注问题</div>
+										<div>备注</div>
+									</div>
+									<div class="section2_boxs1_botton">
+										<div>
+											<select name="1" v-model="customerData.base.vipLevel" >
+												<option value="">选择客户等级</option>
+												<option value="0">优质</option>
+												<option value="1">很好</option>
+												<option value="2">一般</option>
+												<option value="3">很差</option>
+											</select>
+										</div>
+										<div><select name="1" v-model="customerData.base.purchaseWill">
+												<option value="">购买意向</option>
+												<option value="0">肯定想买</option>
+												<option value="1">有点想</option>
+												<option value="2">不清楚</option>
+												<option value="3">确定不买</option>
+											</select></div>
+										<div><select name="1" v-model="customerData.shopId">
+												<option value="">选择门店</option>
+												<option :value="item.id" v-for="item in shopList">{{item.shopName}}</option>
+												<!--<option value="1">集美店</option>-->
+												<!--<option value="2">思明店</option>-->
+											</select></div>
+										<div><select name="1" id="cardType" v-model="customerData.base.willingCardType" @change="queryCardNameList">
+												<option value="">意向卡类别</option>
+												<option :value="item.id" v-for="item in cardTypeList">{{item.cardTypeName}}</option>
+												<!--<option value="1">次卡</option>-->
+											</select></div>
+										<div><select name="1" v-model="customerData.base.willingCardName" >
+											<option value="" selected = "selected" >意向卡名称</option>
+											<option :value="item.cardTypeName" v-for="item in cardNameList">{{item.cardTypeName}}</option>
+										</select></div>
+										<div><input type="text" placeholder="填写意向价格" v-model="wpCheckNum"
+													onkeyup="
+													if(this.value.length==1){
+													    this.value=this.value.replace(/[^1-9]/g,'')
+													}else{
+													    this.value=this.value.replace(/\D/g,'')
+													}"
+										/></div>
+										<div>
+											<select name="1" v-model="customerData.salespersonId">
+												<option value="">销售顾问</option>
+												<option :value="item.id" v-for="item in salespersonList">{{item.relName}}</option>
+											</select>
+										</div>
+										<!--<div><input type="date" v-model="customerData.base.buildDate"></div>-->
+										<div><input type="text" class="jeinput buildDate"   v-model="customerData.base.buildDate" readonly/></div>
+										<div><input type="text" placeholder="填写推荐人电话" v-model="customerData.base.referenceTel"></div>
+										<div><input type="text" placeholder="填写推荐人姓名" v-model="customerData.base.referenceName"></div>
+										<div><textarea name=""  v-model="customerData.base.cautionQuestion"></textarea></div>
+										<div><textarea name=""  v-model="customerData.base.note"></textarea></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+		<div class="tored"><span>系统设定：潜在客户若有推荐人，可以在建档2分钟内录入推荐人</span></div>
+		<div class="leadCustomerEntry_footer">
+			<a href="#" class="btn btn-success" @click="saveCustomer">保存</a>
+			<a href="potentialCustomers.html" class="btn btn-default">取消</a>
+		</div>
+	</div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/common.js"></script>
+<script src="leadCustomerEntry.js"></script>
+<script>
+	$(function () {
+
+	})
+</script>
+
+</html>

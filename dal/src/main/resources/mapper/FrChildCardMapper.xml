@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrChildCardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrChildCard">
+        <id column="a.id" property="id" />
+        <result column="a.card_no" property="cardNo" />
+        <result column="a.shop_id" property="shopId" />
+        <result column="a.parent_card_id" property="parentCardId" />
+        <result column="a.mobile" property="mobile" />
+        <result column="a.share_benefit" property="shareBenefit" />
+        <result column="a.card_handle" property="cardHandle" />
+        <result column="a.handle_personal_id" property="handlePersonalId" />
+        <result column="a.user_name" property="userName" />
+        <result column="a.out_card_no" property="outCardNo" />
+        <result column="a.type" property="type" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.sale_man_id" property="saleManId" />
+        <result column="a.share_num" property="shareNum" />
+        <result column="a.child_client_id" property="childClientId" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.flag" property="flag" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.update_user_id" property="updateUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_no AS cardNo,
+        a.shop_id AS shopId,
+        a.parent_card_id AS parentCardId,
+        a.mobile,
+        a.share_benefit AS shareBenefit,
+        a.card_handle AS cardHandle,
+        a.handle_personal_id AS handlePersonalId,
+        a.user_name AS userName,
+        a.out_card_no AS outCardNo,
+        a.type,
+        a.is_using AS isUsing,
+        a.CustomerCode,
+        a.sale_man_id AS saleManId,
+        a.share_num AS shareNum,
+        a.child_client_id AS childClientId,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.create_user_id AS createUserId,
+        a.create_time AS createTime,
+        a.flag,
+        a.update_user_name AS updateUserName,
+        a.update_user_id AS updateUserId,
+        a.id
+    </sql>
+
+
+    <sql id="Base_IsFlage">
+        <where>
+            <if test="parentCardId!=null and parentCardId!=''">
+                and  a.parent_card_id = #{parentCardId}
+            </if>
+            <if test="CustomerCode!=null and CustomerCode !=''">
+                and  a.CustomerCode = #{CustomerCode}
+            </if>
+        </where>
+    </sql>
+
+    <!--查询指定会员会员卡的总条数-->
+    <select id="selectChildCardList" resultType="java.util.Map">
+        SELECT
+          (SELECT p.RelName FROM PersonnelInfo p WHERE a.sale_man_id = p.id) saleName,
+          (SELECT p.RelName FROM PersonnelInfo p WHERE a.handle_personal_id = p.id) handleName,
+          (SELECT f.card_no FROM fr_card f WHERE a.parent_card_id = f.id) parentCardNo,
+          <include refid="Base_Column_List"/>
+        FROM
+        fr_child_card a
+        <include refid="Base_IsFlage"/>
+    </select>
+
+
+    <select id="queryChildCardShareNum" resultType="java.lang.Double">
+        SELECT SUM(a.share_num)
+        FROM  fr_child_card a
+        WHERE a.is_using = 1
+        AND a.type != 2
+        AND a.CustomerCode = #{CustomerCode}
+        AND a.parent_card_id = #{parentCardId}
+    </select>
+
+    <select id="queryChildCardAmt" resultType="java.util.Map" >
+        SELECT a.share_num shareNum,a.id,a.child_client_id childClientId,
+          isNull((SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c WHERE c.client_id = a.child_client_id  AND c.is_using = 1
+            AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2 ORDER BY c.create_time DESC),0)orderPrice,
+          isNull((SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c  WHERE c.client_id = a.child_client_id  AND c.is_using = 1
+           AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1 ORDER BY c.create_time DESC),0)orderRightsNum
+        FROM fr_child_card a
+        WHERE  a.is_using = 1
+          AND a.CustomerCode = #{CustomerCode}
+          AND a.parent_card_id = #{parentCardId}
+          AND  a.type != 2
+    </select>
+
+</mapper>

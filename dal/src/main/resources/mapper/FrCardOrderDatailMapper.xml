@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderDatailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderDatail">
+        <id column="a.id" property="id" />
+        <result column="a.card_id" property="cardId" />
+        <result column="a.client_id" property="clientId" />
+        <result column="a.card_type" property="cardType" />
+        <result column="a.order_status" property="orderStatus" />
+        <result column="a.order_price" property="orderPrice" />
+        <result column="a.order_rights_num" property="orderRightsNum" />
+        <result column="a.shop_id" property="shopId" />
+        <result column="a.personnel_id" property="personnelId" />
+        <result column="a.flag" property="flag" />
+        <result column="a.type" property="type" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.status" property="status" />
+        <result column="a.audit_status" property="auditStatus" />
+        <result column="a.status_user_id" property="statusUserId" />
+        <result column="a.audit_user_id" property="auditUserId" />
+        <result column="a.order_id" property="orderId" />
+        <result column="a.order_type" property="orderType" />
+        <result column="a.order_price_id" property="orderPriceId" />
+        <result column="a.order_amt" property="orderAmt" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.create_user_name" property="createUserName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_id AS cardId,
+        a.client_id AS clientId,
+        a.card_type AS cardType,
+        a.order_status AS orderStatus,
+        a.order_price AS orderPrice,
+        a.order_rights_num AS orderRightsNum,
+        a.shop_id AS shopId,
+        a.personnel_id AS personnelId,
+        a.flag,
+        a.type,
+        a.is_using AS isUsing,
+        a.status,
+        a.audit_status AS auditStatus,
+        a.status_user_id AS statusUserId,
+        a.audit_user_id AS auditUserId,
+        a.order_id AS orderId,
+        a.order_type AS orderType,
+        a.order_price_id AS orderPriceId,
+        a.order_amt AS orderAmt,
+        a.update_user_name AS updateUserName,
+        a.update_user_id AS updateUserId,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.id,
+        a.create_user_name AS createUserName
+    </sql>
+
+
+    <sql id="query_where_id">
+        <if test="id != null and id != '' ">
+            AND  a.id = #{id}
+        </if>
+        <if test="orderId != null and orderId !='' ">
+            AND   a.order_id = #{orderId}
+        </if>
+        <if test="orderPriceId != null and orderPriceId != ''">
+            AND  a.order_price_id = #{orderPriceId}
+        </if>
+        <if test="cardId != null and cardId !='' ">
+            AND  a.card_id = #{cardId}
+        </if>
+        <if test="shopId != null and shopId != ''">
+            AND a.shop_id = #{shopId}
+        </if>
+        <if test="personnelId != null and personnelId != ''">
+            AND a.personnel_id = #{personnelId}
+        </if>
+        <if test="cardType != null">
+            AND a.card_type = #{cardType}
+        </if>
+        <if test="orderStatus != null ">
+            AND a.order_status = #{orderStatus}
+        </if>
+        <if test="type != null">
+            AND  a.type = #{type}
+        </if>
+        <if test="orderType != null">
+            AND  a.order_type = #{orderType}
+        </if>
+    </sql>
+    <sql id="query_where_status">
+        <if test="status != null">
+            AND   a.status = #{status}
+        </if>
+        <if test="auditStatus != null">
+            AND   a.audit_status = #{auditStatus}
+        </if>
+    </sql>
+
+    <select id="querySumOrderPrice" resultType="java.lang.Double">
+        SELECT
+        SUM(a.order_price) order_price
+        FROM fr_card_order_datail a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND a.client_id = #{clientId}
+        AND a.is_using = 1
+        AND a.status != 2
+        AND a.audit_status != 2
+        <include refid="query_where_id" />
+    </select>
+
+
+    <select id="queryAmtOrderPrice" resultType="java.lang.Double">
+        SELECT  TOP 1 (a.order_amt) order_price
+        FROM fr_card_order_datail a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND a.client_id = #{clientId}
+        AND a.is_using = 1
+        AND a.status != 2
+        AND a.audit_status != 2
+        <include refid="query_where_id" />
+        ORDER BY a.create_time DESC
+    </select>
+
+
+    <select id="queryTopOne" resultType="com.yj.dal.model.FrCardOrderDatail">
+        SELECT TOP 1
+        <include refid="Base_Column_List" />
+        FROM fr_card_order_datail a
+        WHERE a.is_using = 1
+        AND a.CustomerCode = #{CustomerCode}
+        AND a.card_id = #{cardId}
+        AND a.client_id = #{clientId}
+        <include refid="query_where_id" />
+        ORDER BY a.create_time DESC
+    </select>
+
+
+
+    <select id="getAmtByCardId" resultType="java.util.Map">
+        SELECT  TOP 1 (a.order_amt) orderRightsNum,
+            (SELECT TOP 1 (b.order_amt) order_price FROM fr_card_order_datail b
+              WHERE  b.type = 2
+              AND b.CustomerCode = a.CustomerCode
+              AND  b.card_id = a.card_id
+              AND  b.client_id = a.client_id
+              AND b.is_using = a.is_using
+              AND b.status != 2
+              AND b.audit_status != 2
+              ORDER BY b.create_time DESC) orderPrice
+        FROM fr_card_order_datail a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND a.card_id = #{cardId}
+        AND a.client_id = #{clientId}
+        AND a.type = 1
+        AND a.is_using = 1
+        AND a.status != 2
+        AND a.audit_status != 2
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

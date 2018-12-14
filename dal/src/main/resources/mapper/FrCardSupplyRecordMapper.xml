@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardSupplyRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardSupplyRecord">
+        <id column="a.id" property="id" />
+        <result column="a.ori_card_id" property="oriCardId" />
+        <result column="a.new_card_id" property="newCardId" />
+        <result column="a.personnel_id" property="personnelId" />
+        <result column="a.pay_price" property="payPrice" />
+        <result column="a.supply_remarks" property="supplyRemarks" />
+        <result column="a.flag" property="flag" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.external_no" property="externalNo" />
+        <result column="a.client_id" property="clientId" />
+        <result column="a.status" property="status" />
+        <result column="a.audit_status" property="auditStatus" />
+        <result column="a.status_user_id" property="statusUserId" />
+        <result column="a.audit_user_id" property="auditUserId" />
+        <result column="a.type" property="type" />
+        <result column="a.ori_card_no" property="oriCardNo" />
+        <result column="a.new_card_no" property="newCardNo" />
+        <result column="a.card_name" property="cardName" />
+        <result column="a.card_flag" property="cardFlag" />
+        <result column="a.invalid_time" property="invalidTime" />
+        <result column="a.card_opening" property="cardOpening" />
+        <result column="a.replacement_card" property="replacementCard" />
+        <result column="a.order_state" property="orderState" />
+        <result column="a.order_info_id" property="orderInfoId" />
+        <result column="a.new_card_num_id" property="newCardNumId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.ori_card_id AS oriCardId,
+        a.new_card_id AS newCardId,
+        a.personnel_id AS personnelId,
+        a.pay_price AS payPrice,
+        a.supply_remarks AS supplyRemarks,
+        a.flag,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.external_no AS externalNo,
+        a.client_id AS clientId,
+        a.status,
+        a.audit_status AS auditStatus,
+        a.status_user_id AS statusUserId,
+        a.audit_user_id AS auditUserId,
+        a.type,
+        a.ori_card_no AS oriCardNo,
+        a.new_card_no AS newCardNo,
+        a.card_name AS cardName,
+        a.card_flag AS cardFlag,
+        a.invalid_time AS invalidTime,
+        a.card_opening AS cardOpening,
+        a.replacement_card AS replacementCard,
+        a.order_state AS orderState,
+        a.order_info_id AS orderInfoId,
+        a.bind_time AS bindTime,
+        a.new_card_num_id AS newCardNumId,
+        a.id
+    </sql>
+
+
+    <select id="queryCarDsupplyRecordList"  resultType="java.util.Map">
+        SELECT
+        (SELECT cf.service_life FROM fr_card_type cf WHERE cf.id = (SELECT fo.card_type_id FROM fr_card_order_info fo WHERE fo.id = a.order_info_id )) serviceLife,
+        (SELECT fo.total_price FROM fr_card_order_info fo WHERE fo.id = a.order_info_id ) totalPrice,
+        (SELECT fo.buy_rights_num FROM fr_card_order_info fo WHERE fo.id = a.order_info_id ) buyRightsNum,
+        (SELECT fo.give_rights_num FROM fr_card_order_info fo WHERE fo.id = a.order_info_id ) giveRightsNum,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id AND p.IsDel = 0) personnerlName,
+        (SELECT STUFF((SELECT ','+ltrim(cast(
+                CASE
+                  WHEN pay_mode =1 THEN '支付宝'
+                  WHEN pay_mode =2  THEN '刷卡'
+                  WHEN pay_mode =3  THEN '微信'
+                  WHEN pay_mode =4 THEN '现金'
+                  WHEN pay_mode =5 THEN '转账'
+                  WHEN pay_mode =6 THEN '花呗'
+                  WHEN pay_mode =7 THEN '其他'
+                ELSE '未设置'
+                END as varchar(10))+':'+cast(pay_price as varchar(10)))
+        FROM fr_card_order_pay_mode WHERE order_id = a.id and order_type ='4' FOR XML PATH('')), 1, 1, '') AS keyword
+        FROM fr_card_order_pay_mode t
+        WHERE t.order_id = a.id  GROUP BY t.order_id, t.order_type ) paymentMoney,
+         <include refid="Base_Column_List" />
+        FROM fr_card_supply_record a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND  a.client_id = #{clientId}
+        AND  a.type = #{type}
+    </select>
+
+    <select id="queryCountAll" resultType="java.lang.Double">
+       SELECT SUM(b.pay_price)
+         FROM fr_card_supply_record a
+   LEFT JOIN fr_card_order_pay_mode b
+           ON a.id = b.order_id
+        WHERE a.client_id = #{clientId}
+          AND a.type = 1
+    </select>
+
+
+
+    <select id="queryContinueCardLis" resultType="java.util.Map">
+        SELECT
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id) personnelName,
+        (SELECT p.buy_rights_num FROM fr_card_order_info p WHERE a.order_info_id = p.id) buyRightsNum,
+        (SELECT (p.buy_rights_num + p.give_rights_num) FROM fr_card_order_info p WHERE a.order_info_id = p.id) haveRightsNum,
+        (SELECT p.discount_num FROM fr_card_order_info p WHERE a.order_info_id = p.id) discountNum,
+        (SELECT STUFF((SELECT ','+ltrim(cast(
+        CASE
+        WHEN pay_mode =1 THEN '支付宝'
+        WHEN pay_mode =2  THEN '刷卡'
+        WHEN pay_mode =3  THEN '微信'
+        WHEN pay_mode =4 THEN '现金'
+        WHEN pay_mode =5 THEN '转账'
+        WHEN pay_mode =6 THEN '花呗'
+        WHEN pay_mode =7 THEN '其他'
+        ELSE '未设置'
+        END as varchar(10))+':'+cast(pay_price as varchar(10)))
+        FROM fr_card_order_pay_mode WHERE order_id = a.order_info_id and order_type ='2' FOR XML PATH('')), 1, 1, '') AS keyword
+        FROM fr_card_order_pay_mode t
+        WHERE t.order_id = a.order_info_id
+        GROUP BY t.order_id, t.order_type ) paymentMoney,
+        <include refid="Base_Column_List"/>
+        FROM fr_card_supply_record a
+        WHERE a.is_using='1'
+        AND a.CustomerCode = #{CustomerCode}
+        AND a.client_id = #{clientId}
+        AND a.new_card_id = #{newCardId}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>会员卡</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/jquery-confirm.css"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <!-- <link rel="stylesheet" href="../css/base.css" /> -->
+    <link rel="stylesheet" href="../css/skin/jedate.css"/>
+    <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../css/newCustomers.css"/>
+    <link rel="stylesheet" href="../css/myPagination.css"/>
+    <link rel="stylesheet" href="../css/customerMembershipCard.css"/>
+</head>
+
+<body>
+<div id="customerMembershipCard">
+    <div class="customerMembershipCard">
+        <div class="tableWrap">
+            <div class="tabW_top">
+                <ul class="MembershipCard-list">
+                    <li class="active" @click="LI(0)"><img src="../img/car-icon1.png" alt="">会员卡列表</li>
+                    <li @click="LI(1)"><img src="../img/car-icon2.png" alt="">新购</li>
+                    <li @click="LI(2)"><img src="../img/car-icon3.png" alt="">续卡</li>
+                    <li @click="LI(3)"><img src="../img/car-icon4.png" alt="">转卡</li>
+                    <li @click="LI(4)"><img src="../img/car-icon5.png" alt="">停卡/冻结</li>
+                    <li @click="LI(5)"><img src="../img/car-icon6.png" alt="">补卡</li>
+                    <li @click="LI(6)"><img src="../img/car-icon7.png" alt="">储值</li>
+                    <li @click="LI(7)"><img src="../img/car-icon8.png" alt="">子卡</li>
+                    <li @click="LI(8)"><img src="../img/car-icon9.png" alt="">补余</li>
+                    <li @click="LI(9)"><img src="../img/car-icon10.png" alt="">转让</li>
+                    <li @click="LI(10)"><img src="../img/car-icon11.png" alt="">退卡</li>
+                </ul>
+            </div>
+            <div class="tabW">
+                <ul>
+                    <!--隐藏标签，用于js传值，不要删除-->
+                    <input  style="display:none;" id="toChildSub" @click="toChildSub"/>
+                    <input  style="display:none;" id="toFlag"/>
+                    <input  style="display:none;" id="mess" />
+                    <!--隐藏标签，用于js传值，不要删除-->
+
+                    <!-- 会员卡列表 -->
+                    <li class="on" v-if="LiIndex==0">
+                        <div id="MembershipCardlist">
+                            <div class="tabW_top_left2">
+                                <strong>会员卡信息</strong>
+                                        会员卡数量: <span>{{loadData0.count}}</span>
+                                正常会员卡:<span>0</span>
+                                即将过期会员卡:<span>{{loadData0.beOverdue}}</span>
+                                未开卡会员卡: <span>0</span>
+                                停卡会员卡:<span>0</span>
+                                历史会员卡:<span>0</span>
+                            </div>
+                            <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+                                <thead>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>归属门店</td>
+                                    <td>卡系列</td>
+                                    <td>会员卡名称</td>
+                                    <td>会员卡号</td>
+                                    <td>外部卡号</td>
+                                    <td>购卡金额</td>
+                                    <td>剩余金额</td>
+                                    <td>剩余权益</td>
+                                    <td>建卡时间</td>
+                                    <td>开卡日期</td>
+                                    <td>失效日期</td>
+                                    <td>销售人员</td>
+                                    <td>状态</td>
+                                    <td>财务审核</td>
+                                    <td>相关复核</td>
+                                    <td>入会凭证</td>
+                                    <td>打印合同</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item,index) in  loadData0.cardList">
+                                    <td>{{index+1}}</td>
+                                    <td>{{item.shopName}}</td>
+                                    <td class="tored">{{item.cardFlag}}</td>
+                                    <td class="toblue"><a href="javascript:;" @click="carddetails(item)" class="toblue">{{item.cardTypeName}}</a></td>
+                                    <td class="toceng">{{item.cardNo}}</td>
+                                    <td>{{item.externalNo}}</td>
+                                    <td><strong>{{item.b_needPrice}}</strong></td>
+                                    <td>
+                                        <strong v-if="item.status == 6">0.00</strong>
+                                        <strong v-else>{{((item.b_needPrice/(item.b_buyRightsNum+item.b_giveRightsNum))*item.orderRightsNum).toFixed(2)}}</strong>
+                                    </td>
+                                    <td class="tored">
+                                        <strong v-if="item.status == 6">0</strong>
+                                        <strong v-else>{{item.orderRightsNum}}</strong>
+                                    </td>
+                                    <td>{{item.createTime|formatDate}}</td>
+                                    <td> {{item.bindTime}}</td>
+                                    <td> {{item.bindTime== null? '':item.invalidTime}}</td>
+                                    <td><strong>{{item.saleName}}</strong></td>
+                                    <td class="togreen">
+                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status">{{items.lav}}</span>
+                                    </td>
+                                    <td class="toshallow" >
+                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.b_status">{{items.lav}}</span>
+                                    </td>
+                                    <td class="toblue"><span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.b_auditStatus">{{items.lav}}</span>
+                                    </td>
+                                    <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
+                                    <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div id="pagination0" class="pagination"></div>
+                        </div>
+                        <div id="MembershipCardDetails">
+                            <fieldset>
+                                <legend>会员卡详情</legend>
+                                <div class="details">
+                                    <div class="details_group">
+                                        <span>会员卡系列：<strong>{{loadData0.cardFlag}}</strong> </span>
+                                        <span>会员卡名称：<strong>{{loadData0.cardTypeName}}</strong> </span>
+                                        <span>卡状态：<strong class="toblue" v-for="items in parameterList.status" v-if="items.vue==loadData0.status">{{items.lav}}</strong> </span>
+                                        <span>协议编号：<strong>{{loadData0.agreementNo}}</strong> </span>
+                                    </div>
+                                    <div class="details_group">
+                                        <span>购买卡金额：<strong
+                                                class="tored">￥{{loadData0.b_needPrice|toManey}}</strong> </span>
+                                        <span>剩余卡金额：<strong
+                                                class="tored">￥{{loadData0.balance|toManey}}</strong> </span>
+                                        <span>储值金额：<strong
+                                                class="tored">￥{{loadData0.storageValue|toManey}}</strong> </span>
+                                    </div>
+                                    <div class="details_group">
+                                        <span>购买卡权益：<strong>{{loadData0.b_buyRightsNum}}</strong> </span>
+                                        <span>赠送卡权益：<strong>{{loadData0.b_giveRightsNum}}</strong> </span>
+                                        <span>可用权益：<strong>{{loadData0.availableNum}}</strong> </span>
+                                        <span>已使用权益：<strong>{{loadData0.alreadyUsedNum}}</strong> </span>
+                                        <span>剩余权益：<strong>{{loadData0.orderRightsNum}}</strong> </span>
+                                    </div>
+                                    <div class="details_group">
+                                        <span>开卡日期：<strong>{{loadData0.bindTime|formatDate}}</strong> </span>
+                                        <span>失效日期：<strong><input type="date" v-model="loadData0.invalidTime"
+                                                                  id="loadInvali"/></strong></span>
+                                        <span>原因：<strong><input type="text" v-model="loadData0.flag"
+                                                                id="loadFlag"/></strong></span>
+                                    </div>
+                                    <div class="details_group">
+                                        <span>财务审核：<strong class="yellow" v-for="items in parameterList.auditStatus"
+                                                           v-if="items.vue==loadData0.b_status">{{items.lav}}</strong> </span>
+                                        <span>相关复核：<strong class="yellow" v-for="items in parameterList.auditStatus"
+                                                           v-if="items.vue==loadData0.b_auditStatus">{{items.lav}}</strong> </span>
+                                    </div>
+                                    <div class="details_group"><a href="javascript:;" class="btn btn-success"
+                                                                  @click="Load0Save">保存</a></div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>使用限定：</legend>
+                                <div>
+                                    <form action="" method="POST" role="form" class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                该卡使用限制为：<span>{{loadData0.userdNum}}</span> 人
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-1 control-label">使用者姓名：</label>
+                                            <div class="col-md-10 usingname">
+                                                <input type="text" class="form-control" v-model="loadData0.userName"
+                                                       placeholder="使用者姓名">
+                                                <span>使用者联系方式：</span>
+                                                <input type="text" class="form-control" v-model="loadData0.userPhone"
+                                                       placeholder="使用者联系方式">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-1 control-label">使用密码：</label>
+                                            <div class="col-md-10">
+                                                <input type="password" class="form-control"
+                                                       v-model="loadData0.userPasswd" placeholder="使用密码">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-1 control-label">使用指纹：</label>
+                                            <div class="col-md-10">
+                                                <input type="button" class="btn btn-info" value="指纹未录入">
+                                                <input type="button" class="btn btn-default on btn-primary"
+                                                       value="录入指纹">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-1 control-label">使用指静脉：</label>
+                                            <div class="col-md-10">
+                                                <input type="button" class="btn btn-info" value="指静脉未录入">
+                                                <input type="button" class="btn btn-default on btn-primary"
+                                                       value="录入指静脉">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-1 control-label">使用脸谱：</label>
+                                            <div class="col-md-10">
+                                                <input type="button" class="btn btn-success" value="脸谱已录入">
+                                                <input type="button" class="btn btn-default on btn-danger" value="重新录入">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-1 control-label">备注：</label>
+                                            <div class="col-md-10">
+                                                <textarea name="" class="form-control"
+                                                          v-model="loadData0.note"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-10 col-md-offset-1">
+                                                <a href="javascript:;" class="btn btn-danger" @click="addCardLimit">添加</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <table class="table table-bordered table-hover" border="1" bordercolor="#ccc"
+                                           style="width: 50%;">
+                                        <thead>
+                                        <tr>
+                                            <td>使用者</td>
+                                            <td>联系方式</td>
+                                            <td>操作</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="item in loadData0.limitList">
+                                            <td>{{item.useName}}</td>
+                                            <td>{{item.usePhone}}</td>
+                                            <td class="toyin" @click="deleteCardLimit(item.id)">删除</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </li>
+                    <!-- 会员卡列表 -->
+                    <!-- 新购 -->
+                    <li class="on" v-if="LiIndex==1">
+                        <div id="NewPurchase">
+                            <div class="NewPurchase_top">
+									<span>
+										<span>销售门店：</span>
+										<select name="1" id="marketShop" @change="getMarketUser('marketShop')">
+											<option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" selected>
+												{{item.shopName}}
+											</option>
+											<option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index>0">
+												{{item.shopName}}
+											</option>
+										</select>
+									</span>
+                                <span>
+										<span>销售人员：</span>
+										<select name="1" id="maeketUser" v-model="loadData1.cardInfoMap.personnelId">
+											<option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+												{{items.relName}}
+											</option>
+											<option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+												{{items.relName}}
+											</option>
+										</select>
+										<a href="javascript:;" class="btn btn-default" @click="performances">业绩分配</a>
+									</span>
+                                <span>
+										<span>协议编号：</span>
+										<input type="text" placeholder="填写协议号或者随机生成" id="agreement" @blur.prevent="checkCardAgreement('agreement')">
+										<a href="javascript:;" class="btn btn-primary" @click="addCardAgreement('agreement')">随机号</a>
+										<span id="spa"></span>
+									</span>
+                                <span>
+                                    购买日期：<strong id="createTime">{{creatTime}}</strong>
+                                </span>
+                            </div>
+                            <div class="NewPurchase_box">
+                                <div>
+                                    <div class="NewPurchase_box_left"><span> 选择购买会员卡：</span></div>
+                                    <div class="NewPurchase_box_right">
+											<span>
+												<input type="text" placeholder="选择需要购买的会员卡" id="buyCard" disabled v-model="loadData1.cardInfoMap.cardTypeName">
+												<a href="javascript:;" class="btn btn-primary" @click="products">选择会员卡</a>
+											</span>
+                                        <span>
+												<span>会员卡号：</span>
+												<input type="text" placeholder="填写会员卡号或者随机生成" id='cardNum' @blur.prevent="checkCardNum('cardNum')" v-model="loadData1.cardInfoMap.cardNo">
+												<a href="javascript:;" class="btn btn-primary" @click="addCardNumMet('cardNum')">随机卡号</a>
+												<a href="javascript:;" class="btn btn-primary">写入IC卡</a>
+												<span id="spa1"></span>
+											</span>
+                                        <span>
+												<span>外部卡号：</span>
+												<input type="text" placeholder="外部卡号" @blur.prevent="checkExternalCard('externalCard')" id="externalCard" v-model="loadData1.cardInfoMap.externalNo">
+												<span></span>
+											</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="NewPurchase_box_left"><span> 售价：</span></div>
+                                    <div class="NewPurchase_box_right">
+											<span>
+												<input type="text" placeholder="单价由选择会员卡的单价" id="salesPrice" disabled v-model="loadData1.cardInfoMap.salesPrice">
+											</span>
+                                        <span>
+												<span>购卡金额：</span>
+												<input type="text" placeholder="填写购卡金额" id="minPrice" @blur="checkMinPrice" v-model="loadData1.cardInfoMap.totalPrice">
+												<span id="minPrice1"></span>
+											</span>
+                                        <span>
+												<span>有效时长：</span>
+												<input type="text" placeholder="填写有效时长" id="serviceLife" disabled v-model="loadData1.cardInfoMap.serviceLife">
+											</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="NewPurchase_box_left"><span> 购买权益：</span></div>
+                                    <div class="NewPurchase_box_right">
+											<span>
+												<input type="text" placeholder="会员卡权益" id="totalNum" disabled v-model="loadData1.cardInfoMap.buyRightsNum">
+											</span>
+                                        <span>
+												<span>赠送权益：</span>
+													<input type="text" placeholder="会员卡权益" id="qtZdqy" @blur="checkQtZdqy()" v-model="loadData1.cardInfoMap.giveRightsNum">
+												<span id="qtZdqy1"></span>
+											</span>
+                                        <span>
+												<span>可用总权益：</span>
+												<strong id="counts">{{loadData1.cardInfoMap.haveRightsNum}}</strong>
+											</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="NewPurchase_box_left"><span> 是否设置自动开卡：</span></div>
+                                    <div class="NewPurchase_box_right">
+											<span>
+												<label >
+													<span><input type="radio" name="2" value="0" v-model="loadData1.cardInfoMap.isFlage" @change="chackBindTime"></span>
+													<span>否</span>
+												</label>
+											</span>
+                                        <span>
+												<label >
+													<span><input type="radio" name="2" value="1" v-model="loadData1.cardInfoMap.isFlage" @change="chackBindTime"></span>
+													<span>是</span>
+												</label>
+											</span>
+                                        <span>
+											<input type="text" class="jeinput" id="bindTime" v-model="loadData1.cardInfoMap.bindTime" placeholder="请选择" readonly disabled/>
+										</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="NewPurchase_box_left"><span> 备注：</span></div>
+                                    <div class="NewPurchase_box_right">
+                                        <textarea name="" v-model="loadData1.cardInfoMap.note"></textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="NewPurchase_box_left" style="opacity: 0;">.</div>
+                                    <div class="NewPurchase_box_right">
+                                        <a href="javascript:;" class="btn btn-warning" @click="toOffers">去结账</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="NewPurchase_footer">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>订单创建日期</th>
+                                        <th>协议编号</th>
+                                        <th>所在门店</th>
+                                        <th>卡系列</th>
+                                        <th>会员卡名称</th>
+                                        <th>单价</th>
+                                        <th>购买金额</th>
+                                        <th>实际付款金额</th>
+                                        <th>购买权益</th>
+                                        <th>赠送权益</th>
+                                        <th>销售人员</th>
+                                        <th>有效期</th>
+                                        <th>操作员</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in loadData1.orderList">
+                                        <td>{{item.createTime|formatDate(item.createTime,true)}}</td>
+                                        <td>{{item.orderNo}}</td>
+                                        <td>{{item.shopName}}</td>
+                                        <td>{{item.cardFlag}}</td>
+                                        <td class="toblue">{{item.cardName}}</td>
+                                        <td>{{item.salesPrice|toManey}}</td>
+                                        <td>{{item.totalPrice|toManey}}</td>
+                                        <td class="toceng">{{item.needPrice|toManey}}</td>
+                                        <td>{{item.buyRightsNum}}</td>
+                                        <td>{{item.giveRightsNum}}</td>
+                                        <td>{{item.personnelName}}</td>
+                                        <td>{{item.serviceLife}}</td>
+                                        <td>{{item.createUserName}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div id="pagination1" class="pagination"></div>
+                            </div>
+                        </div>
+                        <!-- 选择会员卡弹窗 -->
+                        <div id="product" class="newCustomers_maskLayer">
+                            <div class="newCustomers_maskLayer_box">
+                                <div class="newCustomers_maskLayer_box_top">
+                                    <span>选择会员卡</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+                                </div>
+                                <div class="newCustomers_maskLayer_box_shen">
+                                    <div class="shen_top">
+											<span>
+												<span>当前门店：</span> <strong id="currentStore"></strong>
+											</span>
+                                        <span>
+                                            <span>选择卡系列：</span>
+                                            <select name="0" id="cardUser" @change="products">
+                                                <option value="0" selected>选择卡系列</option>
+                                                <option v-for="item in parameterList.type" :value="item.vue">{{item.lav}}</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>选择</th>
+                                            <th>门店</th>
+                                            <th>卡系列</th>
+                                            <th>卡名称</th>
+                                            <th>市场价</th>
+                                            <th>单价</th>
+                                            <th>有效时长</th>
+                                            <th>卡权益</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="item in loadData1.cardsList">
+                                            <td class="tored" @click="assignment(item.id,item.cardFlag)">选择</td>
+                                            <td>{{item.shopName}}</td>
+                                            <td>{{item.cardFlag}}</td>
+                                            <td>{{item.cardTypeName}}</td>
+                                            <td>{{item.originalPrice}}.00</td>
+                                            <td>{{item.salesPrice}}.00</td>
+                                            <td>{{item.serviceLife}}</td>
+                                            <td>{{item.totalNum}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 选择会员卡弹窗 -->
+                    </li>
+                    <!-- 新购 -->
+                    <!-- 续卡 -->
+                    <li class="on" v-if="LiIndex==2">
+                        <div id="renewalCard">
+                            <div class="renewalCard_top">
+								<span>
+									<span>选择会员卡：</span>
+									<select name="1" id="continueCard" @change="toContinueCardList">
+										<option>请选择</option>
+                                        <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
+                                                :cardNo="item.cardNo" :status="item.a_status" :orderState="item.orderState">
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                         </option>
+									</select>
+								</span>
+                            </div>
+                            <div class="XK-wrap">
+                                <h4 class="XK-title">
+                                    续卡操作(
+                                    <span class="col-red">备注：直接延续只能延续同类型卡中种；另行开卡，卡号不变，只有新卡开了，卡号才会由老卡变成新卡</span>)
+                                </h4>
+                                <div class="XK-con">
+                                    <div class="XK-radio-box">
+                                        <span>开卡方式：</span>
+                                        <label for="ZJYX">
+                                            <input type="radio" name="KKFS" value="0" id='ZJYX' v-model="loadData2.cardOpening">
+                                            <span>直接延续</span>
+                                        </label>
+                                        <label for="LXKK">
+                                            <input type="radio" name="KKFS" value="1" id='LXKK' v-model="loadData2.cardOpening">
+                                            <span>另行开卡</span>
+                                        </label>
+                                    </div>
+                                    <div class="XK-radio-box">
+                                        <span>是否更换新卡：</span>
+                                        <label for="GHXK1">
+                                            <input type="radio" name="GHXK" value="1" id='GHXK1' v-model="loadData2.replacementCard">
+                                            <span>是</span>
+                                        </label>
+                                        <label for="GHXK2">
+                                            <input type="radio" name="GHXK" value="0" id='GHXK2'  v-model="loadData2.replacementCard">
+                                            <span>否</span>
+                                        </label>
+                                    </div>
+                                    <strong class="XK-btn" @click="toSubContinueCard">续卡</strong>
+                                    <span class="XK-explain">
+				                                 选择完续卡方式后，操作续卡会跳转到新建会员卡</span>
+                                    <p class="XK-p">说明：</br>
+                                        直接延期：新续的会员卡，会在老卡过期时，自动开卡；如果要更换新卡，卡号也会由老卡变动为新卡；</br>
+                                        另行开卡：新续的会员卡，会在老卡过期后，卡状态为未开卡状态，需要会员另行开卡；如果要更换新卡，卡号也会有老卡变动为新卡；
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="renewalCard_footer">
+                                <h4 class="XK-title">续卡记录</h4>
+                                <table class="table table-bordered table-hover continueList">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>续卡时间</th>
+                                        <th>续卡方式</th>
+                                        <th>卡系列</th>
+                                        <th>卡名称</th>
+                                        <th>卡号变更</th>
+                                        <th>失效时间</th>
+                                        <th>购买权益</th>
+                                        <th>剩余权益</th>
+                                        <th>票券抵扣</th>
+                                        <th>支付方式</th>
+                                        <th>操作人</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in loadData2.continuedCardList" :value="item.id">
+                                        <td>{{index+1}}</td>
+                                        <td>{{item.createTime|formatDate(item.createTime,true)}}</td>
+                                        <td>{{item.cardOpening}}</td>
+                                        <td>{{item.cardFlag}}</td>
+                                        <td class="tored">{{item.cardName}}</td>
+                                        <td>{{item.supplyRemarks}}</td>
+                                        <td>{{item.invalidTime}}</td>
+                                        <td>{{item.buyRightsNum}}</td>
+                                        <td>{{item.haveRightsNum}}</td>
+                                        <td class="tored">{{item.discountNum}}</td>
+                                        <td>{{item.paymentMoney}}</td>
+                                        <td>{{item.personnelName}}</td>
+                                        <td class="tored" v-if="item.status!=1&&item.auditStatus!=1">
+                                            <span v-for="orderType in parameterList.continueOrderStat"
+                                                  v-if="item.orderState==orderType.vue" :value="item.id"
+                                                  @click="toDeleteContinue(item.id,item.orderState)">{{orderType.lav}}</span>
+                                        </td>
+                                        <td class="tored" v-else-if="item.status!=0&&item.auditStatus==0">审核中</td>
+                                        <td class="tored" v-else-if="item.status!=0&&item.auditStatus!=0">已经审核</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="pagination2" class="pagination"></div>
+                        </div>
+                    </li>
+                    <!-- 续卡 -->
+                    <!-- 转卡 -->
+                    <li class="on" v-if="LiIndex==3">
+                        <div id="transferCard">
+                            <div class="transferCard_top">
+                                <span>
+                                    <span>选择会员卡：</span>
+                                    <select name="1"  id="cardSupply2" @change="toCardSupply2" >
+                                       	<option>请选择</option>
+                                        <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo"
+                                                :status="item.a_status" :orderState="item.orderState" :type="item.type" :shopName="item.shopName"
+                                                :orderRightsNum = "item.orderRightsNum" >
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                         </option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="transferCard_box">
+                                <div class="transferCard-con">
+                                    <ul class="transferCard-type-list">
+                                        <li class="active" @click="transferCardBoxTops(0)">转卡</li>
+                                        <li @click="transferCardBoxTops(1)">卡升级</li>
+                                    </ul>
+                                    <div class="transferCard-box">
+                                        <div class="transferCard-box-left">
+                                            <h4 class="TCL-title">{{loadData3.context}}</h4>
+                                            <div class="TCL-con">
+                                                <ul class="NavTree-first" v-for="(item,index) in loadData3.shopList">
+                                                    <li ><strong :value="item.id" @click="getProducts(item.id,index)"  class="active" >{{item.shopName}}</strong>
+                                                        <ul class="NavTree-second">
+                                                            <li v-for="cardFs in item.cardFlagList">
+                                                                <strong class="active" >{{cardFs.cardFlag}}</strong>
+                                                                <ul class="NavTree-third" class="active">
+                                                                    <li v-for="cardN in item.cardsList"  v-if="cardN.cardFlag == cardFs.cardFlag" @click="checkCardType(cardN)">
+                                                                        <strong>{{cardN.cardTypeName}}</strong>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="transferCard-box-right">
+                                            <h4 class="TCR-title">选择转卡会员卡：{{loadData3.type|toType}}：
+                                                <span class="col-red">{{loadData3.cardFlag}}</span>
+                                                ; 卡名称：<span class="col-red">{{loadData3.cardTypeName}}</span>
+                                                ; 卡价格：<span class="col-red">￥ {{loadData3.originalPrice|toManey}}</span>
+                                                ; 购买价格：<span class="col-red">￥ {{loadData3.salesPrice|toManey}}</span>
+                                                ; 购买权益：<span class="col-red">{{loadData3.totalNum}}</span>
+                                                ; 可用权益：<span class="col-red">{{loadData3.totalNum}}</span>;
+                                            </h4>
+                                            <div class="TCR-con">
+                                                <div>
+                                                    <span>会员卡号：</span>
+                                                    <input type="text"  class="MembershipCard-input"  placeholder='随机生成或者原卡号' id='cardSupplyId' @blur.prevent="checkCardNum('cardSupplyId')"  v-model="loadData3.cardSupply3.cardNo">
+                                                    <strong class="blue-btn" @click="addCardNumMet('cardSupplyId')">随机生成</strong>
+                                                    <strong class="red-btn" @click="toSee('cardNo','查看原卡号：')">原卡号</strong>
+                                                    <span>生效日期：</span>
+                                                    <strong class="font-bold">{{creatTime|formatDate(creatTime,true)}}</strong>
+                                                    <span>(当前操作日期)</span>
+                                                </div>
+                                                <div>
+                                                    <span>手续费：</span>
+                                                    <input type="number"  class="TCR-input1" v-model="loadData3.cardSupply3.transferFee" id="transferFee" @change="getTransferFee">
+                                                    <span>客户授权：</span>
+                                                    <input type="password"  class="TCR-input2" id="supplyClientPass">
+                                                    <span>授权人：</span>
+                                                    <select name="1" v-model="loadData3.cardSupply3.personnelId">
+                                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                                            {{items.relName}}
+                                                        </option>
+                                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                                            {{items.relName}}
+                                                        </option>
+                                                    </select>
+                                                    <span>员工授权：</span>
+                                                    <input type="password" class="TCR-input2"  id="supplyPersonnelPass">
+                                                </div>
+                                                <div>
+                                                    <span>操作人：</span>
+                                                    <strong class="font-bold">{{personnelName}}</strong>
+                                                    <span>操作时间：</span>
+                                                    <strong class="font-bold">{{creatTime|formatDate(creatTime,true)}}</strong>
+                                                </div>
+                                            </div>
+                                            <div class="TCR-tables">
+                                                <div class="TCR-tables-box1">
+                                                    <div class="TCR-table-con1-query">
+                                                        <span>手机号码：</span>
+                                                        <strong class="TCR-table-con1-query-btn" @click="getClientList('tickMark')">搜索</strong>
+                                                        <input type="text" placeholder="输入手机号码" v-model="givePhone">
+                                                    </div>
+                                                    <div class="TCR-table-con1">
+                                                        <div class="TCR-overflow-box">
+                                                            <table class='green-head-table' border="0" cellspacing="0"
+                                                                   cellpadding="0">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>序号</th>
+                                                                    <th>票券号码</th>
+                                                                    <th>票券名称</th>
+                                                                    <th>可用权益</th>
+                                                                    <th>使用</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr v-for="(item,index) in ticketPrice.ticketPriceList">
+                                                                    <td>{{++index}}</td>
+                                                                    <td>{{item.tickNo}}</td>
+                                                                    <td class='col-blue'>{{item.tickName}}</td>
+                                                                    <td class='font-bold'>{{item.tickNum}}</td>
+                                                                    <td>
+                                                                        <input type="checkbox" v-model="ticketPrice.ticketPriceListOk" :value="item" @change="changeTicket">
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <strong class="showAllTable-btn">显示更多</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="TCR-table-con2">
+                                                        <div><span>会员卡号：</span><strong class="font-bold">{{ticketPrice.cardNo}}</strong></div>
+                                                        <div><span>会员名称：</span><strong class="font-bold">{{ticketPrice.cardUserName}}</strong></div>
+                                                        <div><span>票劵差价：</span><strong class="font-bold col-red">{{ticketPrice.differencePrice|toManey}}</strong>
+                                                            <span>票劵抵扣：</span><strong class="font-bold col-red">{{ticketPrice.totalPrice|toManey}}</strong></div>
+                                                        <div><span>卡中储值金额：</span><strong class="font-bold col-red" >{{ticketPrice.storage0rderPrice|toManey}}</strong></div>
+                                                        <div><span>扣储值金额：</span><input type="text" v-model="ticketPrice.storagePirc" @change="changeTicket" style="width: 58%" ></div>
+                                                        <div><span>输入凭证：</span><input type="password" v-model="ticketPrice.userPass" style="width: 58%"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="TCR-tables-box2">
+                                                    <table border="0" cellspacing="0" cellpadding="0"
+                                                           class="green-head-table2">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>支付方式</th>
+                                                            <th>支付金额</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>支付宝</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L1" @change="isCommonMoney(payModel.L1,'L1')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>刷卡</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L2" @change="isCommonMoney(payModel.L2,'L2')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>微信</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L3" @change="isCommonMoney(payModel.L3,'L3')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>现金</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>转账</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>花呗</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="TCR-tables-box3">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>小计：</td>
+                                                            <td>￥ {{payMentMoney.totalPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>抵扣金额：</td>
+                                                            <td>￥ {{payMentMoney.discountNum|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>应付金额：</td>
+                                                            <td>￥ {{payMentMoney.needPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>未付金额：</td>
+                                                            <td>￥ {{payMentMoney.noPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>找零：</td>
+                                                            <td>￥ {{payMentMoney.retChange|toManey}}</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <strong class="ZK-btn" @click="addSupply34Ok">转卡</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="transferCard_footer">
+                                <div class="transferCard_footer_top">
+                                    转卡记录
+                                </div>
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>操作时间</th>
+                                        <th>新卡号</th>
+                                        <th>旧卡号</th>
+                                        <th>卡类别</th>
+                                        <th>卡名称</th>
+                                        <th>购卡金额</th>
+                                        <th>差价</th>
+                                        <th>有效时长</th>
+                                        <th>购买权益</th>
+                                        <th>赠送权益</th>
+                                        <th>可用权益</th>
+                                        <th>操作人</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in loadData3.supplyList">
+                                        <td>{{++index}}</td>
+                                        <td>{{item.createTime|formatDate}}</td>
+                                        <td>{{item.newCardNo}}</td>
+                                        <td>{{item.oriCardNo}}</td>
+                                        <td>{{item.cardFlag}}</td>
+                                        <td>{{item.cardName}}</td>
+                                        <td>{{item.totalPrice|toManey}}</td>
+                                        <td>{{item.payPrice|toManey}}</td>
+                                        <td>{{item.serviceLife}}</td>
+                                        <td>{{item.buyRightsNum}}</td>
+                                        <td>{{item.giveRightsNum}}</td>
+                                        <td>{{item.buyRightsNum+item.giveRightsNum}}</td>
+                                        <td>Klaus</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 转卡 -->
+                    <!-- 停卡/冻结 -->
+                    <li class="on" v-if="LiIndex==4">
+                        <div id="StopCard">
+                            <div class="StopCard_top">
+								<span>
+                                    <span>选择会员卡：</span>
+                                    <select name="1" id="cardStop" @change="getCardStopList">
+                                        <option>请选择</option>
+                                        <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
+                                                :cardNo="item.cardNo" :status="item.a_status">
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="StopCard_box">
+                                <div class="transferCard_box_top">
+                                    <a href="javascript:;" class="on" @click="transferCardBoxTops(0)">停卡</a>
+                                    <a href="javascript:;" @click="transferCardBoxTops(1)">冻结</a>
+                                </div>
+                                <div class="transferCard_box_bottom">
+                                    <div class="on transferCard_a" v-if="transferCardBoxTop==0">
+                                        <div class="TK-wrap">
+                                            <div class="TK-wrap-l">
+                                                <h4 class="TK-title">
+                                                    <span>可停卡次数：<strong class="col-red">{{loadData4.stopNum}}</strong>次</span>
+                                                    <span>每次时长：<strong class="col-red">{{loadData4.stopDays}}</strong>天</span>
+                                                    <span>已停用次数：<strong class="col-red">{{loadData4.realStopNum}}</strong>次</span>
+                                                    <span>超出收费：<strong class="col-red">{{loadData4.outPrice|toManey}}</strong>元/天</span>
+                                                </h4>
+                                                <table>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>开始时间：</td>
+                                                        <td>
+                                                            <input type="text" class="jeinput startTime" placeholder="开始日期" readonly v-model="loadData4.addStroData.startTime" @click="initGetStartTime">
+                                                        </td>
+                                                        <td>结束时间：</td>
+                                                        <td>
+                                                            <input type="text" class="jeinput estEndTime" placeholder="结束日期" readonly v-model="loadData4.addStroData.estEndTime" @click="initGetEstEndTime">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>停卡时长：</td>
+                                                        <td>
+                                                            <input type="text" placeholder="停卡时长" v-model="loadData4.addStroData.estStopTime" disabled>天
+                                                        </td>
+                                                        <td>新失效时间：</td>
+                                                        <td class="font-bold">{{loadData4.estInvalidTime}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>图片：</td>
+                                                        <td colspan="3">
+                                                            <img class="img-responsive" src="../img/u2871.png" alt="" @click="pictureSelected(1)" id="price1">
+                                                            <input id="file-fr" style="display: none;" ref="avatar" name="file" type="file" @change="pictureShow($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>停卡原因</td>
+                                                        <td colspan="3">
+                                                            <textarea name="addStroData.flag" v-model="loadData4.addStroData.flag" rows="4"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="TK-wrap-r">
+                                                <div class="TCR-con">
+                                                    <div>
+                                                        <span>客户授权：</span>
+                                                        <input class="TCR-input2" type="password" placeholder="客户授权"
+                                                               id="stopUserVoucher">
+                                                    </div>
+                                                    <div>
+                                                        <span>操作人：</span>
+                                                        <strong class="font-bold">{{loadData4.personnelName}}</strong>
+                                                        <span>操作时间：</span>
+                                                        <strong class="font-bold">{{creatTime}}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="TCR-tables-box2">
+                                                    <table border="0" cellspacing="0" cellpadding="0"
+                                                           class="green-head-table2">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>支付方式</th>
+                                                            <th>支付金额</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>支付宝</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L1"
+                                                                                     @change="isCommonMoney(payModel.L1,'L1')">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>刷卡</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L2"
+                                                                                     @change="isCommonMoney(payModel.L2,'L2')">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>微信</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L3"
+                                                                                     @change="isCommonMoney(payModel.L3,'L3')">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>现金</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>转账</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>花呗</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="TCR-tables-box3">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>小计：</td>
+                                                            <td>￥ {{payMentMoney.totalPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>抵扣金额：</td>
+                                                            <td>￥{{payMentMoney.discountNum|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>应付金额：</td>
+                                                            <td>￥{{payMentMoney.needPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>未付金额：</td>
+                                                            <td>￥ {{payMentMoney.noPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>找零</td>
+                                                            <td>￥ {{payMentMoney.retChange|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2"><strong class="TK-btn" @click="stopSubtime">停卡</strong>
+                                                                <span class="DY-btn">打印</span>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="StopCard_footer" style="width: auto">
+                                            <div class="transferCard_footer_top">
+                                                停卡记录
+                                            </div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>创建时间</th>
+                                                    <th>停卡时长</th>
+                                                    <th>开始停卡</th>
+                                                    <th>结束停卡</th>
+                                                    <th>新失效时间</th>
+                                                    <th>付款类型</th>
+                                                    <th>收费</th>
+                                                    <th>原因</th>
+                                                    <th>图片</th>
+                                                    <th>停卡操作员</th>
+                                                    <th>结束停卡时间</th>
+                                                    <th>实际停卡时长</th>
+                                                    <th>结束停卡操作人</th>
+                                                    <th>状态</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="item in loadData4.stopType1">
+                                                    <td>{{item.createTime|formatDate}}</td>
+                                                    <td class="tored"><strong>{{item.estStopTime}}</strong></td>
+                                                    <td>{{item.startTime|formatDate}}</td>
+                                                    <td>{{item.estEndTime|formatDate}}</td>
+                                                    <td class="tored">{{item.invalidTime}}</td>
+                                                    <td>{{item.paymentMoney}}</td>
+                                                    <td class="tored">{{item.totalPrice}}</td>
+                                                    <td>
+                                                        <!--<a href="javascript:;" @click="toSee(item.flag,'查看停卡原因：')">查看</a>-->
+                                                        <strong class="LookTKYY" :data-yy="item.flag">查看</strong>
+                                                    </td>
+                                                    <td>
+                                                        <img class="img-responsive" :src="item.picLink">
+                                                    </td>
+                                                    <td class="toshallow">{{item.personnerlName}}</td>
+                                                    <td class="totuhuang">{{item.endTime|formatDate}}</td>
+                                                    <td class="tored"><strong>{{item.stopTime}}</strong></td>
+                                                    <td class="toshallow">{{item.stopUserName}}</td>
+                                                    <td class="toyen"><i v-for="items in parameterList.stopStatus"
+                                                                         v-if="items.vue == item.stopStatus ">{{items.lav}}</i>
+                                                    </td>
+                                                    <td>
+                                                        <a href="javascript:;" class="togreen"
+                                                           @click="termination(item)"
+                                                           v-if="item.stopStatus == 1 && item.priceStatus != 2">终止</a>
+                                                        <a href="javascript:;"
+                                                           v-if="item.status!=1&&item.auditStatus!=1">
+                                                            <i v-for="orderType in parameterList.continueOrderStat"
+                                                               v-if="item.priceStatus==orderType.vue" :value="item.id"
+                                                               @click="delStop(item.priceStatus,item.id)">{{orderType.lav}}
+                                                            </i>
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                           v-else-if="item.status!=0&&item.auditStatus==0">审核中</a>
+                                                        <a href="javascript:;"
+                                                           v-else-if="item.status!=0&&item.auditStatus!=0">已审核</a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="transferCard_b on" v-if="transferCardBoxTop==1">
+                                        <div class="transferCard_a_left">
+                                            <div>
+                                                <div>
+														<span>
+															原因：
+														</span>
+                                                    <textarea name="1" cols="30" rows="10"
+                                                              v-model="loadData4.addStroData.flag"></textarea>
+                                                </div>
+                                                <div>
+                                                    操作人: <strong>{{loadData4.personnelName}}</strong>
+                                                </div>
+                                                <div>
+                                                    <a href="javascript:;" class="btn btn-default"
+                                                       @click="toStop2SubtimeOk(1)">冻结</a>
+                                                    <a href="javascript:;" class="btn btn-default"
+                                                       @click="toStop2SubtimeOk(2)">解冻</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="transferCard_a_bottom">
+                                            <div>冻结记录</div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>冻结时间</th>
+                                                    <th>解冻时间</th>
+                                                    <th>原因</th>
+                                                    <th>冻结操作员</th>
+                                                    <th>解冻操作员</th>
+                                                    <th>状态</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(item,index) in loadData4.stopType2">
+                                                    <td>{{++index}}</td>
+                                                    <td>{{item.startTime|formatDate}}</td>
+                                                    <td>{{item.endTime|formatDate}}</td>
+                                                    <td><strong class="LookTKYY" :data-yy="item.flag">查看</strong>
+                                                    </td>
+                                                    <td>{{item.personnerlName}}</td>
+                                                    <td>{{item.stopUserName}}</td>
+                                                    <td><i v-for="stopS in parameterList.stopStatusT"
+                                                           v-if="stopS.vue==item.stopStatus">{{stopS.lav}}</i></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 停卡 -->
+                        </div>
+                        <div id="termination" class="newCustomers_maskLayer">
+                            <div class="newCustomers_maskLayer_box">
+                                <div class="newCustomers_maskLayer_box_top">
+                                    <span>终止停卡</span><a href="#" class="newCustomers_maskLayer_X"
+                                                        onclick="newCustomers_maskLayer_X()">X</a>
+                                </div>
+                                <div class="newCustomers_maskLayer_box_shen">
+                                    <div>
+                                        <span>已停卡时长： </span> <span><strong class="tored">{{loadData4.termination.stopTime}}</strong> 天</span>
+                                    </div>
+                                    <div><span>新失效时间：</span>
+                                        <strong>{{loadData4.termination.invalidTime|formatDate}}</strong></div>
+                                    <div>
+                                        <span>终止原因：</span> <textarea cols="30" rows="5"
+                                                                     v-model="loadData4.termination.flag"></textarea>
+                                    </div>
+                                    <div><span>客户授权：</span> <input type="password" id="stopTermination"></div>
+                                    <div><span>操作人：</span> <strong>{{loadData4.personnelName}}</strong></div>
+                                    <div><span>需付款：￥</span> <strong class="tored">{{loadData4.termination.totalPrice|toManey}}</strong>
+                                    </div>
+                                    <a href="javascript:;" class="btn btn-success" @click="toStopTermination">终止</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 停卡/冻结 -->
+                    <!-- 补卡 -->
+                    <li class="on" v-if="LiIndex==5">
+                        <div id="SupplementaryCard">
+                            <div class="SupplementaryCard_top">
+									<span>
+										<span>选择会员卡：</span>
+										<select name="1" id="cardSupply1" @change="addCardSupply2Card()">
+											<option>请选择</option>
+											<option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
+                                                    :cardNo="item.cardNo" :status="item.a_status">
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                         </option>
+									   </select>
+									</span>
+                            </div>
+                            <div class="SupplementaryCard_box">
+                                <div class="transferCard_box_bottom">
+                                    <div class="transferCard_b">
+                                        <div class="transferCard_a_left">
+                                            <div class="sc">
+                                                <div class="sc_box">
+                                                    <strong>补卡操作</strong>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">新卡号：</div>
+                                                    <div class="sc_box_right"><input type="text" placeholder="自动生成" style="width: 70%;" readonly id="cardSupply">
+                                                        <a href="javascript:;" class="btn btn-danger" @click="addCardNumMet('cardSupply')">自动生成</a></div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">外部卡号：</div>
+                                                    <div class="sc_box_right"><input type="text" placeholder="外部卡号" @blur.prevent="checkExternalCard('SupplyExternalNo')" id="SupplyExternalNo" v-model="loadData5.addSupply1.externalNo">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">付款方式：</div>
+                                                    <div class="sc_box_right">
+                                                        <table border="0" cellspacing="0" cellpadding="0" class="green-head-table2">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>支付方式</th>
+                                                                <th>支付金额</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>支付宝</td>
+                                                                <td><input type="text" v-model="payModel.L1" @change="isCommonMoney(payModel.L1,'L1')"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>刷卡</td>
+                                                                <td><input type="text" v-model="payModel.L2" @change="isCommonMoney(payModel.L2,'L2')"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>微信</td>
+                                                                <td><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>现金</td>
+                                                                <td><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>转账</td>
+                                                                <td><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>花呗</td>
+                                                                <td><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">付款金额：</div>
+                                                    <div class="sc_box_right"><input type="text" placeholder="付款金额" readonly v-model="payModelMoney">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"> 备注：</div>
+                                                    <div class="sc_box_right">
+                                                        <textarea v-model="loadData5.addSupply1.supplyRemarks"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">操作人：</div>
+                                                    <div class="sc_box_right">
+                                                        <select name="saleManId" v-model="loadData5.addSupply1.personnelId">
+                                                            <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                                                {{items.relName}}
+                                                            </option>
+                                                            <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                                                {{items.relName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <a href="javascript:;" class="btn btn-default" @click="addSupply1Ok">确定补卡</a>
+                                                    <a href="javascript:;" class="btn btn-default">打印</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="transferCard_a_bottom">
+                                            <div>补卡记录</div>
+                                            <div>历史补卡总费用： <span>{{loadData5.SupplyMoney}}</span> 元</div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>补卡时间</th>
+                                                    <th>新会员卡号</th>
+                                                    <th>外部卡号</th>
+                                                    <th>旧卡号</th>
+                                                    <th>付款类型</th>
+                                                    <th>补卡费</th>
+                                                    <th>操作人</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(item,index) in loadData5.carDsupplyRecordList "
+                                                    :value="item.id">
+                                                    <td>{{index+1}}</td>
+                                                    <td>{{item.createTime|formatDate}}</td>
+                                                    <td :value="item.newCardId">{{item.newCardNo}}</td>
+                                                    <td class="tored">{{item.externalNo}}</td>
+                                                    <td :value="item.oriCardId">{{item.oriCardNo}}</td>
+                                                    <td>{{item.paymentMoney}}</td>
+                                                    <td class="tored">{{item.payPrice}}</td>
+                                                    <td>{{item.personnerlName}}</td>
+                                                    <td class="tored">打印</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 补卡 -->
+                    <!-- 储值 -->
+                    <li class="on" v-if="LiIndex==6">
+                        <div id="StoredValue">
+                            <div class="StoredValue_top">
+								<span>
+                                    <span>选择会员卡：</span>
+                                     <select name="1" id="storageCard" @change="getStorageCardList">
+                                         <option>请选择</option>
+                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                         </option>
+								    </select>
+                                </span>
+                            </div>
+                            <div class="StoredValue_box">
+                                <div class="transferCard_box_bottom">
+                                    <div class="transferCard_a">
+                                        <div class="transferCard-box-right">
+                                            <h4 class="TCR-title">当前储值金额：<span class="font-bold col-red">￥{{loadData6.orderPrice|toManey}}</span>
+                                            </h4>
+                                            <div class="TCR-con">
+                                                <div>
+                                                    <span>储值金额：</span>
+                                                    <input type="text" class="TCR-input2" placeholder='填写储值金额' v-model="payMentMoney.price" @change="ticketDeductiont">
+                                                    <span>赠送金额：</span>
+                                                    <input type="text" class="TCR-input2" placeholder='填写赠送金额' value="0" v-model="loadData6.givePrice">
+                                                    <span>操作人：</span>
+                                                    <strong class="font-bold">{{loadData6.personnelName}}</strong>
+                                                    <span>操作时间：</span>
+                                                    <strong class="font-bold">{{creatTime}}</strong>
+                                                    <span>输入凭证：</span>
+                                                    <input type="password" class="TCR-input2" placeholder='输入凭证' id="storagePass">
+                                                </div>
+                                            </div>
+                                            <div class="TCR-tables">
+                                                <div class="TCR-tables-box1">
+                                                    <div class="TCR-table-con1-query">
+                                                        <span>手机号码：</span>
+                                                        <strong class="TCR-table-con1-query-btn"  @click="getClientList('tickMark')">搜索</strong>
+                                                        <input type="text" placeholder="输入手机号码" v-model="givePhone">
+                                                    </div>
+                                                    <div class="TCR-table-con1">
+                                                        <div class="TCR-overflow-box">
+                                                            <table class='green-head-table' border="0" cellspacing="0" cellpadding="0">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>序号</th>
+                                                                    <th>票券号码</th>
+                                                                    <th>票券名称</th>
+                                                                    <th>可用权益</th>
+                                                                    <th>使用</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr v-for="(item,index) in ticketPrice.ticketPriceList">
+                                                                    <td>{{++index}}</td>
+                                                                    <td>{{item.tickNo}}</td>
+                                                                    <td class='col-blue'>{{item.tickName}}</td>
+                                                                    <td class='font-bold'>{{item.tickNum}}</td>
+                                                                    <td>
+                                                                        <input type="checkbox" v-model="ticketPrice.ticketPriceListOk" :value="item" @change="changeTicket">
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <strong class="showAllTable-btn">显示更多</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="TCR-table-con2">
+                                                        <div><span>会员卡号：</span><strong class="font-bold">{{ticketPrice.cardNo}}</strong></div>
+                                                        <div><span>会员名称：</span><strong class="font-bold">{{ticketPrice.cardUserName}}</strong></div>
+                                                        <div><span>票劵差价：</span><strong class="font-bold col-red">{{ticketPrice.differencePrice|toManey}}</strong>
+                                                              <span>票劵抵扣：</span><strong class="font-bold col-red">{{ticketPrice.totalPrice|toManey}}</strong></div>
+                                                        <div><span>卡中储值金额：</span><strong class="font-bold col-red">{{ticketPrice.storage0rderPrice|toManey}}</strong></div>
+                                                        <div><span>扣储值金额：</span><input type="text" placeholder="不能抵扣储值" disabled>
+                                                            <!--<input type="text" v-model="ticketPrice.storagePirc" @change="changeTicket" disabled>--></div>
+                                                        <div><span>输入凭证：</span><input type="password" v-model="ticketPrice.userPass"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="TCR-tables-box2">
+                                                    <table border="0" cellspacing="0" cellpadding="0"
+                                                           class="green-head-table2">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>支付方式</th>
+                                                            <th>支付金额</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>支付宝</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L1" @change="isCommonMoney(payModel.L1,'L1')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>刷卡</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L2" @change="isCommonMoney(payModel.L2,'L2')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>微信</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L3" @change="isCommonMoney(payModel.L3,'L3')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>现金</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>转账</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>花呗</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="TCR-tables-box3">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>小计：</td>
+                                                            <td>￥ {{payMentMoney.totalPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>抵扣金额：</td>
+                                                            <td>￥ {{payMentMoney.discountNum|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>应付金额：</td>
+                                                            <td>￥ {{payMentMoney.needPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>未付金额：</td>
+                                                            <td>￥ {{payMentMoney.noPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>找零</td>
+                                                            <td>￥ {{payMentMoney.retChange|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan='2'>
+                                                                <strong class="CZ-btn" @click="storageSubVin">储值</strong>
+                                                                <span class='DY-btn'>打印</span>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="StopCard_footer">
+                                            <div class="transferCard_footer_top">
+                                                <span>储值金额：<strong>50.00</strong>元 </span>
+                                                <span>票券抵扣：<strong>50.00</strong>元 </span>
+                                                <span>赠送金额：<strong>50.00</strong>元 </span>
+                                            </div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>操作</th>
+                                                    <th>状态</th>
+                                                    <th>储值时间</th>
+                                                    <th>编号</th>
+                                                    <th>归属门店</th>
+                                                    <th>支付方式</th>
+                                                    <th>储值金额</th>
+                                                    <th>赠送金额</th>
+                                                    <th>票卷抵扣</th>
+                                                    <th>实际付款金额</th>
+                                                    <th>储值总金额</th>
+                                                    <th>转让人</th>
+                                                    <th>转让人手机</th>
+                                                    <th>冲销备注</th>
+                                                    <th>退款授权人</th>
+                                                    <th>退款原因</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(item,index) in loadData6.storageCardList">
+                                                    <td>{{ ++index }}</td>
+                                                    <td v-if="item.storageStatus != 2">
+                                                        <a href="javascript:;" class="togreen" @click="transfersStorage(item.id,item.surplusPrice)" v-if="item.storageStatus == 1">转让</a>
+                                                        <a href="javascript:;" class="totuhuang" @click="Refund(item.totalPrice,item.id,item.surplusPrice)" v-if="item.storageStatus == 1">退款</a>
+                                                        <a href="javascript:;" class="toyin">打印</a>
+                                                        <a href="javascript:;" v-if="item.status!=1&&item.auditStatus!=1" class="tored" @click="delStorage(item.id,item.storageStatus)">冲销</a>
+                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus==0" class="tored"> 审核中 </a>
+                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus!=0" class="tored">已审核</a>
+                                                    </td>
+                                                    <td v-else></td>
+                                                    <td v-for="storage in parameterList.storageStatus"
+                                                        v-if="item.storageStatus == storage.vue" :class="storage.cla">
+                                                        {{storage.lav}}
+                                                    </td>
+                                                    <td>{{item.createTime|formatDate(true)}}</td>
+                                                    <td>{{item.orderNo}}</td>
+                                                    <td>{{item.shopName}}</td>
+                                                    <td>{{item.paymentMoney}}</td>
+                                                    <td class="tored"><strong>{{item.storePrice}}</strong></td>
+                                                    <td class="tored"><strong class="tored">{{item.givePrice}}</strong></td>
+                                                    <td class="tored"><strong class="tored">{{item.ticketPrice}}</strong></td>
+                                                    <td class="tored"><strong class="tored">{{item.totalPrice}}</strong></td>
+                                                    <td class="totuhuang"><strong>{{item.surplusPrice}}</strong></td>
+                                                    <td class="toyin">{{item.giveName}}</td>
+                                                    <td>{{item.givePhone}}</td>
+                                                    <td class="toyin">{{item.cancelNote}}</td>
+                                                    <td>{{item.refundUserName}}</td>
+                                                    <td><a href="javascript:;" class="totuhuang" :value="item.refundNote" @click="toSee(item.refundNote,'查看退款原因：')"> 查看</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="TransferOperation" class="newCustomers_maskLayer">
+                            <div class="newCustomers_maskLayer_box">
+                                <div class="newCustomers_maskLayer_box_top">
+                                    <span>转让操作</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+                                </div>
+                                <div class="newCustomers_maskLayer_box_shen">
+                                    <div>
+                                        <span>转让储值金额： </span> <span><strong class="tored">{{loadData6.transfersMoney|toManey}}</strong> 元</span>
+                                    </div>
+                                    <div><span>转让人手机号：</span> <span><input type="text" placeholder="转让人手机号" v-model="givePhone" @change="getClientList"></span>
+                                    </div>
+                                    <div>
+                                        <span>转让人姓名：</span> <span><input type="text" placeholder="转让人姓名" v-model="giveName"></span>
+                                    </div>
+                                    <div><span>客户授权：</span> <span><input type="password" placeholder="客户授权" id="giveUserStor"></span></div>
+                                    <div><span>操作人：</span> <strong>{{personnelName}}</strong></div>
+                                    <a href="javascript:;" class="btn btn-success" @click="toGiveUserStor">转让</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Refund" class="newCustomers_maskLayer">
+                            <div class="newCustomers_maskLayer_box">
+                                <div class="newCustomers_maskLayer_box_top">
+                                    <span>退款操作</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+                                </div>
+                                <div class="newCustomers_maskLayer_box_shen">
+                                    <div>
+                                        <span>提款金额： </span> <span><strong class="tored">{{loadData6.addRefund.totalPrice|toManey}}</strong> 元</span>
+                                    </div>
+                                    <div><span>提款人：</span> <strong>{{loadData6.clientUserName}}</strong></div>
+                                    <div><span>授权人：</span>
+                                        <span>
+                                             <select name="saleManId" v-model="loadData6.addRefund.refundUserId">
+                                             <option>请选择授权人</option>
+                                             <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                                  {{items.relName}}
+                                             </option>
+                                             <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                                    {{items.relName}}
+                                             </option>
+                                        </select>
+                                        </span>
+                                    </div>
+                                    <div><span>授权凭证：</span> <input type="password" placeholder="授权凭证" id="refundStorage"></div>
+                                    <div>
+                                        <span>原因：</span> <textarea cols="30" rows="5" v-model="loadData6.addRefund.refundNote"></textarea>
+                                    </div>
+                                    <div><span>操作人：</span> <strong>{{loadData6.personnelName}}</strong></div>
+                                    <a href="javascript:;" class="btn btn-success" @click="refundStorage">退款</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 储值 -->
+                    <!-- 子卡 -->
+                    <li class="on" v-if="LiIndex==7">
+                        <div id="DaughterCard">
+                            <div class="DaughterCard_top">
+								<span>
+									<span>选择会员卡：</span>
+									   <select name="1" id="childCard" @change="getChildCardList">
+                                           <option>请选择</option>
+                                           <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
+                                                   :cardNo="item.cardNo" :status="item.a_status">
+											    归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；</option>
+									   </select>
+								</span>
+                            </div>
+                            <div class="DaughterCard_box">
+                                <div class="transferCard_box_bottom">
+                                    <div class="transferCard_b">
+                                        <div class="transferCard_a_left">
+                                            <div class="sc">
+                                                <div class="sc_box">
+                                                    添加子卡操作
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">当前卡设置：</div>
+                                                    <div class="sc_box_right">
+                                                        <p>
+                                                            可添加子卡数：<span> <strong>{{loadData7.zkNum}}</strong></span> 张；
+                                                            持有方式：<span v-for="item in parameterList.zkCyfs "> <strong :value="item.vue" v-if="item.vue==loadData7.zkCyfs">{{item.lav}}</strong> </span>
+                                                            ；
+                                                            消费方式：<span v-for="item in parameterList.zkXffs"><strong :value="item.vue" v-if="item.vue==loadData7.zkXffs">{{item.lav}}</strong></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"><strong>*</strong> 会员卡号：</div>
+                                                    <div class="sc_box_right">
+                                                        <input type="text" placeholder="会员卡号" id="cardNo">
+                                                        <a href="javascript:;" class="SJH-btn" @click="addCardNumMet('cardNo')">随机卡号</a>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"><strong>*</strong> 分享权益：</div>
+                                                    <div class="sc_box_right">
+                                                        <select name="cardHandle" v-model="loadData7.shareBenefit">
+                                                            <option v-for="item in parameterList.shareBenefit" :value="item.vue">{{item.lav}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box" v-if="loadData7.zkXffs==1">
+                                                    <div class="sc_box_left">分享权益：</div>
+                                                    <div class="sc_box_right">
+                                                        <input type="text" placeholder="分享的权益" v-model="loadData7.shareNum">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">外部卡号：</div>
+                                                    <div class="sc_box_right"><input type="text" placeholder="外部卡号" v-model="loadData7.outCardNo" id="outCardNo" @blur.prevent="checkExternalCard('outCardNo')">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"><strong>*</strong> 持卡人手机：</div>
+                                                    <div class="sc_box_right">
+                                                        <input type="text" placeholder="持卡人手机" v-model="givePhone" @change="getClientList" >
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"><strong>*</strong> 持卡人：</div>
+                                                    <div class="sc_box_right">
+                                                        <input type="text" placeholder="持卡人" v-model="giveName" >
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"><strong>*</strong> 销售人员：</div>
+                                                    <div class="sc_box_right">
+                                                        <select name="saleManId" v-model="loadData7.saleManId">
+                                                            <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>{{items.relName}}
+                                                            </option>
+                                                            <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">{{items.relName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <a href="javascript:;" class="btn btn-default"
+                                                       @click="saveChildCard">添加子卡</a>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <p>说明：</p>
+                                                    <p>与主卡享有同等权益：即主卡可以用什么，子卡就用什么，如果是充值卡，就是一起刷金额；</p>
+                                                    <p>分享权益：随主卡同步附属使用：即主卡与子卡必须同时使用，如主卡刷卡后15分钟内，子卡均可以刷卡；</p>
+                                                    <p>
+                                                        与主卡分割额度使用：即从主卡的权益中，分割一部分给予子卡使用。如充值卡，如果主卡1000元，子卡分割200元，则主卡只剩800元。如果是次卡、年卡类同；</p>
+                                                    <p>卡处理：子卡持有：指该卡永远受父卡约束，可以随时修改；独立分卡：属于不可逆行为，一旦设定设定后，不可修改；</p>
+                                                    <p>指定持有人：指定持有人一旦建立后，不可修改；</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="transferCard_a_bottom">
+                                            <div>子卡记录</div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>父卡号</th>
+                                                    <th>子卡号</th>
+                                                    <th>外部卡号</th>
+                                                    <th>分享权益</th>
+                                                    <th>卡处理</th>
+                                                    <th>持有人姓名</th>
+                                                    <th>手机号</th>
+                                                    <th>销售人员</th>
+                                                    <th>操作人员</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tbody>
+                                                <tr v-for="item in loadData7.childCardList">
+                                                    <td>{{item.parentCardNo}}</td>
+                                                    <td>{{item.cardNo}}</td>
+                                                    <td>{{item.outCardNo}}</td>
+                                                    <td v-for="share in parameterList.shareBenefit"
+                                                        v-if="share.vue==item.shareBenefit">{{share.lav}}
+                                                    </td>
+                                                    <td v-for="car in parameterList.cardHandle"
+                                                        v-if="car.vue==item.cardHandle">{{car.lav}}
+                                                    </td>
+                                                    <td>{{item.userName}}</td>
+                                                    <td>{{item.mobile}}</td>
+                                                    <td>{{item.saleName}}</td>
+                                                    <td>{{item.handleName}}</td>
+                                                </tr>
+                                                </tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 子卡 -->
+                    <!-- 补余 -->
+                    <li class="on" v-if="LiIndex==8">
+                        <div id="Remnant">
+                            <div class="Remnant_top">
+								<span>
+									<span>选择会员卡：</span>
+									   <select name="1" id="complementCard" @change="getComplementCardList">
+											 <option>请选择</option>
+                                             <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；</option>
+									   </select>
+								</span>
+                            </div>
+                            <div class="Remnant_box">
+                                <div class="transferCard_box_bottom">
+                                    <div class="transferCard_b">
+                                        <div class="transferCard-box-right">
+                                            <div class="TCR-con">
+                                                <table>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>卡销售金额：</td>
+                                                        <td><strong class="font-bold col-blue">{{loadData8.addComplement.totalPrice}}</strong></td>
+                                                        <td>已付款金额：</td>
+                                                        <td><strong class="font-bold col-green">{{loadData8.complementPrice}}</strong></td>
+                                                        <td>欠款金额：</td>
+                                                        <td>
+                                                            <strong class="font-bold col-red">{{loadData8.noPrice}}</strong>
+                                                            <strong class="col-red">(剩余{{loadData8.num}}期)</strong>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>还款选择：</td>
+                                                        <td colspan="5">
+                                                            <span v-for="item in loadData8.orderSplitList" name="splitNum">
+                                                                <label>
+                                                                    <input type="checkbox" v-model="loadData8.orderSetIdListTwo" :value="item" @change="checkMoeny" name="orderSet" > 第{{item.splitOrder}}期
+                                                                </label>
+                                                                <strong class="font-bold col-orange">￥{{item.splitNum|toMoneySet(item.splitNum,item,item)}}</strong>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>补余金额：</td>
+                                                        <td>
+                                                            <strong class="font-bold col-red">￥{{loadData8.depositMon|toManey}}</strong>
+                                                        </td>
+                                                        <td>补余期限：</td>
+                                                        <td>
+                                                            <strong class="font-bold">{{loadData8.depositTime}}天</strong>
+                                                        </td>
+                                                        <td>下一次日期：</td>
+                                                        <td>{{loadData8.nextTime|formatDate}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>业绩归属门店：</td>
+                                                        <td>
+                                                            <select name="1" v-model="loadData8.addComplement.shopId" id="complementUser" @change="getMarketUser('complementUser')">
+                                                                <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" selected>
+                                                                    {{item.shopName}}
+                                                                </option>
+                                                                <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index>0">
+                                                                    {{item.shopName}}
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                        <td>业绩分配：</td>
+                                                        <td>
+                                                            <strong class="red-btn"  @click="performances">业绩分配</strong>
+                                                        </td>
+                                                        <td>支付备注：</td>
+                                                        <td>
+                                                            <input type="text" class="TCR-input3" v-model="loadData8.addComplement.payRemarks">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>操作人：</td>
+                                                        <td>
+                                                            <strong class="font-bold">{{personnelName}}</strong>
+                                                            <!--<select name="saleManId" v-model="loadData8.addComplement.personnelId">-->
+                                                                <!--<option>请选择</option>-->
+                                                                <!--<option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>-->
+                                                                    <!--{{items.relName}}-->
+                                                                <!--</option>-->
+                                                                <!--<option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">{{items.relName}}-->
+                                                                <!--</option>-->
+                                                            <!--</select>-->
+                                                        </td>
+                                                        <td>操作时间：</td>
+                                                        <td colspan="3">
+                                                            <strong class="font-bold">{{creatTime|formatDate(true)}}</strong>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="TCR-tables">
+                                                <div class="TCR-tables-box1">
+                                                    <div class="TCR-table-con1-query">
+                                                        <span>手机号码：</span>
+                                                        <strong class="TCR-table-con1-query-btn" @click="getClientList('tickMark')">搜索</strong>
+                                                        <input type="text" placeholder="输入手机号码" v-model="givePhone">
+                                                    </div>
+                                                    <div class="TCR-table-con1">
+                                                        <div class="TCR-overflow-box">
+                                                            <table class='green-head-table' border="0" cellspacing="0"
+                                                                   cellpadding="0">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>序号</th>
+                                                                    <th>票券号码</th>
+                                                                    <th>票券名称</th>
+                                                                    <th>可用权益</th>
+                                                                    <th>使用</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr v-for="(item,index) in ticketPrice.ticketPriceList">
+                                                                    <td>{{++index}}</td>
+                                                                    <td>{{item.tickNo}}</td>
+                                                                    <td class='col-blue'>{{item.tickName}}</td>
+                                                                    <td class='font-bold'>{{item.tickNum}}</td>
+                                                                    <td>
+                                                                        <input type="checkbox" v-model="ticketPrice.ticketPriceListOk" :value="item" @change="changeTicket">
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <strong class="showAllTable-btn">显示更多</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="TCR-table-con2">
+                                                        <div><span>会员卡号：</span><strong class="font-bold">{{ticketPrice.cardNo}}</strong></div>
+                                                        <div><span>会员名称：</span><strong class="font-bold">{{ticketPrice.cardUserName}}</strong></div>
+                                                        <div><span>票劵差价：</span><strong class="font-bold col-red">{{ticketPrice.differencePrice|toManey}}</strong>
+                                                            <span>票劵抵扣：</span><strong class="font-bold col-red">{{ticketPrice.totalPrice|toManey}}</strong></div>
+                                                        <div><span>卡中储值金额：</span><strong class="font-bold col-red">{{ticketPrice.storage0rderPrice|toManey}}</strong></div>
+                                                        <div><span>扣储值金额：</span><input type="text" v-model="ticketPrice.storagePirc" @change="changeTicket" ></div>
+                                                        <div><span>输入凭证：</span><input type="password" v-model="ticketPrice.userPass"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="TCR-tables-box2">
+                                                    <table border="0" cellspacing="0" cellpadding="0" class="green-head-table2">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>支付方式</th>
+                                                            <th>支付金额</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>支付宝</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L1" @change="isCommonMoney(payModel.L1,'L1')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>刷卡</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L2" @change="isCommonMoney(payModel.L2,'L2')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>微信</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L3" @change="isCommonMoney(payModel.L3,'L3')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>现金</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>转账</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>花呗</td>
+                                                            <td><span>￥</span><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="TCR-tables-box3">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>小计：</td>
+                                                            <td>￥ {{payMentMoney.totalPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>抵扣金额：</td>
+                                                            <td>￥ {{payMentMoney.discountNum|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>应付金额：</td>
+                                                            <td>￥ {{payMentMoney.needPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>未付金额：</td>
+                                                            <td>￥ {{payMentMoney.noPrice|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>找零</td>
+                                                            <td>￥ {{payMentMoney.retChange|toManey}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <strong class="BY-btn" @click="toCheckMoeny">补余</strong>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="transferCard_footer">
+                                            <div class="transferCard_footer_top">
+                                                补余记录
+                                            </div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>补余卡种</th>
+                                                    <th>补余时间</th>
+                                                    <th>销售人员</th>
+                                                    <th>付款方式：付款金额</th>
+                                                    <th>剩余欠款</th>
+                                                    <th>业绩归属门店</th>
+                                                    <th>业绩分配</th>
+                                                    <th>操作人</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(item,index) in loadData8.complementCardList">
+                                                    <td>{{index+1}}</td>
+                                                    <td v-for="types in parameterList.type" v-if="item.cardType == types.vue">{{types.lav}}</td>
+                                                    <td>{{item.createTime|formatDate}}</td>
+                                                    <td>{{item.relName}}</td>
+                                                    <td>{{item.paymentMoney}}</td>
+                                                    <td>{{item.noPrice}}</td>
+                                                    <td>{{item.shopName}}</td>
+                                                    <td>{{item.allotNum}}{{item.allotType==1?'%':''}}</td>
+                                                    <td :value="item.createUserId">{{item.createUserName}}</td>
+                                                    <td><a href="javascript:;" v-if="item.status!=1&&item.auditStatus!=1">
+                                                        <i v-for="orderType in parameterList.continueOrderStat" v-if="item.orderState==orderType.vue" :value="item.id" @click="toDelComplement(item.id,item.orderState)">
+                                                            {{orderType.lav}}
+                                                        </i>
+                                                    </a>
+                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus==0">审核中</a>
+                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus!=0">已审核</a>
+                                                        <a href="javascript:;">打印</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--补余-->
+                        </div>
+                    </li>
+                    <!-- 补余 -->
+                    <!-- 转让 -->
+                    <li class="on" v-if="LiIndex==9">
+                        <div id="Transfer">
+                            <div class="Transfer_top">
+                                <span>
+                                    <span>选择会员卡：</span>
+                                    <select name="1" id="cardtTransfer" @change="getTransferCardList">
+                                        <option>请选择</option>
+                                        <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                         </option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="Transfer_box">
+                                <div class="transferCard_box_bottom">
+                                    <div class="transferCard_b">
+                                        <div class="transferCard_a_left">
+                                            <div class="sc">
+                                                <div class="sc_box">
+                                                    <strong>转让操作</strong>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">转让人：</div>
+                                                    <div class="sc_box_right">
+                                                        <strong>{{clientUserName}}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">转让人手机：</div>
+                                                    <div class="sc_box_right"><strong>{{clientPhone}}</strong></div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">承接人手机：</div>
+                                                    <div class="sc_box_right">
+                                                        <input type="text" placeholder="承接人手机" v-model="givePhone" @change="getClientList">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">承接人姓名：</div>
+                                                    <div class="sc_box_right"><input type="text" placeholder="承接人姓名"v-model="giveName">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">付款类型：</div>
+                                                    <div class="sc_box_right">
+                                                        <table border="0" cellspacing="0" cellpadding="0" class="green-head-table2">
+                                                            <thead>
+                                                            <tr><th>支付方式</th> <th>支付金额</th></tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr><td>支付宝</td>
+                                                                <td><input type="text" v-model="payModel.L1" @change="isCommonMoney(payModel.L1,'L1')"></td>
+                                                            </tr>
+                                                            <tr><td>刷卡</td>
+                                                                <td><input type="text" v-model="payModel.L2" @change="isCommonMoney(payModel.L2,'L2')"></td>
+                                                            </tr>
+                                                            <tr><td>微信</td>
+                                                                <td><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                            </tr>
+                                                            <tr><td>现金</td>
+                                                                <td><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                            </tr>
+                                                            <tr><td>转账</td>
+                                                                <td><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                                            </tr>
+                                                            <tr><td>花呗</td>
+                                                                <td><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">手续费：</div>
+                                                    <div class="sc_box_right"><input type="text" :placeholder="loadData9.addTranferCar.totalPrice" v-model="payModelMoney"></div>
+                                                </div>
+
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left"> 备注：</div>
+                                                    <div class="sc_box_right">
+                                                        <textarea v-model="loadData9.addTranferCar.flag"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">授权人：</div>
+                                                    <div class="sc_box_right">
+                                                        <select name="1" v-model="loadData9.addTranferCar.personnelId">
+                                                            <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                                                {{items.relName}}
+                                                            </option>
+                                                            <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                                                {{items.relName}}
+                                                            </option>
+                                                        </select></div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">授权人密码：</div>
+                                                    <div class="sc_box_right"><input type="password" placeholder="授权人密码" id="transferUserPass">
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <div class="sc_box_left">操作人：</div>
+                                                    <div class="sc_box_right">
+                                                        <strong>{{personnelName}}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="sc_box">
+                                                    <a href="javascript:;" class="btn btn-default" @click="transferSub">确认转让</a>
+                                                    <a href="javascript:;" class="btn btn-default">打印</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="transferCard_a_bottom">
+                                            <div>手续费总金额：<span>{{loadData9.totalPrice|toManey}}</span>元</div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>转让时间</th>
+                                                    <th>转让人</th>
+                                                    <th>转让人手机</th>
+                                                    <th>承接人电话</th>
+                                                    <th>承接人姓名</th>
+                                                    <th>付款方式：付款金额</th>
+                                                    <th>手续费</th>
+                                                    <th>授权人</th>
+                                                    <th>备注</th>
+                                                    <th>操作人</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(item,index) in loadData9.transferCardList">
+                                                    <td>{{++index}}</td>
+                                                    <td>{{item.createTime|formatDate}}</td>
+                                                    <td>{{item.transferUserName}}</td>
+                                                    <td>{{item.transferUserPhone}}</td>
+                                                    <td>{{item.catcherClientPhone}}</td>
+                                                    <td>{{item.catcherClientName}}</td>
+                                                    <td>{{item.paymentMoney}}</td>
+                                                    <td>{{item.totalPrice|toManey}}</td>
+                                                    <td>{{item.personnelName}}</td>
+                                                    <td>{{item.flag}}</td>
+                                                    <td>{{item.createUserName}}</td>
+                                                    <td>
+                                                        <a href="javascript:;" v-if="item.status!=1&&item.auditStatus!=1">
+                                                            <i v-for="orderType in parameterList.continueOrderStat" v-if="item.transferStatus==orderType.vue" :value="item.id" @click="delTransfer(item.id,item.transferStatus)">
+                                                                {{orderType.lav}}
+                                                            </i>
+                                                        </a>
+                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus==0" class="tored"> 审核中 </a>
+                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus!=0" class="tored">已审核</a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 转让 -->
+                    <!-- 退卡 -->
+                    <li class="on" v-if="LiIndex==10">
+                        <div id="CheckOut">
+                            <div class="CheckOut_box">
+                                <div class="transferCard_box_bottom">
+                                    <div class="transferCard_a">
+                                        <fieldset>
+                                            <legend><span>退卡操作</span></legend>
+                                            <div>
+                                                <div class="NewPurchase_top">
+													<span>
+														<span>选择会员卡：</span>
+														<select name="1" id="blackCard" @change="getBlackCardOne">
+                                                            <option>请选择</option>
+                                                            <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">
+										                      	归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                                            </option>
+									                    </select>
+													</span>
+                                                </div>
+                                                <div class="NewPurchase_box">
+                                                    <div>
+                                                        <div class="NewPurchase_box_left"><span> 退卡金额：</span></div>
+                                                        <div class="NewPurchase_box_right">
+																<span>
+																	<strong>￥{{loadData10.addBlackCard.needPrice}}</strong>
+																</span>
+                                                            <span>
+																	<span>退卡手续费：</span>
+																	<input type="text" placeholder="退卡手续费"
+                                                                           v-model="loadData10.addBlackCard.procedPrcie"
+                                                                           @change="calculationMoney">
+																</span>
+                                                            <span>
+																	<span>需退金额：</span>
+																	<span><strong>￥{{loadData10.addBlackCard.totalPrice}}</strong></span>
+																</span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="NewPurchase_box_left"><span> 销售人员：</span></div>
+                                                        <div class="NewPurchase_box_right">
+																<span>
+																	{{loadData10.saleName}}<strong class="hui" v-for="item in parameterList.saleStatus" v-if="item.vue == loadData10.saleStatus">({{item.lav}})</strong>
+																</span>
+                                                            <span>
+																	<span>是否扣除销售员当月业绩：</span>
+																	<span>
+																		<label>
+																			<input type="radio"
+                                                                                   v-model="loadData10.addBlackCard.allotSetType"
+                                                                                   value="1">
+																			<span>是</span>
+																		</label>
+																		<label>
+																			<input type="radio"
+                                                                                   v-model="loadData10.addBlackCard.allotSetType"
+                                                                                   value="0">
+																			<span>否</span>
+																		</label>
+																	</span>
+																</span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="NewPurchase_box_left"><span> 退款方式：</span></div>
+                                                        <div class="NewPurchase_box_right">
+																<span>
+																	<select name="1" id="refundType">
+																		<option v-for="item in parameterList.payModeList"
+                                                                                :value="item.vue">{{item.lav}}</option>
+																	</select>
+																</span>
+                                                            <span>
+																	<span>退款账号：</span>
+																	<span><input type="text" placeholder="退款账号"
+                                                                                 v-model="loadData10.addBlackCard.accountNumber"><strong>如果现金退款，此项不填</strong></span>
+																</span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="NewPurchase_box_left"><span> 操作人：</span></div>
+                                                        <div class="NewPurchase_box_right">
+                                                            <span><strong
+                                                                    class="yuan">{{loadData10.createdName}}</strong></span>
+                                                            <span>
+																	<span>输入凭证：</span>
+																	<span><input type="password" placeholder="输入凭证"
+                                                                                 id="blackPassId"></span>
+																</span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="NewPurchase_box_left" style="opacity: 0;">.</div>
+                                                        <div class="NewPurchase_box_right">
+                                                            <a href="javascript:;" class="btn btn-warning"
+                                                               @click="blackOk">确认退款</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="StopCard_footer">
+                                            <div class="transferCard_footer_top">
+                                                退卡手续费： <span>{{loadData10.SupplyMoney}}</span> 元
+                                            </div>
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>退卡时间</th>
+                                                    <th>卡系列</th>
+                                                    <th>卡名称</th>
+                                                    <th>退款金额</th>
+                                                    <th>退卡手续费</th>
+                                                    <th>需退金额</th>
+                                                    <th>退款类型</th>
+                                                    <th>退款账号</th>
+                                                    <th>原业绩归属</th>
+                                                    <th>是否扣除销售员当月业绩</th>
+                                                    <th>操作人</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(item,index) in loadData10.blacekCardList ">
+                                                    <td>{{++index}}</td>
+                                                    <td>{{item.createTime|formatDate}}</td>
+                                                    <td>{{item.cardFlag}}</td>
+                                                    <td>{{item.cardTypeName}}</td>
+                                                    <td class="totuhuang">{{item.needPrice|toManey}}</td>
+                                                    <td><strong>{{item.procedPrcie|toManey}}</strong></td>
+                                                    <td class="totuhuang">{{item.totalPrice|toManey}}</td>
+                                                    <td v-for="items in parameterList.payModeList" v-if="items.vue == item.refundType">{{items.lav}}</td>
+                                                    <td>{{item.accountNumber}}</td>
+                                                    <td>{{item.saleName}} <i v-for="items in parameterList.saleStatus" v-if="items.vue == item.saleStatus">（{{items.lav}}）</i></td>
+                                                    <td v-for="items in parameterList.allotSetType" v-if="items.vue == item.allotSetType">{{items.lav}}</td>
+                                                    <td>{{item.createUserName}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 退卡 -->
+                </ul>
+            </div>
+            <!-- 业绩分配弹窗 -->
+            <div id="performance" class="newCustomers_maskLayer">
+                <div class="newCustomers_maskLayer_box">
+                    <div class="newCustomers_maskLayer_box_top">
+                        <span>销售业绩分配</span><a href="#" class="newCustomers_maskLayer_X" @click="newCustomers_maskLayer_X">X</a>
+                    </div>
+                    <div class="newCustomers_maskLayer_box_shen">
+                        <fieldset>
+                            <legend>销售价格分配比例/金额</legend>
+                            <div>
+                                <label><input type="radio" v-model="loadData1.orderAllotSet.allotType" value="1">以实际销售价格</label>
+                                <label><input type="text" placeholder="分配比例" v-model="loadData1.orderAllotSet.allotNumOne">%为销售业绩</label>
+
+                                <label><input type="radio" v-model="loadData1.orderAllotSet.allotType" value="2">以实际销售价格</label>
+                                <label><input type="text" placeholder="分配金额" v-model="loadData1.orderAllotSet.allotNumTwo">元为销售业绩</label>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>销售人员销售业绩分配比例/金额</legend>
+                            <div>
+
+                                <div>
+                                    <label><input type="radio" v-model="loadData1.orderAllotSet.saleAllotType" value="1">销售业绩按比例分配</label>
+                                    <label><input type="radio" v-model="loadData1.orderAllotSet.saleAllotType" value="2">销售业绩按金额分配</label>
+                                </div>
+                                <div>
+                                    选择销售人员：
+                                    <select name="1" v-model="loadData1.orderAllotSet.personnelId">
+                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                            {{items.relName}}
+                                        </option>
+                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                            {{items.relName}}
+                                        </option>
+                                    </select>
+                                    <input type="text" placeholder="分配比例/金额" v-model="loadData1.orderAllotSet.saleAllotNum" @change="checkNum(3,'saleAllotNum')">
+                                    <a href="#" class="btn btn-primary" @click="addOrderAllotSetOne">添加</a>
+                                </div>
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>销售人员</th>
+                                        <th>分配比例/金额</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in loadData1.orderAllotSetListOne" class="orderAllotSet">
+                                        <td>{{index+1}}</td>
+                                        <td v-for='(items,index) in maeketUserList' v-if="item.personnelId == items.id">
+                                            {{items.relName}}
+                                        </td>
+                                        <td>{{item.saleAllotNum}}</td>
+                                        <td>
+                                            <a href="#" @click="updateFamily(index)">修改</a>
+                                            /<a href="#" @click="deleteFamily(index)">删除</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="newCustomers_maskLayer_box_botton">
+                        <a href="#" class="btn btn-success" @click="addOrderAllotSet">保存</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 业绩分配弹窗 -->
+            <!--表格1-->
+            <div class="newCustomers_maskLayer performance" style="display:none;" id="clientList">
+                <div class="newCustomers_maskLayer_box">
+                    <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span><a href="#" class="newCustomers_maskLayer_X" @click="colseX('clientList')">X</a>
+                    </div>
+                    <div class="KHGL-table-box">
+                        <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>标识</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>创建时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="item in optionClientList">
+                                <td><span class="col-green" :value="item.id" @click="catcherClientList(item)">选择</span></td>
+                                <td><span class="col-red">{{item.CustomerMark}}</span></td>
+                                <td>{{item.clientName}}</td>
+                                <td v-for="sexs in parameterList.sexList" v-if="sexs.vue == item.sex">{{sexs.lav}}</td>
+                                <td>{{item.applyTime|formatDate(true)}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 表格1 -->
+            <!-- 表格2 -->
+            <div class="newCustomers_maskLayer performance" style="display: none;" id="clientCardList">
+                <div class="newCustomers_maskLayer_box">
+                    <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span><a href="#" class="newCustomers_maskLayer_X" @click="colseX('clientCardList')">X</a>
+                    </div>
+                    <h5 class="KHGL-title">选择要储值的会员卡</h5>
+                    <div class="KHGL-table-box">
+                        <table class="KHGL-table2" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>姓名</th>
+                                <th>手机号码</th>
+                                <th>卡系列</th>
+                                <th>卡名称</th>
+                                <th>开始日期</th>
+                                <th>失效日期</th>
+                                <th>剩余权益</th>
+                                <th>剩余储值</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="item in optionClientCardList">
+                                <td class="cursorP" :value="item.id" @click="catcheCardId(item)">选择</td>
+                                <td class='col-blue'>{{item.clientName}}</td>
+                                <td>{{item.mobile}}</td>
+                                <td>{{item.cardFlag}}</td>
+                                <td class='col-red'>{{item.cardTypeName}}</td>
+                                <td>{{item.bindTime}}</td>
+                                <td>{{item.invalidTime|formatDate}}</td>
+                                <td>{{item.orderRightsNum}}</td>
+                                <td>{{item.orderPrice}}</td>
+                                <td>{{item.a_status}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--表格2-->
+        </div>
+    </div>
+</div>
+
+<div class="TKYY-modal">
+    <h5 class="TKYY-title">停卡原因</h5>
+    <div class="TKYY-con">
+        <span>停卡原因：</span>
+        <strong class="col-red">默认原因</strong>
+    </div>
+</div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="/js/myPagination.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="customerMembershipCard.js"></script>
+
+<script>
+    Loading.prototype.init();
+    customerMembershipCard.init();
+    $('body').on('click', '.showAllTable-btn', function () {
+        $(this).hide();
+        $('.TCR-table-con1').css('overflow', 'auto');
+    })
+    // 鼠标经过时显示停卡原因
+    $('body').on('mouseover', '.LookTKYY', function () {
+        var BtnToTop = $(this).offset().top;
+        $('.TKYY-modal').show().css('top', BtnToTop - 0 + 20 + 'px');
+        $('.TKYY-modal .TKYY-con .col-red').html($(this).attr('data-yy'));
+    })
+    // 鼠标离开时隐藏停卡原因
+    $('body').on('mouseout', '.LookTKYY', function () {
+        $('.TKYY-modal').hide();
+    })
+    // 门店，部门，人员的选择
+    var SelectName;
+    $("body").on('click','.YGLY-select-name',function(){
+        SelectName = $(this);
+        $(this).parent('.YGLY-select-con').addClass('active').siblings().removeClass('active');
+    })
+    // 点击选择时，将值穿给标题
+    $("body").on('click','.YGLY-select-ul li',function(){
+        SelectName.parents('.YGLY-select-con').removeClass('active');
+        SelectName.html($(this).html());
+    })
+</script>
+
+</html>

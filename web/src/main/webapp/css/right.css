@@ -1,0 +1,635 @@
+
+#right{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #fff;
+}
+#right .main_top{
+    border-bottom: 1px solid #ccc;
+    line-height: 30px;
+    padding: 7px 20px;
+    border-right: 1px solid #ccc;
+    font-size: 13px;
+    min-width: 1100px;
+}
+#right .main_box{
+    padding: 30px;
+    height: 89%;
+    border-right: 1px solid #ccc;
+    min-width: 1345px;
+    min-height: 480px;
+}
+#right .form{
+    line-height: 30px;
+}
+#right .form .common{
+    margin-bottom: 20px;
+
+}
+#right .form .common .common_span{
+    top: -15px;
+}
+#right .form .col-md-12{
+    overflow: hidden;
+}
+#right .form .form_top{
+    overflow: hidden;
+    margin: 0 0 20px;
+    font-size: 13px;
+}
+#right .form .form_top div{
+    float: left;
+    margin-right: 15px;
+}
+
+
+#right .form .form_box{
+    overflow: hidden;
+}
+
+#right .form .form_box .form_box_left{
+    float: left;
+    width: 11%;
+    padding: 0 10px;
+    text-align: right;
+}
+
+#right .form .form_box .form_box_right{
+    float: left;
+    width: 87%;
+}
+
+#right .form .form_box .form_box_right .form_box_right_cb{
+    border: 1px #ccc dashed;
+    width: 96%;
+    padding: 5px 15px;
+}
+#right .form .form_box .form_box_right .form_box_right_cb ul{
+    margin-left: 20px;
+    overflow: hidden;
+}
+#right .form .form_box .form_box_right .form_box_right_cb ul li{
+    float: left;
+    margin: 0 10px;
+    min-width: 70px;
+}
+#right .form .form_box .form_box_right .form_box_right_red{
+    color: red;
+}
+#right .form .form_box .form_box_right .form_box_right_red.on{
+    padding: 0 15px;
+}
+#right .form .form_box .form_box_right .form_box_right_inp{
+    padding: 0px 15px;
+    min-width: 40%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#right .form .form_box .form_box_right.shuxing ul{
+    overflow: hidden;
+    max-width: 50%;
+}
+#right .form .form_box .form_box_right.shuxing ul li{
+    float: left;
+    margin: 0 10px;
+    min-width: 70px;
+}
+#right .form .form_box .form_box_right.shuxing span{
+    float: left;
+   
+}
+#right .form .form_box .form_box_right.shuxing input{
+    margin-top: 9px;
+    margin-right: 2px
+   
+}
+#right .form .form_box .form_box_right.on span {
+    float: left;
+}
+#right .form .form_box .form_box_right.on div {
+    overflow: hidden;
+}
+
+#right .form .form_box .form_box_right.on input {
+    margin-right: 2px;
+    margin-top: 9px;
+}
+#right .main_box .common.on{
+    margin-bottom: 30px;
+}
+#right .main_box .common.on textarea{ 
+    width: 98%;
+    min-height: 100px;
+    border-radius: 5px;
+    resize: none;
+    padding: 12px;
+}
+
+/* //basis */
+.basis input{
+    border-radius: 5px;
+    margin: 0 2px;
+    border: 1px solid #ccc;
+    padding: 0 5px;
+}
+.basis .co{
+    overflow: hidden;
+}
+.basis .co span{
+    float: left;
+    margin-right: 10px;
+}
+.basis .co span input[type='checkbox']{
+    margin-top: 10px;
+}
+
+.basis .co p{
+    float: left;
+    width: 40%;
+    color: red;
+    margin: 0 ;
+    line-height: 20px;
+}
+.basis .common2 div{
+    overflow: hidden;
+}
+.basis .common2>div:nth-child(1){
+    margin-bottom: 15px;
+}
+.basis .common2 div p{
+    line-height: 30px;
+}
+.basis .common2 .form-control{
+    display: inline-block;
+    height: 18px;
+}
+.basis .common2 span{
+    position: relative;
+}
+.basis .common2 select{
+    position: absolute;
+    top: 0;
+    width: 50px;
+    right: 0;
+    border-radius: 0;
+}
+.basis  .common3 input{
+    width: 50px;
+}
+.basis .common4 ul{
+    overflow: hidden;
+    display: inline-block;
+}
+.basis .common4 ul li{
+    float: left;
+    min-width: 60px;
+}
+.basis .common4 ul li span{
+    margin: 0;
+}
+.basis .common4 ul li input[type='checkbox']{
+    margin-top: 9px;
+}
+.basis .common5 ul li span:nth-child(1){
+    min-width: 185px;
+    display: inline-block;
+    text-align: right;
+    float: left;
+}
+.basis .common5 p{
+    display: inline-block;
+    color: red;
+    margin: 0;
+}
+.basis .common5 label{
+    min-width: 80px;
+}
+.basis .common5 label input{
+    margin-top: 9px;
+}
+.basis .common5 ul li{
+    overflow: hidden;
+}
+.basis .common6 label{
+    min-width: 90px;
+}
+.basis .common6 label input{
+    margin-top: 9px;
+}
+.basis .common6 ul li{
+    overflow: hidden;
+}
+.basis .common6 span{
+    margin: 0;
+}
+.basis .common6 span input[type='checkbox']{
+    margin-left: 10px;
+    margin-top: 9px;
+}
+.basis .common6 span input[type='radio']{
+    margin-left: 10px;
+    margin-top: 9px;
+}
+.basis .common6 .special{
+    padding: 0 15px;
+    display: none;
+    overflow: hidden;
+}
+.basis .common7 ul li{
+    overflow: hidden;
+}
+.basis .common7 ul li label input{
+    margin-top: 9px;
+}
+.basis .common7 ul li p{
+    line-height: 30px;
+}
+.basis .common7 .uls li{
+    margin-left: 50px;
+}
+
+/* //tab表单 */
+.xiangMu{
+    border-left: 1px dashed #ccc;
+    border-bottom: 1px dashed #ccc;
+    overflow: initial !important;
+    margin-bottom: 30px;
+}
+.xiangMu ul{
+    border-left: 1px dashed #ccc;
+    overflow: initial !important;
+}
+.xiangMu ul li{
+    display: block;
+    float: none !important;
+    width: 99%;
+}
+.xiangMu .xiangMu_list{
+    margin-left: 0px;
+    background-color: #fff;
+}
+.xiangMu .table{
+    text-align: center;
+    margin: 0;
+}
+.xiangMu .table thead{
+    background-color: #B1DBFF;
+}
+.xiangMu .table thead th{
+    padding: 0px 8px;
+    text-align: center;
+}
+.xiangMu .table span{
+    margin-top: 7px;
+}
+.xiangMu .table select{
+    margin-top: 7px;
+}
+.xiangMu .table tr td:nth-child(5) label{
+    margin-right: 30px;
+}
+.xiangMu .table tr td:nth-child(5) label:nth-child(2){
+    margin-right: 60px;
+ }
+.xiangMu .table tr td:nth-child(5) label:nth-child(4){
+   float: right;
+}
+.xiangMu .table input[type="text"]{
+    max-width: 40px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    margin-top: 5px !important;
+    border: 1px solid #ccc;
+}
+.xiangMu .table label{
+    margin-right: 15px;
+}
+
+.xiangMu .ul_on{
+    border: none;
+    background-color: #fff;
+}
+.xiangMu .ul_on li{
+    margin-top: 20px !important;
+    margin-bottom: -18px !important;
+    overflow: hidden;
+    width: 98.7%;
+    border: 1px solid #ccc;
+}
+
+.xiangMu .ul_on li input[type="text"]{
+    max-width: 40px;
+    padding: 0px 3px;
+    border-radius: 3px;
+    margin-top: 5px !important;
+    border: 1px solid #ccc;
+    line-height: 20px;
+}
+.xiangMu .ul_on li label:nth-child(1){
+    width: 15.8%;
+    margin-left: 10px;
+}
+.xiangMu .ul_on li label:nth-child(2){
+    width: 9.2%;
+ }
+ .xiangMu .ul_on li label:nth-child(3){
+    width: 9.2%;
+ }
+ .xiangMu .ul_on li label:nth-child(4){
+    width: 15.5%;
+ }
+ .xiangMu .ul_on li label:nth-child(5){
+    width: 19.8%;
+ }
+ .xiangMu .ul_on li label:nth-child(6){
+    width: 19.2%;
+ }
+ .xiangMu .ul_on li label:nth-child(7){
+    width: 4%;
+ }
+/* //提交按钮 */
+#right .main_sub{
+    text-align: center;
+    margin-bottom: 40px;
+}
+#right .main_sub a{
+    padding: 10px 40px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius:4px; 
+    margin-right: 15px;
+}
+#right .main_sub a.on{
+    background-color: #169bd5;
+    border-color: #169bd5;
+    color: #fff;
+}
+
+/* //弹窗 */
+.mask{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    line-height: 30px;
+    min-width: 1400px;
+}
+.mask .maskLayerAlert{
+    width: 600px;
+    height: 600px;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 15%;
+    bottom: 0;
+    box-shadow:3px 3px 20px 1px #000;
+    min-width: 600px;
+}
+.mask .maskLayerAlert .maskLayerAlert_top{
+    background-color: #B1DBFF;
+    text-align: center;
+}
+.mask .maskLayerAlert .maskLayerAlert_top .setting_hide{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    padding: 0 15px;
+}
+.maskLayerAlert_box{
+    overflow: hidden;
+}
+.maskLayerAlert_box .col-md{
+    padding: 0;
+    min-width: 600px;
+    overflow: hidden;
+}
+.maskLayerAlert_box .col-md4{
+    padding: 0;
+    border-bottom: 1px solid #ccc;
+    border-right:  1px solid #ccc;
+    width: 33.15%;
+    float: left;
+}
+.maskLayerAlert_box .col-md4 span{
+    float: left;
+    padding: 0 8px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    line-height: 30px;
+}
+.maskLayerAlert_box .col-md4 label{
+    float: left;
+    padding: 0 8px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    display: list-item;
+    line-height: 30px;
+   
+}
+.maskLayerAlert_box .col-md4 input[type=text]{
+    width: 195px;
+    line-height: 30px;
+    border: none;
+    float: left;
+    text-align: center;
+}
+.maskLayerAlert_box .col-md4 input[type="text"]::-webkit-inner-spin-button{
+    display: none;
+ }
+ .maskLayerAlert_box .col-md4 input[type="text"]::-webkit-calendar-picker-indicator{
+    display: none;
+ }
+ 
+ .maskLayerAlert_box .col-md4 input[type=checkbox]{
+   margin-top: 10px;
+}
+.maskLayerAlert_box .table{
+    text-align: center;
+}
+.maskLayerAlert_box .table input{
+    max-width: 70px;
+    text-align: center;
+    margin: 2px 0 0;
+}
+.maskLayerAlert_box .table>tbody>tr>td,.maskLayerAlert_box .table>tbody>tr>th,.maskLayerAlert_box .table>tfoot>tr>td,.maskLayerAlert_box .table>tfoot>tr>th,.maskLayerAlert_box .table>thead>tr>td,.maskLayerAlert_box .table>thead>tr>th{
+    padding: 4px;
+}
+
+.maskLayerAlert_box .table input[type=text]{
+    margin: 2px 0 0;
+    border: none;
+}
+.maskLayerAlert_box .table thead{
+    background-color: #B1DBFF;
+}
+.maskLayerAlert_box .table label{
+    margin-right: 10px;
+}
+.maskLayerAlert_box select{
+    padding: 5px 10px;
+}
+.maskLayerAlert_box p input[type=text]{
+    width: 100px;
+    line-height: 26px;
+}
+.table_hide{
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.mask .maskLayerAlert_footer {
+    text-align: center;
+}
+
+/* //弹窗 */
+.mask1{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    line-height: 30px;
+    min-width: 1400px;
+}
+.mask1 .maskLayerAlert{
+    width: 600px;
+    height: 850px;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 0%;
+    bottom: 0;
+    box-shadow: 3px 3px 20px 1px #000;
+    min-width: 600px;
+}
+.mask1 .maskLayerAlert .maskLayerAlert_top{
+    background-color: #B1DBFF;
+    text-align: center;
+}
+.mask1 .maskLayerAlert .maskLayerAlert_top .setting_hide{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    padding: 0 15px;
+}
+.mask1 .section1 {
+    border: 1px dashed #ccc;
+    padding: 0 15px;
+    margin-bottom: 10px;
+    line-height: 26px;
+}
+.mask1 .section1 legend{
+    color: red;
+    font-size: 12px;
+    border-bottom: none;
+    display: initial;
+    width: auto;
+    margin: 0;
+}
+.mask1 .section1 input{
+    max-width: 100px;
+}
+.mask1 .section1 input[type="radio"]{
+    margin-top: 7px;
+}
+.mask1 .section1 .category{
+    margin-bottom: 10px;
+}
+.mask1 .section1 .category div{
+    overflow: hidden;
+}
+.mask1 .section1 .category span{
+    float: left;
+    margin-right: 5px;
+}
+.mask1 .section1 .category .category_span_red{
+    color: red;
+}
+.mask1 .maskLayerAlert_box{
+    padding: 10px;
+    position: relative;
+}
+.mask1 .section1 .category .category_box{
+    overflow: hidden;
+}
+.category_box .category_box_right{
+    float: left;
+    width: 88%;
+}
+.category_box .category_box_left{
+    float: left;
+    width: 12%;
+}   
+.category_box p{
+    margin: 0;
+}
+.mask1 .section1 textarea{
+    width: 99%;
+}
+.category_box .category_box_right input{
+    margin-top: 5px;
+}
+.maskLayerAlert_footer {
+    padding: 0 10px;
+}
+.maskLayerAlert_footer .category_span_red{
+    color: red;
+}
+.maskLayerAlert_footer .category_span_red p{
+    margin: 0;
+    line-height: 24px;
+    text-indent: 20px;
+}
+.mask1 .table_hide a{
+    border: 1px solid #ccc;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.maskLayerAlert_box_alert{
+    display: none;
+    position: absolute;
+    top: 40%;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    background-color: #fff;
+    text-align: center;
+    height: 180px;
+    box-shadow: 3px 3px 20px 1px #000; 
+}
+.maskLayerAlert_box_alert .maskLayerAlert_box_alert_a{
+    background-color: #B1DBFF;
+    margin-bottom: 15px;
+}
+
+.maskLayerAlert_box_alert .maskLayerAlert_box_alert_a .setting_hide_a{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    padding: 0 15px;
+}
+
+.maskLayerAlert_box_alert input{
+    width: 80px;
+}
+.maskLayerAlert_box_alert .btn-success{
+    margin-right: 15px;
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrLatenceFollowMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrLatenceFollow">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="personal_id" property="personalId"/>
+        <result column="follow_time" property="followTime"/>
+        <result column="follow_type" property="followType"/>
+        <result column="follow_content" property="followContent"/>
+        <result column="next_follow_time" property="nextFollowTime"/>
+        <result column="plan_follow_time" property="planFollowTime"/>
+        <result column="plan_visit_time" property="planVisitTime"/>
+        <result column="plan_purchase_time" property="planPurchaseTime"/>
+        <result column="follow_mark" property="followMark"/>
+        <result column="supper_managment_id" property="supperManagmentId"/>
+        <result column="check_time" property="checkTime"/>
+        <result column="follow_adjust_time" property="followAdjustTime"/>
+        <result column="handle_advice" property="handleAdvice"/>
+        <result column="role_info_id" property="roleInfoId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="flag" property="flag"/>
+        <result column="update_user_name" property="updateUserName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="type"/>
+        <result column="actual_visit_time" property="actualVisitTime"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        client_id AS clientId, personal_id AS personalId, follow_time AS followTime, follow_type AS followType, follow_content AS followContent, next_follow_time AS nextFollowTime, plan_follow_time AS planFollowTime, plan_visit_time AS planVisitTime, plan_purchase_time AS planPurchaseTime, follow_mark AS followMark, supper_managment_id AS supperManagmentId, check_time AS checkTime, follow_adjust_time AS followAdjustTime, handle_advice AS handleAdvice, role_info_id AS roleInfoId, shop_id AS shopId, is_using AS isUsing, create_user_id AS createUserId, create_user_name AS createUserName, flag, update_user_name AS updateUserName, create_time AS createTime, id, update_user_id AS updateUserId, update_time AS updateTime, type, actual_visit_time AS actualVisitTime, CustomerCode
+    </sql>
+    <select id="getFirstFollow" resultType="java.util.Date" parameterType="java.lang.String">
+         SELECT
+        top 1
+        min(follow_time)
+        FROM
+        fr_latence_follow
+        where CustomerCode = #{customerCode}
+    </select>
+
+    <sql id="Base_IsFlage">
+        <if test=" clientId!=null and clientId!=''">
+            and  a.client_id = #{clientId}
+        </if>
+        <if test=" shopId != null and shopId !=''">
+            and a.shop_id = #{shopId}
+        </if>
+        <if test="isUsing == true">
+            and  a.is_using = #{isUsing}
+        </if>
+    </sql>
+
+    <!--查询指定会员会员卡的总条数-->
+    <select id="selectFrLatenceClienFollowList" resultType="java.util.Map">
+        SELECT
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.personal_id = p.id) personalName,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.supper_managment_id = p.id) supperManagmentName,
+        (SELECT k.content FROM fr_follow_keyword k WHERE a.follow_content = k.id)content,
+        <include refid="Base_Column_List"/>
+        FROM
+        fr_latence_follow a
+        WHERE  a.CustomerCode = #{CustomerCode}
+        <include refid="Base_IsFlage"/>
+        ORDER BY a.create_time
+    </select>
+</mapper>

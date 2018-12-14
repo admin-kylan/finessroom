@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>身体</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/employee.css">
+
+
+</head>
+<style>
+    .form_box_right_cb ul{
+        float: left;
+
+    }
+</style>
+<body>
+    <div id="employee">
+        <div class="main_top">会员卡设置</div>
+        <div class="main_box">
+            <div class="common">
+                <span class="common_span">添加卡种信息</span>
+                <div class="form">
+                    <form action="" id="form">
+                        <div class="form_box">
+                            <div class="form_box_left">卡类别：</div>
+                            <div class="form_box_right"><strong id="idck">{{name}}</strong></div>
+                        </div>
+                        <div class="form_box">
+                            <div class="form_box_left">卡种名称：</div>
+                            <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="卡类名称"></div>
+                        </div>
+
+                        <div class="form_box">
+                            <div class="form_box_left">操作人：</div>
+                            <div class="form_box_right"><strong class="form_box_right_red">Klaus</strong></div>
+                        </div>
+                        <div class="form_box">
+                            <div class="form_box_left">上次操作时间：</div>
+                            <div class="form_box_right">{{createTime}}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="main_sub"> <a href="#" class="on" v-on:click="add()">新增</a><a href="#">取消</a></div>
+        </div>
+    </div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/common.js"></script>
+<script>
+//    var kid = window.parent.getParam('kid');
+    var employee = new Vue({
+        el: '#employee',
+        data: {
+            createTime:'',//最后一次添加时间
+            name:'',
+            storeList:[],
+        },
+        created:function () {
+            var that = this;
+            var userName = $.cookie('name');
+            $(".form_box_right_red").html(userName);
+            Loading.prototype.show();
+            var url = $.stringFormat("{0}/frCardType/selectFrCardTypeTime",$.cookie('url'));
+            $.get(url, {
+                    type:0,
+                },
+                function(res) {
+                    if(res.code == 200) {
+                        if(res.data.data.createTime){
+                            that.createTime = that.fmtDate(res.data.data.createTime);
+                            Loading.prototype.hide();
+                        }
+
+                    } else {
+                        alert(res.msg);
+                        //$('#tip').text(res.msg);//异常处理
+                    }
+                    that.selectName();
+                    that.selectList();//查询门店列表
+
+                }
+
+            );
+        },
+        methods: {
+            add: function () {
+                var that = this;
+                var ids = new Array();
+
+                //获取卡系列id
+
+                var pId = getParam('pId');
+                // var thisUrl = document.URL;
+                // var pId = thisUrl.split("=")[1];
+                var storeId = '';
+                var name = $(".form_box_right_inp").val();
+                if(name == '' || name==null || name.length<0){
+                    alert("卡种名称不能为空")
+                    return;
+                }
+                Loading.prototype.show();
+                var createUserName = $.cookie('name');
+                var CustomerCode = $.cookie("code");
+                var createUserId = $.cookie("id");
+                var url = $.stringFormat(
+                    "{0}/frCardType/addCurrentFrCardType?shopId="+storeId+
+                    "&type=7"+"&cardTypeName="+name+"&ids="+ids+
+                    "&ty=1&pId="+pId+"&typeSetState=2&createUserName='"+createUserName+
+                    "&CustomerCode="+CustomerCode+"&createUserId="+createUserId,$.cookie('url'));
+                $.ajax({
+                    type: "POST",
+                    url: url,
+//                    data: {username:name, id:Ids,ty:0},
+                    dataType: "json",
+                    success: function(data){
+                        if(data.code == 200) {
+                            alert("添加成功！");
+                            window.location.reload()
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                        } else {
+                            alert(data.msg);
+                            Loading.prototype.hide();
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+                    }
+                });
+
+
+            },
+            //查询卡系列名称
+            selectName:function () {
+                var that = this;
+                //获取卡系列id
+                var thisUrl = document.URL;
+                var pId = thisUrl.split("=")[1];
+                if(pId.split("#").length>0){
+                    pId = pId.split("#")[0];
+                }
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/frCardType/getFrCardTypeByPid",$.cookie('url'));
+                $.get(url, {
+                        pId:pId,
+                        storeId:'',
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            that.name = res.data.data.cardTypeName;
+                            Loading.prototype.hide();
+                        } else {
+                            alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+            },
+            //查询所有门店列表
+            selectList:function () {
+                var that = this;
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/shop/getStoreList",$.cookie('url'));
+                $.get(url, {
+                        type:0,//添加操作
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            that.storeList = res.data.data.list;
+                            Loading.prototype.hide();
+                        } else {
+                            //alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+            },
+            //时间戳转指定格式
+            fmtDate:function (inputTime) {
+                var date = new Date(inputTime);
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            },
+
+
+        },
+    })
+    // employee.yo();
+    $(function () {
+
+
+    })
+</script>
+
+</html>

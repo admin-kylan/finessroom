@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrShopCardTypeRelateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrShopCardTypeRelate">
+        <id column="a.id" property="id" />
+        <result column="a.shop_id" property="shopId" />
+        <result column="a.card_type_id" property="cardTypeId" />
+        <result column="a.name" property="name" />
+        <result column="a.flag" property="flag" />
+        <result column="a.type" property="type" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.type_set_state" property="typeSetState" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.shop_id AS shopId,
+        a.card_type_id AS cardTypeId,
+        a.name,
+        a.flag,
+        a.type,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.id,
+        a.type_set_state AS typeSetState
+    </sql>
+
+</mapper>

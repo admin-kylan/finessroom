@@ -1,0 +1,225 @@
+html,body{
+    /* overflow: auto; */
+    background-color: #eff0f3;
+}
+#customerInformation{
+    min-width: 1266px;
+    padding: 8px 8px 5px 0;
+    /* height: 98.7%; */
+    position: relative;
+}
+/*头部*/
+#customerInformationTop{
+    background-color: #fff;
+    padding: 10px 10px 0;
+    width: auto;
+    position: relative;
+}
+#customerInformationTop .customerInformationTop{
+    overflow: hidden;
+    border: 1px solid #ccc;
+    height: 174px;
+    width: 100%;
+    border-bottom: none;
+}
+#customerInformationTop .customerInformationTop .customerrightFrame_top{
+    padding: 0 10px;
+    margin: 10px 0;
+}
+#customerInformationTop .customerrightFrame_box{
+    overflow: hidden;
+}
+#customerInformationTop .customerrightFrame_box>div{
+    float: left;
+    width: 10%;
+}
+#customerInformationTop .customerrightFrame_box>div img{
+    width: 75px;
+    margin: 10px auto;
+    max-width: 75px;
+    border-radius: 50%;
+}
+#customerInformationTop .customerrightFrame_box ul{
+    width: 90%;
+    margin: 10px auto;
+    overflow: hidden;
+    float: left;
+}
+#customerInformationTop .customerrightFrame_box ul li{
+    float: left;
+    width: 25%;
+    margin: 4px 0;
+}
+
+#customerInformationTop .customerrightFrame_botton{
+    position: relative;
+    width: 100%;
+}
+#customerInformationTop .customerrightFrame_botton ul{
+    overflow: hidden;
+    height: 40px;
+    background: #e4e4e4;
+}
+#customerInformationTop .customerrightFrame_botton ul li{
+    float: left;
+    padding: 0 10px;
+    border-top: 2px solid #e4e4e4;
+    border-bottom: none;
+    min-width: 95px;
+    text-align: center;
+    line-height: 38px;
+}
+#customerInformationTop .customerrightFrame_botton ul li a{
+    display: inline-block;
+    width: 100%;
+}
+#customerInformationTop .customerrightFrame_botton ul li.on,
+#customerInformationTop .customerrightFrame_botton ul li:hover {
+    background-color: #fff;
+    border-top: 2px solid #0cc;
+}
+#customerInformationTop .customerrightFrame_botton ul li.on a{
+    color: #0cc;
+}
+/*//底部*/
+#customerInformationBotton{
+     background-color: #fff;
+     padding: 0 10px 8px;
+     width: auto;
+     /* height: 81%; */
+}
+#customerInformationBotton .customerInformationBotton{
+    overflow: hidden;
+     width: 100%;
+    height: 100%;
+    border-right: 1px solid #5CDBDB;
+    border-bottom: 1px solid #5CDBDB;
+    border-left: 1px solid #5CDBDB;
+}
+#customerInformationBotton iframe{
+    width: 100%;
+    box-shadow: none;
+    height: 100%;
+    border: none;
+}   
+
+
+
+/* <!-- 业绩分配弹窗 --> */
+#performance .newCustomers_maskLayer_box{
+    top: 10%;
+    max-width: 950px;
+    position: relative;
+    margin: 0 auto;
+    left: 0px;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+}
+
+#performance .newCustomers_maskLayer_box_shen{
+    padding: 10px;
+}
+#performance .newCustomers_maskLayer_box_botton a{
+    text-align: center;
+}
+
+#performance .newCustomers_maskLayer_box_shen input{
+    max-width: 60px;
+    padding: 5px 10px;
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen .btn-primary{
+   padding: 4px 10px;
+}
+
+#performance .newCustomers_maskLayer_box_shen .table{
+    line-height: 26px;
+    width: 100%;
+    margin: 0 auto;
+}
+#performance .newCustomers_maskLayer_box_shen .table thead{
+    background-color: #00ccff;
+}
+#performance .newCustomers_maskLayer_box_shen .table thead th{
+    text-align: center;
+    font-weight: 500;
+}
+#performance .newCustomers_maskLayer_box_shen .table td{
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen .table1 tbody tr:nth-child(1) td{
+    border-color: #000;
+}
+#performance .newCustomers_maskLayer_box_shen .table1 tbody tr:nth-child(2) td{
+    border-color: #000;
+}
+#performance .newCustomers_maskLayer_box_shen .table1 tbody tr:nth-child(3) td{
+    border-color: #000;
+}
+#performance .newCustomers_maskLayer_box_shen .table1 tbody tr:nth-child(4) td{
+    border-color: #000;
+    border-bottom-color: #ccc;
+}
+#performance .newCustomers_maskLayer_box_shen div{
+    line-height: 30px;
+}
+#performance .newCustomers_maskLayer_box_shen div .color_jin{
+    color: #FFCC00;
+    margin-right: 30px;
+} 
+#performance .newCustomers_maskLayer_box_shen div strong{
+    color: #FFCC00;
+    margin-right: 30px;
+} 
+#performance .newCustomers_maskLayer_box_shen div .color_red{
+    color: red;
+    margin-right: 30px;
+} 
+
+#performance .newCustomers_maskLayer_box label{
+    margin-right: 10px;
+    font-weight:500;
+}
+#performance .newCustomers_maskLayer_box select{
+    min-width: 90px;
+    padding: 5px 10px;
+}
+#performance .newCustomers_maskLayer_box_botton{
+    text-align: center;
+    padding: 10px 10px 15px 10px;
+}
+#performance .newCustomers_maskLayer_box_botton p{
+    color: red;
+    text-align: left;
+    padding: 0 10px;
+    margin: 10px 0;
+}
+
+
+#customerInformation .newCustomers_maskLayer{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: none;
+}
+#customerInformation .newCustomers_maskLayer .newCustomers_maskLayer_box_top{
+    line-height: 36px;
+    background-color: #09f;
+    text-align: center;
+}
+#customerInformation .newCustomers_maskLayer .newCustomers_maskLayer_box_top a{
+ position: absolute;
+ right: 0px;
+ color: #000;
+ font-size: 18px;
+ font-weight: 900;
+ padding: 0 10px;
+}

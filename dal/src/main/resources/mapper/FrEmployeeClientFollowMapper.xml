@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEmployeeClientFollowMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEmployeeClientFollow">
+        <id column="id" property="id" />
+        <result column="client_id" property="clientId" />
+        <result column="personal_id" property="personalId" />
+        <result column="follow_time" property="followTime" />
+        <result column="follow_type" property="followType" />
+        <result column="follow_content" property="followContent" />
+        <result column="next_follow_time" property="nextFollowTime" />
+        <result column="plan_follow_time" property="planFollowTime" />
+        <result column="plan_visit_time" property="planVisitTime" />
+        <result column="plan_purchase_time" property="planPurchaseTime" />
+        <result column="follow_mark" property="followMark" />
+        <result column="supper_managment_id" property="supperManagmentId" />
+        <result column="check_time" property="checkTime" />
+        <result column="follow_adjust_time" property="followAdjustTime" />
+        <result column="handle_advice" property="handleAdvice" />
+        <result column="role_info_id" property="roleInfoId" />
+        <result column="shop_id" property="shopId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="flag" property="flag" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="is_using" property="isUsing" />
+        <result column="type" property="type" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="actual_visit_time" property="actualVisitTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.client_id AS clientId,
+        a.personal_id AS personalId,
+        a.follow_time AS followTime,
+        a.follow_type AS followType,
+        a.follow_content AS followContent,
+        a.next_follow_time AS nextFollowTime,
+        a.plan_follow_time AS planFollowTime,
+        a.plan_visit_time AS planVisitTime,
+        a.plan_purchase_time AS planPurchaseTime,
+        a.follow_mark AS followMark,
+        a.supper_managment_id AS supperManagmentId,
+        a.check_time AS checkTime,
+        a.follow_adjust_time AS followAdjustTime,
+        a.handle_advice AS handleAdvice,
+        a.role_info_id AS roleInfoId,
+        a.shop_id AS shopId,
+        a.create_time AS createTime,
+        a.update_user_name AS updateUserName,
+        a.update_user_id AS updateUserId,
+        a.create_user_id AS createUserId,
+        a.flag,
+        a.id,
+        a.create_user_name AS createUserName,
+        a.is_using AS isUsing,
+        a.type,
+        a.CustomerCode,
+        a.actual_visit_time AS actualVisitTime,
+        a.update_time AS updateTime
+    </sql>
+
+    <sql id="Base_IsFlage">
+        <if test=" clientId!=null and clientId!=''">
+            and  a.client_id = #{clientId}
+        </if>
+        <if test=" shopId != null and shopId !=''">
+            and a.shop_id = #{shopId}
+        </if>
+        <if test="isUsing == true">
+            and  a.is_using = #{isUsing}
+        </if>
+    </sql>
+
+    <!--查询指定会员会员卡的总条数-->
+    <select id="selectFrEmployeeClienFollowList" resultType="java.util.Map">
+        SELECT
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.personal_id = p.id) personalName,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.supper_managment_id = p.id) supperManagmentName,
+        (SELECT k.content FROM fr_follow_keyword k WHERE a.follow_content = k.id)content,
+        <include refid="Base_Column_List"/>
+        FROM
+        fr_employee_client_follow a
+        WHERE  a.CustomerCode = #{CustomerCode}
+        <include refid="Base_IsFlage"/>
+        ORDER BY a.create_time
+    </select>
+
+</mapper>

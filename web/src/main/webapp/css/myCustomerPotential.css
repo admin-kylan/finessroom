@@ -1,0 +1,289 @@
+html,body{
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+}
+#c_rig2{
+	min-width: 1005px;
+}
+fieldset legend{
+	display: initial;
+    width: auto;
+    padding: 0;
+    margin-bottom: 0px;
+    font-size: 12px;
+    line-height: inherit;
+    color: #333;
+    border: 0;
+    border-bottom: none;
+}
+
+.tab{
+	margin-top:10px;
+	border-bottom:1px solid #ccc;
+}
+.tab a{
+	position: relative;
+	top:1px;
+	float:left;
+	margin:0 10px;
+	padding:0 12px;
+	height:30px;
+	line-height: 30px;
+	border:1px solid #ccc;
+	border-radius: 5px 5px 0 0;
+	border-bottom: none;
+	background:#f4f4f4;
+	cursor:pointer;
+	min-width: 100px;
+	text-align: center;
+}
+.tab a.on{
+	border-bottom:1px solid #fff;
+	background:transparent;
+}
+.tableWrap{
+	margin-top:5px;
+}
+.tableWrap table{
+	border-collapse:collapse;
+	text-align: center;
+}
+.tableWrap table thead tr{
+	background:#0cc;
+}
+.tableWrap table thead tr td{
+	color:#fff;
+}
+.tableWrap table td{
+	padding:0 15px;
+}
+.tableWrap table td img{
+	margin:0 5px;
+	vertical-align: bottom;
+}
+.tableWrap table td.tored{
+	color:#FF0000;
+}
+.tableWrap table td.togreen{
+	color:#00cc00;
+}
+.tableWrap table td.toyellow{
+	color: #cfcf07;
+}
+.tableWrap table td.toyen{
+	color: #adabab !important;
+}
+.tableWrap table td.toceng{
+	color: #f90;
+}
+.tableWrap table td.toshallow{
+	color: #00ccff;
+}
+.tableWrap table td.toblue{
+	color: rgba(0, 153, 255, 1);
+}
+fieldset{
+	margin:5px;
+	border:1px dashed #ccc;
+	padding: 10px;
+	border-radius: 5px;
+}
+.section1 span{
+	float:left;
+	padding:0 10px;
+	background:#f4f4f4;
+	border:1px solid #ccc;
+    height: 28px;
+    line-height: 28px;
+	border-radius:5px;
+	margin:0 8px;
+	cursor: pointer;
+}
+.follow select{
+	width:115px;
+	height: 28px;
+}
+.follow input{
+	margin:0 5px;
+	text-align: center;
+}
+.follow input[type=text]{
+	padding: 5px 0;
+    height: 16px;
+}
+.follow input[type=date]{
+	padding: 5px 0;
+}
+.follow input[type=submit]{
+	width:60px;
+	height:30px;
+	border-radius: 3px;
+	background:#fff;
+	color: #333;
+	cursor: pointer;
+	border: 1px solid #333;
+}
+.follow input[type=submit].active {
+	background: #0cc;
+	color: #fff;
+	border: 1px solid #0cc;
+}
+.screening{
+	margin:8px 0;
+}
+.search input[type=text]{
+	width:500px;
+	height: 18px;
+	border:1px solid #ccc;
+}
+.search input:nth-child(3){
+	background:#fc0;
+}
+.search input:nth-child(4){
+	background:#00f;
+}
+.operation{
+	margin:10px;
+	overflow: hidden;
+}
+.operation span{
+	display: inline-block;
+	height:30px;
+	padding:0 10px;
+	cursor: pointer;
+	line-height: 30px;
+	color:#000;
+	float: left;
+}
+.operation a{
+	float: left;
+	overflow: hidden;
+}
+.operation a:nth-child(2) span{
+	background:#FF0000;
+	color:#fff;
+}
+.operation a:nth-child(3) span{
+	background:#FFCC00;
+	color:#fff;
+}
+.operation a:nth-child(4) span{
+	background:#00cc00;
+	color:#fff;
+}
+.operation span:nth-child(5){
+	background:#0099ff;
+	color:#fff;
+}
+.operation span:nth-child(6){
+	background:rgba(153, 204, 255, 1);
+	color:#fff;
+}
+.tableWrap .tabW{
+	overflow-x:scroll;
+}
+.tableWrap table{
+	border-collapse:collapse;
+	text-align: center;
+}
+.tableWrap table thead{
+	background:#0cc;
+}
+.tableWrap table thead td{
+	color:#fff;
+}
+.tableWrap table td{
+	white-space:nowrap;
+	/* height:30px; */
+	padding:0 8px;
+}
+.tableWrap table tbody tr:nth-child(even){
+	background:#ecffff;
+}
+.tableWrap table tbody tr td:last-child{
+	color:red;
+	cursor: pointer;
+}
+.tableWrap .page{
+	margin:15px 0;
+}
+.tableWrap .page p{
+	margin-left:20px;
+}
+.tableWrap .page ul li{
+	float:left;
+	margin:0 8px;
+	padding:0 10px;
+	border:1px solid #ccc;
+	height:25px;
+	border-radius: 5px;
+	line-height: 25px;
+	cursor: pointer;
+}
+.tableWrap .page ul li:nth-child(3),.content .tab .page ul li:last-child{
+	cursor: default;
+}
+.tableWrap .page ul li:last-child{
+	border:none;
+}
+.tableWrap .page ul li input{
+	width:50px;
+	margin:0 5px;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,122 @@
+
+#customerMemberBenefits{
+    padding: 10px
+}
+html,body{
+    overflow-x: auto;
+}
+#customerMemberBenefits fieldset{
+    margin: 5px;
+    border: 1px dashed #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+#customerMemberBenefits fieldset legend {
+    display: initial;
+    width: auto;
+    padding: 0;
+    margin-bottom: 0px;
+    font-size: 12px;
+    line-height: inherit;
+    color: #333;
+    border: 0;
+    border-bottom: none;
+}
+
+#customerMemberBenefits fieldset legend span{
+    color:  #e8bc0c;
+}
+#customerMemberBenefits ul {
+    overflow: hidden;
+}
+#customerMemberBenefits ul li{
+    float: left;
+    width: 25%;
+
+}
+#customerMemberBenefits ul li div{
+    overflow: hidden;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 8px 0;
+}
+#customerMemberBenefits ul li div span{
+    font-size: 30px;
+    color: #fff;
+}
+
+#customerMemberBenefits ul li>div{
+    margin: 10px;
+    background-color: rgba(0, 204, 0, 1);
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+}
+#customerMemberBenefits ul li:nth-child(2)>div{
+    background-color: rgba(255, 204, 0, 1);
+}
+#customerMemberBenefits ul li:nth-child(3)>div{
+    background-color: rgba(0, 204, 255, 1);
+}
+#customerMemberBenefits ul li:nth-child(4)>div{
+    background-color: rgba(134, 134, 134, 1);
+}
+
+#customerMemberBenefits ul li img{
+    float: right;
+}
+/* #customerMemberBenefits ul:nth-child(1) li img{
+    width: 50px;
+} */
+#customerMemberBenefits .customerMemberBenefits_photo ul{
+    overflow: hidden;
+}
+#customerMemberBenefits .customerMemberBenefits_photo ul li{
+    max-width: 160px;
+    max-height: 160px;
+    margin-right: 15px;
+}
+#customerMemberBenefits .form-control{
+    width: 20%;
+    padding: 0 5px;
+}
+#customerMemberBenefits .btn{
+    width: 12%;
+
+}
+#customerMemberBenefits textarea{
+    width: 40% !important;
+    min-height: 100px;
+    max-height: 100px;
+    min-width: 40%;
+    max-width: 40%;
+}
+#customerMemberBenefits .btn-danger{
+    margin: 0 10px;
+    margin: 0 5px;
+    border-color: #169bd5;
+    background-color: #169bd5;
+    max-width: 80px;
+}
+
+#customerMemberBenefits form .btn-success{
+    border-color: #5cb85c;
+    background-color: #fff;
+    color: #5cb85c;
+}
+#customerMemberBenefits form .btn-info{
+    border-color: red;
+    background-color: #fff;
+    color: red;
+}
+#customerMemberBenefits form .btn-success:active{
+    box-shadow:none;
+}
+#customerMemberBenefits form .btn-info:active{
+    box-shadow:none;
+}
+
+#customerMemberBenefits form .form-group {
+    margin-bottom: 5px;
+}

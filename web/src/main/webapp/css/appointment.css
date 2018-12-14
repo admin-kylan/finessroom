@@ -1,0 +1,2191 @@
+.wrap {
+	height: 100%;
+	min-width: 1366px;
+}
+
+.cWrap {
+	height: 100%;
+}
+
+.top {
+	height: 50px;
+	padding-left: 20px;
+	background: #363E48;
+	border-bottom: 1px solid #ccc;
+	color: #fff;
+	line-height: 50px;
+	font-size: 18px;
+}
+
+.top img {
+	margin: 0 5px;
+}
+
+input[type=checkbox] {
+	position: relative;
+	top: 2px;
+}
+
+.left {
+	float: left;
+	width: 12%;
+	background: #363E48;
+	height: 100%;
+	overflow: auto;
+}
+
+.left li {
+	height: 40px;
+	cursor: pointer;
+	line-height: 40px;
+	color: #999;
+}
+
+.left li img {
+	margin: 12px 0px 0px 30px;
+	float: left;
+}
+
+.left li a {
+	height: 40px;
+	cursor: pointer;
+	text-indent: 5px;
+	line-height: 40px;
+	color: #999;
+	display: block;
+	float: left;
+}
+
+.left li.on {
+	color: #fff;
+}
+
+.left li a.on {
+	color: #fff;
+}
+
+.content {
+	float: left;
+	width: 88%;
+	height: 100%;
+}
+
+.lefNav {
+	padding-left: 1%;
+	width: 8.9%;
+	height: 100%;
+	border-right: 1px solid #ccc;
+}
+
+.lefNav li {
+	margin-top: 10px;
+	height: 35px;
+	border: 1px solid #ccc;
+	border-right: none;
+	background: #f9f9f9;
+	border-radius: 5px 0 0 5px;
+	cursor: pointer;
+	line-height: 35px;
+	text-align: center;
+}
+
+.lefNav li.on {
+	position: relative;
+	right: -1px;
+	background: #fff;
+	border-right: 1px solid #fff;
+	z-index: 1;
+}
+
+.contains {
+	position: relative;
+	width: 90%;
+	overflow: hidden;
+	overflow: auto;
+}
+
+.contains::after {
+	display: block;
+	position: absolute;
+	content: "";
+	top: 0;
+	left: -1px;
+	width: 1px;
+	height: 100%;
+	background: #ccc;
+}
+
+.contains .list {
+	display: none;
+}
+
+.contains .list.on {
+	display: block;
+}
+
+.contains .list .searchWrap {
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+}
+
+.contains .list .search {
+	margin: 10px 0 10px 20px;
+	width: 620px;
+	height: 30px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+}
+
+.contains .list .search input[type=text] {
+	float: left;
+	width: 520px;
+	height: 100%;
+	text-indent: 10px;
+	border: none;
+	background: transparent;
+}
+
+.contains .list .search input[type=submit] {
+	float: left;
+	width: 100px;
+	height: 100%;
+	background: #09f;
+	border: none;
+	color: #fff;
+}
+
+.contains .list .screening {
+	padding-left: 15px;
+	height: 52px;
+	background: #f2f2f2;
+	line-height: 52px;
+}
+
+.contains .list .screening select,
+.contains .list .screening input[type=text] {
+	margin: 0 5px;
+	height: 28px;
+	border: 1px solid #ccc;
+	width: 15.3%;
+	min-width: 80px;
+	text-indent: 5px;
+}
+
+.contains .list .screening .btnWrap {
+	margin-top: 10px;
+}
+
+.contains .list .screening .btnWrap span {
+	float: left;
+	margin: 0 2px;
+	width: 60px;
+	height: 30px;
+	border-radius: 5px;
+	cursor: pointer;
+	line-height: 30px;
+	color: #fff;
+	text-align: center;
+}
+
+.contains .list .screening .orange {
+	background: #f90;
+}
+
+.contains .list .screening .blue {
+	background: #00f;
+}
+
+.contains .list .screening .red {
+	background: #f00;
+}
+
+.contains .list .screening .green {
+	background: green;
+}
+
+.contains .list .screening .skyBlue {
+	background: #09f;
+}
+
+.contains .list .screening .grey {
+	background: #0cc;
+}
+
+.screening>label {
+	width: 61.5%;
+	font-weight: 500;
+}
+
+.screening>.btnWrap {
+	width: 38.5%;
+}
+
+.contains .list .tab h4 {
+	margin: 15px auto;
+	width: 300px;
+	height: 30px;
+	line-height: 30px;
+	border: 1px dashed #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+	text-align: center;
+}
+
+.contains .list .tab .info {
+	padding-left: 20px;
+	height: 30px;
+	line-height: 30px;
+}
+
+.contains .list .tab .info .cyan {
+	color: #0cf;
+}
+
+.contains .list .tab table {
+	width: 100%;
+	text-align: center;
+}
+
+.contains .list .tab table thead {
+	background: #0cc;
+}
+
+.contains .list .tab table tr {
+	height: 30px;
+}
+
+.contains .list .tab table .margin {
+	margin: 0 10px;
+}
+
+.contains .list .tab table .green {
+	color: #090;
+}
+
+.contains .list .tab table .blue {
+	color: #00f;
+}
+
+.contains .list .tab table .grey {
+	color: #ccc;
+}
+
+.contains .list .tab table .red {
+	color: #f00;
+}
+
+.contains .list .tab table .skyBlue {
+	color: #09f;
+}
+
+.contains .list .tab table .orange {
+	color: #f90;
+	float: right;
+}
+
+.contains .list .tab .sup tbody td:nth-child(10) {
+	text-align: left;
+}
+
+.contains .list .tab .sup span {
+	cursor: pointer;
+}
+
+.contains .list .tabBox {
+	display: none;
+    position: absolute;
+    padding: 15px 5px 0;
+    background: #f2f2f2;
+    top: 0px;
+    width: 97%;
+    box-shadow: 0 0 10px 1px #ccc;
+    left: 1%;
+}
+
+.contains .list .tabBox::after {
+	position: absolute;
+	content: '';
+	display: block;
+	top: 3px;
+	left: 79%;
+	width: 0;
+	height: 0;
+	border: 15px solid transparent;
+	border-bottom: 15px solid #b9fff1;
+	border-top: none;
+}
+
+.contains .list .tab .sub {
+	background: #fff;
+}
+
+.contains .list .tab .sub thead tr {
+	background: #b9fff1;
+}
+
+.contains .list .tab .tabFoot {
+	padding: 5px 0;
+	padding-left: 8px;
+	line-height: 30px;
+	margin: 5px 0;
+}
+
+.contains .list .tab .tabFoot .btn {
+	padding: 4px 15px;
+	margin: 0 5px;
+}
+
+.contains .list .tab .tabFoot .btn span {
+	margin: 10px 10px;
+	width: 70px;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+.contains .list .tab .tabFoot .btn .btnBlue {
+	background: #0cf;
+	height: 28px;
+	line-height: 28px;
+	color: #fff;
+}
+
+.contains .list .tab .tabFoot .btn .btnRed {
+	border: 1px solid #f00;
+	height: 26px;
+	line-height: 26px;
+	color: #f00;
+}
+
+.contains .list .line {
+	padding-left: 20px;
+	height: 48px;
+	line-height: 48px;
+	background: #e1f9ff;
+	border-bottom: 1px dashed #ccc;
+}
+
+.contains .list .line p {
+	margin-right: 60px;
+}
+
+.contains .list .line p>span {
+	margin-left: 30px;
+	float: left;
+}
+
+.contains .list .line p>span strong {
+	width: 25px;
+	float: left;
+	margin: 12px 0;
+	height: 25px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+}
+
+.contains .list .line p>span strong.you {
+
+	background-color: #fff;
+}
+
+.contains .list .line p>span strong.wu {
+
+	background-color: rgba(247, 247, 247, 1);
+}
+
+.contains .list .line p>span strong.xiu {
+
+	background-color: rgba(255, 240, 240, 1);
+}
+
+.contains .list .liBox {
+	padding: 0 10px;
+}
+
+.contains .list .liBox li {
+	overflow: hidden;
+	float: left;
+	margin: 15px 10px;
+	width: 160px;
+	height: 160px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	text-align: center;
+}
+
+.contains .list .liBox li .title {
+	height: 35px;
+	background: #0cc;
+	font-weight: bold;
+	line-height: 35px;
+}
+
+.contains .list .liBox li div {
+	height: 125px;
+}
+
+.contains .list .liBox li div.have {
+	background: #fff;
+}
+
+.contains .list .liBox li div.no {
+	background: #f7f7f7;
+}
+
+.contains .list .liBox li div.rest {
+	background: #fff0f0;
+}
+
+.contains .list .liBox li div .txt {
+	padding-top: 25px;
+}
+
+.contains .list .classroom li {
+	width: 320px;
+	height: 170px;
+}
+
+.contains .list .classroom li div {
+	height: 135px;
+}
+
+.contains .list .classroom li div.free {
+	background: #f7f7f7;
+}
+
+.contains .list3 p {
+	padding: 10px;
+}
+
+.contains .list3 p input {
+	float: left;
+	margin: 0 10px;
+	width: 150px;
+	height: 28px;
+	border: 1px solid #ccc;
+	padding: 0px 5px;
+}
+
+.contains .list3 p label input {
+	float: none;
+}
+
+.contains .list3 p input.sear {
+	float: left;
+	width: 80px;
+	height: 30px;
+	background: #169bd5;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+	line-height: 30px;
+	color: #fff;
+}
+
+.contains .list3 table {
+	width: 100%;
+	text-align: center;
+}
+
+.contains .list3 table .blue {
+	color: #0099ff;
+}
+
+.contains .list3 table .orange {
+	color: #ff9900;
+}
+
+.contains .list3 table .red {
+	color: #ff0000;
+}
+
+.contains .list3 table .green {
+	color: #090;
+}
+
+.contains .list3 table .grey {
+	color: #ccc;
+}
+
+.contains .list3 table .seaBlue {
+	color: #00f;
+	min-width: 100px;
+}
+
+.contains .list3 table .toGrey {
+	background: #ccc;
+}
+
+.contains .list3 table .toOrange {
+	background: #f90;
+}
+
+.contains .list3 table .toRed {
+	background: #f00;
+}
+
+.contains .list3 table .toGreen {
+	background: #090;
+}
+
+.contains .list3 table thead tr {
+	background: #0cc;
+}
+
+.contains .list3 table tr {
+	height: 30px;
+}
+
+.contains .list3 table .sWrap {
+	display: inline-block;
+	margin: 4px auto 0;
+	width: 195px;
+}
+
+.contains .list3 table .sWrap span {
+	float: left;
+	margin: 0 10px;
+	width: 45px;
+	height: 22px;
+	border-radius: 5px;
+	line-height: 22px;
+	color: #fff;
+}
+
+.contains .list4 .tabSpan {
+	padding-top: 10px;
+	height: 28px;
+	border-bottom: 1px solid #ccc;
+}
+
+.contains .list4 .tabSpan span {
+	position: relative;
+	float: left;
+	margin: 0 10px;
+	top: -1px;
+	padding: 0 15px;
+	height: 28px;
+	border: 1px solid #ccc;
+	border-radius: 5px 5px 0 0;
+	cursor: pointer;
+	line-height: 28px;
+	background-color: #f3f3f3;
+}
+
+.contains .list4 .tabSpan span.on {
+	border-bottom: 1px solid #fff;
+	background-color: #fff;
+}
+
+.contains .list4 .select {
+	display: none;
+}
+
+.contains .list4 .on {
+	display: block;
+}
+
+.contains .list4 .selectBox {
+	padding: 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.contains .list4 .selectBox p {
+	margin: 10px 0;
+	padding-left: 20px;
+
+}
+
+.contains .list4 .selectBox input {
+	margin: 0 10px;
+	width: 170px;
+	height: 26px;
+	text-align: center;
+}
+
+.contains .list4 .selectBox select {
+	margin: 0 10px;
+	width: 170px;
+	height: 26px;
+	text-align: center;
+}
+
+.contains .list4 .selectBox input[type=submit] {
+	width: 85px;
+	height: 30px;
+	border: none;
+	background: #169bd5;
+	border-radius: 5px;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+}
+
+.contains .list4 h3 {
+	text-align: center;
+	line-height: 35px;
+}
+
+.contains .list4 .tabTop {
+	padding: 0 20px;
+	line-height: 30px;
+}
+
+.contains .list4 .red {
+	color: #f00;
+}
+
+.contains .list4 .orange {
+	color: #f90;
+}
+
+.contains .list4 .tabTop .rig span {
+	float: left;
+	margin: 0 10px;
+	width: 60px;
+	height: 30px;
+	border-radius: 5px;
+	cursor: pointer;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+}
+
+.contains .list4 .toOrange {
+	background: #f90;
+}
+
+.contains .list4 .toGreen {
+	background: #090;
+}
+
+.contains .list4 table {
+	margin-top: 10px;
+	width: 100%;
+	text-align: center;
+}
+
+.contains .list4 table thead {
+	background: #0cc;
+}
+
+.contains .list4 table tr {
+	height: 30px;
+}
+
+.contains .list4 .blue {
+	color: #06f;
+}
+
+.contains .list4 .blue {
+	color: #06f;
+}
+
+.contains .list4 .grey {
+	color: #ccc;
+}
+
+.contains .list4 .overflow {
+	overflow-x: scroll;
+}
+
+.contains .list4 .overflow table {
+	width: 1500px;
+}
+
+.contains .list5 div {
+	padding: 10px;
+}
+
+.contains .list5 div input {
+	margin: 0 10px;
+	width: 150px;
+	height: 28px;
+	border: 1px solid #ccc;
+	padding: 0 5px;
+}
+
+.contains .list5 div input[type=submit] {
+	width: 85px;
+	height: 30px;
+	border-radius: 5px;
+	color: #fff;
+	text-align: center;
+	cursor: pointer;
+	background: #169bd5;
+	border: none;
+}
+
+.contains .list5 table {
+	width: 100%;
+	text-align: center;
+}
+
+.contains .list5 table tr {
+	height: 30px;
+}
+
+.contains .list5 table thead {
+	background: #0cc;
+}
+
+.contains .list5 table .blue {
+	color: #0cf;
+}
+
+.contains .list5 table .orange {
+	color: #f90;
+}
+
+.contains .list5 table .red {
+	color: #f00;
+}
+
+.contains .list5 table tbody tr:nth-child(even) {
+	background: #ecffff;
+}
+
+.contains .list7 .selectBar {
+	padding: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.contains .list7 .selectBar select,
+.contains .list7 .selectBar input {
+	margin: 0 10px;
+	width: 150px;
+	height: 28px;
+	border: 1px solid #ccc;
+	padding: 0 5px;
+}
+
+.contains .list7 .boxWrap li {
+	overflow: hidden;
+	float: left;
+	margin: 20px;
+	width: 29%;
+	height: 260px;
+	border-radius: 10px;
+	background: pink;
+	min-width: 300px;
+}
+
+.contains .list7 .boxWrap li .title {
+	height: 40px;
+	background: #0cc;
+	line-height: 40px;
+	color: #fff;
+	text-align: center;
+}
+
+.contains .list7 .boxWrap li .box {
+	height: 220px;
+	background: #f0fff0;
+}
+
+.contains .list7 .boxWrap li .box .currentTime {
+	line-height: 40px;
+	text-align: center;
+}
+
+.contains .list7 .boxWrap li .box .txt {
+	padding-left: 30px;
+	line-height: 28px;
+}
+
+.lisNavBar {
+	height: 50px;
+	background: #F3f3f3;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	overflow: hidden;
+}
+
+.lisNavBar span {
+	float: left;
+	margin: 10px 0 0 10px;
+	width: 110px;
+	height: 28px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background: #fff;
+	cursor: pointer;
+	line-height: 28px;
+	text-align: center;
+}
+
+.lisNavBar .pull-right {
+	min-width: 160px;
+	background-color: #fff;
+	height: 28px;
+	margin: 10px 10px 0 0;
+	border: 1px solid #ccc;
+
+}
+
+.lisNavBar .pull-right span {
+	background-color: #fff;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	height: 20px;
+	border: none;
+	line-height: 20px;
+	width: 60px;
+	margin: 4px 10px;
+	border-radius: 0;
+}
+
+.lisNavBar .pull-right span.on {
+	background-color: rgba(0, 204, 255, 1);
+	color: #fff;
+}
+
+.list8 label {
+	font-weight: normal;
+}
+
+.contains .list8 .selectWrap {
+	margin: 12px 0;
+}
+
+.contains .list6 .selectWrap select {
+	margin: 12px 0;
+	height: 28px;
+	width: 130px;
+}
+
+.contains .list6 .selectWrap input {
+	margin: 12px 0;
+	height: 28px;
+	width: 130px;
+	padding: 0 5px;
+}
+
+.contains .list6 .selectWrap label {
+	margin-left: 20px;
+	font-weight: normal;
+}
+
+.contains .tabFoot .btnBlue {
+	color: #fff;
+	background-color: rgba(0, 204, 255, 1);
+}
+
+.contains .tabFoot .btnRed {
+	border-color: red;
+	color: red;
+}
+.contains table tbody tr:nth-child(even){
+	background-color: #ecffff;
+}
+
+
+
+/* //<!-- 课程预约/预约详情 --> */
+.bookDetail {
+	display: none;
+}
+
+.bookDetail .bookHeader {
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #ccc;
+}
+
+.bookDetail .bookHeader img {
+	margin: 0 10px;
+	cursor: pointer;
+}
+
+.bookDetail .bookHeader .grey {
+	margin-right: 5px;
+	color: #ccc;
+}
+
+.bookDetail .bookBody {
+	padding: 20px;
+}
+
+.bookDetail .bookBody .lef img {
+	margin-right: 35px;
+	width: 298px;
+	height: 233px;
+}
+
+.bookDetail .bookBody .rig h3 {
+	margin: 0 0 10px 0;
+}
+
+.bookDetail .bookBody .rig label {
+	display: block;
+	font-weight: normal;
+}
+
+.bookDetail .bookBody .rig span {
+	font-size: 14px;
+}
+
+.bookDetail .bookBody .rig .startBtn {
+	display: block;
+	margin-top: 10px;
+	width: 130px;
+	height: 36px;
+	background: #0cc;
+	cursor: pointer;
+	border-radius: 5px;
+	;
+	line-height: 36px;
+	text-align: center;
+	color: #fff;
+}
+
+.bookDetail .bookTab .allBook {
+	display: block;
+	position: relative;
+	top: 1px;
+	margin-left: 20px;
+	width: 95px;
+	height: 30px;
+	border: 1px solid #ccc;
+	border-bottom-color: #fff;
+	border-radius: 5px 5px 0 0;
+	line-height: 30px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.bookDetail .bookTab .tabLine {
+	height: 40px;
+	border-top: 1px solid #ccc;
+	line-height: 40px;
+	margin-bottom: 10px;
+}
+
+.bookDetail .bookTab .tabLine label {
+	margin: 0 10px;
+}
+
+.bookDetail .bookTab .tabLine .addBook {
+	margin-top: 10px;
+	width: 100px;
+	height: 30px;
+	background: #169bd5;
+	border-radius: 5px;
+	text-align: center;
+	line-height: 30px;
+	cursor: pointer;
+	color: #fff;
+}
+
+.bookDetail .bookTab .table td {
+	padding: 4px;
+}
+
+.bookDetail .bookTab .table thead {
+	background-color: #0cc;
+}
+
+.bookDetail .bookTab .table {
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.bookDetail .bookTab .table td span {
+	margin: 0 5px;
+}
+
+.bookDetail .bookTab .table td.blue {
+	color: #0000ff;
+}
+
+.bookDetail .bookTab .table td.orange {
+	color: #ff9900;
+}
+
+.bookDetail .bookTab .table td.red {
+	color: red;
+}
+
+.bookDetail .bookTab .table td span.red {
+	color: red;
+}
+
+.bookDetail .bookTab .table td span.skyBlue {
+	color: #00ccff;
+	margin: 0 5px;
+}
+
+.bookDetail .bookTab .table td.grey {
+	color: #cccccc;
+}
+
+.bookDetail .bookTab .table td.green {
+	color: #009900;
+}
+
+.bookDetail .bookTab .tabFoot {
+	padding: 0 15px;
+	line-height: 30px;
+}
+
+.bookDetail .bookTab .tabFoot .btn {
+	padding: 4px 15px;
+	margin: 0 5px;
+}
+
+
+
+/* //弹窗头部 */
+#appointment .newCustomers_maskLayer {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: 0 auto;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+	display: none;
+}
+
+#appointment .newCustomers_maskLayer .newCustomers_maskLayer_box_top {
+	line-height: 36px;
+	background-color: rgba(0, 204, 204, 1);
+	text-align: center;
+}
+
+#appointment .newCustomers_maskLayer .newCustomers_maskLayer_box_top span {
+	color: #fff;
+}
+
+#appointment .newCustomers_maskLayer .newCustomers_maskLayer_box_top a {
+	position: absolute;
+	right: 0px;
+	color: #000;
+	font-size: 18px;
+	font-weight: 900;
+	padding: 0 10px;
+}
+
+/* //弹窗头部 */
+
+
+/* 添加预约 */
+#reservation .newCustomers_maskLayer_box {
+	top: 5%;
+	max-width: 500px;
+	position: relative;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	box-shadow: 0 0 10px 1px #000;
+}
+
+#reservation .newCustomers_maskLayer_box_shen {
+	padding: 10px 0;
+}
+
+#reservation .bookBody {}
+
+#reservation .bookBody .lef {
+	width: 50%;
+	text-align: center;
+}
+
+#reservation .bookBody .rig {
+	width: 50%;
+}
+
+#reservation .bookBody .lef img {
+	width: 80%;
+	margin: 0 auto;
+	height: 180px;
+}
+
+#reservation .bookBody .rig div {
+	display: block;
+	font-weight: normal;
+	margin: 13px 0;
+}
+
+#reservation .bookBody .rig span {
+	font-size: 14px;
+}
+
+#reservation .bookBody .rig .startBtn {
+	display: block;
+	margin-top: 10px;
+	width: 130px;
+	height: 36px;
+	background: #0cc;
+	cursor: pointer;
+	border-radius: 5px;
+	;
+	line-height: 36px;
+	text-align: center;
+	color: #fff;
+}
+
+#reservation .bookBody2 {
+	line-height: 30px;
+	margin: 8px 0;
+}
+
+#reservation .bookBody2 .lef {
+	width: 25%;
+	text-align: right;
+}
+
+#reservation .bookBody2 .lef span {
+	color: red;
+}
+
+#reservation .bookBody2 .rig {
+	width: 75%;
+	line-height: 30px;
+}
+
+#reservation .bookBody2 .rig input {
+	padding: 0px 10px;
+	width: 80%;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	text-align: center;
+}
+
+#reservation .bookBody2 .rig span {
+	line-height: 30px;
+}
+
+#reservation .bookBody2 .rig strong {
+	margin: 5px 5px;
+}
+
+#reservation .bookBody2 .rig strong.sc-hui {
+	background-color: rgba(0, 255, 255, 1);
+	border: 1px solid rgba(204, 204, 204, 1);
+
+}
+
+#reservation .bookBody2 .rig strong.sc-green {
+	background-color: rgba(249, 249, 249, 1);
+	border: 1px solid rgba(204, 204, 204, 1);
+}
+
+#reservation .bookBody2 .rig strong.sc-hei {
+	background-color: rgba(102, 102, 102, 1);
+	border: 1px solid rgba(204, 204, 204, 1);
+}
+
+#reservation .bookBody2 .rig .sc-pull-right {
+	width: 50%;
+	float: right;
+	margin-right: 30px;
+}
+
+#reservation .bookBody2 .rig .sc-pull-right>div {
+	float: left;
+	width: 32%;
+	line-height: 22px;
+	margin-top: 0;
+}
+
+#reservation .bookBody2 .rig .sc-pull-right>div span {
+	float: initial;
+}
+
+#reservation .bookBody2 .bookBody2_tb {
+	padding: 0 40px;
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box {
+	border: 1px solid #ccc;
+	line-height: 50px;
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box .bookBody2_tb_box_top div {
+	border: 1px solid #ccc;
+	width: 40%;
+	text-align: center;
+	margin: 10px auto;
+	height: 48px;
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box .bookBody2_tb_box_buttom {
+	padding: 0 20px;
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box .table td {
+	height: 33px;
+	text-align: center;
+	line-height: 33px;
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box .table td.hui {
+	background-color: rgba(0, 255, 255, 1);
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box .table td.fen {
+	background-color: rgba(249, 249, 249, 1);
+}
+
+#reservation .bookBody2 .bookBody2_tb .bookBody2_tb_box .table td.hei {
+	background-color: rgba(102, 102, 102, 1);
+}
+
+#reservation .newCustomers_maskLayer_box_botton {
+	text-align: center;
+	padding-bottom: 15px;
+}
+
+#reservation .newCustomers_maskLayer_box_botton .btn {
+	background-color: rgba(22, 155, 213, 1);
+	color: #fff;
+	min-width: 80px;
+	border-color: rgba(22, 155, 213, 1);
+}
+
+
+/* 开课 */
+#startClass {}
+
+#startClass h4 {
+	text-align: center;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+#startClass fieldset legend span {
+	color: #ff9900;
+}
+
+
+#startClass .startClass_fieldset {
+	padding: 0 15px;
+}
+
+#startClass .startClass_fieldset1 .btn {
+	padding: 4px 15px;
+	background-color: rgba(22, 155, 213, 1);
+	border-color: rgba(22, 155, 213, 1);
+	margin: 0 20px;
+}
+
+#startClass .startClass_fieldset2 ul {
+	overflow: hidden;
+}
+
+#startClass .startClass_fieldset2 ul li {
+	width: 20%;
+	text-align: center;
+	float: left;
+}
+
+#startClass .startClass_fieldset2 ul li select {
+	padding: 0px 15px;
+	height: 28px;
+}
+
+#startClass .startClass_fieldset2 ul li a {
+	padding: 4px 15px;
+	background-color: rgba(22, 155, 213, 1);
+	border-color: rgba(22, 155, 213, 1);
+}
+
+#startClass .startClass_fieldset2 ul li span {
+	line-height: 28px;
+}
+
+#startClass .startClass_fieldset2 .text-center {
+	margin: 15px 0;
+}
+
+#startClass .startClass_fieldset2 .text-center input {
+	text-align: center;
+	padding: 10px 15px;
+	min-width: 300px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+#startClass .startClass_fieldset2 .text-center .btn-primary {
+	padding: 8px 15px;
+}
+
+#startClass .startClass_fieldset2 .memberInformation {
+	background-color: rgba(247, 247, 247, 1);
+}
+
+#startClass .startClass_fieldset2 .memberInformation .memberInformation_box {
+	overflow: hidden;
+}
+
+#startClass .startClass_fieldset2 .memberInformation .memberInformation_box .memberInformation_box_left {
+	float: left;
+	width: 70%;
+}
+
+#startClass .startClass_fieldset2 .memberInformation .memberInformation_box .memberInformation_box_right {
+	float: left;
+	width: 30%;
+}
+
+#startClass .startClass_fieldset2 .memberInformation_box_right>div {
+	padding: 0 15px;
+}
+
+#startClass .startClass_fieldset2 .memberInformation_box_right img {
+	width: 100%;
+}
+
+#startClass .startClass_fieldset2 .memberInformation_box_left fieldset {
+	background-color: #fff;
+}
+
+#startClass .startClass_fieldset2 .memberInformation_box_left>div>span {
+	margin: 0 10px;
+	line-height: 30px;
+}
+
+#startClass .startClass_fieldset3 .table {
+	text-align: center;
+	min-width: 1090px;
+}
+
+#startClass .startClass_fieldset3 .table thead {
+	background: #0cc;
+	text-align: center;
+}
+
+#startClass .startClass_fieldset3 .table thead th {
+	background: #0cc;
+	text-align: center;
+}
+
+#startClass .startClass_fieldset3_top {
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+#startClass .startClass_fieldset3_top .col-md-6 {
+	padding: 0;
+	line-height: 30px;
+}
+
+#startClass .startClass_fieldset3_top .col-md-6 input {
+	padding: 0 10px;
+	height: 28px;
+	float: right;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	margin-right: 15px;
+}
+
+#startClass .startClass_fieldset3_top .col-md-6 a {
+	padding: 4px 15px;
+	float: right;
+	background-color: rgba(22, 155, 213, 1);
+	border-color: rgba(22, 155, 213, 1);
+	color: #fff;
+}
+
+#startClass .startClass_fieldset3 .table td.red {
+	color: red;
+}
+
+#startClass .startClass_fieldset3 .table td.blue {
+	color: #0000ff;
+}
+
+#startClass .startClass_fieldset3 .table td.sblue {
+	color: #09f
+}
+
+#startClass .startClass_fieldset3 .btn-group {
+	padding: 8px 15px;
+	background-color: rgba(22, 155, 213, 1);
+	border-color: rgba(22, 155, 213, 1);
+	color: #fff;
+	min-width: 150px;
+}
+
+#startClass .startClass_fieldset3 .text-center input {
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding: 5px;
+}
+
+
+/* 添加预约 */
+#coachInformation .newCustomers_maskLayer_box {
+	top: 10%;
+	max-width: 400px;
+	position: relative;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	box-shadow: 0 0 10px 1px #000;
+}
+
+#coachInformation .newCustomers_maskLayer_box_shen {
+	padding: 10px 20px 0;
+}
+
+#coachInformation .newCustomers_maskLayer_box_botton {
+	text-align: center;
+	padding: 20px 0;
+}
+
+#coachInformation .newCustomers_maskLayer_box_botton .btn-primary {
+	padding: 8px 5px;
+	background-color: rgba(22, 155, 213, 1);
+	border-color: rgba(22, 155, 213, 1);
+	color: #fff;
+	min-width: 100px;
+}
+
+#coachInformation .newCustomers_maskLayer_box_botton .btn-warning {
+	padding: 8px 5px;
+	background-color: rgba(0, 153, 0, 1);
+	border-color: rgba(0, 153, 0, 1);
+	color: #fff;
+	min-width: 100px;
+}
+
+#coachInformation .newCustomers_maskLayer_box_botton .btn-danger {
+	padding: 8px 5px;
+	background-color: #fff;
+	border-color: red;
+	color: red;
+	min-width: 100px;
+}
+
+#coachInformation .newCustomers_maskLayer_box_shen_left {
+	float: left;
+	width: 70%;
+}
+
+#coachInformation .newCustomers_maskLayer_box_shen_left>div {
+	font-size: 16px;
+	margin: 10px 0;
+}
+
+#coachInformation .newCustomers_maskLayer_box_shen_left strong {
+	font-size: 16px;
+}
+
+#coachInformation .newCustomers_maskLayer_box_shen_right {
+	float: left;
+	width: 30%;
+}
+
+
+
+/* 训练详情弹窗 */
+#trainingDetails .newCustomers_maskLayer_box {
+	top: 10%;
+	max-width: 1000px;
+	min-height: 400px;
+	position: relative;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	box-shadow: 0 0 10px 1px #000;
+}
+
+#trainingDetails .newCustomers_maskLayer_box_shen .table thead {
+	text-align: center;
+	background-color: #fff;
+}
+
+#trainingDetails .newCustomers_maskLayer_box_shen .table thead th {
+	text-align: center;
+	border-bottom: none;
+}
+
+#trainingDetails .newCustomers_maskLayer_box_shen td.green {
+	color: green;
+}
+
+#trainingDetails .newCustomers_maskLayer_box_shen td.zhise {
+	color: rgb(231, 113, 241);
+}
+
+
+
+
+/* //<!-- 批量排团课 --> */
+.batchSchedulingClass {
+	display: none;
+}
+
+.batchSchedulingClass .bookHeader {
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #ccc;
+}
+
+.batchSchedulingClass .bookHeader img {
+	margin: 0 10px;
+	cursor: pointer;
+}
+
+.batchSchedulingClass .bookHeader .grey {
+	margin-right: 5px;
+	color: #ccc;
+}
+
+.batchSchedulingClass .bookBody {
+	padding: 20px;
+	overflow: hidden;
+}
+
+.batchSchedulingClass .bookBody .col-sm-2 span {
+	color: red;
+}
+
+.batchSchedulingClass .bookBody .col-sm-5 {
+	line-height: 30px;
+}
+
+.batchSchedulingClass .bookBody .col-sm-5 select {
+	height: 20px;
+	max-width: 450px;
+}
+
+.batchSchedulingClass .bookBody .col-sm-5 input {
+	height: 20px;
+	max-width: 180px;
+	float: left;
+}
+
+.batchSchedulingClass .bookBody .col-sm-5 span {
+	float: left;
+	color: red;
+}
+
+.batchSchedulingClass .bookTab {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.batchSchedulingClass .bookTab .tabFoot {
+	padding: 0 15px;
+	line-height: 30px;
+}
+
+.batchSchedulingClass .bookTab .tabFoot .btn {
+	padding: 8px 15px;
+	margin: 0 5px;
+	min-width: 100px;
+}
+
+.batchSchedulingClass .bookTab .tabFoot .btnRed {
+	border-color: #ccc;
+	color: #000;
+}
+
+.batchSchedulingClass>h4 {
+	background-color: rgba(242, 242, 242, 1);
+	line-height: 30px;
+	font-size: 13px;
+	padding: 0 20px;
+}
+
+.batchSchedulingClass>h4 span {
+	color: red;
+	font-size: 13px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	width: 90%;
+	float: left;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b p {
+	overflow: hidden;
+	line-height: 30px;
+	margin: 5px 0;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b p span.red {
+	color: red;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b p span {
+	float: left;
+	margin-right: 10px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b ul {
+	padding-left: 30px;
+	margin-bottom: 10px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b li {
+	overflow: hidden;
+	margin: 5px 0;
+	line-height: 30px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b label {
+	margin-right: 10px;
+	margin-bottom: 0;
+	font-weight: 500;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b input[type=text] {
+	margin-right: 10px;
+	text-align: center;
+	height: 26px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b li strong {
+	margin: 0 10px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b input[type=radio] {
+	float: left;
+	margin: 9px 5px 0 0;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b select {
+	min-width: 50px;
+	padding: 5px 15px;
+	float: left;
+	margin: 0 8px 0 0;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b p input[type=text] {
+	margin: 0 10px;
+	float: left;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b p input[type=checkbox] {
+	margin: 7px 5px 0 0;
+	float: left;
+}
+
+.batchSchedulingClass .bookBody .bookBody_c {
+	width: 5%;
+	float: right;
+	padding: 10px;
+	line-height: 315px;
+	position: relative;
+}
+
+.batchSchedulingClass .bookBody .bookBody_c span {
+	position: absolute;
+	left: 20px;
+	font-size: 23px;
+	color: #fff;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .bor ul {
+	border-left: 1px dashed #ccc;
+	padding-left: 0;
+	margin-left: 30px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .dataData {
+	margin: 0 10px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .bor {
+	margin: 0 15px;
+	border: 1px #ccc dashed;
+	padding: 0 10px;
+	border-bottom-right-radius: 5px;
+	border-top-right-radius: 5px;
+	border-left: 5px solid #ccc;
+	overflow: hidden;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .bor li {
+	margin: 0;
+	margin-left: -6px;
+	position: relative;
+	overflow: initial;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .bor li label {
+	background-color: #fff;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .bor li hr {
+	margin: 0;
+	max-width: 30px;
+	border-style: dashed;
+	border-color: #ccc;
+	position: absolute;
+	left: -18px;
+	top: 15px;
+	width: 15px;
+}
+
+.batchSchedulingClass .bookBody .bookBody_b .bor li input[type=text] {
+	max-width: 50px;
+	height: 20px;
+}
+
+
+/* 复制排课 */
+
+.copyClass {
+	display: none;
+}
+
+.copyClass .bookHeader {
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #ccc;
+}
+
+.copyClass .bookHeader img {
+	margin: 0 10px;
+	cursor: pointer;
+}
+
+.copyClass .bookHeader .grey {
+	margin-right: 5px;
+	color: #ccc;
+}
+
+.copyClass .bookBody {
+	padding: 20px 20px 0;
+	overflow: hidden;
+}
+
+.copyClass .bookBody .col-sm-2 span {
+	color: red;
+}
+
+.copyClass .bookBody .col-sm-9 {
+	line-height: 34px;
+}
+
+
+.copyClass .bookBody .col-sm-9 select {
+	height: 20px;
+	max-width: 450px;
+}
+
+.copyClass .bookBody .col-sm-9 select {
+	max-width: 400px;
+	float: left;
+}
+
+.copyClass .bookBody .col-sm-9 input {
+	height: 20px;
+	max-width: 180px;
+	float: left;
+}
+
+.copyClass .bookBody .col-sm-9 span {
+	float: left;
+}
+
+.copyClass .bookBody .col-sm-9 span.red {
+	color: red;
+	margin-left: 15px;
+}
+
+.copyClass .bookBody .col-sm-9 p {
+	color: #ccc;
+}
+
+.copyClass .bookTab {
+	margin-bottom: 20px;
+}
+
+.copyClass .bookTab .tabFoot {
+	padding: 0 15px;
+	line-height: 30px;
+}
+
+.copyClass .bookTab .tabFoot .btn {
+	padding: 8px 15px;
+	margin: 0 5px;
+	min-width: 100px;
+}
+
+.copyClass .bookTab .tabFoot .btnRed {
+	border-color: #ccc;
+	color: #000;
+}
+
+
+
+/* //教室 */
+#classroom .newCustomers_maskLayer_box {
+	top: 10%;
+	max-width: 650px;
+	min-height: 400px;
+	position: relative;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	box-shadow: 0 0 10px 1px #000;
+	z-index: 11;
+}
+#classroom .newCustomers_maskLayer_box_shen {
+	padding:0;
+	overflow: hidden;
+}
+#classroom .bookHeader {
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #ccc;
+}
+
+#classroom .bookHeader img {
+	margin: 0 10px;
+	cursor: pointer;
+}
+
+#classroom .bookHeader .grey {
+	margin-right: 5px;
+	color: #ccc;
+}
+
+#classroom .bookBody {
+	padding: 20px;
+	overflow: hidden;
+}
+
+#classroom .bookBody .col-sm-2 span {
+	color: red;
+}
+
+#classroom .bookBody .col-sm-7 {
+	line-height: 30px;
+}
+
+#classroom .bookBody .col-sm-7 select {
+	height: 20px;
+	max-width: 450px;
+}
+
+#classroom .bookBody .col-sm-7 input {
+	height: 20px;
+	max-width: 95px;
+	float: left;
+}
+
+#classroom .bookBody .col-sm-7 span {
+	float: left;
+	color: red;
+}
+
+#classroom .bookTab {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+#classroom .bookTab .tabFoot {
+	padding: 0 15px;
+	line-height: 30px;
+}
+
+#classroom .bookTab .tabFoot .btn {
+	padding: 8px 15px;
+	margin: 0 5px;
+	min-width: 100px;
+}
+
+#classroom .bookTab .tabFoot .btnRed {
+	border-color: #ccc;
+	color: #000;
+}
+
+#classroom h4 {
+	background-color: rgba(242, 242, 242, 1);
+	line-height: 30px;
+	font-size: 13px;
+	padding: 0 20px;
+}
+
+#classroom h4 span {
+	color: red;
+	font-size: 13px;
+}
+
+#classroom .bookBody .bookBody_b {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	width: 96%;
+	float: left;
+}
+
+#classroom .bookBody .bookBody_b p {
+	overflow: hidden;
+	line-height: 30px;
+	margin: 5px 0;
+}
+
+#classroom .bookBody .bookBody_b p span.red {
+	color: red;
+}
+
+#classroom .bookBody .bookBody_b p span {
+	float: left;
+	margin-right: 10px;
+}
+
+#classroom .bookBody .bookBody_b ul {
+	padding-left: 30px;
+	margin-bottom: 10px;
+}
+
+#classroom .bookBody .bookBody_b li {
+	overflow: hidden;
+	margin: 5px 0;
+	line-height: 30px;
+}
+
+#classroom .bookBody .bookBody_b label {
+	margin-right: 10px;
+	margin-bottom: 0;
+	font-weight: 500;
+}
+
+#classroom .bookBody .bookBody_b input[type=text] {
+	margin-right: 10px;
+	text-align: center;
+	height: 26px;
+}
+
+#classroom .bookBody .bookBody_b li strong {
+	margin: 0 10px;
+}
+
+#classroom .bookBody .bookBody_b input[type=radio] {
+	float: left;
+	margin: 9px 5px 0 0;
+}
+
+#classroom .bookBody .bookBody_b select {
+	min-width: 50px;
+	padding: 5px 15px;
+	float: left;
+	margin: 0 8px 0 0;
+}
+
+#classroom .bookBody .bookBody_b p input[type=text] {
+	margin: 0 10px;
+	float: left;
+}
+#classroom .bookBody .bookBody_b p input[type=checkbox] {
+	margin: 7px 2px 0 0;
+	float: left;
+}
+
+#classroom .bookBody .bookBody_c {
+	width: 5%;
+	float: right;
+	padding: 10px;
+	line-height: 315px;
+	position: relative;
+}
+
+#classroom .bookBody .bookBody_c span {
+	position: absolute;
+	left: 20px;
+	font-size: 23px;
+	color: #fff;
+}
+#classroom .bookBody .bookBody_b .bor ul {
+	border-left: 1px dashed #ccc;
+	padding-left: 0;
+	margin-left: 30px;
+}
+
+#classroom .bookBody .bookBody_b .dataData {
+	margin: 0 10px;
+}
+
+#classroom .bookBody .bookBody_b .bor {
+	margin: 0 15px;
+	border: 1px #ccc dashed;
+	padding: 0 10px;
+	border-bottom-right-radius: 5px;
+	border-top-right-radius: 5px;
+	border-left: 5px solid #ccc;
+	overflow: hidden;
+}
+#classroom .bookBody .bookBody_b .bor>label{
+	margin: 0;
+}
+#classroom .bookBody .bookBody_b .bor li {
+	margin: 0;
+	margin-left: -6px;
+	position: relative;
+	overflow: initial;
+}
+
+#classroom .bookBody .bookBody_b .bor li label {
+	background-color: #fff;
+}
+
+#classroom .bookBody .bookBody_b .bor li hr {
+	margin: 0;
+	max-width: 30px;
+	border-style: dashed;
+	border-color: #ccc;
+	position: absolute;
+	left: -18px;
+	top: 15px;
+	width: 15px;
+}
+#classroom .bookBody .bookBody_b .bor li input[type=text] {
+	max-width: 50px;
+	height: 20px;
+}
+
+/* 课程设置 */
+#Curriculum .newCustomers_maskLayer_box {
+	top: 15%;
+	max-width: 500px;
+	position: relative;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	box-shadow: 0 0 10px 1px #000;
+	z-index: 10;
+}
+
+#Curriculum .newCustomers_maskLayer_box_shen {
+	padding: 10px 0;
+}
+
+
+#Curriculum .bookBody .lef {
+	width: 50%;
+	text-align: center;
+}
+
+#Curriculum .bookBody .rig {
+	width: 50%;
+}
+#Curriculum .bookBody .rig .title.on{
+	font-size: 18px;
+}
+#Curriculum .bookBody .rig .txt.on{
+	font-size: 18px;
+}
+
+#Curriculum .bookBody .lef img {
+	width: 80%;
+	margin: 0 auto;
+	height: 180px;
+}
+
+#Curriculum .bookBody .rig div {
+	display: block;
+	font-weight: normal;
+	margin: 8px 0;
+}
+#Curriculum .bookBody .rig div:nth-child(1){
+	margin: 0;
+}
+#Curriculum .bookBody .rig h3{
+	margin: 0;
+}
+#Curriculum .bookBody .rig h3 span{
+	font-size: 20px;
+	font-weight: 700;
+}
+#Curriculum .bookBody .rig h3 strong{
+	font-size: 20px;
+}
+
+#Curriculum .bookBody .rig .startBtn {
+	display: block;
+	margin-top: 10px;
+	width: 130px;
+	height: 36px;
+	background: #0cc;
+	cursor: pointer;
+	border-radius: 5px;
+	;
+	line-height: 36px;
+	text-align: center;
+	color: #fff;
+}
+
+#Curriculum .newCustomers_maskLayer_box_botton {
+	text-align: center;
+	padding-bottom: 15px;
+}
+
+#Curriculum .newCustomers_maskLayer_box_botton .btn {
+	background-color: rgba(22, 155, 213, 1);
+	color: #fff;
+	min-width: 80px;
+	border-color: rgba(22, 155, 213, 1);
+}
+
+#Curriculum .newCustomers_maskLayer_box_botton .btn.btn-success {
+	background-color: rgba(0, 204, 204, 1);
+	color: #fff;
+	min-width: 80px;
+	border-color: rgba(0, 204, 204, 1);
+}
+
+#Curriculum .newCustomers_maskLayer_box_botton .btn.btn-danger {
+	background-color: red;
+	color: #fff;
+	min-width: 80px;
+	border-color: red;
+}
+#Curriculum .newCustomers_maskLayer_box_botton .btn.btn-red {
+	background-color: rgba(204, 204, 204, 1);
+	color: #fff;
+	min-width: 80px;
+	border-color: rgba(204, 204, 204, 1);
+}
+
+
+
+
+#container {
+	overflow: hidden;
+	padding: 0 5px;
+}
+
+.contains .list3 table .seaBlue {
+    min-width: 100px;
+}
+.contains .list3 table .blue {
+	min-width: 100px;
+}
+#appointmentWorkbench tr td.skyBlue{
+	min-width: 115px;
+}
+#consumptionSchedule thead td:nth-child(3){
+	min-width: 170px;
+}
+
+@media screen and (max-width: 960px) {
+	.left li img {
+		margin: 12px 0px 0px 20px;
+		float: left;
+	}
+}

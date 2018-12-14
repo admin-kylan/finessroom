@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>个人详情</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/base.css"/>
+    <link rel="stylesheet" href="../css/skin/jedate.css"/>
+    <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../css/customerPersonalDetails.css"/>
+</head>
+
+<body>
+<div id="customerPersonalDetails">
+    <div class="ImgModal-wrap">
+        <h5 class="ImgModal-title">
+            图片
+            <span class="close-modal-btn" @click="closeImgModal()">X</span>
+        </h5>
+        <img src="../img/u2871.png" alt="" id="ImgModal-ImgUrl">
+        <div class="ImgModal-footer">
+            <span class="ImgModal-red-btn" @click="picModalFile()">上传图片</span>
+            <span class="ImgModal-green-btn" @click="picDownload()">导入到本地</span>
+        </div>
+    </div>
+    <input id="file-fr" style="display: none;" ref="avatar" name="file" type="file"
+           @change="pictureShow($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
+    </p>
+    <div class="content">
+        <ul class="left">
+            <li class="on" v-on:click="LI(0)">基础档案</li>
+            <li v-on:click="LI(1)">生活详情</li>
+            <li v-on:click="LI(2)">运动档案</li>
+            <li v-on:click="LI(3)">工作行业</li>
+            <li v-on:click="LI(4)">心理状况</li>
+            <li v-on:click="LI(5)">家庭亲子</li>
+            <li v-on:click="LI(6)">生理状况</li>
+            <li v-on:click="LI(7)">皮肤档案</li>
+            <li v-on:click="LI(8)">头发档案</li>
+            <li v-on:click="LI(9)">塑形抗衰</li>
+            <li v-on:click="LI(10)">GFP表</li>
+        </ul>
+        <ul class="right">
+            <li class="on list1" v-if="LiIndex==0">
+                <h2>{{ClientInfo.clientName}}个人基础档案</h2>
+                <div class="date">
+                    <p>
+                        申请时间：<span v-text="ClientInfo.applyTime"></span>
+                    </p>
+                    <p>
+                        建档时间：<span v-text="ClientInfo.buildDate"></span>
+                    </p>
+                </div>
+                <table border="1" bordercolor="#ccc" class="tab1">
+                    <tbody>
+                    <tr>
+                        <td class="lightColor">客户姓名</td>
+                        <td><input type="text" v-model="ClientInfo.clientName"></td>
+                        <td class="lightColor">性别</td>
+                        <td>
+                            <select name="" v-model="ClientInfo.sex">
+                                <option value="0" selected="selected">男</option>
+                                <option value="1">女</option>
+                            </select>
+                        </td>
+                        <td rowspan="5">
+                            <img v-bind:src="ClientInfo.clientImg" alt="" class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">手机号码</td>
+                        <td>{{ClientInfo.mobile}}</td>
+                        <td class="lightColor">电话</td>
+                        <td class="dark"><input type="text" v-model="ClientInfo.tel"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">身高</td>
+                        <td><input type="text" v-model="ClientInfo.stature"></td>
+                        <td class="lightColor">体重</td>
+                        <td><input type="text" v-model="ClientInfo.weight"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">婚姻状况</td>
+                        <td>
+                            <select name="" v-model="ClientInfo.maritalStatus">
+                                <option value=false selected="selected">未婚</option>
+                                <option value=true>已婚</option>
+                            </select>
+                        </td>
+                        <td class="lightColor">籍贯</td>
+                        <td><input type="text" v-model="ClientInfo.nativePlace"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">证件名称</td>
+                        <td><input type="text" v-if="ClientInfo.idType==0" value="身份证"></td>
+                        <td v-if="ClientInfo.idType==1"><input type="text" value="港澳居民来往内地通行证"></td>
+                        <td v-if="ClientInfo.idType==2"><input type="text" value="台湾居民来往大陆通行证"></td>
+                        <td v-if="ClientInfo.idType==3"><input type="text" value="军人证"></td>
+                        <td v-if="ClientInfo.idType==4"><input type="text" value="护照"></td>
+                        <td class="lightColor">出生年月</td>
+                        <td><input type="text" v-model="ClientInfo.birthday"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">证件号码</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.idNo"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">证件地址</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.idAddress"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">家庭地址</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.homeAdd"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">电子邮件</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.email"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table border="1" bordercolor="#ccc" class="tab2">
+                    <tbody>
+                    <tr>
+                        <td id="chatAdd" rowspan="3" class="lightColor">使用聊天工具</td>
+                        <td class="lightColor">聊天工具</td>
+                        <td class="lightColor">聊天账号</td>
+                        <td colspan="2" class="lightColor">操作</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="QQ"></td>
+                        <td><input type="text" v-model="ClientInfo.qq"></td>
+                        <td colspan="2">
+                            <span class="toGreen">修改</span>
+                            <span class="dark">删除</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" value="">
+                        </td>
+                        <td><input type="text" value=""></td>
+                        <td colspan="2">
+                            <span class="toRed" @click="chatAdd($event)">新增</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">公司名称</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.companyName"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">职务名称</td>
+                        <td class="dark"><input type="text" v-model="ClientInfo.jobTitle"></td>
+                        <td class="lightColor">公司电话</td>
+                        <td colspan="2" class="dark"><input type="text" v-model="ClientInfo.companyTel"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">公司地址</td>
+                        <td class="dark"><input type="text" v-model="ClientInfo.companyAddress"></td>
+                        <td class="lightColor">大约收入</td>
+                        <td colspan="2" class="dark"><input type="text" v-model="ClientInfo.income"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">经营范围</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.businessScope"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">车牌号码</td>
+                        <td class="dark"><input type="text" v-model="ClientInfo.carNum"></td>
+                        <td class="lightColor">车辆品牌</td>
+                        <td colspan="2" class="dark"><input type="text" v-model="ClientInfo.carBrand"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">关注问题</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.cautionQuestion"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">备注</td>
+                        <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.note"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">推荐人</td>
+                        <td class="dark"><input type="text" v-model="ClientInfo.referenceName"></td>
+                        <td class="lightColor">推荐人电话</td>
+                        <td colspan="2" class="dark"><input type="text" v-model="ClientInfo.referenceTel"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">销售顾问</td>
+                        <td class="dark"><input type="text" v-model="ClientInfo.consultantName"></td>
+                        <td class="lightColor">销售顾问电话</td>
+                        <td colspan="2" class="dark"><input type="text" v-model="ClientInfo.consultantTel"></td>
+                    </tr>
+                    <tr>
+                        <td class="lightColor">服务会籍</td>
+                        <td><input type="text" v-model="ClientInfo.fwhjName"></td>
+                        <td class="lightColor">服务会籍电话</td>
+                        <td colspan="2"><input type="text" v-model="ClientInfo.fwhjTel"></td>
+                    </tr>
+                    <tr v-if="ClientInfo.coachs">
+                        <td id="coachAdded" :rowspan="ClientInfo.coachs.length+2" class="lightColor">教练</td>
+                        <td class="lightColor">角色</td>
+                        <td class="lightColor">角色名称</td>
+                        <td class="lightColor">联系方式</td>
+                        <td class="lightColor">操作</td>
+                    </tr>
+                    <tr v-for="(coach,index) in ClientInfo.coachs">
+                        <td class="t1" v-bind:data-id="coach.roleId">{{coach.firstName}}</td>
+                        <td class="t2">{{coach.rolRoleName}}</td>
+                        <td class="t3" v-bind:data-id="coach.personalId">{{coach.phone}}</td>
+                        <td class="coach">
+                            <span class="toGreen" @click="coachUpdate(index)">修改</span>
+                            <span class="dark">删除</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><select name="" id="">
+                            <option value="1"></option>
+                        </select></td>
+                        <td><input type="text" value=""></td>
+                        <td><select name="" id="">
+                            <option value="1"></option>
+                        </select></td>
+                        <td>
+                            <span class="toRed" @click="coachAdded($event)">新增</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="btn">
+                    <input type="button" value="保存" @click="save1"/>
+                </p>
+            </li>
+            <li class="on list2" v-if="LiIndex==1">
+                <p class="title">
+                    资源类型：<span>新资源</span>
+                </p>
+                <fieldset class="section1">
+                    <legend>性格描述</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-for="userInfo in UserLifeInfo"
+                               v-if="userInfo.type==1">
+                            <input name="character" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset class="section2">
+                    <legend>用餐习惯</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-for="userInfo in UserLifeInfo"
+                               v-if="userInfo.type==2">
+                            <input name="ECP" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset class="section3">
+                    <legend>饮食偏好</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-for="userInfo in UserLifeInfo"
+                               v-if="userInfo.type==3">
+                            <input name="FP" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset class="section4">
+                    <legend>交通工具</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-if="userInfo.type==4"
+                               v-for="userInfo in UserLifeInfo">
+                            <input name="vehicle" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+
+                    </p>
+                </fieldset>
+                <fieldset class="section5">
+                    <legend>阅读类型</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-if="userInfo.type==5"
+                               v-for="userInfo in UserLifeInfo">
+                            <input name="read" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+
+                    </p>
+
+                </fieldset>
+                <fieldset class="section6">
+                    <legend>喜欢香味</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-if="userInfo.type==6"
+                               v-for="userInfo in UserLifeInfo">
+                            <input name="aroma" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+
+                    </p>
+                </fieldset>
+                <fieldset class="section7">
+                    <legend>购物习惯</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-if="userInfo.type==7"
+                               v-for="userInfo in UserLifeInfo">
+                            <input name="shopping" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+
+                    </p>
+                </fieldset>
+                <fieldset class="section8">
+                    <legend>兴趣爱好</legend>
+                    <p>
+                        <label  v-bind:value="userInfo.id" v-for="userInfo in UserLifeInfo"
+                               v-if="userInfo.type==8">
+                            <input name="hobby" v-bind:value="userInfo.id" :id="userInfo.id" type="checkbox"/>{{userInfo.lifeName}}
+                        </label>
+
+                    </p>
+                </fieldset>
+                <fieldset class="section9">
+                    <legend>了解祈祷/资料来源</legend>
+                    <p style="width: 100%;">
+                        <label  v-for="userSource in UserSource">
+								<span>
+									<input type="radio" name="_radio" v-bind:value="userSource.sourceName"
+                                           :id="userSource.id"/>{{userSource.sourceName}}
+								</span>
+                            <input type="text" class="source" :name="userSource.id" :placeholder="userSource.prompt"/>
+                        </label>
+                    </p>
+                </fieldset>
+                <p class="btn">
+                    <input type="submit" @click="saveDetails" value="保存"/>
+                </p>
+            </li>
+            <li class="on list3" v-if="LiIndex==2">
+                <fieldset>
+                    <legend>体型</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==1">
+                            <input name="shape" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>运动爱好</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==2">
+                            <input name="sportsHobbies" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>喜欢舞蹈类型</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==3">
+                            <input name="dance" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>健身目的</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==4">
+                            <input name="objective" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>想锻炼部位</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==5">
+                            <input name="position" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>对私教的了解</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==6">
+                            <input name="know" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>运动历史状况</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==7">
+                            <input name="history" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                </fieldset>
+                <fieldset>
+                    <legend>可以运动时间</legend>
+                    <p>
+                        <label  v-for="sportInfo in SportInfo" v-if="sportInfo.type==8">
+                            <input name="time" v-bind:value="sportInfo.id" :id="sportInfo.id" type="checkbox"/>{{sportInfo.motionName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>希望运动类型/项目</legend>
+                    <textarea id="sportType"></textarea>
+                </fieldset>
+                <p class="btn">
+                    <input type="submit" value="保存" @click="saveSports"/>
+                </p>
+            </li>
+            <li class="on list4" v-if="LiIndex==3">
+                <fieldset>
+                    <legend>从事行业</legend>
+                    <p>
+                        <label  v-for="workInfo in WorkInfo" v-if="workInfo.type==1">
+                            <input name="industry" v-bind:value="workInfo.id" :id="workInfo.id" type="checkbox"/>{{workInfo.workName}}
+                        </label>
+
+                </fieldset>
+                <fieldset>
+                    <legend>工作性质</legend>
+                    <p>
+                        <label  v-for="workInfo in WorkInfo" v-if="workInfo.type==2">
+                            <input name="nature" v-bind:value="workInfo.id" :id="workInfo.id" type="checkbox"/>{{workInfo.workName}}
+                        </label>
+
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>工作情况</legend>
+                    <textarea id="workSituation"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>工作历史</legend>
+                    <textarea id="workHistory"></textarea>
+                </fieldset>
+                <p class="btn">
+                    <input type="submit" value="保存" @click="saveWork"/>
+                </p>
+            </li>
+            <li class="on list5" v-if="LiIndex==4">
+                <fieldset>
+                    <legend>家庭生活情况</legend>
+                    <textarea id="familyLife"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>睡眠习惯</legend>
+                    <p>
+                        <label  v-for="mentalityInfo in MentalityInfo" v-if="mentalityInfo.type==1">
+                            <input name="sleepHabits" v-bind:value="mentalityInfo.id" :id="mentalityInfo.id"
+                                   type="checkbox"/>{{mentalityInfo.mentalityName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>睡眠质量</legend>
+                    <p>
+                        <label  v-for="mentalityInfo in MentalityInfo" v-if="mentalityInfo.type==2">
+                            <input name="sleepQuality" v-bind:value="mentalityInfo.id" :id="mentalityInfo.id"
+                                   type="checkbox"/>{{mentalityInfo.mentalityName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>情绪状况</legend>
+                    <textarea id="emotionalState"></textarea>
+                </fieldset>
+                <p class="btn">
+                    <input type="submit" value="保存" @click="saveMentality"/>
+                </p>
+            </li>
+            <li class="on list6" v-if="LiIndex==5">
+                <table border="1" bordercolor="#ccc">
+                    <thead>
+                    <tr>
+                        <td>关系</td>
+                        <td>姓名</td>
+                        <td>电话</td>
+                        <td>工作单位</td>
+                        <td>职务</td>
+                        <td>是否会员</td>
+                        <td>居住城市</td>
+                        <td>操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(familyInfo,index) in FamilyInfo" class="familytr">
+                        <td>{{familyInfo.relations}}</td>
+                        <td>{{familyInfo.name}}</td>
+                        <td>{{familyInfo.tel}}</td>
+                        <td>{{familyInfo.workUnit}}</td>
+                        <td>{{familyInfo.position}}</td>
+                        <td v-if="familyInfo.member==true">是</td>
+                        <td v-if="familyInfo.member==false">否</td>
+                        <td>{{familyInfo.homeAdd}}</td>
+                        <td class="clickupdate">
+                            <span class="toGreen" @click="updateFamily(index,familyInfo.id)">修改</span>
+                            <span class="dark" @click="deleteFamily(familyInfo.id,index)">删除</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <span class="toRed" @click="addfamily($event)">增加</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li class="on list7" v-if="LiIndex==6">
+                <fieldset>
+                    <legend>医疗史</legend>
+                    <p>
+                        <label  v-for="psychologyInfo in PsychologyInfo" v-if="psychologyInfo.type==1">
+                            <input name="medical" v-bind:value="psychologyInfo.id" :id="psychologyInfo.id"
+                                   type="checkbox"/>{{psychologyInfo.physiologyName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>体型</legend>
+                    <p>
+                        <label  v-for="psychologyInfo in PsychologyInfo" v-if="psychologyInfo.type==2">
+                            <input name="size" v-bind:value="psychologyInfo.id" :id="psychologyInfo.id"
+                                   type="checkbox"/>{{psychologyInfo.physiologyName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>健康状况</legend>
+                    <p>
+                        <label  v-for="psychologyInfo in PsychologyInfo" v-if="psychologyInfo.type==3">
+                            <input name="health" v-bind:value="psychologyInfo.id" :id="psychologyInfo.id"
+                                   type="checkbox"/>{{psychologyInfo.physiologyName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>身体状况</legend>
+                    <p>
+                        <label  v-for="psychologyInfo in PsychologyInfo" v-if="psychologyInfo.type==4">
+                            <input name="body" v-bind:value="psychologyInfo.id" :id="psychologyInfo.id"
+                                   type="checkbox"/>{{psychologyInfo.physiologyName}}
+                        </label>
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <legend>以往病史</legend>
+                    <textarea id="medicalHistory"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>曾服药物</legend>
+                    <textarea id="drug"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>荷尔蒙情况</legend>
+                    <textarea id="theHormone"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>血压状况</legend>
+                    <textarea id="bloodPressure"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>月经状况</legend>
+                    <textarea id="menstruation"></textarea>
+                </fieldset>
+                <p class="btn">
+                    <input type="submit" value="保存" @click="savePsychology"/>
+                </p>
+            </li>
+            <li class="on list8 lis8910" v-if="LiIndex==7">
+                <div class="lefBar">
+                    <p class="date yellow">日期</p>
+                    <p class="time blue" @click="addDate" id="pdate">新增</p>
+                    <p class="time blue" v-for="item in time" @click="getContent(item.saveDate)">{{item.saveDate}}</p>
+                </div>
+                <div class="rigContent">
+                    <h2>{{ClientInfo.clientName}}皮肤档案</h2>
+                    <div class="instructions">
+                        <p class="lef" name="pdate"></p>
+                        <p class="rig">
+                            <span class="yellow">打印</span>
+                            <span class="green">导出</span>
+                        </p>
+                    </div>
+                    <fieldset>
+                        <legend>皮肤实况档案</legend>
+                        <div>
+                            <span>护理状态：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==1">
+                                    <input name="nursing" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>皮肤类型：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==2">
+                                    <input name="skinType" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>皮肤观察：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==3">
+                                    <input name="skinObservation" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>额头：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==4">
+                                    <input name="forehead" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>眼部：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==5">
+                                    <input name="eye" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>面颊：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==6">
+                                    <input name="cheek" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>鼻子：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==7">
+                                    <input name="nose" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>嘴唇：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==8">
+                                    <input name="lips" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>颈部：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==9">
+                                    <input name="neck" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>胸部：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==10">
+                                    <input name="chest" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>腰部：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==11">
+                                    <input name="waist" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>其他原因：</span>
+                            <textarea id="otherReasons"></textarea>
+                        </div>
+                    </fieldset>
+                    <fieldset class="sec">
+                        <legend>皮肤实况档案</legend>
+                        <div>
+                            <span>面疱原因：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==12">
+                                    <input name="causeOfPimples" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>黑斑原因：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==13">
+                                    <input name="blackSpot" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>皱纹原因：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==14">
+                                    <input name="causeOfWrinkles" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>过敏原因：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==15">
+                                    <input name="causeOfAnaphylaxis" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>毛孔粗大原因：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==16">
+                                    <input name="coarsePores" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>维他命需求：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==17">
+                                    <input name="vitamin" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>过敏史：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==18">
+                                    <input name="anaphylaxis" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>使用过护肤品：</span>
+                            <textarea id="skinCare"></textarea>
+                        </div>
+                        <div>
+                            <span>正使用护肤品：</span>
+                            <textarea id="skinCareProducts"></textarea>
+                        </div>
+                        <div>
+                            <span>其他说明：</span>
+                            <textarea id="otherInstructions"></textarea>
+                        </div>
+                        <div>
+                            <span>图片：</span>
+                            <p class="skin_img" id="skinImg">
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price1')"
+                                     id="price1">
+                                <!--<div class="delete_img" @click="deleimg(0)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price2')"
+                                     id="price2">
+                                <!--<div class="delete_img" @click="deleimg(1)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price3')"
+                                     id="price3">
+                                <!--<div class="delete_img" @click="deleimg(2)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price4')"
+                                     id="price4">
+                                <!--<div class="delete_img" @click="deleimg(3)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price5')"
+                                     id="price5">
+                                <!--<div class="delete_img" @click="deleimg(4)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price6')"
+                                     id="price6">
+                                <!--<div class="delete_img" @click="deleimg(5)">X</div>-->
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    <fieldset class="third">
+                        <legend>专业建议（填写具体情况）</legend>
+                        <div>
+                            <span>希望改善问题：</span>
+                            <textarea id="improveProblem"></textarea>
+                        </div>
+                        <div>
+                            <span>皮肤意愿：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==19">
+                                    <input name="skinIntention" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>身体意愿：</span>
+                            <p>
+                                <label  v-for="skinInfo in SkinInfo" v-if="skinInfo.archivesType==20">
+                                    <input name="physicalIntention" v-bind:value="skinInfo.id" :id="skinInfo.id"
+                                           type="checkbox"/>{{skinInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>建议及注意事项：</span>
+                            <textarea id="proposal"></textarea>
+                        </div>
+                        <div>
+                            <span>护理建议及注意事项：</span>
+                            <textarea id="nursingAdvice"></textarea>
+                        </div>
+                        <div>
+                            <span>产品搭配建议：</span>
+                            <textarea id="productProposal"></textarea>
+                        </div>
+                    </fieldset>
+                </div>
+                <p class="btn">
+                    <input type="submit" value="保存"  @click="saveSkin"/>
+                </p>
+            </li>
+            <li class="on list9 lis8910" v-if="LiIndex==8">
+                <div class="lefBar">
+                    <p class="date yellow">日期</p>
+                    <p class="time blue" @click="addDate" >新增</p>
+                    <p class="time blue" v-for="item in time" @click="getContent(item.saveDate)">{{item.saveDate}}</p>
+                </div>
+                <div class="rigContent">
+                    <h2>{{ClientInfo.clientName}}头发档案</h2>
+                    <div class="instructions">
+                        <p class="lef" name="pdate"></p>
+                        <p class="rig">
+                            <span class="yellow">打印</span>
+                            <span class="green">导出</span>
+                        </p>
+                    </div>
+                    <fieldset>
+                        <legend>头发实况档案</legend>
+                        <div>
+                            <span>头发颜色：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==1">
+                                    <input name="hairColor" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>颜色原因：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==2">
+                                    <input name="colorReasons" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <div class="clearFix">
+                                <span>头发种类：</span>
+                                <p>
+                                    <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==3">
+                                        <input name="colorReasons" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                               type="checkbox"/>{{hairInfo.archivesName}}
+                                    </label>
+                                </p>
+                            </div>
+                            <p class="txt">钢发：比较粗硬，生长稠密，含水量也较多，有弹性，弹力也稳固。</p>
+                            <p class="txt">绵发：比较细软的头发，缺少硬度，弹性较差。</p>
+                            <p class="txt">油发：这种头发油质较多，弹性较强，抵抗力强，弹性不稳定。 </p>
+                            <p class="txt">沙发：缺乏油脂，含水量少。</p>
+                            <p class="txt">卷发：弯曲丛生，软如羊毛。</p>
+                        </div>
+                        <div>
+                            <span>头发质地：</span>
+                            <p class="text">中性发：是光泽、柔顺、健康的发质。既不油腻也不干燥，软硬适度，丰润柔软，有自然的光泽。适合做各种发型，是最理想的发质。</p>
+                            <p class="text">干性发：头发干燥，触摸有粗糙感，不润滑，缺乏光泽，造型后易变形。</p>
+                            <p class="text">油性发：头发油腻,触摸有粘腻感,头皮屑多,缺乏光泽.不适合平直的发型,应选用蓬松发型,使头皮接触更多空气，减少头部油脂的产生。 </p>
+                            <p class="text">受损发：头发干燥，触摸有粗糙感，缺乏光泽，颜色枯黄。发尾分叉，不易造型。</p>
+                        </div>
+                        <div>
+                            <span>头发受损原因：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==5">
+                                    <input name="damage" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>其他说明：</span>
+                            <textarea id="otherInstructions2"></textarea>
+                        </div>
+                    </fieldset>
+                    <fieldset class="sec">
+                        <legend>头发说明</legend>
+                        <div>
+                            <span>烫发方式：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==6">
+                                    <input name="perm" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>护发频率：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==7">
+                                    <input name="hairCare" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>护理方式：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==8">
+                                    <input name="nursing2" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>喜欢头发类型：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==9">
+                                    <input name="hairType" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>洗发水类型：</span>
+                            <p>
+                                <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==10">
+                                    <input name="shampoo" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                           type="checkbox"/>{{hairInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>图片：</span>
+                            <p class="skin_img" id="hairImg">
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('hair1')"
+                                     id="hair1">
+                                <!--<div class="delete_img" @click="deleimg(0)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('hair2')"
+                                     id="hair2">
+                                <!--<div class="delete_img" @click="deleimg(1)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('hair3')"
+                                     id="hair3">
+                                <!--<div class="delete_img" @click="deleimg(2)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('hair4')"
+                                     id="hair4">
+                                <!--<div class="delete_img" @click="deleimg(3)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('hair5')"
+                                     id="hair5">
+                                <!--<div class="delete_img" @click="deleimg(4)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('hair5')"
+                                     id="hair6">
+                                <!--<div class="delete_img" @click="deleimg(5)">X</div>-->
+                            </div>
+                            </p>
+                        </div>
+                    </fieldset>
+                    <fieldset class="third">
+                        <legend>专业建议（填写具体情况）</legend>
+                        <div>
+                            <span>希望效果：</span>
+                            <textarea id="effect"></textarea>
+                        </div>
+                        <div>
+                            <span>希望颜色：</span>
+                            <textarea id="color"></textarea>
+                        </div>
+                        <div>
+                            <span>希望发型：</span>
+                            <textarea id="hairstyle"></textarea>
+                        </div>
+                        <div>
+                            <span>建议及注意事项：</span>
+                            <textarea id="proposal2"></textarea>
+                        </div>
+                        <div>
+                            <span>护理建议及注意事项：</span>
+                            <textarea id="nursingAdvice2"></textarea>
+                        </div>
+                        <div>
+                            <span>产品搭配建议：</span>
+                            <textarea id="productCollocation"></textarea>
+                        </div>
+                    </fieldset>
+                </div>
+                <p class="btn">
+                    <input type="submit" value="保存" @click="saveHair"/>
+                </p>
+            </li>
+            <li class="on list10 lis8910" v-if="LiIndex==9">
+                <div class="lefBar">
+                    <p class="date yellow">日期</p>
+                    <p class="time blue" @click="addDate" >新增</p>
+                    <p class="time blue" v-for="item in time" @click="getContent(item.saveDate)">{{item.saveDate}}</p>
+                </div>
+                <div class="rigContent">
+                    <h2>{{ClientInfo.clientName}}塑形抗衰</h2>
+                    <div class="instructions">
+                        <p class="lef" name="pdate"></p>
+                        <p class="rig">
+                            <span class="yellow">打印</span>
+                            <span class="green">导出</span>
+                        </p>
+                    </div>
+                    <fieldset>
+                        <legend>塑行抗衰档案</legend>
+                        <div>
+                            <span>脸型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==1">
+                                    <input name="face" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>鼻型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==2">
+                                    <input name="nose" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>胸型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==3">
+                                    <input name="chest" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>腰型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==4">
+                                    <input name="waist" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>手型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==5">
+                                    <input name="hand" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>腿型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==6">
+                                    <input name="leg" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>臀型：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==7">
+                                    <input name="buttocks" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>过敏史：</span>
+                            <p>
+                                <label  v-for="plasticityInfo in PlasticityInfo"
+                                       v-if="plasticityInfo.archivesType==8">
+                                    <input name="allergy" v-bind:value="plasticityInfo.id" :id="plasticityInfo.id"
+                                           type="checkbox"/>{{plasticityInfo.archivesName}}
+                                </label>
+                            </p>
+                        </div>
+                        <div>
+                            <span>希望结果：</span>
+                            <textarea id="hopeResult"></textarea>
+                        </div>
+                        <div>
+                            <span>用到产品：</span>
+                            <textarea id="useProduct"></textarea>
+                        </div>
+                        <div>
+                            <span>专家建议：</span>
+                            <textarea id="product"></textarea>
+                        </div>
+                        <div>
+                            <span>拟定时间：</span>
+                            <textarea id="time"></textarea>
+                        </div>
+                        <div>
+                            <span>实际情况：</span>
+                            <textarea id="physicalTruth"></textarea>
+                        </div>
+                        <div>
+                            <span>禁忌：</span>
+                            <textarea id="taboo"></textarea>
+                        </div>
+                        <div class="imgDiv">
+                            <span>原型图片：</span>
+                            <p class="skin_img" id="plasticityImg">
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity1')"
+                                     id="plasticity1">
+                                <!--<div class="delete_img" @click="deleimg(0)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity2')"
+                                     id="plasticity2">
+                                <!--<div class="delete_img" @click="deleimg(1)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity3')"
+                                     id="plasticity3">
+                                <!--<div class="delete_img" @click="deleimg(2)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity4')"
+                                     id="plasticity4">
+                                <!--<div class="delete_img" @click="deleimg(3)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity5')"
+                                     id="plasticity5">
+                                <!--<div class="delete_img" @click="deleimg(4)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity5')"
+                                     id="plasticity6">
+                                <!--<div class="delete_img" @click="deleimg(5)">X</div>-->
+                            </div>
+                            </p>
+                        </div>
+                        <div class="imgDiv">
+                            <span>之后图片：</span>
+                            <p class="skin_img" id="plasticityImg2">
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity7')"
+                                     id="plasticity7">
+                                <!--<div class="delete_img" @click="deleimg(0)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity8')"
+                                     id="plasticity8">
+                                <!--<div class="delete_img" @click="deleimg(1)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity9')"
+                                     id="plasticity9">
+                                <!--<div class="delete_img" @click="deleimg(2)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity10')"
+                                     id="plasticity10">
+                                <!--<div class="delete_img" @click="deleimg(3)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity11')"
+                                     id="plasticity11">
+                                <!--<div class="delete_img" @click="deleimg(4)">X</div>-->
+                            </div>
+                            <div class="skinrela">
+                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('plasticity12')"
+                                     id="plasticity12">
+                                <!--<div class="delete_img" @click="deleimg(5)">X</div>-->
+                            </div>
+                            </p>
+                        </div>
+                    </fieldset>
+                </div>
+                <p class="btn">
+                    <input type="submit" value="保存" @click="savePlasticity"/>
+                </p>
+            </li>
+            <li class="on list11" v-if="LiIndex==10">
+                GFP表
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+
+<script src="../js/jedate.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="customerPersonalDetails.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script>
+    customerPersonalDetails.init();
+</script>
+
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrShopCtypeConsumePlsetMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrShopCtypeConsumePlset">
+        <id column="id" property="id" />
+        <result column="use_select" property="useSelect" />
+        <result column="use_days" property="useDays" />
+        <result column="start_time_am" property="startTimeAm" />
+        <result column="end_time_am" property="endTimeAm" />
+        <result column="start_time_pm" property="startTimePm" />
+        <result column="end_time_pm" property="endTimePm" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="consume_id" property="consumeId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        use_select AS useSelect, use_days AS useDays, start_time_am AS startTimeAm, end_time_am AS endTimeAm, start_time_pm AS startTimePm, end_time_pm AS endTimePm, CustomerCode, consume_id AS consumeId, id
+    </sql>
+
+    <select id="selectCtypeConsumePlset" resultType="com.yj.dal.model.FrShopCtypeConsumePlset">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        fr_shop_ctype_consume_plset
+        WHERE consume_id=#{consumeId}
+
+    </select>
+
+
+
+
+
+</mapper>

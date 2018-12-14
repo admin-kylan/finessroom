@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>会员权益</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/reset.css" />
+	<!-- <link rel="stylesheet" href="../css/base.css" /> -->
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/combobox.css" />
+	<link rel="stylesheet" href="../css/customerMemberBenefits.css" />
+</head>
+
+<body>
+	<div id="customerMemberBenefits">
+		<div class="customerMemberBenefits">
+			<fieldset>
+				<legend><span>会员所持有权益</span></legend>
+				<div>
+					<ul>
+						<li>
+							<div>
+								<a href="customerMembershipCard.html" target="customerrightFrame" onclick="window.parent.customerrightFrame_botton_li(1)">
+									<div>会员卡</div>
+									<div>
+										<span>5</span> <img src="../img/u2905.png" alt="">
+									</div>
+									<div>当前会员所持有会员卡数</div>
+								</a>
+							</div>
+						</li>
+						<li>
+							<div>
+								<a href="customerTicketPoint.html" target="customerrightFrame" onclick="window.parent.customerrightFrame_botton_li(3)">
+									<div>票券/积分</div>
+									<div>
+										<span>30/2000积分</span> <img src="../img/u2907.png" alt="">
+									</div>
+									<div>当前会员所持有票券积分</div>
+								</a>
+							</div>
+						</li>
+						<li>
+						
+								<div>
+										<a href="customerCourseProject.html" target="customerrightFrame" onclick="window.parent.customerrightFrame_botton_li(2)">
+											<div>项目/产品</div>
+											<div>
+												<span>30</span> <img src="../img/u2909.png" alt="">
+											</div>
+											<div>当前会员拥有项目/产品</div>
+										</a>
+								</div>
+							
+						</li>
+						<li>
+							<div>
+								<div>签到天数</div>
+								<div>
+									<span>15天/漏签6天</span> <img src="../img/u2913.png" alt="">
+								</div>
+								<div>当前会员签到天数</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend><span>会员照片：</span></legend>
+				<div class="customerMemberBenefits_photo">
+					<ul>
+						<li>
+							<img src="../img/u2871.png" alt="" class="img-responsive">
+						</li>
+						<li>
+							<img src="../img/u2871.png" alt="" class="img-responsive">
+						</li>
+						<li>
+							<img src="../img/u2871.png" alt="" class="img-responsive">
+						</li>
+						<li>
+							<img src="../img/u2871.png" alt="" class="img-responsive">
+						</li>
+						<li>
+							<img src="../img/u2871.png" alt="" class="img-responsive">
+						</li>
+					</ul>
+
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>使用限定：（<span>如果单张卡有使用设置的话以卡为主</span>）</legend>
+				<div>
+					<form action="" method="POST" role="form" class="form-horizontal">
+						<div class="form-group">
+							<label for="usePassword" class="col-md-1 control-label">使用密码：</label>
+							<div class="col-md-10">
+								<input type="password" class="form-control" id="usePassword" placeholder="使用密码">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="usingFingerprint" class="col-md-1 control-label">使用指纹：</label>
+							<div class="col-md-10">
+								<input type="button" class="btn btn-info" value="指纹未录入">
+								<input type="button" class="btn btn-default on" value="录入指纹">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="using5TheFingerVein" class="col-md-1 control-label">使用指静脉：</label>
+							<div class="col-md-10">
+								<input type="button" class="btn btn-info" value="指静脉未录入">
+								<input type="button" class="btn btn-default on" value="录入指静脉">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="usingFacebook" class="col-md-1 control-label">使用脸谱：</label>
+							<div class="col-md-10">
+								<input type="button" class="btn btn-success" value="脸谱已录入">
+								<input type="button" class="btn btn-default on" value="重新录入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="usingFacebook" class="col-md-1 control-label">备注：</label>
+							<div class="col-md-10">
+								<textarea name=""  class="form-control" id="" ></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</fieldset>
+			<div>
+				<a href="javascript:;" class="btn btn-danger">保存</a>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    $(function () {
+        var id = document.URL.split("=")[1];
+        $.cookie('cid', id)  //存入值
+    })
+</script>
+
+</html>

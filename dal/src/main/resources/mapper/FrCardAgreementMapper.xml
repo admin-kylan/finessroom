@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardAgreementMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardAgreement">
+        <id column="id" property="id" />
+        <result column="agreement_id" property="agreementId" />
+        <result column="card_id" property="cardId" />
+        <result column="agreement_no" property="agreementNo" />
+        <result column="is_using" property="isUsing" />
+        <result column="CustomerCode" property="CustomerCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        agreement_id AS agreementId, card_id AS cardId, agreement_no AS agreementNo, is_using AS isUsing, CustomerCode, id
+    </sql>
+
+</mapper>

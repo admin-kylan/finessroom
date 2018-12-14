@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderInfo">
+        <id column="a.id" property="id" />
+        <result column="a.card_id" property="cardId" />
+        <result column="a.card_type_id" property="cardTypeId" />
+        <result column="a.order_no" property="orderNo" />
+        <result column="a.client_id" property="clientId" />
+        <result column="a.pay_type" property="payType" />
+        <result column="a.consume_type" property="consumeType" />
+        <result column="a.order_state" property="orderState" />
+        <result column="a.total_price" property="totalPrice" />
+        <result column="a.discount" property="discount" />
+        <result column="a.change_num" property="changeNum" />
+        <result column="a.full_type" property="fullType" />
+        <result column="a.discount_full" property="discountFull" />
+        <result column="a.discount_reduce" property="discountReduce" />
+        <result column="a.discount_price" property="discountPrice" />
+        <result column="a.discount_num" property="discountNum" />
+        <result column="a.need_price" property="needPrice" />
+        <result column="a.no_price" property="noPrice" />
+        <result column="a.ret_change" property="retChange" />
+        <result column="a.shop_id" property="shopId" />
+        <result column="a.personnel_id" property="personnelId" />
+        <result column="a.flag" property="flag" />
+        <result column="a.type" property="type" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.buy_rights_num" property="buyRightsNum" />
+        <result column="a.give_rights_num" property="giveRightsNum" />
+        <result column="a.status" property="status" />
+        <result column="a.audit_status" property="auditStatus" />
+        <result column="a.status_user_id" property="statusUserId" />
+        <result column="a.audit_user_id" property="auditUserId" />
+        <result column="a.allot_set_type" property="allotSetType" />
+        <result column="a.deposit_time" property="depositTime" />
+        <result column="a.invoice_status" property="invoiceStatus" />
+        <result column="a.authorizing_user_Id" property="authorizingUserId" />
+        <result column="a.displace_company " property="displaceCompany " />
+        <result column="a.displace_way" property="displaceWay" />
+        <result column="a.card_set_id" property="cardSetId" />
+        <result column="a.give_client_card_id" property="giveClientCardId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_id AS cardId,
+        a.card_type_id AS cardTypeId,
+        a.order_no AS orderNo,
+        a.client_id AS clientId,
+        a.pay_type AS payType,
+        a.consume_type AS consumeType,
+        a.order_state AS orderState,
+        a.total_price AS totalPrice,
+        a.discount,
+        a.change_num AS changeNum,
+        a.full_type AS fullType,
+        a.discount_full AS discountFull,
+        a.discount_reduce AS discountReduce,
+        a.discount_price AS discountPrice,
+        a.discount_num AS discountNum,
+        a.need_price AS needPrice,
+        a.no_price AS noPrice,
+        a.ret_change AS retChange,
+        a.shop_id AS shopId,
+        a.personnel_id AS personnelId,
+        a.flag,
+        a.type,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.buy_rights_num AS buyRightsNum,
+        a.give_rights_num AS giveRightsNum,
+        a.status,
+        a.audit_status AS auditStatus,
+        a.status_user_id AS statusUserId,
+        a.audit_user_id AS auditUserId,
+        a.allot_set_type AS allotSetType,
+        a.deposit_time AS depositTime,
+        a.invoice_status AS invoiceStatus,
+        a.authorizing_user_Id AS authorizingUserId,
+        a.displace_company  AS displaceCompany,
+        a.displace_way AS displaceWay,
+        a.card_set_id AS cardSetId,
+        a.give_client_card_id AS giveClientCardId,
+        a.id
+    </sql>
+
+    <sql id="Base_Column_List_Card_Type">
+        b.card_type_name AS cardTypeName,
+        b.service_life AS serviceLife,
+        b.swiping_interval AS swipingInterval,
+        b.swiping_time AS swipingTime,
+        b.original_price AS boriginalPrice,
+        b.sales_price AS bsalesPrice,
+        b.total_num AS btotalNum,
+        b.qt_xxjg_update AS qtXxjgUpdate,
+        b.qt_xxqy_update AS qtXxqyUpdate,
+        b.qt_zsqy_update AS qtZsqyUpdate,
+        b.qt_lrzp_update AS qtLrzpUpdate,
+        b.qt_zdxxjg AS qtZdxxjg,
+        b.qt_zdqy AS qtZdqy,
+        b.renew_common_price AS renewCommonPrice,
+        b.renew_level1_price AS renewLevel1Price,
+        b.renew_level2_price AS renewLevel2Price,
+        b.renew_level3_price AS renewLevel3Price,
+        b.renew_level4_price AS renewLevel4Price,
+        b.qt_can_renew AS qtCanRenew,
+        b.type_set_state AS btypeSetState,
+        b.type btype,
+        b.card_type_set AS bcardTypeSet,
+        b.shop_id AS bshopId,
+        b.can_change_type AS bcanChangeType,
+        b.transfer_fee AS btransferFee,
+        b.id bId,
+    </sql>
+
+    <!--获取会员的所有新购数据-->
+    <select id="getCardOrederList" resultType="java.util.Map">
+        SELECT
+        (SELECT TOP 1 c.card_type_name FROM fr_card_type c WHERE c.id = (SELECT TOP 1 b.card_flag_id FROM fr_card_original_set b where a.card_id = b.card_id)) cardFlag,
+        (SELECT TOP 1 b.card_type_name FROM fr_card_original_set b where a.card_id = b.card_id) cardName,
+        (SELECT TOP 1 b.sales_price FROM fr_card_original_set b where a.card_id = b.card_id) salesPrice,
+        (SELECT TOP 1 b.service_life FROM fr_card_original_set b where a.card_id = b.card_id) serviceLife,
+        (SELECT s.ShopName FROM Shop s where s.id = a.shop_id) shopName,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id) personnelName,
+        <include refid="Base_Column_List" />
+         FROM fr_card_order_info a
+         WHERE a.CustomerCode = #{CustomerCode}
+         AND a.client_id = #{clientId}
+         AND a.type = 1
+         ORDER BY a.create_time DESC
+    </select>
+
+
+    <select id="queryOrderInfoPrice" resultType="java.util.Map">
+        SELECT
+           (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and b.order_type ='1' ) payPrice,
+           (SELECT SUM(f.total_price) FROM fr_card_order_complement f WHERE f.card_id = a.card_id
+                        AND f.order_state = 1 AND f.status != 2 AND f.audit_status != 2 )complementPrice,
+          <include refid="Base_Column_List" />
+        FROM fr_card_order_info a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND a.card_id = #{cardId}
+        AND a.order_state != 3  AND a.order_state != 4  AND a.order_state != 5
+        AND (a.pay_type = '5' or a.pay_type = '2')
+    </select>
+
+    <select id="getBlackCardData" resultType="java.util.Map">
+        SELECT
+          (SELECT b.zk_xffs FROM fr_card_original_set b  WHERE a.card_set_id = b.id)zkXffs,
+          (SELECT c.card_type_name FROM fr_card_type c WHERE c.id = (SELECT b.card_flag_id FROM fr_card_original_set b where a.card_id = b.card_id)) cardFlag,
+          (SELECT b.card_type_name FROM fr_card_original_set b where a.card_id = b.card_id) cardName,
+          (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id) saleName,
+          (SELECT p.Status FROM PersonnelInfo p WHERE a.personnel_id = p.id) saleStatus,
+          (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and b.order_type ='1' ) payPrice,
+        <include refid="Base_Column_List" />
+        FROM fr_card_order_info a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND  a.card_id = #{cardId}
+        AND a.client_id = #{clientId}
+        <if test="status!=null and status!=''">
+            AND a.status = #{status}
+        </if>
+        <if test="auditStatus!=null and auditStatus!=''">
+            AND a.audit_status = #{auditStatus}
+        </if>
+        <if test="isUsing!=null and isUsing!=''">
+            AND a.is_using = #{isUsing}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="queryOrderInfoAllPrice" resultType="java.lang.Double">
+        SELECT
+        (SELECT SUM(b.pay_price) FROM fr_card_order_complement f
+                LEFT JOIN fr_card_order_pay_mode b ON b.order_id = f.id WHERE f.card_id = a.card_id AND b.order_type = '6'
+                AND f.order_state = 1 AND f.status = 1 AND f.audit_status = 1 )complementPrice
+        FROM fr_card_order_info a
+        WHERE  a.CustomerCode = #{CustomerCode}
+        AND  a.status = 1
+        AND  a.audit_status = 1
+        AND  a.is_using = 1
+        AND  a.card_id = #{cardId}
+        AND (a.pay_type = '5' or a.pay_type = '2')
+    </select>
+
+    <select id="queryCardAndType" resultType="java.util.Map">
+        SELECT
+          (SELECT c.invalid_time  FROM fr_card c WHERE  c.id = a.card_id) cardInvalidTime,
+          (SELECT c.bind_time  FROM fr_card c WHERE  c.id = a.card_id) cardBindTime,
+          (SELECT c.status  FROM fr_card c WHERE  c.id = a.card_id) cardStatus,
+          (SELECT c.card_no  FROM fr_card c WHERE  c.id = a.card_id) cardNo,
+          (SELECT c.external_no  FROM fr_card c WHERE  c.id = a.card_id) externalNo,
+          (SELECT c.level_name  FROM fr_level c WHERE  c.id = (SELECT c.level_id  FROM fr_client c WHERE  c.id = a.client_id)) levelName,
+          (SELECT c.card_type_name FROM fr_card_type c WHERE c.id = b.p_id) cardFlag,
+          (SELECT c.renew_common_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewCommonPrice,
+          (SELECT c.renew_level1_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel1Price,
+          (SELECT c.renew_level2_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel2Price,
+          (SELECT c.renew_level3_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel3Price,
+          (SELECT c.renew_level4_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel4Price,
+          <include refid="Base_Column_List_Card_Type" />
+          <include refid="Base_Column_List" />
+        FROM  fr_card_order_info a
+        LEFT JOIN fr_card_type b
+        ON a.card_type_id = b.id AND b.is_using = 1
+        WHERE a.card_id = #{cardId}
+          AND a.CustomerCode = #{CustomerCode}
+          AND a.client_id = #{clientId}
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

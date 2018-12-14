@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrFollowPicMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrFollowPic">
+        <id column="id" property="id" />
+        <result column="employee_client_follow_id" property="employeeClientFollowId" />
+        <result column="follow_mark_pic" property="followMarkPic" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        employee_client_follow_id AS employeeClientFollowId, follow_mark_pic AS followMarkPic, id
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_ListT">
+        employee_client_follow_id, follow_mark_pic , id
+    </sql>
+
+    <sql id="Base_where">
+        <where>
+            <if test="id != null and id !=''">
+                id = #{Id}
+            </if>
+            <if test="employeeClientFollowId != null and employeeClientFollowId !=''">
+                employee_client_follow_id = #{employeeClientFollowId}
+            </if>
+            <if test="followMarkPic != null and followMarkPic !=''">
+                follow_mark_pic = #{followMarkPic}
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryPricList" resultMap="BaseResultMap">
+        SELECT
+         <include refid="Base_Column_ListT" />
+        FROM
+         fr_follow_pic
+         <include refid="Base_where"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>可认领客户</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/base.css"/>
+    <link rel="stylesheet" href="../css/skin/jedate.css"/>
+    <link rel="stylesheet" href="../css/myClaimingCustomers.css"/>
+    <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../css/myPagination.css"/>
+</head>
+
+<body>
+<div id="myClaimingCustomers">
+    <div class="tab clearfix">
+        <span>现有客户认领</span>
+    </div>
+    <fieldset class="section2">
+        <legend>筛选条件</legend>
+        <div class="follow">
+            <div class="follow">
+                门店：
+                <select name="" id="shopId" v-model="customerFilter.shopId">
+                    <option value="">--门店--</option>
+                    <option :value="item.id" v-for="(item,index) in ShopInfo">{{item.shopName}}</option>
+                </select>
+                性别：
+                <label><input type="radio" name="sex" v-model="customerFilter.sex" value="0"> <span>男</span></label>
+                <label><input type="radio" name="sex" v-model="customerFilter.sex" value="1"> <span>女</span></label>
+                服务会籍：
+                <select name="" id="fwhjNameId" v-model="customerFilter.fwhjNameId">
+                    <option value="">--服务会籍--</option>
+                    <option :value="item.mobile" v-for="(item,index) in ServiceInfo">{{item.relName}}</option>
+                </select>
+                销售顾问：
+                <select name="" id="consultantId" v-model="customerFilter.consultantId">
+                    <option value="">--销售顾问--</option>
+                    <option :value="item.id" v-for="(item,index) in ConsultantInfo">{{item.relName}}</option>
+                </select>
+                教练：
+                <select name="" id="personalId" v-model="customerFilter.personalId">
+                    <option value="">--教练--</option>
+                    <option :value="item.id" v-for="(item,index) in CoachInfo">{{item.relName}}</option>
+                </select>
+            </div>
+            <div class="screening">
+                <select name="" id="dateType" v-model="customerFilter.dateType">
+                    <option value="0">建档日期</option>
+                    <option value="1">最近更新日期</option>
+                </select>
+                <input type="text" class="jeinput startDate" placeholder="开始日期" v-model="customerFilter.startTime"
+                       readonly/>至
+                <input type="text" class="jeinput endDate" placeholder="结束日期" v-model="customerFilter.endTime"
+                       readonly/>
+                <input type="submit" value="全部" @click="clickTime(0)"/>
+                <input type="submit" value="本天" @click="clickTime(1)"/>
+                <input type="submit" value="本周" @click="clickTime(2)"/>
+                <input type="submit" value="本月" @click="clickTime(3)"/>
+                <input type="submit" value="本季度" @click="clickTime(4)"/>
+                <input type="submit" value="本年" @click="clickTime(5)"/>
+                <input type="text" placeholder="多少天无人跟进" v-model="customerFilter.noFollow"
+                       @keyup.enter="buildFilterDate">
+                <input type="text" placeholder="手动跟进次数" v-model="customerFilter.manualCount"
+                       @keyup.enter="buildFilterDate">
+                <input type="text" placeholder="自动跟进次数" v-model="customerFilter.automaticCount"
+                       @keyup.enter="buildFilterDate">
+            </div>
+            <div class="search">
+                <input type="text" placeholder="姓名/手机号码" v-model="customerFilter.keyword"
+                       @keyup.enter="buildFilterDate"/>
+                <input type="button" value="搜索" @click="buildFilterDate"/>
+                <input type="button" value="打印"/>
+                <input type="button" value="导出"/>
+                <input type="button" value="帮助?"/>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="section1">
+        <legend>认领操作</legend>
+        <div class="category">
+            <p>提示：共【<span>{{customerTable.totalCount}}</span>】个客户可被认领，每【<span>{{ClaimingInfo.rlHours}}</span>】小时能认领【{{ClaimingInfo.rlNum}}】个客户！您当前最多可认领【{{ClaimingInfo.rlNum}}】个客户
+                <input type="button" value="认领" @click="claiming"/></p>
+        </div>
+    </fieldset>
+    <div class="tableWrap">
+        <div class="tabW">
+            <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+                <thead>
+                <tr>
+                    <td><input type="checkbox" id="pcheckbox" @click="queryAll"/></td>
+                    <td>序号</td>
+                    <td>姓名</td>
+                    <td>性别</td>
+                    <td>联系方式</td>
+                    <td>建档时间</td>
+                    <td>最近跟进日期</td>
+                    <td>手动跟进次数</td>
+                    <td>自动跟进次数</td>
+                    <td>跟进内容</td>
+                    <td>多少天无人跟进</td>
+                    <td>销售顾问</td>
+                    <td>服务会籍</td>
+                    <td>服务人员</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item,index) in customerTable.list">
+                    <td><input type="checkbox"v-bind:value="item.id" name="checkAll"/></td>
+                    <td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
+                    <td class="toblue">{{item.clientName}}</td>
+                    <td>{{item.sex==0?'男':'女'}}</td>
+                    <td>{{item.mobile}}</td>
+                    <td>{{item.buildDate}}</td>
+                    <td>{{item.followTime}}</td>
+                    <td>{{item.manualCount}}</td>
+                    <td>{{item.automaticCount}}</td>
+                    <td class="toblue">{{item.followContent}}</td>
+                    <td class="tored">{{item.onFollow}}</td>
+                    <td>{{item.consultantName}}</td>
+                    <td>{{item.fwhjName}}</td>
+                    <td>Klaus</td>
+                </tr>
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr> <tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox" /></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">张三</td>-->
+                <!--<td>男</td>-->
+                <!--<td class="toyellow">18677789054</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>2018-08-15 16:30</td>-->
+                <!--<td>10</td>-->
+                <!--<td>30</td>-->
+                <!--<td class="toblue">手动：报表认领</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--<td>Klaus</td>-->
+                <!--</tr>-->
+
+
+                </tbody>
+            </table>
+        </div>
+        <div id="pagination" class="pagination"></div>
+        <!--<div class="page clearfix">-->
+        <!--<p class="fl">【共5页/总100条】</p>-->
+        <!--<ul class="fr">-->
+        <!--<li>首页</li>-->
+        <!--<li>上一页</li>-->
+        <!--<li>1</li>-->
+        <!--<li>下一个</li>-->
+        <!--<li>尾页</li>-->
+        <!--<li>第<input type="text">页</li>-->
+        <!--</ul>-->
+        <!--</div>-->
+    </div>
+</div>
+
+</body>
+<!--基础-->
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<!--插件-->
+<script src="../js/loading.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="/js/myPagination.js"></script>
+<script src="myClaimingCustomers.js"></script>
+<script>
+    myClaimingCustomers.init();
+</script>
+</html>

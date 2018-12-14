@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrClientMotionRelateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrClientMotionRelate">
+        <id column="id" property="id" />
+        <result column="motion_type_id" property="motionTypeId" />
+        <result column="motion_type_content" property="motionTypeContent" />
+        <result column="type" property="type" />
+        <result column="is_using" property="isUsing" />
+        <result column="client_id" property="clientId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        motion_type_id AS motionTypeId, motion_type_content AS motionTypeContent, type, is_using AS isUsing, client_id AS clientId, id
+    </sql>
+
+</mapper>

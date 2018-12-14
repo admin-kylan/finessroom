@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrClientLifeRelateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrClientLifeRelate">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="life_type_id" property="lifeTypeId"/>
+        <result column="type" property="type"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="life_type_content" property="lifeTypeContent"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        client_id AS clientId, life_type_id AS lifeTypeId, type, is_using AS isUsing, life_type_content AS lifeTypeContent, id
+    </sql>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.SdaduimMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.Sdaduim">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="NumId" property="NumId" />
+        <result column="ShopId" property="ShopId" />
+        <result column="Name" property="Name" />
+        <result column="Status" property="Status" />
+        <result column="IsHand" property="IsHand" />
+        <result column="Num" property="Num" />
+        <result column="IsPrivateEducation" property="IsPrivateEducation" />
+        <result column="IsBackstage" property="IsBackstage" />
+        <result column="AutomaticEntry" property="AutomaticEntry" />
+        <result column="Module" property="Module" />
+        <result column="IsShow" property="IsShow" />
+        <result column="IsConsume" property="IsConsume" />
+        <result column="AesEncrypt" property="AesEncrypt" />
+        <result column="checkFinger" property="checkFinger" />
+        <result column="UseType" property="UseType" />
+        <result column="StartTime" property="StartTime" />
+        <result column="EndTime" property="EndTime" />
+        <result column="BalanceNum" property="BalanceNum" />
+        <result column="TotalNum" property="TotalNum" />
+        <result column="CreateId" property="CreateId" />
+        <result column="CreateName" property="CreateName" />
+        <result column="BusinessTypeId" property="BusinessTypeId" />
+        <result column="ModelCode" property="ModelCode" />
+        <result column="CreateTime" property="CreateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, CustomerCode, NumId, ShopId, Name, Status, IsHand, Num, IsPrivateEducation, IsBackstage, AutomaticEntry, Module, IsShow, IsConsume, AesEncrypt, checkFinger, UseType, StartTime, EndTime, BalanceNum, TotalNum, CreateId, CreateName, BusinessTypeId, ModelCode, CreateTime
+    </sql>
+
+</mapper>

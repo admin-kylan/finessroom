@@ -1,0 +1,258 @@
+html,body{
+	overflow: auto;
+}
+.wrap{
+	min-width: 1550px;
+	height: 94%;
+}
+.content,.list{
+	height: 100%;
+}
+.content{
+	width: 100%;
+	/* overflow-y: auto; */
+}
+.list{
+	min-width: 1366px;
+}
+.header{
+	height:60px;
+	background:#0cc;
+	font-size: 18px;
+	font-weight:bold;
+	line-height: 60px;
+	text-indent:20px;
+	color:#fff;
+}
+.tab{
+	height: 40px;
+	border-bottom:1px solid #ccc;
+}
+.tab span{
+	float:left;
+	margin: 10px 15px 0;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 15px;
+	border:1px solid #ccc;
+	border-bottom:none;
+	border-radius:5px 5px 0 0;
+	cursor:pointer;
+	background:transparent;
+	font-size: 13px;
+}
+.tab span.on{
+	background:#f9f9f9;
+}
+.tab span + span{
+	margin-left:0;
+}
+.list .left{
+	width:249px;
+	border-right:1px solid #ccc;
+	width: 13%;
+}
+.list .left li{
+	height:40px;
+	line-height: 40px;
+	border-bottom:1px solid #ccc;
+	cursor: pointer;
+	text-indent:30px;
+	font-size: 13px;
+}
+.list .left li.on{
+	position: relative;
+	right:-1px;
+	border-right:1px solid #fff;
+}
+.list .right{
+	padding: 20px;
+	height: 95%;
+	overflow-y: auto;
+	width: 84%;
+}
+.list .right .title{
+	margin-bottom:16px;
+}
+.list .right .title .operator{
+	margin-left:30px;
+}
+.list .right fieldset{
+	border:1px dashed #00CCCC;
+}
+.list .right fieldset{
+	margin:10px 0;
+	padding:0 35px;
+	line-height:26px;
+}
+.list .right fieldset legend{
+	text-indent:-12px;
+}
+.list .right fieldset p label{
+	margin-left:15px;
+	font-weight: 500;
+}
+.list .right fieldset p span input{
+	margin-right:4px;
+}
+.list .right fieldset p{
+	line-height: 38px;;
+}
+.list .right input.txt{
+	margin:0 5px;
+	width:40px;
+	height:22px;
+	text-align: center;
+}
+.list .right table{
+	margin:10px -10px 20px;
+	border-collapse:collapse;
+    line-height:30px;
+    text-align: center;
+}
+.list .right table thead tr td{
+	background:#00CCCC;
+	padding:0 25px;
+	color:#fff;
+}
+.list .right table tbody tr td{
+	padding:0 25px;
+}
+.list .right .section8 p{
+	margin-left:-10px;
+}
+.list .right .section8 .txt1{
+	width:300px;
+	height:30px;
+}
+.list .right .section8 .submit{
+	margin-left:15px;
+	width:120px;
+	height:34px;
+	background:#ff0000;
+	border-radius:5px;
+	color:#fff;
+	border:none;
+	cursor:pointer;
+}
+.list .right .section8 div{
+	width:1145px;
+	margin:20px 0 20px -10px;
+	padding:0 20px;
+	border:1px solid #ccc;
+}
+.list .right .section8 div p{
+	float:left;
+	border:1px solid #D5D9DF;
+	margin:15px 8px;
+	padding:0 15px;
+	border-radius: 20px;
+	background-color: #D5D9DF;
+}
+.list .right .section8 div p.on{
+	background-color: #169bd5;
+	color: #fff;
+	border-color:#169bd5;
+}
+.list .right .section8 div p.on span{
+	display: initial;
+}
+.list .right .section8 div p span{
+	margin-left:5px;
+	cursor: pointer;
+	display: none;
+	color: #fff;
+	font-weight: 700;
+}
+.list .right .save{
+	width:130px;
+	height:40px;
+	background:#00CCCC;
+	color:#fff;
+	border:none;
+	border-radius:5px;
+	cursor:pointer;
+}
+.noshow{
+	display: none;
+}
+.list2 .section5 span{
+	margin-right:10px;
+}
+.list2 .section7 .txt1{
+	width:300px;
+	height:30px;
+}
+.list2 .section5 label{
+	font-weight: 500;
+}
+.list2 .section7 .submit,.list2 .right .section8 .submit,.list2 .right .section9 .submit,.list2 .right .section10 .submit{
+	margin-left:15px;
+	width:120px;
+	height:34px;
+	background:#169bd5;
+	border-radius:5px;
+	color:#fff;
+	border:none;
+	cursor:pointer;
+}
+.list2 .right .section9 .submit,.list2 .right .section10 .submit{
+	background:#ff0000;
+}
+.list2 .width110{
+	width:110px !important;
+	margin-right:15px !important;
+	height: 26px;
+}
+.list2 .width40{
+	width:40px !important;
+	height: 26px;
+}
+
+
+.page-bar{
+	/*margin:20px;*/
+}
+.list ul,li{
+	margin: 0px;
+	padding: 0px;
+}
+.list li{
+	list-style: none
+}
+.page-bar li:first-child>a {
+	margin-left: 0px
+}
+.page-bar a{
+	border: 1px solid #ddd;
+	text-decoration: none;
+	position: relative;
+	float: left;
+	padding: 6px 12px;
+	margin-left: -1px;
+	line-height: 1.42857143;
+	color: #337ab7;
+	cursor: pointer;
+	margin-bottom: 22px
+}
+.page-bar a:hover{
+	background-color: #eee;
+}
+.page-bar a.banclick{
+	cursor:not-allowed;
+}
+.page-bar .active a{
+	color: #fff;
+	cursor: default;
+	background-color: #337ab7;
+	border-color: #337ab7;
+}
+.page-bar i{
+	font-style:normal;
+	color: #d44950;
+	margin: 0px 4px;
+	font-size: 12px;
+}
+.list  #lis3  table td input{
+	border: none;
+}

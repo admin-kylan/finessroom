@@ -1,0 +1,4541 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>健身管理</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/reset.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/training.css" />
+	<link rel="stylesheet" href="../css/combobox.css" />
+	<link rel="stylesheet" href="../css/simple-calendar.css">
+</head>
+
+<body>
+	<div class="wrap" id="training">
+		<div class="top"><img src="../img/u6.png">健身管理</div>
+		<div class="cWrap clearfix">
+			<div class="left">
+				<ul>
+					<li><img src="../img/u40.png"><a href="javascript:;">客户接待</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">潜在客户录入</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">潜在客户维护</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">GFP录入</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">体适能测试</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">入会合同</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">建立新会员</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">会员管理/维护</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">卡权益维护</a></li>
+					<li><img src="../img/u40.png"><a href="../fitness/admissionManagement.html">出入场管理</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">商品售卖管理</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">租赁管理</a></li>
+					<li><img src="../img/u40.png"><a href="javascript:;">POS</a></li>
+					<li> <img src="../img/u40.png"><a href="../fitness/appointment.html">团操约课管理</a></li>
+					<li class="on"><img src="../img/u40.png"><a class="on" href="../fitness/training.html">私教约课/耗课管理</a></li>
+				</ul>
+			</div>
+			<div class="content">
+				<div class="lefNav fl">
+					<ul>
+						<li class="on" @click="LI(0)">预约工作台</li>
+						<li @click="LI(1)">教练</li>
+						<li @click="LI(2)">结账情况列表</li>
+						<li @click="LI(3)">消费明细表</li>
+						<li @click="LI(4)">会员冻结列表</li>
+						<li @click="LI(5)">教练工作时间安排</li>
+						<li @click="LI(6)">私教月课表</li>
+						<li @click="LI(7)">私教管理</li>
+					</ul>
+				</div>
+				<div class="contains fl">
+					<ul>
+						<li class="list" v-if="LiIndex==0">
+							<!-- 预约工作台 -->
+							<div id="appointmentWorkbench">
+								<div class="searchWrap">
+									<div class="search">
+										<input type="text" placeholder="可按会员姓名、手机号搜索" />
+										<input type="submit" value="搜索" />
+									</div>
+								</div>
+								<div class="screening clearfix">
+									<label  class="fl">
+										<span class="title">筛选条件：</span>
+										<select name="">
+											<option value="" selected>全部教练</option>
+										</select>
+										<select name="">
+											<option value="" selected>全部课程类型</option>
+										</select>
+										<select name="">
+											<option value="" selected>全部场地</option>
+										</select>
+										<input type="text" class="jeinput startDate" placeholder="开始时间" /> ~ <input type="text" class="jeinput endDate"
+										 placeholder="结束时间" />
+									</label>
+									<span class="btnWrap fl">
+										<span class="orange">全部</span>
+										<span class="grey">当天</span>
+										<span class="skyBlue">本周</span>
+										<span class="red">本月</span>
+										<span class="blue">本季度</span>
+										<span class="green">本年度</span>
+									</span>
+								</div>
+								<div class="tab">
+									<div class="titleWrap">
+										<div class="btnWrap fl">
+											<span class="on fl" @click="btnWrapSpanFl(0)">私教一对一预约</span>
+											<span class="fl" @click="btnWrapSpanFl(1)">私教一对多预约</span>
+										</div>
+										<h4>2018年07月01日 ~ 2018年07月31日</h4>
+									</div>
+									<p class="info">
+										共<span class="cyan">10</span>节课，上课人数<span class="cyan">10</span>人
+									</p>
+									<div class="tabt on tabScroll">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<td>序号</td>
+													<td>门店</td>
+													<td>课程名</td>
+													<td>课程时间</td>
+													<td>课程类型</td>
+													<td>教练</td>
+													<td>教室</td>
+													<td>会员姓名</td>
+													<td>手机号码</td>
+													<td>预约人</td>
+													<td>预约时间</td>
+													<td>结算方式</td>
+													<td>扣费（余额）</td>
+													<td>预约状态</td>
+													<td>备注</td>
+													<td style="text-align: center">操作</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="blue margin" @click="LI(3,1)">查看会员消费记录</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="orange margin">预约确认</span>
+														<span class="red margin">拒绝</span>
+													</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>扣卡</td>
+													<td>剩余220天</td>
+													<td class="green">已确定</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="red margin" onclick="startClass()">开课</span>
+													</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td class="grey">无</td>
+													<td class="red">吴改</td>
+													<td class="orange">13645945925</td>
+													<td>Klaus</td>
+													<td>2018-06-12 10:51</td>
+													<td>支付宝</td>
+													<td>剩余220天</td>
+													<td class="green">已预约</td>
+													<td></td>
+													<td class="green">
+														<span class="skyBlue margin" onclick="checkDetails()">查看详情</span>
+														<span class="green margin" onclick="reservation()">添加预约</span>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="tabt">
+										<table class="table table-bordered" style="margin-bottom: 0px;">
+											<thead>
+												<tr>
+													<td>序号</td>
+													<td>门店</td>
+													<td>课程名</td>
+													<td>上课时间</td>
+													<td>课程类型</td>
+													<td>教练</td>
+													<td>教室</td>
+													<td>可上课人数</td>
+													<td>（<span>总人数</span>/<span class="green">已确认</span>/<span class="skyBlue">待确认</span>/<span class="grey">已取消</span>）</td>
+													<td>操作</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td>10</td>
+													<td><span>10</span> / <span class="green">10</span> / <span class="skyBlue">0</span> / <span class="grey">0</span><span
+														 class="orange margin toBlock">预约确认</span></td>
+													<td><span class="skyBlue margin" onclick="checkDetails()">查看详情</span><span class="green margin" onclick="reservation()">添加预约</span><span
+														 class="margin red" onclick="startClass()">开课</span></td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td>10</td>
+													<td><span>10</span> / <span class="green">10</span> / <span class="skyBlue">0</span> / <span class="grey">0</span><span
+														 class="orange margin toBlock">预约确认</span></td>
+													<td><span class="skyBlue margin" onclick="checkDetails()">查看详情</span><span class="green margin" onclick="reservation()">添加预约</span><span
+														 class="margin red" onclick="startClass()">开课</span></td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td>10</td>
+													<td><span>10</span> / <span class="green">10</span> / <span class="skyBlue">0</span> / <span class="grey">0</span><span
+														 class="orange margin toBlock">预约确认</span></td>
+													<td><span class="skyBlue margin" onclick="checkDetails()">查看详情</span><span class="green margin" onclick="reservation()">添加预约</span><span
+														 class="margin red" onclick="startClass()">开课</span></td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>软件园店</td>
+													<td class="skyBlue">私教一对一</td>
+													<td>2018-07-02 15:30</td>
+													<td>私教</td>
+													<td>Nicolas Klaus</td>
+													<td>私教教室-01A室</td>
+													<td>10</td>
+													<td><span>10</span> / <span class="green">10</span> / <span class="skyBlue">0</span> / <span class="grey">0</span><span
+														 class="orange margin toBlock">预约确认</span></td>
+													<td><span class="skyBlue margin" onclick="checkDetails()">查看详情</span><span class="green margin" onclick="reservation()">添加预约</span><span
+														 class="margin red" onclick="startClass()">开课</span></td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="tabBox">
+											<table border="1" bordercolor="#ccc" class="sub">
+												<thead>
+													<tr>
+														<td></td>
+														<td>序号</td>
+														<td>会员姓名</td>
+														<td>手机号码</td>
+														<td>预约人</td>
+														<td>座位</td>
+														<td>预约时间</td>
+														<td>结算方式</td>
+														<td>扣费（余额）</td>
+														<td>预约状态</td>
+														<td>备注</td>
+														<td>操作</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td><input type="checkbox" /></td>
+														<td>1</td>
+														<td>吴改</td>
+														<td>13599888333</td>
+														<td>Klaus</td>
+														<td>1排3列3号</td>
+														<td>2018-06-18 10:51</td>
+														<td>扣卡</td>
+														<td>剩余220天</td>
+														<td class="green">已预约</td>
+														<td class="grey">无</td>
+														<td>
+															<span class="blue">确认</span>
+															<span class="red">取消</span>
+														</td>
+													</tr>
+													<tr>
+														<td><input type="checkbox" /></td>
+														<td>2</td>
+														<td>吴改</td>
+														<td>13599888333</td>
+														<td>Klaus</td>
+														<td>1排3列3号</td>
+														<td>2018-06-18 10:51</td>
+														<td>扣卡</td>
+														<td>剩余220天</td>
+														<td class="green">已预约</td>
+														<td class="grey">无</td>
+														<td>
+															<span class="blue">确认</span>
+															<span class="red">取消</span>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<p class="tabFoot clearfix">
+												<lable class="fl">
+													<input type="checkbox" />
+													<span>全选/全不选</span>
+												</lable>
+												<span class="btns fl">
+													<a class="btn btnBlue fl">确认</a>
+													<a class="btn btnRed fl cancel" onclick="cancel()">取消</a>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 预约工作台 -->
+							<!-- 课程预约/预约详情 -->
+							<div id="bookDetail" class="bookDetail">
+								<div class="bookHeader">
+									<img v-on:click="LI(0)" src="../img/goback.png" alt="" />
+									<span><span class="grey">课程预约/</span>预约详情</span>
+								</div>
+								<div class="bookBody clearfix">
+									<div class="lef fl">
+										<img src="../img/u2871.png" alt="" />
+									</div>
+									<div class="rig fl">
+										<h3>课程名称：健身私教</h3>
+										<label >
+											<span class="title">门店：</span>
+											<span class="txt"><strong>软件园店</strong></span>
+										</label>
+										<label >
+											<span class="title">教练：</span>
+											<span class="txt"><strong>Nicolas Klaus</strong></span>
+										</label>
+										<label >
+											<span class="title">日期：</span>
+											<span class="txt"><strong>2018-06-26</strong></span>
+										</label>
+										<label >
+											<span class="title">时间：</span>
+											<span class="txt"><strong>20:00~21:00</strong></span>
+										</label>
+										<label >
+											<span class="title">场地：</span>
+											<span class="txt"><strong>动感教室-01A室</strong></span>
+										</label>
+										<label >
+											<span class="title">上课人数：</span>
+											<span class="txt"><strong>1/29</strong></span>
+										</label>
+										<span class="startBtn" onclick="startClass()">开始训练</span>
+									</div>
+								</div>
+								<div class="bookTab">
+									<span class="allBook">全部预约</span>
+									<div class="tabLine clearfix">
+										<p class="fl">
+											<label >
+												<span>已预约人数：</span>
+												<span>5</span>
+											</label>
+											<label >
+												<span>现有客户：</span>
+												<span>4</span>
+											</label>
+											<label >
+												<span>潜在客户：</span>
+												<span>4</span>
+											</label>
+										</p>
+										<span class="addBook fr" onclick="reservation()">添加预约</span>
+									</div>
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<td></td>
+												<td>序号</td>
+												<td>会员姓名</td>
+												<td>客户类型</td>
+												<td>手机号码</td>
+												<td>预约人</td>
+												<td>座位</td>
+												<td>预约时间</td>
+												<td>结算方式</td>
+												<td>扣费（余额）</td>
+												<td>预约状态</td>
+												<td>备注</td>
+												<td>操作</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="green">已预约</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="grey">无</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="green">已预约</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="green">已预约</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="green">已预约</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="grey">无</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="green">已预约</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+											<tr>
+												<td><input type="checkbox" /></td>
+												<td>1</td>
+												<td class="blue">吴改</td>
+												<td>现有客户</td>
+												<td class="orange">13645945925</td>
+												<td>Klaus</td>
+												<td>1</td>
+												<td class="red">1排3列3号</td>
+												<td>2018-06-12 10:51</td>
+												<td>扣卡</td>
+												<td class="grey">无</td>
+												<td class="grey">无</td>
+												<td> <a href="javscript:;"><span class="skyBlue">确认</span></a> <a href="javscript:;"><span class="red">取消</span></a></td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="tabFoot clearfix">
+										<lable class="fl"><input type="checkbox"> <span>全选/全不选</span></lable> <span class="fl"><a class="btn btnBlue fl">确认</a>
+											<a class="btn btnRed fl">取消</a></span>
+									</div>
+								</div>
+							</div>
+							<!-- 课程预约/预约详情 -->
+							<!-- 开课 -->
+							<div id="startClass">
+								<h4>私教开课</h4>
+								<div class="startClass_fieldset">
+									<fieldset>
+										<legend><span>教练/场馆信息</span></legend>
+										<div class="startClass_fieldset1">
+											<span>教练：</span> <strong>Nicolas Klaus</strong> <a href="javascript:;" class="btn btn-danger">读取指纹</a><span>地点/场馆：</span>
+											<strong>动感单车-01A室</strong>
+										</div>
+									</fieldset>
+									<fieldset>
+										<legend><span>消费项目</span></legend>
+										<div class="startClass_fieldset2">
+											<ul>
+												<li>
+													<span>消费课程：</span>
+													<span>
+														<select name="1" id="">
+															<option value="1">动感单车</option>
+															<option value="1">动感单车</option>
+															<option value="1">动感单车</option>
+														</select>
+													</span>
+
+												</li>
+												<li><span>消费市场：</span> <span><strong>30分钟</strong></span></li>
+												<li><span>训练计划：</span> <span><a href="javascript:;" class="btn btn-danger">查看训练计划</a></span> </li>
+												<li><span>消费数量：</span> <span><strong>1</strong></span> </li>
+												<li>
+													<span>助教：</span>
+													<span>
+														<select name="1" id="">
+															<option value="1">选择助教</option>
+															<option value="1">选择助教</option>
+															<option value="1">选择助教</option>
+														</select>
+													</span>
+												</li>
+											</ul>
+											<div class="text-center">
+												<div style="width: 70%;margin: 0 auto">
+													<span>会员卡号/指纹：</span>
+													<span><input type="text" placeholder="会员卡号/手机号码/票券号/团购号"></span>
+													<span><a href="javascript:;" class="btn btn-primary">更新指纹数据</a></span>
+												</div>
+											</div>
+											<div>
+												<div style="width: 70%;margin: 0 auto">
+													<fieldset class="memberInformation">
+														<legend><span>会员信息</span></legend>
+														<div class="memberInformation_box">
+															<div class="memberInformation_box_left">
+																<div>
+																	<span>
+																		<span>会员姓名：</span><span><strong>吴改</strong></span>
+																	</span>
+																	<span>
+																		<span>会员性别：</span><span><strong>男</strong></span>
+
+																	</span>
+																	<span>
+																		<span>会员卡号：</span><span><strong>1110080065448</strong></span>
+																	</span>
+																</div>
+																<div>
+																	<span>
+																		<span>会员卡系列：</span><span><strong>年卡</strong></span>
+
+																	</span>
+																	<span>
+																		<span>会员卡名称：</span><span><strong>一年卡</strong></span>
+
+																	</span>
+																	<span>
+																		<span>总权益：</span><span><strong>900</strong></span>
+
+																	</span>
+																	<span>
+																		<span>剩余权益：</span><span><strong>900</strong></span>
+
+																	</span>
+																</div>
+																<div>
+																	<span>
+																		<span>开始时间：</span><span><strong>2018-07-08</strong></span>
+
+																	</span>
+																	<span>
+																		<span>失效时间：</span><span><strong>2018-07-08</strong></span>
+																	</span>
+																</div>
+																<div>
+																	<span>
+																		<span>销售顾问：</span><span><strong>Klaus</strong></span>
+
+																	</span>
+																	<span>
+																		<span>指定教练：</span><span><strong>Nicolas Klaus</strong></span>
+
+																	</span>
+																	<span>
+																		<span>服务顾问：</span><span><strong>Nicolas Klaus</strong></span>
+																	</span>
+																</div>
+																<div>
+																	<fieldset>
+																		<legend><span>票券信息</span></legend>
+																		<div>
+																			<ul>
+																				<li><span>票券条形码：</span><span>无</span></li>
+																				<li><span>使用人姓名：</span><span>无</span></li>
+																				<li><span>使用人电话：</span><span>无</span></li>
+																				<li><span>差额：</span><span>无</span></li>
+																			</ul>
+																		</div>
+																	</fieldset>
+
+																</div>
+																<div>
+																	<fieldset>
+																		<legend><span>团购信息</span></legend>
+																		<div>
+																			<ul>
+																				<li><span>票券条形码：</span><span>无</span></li>
+																				<li><span>使用人姓名：</span><span>无</span></li>
+																				<li><span>使用人电话：</span><span>无</span></li>
+																				<li><span>差额：</span><span>无</span></li>
+																			</ul>
+																		</div>
+																	</fieldset>
+
+																</div>
+															</div>
+															<div class="memberInformation_box_right">
+																<div>
+																	<img src="../img/u601.png" class="img-responsive" alt="">
+																</div>
+															</div>
+														</div>
+													</fieldset>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset>
+										<legend><span>学员信息</span></legend>
+										<div class="startClass_fieldset3">
+											<div class="startClass_fieldset3_top">
+												<div class="col-md-6 text-left">当前约课人数：<strong>5</strong>人</div>
+												<div class="col-md-6 text-right"><a href="javascript:;" class="btn btn-default">搜索</a><input type="text"
+													 placeholder="姓名/卡号"></div>
+											</div>
+											<div style="overflow-x:  scroll;">
+												<table class="table table-hover table-bordered">
+													<thead>
+														<tr>
+															<th>消费时间</th>
+															<th>会员卡号</th>
+															<th>会员姓名</th>
+															<th>性别</th>
+															<th>卡种</th>
+															<th>会员卡名</th>
+															<th>剩余权益</th>
+															<th>失效日期</th>
+															<th>使用人</th>
+															<th>消费数量</th>
+															<th>消费金额</th>
+															<th>座位号</th>
+															<th>票据号</th>
+															<th>销售员</th>
+															<th>操作员</th>
+															<th>操作</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>2018-07-03 12:03</td>
+															<td>1000665948949</td>
+															<td class="blue">Klaus</td>
+															<td>男</td>
+															<td>年卡</td>
+															<td class="sblue">一年卡</td>
+															<td class="red">600</td>
+															<td>2018-06-03</td>
+															<td>吴改</td>
+															<td>1</td>
+															<td>0.00</td>
+															<td class="red">3排4列5号</td>
+															<td><strong>6559191486</strong></td>
+															<td>Klaus</td>
+															<td><strong>Klaus</strong></td>
+															<td class="red">冲销</td>
+														</tr>
+														<tr>
+															<td>2018-07-03 12:03</td>
+															<td>1000665948949</td>
+															<td class="blue">Klaus</td>
+															<td>男</td>
+															<td>年卡</td>
+															<td class="sblue">一年卡</td>
+															<td class="red">600</td>
+															<td>2018-06-03</td>
+															<td>吴改</td>
+															<td>1</td>
+															<td>0.00</td>
+															<td class="red">3排4列5号</td>
+															<td><strong>6559191486</strong></td>
+															<td>Klaus</td>
+															<td><strong>Klaus</strong></td>
+															<td class="red">冲销</td>
+														</tr>
+														<tr>
+															<td>2018-07-03 12:03</td>
+															<td>1000665948949</td>
+															<td class="blue">Klaus</td>
+															<td>男</td>
+															<td>年卡</td>
+															<td class="sblue">一年卡</td>
+															<td class="red">600</td>
+															<td>2018-06-03</td>
+															<td>吴改</td>
+															<td>1</td>
+															<td>0.00</td>
+															<td class="red">3排4列5号</td>
+															<td><strong>6559191486</strong></td>
+															<td>Klaus</td>
+															<td><strong>Klaus</strong></td>
+															<td class="red">冲销</td>
+														</tr>
+														<tr>
+															<td>2018-07-03 12:03</td>
+															<td>1000665948949</td>
+															<td class="blue">Klaus</td>
+															<td>男</td>
+															<td>年卡</td>
+															<td class="sblue">一年卡</td>
+															<td class="red">600</td>
+															<td>2018-06-03</td>
+															<td>吴改</td>
+															<td>1</td>
+															<td>0.00</td>
+															<td class="red">3排4列5号</td>
+															<td><strong>6559191486</strong></td>
+															<td>Klaus</td>
+															<td><strong>Klaus</strong></td>
+															<td class="red">冲销</td>
+														</tr>
+														<tr>
+															<td>2018-07-03 12:03</td>
+															<td>1000665948949</td>
+															<td class="blue">Klaus</td>
+															<td>男</td>
+															<td>年卡</td>
+															<td class="sblue">一年卡</td>
+															<td class="red">600</td>
+															<td>2018-06-03</td>
+															<td>吴改</td>
+															<td>1</td>
+															<td>0.00</td>
+															<td class="red">3排4列5号</td>
+															<td><strong>6559191486</strong></td>
+															<td>Klaus</td>
+															<td><strong>Klaus</strong></td>
+															<td class="red">冲销</td>
+														</tr>
+
+													</tbody>
+												</table>
+											</div>
+
+											<div>
+												<div class="text-center" style="margin: 15px 0;">
+													<span>开始时间：<input type="text" class="jeinput startDate" placeholder="开始时间"></span>
+													<span>结束时间：<input type="text" class="jeinput endDate" placeholder="结束时间"></span>
+												</div>
+												<div class="text-center">
+													<a href="javascript:;" class="btn btn-group">开始</a>
+												</div>
+											</div>
+
+										</div>
+									</fieldset>
+								</div>
+							</div>
+							<!-- 开课 -->
+							<!-- 添加预约 -->
+							<div id="reservation" class="newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>添加私教预约</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+									</div>
+									<div class="newCustomers_maskLayer_box_shen">
+										<div class="bookBody clearfix">
+											<div class="lef fl"><img src="../img/u2871.png" alt=""></div>
+											<div class="rig fl">
+												<div><span class="title">课程名称：</span> <span class="txt"><strong>私教一对一</strong></span></div>
+												<div><span class="title">课程日期：</span> <span class="txt"><strong>2018-06-26</strong></span></div>
+												<div><span class="title">课程教练：</span> <span class="txt"><strong>Nicolas Klaus</strong></span></div>
+												<div><span class="title">预约人数：</span> <span class="txt"><strong>1/5</strong></span></div>
+											</div>
+										</div>
+										<div class="bookBody2 clearfix">
+											<div class="lef fl"><span>*</span> 预约会员：</div>
+											<div class="rig fl">
+												<div><input type="text" placeholder="请输入姓名手机号查找"></div>
+											</div>
+										</div>
+										<div class="bookBody2 clearfix">
+											<div class="bookBody2_tb">
+												<div class="bookBody2_tb_box">
+													<div class="bookBody2_tb_box_buttom">
+														<ul>
+															<li>09:00~10:00</li>
+															<li>09:00~10:00</li>
+															<li>09:00~10:00</li>
+															<li>09:00~10:00</li>
+															<li>09:00~10:00</li>
+															<li>09:00~10:00</li>
+															<li>09:00~10:00</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="newCustomers_maskLayer_box_botton">
+										<a href="#" class="btn btn-success">保存</a>
+									</div>
+								</div>
+							</div>
+							<!-- 添加预约 -->
+						</li>
+						<li class="list" v-if="LiIndex==1">
+							<!-- 教练 -->
+							<div id="coachClassroom">
+
+								<div class="line clearfix">
+									<span class="fl">教练</span>
+									<p class="fr">
+										<span>
+											<strong class="you"></strong>
+											<span>上课中</span>
+										</span>
+										<span>
+											<strong class="wu"></strong>
+											<span>无课</span>
+										</span>
+										<span>
+											<strong class="xiu"></strong>
+											<span>休息中</span>
+										</span>
+									</p>
+								</div>
+								<ul class="liBox clearfix">
+									<li onclick="coachInformation()">
+										<p class="title">Nicolas Claus</p>
+										<div class="have">
+											<p class="txt">动感单车</p>
+											<p class="date">12:00~13:00</p>
+										</div>
+									</li>
+									<li onclick="coachInformation(0)">
+										<p class="title">Nicolas Claus</p>
+										<div class="no">
+											<p class="txt">无课</p>
+										</div>
+									</li>
+									<li>
+										<p class="title">Nicolas Claus</p>
+										<div class="rest">
+											<p class="txt">动感单车</p>
+											<p class="date">2018-07-04~2018-07-05</p>
+										</div>
+									</li>
+									<li onclick="coachInformation()">
+										<p class="title">Nicolas Claus</p>
+										<div class="have">
+											<p class="txt">动感单车</p>
+											<p class="date">12:00~13:00</p>
+										</div>
+									</li>
+									<li onclick="coachInformation(0)">
+										<p class="title">Nicolas Claus</p>
+										<div class="no">
+											<p class="txt">无课</p>
+										</div>
+									</li>
+									<li>
+										<p class="title">Nicolas Claus</p>
+										<div class="rest">
+											<p class="txt">动感单车</p>
+											<p class="date">2018-07-04~2018-07-05</p>
+										</div>
+									</li>
+									<li onclick="coachInformation()">
+										<p class="title">Nicolas Claus</p>
+										<div class="have">
+											<p class="txt">动感单车</p>
+											<p class="date">12:00~13:00</p>
+										</div>
+									</li>
+									<li>
+										<p class="title">Nicolas Claus</p>
+										<div class="no">
+											<p class="txt">无课</p>
+										</div>
+									</li>
+									<li>
+										<p class="title">Nicolas Claus</p>
+										<div class="rest">
+											<p class="txt">动感单车</p>
+											<p class="date">2018-07-04~2018-07-05</p>
+										</div>
+									</li>
+									<li onclick="coachInformation()">
+										<p class="title">Nicolas Claus</p>
+										<div class="have">
+											<p class="txt">动感单车</p>
+											<p class="date">12:00~13:00</p>
+										</div>
+									</li>
+									<li>
+										<p class="title">Nicolas Claus</p>
+										<div class="no">
+											<p class="txt">无课</p>
+										</div>
+									</li>
+									<li>
+										<p class="title">Nicolas Claus</p>
+										<div class="rest">
+											<p class="txt">动感单车</p>
+											<p class="date">2018-07-04~2018-07-05</p>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<!-- 教练 -->
+							<!-- 教练信息 -->
+							<div id="coachInformation" class="newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>开始Nicolas Klaus的课程</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+									</div>
+									<div class="newCustomers_maskLayer_box_shen">
+										<fieldset>
+											<legend><span>教练信息</span></legend>
+											<div style="overflow: hidden;">
+												<div class="newCustomers_maskLayer_box_shen_left">
+													<div>姓名：<strong>Nicolas Klaus</strong> </div>
+													<div>性别：<strong>男</strong> </div>
+													<div>手机号码：<strong>13688888828</strong> </div>
+													<div>工号：<strong class="orange">K10065588</strong> </div>
+												</div>
+												<div class="newCustomers_maskLayer_box_shen_right">
+													<div>
+														<img src="../img/u601.png" class="img-responsive" alt="">
+													</div>
+												</div>
+											</div>
+										</fieldset>
+
+									</div>
+									<div class="newCustomers_maskLayer_box_botton">
+										<a href="javascript:;" class="btn btn-primary" @click="LI(0,2)">开始上课</a>
+										<a href="javascript:;" class="btn btn-warning" @click="LI(0)">预约该教练课程</a>
+										<a href="javascript:;" class="btn btn-danger" @click="LI(2)">结账</a>
+									</div>
+								</div>
+							</div>
+							<!-- 教练信息 -->
+						</li>
+						<li class="list list3" v-if="LiIndex==2">
+							<!-- 结账情况列表 -->
+							<div id="checkoutList">
+								<p class="clearfix">
+									<input type="text" placeholder="手机号码/卡号" />
+									<label class="fl">
+										<input type="text" class="jeinput startDate" placeholder="开始时间" /> ~ <input type="text" class="jeinput endDate"
+										 placeholder="结束时间" />
+									</label>
+									<input type="submit" value="搜索" class="sear" />
+								</p>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>教练</td>
+											<td>授课类型</td>
+											<td>消费课程</td>
+											<td>会员卡号</td>
+											<td>姓名</td>
+											<td>手机号码</td>
+											<td>使用日期</td>
+											<td>开始时间</td>
+											<td>结束时间</td>
+											<td>操作员</td>
+											<td>状态</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>Nicolas Klaus</td>
+											<td>私教</td>
+											<td class="blue">私教一对一</td>
+											<td class="orange">100658117068</td>
+											<td class="seaBlue">吴改</td>
+											<td class="red">13688888828</td>
+											<td>2018-07-03</td>
+											<td class="green">09:00</td>
+											<td class="red">10:00</td>
+											<td>Klaus</td>
+											<td class="grey">已结束</td>
+											<td>
+												<span class="sWrap clearfix">
+													<span class="toGreen">结账</span>
+													<span class="toOrange">打印</span>
+													<span class="toRed">冲销</span>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Nicolas Klaus</td>
+											<td>私教</td>
+											<td class="blue">私教一对一</td>
+											<td class="orange">100658117068</td>
+											<td class="seaBlue">吴改</td>
+											<td class="red">13688888828</td>
+											<td>2018-07-03</td>
+											<td class="green">09:00</td>
+											<td class="red">10:00</td>
+											<td>Klaus</td>
+											<td class="grey">已结束</td>
+											<td>
+												<span class="sWrap clearfix">
+													<span class="toGreen">结账</span>
+													<span class="toOrange">打印</span>
+													<span class="toRed">冲销</span>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Nicolas Klaus</td>
+											<td>私教</td>
+											<td class="blue">私教一对一</td>
+											<td class="orange">100658117068</td>
+											<td class="seaBlue">吴改</td>
+											<td class="red">13688888828</td>
+											<td>2018-07-03</td>
+											<td class="green">09:00</td>
+											<td class="red">10:00</td>
+											<td>Klaus</td>
+											<td class="grey">已结束</td>
+											<td>
+												<span class="sWrap clearfix">
+													<span class="toGreen">结账</span>
+													<span class="toOrange">打印</span>
+													<span class="toRed">冲销</span>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Nicolas Klaus</td>
+											<td>私教</td>
+											<td class="blue">私教一对一</td>
+											<td class="orange">100658117068</td>
+											<td class="seaBlue">吴改</td>
+											<td class="red">13688888828</td>
+											<td>2018-07-03</td>
+											<td class="green">09:00</td>
+											<td class="red">10:00</td>
+											<td>Klaus</td>
+											<td class="grey">已结束</td>
+											<td>
+												<span class="sWrap clearfix">
+													<span class="toGreen">结账</span>
+													<span class="toOrange">打印</span>
+													<span class="toRed">冲销</span>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Nicolas Klaus</td>
+											<td>私教</td>
+											<td class="blue">私教一对一</td>
+											<td class="orange">100658117068</td>
+											<td class="seaBlue">吴改</td>
+											<td class="red">13688888828</td>
+											<td>2018-07-03</td>
+											<td class="green">09:00</td>
+											<td class="red">10:00</td>
+											<td>Klaus</td>
+											<td class="grey">已结束</td>
+											<td>
+												<span class="sWrap clearfix">
+													<span class="toGreen">结账</span>
+													<span class="toOrange">打印</span>
+													<span class="toRed">冲销</span>
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Nicolas Klaus</td>
+											<td>私教</td>
+											<td class="blue">私教一对一</td>
+											<td class="orange">100658117068</td>
+											<td class="seaBlue">吴改</td>
+											<td class="red">13688888828</td>
+											<td>2018-07-03</td>
+											<td class="green">09:00</td>
+											<td class="red">10:00</td>
+											<td>Klaus</td>
+											<td class="grey">已结束</td>
+											<td>
+												<span class="sWrap clearfix">
+													<span class="toGreen">结账</span>
+													<span class="toOrange">打印</span>
+													<span class="toRed">冲销</span>
+												</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- 结账情况列表 -->
+						</li>
+						<li class="list list4" v-if="LiIndex==3">
+							<!-- 消费明细表 -->
+							<div id="consumptionSchedule">
+								<div class="tabSpan">
+									<span class="on" @click="tabSpanSpans(0)">课程消费明细表</span>
+									<span @click="tabSpanSpans(1)">个人消费明细表</span>
+								</div>
+								<div class="select select1 on">
+									<div class="selectBox">
+										<p>
+											<label >
+												<span>筛选条件：</span>
+												<input type="text" class="jeinput startDate" placeholder="开始时间" /> ~ <input type="text" class="jeinput endDate"
+												 placeholder="结束时间" />
+											</label>
+										</p>
+										<p>
+											<label >
+												<span>高级搜索：</span>
+												<input type="text" placeholder="项目/课程" />
+												<input type="text" placeholder="教练/销售人员" />
+												<input type="submit" value="搜索" />
+											</label>
+										</p>
+									</div>
+									<h3>健身私教 · 课程消费明细表</h3>
+									<div class="tabTop clearfix">
+										<p class="rig fr">
+											<span class="toOrange">打印</span>
+											<span class="toGreen">导出</span>
+										</p>
+									</div>
+									<table border="1" bordercolor="#ccc">
+										<thead>
+											<tr>
+												<td>序号</td>
+												<td>开课日期</td>
+												<td>消费课程</td>
+												<td>开始时间</td>
+												<td>结束时间</td>
+												<td>总时长（分）</td>
+												<td>总收入</td>
+												<td>（总人数/<span class="orange">上课人数</span>/<span class="grey">失约人数</span>）</td>
+												<td>教练</td>
+												<td>教室</td>
+												<td>结算员</td>
+												<td>评分</td>
+												<td>训练详情</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td class="green">2018-07-03</td>
+												<td class="blue">动感单车</td>
+												<td>16:13</td>
+												<td class="red">17:00</td>
+												<td>10</td>
+												<td>10.00</td>
+												<td>
+													30<span class="orange">25</span>/<span class="grey">5</span> <span class="orange" @click="tabSpanSpans(1)">查看</span>
+												</td>
+												<td>Nicolas Klaus</td>
+												<td>单车-01A室</td>
+												<td>Klaus</td>
+												<td class="orange">8.3</td>
+												<td class="blue" onclick="trainingDetails()">详情</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="select select2">
+									<div class="selectBox">
+										<p>
+											<label >
+												<span>筛选条件：</span>
+												<input type="text" placeholder="手机号码/卡号" />
+												<input type="text" class="jeinput startDate" placeholder="开始时间" /> ~ <input type="text" class="jeinput endDate"
+												 placeholder="结束时间" />
+											</label>
+										</p>
+										<p>
+											<label >
+												<span>高级搜索：</span>
+												<select name="">
+													<option value="">卡类别筛选</option>
+												</select>
+												<select name="">
+													<option value="">卡名称筛选</option>
+												</select>
+												<input type="text" placeholder="项目/课程" />
+												<input type="text" placeholder="教练/销售人员" />
+												<input type="submit" value="搜索" />
+											</label>
+										</p>
+									</div>
+									<h3>健身私教 · 个人消费明细表</h3>
+									<div class="tabTop clearfix">
+										<p class="lef fl">
+											共计：￥<span class="red">5.00 </span> 年卡消费：￥<span class="orange">5.00 </span>
+										</p>
+										<p class="rig fr">
+											<span class="toOrange">打印</span>
+											<span class="toGreen">导出</span>
+										</p>
+									</div>
+									<div class="overflow">
+										<table border="1" bordercolor="#ccc">
+											<thead>
+												<tr>
+													<td>序号</td>
+													<td>消费日期</td>
+													<td>消费课程</td>
+													<td>课时数</td>
+													<td>消费金额</td>
+													<td>开始时间</td>
+													<td>结束时间</td>
+													<td>总时长（分）</td>
+													<td>会员卡号</td>
+													<td>会员姓名</td>
+													<td>性别</td>
+													<td>手机号码</td>
+													<td>卡类别</td>
+													<td>卡名称</td>
+													<td>可用权益</td>
+													<td>剩余权益</td>
+													<td>教练</td>
+													<td>结算员</td>
+													<td>评分</td>
+													<td>评分内容</td>
+													<td>训练详情</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-07-03</td>
+													<td class="blue">动感单车</td>
+													<td>1</td>
+													<td class="red">0.00</td>
+													<td>16:13</td>
+													<td>17:00</td>
+													<td>1</td>
+													<td class="orange">1001623118814</td>
+													<td class="blue">吴迪</td>
+													<td class="blue">男</td>
+													<td>13688888817</td>
+													<td>年卡</td>
+													<td class="orange">一年卡</td>
+													<td>300</td>
+													<td class="red">300</td>
+													<td>Nicolas Klaus</td>
+													<td>Klaus</td>
+													<td class="orange">8.3</td>
+													<td>肌肉酸痛</td>
+													<td class="blue" onclick="trainingDetails()">详情</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+							<!-- 消费明细表 -->
+							<!-- 训练详情 -->
+							<div id="trainingDetails" class="newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>训练详情</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+									</div>
+									<div class="newCustomers_maskLayer_box_shen">
+
+										<table class="table table-hover table-bordered">
+											<thead>
+												<tr>
+													<th>序号</th>
+													<th>训练日期</th>
+													<th>计划开始时间</th>
+													<th>计划结束时间</th>
+													<th>实际训练日期</th>
+													<th>实际开始时间</th>
+													<th>实际结束时间</th>
+													<th>课程详情</th>
+													<th>会员自我感觉</th>
+													<th>教练小结</th>
+													<th>方案改进</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>2018-06-08</td>
+													<td class="green">09:00</td>
+													<td class="red">09:20</td>
+													<td class="blue">2018-07-03</td>
+													<td class="zhise">09:00</td>
+													<td>09:20</td>
+													<td>俯卧撑</td>
+													<td>累成狗！</td>
+													<td>平时缺乏锻炼</td>
+													<td>加强训练强度</td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>2018-06-08</td>
+													<td class="green">09:00</td>
+													<td class="red">09:20</td>
+													<td class="blue">2018-07-03</td>
+													<td class="zhise">09:00</td>
+													<td>09:20</td>
+													<td>俯卧撑</td>
+													<td>累成狗！</td>
+													<td>平时缺乏锻炼</td>
+													<td>加强训练强度</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<!-- 训练详情 -->
+						</li>
+						<li class="list list5" v-if="LiIndex==4">
+							<!-- 会员冻结列表 -->
+							<div id="memberFreezelist">
+								<div>
+									<input type="text" placeholder="手机号码/卡号" />
+									<input type="text" class="jeinput startDate" placeholder="开始时间" /> ~ <input type="text" class="jeinput endDate"
+									 placeholder="结束时间" />
+									<input type="submit" value="搜索" />
+								</div>
+								<table border="1" bordercolor="#ccc">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>门店</td>
+											<td>会员姓名</td>
+											<td>会员手机号</td>
+											<td>解冻金额（元/次）</td>
+											<td>解冻时间</td>
+											<td>解冻时间</td>
+											<td>备注</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td class="blue">吴改</td>
+											<td class="orange">13688888828</td>
+											<td class="red">80.00</td>
+											<td>2018-06-27 10:00</td>
+											<td>2018-06-27 10:00</td>
+											<td></td>
+											<td class="orange">解冻</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<!-- 会员冻结列表 -->
+						</li>
+						<li class="list" v-if="LiIndex==5">
+							<!-- 教练工作时间安排 -->
+							<div id="groupCourseSchedule">
+								<div class="selectWrap clearfix">
+									<div class="selectLeft fl">
+										<select name="">
+											<option value="" selected>软件园店</option>
+										</select>
+										<select name="">
+											<option value="" selected>选择部门</option>
+										</select>
+										<select name="">
+											<option value="" selected>选择教练</option>
+										</select>
+									</div>
+									<span class="selectRight fr" onclick="copyClass()">复制工作时间</span>
+								</div>
+								<div class="timeTittle">Nicolas Klaus教练工作时间表</div>
+								<div id="container">
+									<div class="container"></div>
+								</div>
+							</div>
+							<!-- 教练工作时间安排 -->
+							<!-- 复制排课 -->
+							<div id="copyClass" class="copyClass newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>复制课程</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+									</div>
+									<div class="bookBody clearfix">
+										<form class="form-horizontal">
+											<div class="form-group">
+												<label  class="col-sm-2 control-label"><span class="red">*</span> 复制课程：</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" placeholder="2018-06-26 ~ 2018-06-30" /> <span class="red">所选日期不能超过31天</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label  class="col-sm-2 control-label" style="opacity: 0;">.</label>
+												<div class="col-sm-9">
+													<select name="0" id="" class="form-control">
+														<option value="0">--全部教练--</option>
+														<option value="1">--选择场地--</option>
+														<option value="2">--选择场地--</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label  class="col-sm-2 control-label" style="opacity: 0;">.</label>
+												<div class="col-sm-9">
+													<select name="0" id="" class="form-control">
+														<option value="0">--全部课程--</option>
+														<option value="1">--选择教练--</option>
+														<option value="2">--选择教练--</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label  class="col-sm-2 control-label"><span>*</span>复制到：</label>
+												<div class="col-sm-9">
+													<input type="text" class="jeinput startDate form-control" placeholder="2018-07-05" /> <span style="margin: 0 15px">
+														至 </span> <span>2018-07-05</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label  class="col-sm-2 control-label" style="opacity: 0;">.</label>
+												<div class="col-sm-9">
+													<select name="0" id="" class="form-control">
+														<option value="0">--选择将课程复制给的教练--</option>
+														<option value="1">--选择教练--</option>
+														<option value="2">--选择教练--</option>
+													</select>
+													<span class="red">将上方所选教练的某个时间段的课程复制给该教练，默认为上方所选教练</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label  class="col-sm-2 control-label"><span>*</span> 即：</label>
+												<div class="col-sm-9">
+													<p>将2018-06-27至2018-07-07期间全部教练的全部课程， 复制到2018-07-01至2018-07-11</p>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="bookTab">
+										<div class="form-group">
+											<label  class="col-sm-2 control-label" style="opacity: 0;"><span>.</span></label>
+											<div class="col-sm-9">
+												<div class="tabFoot clearfix">
+													<a class="btn btnRed">取消</a><a class="btn btnBlue">复制排课</a>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<!-- 复制排课 -->
+							<!-- 复制排课 -->
+							<div id="SetCoachTime" class="newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>设置教练上课时间</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+									</div>
+									<div class="newCustomers_maskLayer_box_shen">
+										<div class="datas" id="date1">
+											
+										</div>
+										<fieldset>
+											<legend><span>工作时间</span></legend>
+											<div class="startClass_fieldset1">
+												<div>
+													<input type="text" class="jeinput startDate" placeholder="开始时间" /> <span> ~ </span><input type="text"
+													 class="jeinput endDate" placeholder="结束时间" />
+												</div>
+
+												<div>
+													<input type="text"><span>分钟</span>
+												</div>
+												<div>
+													<label>
+														<input type="radio"><span>正常班</span>
+													</label>
+													<label>
+														<input type="radio"><span>休息</span>
+													</label>
+												</div>
+
+											</div>
+										</fieldset>
+										<div class="bookBody_c">
+											<img src="../img/u6202.png" alt=""><span>+</span>
+										</div>
+									</div>
+									<div class="newCustomers_maskLayer_box_botton">
+										<a href="#" class="btn btn-success">保存</a>
+										<a href="#" class="btn btn-default">取消</a>
+									</div>
+								</div>
+							</div>
+							<!-- 复制排课 -->
+
+						</li>
+						<li class="list list8" v-if="LiIndex==6">
+							<!-- 私教排课 -->
+							<div id="privateLessons">
+
+								<div class="selectWrap clearfix">
+									<div class="selectLeft fl">
+										<label >
+											<span>教练筛选：</span>
+											<select name="">
+												<option value="" selected>全部教练</option>
+											</select>
+										</label>
+										<label >
+											<span>上课时间：</span>
+
+											<input type="text" class="jeinput startTime" placeholder="开始时间" /> ~ <input type="text" class="jeinput endTime"
+											 placeholder="结束时间" />
+
+
+										</label>
+									</div>
+								</div>
+								<div class="lisNavBar clearfix">
+									<span @click="LI(6,1)">批量排私教</span>
+									<span @click="LI(6,2)">复制排课</span>
+									<span>打印课程</span>
+								</div>
+								<div id="container1">
+									<div class="container"></div>
+								</div>
+							</div>
+							<!-- 私教排课 -->
+							<!-- 批量排私教 -->
+							<div id="batchSchedulingClass" class="batchSchedulingClass">
+								<div class="bookHeader">
+									<img @click="LI(6)" src="../img/goback.png" alt="" />
+									<span><span class="grey">团课排期/</span>批量排团课</span>
+								</div>
+								<div class="bookBody clearfix">
+									<form class="form-horizontal">
+										<div class="form-group">
+											<label  class="col-sm-2 control-label">门店：</label>
+											<div class="col-sm-5">
+												<span>软件园店</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span>*</span>场地/教室：</label>
+											<div class="col-sm-5">
+												<select name="0" id="" class="form-control">
+													<option value="0">--选择场地--</option>
+													<option value="1">--选择场地--</option>
+													<option value="2">--选择场地--</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span>*</span>教练：</label>
+											<div class="col-sm-5">
+												<select name="0" id="" class="form-control">
+													<option value="0">--选择教练--</option>
+													<option value="1">--选择教练--</option>
+													<option value="2">--选择教练--</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span>*</span>课程：</label>
+											<div class="col-sm-5">
+												<select name="0" id="" class="form-control">
+													<option value="0">--选择课程--</option>
+													<option value="1">--选择课程--</option>
+													<option value="2">--选择课程--</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span>*</span>课程日期：</label>
+											<div class="col-sm-5">
+												<input type="text" class="jeinput startDate form-control" placeholder="开始时间" /> <span> ~ </span><input type="text"
+												 class="jeinput endDate form-control" placeholder="结束时间" />
+											</div>
+										</div>
+									</form>
+								</div>
+								<h4>课程周期设置：<span>清除课程周期</span> </h4>
+								<div class="bookBody">
+									<div class="bookBody_b">
+										<p><span>每周：</span> <span class="red">当前课程时长为40分钟</span></p>
+										<ul>
+											<li><label class="fl"><input type="checkbox"> <span>周一</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+											<li><label class="fl"><input type="checkbox"> <span>周二</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+											<li><label class="fl"><input type="checkbox"> <span>周三</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+											<li><label class="fl"><input type="checkbox"> <span>周四</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+											<li><label class="fl"><input type="checkbox"> <span>周五</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+											<li><label class="fl"><input type="checkbox"> <span>周六</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+											<li><label class="fl"><input type="checkbox"> <span>周日</span></label> 上课时间：<input type="text" class="jeinput startTime"
+												 placeholder="开始时间" />至 <strong>10:40</strong> </li>
+										</ul>
+										<p>课程周期：上课时间为每个 周一的00:00-23:59、周二的00:00-23:59、周三的00:00-23:59、周四的00:00-23:59、周五的 00:00-23:59</p>
+									</div>
+									<div class="bookBody_c">
+										<img src="../img/u6202.png" alt=""><span>+</span>
+									</div>
+								</div>
+								<h4>开放预约时间：</h4>
+								<div class="bookBody">
+									<div class="bookBody_b">
+										<p><label class="fl"><input type="radio"> <span>立即开放预约</span> </label></p>
+										<p><label class="fl"><input type="radio"> <span>定时开放预约</span> <input type="text" class="jeinput dataData"
+												 placeholder="2018-10-22 00:00:00"></label>
+										</p>
+										<p>
+											<label class="fl"><input type="radio"> <span>课程开始前</span> </label>
+											<select name="0" id="">
+												<option value="0">0</option>
+											</select>
+											<span>小时开放预约</span>
+										</p>
+										<p><span>预约设置修改，仅限在预约时间发生前</span><input type="text" value="1"> <span>小时内修改</span></p>
+										<p><span>未经允许是否可以上课</span> <label class="fl"><input type="radio"> <span>是</span> </label><label class="fl"><input
+												 type="radio"> <span>否</span> </label> <span class="red">（如果没有预约的课程就无法开课）</span></p>
+										<p><span>前台预约是否允许选择教练</span> <label class="fl"><input type="radio"> <span>允许</span> </label><label class="fl"><input
+												 type="radio"> <span>不允许</span> </label> <span class="red">（只允许指定教练上课）</span></p>
+										<p><span>团会员APP预约是否需要确认：</span> <label class="fl"><input type="radio"> <span>是</span> </label><label class="fl"><input
+												 type="radio"> <span>否</span> </label> </p>
+										<p><span>团课开始之前</span><input type="text" value="20"> <span>分钟，团操老师可刷团会员APP二维码入场</span></p>
+									</div>
+								</div>
+								<h4>课程结算：</h4>
+								<div class="bookBody">
+									<div class="bookBody_b">
+										<p><label class="fl"><input type="checkbox"> <span>在线支付</span> </label></p>
+										<ul>
+											<li>
+												<p><span>每节课</span><input type="text" value="1"> <span>元</span></p>
+												<p><span>限制约课</span> <label class="fl"><input type="radio"> <span>是</span> </label><label class="fl"><input
+														 type="radio"> <span>否</span> </label> </p>
+												<p class="bor">
+													<span>预约对象：</span>
+													<label class="fl"><input type="checkbox"> <span>新注册</span> </label>
+													<label class="fl"><input type="checkbox"> <span>普通会员</span> </label>
+													<label class="fl"><input type="checkbox"> <span>银卡会员</span> </label>
+													<label class="fl"><input type="checkbox"> <span>金卡会员</span> </label>
+													<label class="fl"><input type="checkbox"> <span>钻卡会员</span> </label>
+													<label class="fl"><input type="checkbox"> <span>潜在会员</span> </label>
+												</p>
+											</li>
+										</ul>
+
+										<p><label class="fl"><input type="checkbox"> <span>会员卡结算</span> <span class="red">涉及以下选择的会员卡使用设置</span></label></p>
+										<ul>
+											<li>
+												<div class="bor">
+													<ul>
+														<li><label><input type="checkbox"> <span>软件园店</span> </label></li>
+														<li>
+															<ul>
+																<li><label><input type="checkbox"> <span>健身房</span> </label>
+																	<hr />
+																</li>
+																<li>
+																	<ul>
+																		<li><label><input type="checkbox"> <span>增肌</span> </label>
+																			<hr /> <span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																		<li><label><input type="checkbox"> <span>体态调整</span> </label>
+																			<hr /><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																	</ul>
+
+																</li>
+																<li><label><input type="checkbox"> <span>健身私教</span> </label>
+																	<hr />
+																</li>
+															</ul>
+														</li>
+														<li><label><input type="checkbox"> <span>集美店</span> </label></li>
+														<li>
+															<ul>
+																<li><label><input type="checkbox"> <span>健身房</span> </label>
+																	<hr />
+																</li>
+																<li>
+																	<ul>
+																		<li><label><input type="checkbox"> <span>增肌</span> </label>
+																			<hr /><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																		<li><label><input type="checkbox"> <span>体态调整</span> </label>
+																			<hr /><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																	</ul>
+
+																</li>
+																<li><label><input type="checkbox"> <span>健身私教</span> </label>
+																	<hr />
+																</li>
+															</ul>
+														</li>
+														<li><label><input type="checkbox"> <span>全选</span> </label><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+
+										<p><label class="fl"><input type="checkbox"> <span>课程结算</span> <span class="red">结算费用 扣除客户所购买的课程数</span>
+											</label></p>
+									</div>
+								</div>
+								<div class="bookTab">
+									<div class="tabFoot clearfix">
+										<a class="btn btnBlue">确认</a><a class="btn btnRed">取消</a>
+									</div>
+								</div>
+							</div>
+							<!-- 批量排私教 -->
+							<!-- 复制排课 -->
+							<div id="copyClass" class="copyClass">
+								<div class="bookHeader">
+									<img @click="LI(6)" src="../img/goback.png" alt="" />
+									<span><span class="grey">团课排期/</span>批量排团课</span>
+								</div>
+								<div class="bookBody clearfix">
+									<form class="form-horizontal">
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span class="red">*</span> 复制课程：</label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" placeholder="2018-06-26 ~ 2018-06-30" /> <span class="red">所选日期不能超过31天</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label" style="opacity: 0;">.</label>
+											<div class="col-sm-9">
+												<select name="0" id="" class="form-control">
+													<option value="0">--全部教练--</option>
+													<option value="1">--选择场地--</option>
+													<option value="2">--选择场地--</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label" style="opacity: 0;">.</label>
+											<div class="col-sm-9">
+												<select name="0" id="" class="form-control">
+													<option value="0">--全部课程--</option>
+													<option value="1">--选择教练--</option>
+													<option value="2">--选择教练--</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span>*</span>复制到：</label>
+											<div class="col-sm-9">
+												<input type="text" class="jeinput startDate form-control" placeholder="2018-07-05" /> <span style="margin: 0 15px">
+													至 </span> <span>2018-07-05</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label" style="opacity: 0;">.</label>
+											<div class="col-sm-9">
+												<select name="0" id="" class="form-control">
+													<option value="0">--选择将课程复制给的教练--</option>
+													<option value="1">--选择教练--</option>
+													<option value="2">--选择教练--</option>
+												</select>
+												<span class="red">将上方所选教练的某个时间段的课程复制给该教练，默认为上方所选教练</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-sm-2 control-label"><span>*</span> 即：</label>
+											<div class="col-sm-9">
+												<p>将2018-06-27至2018-07-07期间全部教练的全部课程， 复制到2018-07-01至2018-07-11</p>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="bookTab">
+									<div class="form-group">
+										<label  class="col-sm-2 control-label" style="opacity: 0;"><span>.</span></label>
+										<div class="col-sm-9">
+											<div class="tabFoot clearfix">
+												<a class="btn btnRed">取消</a><a class="btn btnBlue">复制排课</a>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<!-- 复制排课 -->
+							<!-- 排课弹窗 -->
+							<div id="classroom" class="newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>临时排课</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+										<a href="#" class="newCustomers_maskLayer_X newCustomers_maskLayer_X2" onclick="newCustomers_maskLayer_X2()">X</a>
+									</div>
+									<div class="newCustomers_maskLayer_box_shen">
+										<div class="bookBody clearfix">
+											<form class="form-horizontal">
+												<div class="form-group">
+													<label  class="col-sm-2 control-label"><span>*</span>教练：</label>
+													<div class="col-sm-7">
+														<select name="0" id="" class="form-control">
+															<option value="0">--选择教练--</option>
+															<option value="1">--选择教练--</option>
+															<option value="2">--选择教练--</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label  class="col-sm-2 control-label"><span>*</span>课程：</label>
+													<div class="col-sm-7">
+														<select name="0" id="" class="form-control">
+															<option value="0">--选择课程--</option>
+															<option value="1">--选择课程--</option>
+															<option value="2">--选择课程--</option>
+														</select>
+													</div>
+												</div>
+											</form>
+										</div>
+
+										<h4>开放预约时间：</h4>
+										<div class="bookBody">
+											<div class="bookBody_b">
+												<p><label class="fl"><input type="radio"> <span>立即开放预约</span> </label></p>
+												<p><label class="fl"><input type="radio"> <span>定时开放预约</span> <input type="text" class="jeinput dataData"
+														 placeholder="2018-10-22 00:00:00"></label>
+												</p>
+												<p>
+													<label class="fl"><input type="radio"> <span>课程开始前</span> </label>
+													<select name="0" id="">
+														<option value="0">0</option>
+													</select>
+													<span>小时开放预约</span>
+												</p>
+												<p><span>预约设置修改，仅限在预约时间发生前</span><input type="text" value="1"> <span>小时内修改</span></p>
+												<p><span>未经允许是否可以上课</span> <label class="fl"><input type="radio"> <span>是</span> </label><label class="fl"><input
+														 type="radio"> <span>否</span> </label> <span class="red">（如果没有预约的课程就无法开课）</span></p>
+												<p><span>前台预约是否允许选择教练</span> <label class="fl"><input type="radio"> <span>允许</span> </label><label class="fl"><input
+														 type="radio"> <span>不允许</span> </label> <span class="red">（只允许指定教练上课）</span></p>
+												<p><span>团会员APP预约是否需要确认：</span> <label class="fl"><input type="radio"> <span>是</span> </label><label class="fl"><input
+														 type="radio"> <span>否</span> </label> </p>
+												<p><span>团课开始之前</span><input type="text" value="20"> <span>分钟，团操老师可刷团会员APP二维码入场</span></p>
+											</div>
+										</div>
+										<h4>课程结算：</h4>
+										<div class="bookBody">
+											<div class="bookBody_b">
+												<p><label class="fl"><input type="checkbox"> <span>在线支付</span> </label></p>
+												<ul>
+													<li>
+														<p><span>每节课</span><input type="text" value="1"> <span>元</span></p>
+														<p><span>限制约课</span> <label class="fl"><input type="radio"> <span>是</span> </label><label class="fl"><input
+																 type="radio"> <span>否</span> </label> </p>
+														<p class="bor">
+															<span>预约对象：</span>
+															<label class="fl"><input type="checkbox"> <span>新注册</span> </label>
+															<label class="fl"><input type="checkbox"> <span>普通会员</span> </label>
+															<label class="fl"><input type="checkbox"> <span>银卡会员</span> </label>
+															<label class="fl"><input type="checkbox"> <span>金卡会员</span> </label>
+															<label class="fl"><input type="checkbox"> <span>钻卡会员</span> </label>
+															<label class="fl"><input type="checkbox"> <span>潜在会员</span> </label>
+														</p>
+													</li>
+												</ul>
+
+												<p><label class="fl"><input type="checkbox"> <span>会员卡结算</span> <span class="red">涉及以下选择的会员卡使用设置</span></label></p>
+												<ul>
+													<li>
+														<div class="bor">
+															<ul>
+																<li><label><input type="checkbox"> <span>软件园店</span> </label></li>
+																<li>
+																	<ul>
+																		<li><label><input type="checkbox"> <span>健身房</span> </label>
+																			<hr />
+																		</li>
+																		<li>
+																			<ul>
+																				<li><label><input type="checkbox"> <span>增肌</span> </label>
+																					<hr /> <span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																				<li><label><input type="checkbox"> <span>体态调整</span> </label>
+																					<hr /><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																			</ul>
+
+																		</li>
+																		<li><label><input type="checkbox"> <span>健身私教</span> </label>
+																			<hr />
+																		</li>
+																	</ul>
+																</li>
+																<li><label><input type="checkbox"> <span>集美店</span> </label></li>
+																<li>
+																	<ul>
+																		<li><label><input type="checkbox"> <span>健身房</span> </label>
+																			<hr />
+																		</li>
+																		<li>
+																			<ul>
+																				<li><label><input type="checkbox"> <span>增肌</span> </label>
+																					<hr /><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																				<li><label><input type="checkbox"> <span>体态调整</span> </label>
+																					<hr /><span><span>售价：</span><input type="text" value="0.00"><span>元</span></span></li>
+																			</ul>
+
+																		</li>
+																		<li><label><input type="checkbox"> <span>健身私教</span> </label>
+																			<hr />
+																		</li>
+																	</ul>
+																</li>
+																<li><label><input type="checkbox"> <span>全选</span> </label><span><span>售价：</span><input type="text"
+																		 value="0.00"><span>元</span></span></li>
+															</ul>
+														</div>
+													</li>
+												</ul>
+
+												<p><label class="fl"><input type="checkbox"> <span>课程结算</span> <span class="red">结算费用 扣除客户所购买的课程数</span>
+													</label></p>
+											</div>
+										</div>
+										<div class="bookTab">
+											<div class="tabFoot clearfix">
+												<a class="btn btnBlue">确认</a><a class="btn btnRed">取消</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 排课弹窗 -->
+							<!-- 课程设置 -->
+							<div id="Curriculum" class="newCustomers_maskLayer">
+								<div class="newCustomers_maskLayer_box">
+									<div class="newCustomers_maskLayer_box_top">
+										<span>临时排课</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
+									</div>
+									<div class="newCustomers_maskLayer_box_shen">
+										<div class="bookBody clearfix">
+											<div class="lef fl"><img src="../img/u2871.png" alt=""></div>
+											<div class="rig fl">
+												<div>
+													<h3><span class="title">课程名称：</span> <span class="txt"><strong>动感单车</strong></span></h3>
+												</div>
+												<div><span class="title">门店：</span> <span class="txt"><strong>软件园店</strong></span></div>
+												<div><span class="title">教练：</span> <span class="txt"><strong>Nicolas Klaus</strong></span></div>
+												<div><span class="title">日期：</span> <span class="txt"><strong>2018-06-26</strong></span></div>
+												<div><span class="title">时间：</span> <span class="txt"><strong>20:00~21:00</strong></span></div>
+												<div><span class="title">场地：</span> <span class="txt"><strong>动感教室-01A室</strong></span></div>
+												<div><span class="title">上课人数：</span> <span class="txt"><strong>1/29</strong></span></div>
+											</div>
+										</div>
+									</div>
+									<div class="newCustomers_maskLayer_box_botton">
+										<a href="#" class="btn btn-success" @click="LI(0,1)">预约该课程</a>
+										<a href="#" class="btn btn-blue" @click="LI(0,2)">开始上课</a>
+										<a href="#" class="btn btn-danger" onclick="CourseModification(1)">课程修改</a>
+										<a href="#" class="btn btn-red">删除</a>
+									</div>
+								</div>
+							</div>
+							<!-- 课程设置 -->
+						</li>
+						<li class="list list7" v-if="LiIndex==7">
+							<!-- 私教管理 -->
+							<div class="boxWrap" id="personalEducationManagement">
+								<fieldset>
+									<legend>教练/会员管理</legend>
+									<ul>
+										<li>
+											<a href="../financial/charge.html">
+												<p class="title">没有收费课会员服务/分配/跟进管理表</p>
+												<div class="box">
+													<p class="currentTime">新资源人数：650人</p>
+												</div>
+											</a>
+										</li>
+										<li>
+											<a href="../financial/work.html">
+												<p class="title">服务教练/上课预约修改管理表</p>
+												<div class="box">
+
+												</div>
+											</a>
+										</li>
+										<li>
+											<a href="../financial/contract.html">
+												<p class="title">私教会员管理一览表</p>
+												<div class="box">
+
+												</div>
+											</a>
+										</li>
+									</ul>
+								</fieldset>
+								<fieldset>
+									<legend>报表管理</legend>
+									<ul>
+										<li>
+											<p class="title"></p>
+											<div class="box">
+											</div>
+										</li>
+										<li>
+											<p class="title"></p>
+											<div class="box">
+
+											</div>
+										</li>
+										<li>
+											<p class="title"></p>
+											<div class="box">
+
+											</div>
+										</li>
+									</ul>
+								</fieldset>
+							</div>
+							<!-- 私教管理 -->
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../js/combobox.js"></script>
+	<script src="../js/jedate.js"></script>
+	<script src="../js/vue.js"></script>
+	<script src="../js/simple-calendar.js"></script>
+	<script type="text/javascript">
+		//修复高度
+		function mainheight() {
+			var mainheight = $(window).height() - 52;
+			$('.cWrap').height(mainheight);
+			$('.contains').height(mainheight);
+			$(window).resize(function () {
+				mainheight = $(window).height() - 52;
+				$('.cWrap').height(mainheight);
+				$('.contains').height(mainheight);
+			})
+		}
+		mainheight();
+		var training = new Vue({
+			el: '#training',
+			data: {
+				//切换索引
+				LiIndex: 0,
+				btnWrapSpan: 0,
+				tabSpanspan: 0,
+			},
+			methods: {
+				//私教约课/耗课管理子页面切换
+				LI: function (t, s) {
+					this.LiIndex = t;
+					setTimeout(function () {
+						$('.lefNav li').eq(t).addClass('on').siblings().removeClass('on');
+						//预约工作台判断
+						if (t == 0) {
+							$('.toBlock').hover(function () {
+								$('.tabBox').css({
+									'display': 'block',
+									'top': $('.contains').scrollTop() +$(this).offset().top - 25
+								});
+							});
+							$('.tabBox').mouseenter(function () {
+								$('.tabBox').css({
+									'display': 'block'
+								});
+							})
+							$('.tabBox').mouseleave(function () {
+								$('.tabBox').css({
+									'display': 'none'
+								});
+							})
+							$('#appointmentWorkbench').show().siblings().hide();
+						}
+						//教练/教室判断
+						if (t == 1) {
+							$('#coachClassroom').show().siblings().hide();
+						}
+						//课程预约/预约详情
+						if (t == 0 && s == 1) {
+							$('#bookDetail').show().siblings().hide();
+						}
+						//开始上课判断
+						if (t == 0 && s == 2) {
+							$('#startClass').show().siblings().hide();
+						}
+						//查看会员消费记录判断
+						if (t == 3 && s == 1) {
+							$('.tabSpan span').eq(s).addClass('on').siblings().removeClass('on');
+							$('.select').eq(s).addClass('on').siblings().removeClass('on');
+						}
+						if(t==5){
+							var myCalendar = new SimpleCalendar3('#date1');
+						}
+						//团操课程表判断
+						if (t == 6) {
+							$('#privateLessons').show().siblings().hide();
+						}
+						// 批量排团课
+						if (t == 6 && s == 1) {
+							$('#batchSchedulingClass').show().siblings().hide();
+						}
+						// 复制排课
+						if (t == 6 && s == 2) {
+							$('#copyClass').show().siblings().hide();
+						}
+						$('.list').addClass('on').siblings().removeClass('on');
+						startDate();
+						mainheight();
+					}, 50)
+					if (t == 5) {
+						setTimeout(function () {
+							var myCalendar = new SimpleCalendar2('#container .container');
+							$('.sc-pull-right').eq(1).css('display', 'inline-table');
+						}, 50)
+					}
+					if (t == 6) {
+						setTimeout(function () {
+							var myCalendar1 = new SimpleCalendar('#container1 .container');
+							$('.sc-pull-right').eq(0).css('display', 'inline-table');
+						}, 50)
+					}
+				},
+				//私教一对一预约/私教一对多预约切换函数
+				btnWrapSpanFl: function (t) {
+					this.btnWrapSpan = t;
+					$('.btnWrap span.fl').eq(t).addClass('on').siblings().removeClass('on');
+					$('.tab .tabt').eq(t).addClass('on').siblings().removeClass('on');
+				},
+				//课程消费明细表/个人消费明细表切换函数
+				tabSpanSpans: function (t) {
+					this.tabSpanspan = t;
+					$('.tabSpan span').eq(t).addClass('on').siblings().removeClass('on');
+					$('.select').eq(t).addClass('on').siblings().removeClass('on');
+				},
+
+			},
+		});
+		//初始化
+		training.LI(0);
+
+		//获取url的参数
+		function getParam(paramName) {
+			paramValue = "", isFound = !1;
+			if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+				arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+				while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() ==
+					paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+			}
+			return paramValue == "" && (paramValue = null), paramValue
+		}
+
+		// 报表页面返回
+		if (getParam('LiIndex')) {
+			training.LI(getParam('LiIndex'))
+		}
+
+		// 确认
+		function cancel() {
+			$('.tabBox').hide();
+		};
+		//预约详情
+		function checkDetails() {
+			$('#bookDetail').css("display", "block").siblings().hide();
+		};
+		//开课
+		function startClass() {
+			$('#startClass').css("display", "block").siblings().hide();
+		}
+		//添加预约弹窗
+		function reservation() {
+			$('#reservation').show();
+		}
+		//  教练信息
+		function coachInformation(t) {
+			$('#coachInformation').show();
+			if (t == 0) {
+				$('#coachInformation .btn-primary').hide();
+			} else {
+				$('#coachInformation .btn-primary').show();
+			}
+		}
+		//修改课程
+		function CourseModification(t) {
+			$('#classroom').show();
+			$('#classroom .newCustomers_maskLayer_X').hide();
+			$('#classroom .newCustomers_maskLayer_X2').show();
+		}
+		//训练详情
+		function trainingDetails() {
+			$('#trainingDetails').show();
+		}
+		// 复制排课
+		function copyClass() {
+			$('#copyClass').show();
+		}
+		// 未开始
+		function hui() {
+			$('#Curriculum').show()
+			$('#Curriculum .newCustomers_maskLayer_box_botton .btn-success').show();
+		}
+		// 已约满
+		function huired() {
+			alert('已约满!');
+		}
+		// 开始上课
+		function huigreen() {
+			$('#Curriculum').show()
+			$('#Curriculum .newCustomers_maskLayer_box_botton .btn-success').hide();
+
+		}
+		var dataday = '';
+		//复制
+		function toolblur(t) {
+			dataday = $(t).parent().parent().find('.dataday').html();
+			alert('复制成功!');
+		}
+		// 删除
+		function toolred(t) {
+			if (confirm("确定删除吗?")) {
+				$(t).parent().remove();
+			}
+		}
+		// 粘贴
+		function toolorange(t) {
+			if (dataday) {
+				$('.sc-header .btn-danger').css('display', 'inline-block');
+				$(t).parent().find('.toolorange').removeClass('on');
+				$(t).parent().find('.toolblur').addClass('on');
+				$(t).parent().find('.toolred').addClass('on');
+				$(t).parent().parent().find('.dataday').html(dataday);
+			} else {
+				alert('粘贴失败,请复制!');
+			}
+		}
+		// 设置教练上课时间
+		function SetCoachTime() {
+			$('#SetCoachTime').show();
+			$('.ranges_1 ul').remove();
+		}
+		// 关闭弹窗
+		function newCustomers_maskLayer_X() {
+			$('.newCustomers_maskLayer').hide();
+		}
+		// 关闭2弹窗
+		function newCustomers_maskLayer_X2() {
+			$('#classroom').hide();
+		}
+		
+      
+	</script>
+	<script src="../js/common.js"></script>
+</body>
+
+</html>

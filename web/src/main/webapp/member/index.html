@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员卡设置</title>
+<script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/extendjQuery.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/setCookie.js"></script>
+<script src="../js/loading.js"></script>
+
+
+<script>
+    function setParam(val) {
+        $("#topFrame").attr("data-param",val);
+    }
+    function getParam() {
+        return $("#topFrame").attr("data-param");
+    }
+    function setType(val) {
+        $("#topFrame").attr("data-type",val);
+    }
+    function getType() {
+        return $("#topFrame").attr("data-type");
+    }
+    function rightFrame(){
+        leftFrame.window.left.getGeneralStoreList();
+        leftFrame.window.left.getGeneralStoreNotList();
+    }
+</script>
+</head>
+<frameset cols="0,*" frameborder="no" border="0" framespacing="0" style="min-width: 1366px">
+        <frame src="about:blank"></frame>
+        <frameset frameborder="no" border="0" framespacing="0" id="top_frameset" scrolling="No" rows="50,*">
+            <frame name="topFrame" id="topFrame" scrolling="no" noresize="noresize" src="top.html" data-param="1" data-type="2">
+            <frameset frameborder="no" border="0" framespacing="0" id="main_frameset"  cols="220,*">
+                <frame name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame" title="leftFrame" src="left.html" >
+                <frame  name="rightFrame" scrolling="No" id="rightFrame" title="rightFrame" src="main.html">
+            </frameset>
+        </frameset>
+        <frame src="about:blank"></frame>
+        </frameset>
+        <noframes>
+            <body>
+            </body>
+        </noframes>
+</html>

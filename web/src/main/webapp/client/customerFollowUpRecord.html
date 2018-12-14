@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta charset="UTF-8">
+	<title>跟进记录</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/reset.css" />
+	<!--<link rel="stylesheet" href="../css/base.css" />-->
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/combobox.css" />
+	<link rel="stylesheet" href="../css/myPagination.css" />
+	<link rel="stylesheet" href="../css/customerFollowUpRecord.css" />
+</head>
+
+<body>
+	<div id="customerFollowUpRecord">
+		<div class="customerFollowUpRecord">
+			<fieldset>
+				<legend>添加跟进记录</legend>
+				<p class="line">
+					日期：
+					<span>{{followUpRecordAdd.createTime}}</span>
+				</p>
+				<p class="line">
+					跟进类型：
+					<label v-for="item in followTypeList">
+						<input type="radio"  :value="item.vue" v-model="followUpRecordAdd.followType"  name="followType"/>
+						{{item.lab}} <span v-if="item.vue == 1" class="toRed">如果选择微信短信跟进，跟进图片必填</span>
+					</label>
+				</p>
+				<p class="line">
+					跟进内容：
+					<!--<textarea name="followContent" v-model="followUpRecordAdd.followContent" v-on:click="getFollwKeyLis"></textarea>-->
+					<textarea name="followContent" v-on:click="getFollwKeyLis" readonly>{{followContentT}}</textarea>
+				</p>
+
+				<!-- 跟进内容筛选 (动态面板) -->
+				<div id="followKeyword" class="ax_default ax_default_hidden" data-label="跟进内容筛选" style="display: none;position: absolute;background: #fff;width: 32%;left: 8%;top: 144px;padding: 15px 8px 15px 8px;border: 1px solid #ccc">
+					<div class="panel_state" data-label="State1" v-for="item in followKeywordList" >
+						<div class="panel_state_content" :value="item.id">
+							<div  class="ax_default box_1">
+								<div  class=""></div>
+								<div class="text" style="visibility: visible;display: inline-block;float: left;margin-left: 10px;margin-right: 10px;margin-bottom:10px;border: 1px solid #ccc;padding: 2px 9px 2px 9px;">
+									<p><span style="font-family:'应用字体 Regular', '应用字体';">{{item.content}}</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="line">
+					跟进记录图片：
+					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(1)"  id="price1" />
+					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(2)"  id="price2" />
+					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(3)"  id="price3" />
+					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(4)"  id="price4" />
+					<input id="file-fr" style="display: none;" ref="avatar" name="file" type="file"  @change="pictureShow($event)" accept="image/png,image/jpeg,image/gif,image/jpg" />
+				</p>
+				<p class="line">
+					<label>
+						下次跟进：
+						<input type="text" class="jeinput nextFollowTime" v-model="followUpRecordAdd.nextFollowTime" placeholder="请选择" readonly/>
+					</label>
+					<label>
+						计划来访：
+						<input type="text" class="jeinput planVisitTime" v-model="followUpRecordAdd.planVisitTime" placeholder="请选择" readonly/>
+					</label>
+					<label >
+						计划购买：
+						<input type="text" class="jeinput planPurchaseTime" v-model="followUpRecordAdd.planPurchaseTime" placeholder="请选择" readonly/>
+					</label>
+				</p>
+				<p class="line">
+					<input type="submit" value="新增" @click="addAndUpdateLoad"/>
+				</p>
+			</fieldset>
+			<table border="1" bordercolor="#ccc" class="tableList">
+				<thead>
+					<tr>
+						<td>序号</td>
+						<td>日期</td>
+						<td>跟进记录</td>
+						<td>跟进记录图片</td>
+						<td>下次跟进</td>
+						<td>计划来访</td>
+						<td>实际来访</td>
+						<td>计划购买</td>
+						<td>上级主管</td>
+						<td>审核时间</td>
+						<td>跟进调整</td>
+						<!--<td>处理建议</td>-->
+						<td>跟进人</td>
+						<td>操作</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(item,index) in followUpRecordList" :value="item.id" :type="item.type" :roId="item.roleInfoId" :suId="item.supperManagmentId" :pId="item.personalId">
+						<td>{{index+1}}</td>
+						<td>{{item.followTime|formatDate(item.followTime,true)}}</td>
+						<td>{{item.content}}</td>
+						<td>查看</td>
+						<td>{{item.nextFollowTime|formatDate}}</td>
+						<td>{{item.planVisitTime|formatDate}}</td>
+						<td>无</td>
+						<td>{{item.planPurchaseTime|formatDate}}</td>
+						<td :value="item.supperManagmentId">{{item.supperManagmentName}}</td>
+						<td>{{item.checkTime|formatDate}}</td>
+						<!--<td>{{item.followAdjustTime|formatDate}}</td>-->
+						<td>{{item.handleAdvice}}</td>
+						<td :value="item.personalId">{{item.personalName}}</td>
+						<td v-if="item.type == 1"><p v-if="item.supperManagmentId != -1" >修改</p></td>
+						<td v-else-if="item.type == 0"><p v-if="item.supperManagmentId != -1" >审核</p></td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="pagination" class="pagination"></div>
+			<div class="box box1">
+				<p class="title">跟进记录图片</p>
+				<span class="close"> X </span>
+				<div class="imgWrap">
+					<img src="../img/u2871.png" alt="" class="img-responsive">
+					<img src="../img/u2871.png" alt="" class="img-responsive">
+					<img src="../img/u2871.png" alt="" class="img-responsive">
+					<img src="../img/u2871.png" alt="" class="img-responsive">
+				</div>
+			</div>
+			<div class="box box2">
+				<p class="title">{{supperTitle}}</p>
+				<span class="close"> X </span>
+				<ul>
+					<li>
+						上级主管：<span >{{supperManagmentName}}</span>
+					</li>
+					<li>
+						审核时间：<span>{{follwAdivce.checkTime}}</span>
+					</li>
+					<li>
+						跟进调整：<textarea v-model="follwAdivce.handleAdvice"></textarea>
+					</li>
+					<li>
+						<input type="submit" :value="supperTitle"  @click="toSaveSubmit" />
+						<span class="toclose">取消</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="/js/myPagination.js"></script>
+<script src="../js/loading.js"></script>
+<script src="customerFollowUpRecord.js"></script>
+<script>
+    //初始化:下次跟进时间
+    jeDate('.nextFollowTime', {
+        format: "YYYY-MM-DD",
+        minDate:getNowTime(),
+        donefun: function(obj){
+            customerFollowUpRecord.followUpRecordAdd.nextFollowTime = obj.val;
+        }
+    });
+    //初始化:计划来访时间
+    jeDate('.planVisitTime', {
+        format: "YYYY-MM-DD",
+        minDate:getNowTime(),
+        donefun: function(obj){
+            customerFollowUpRecord.followUpRecordAdd.planVisitTime = obj.val;
+        }
+    });
+    //初始化:计划购买时间
+    jeDate('.planPurchaseTime', {
+        format: "YYYY-MM-DD",
+        minDate:getNowTime(),
+        donefun: function(obj){
+            customerFollowUpRecord.followUpRecordAdd.planPurchaseTime = obj.val;
+        }
+    });
+    Loading.prototype.init();
+    customerFollowUpRecord.init();
+</script>
+
+</html>

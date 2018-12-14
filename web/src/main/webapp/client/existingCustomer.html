@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>现有客户</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />--销售顾问/教练--
+	<link rel="stylesheet" href="../css/reset.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/combobox.css" />
+	<link rel="stylesheet" href="../css/existingCustomer.css" />
+	<link rel="stylesheet" href="../css/myPagination.css" />
+
+</head>
+
+<body>
+	<div id="c_rig2" >
+		<div class="follow">
+			<fieldset class="c_rig2Head">
+				<legend>筛选</legend>
+				<div class="screening">
+					筛选条件：
+					<select name="" v-model="level.selected">
+						<option value="">--会员等级--</option>
+						<option v-for="item in level.list" :value="item.id">{{item.levelName}}</option>
+					</select>
+					<select name="" v-model="vipCardStatus">
+							<option value="">--会员卡状态--</option>
+							<option value="1">正常</option>
+							<option value="2">停卡</option>
+							<option value="3">冻结</option>
+							<option value="4">已过期</option>
+							<option value="5">未开卡</option>
+							<option value="6">待补余</option>
+							<option value="7">历史</option>
+					</select>
+					<div class="selectCZR-con">
+						<input type="text" class="selectCZR" readonly="readonly" placeholder="选择操作人">
+						<div class="selectCZR-hidden-box">
+							<div class="SHB-l">
+								<h4>运营部门</h4>
+								<ul>
+									<li class="active">运营部</li>
+									<li>会籍部</li>
+									<li>教练部</li>
+									<li>销售部</li>
+								</ul>
+							</div>
+							<div class="SHB-r">
+								<h4>选择员工</h4>
+								<div class="YGLY-query-box">
+									<input type="text" placeholder="搜索操作人">
+									<strong class="YGLY-query-Btn"></strong>
+								</div>
+								<ul>
+									<li>Alex</li>
+									<li>Brande</li>
+									<li>Cicily</li>
+									<li>David</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<select name="">
+						<option value="">--已购项目筛选--</option>
+						<option value="">减肥套餐</option>
+						<option value="">减肥套餐</option>
+						<option value="">减肥套餐</option>
+						<option value="">减肥套餐</option>
+					</select>
+
+					<input type="text" placeholder="剩余保护天数" v-model="protectDay" @keyup.enter="searchByProtectDay" />
+				</div>
+				<div class="follow">
+					<select name="" id="" v-model="dateType">
+						<option value="1">申请时间</option>
+						<option value="2">开卡日期</option>
+						<option value="3">失效日期</option>
+						<option value="4">客户认领</option>
+						<option value="5">客户分配</option>
+						<option value="6">下次跟进日期</option>
+					</select>
+					<input type="text" class="jeinput startDate" placeholder="开始日期" value="" v-model="startTime" readonly/>
+					至
+					<input type="text" class="jeinput endDate" placeholder="结束日期" value="" v-model="endTime" readonly/>
+					<input type="button" class="btn btn-default" value="全部" @click="clickTime(3)"/>
+					<input type="button" class="btn btn-default" value="今天" @click="clickTime(1)"/>
+					<input type="button" class="btn btn-default" value="本月" @click="clickTime(2)"/>
+					<input type="button" class="btn btn-default" value="今年" @click="clickTime(3)"/>
+				</div>
+				<div class="search">
+					<input type="text" placeholder="手机号码/会员卡号/姓名" v-model="keyword" @keyup.enter="searchByKeyword"/>
+					<input type="button" class="btn btn-primary" value="搜索" @click="searchByKeyword"/>
+				</div>
+			</fieldset>
+		</div>
+		<p class="operation">
+			会员总数：<span>{{existenceStat.count}}</span>近一周生日会员数：<span>{{existenceStat.birthdayCount}}</span> 本周新增会员数：<span>{{existenceStat.addCount}}</span>
+		</p>
+		<div class="tableWrap">
+			<div class="tableWrap_top">
+				<a href="newCustomers.html" target="rightFrame" class="btn btn-danger">+ 新建现有客户</a>
+				<a href="invoicing.html" target="rightFrame" class="btn btn-success">发票开具</a>
+			</div>
+			<div class="tabW">
+				<table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+					<thead>
+						<tr>
+							<td>序号</td>
+							<td>会员姓名</td>
+							<td>性别</td>
+							<td>会员等级</td>
+							<td>会员卡数</td>
+							<td>保护天数</td>
+							<td>手机</td>
+							<td>生日</td>
+							<td>申请时间</td>
+							<td>最近到访时间</td>
+							<td>服务会籍</td>
+							<td>推荐人</td>
+							<td>操作人</td>
+							<td>会员来源</td>
+							<td>状态</td>
+							<td>入会凭证</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item,index) in existence.list">
+							<td>{{(existence.currPage-1)*10+(index+1)}}</td>
+							<td>
+								<a :href="'customerInformation.html?id='+item.id" target="rightFrame">
+									<!--<img :src="../img/addImg.png"  alt="">-->
+									<!--<img src="http://pic.qqtn.com/up/2018-1/15171871903543439.jpg"  alt="">-->
+									<img  :src="avatarUrl(item.picLink)">
+									<span>{{item.clientName}}</span>
+								</a>
+							</td>
+							<td >{{item.sex==0?'男':'女'}}</td>
+							<td :class="levelClass(item.levelName)">{{item.levelName}}</td>
+							<td>{{item.cardCount}}</td>
+							<td :class="{tored:item.protectDay<1}">{{item.protectDay}}</td>
+							<td class="toyellow">{{item.mobile}}</td>
+							<td>{{item.birthday.substring(0,10)}}</td>
+							<td>{{item.applyTime}}</td>
+							<td>{{item.visitingTime}}</td>
+							<td class="togreen">{{item.fwhjName}}</td>
+							<td class="toyellow">{{item.referenceName}}</td>
+							<td><strong>{{item.createUserName}}</strong></td>
+							<td>{{item.customerSource}}</td>
+							<td :class="statusJudge(item.status).class">{{statusJudge(item.status).text}}</td>
+							<td :class="statusJudge(item.status).operateClass" @click="tabalOperate(item.id,item.status)">{{statusJudge(item.status).operate}}</td>
+						</tr>
+						<!-- //调试 -->
+						<!--<tr>-->
+							<!--<td><input type="checkbox" /></td>-->
+							<!--<td>1</td>-->
+							<!--<td>-->
+								<!--<a href="customerInformation.html" target="rightFrame">-->
+									<!--<img src="../img/addImg.png" alt="">-->
+									<!--<span>王一</span>-->
+								<!--</a>-->
+							<!--</td>-->
+							<!--<td>男</td>-->
+							<!--<td class="toyellow">金卡会员</td>-->
+							<!--<td>5</td>-->
+							<!--<td>5</td>-->
+							<!--<td class="toyellow">18760671221</td>-->
+							<!--<td>2018-10-5</td>-->
+							<!--<td>2018-06-02 14:00</td>-->
+							<!--<td>2018-06-02 14:00</td>-->
+							<!--<td class="togreen">Klaus</td>-->
+							<!--<td class="toyellow">Claus</td>-->
+							<!--<td>Nicolas Klaus</td>-->
+							<!--<td>直接录入</td>-->
+							<!--<td class="tored">未付款</td>-->
+							<!--<td class="tored">去结账</td>-->
+						<!--</tr>-->
+						<!-- //调试 -->
+
+
+					</tbody>
+
+				</table>
+			</div>
+			<!--<div class="page clearfix">-->
+				<!--<p class="fl">【共{{existence.totalPage}}页/总{{existence.totalCount}}条】</p>-->
+				<!--<ul class="fr">-->
+					<!--<li>首页</li>-->
+					<!--<li>上一页</li>-->
+					<!--<li>1</li>-->
+					<!--<li>2</li>-->
+					<!--<li>下一个</li>-->
+					<!--<li>尾页</li>-->
+					<!--<li>第<input type="text">页</li>-->
+				<!--</ul>-->
+			<!--</div>-->
+			<div id="pagination" class="pagination"></div>
+
+		</div>
+	</div>
+
+</body>
+
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/myPagination.js"></script>
+<script src="existingCustomer.js"></script>
+<script src="../js/common.js"></script>
+<script>
+	// 点击弹出操作人的下拉框
+	$('body').on('click','.selectCZR-con .selectCZR',function () {
+		$(".selectCZR-hidden-box").slideDown();
+		$('body').on('mouseleave','.selectCZR-hidden-box',function () {
+			$('.selectCZR-hidden-box').slideUp();
+        })
+    })
+	// 点击选择部门
+    $('body').on('click','.SHB-l li',function () {
+        $(this).addClass('active').siblings().removeClass('active');
+    })
+    // 点击选择操作人
+    $('body').on('click','.SHB-r li',function () {
+        $('.selectCZR').val($(this).html());
+        $('.selectCZR-hidden-box').slideUp();
+    })
+    // 点击选择操作人
+    $('body').on('click','.follow .btn.btn-default',function () {
+        $(this).addClass("active").siblings('.btn.btn-default').removeClass('active');
+    })
+
+</script>
+
+</html>

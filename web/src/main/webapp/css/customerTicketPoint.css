@@ -1,0 +1,468 @@
+#customerTicketPoint{
+    padding: 10px
+}
+
+#customerTicketPoint .tableWrap {
+    margin-top: 5px;
+}
+
+#customerTicketPoint .tableWrap table {
+    border-collapse: collapse;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+#customerTicketPoint .tableWrap table thead tr {
+    background: #0cc;
+}
+
+#customerTicketPoint .tableWrap table thead tr td {
+    color: #000;
+}
+
+#customerTicketPoint .tableWrap table td img {
+    margin: 0 5px;
+    vertical-align: bottom;
+}
+
+#customerTicketPoint .tableWrap table td.tored {
+    color: #FF0000;
+}
+
+#customerTicketPoint .tableWrap table td.togreen {
+    color: #00cc00;
+}
+
+#customerTicketPoint .tableWrap table td.toyellow {
+    color: #cfcf07;
+}
+
+#customerTicketPoint .tableWrap table td.toyen {
+    color: #adabab !important;
+}
+
+#customerTicketPoint .tableWrap table td.toceng {
+    color: #f90;
+}
+
+#customerTicketPoint .tableWrap table td.toshallow {
+    color: #00ccff;
+}
+
+#customerTicketPoint .tableWrap table td.toblue {
+    color: rgba(0, 153, 255, 1);
+}
+
+#customerTicketPoint .tableWrap table td {
+    white-space: nowrap;
+    padding: 4px;
+}
+
+#customerTicketPoint .tableWrap table tbody tr:nth-child(odd) {
+    background: #f0f8ff;
+
+}
+
+#customerTicketPoint .tableWrap .page {
+    margin: 15px 0;
+}
+
+#customerTicketPoint .tableWrap .page p {
+    margin-left: 20px;
+}
+
+#customerTicketPoint .tableWrap .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+#customerTicketPoint .tableWrap .page ul li:nth-child(3),
+.content .tab .page ul li:last-child {
+    cursor: default;
+}
+
+#customerTicketPoint .tableWrap .page ul li:last-child {
+    border: none;
+}
+
+#customerTicketPoint .tableWrap .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+
+#customerTicketPoint .tabW_top {
+    text-align: right;
+    margin: 5px 0;
+}
+
+#customerTicketPoint .tabW_top_left{
+    float: left;
+    line-height: 35px;
+    padding: 0 10px;
+}
+#customerTicketPoint .tabW_top_left strong{
+    font-weight: 500; 
+    margin-right: 20px;
+}
+#customerTicketPoint .tabW_top_left span{
+    margin-right: 20px;
+    color: red;
+}
+#customerTicketPoint .tabW_top a {
+    padding: 5px 15px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #ccc;
+    min-width: 60px;
+    height: 30px;
+}
+#customerTicketPoint .tabW_top a#performances{
+    background-color: #070;
+    color: #fff;
+    border-color: #070;
+}
+#customerTicketPoint .tabW_top a#ticketGifts{
+    background-color: red;
+    color: #fff;
+    min-width: 100px;
+    border-color: #FF0000;
+}
+#customerTicketPoint .tableWrap .page {
+    margin: 15px 0;
+}
+
+#customerTicketPoint .tableWrap .page p {
+    margin-left: 20px;
+}
+
+#customerTicketPoint .tableWrap .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+#customerTicketPoint .tableWrap .page ul li:nth-child(3),
+.content .tab .page ul li:last-child {
+    cursor: default;
+}
+
+#customerTicketPoint .tableWrap .page ul li:last-child {
+    border: none;
+}
+
+#customerTicketPoint .tableWrap .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+#customerTicketPoint .tableWrap .tabW_div{
+    border:1px solid #ccc;
+    border-top: 0; 
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#customerTicketPoint .newCustomers_maskLayer{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: none;
+}
+#customerTicketPoint .newCustomers_maskLayer .newCustomers_maskLayer_box_top{
+    line-height: 36px;
+    background-color: rgba(0, 153, 255, 1);
+    text-align: center;
+}
+#customerTicketPoint .newCustomers_maskLayer .newCustomers_maskLayer_box_top span{
+   color: #fff;
+}
+#customerTicketPoint .newCustomers_maskLayer .newCustomers_maskLayer_box_top a{
+ position: absolute;
+ right: 0px;
+ color: #000;
+ font-size: 18px;
+ font-weight: 900;
+ padding: 0 10px;
+}
+
+
+
+
+/* <!-- 票券赠送 --> */
+#ticketGift .newCustomers_maskLayer_box{
+    top: 0;
+    width: 85%;
+    position: relative;
+    margin: 0px auto 10px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+    min-height: 686px;
+    min-width: 1170px;
+}
+
+#ticketGift .section2_box{
+    height: 650px;
+}
+#ticketGift .section2_box .section2_boxs {
+    border: 1px solid #ccc;
+    height: 100%;
+}
+
+#ticketGift .section2_box .section2_boxs1 {
+    display: none;
+    height: 100%;
+    padding: 10px;
+    overflow: hidden;
+}
+
+#ticketGift .section2_box .section2_boxs1.on {
+    display: block;
+}
+
+#ticketGift .section2_boxs1_left {
+    width: 15%;
+    float: left;
+    background-color: #eff0f3;
+    height: 100%;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+#ticketGift .section2_boxs1_left .section2_boxs1_top {
+    text-align: center;
+}
+
+#ticketGift .section2_boxs1_left .section2_boxs1_top select {
+    padding: 2px 5px;
+    width: 80%;
+    margin: 10px 0;
+}
+
+#ticketGift .section2_boxs1_left .section2_boxs1_botton ul {
+    padding-left: 30px;
+    line-height: 22px;
+}
+
+#ticketGift .section2_boxs1_left .section2_boxs1_botton ul li {
+    overflow: hidden;
+}
+
+#ticketGift .section2_boxs1_left .section2_boxs1_botton ul li span {
+    margin-right: 5px;
+    float: left;
+}
+#ticketGift .section2_boxs1_left .section2_boxs1_botton ul li label {
+    overflow: hidden;
+    margin: 0;
+    font-weight: 500 !important;
+}
+#ticketGift .section2_boxs1_left .section2_boxs1_botton ul li input {
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+#ticketGift .section2_boxs1_left .section2_boxs1_botton ul li img {
+    margin-bottom: 5px;
+}
+
+#ticketGift .section2_boxs1_right {
+    width: 84%;
+    float: right;
+    border: none;
+    height: 100%;
+}
+#ticketGift .section2_boxs1_right .btn-primary{
+   width: 100px;
+   background-color: rgba(22, 155, 213, 1);
+   border: none;
+   margin-left: 20px;
+}
+#ticketGift .section2_boxs1_right .section2_boxs1_right_top {
+    line-height: 24px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+#ticketGift .section2_boxs1_right .section2_boxs1_right_top label{
+    margin: 0 15px 0 0;
+    overflow: hidden;
+    float: left;
+}
+#ticketGift .section2_boxs1_right .section2_boxs1_right_top label input{
+    text-align: center;
+}
+#ticketGift .section2_boxs1_right .section2_boxs1_right_top label input[type=checkbox]{
+   float: left;
+   margin: 6px 0 0;
+}
+#ticketGift .section2_boxs1_right .section2_boxs1_right_top span{
+    float: left;
+    margin-right: 5px;
+}
+#ticketGift .page {
+    margin: 15px 0;
+}
+
+#ticketGift .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+#ticketGift .page ul li:last-child {
+    border: none;
+}
+#ticketGift .table th{
+    text-align: center;
+    font-weight: 500;
+}
+#ticketGift .table thead{
+    background-color:#99ccff;
+}
+
+#ticketGift .table label{
+    width: 100%;
+}
+#ticketGift .table input{
+    width: 100%;
+    border: none;
+    text-align: center;
+    line-height: 26px;
+}
+#ticketGift .table tbody tr td:nth-child(7){
+    color: #009900;
+}
+#ticketGift .table tbody tr td:nth-child(10){
+    color: red;
+}
+#ticketGift .table tbody tr td:nth-child(11){
+    color: #ff9900;
+}
+#ticketGift .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+
+
+/* <!-- 业绩分配弹窗 --> */
+#performance .newCustomers_maskLayer_box{
+    top: 20%;
+    max-width: 700px;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+}
+
+#performance .newCustomers_maskLayer_box_shen{
+    padding: 5px 0;
+}
+
+#performance .newCustomers_maskLayer_box_botton a{
+    text-align: center;
+}
+
+#performance .newCustomers_maskLayer_box_shen input{
+    max-width: 60px;
+    padding: 5px 10px;
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen .btn-primary{
+   padding: 4px 10px;
+}
+
+#performance .newCustomers_maskLayer_box_shen .table{
+    line-height: 26px;
+    width: 90%;
+    margin: 0 auto;
+}
+#performance .newCustomers_maskLayer_box_shen .table thead{
+    background-color: #00ccff;
+}
+#performance .newCustomers_maskLayer_box_shen .table thead th{
+    text-align: center;
+    font-weight: 500;
+}
+#performance .newCustomers_maskLayer_box_shen .table td{
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen div{
+    margin-bottom: 10px;
+}
+#performance .newCustomers_maskLayer_box label{
+    margin-right: 10px;
+    font-weight:500;
+}
+#performance .newCustomers_maskLayer_box select{
+    min-width: 90px;
+    padding: 5px 10px;
+}
+#performance .newCustomers_maskLayer_box_botton{
+    text-align: center;
+    padding-bottom: 15px;
+    padding: 10px;
+}
+#performance .newCustomers_maskLayer_box_botton p{
+    color: red;
+    text-align: left;
+    padding: 0 10px;
+    margin: 10px 0;
+}
+#performance .newCustomers_maskLayer_box_botton .btn-success{
+    background-color: #169BD5;
+}
+#performance .newCustomers_maskLayer_box_shen fieldset:nth-child(2) input[type=text]{
+    min-width: 100px;
+    text-align: center;
+}
+
+#performance .newCustomers_maskLayer_box_shen ul{
+    overflow: hidden;
+}
+#performance .newCustomers_maskLayer_box_shen ul li{
+    float: left;
+    background-color: rgb(240, 255, 240);
+    border: 1px dashed rgb(0, 153, 0);
+    padding: 0 10px;
+    margin: 5px;
+}
+#performance .newCustomers_maskLayer_box_shen ul li div{
+    margin: 5px 0;
+}
+#performance .newCustomers_maskLayer_box_shen .ticket_transfer div{
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+#performance .newCustomers_maskLayer_box_shen .ticket_transfer div input{
+  max-width: 200px;
+}

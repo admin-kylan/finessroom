@@ -1,0 +1,348 @@
+@charset "utf-8";
+/* CSS Document */
+/***
+ * uimaker
+ * http://www.uimaker.com
+ * e-mail: admin@uimaker.com
+ */
+*{margin:0;padding:0;}
+body{
+    font-family:'微软雅黑';
+    margin:0 auto;
+    overflow: hidden;
+    background-color: #f4f7f7;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+}
+ul{display:block;margin:0;padding:0;list-style:none;}
+li{display:block;margin:0;padding:0;list-style: none;}
+img{border:0;}
+dl,dt,dd,span{margin:0;padding:0;}
+a,a:focus{text-decoration:none;color:#000;outline:none;blr:expression(this.onFocus=this.blur());}
+a:hover{color:#00a4ac;text-decoration:none;}
+table{border-collapse:collapse;border-spacing: 0;}
+cite{font-style:normal;}
+h2{font-weight:normal;}
+label{
+    margin: 0;
+    float: left;
+    font-weight: 500;
+}
+label input{
+    float: left;
+}
+.common{
+    border: 1px #09a1bb dashed;
+    border-radius: 5px;
+    padding: 20px;
+    position: relative;
+    font-size: 12px;
+}
+.common .common_span{
+    position: absolute;
+    left: 20px;
+    top: -9px;
+    color: #09a1bb;
+    font-size: 13px;
+    background-color: #fff;
+}
+
+/*里面的样式全部为公共*/
+
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+/*简单的弹窗输入框样式*/
+.simpleFrm {
+    display: none;
+    width: 320px;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFF;
+    border-radius: 2px;
+    border: 1px solid #99b2ca;
+    -moz-box-shadow: 2px 2px 5px #99b2ca;
+    -webkit-box-shadow: 2px 2px 5px #99b2ca;
+    box-shadow: 2px 2px 5px #99b2ca;
+    z-index: 1000;
+}
+
+.simpleFrm .simpleFrmTop {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #ffffff;
+    text-indent: 10px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    /*font-weight: bold;*/
+    background-color: rgb(73, 161, 2455);
+}
+
+.simpleFrm .simpleFrmTop .close {
+    float: right;
+    margin: 8px;
+}
+
+.simpleFrm .simpleFrmMain > div {
+    float: left;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: calc(100% - 40px);
+    height: 24px;
+    line-height: 24px;
+}
+
+/*第一个元素*/
+.simpleFrm .simpleFrmMain > div:nth-child(1) {
+    margin-top: 10px;
+}
+
+.simpleFrm .simpleFrmMain > div:nth-last-child(1).save { /*保存 按钮*/
+    width: 60px;
+    background-color: rgb(73, 161, 2455);
+    text-align: center;
+    border-radius: 4px;
+    color: #ffffff;
+    letter-spacing: 4px;
+    font-weight: bold;
+    text-indent: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: calc(50% - 30px);
+}
+
+/*分隔符*/
+.simpleFrm .simpleFrmMain > div.split {
+    height: 1px;
+    width: calc(100% - 10px);
+    margin: 10px 5px 10px 5px;
+    background-color: rgba(194, 194, 194, 0.3);
+}
+
+/*标题 例如 角色名称*/
+.simpleFrm .simpleFrmMain > div > span {
+    float: left;
+    display: block;
+    height: 100%;
+    width: 70px;
+    letter-spacing: 2px;
+}
+
+/*第二个元素大小*/
+.simpleFrm .simpleFrmMain > div > *:nth-child(2) {
+    display: block;
+    float: left;
+    width: calc(100% - 74px);
+    height: calc(100% - 2px);
+    border: 1px solid rgb(0, 184, 125);
+    border-radius: 2px;
+}
+
+/*文本输入框*/
+.simpleFrm .simpleFrmMain > div > input {
+    text-indent: 8px;
+}
+
+/*信息数据搜索*/
+.searchInfo {
+    float: left;
+    margin: 20px 8px 8px 8px;
+    width: calc(100% - 38px);
+    border: 1px solid #EAEAEA;
+    border-radius: 2px;
+    padding: 10px;
+    height: auto;
+    background-color: #ffffff;
+    position: relative;
+}
+
+.searchInfo > span {
+    position: absolute;
+    color: #FF7F50;
+    background-color: transparent;
+    left: 10px;
+    top: -12px;
+    font-size: 15px;
+}
+
+.searchInfo > div {
+    float: left;
+    width: 180px;
+    height: 27px;
+    line-height: 27px;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.searchInfo > div > span {
+    display: block;
+    float: left;
+    width: 62px;
+    text-align: left;
+    height: 100%;
+    text-indent: 2px;
+    padding-right: 10px;
+}
+
+.searchInfo > div > *:nth-last-child(1) {
+    display: block;
+    float: left;
+    width: calc(100% - 74px);
+    height: 21px;
+    border: 1px solid rgb(0, 184, 125);
+    border-radius: 2px;
+    margin-top: 2px;
+    text-indent: 6px;
+}
+
+/*时间*/
+.searchInfo > div > input.time {
+    background: url("../img/down.png") center right no-repeat;
+    background-color: #ffffff;
+    background-position-x: calc(100% - 5px);
+    cursor: default;
+}
+
+/*搜索*/
+.searchInfo > div.search {
+    width: 50px;
+    height: 23px;
+    line-height: 23px;
+    border: 1px solid #00A680;
+    margin-left: 15px;
+    padding-top: 1px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #00A680;
+    color: white;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+/*顶部栏*/
+.ycontentsTop {
+    float: left;
+    width: calc(100% - 16px);
+    height: 39px;
+    line-height: 39px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 8px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddddde;
+}
+
+.ycontentsTop > span {
+    padding-left: 10px;
+}
+
+/*内容显示区域*/
+.ycontentsMain {
+    float: left;
+    margin: 8px;
+    width: calc(100% - 18px);
+    height: calc(100% - 66px);
+    border: 1px solid #dae1f7;
+    background-color: #ffffff;
+}
+
+/*标题栏*/
+.ycontentsMain .commonTitle {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background-color: #f4f7f7;
+    border-bottom: 1px solid #dae1f7;
+}
+
+.ycontentsMain .commonTitle i {
+    float: left;
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-right: 1px solid silver;
+    text-align: center;
+    font-size: 16px;
+}
+
+.ycontentsMain .commonTitle > span {
+    display: block;
+    float: left;
+    height: 100%;
+    width: auto;
+    margin-left: 10px;
+}
+
+/*表格内容区域*/
+.ycontentsMain .ycontentsGroup {
+    float: left;
+    margin: 10px 10px 0 10px;
+    width: calc(100% - 22px);
+    height: calc(100% - 88px);
+    border: 1px solid silver;
+}
+
+.ycontentsMain .ycontentsGroup > div {
+    float: left;
+    width: 100%;
+}
+
+.ycontentsMain .ycontentsGroup table {
+    width: 100%;
+    height: auto;
+    table-layout: fixed;
+    word-break: break-all;
+    word-wrap: break-word;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.ycontentsMain .ycontentsGroup table td {
+    border-bottom: 1px solid #e3e3e3;
+    text-align: center;
+}
+
+.ycontentsMain .ycontentsGroup > div.fixedTable table tr {
+    height: 28px;
+}
+
+.ycontentsMain .ycontentsGroup > div.tableInfo {
+    height: calc(100% - 28px);
+    overflow: auto;
+}
+
+.ycontentsMain .ycontentsGroup > div.tableInfo table tr {
+    height: 26px;
+}
+
+/*序号*/
+.ycontentsMain .ycontentsGroup table td.number {
+    width: 40px;
+}
+
+/*高亮显示*/
+.ycontentsMain .ycontentsGroup table tbody td.highShow {
+    color: red;
+}
+
+/*分页容器*/
+.ycontentsMain .commonPageBox {
+    float: left;
+    margin: 10px;
+    height: 25px;
+    width: calc(100% - 20px);
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.PersonlRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.PersonlRole">
+        <id column="ID" property="id"/>
+        <result column="RoleInfoId" property="RoleInfoId"/>
+        <result column="PersonnelInfoId" property="PersonnelInfoId"/>
+        <result column="ShopId" property="ShopId"/>
+        <result column="IsMain" property="IsMain"/>
+        <result column="IsDel" property="IsDel"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        RoleInfoId, PersonnelInfoId, ShopId, IsMain, ID, IsDel, CustomerCode
+    </sql>
+
+    <select id="getParentIdByPersonnelInfoId" resultType="java.util.Map">
+        SELECT
+             (SELECT r.ParentId FROM RoleInfo r WHERE r.ID = p.RoleInfoId) parentId,
+	          p.RoleInfoId roleInfoId
+        FROM PersonlRole p
+        WHERE p.IsMain='1'
+          and p.IsDel='0'
+          and p.PersonnelInfoId = #{pifId}
+          and p.CustomerCode = #{code}
+    </select>
+
+    <select id="getParentId" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT PersonnelInfoId FROM PersonlRole where RoleInfoId=#{id}
+    </select>
+
+
+</mapper>

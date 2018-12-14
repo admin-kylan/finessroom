@@ -1,0 +1,385 @@
+html,body{
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+}
+#c_rig2{
+	min-width: 1005px;
+}
+#c_rig2>.follow{
+	padding: 0 15px;
+}
+
+#c_rig2>.follow input{
+	height: 28px;
+	font-size: 12px;
+	margin-right: 15px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding: 0;
+}
+
+#c_rig2>.follow .btn{
+	padding: 0 15px;
+	height: 28px;
+} 
+.tab{
+	margin-top:10px;
+	border-bottom:1px solid #ccc;
+}
+.tab span{
+	position: relative;
+	top:1px;
+	float:left;
+	margin:0 10px;
+	padding:0 12px;
+	height:30px;
+	line-height: 30px;
+	border:1px solid #ccc;
+	border-radius: 5px 5px 0 0;
+	border-bottom: none;
+	background:#f4f4f4;
+	cursor:pointer;
+	min-width: 100px;
+	text-align: center;
+}
+.tab span.on{
+	border-bottom:1px solid #fff;
+	background:transparent;
+}
+.tableWrap{
+	margin-top:5px;
+    overflow: auto;
+	height: 775px;
+	position: relative;
+}
+.tableWrap .tableWrap_top{
+	padding: 0 15px;
+	margin: 10px 0;
+}
+.tableWrap .tableWrap_top .btn{
+	background-color: red;
+	border-color: red;
+}
+.tableWrap table{
+	border-collapse:collapse;
+	text-align: center;
+}
+.tableWrap table thead tr{
+	background:#0cc;
+}
+.tableWrap table thead tr td{
+	color:#fff;
+}
+.tableWrap table td{
+	padding:0 15px;
+}
+.tableWrap table td img{
+	vertical-align: middle;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+.tableWrap table td.tored{
+	color:#FF0000;
+}
+.tableWrap table td.togreen{
+	color:#00cc00;
+}
+.tableWrap table td.toyellow{
+	color:#cfcf07;
+}
+.tableWrap table td.toyen{
+	color:#adabab;
+}
+.tableWrap table td a span{
+	color: rgba(0, 153, 255, 1);
+	font-weight: 600;
+}
+fieldset{
+	margin:5px;
+	border:1px dashed #ccc;
+	padding: 10px;
+	border-radius: 5px;
+}
+.section1 span{
+	float:left;
+	padding:0 10px;
+	background:#f4f4f4;
+	border:1px solid #ccc;
+	height:30px;
+	line-height:30px;
+	border-radius:5px;
+	margin:0 8px;
+	cursor: pointer;
+}
+.follow{
+	margin:8px 0;
+}
+.follow select{
+	width:115px;
+	height: 28px;
+	margin-right: 15px;
+	border-radius: 5px;
+}
+.follow input[type=text]{
+	padding: 0px 0;
+	margin: 0;
+	text-align: center;
+}
+.follow input[type=date]{
+	margin: 0 15px;
+}
+.follow input[type=submit]{
+	width:60px;
+	height:30px;
+	border-radius: 3px;
+	background:#fff;
+	color: #333;
+	cursor: pointer;
+	border: 1px solid #333;
+}
+.follow input[type=submit].active {
+	background: #0cc;
+	color: #fff;
+	border: 1px solid #0cc;
+}
+.screening{
+	margin:8px 0;
+}
+
+.screening input{
+	width: 50px;
+}
+.search {
+	overflow: hidden;
+}
+.search input[type=text]{
+	width: 500px;
+	height: 28px !important;
+	border: 1px solid #ccc;
+	float: left;
+	margin-right: 0 !important;
+	border-radius: 0 !important;
+	border-bottom-left-radius: 5px !important;
+	border-top-left-radius: 5px !important;
+}
+.search input:nth-child(4){
+	background:#00f;
+}
+.search .btn{
+	float: left;
+    background-color: rgba(0, 153, 255, 1);
+    margin-left: 0px;
+    color: #fff;
+    cursor: pointer;
+    border: none !important;
+	height: 30px !important;
+	border-radius: 0 !important;
+	border-bottom-right-radius: 5px !important;
+	border-top-right-radius: 5px !important;
+	width: 60px;
+}
+.search span{
+	float: left;
+	line-height: 30px;
+	margin-right: 10px;
+}
+.operation{
+	margin:10px 0;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	padding: 0 15px;
+}
+.operation span{
+	display: inline-block;
+	height:30px;
+	padding:0 10px;
+	cursor: pointer;
+	line-height: 30px;
+	color:red;
+	margin-right: 15px;
+}
+.tab{
+	margin-top:10px;
+	border-bottom:1px solid #ccc;
+}
+.tab a{
+	position: relative;
+	top:1px;
+	float:left;
+	margin:0 10px;
+	padding:0 12px;
+	height:30px;
+	line-height: 30px;
+	border:1px solid #ccc;
+	border-radius: 5px 5px 0 0;
+	border-bottom: none;
+	background:#f4f4f4;
+	cursor:pointer;
+	min-width: 100px;
+	text-align: center;
+}
+.tab a.on{
+	border-bottom:1px solid #fff;
+	background:transparent;
+}
+
+.tableWrap table{
+	border-collapse:collapse;
+	text-align: center;
+}
+.tableWrap table thead{
+	background:#0cc;
+}
+.tableWrap table thead td{
+	color:#fff;
+	line-height: 20px;
+}
+.tableWrap table td{
+	white-space:nowrap;
+	padding:0 5px;
+}
+.tableWrap table tbody td{
+	/* line-height: 50px; */
+}
+.tableWrap table tbody tr:nth-child(even){
+	background:#ecffff;
+}
+.tableWrap .page{
+	margin:15px 0;
+}
+.tableWrap .page p{
+	margin-left:20px;
+}
+.tableWrap .page ul li{
+	float:left;
+	margin:0 8px;
+	padding:0 10px;
+	border:1px solid #ccc;
+	height:25px;
+	border-radius: 5px;
+	line-height: 25px;
+	cursor: pointer;
+}
+.tableWrap .page ul li:nth-child(3),.content .tab .page ul li:last-child{
+	cursor: default;
+}
+.tableWrap .page ul li:last-child{
+	border:none;
+}
+.tableWrap .page ul li input{
+	width:50px;
+	margin:0 5px;
+	text-align: center;
+}
+.tableWrap .tabBox {
+	display: none;
+    position: absolute;
+    padding: 15px 5px 0;
+    background: #e8ffff;
+    top: 0px;
+    width: 65%;
+    box-shadow: 0 0 10px 1px #ccc;
+	left: 22%;
+	border-radius: 5px;
+}
+.tableWrap .tabBox .table{
+	margin: 0 ;
+}
+.tableWrap .tabBox::after {
+	position: absolute;
+    content: '';
+    display: block;
+    top: -10px;
+    left: 65%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-bottom: 15px solid #e8ffff;
+    border-top: none;
+}
+.tabFoot .btnBlue {
+    color: #fff;
+    background-color: rgba(0, 204, 255, 1);
+}
+.tabFoot .btnRed {
+    border-color: red;
+    color: red;
+}
+.tableWrap .tabBox1{
+	width: 20%;
+    left: 5%;
+    line-height: 26px;
+    padding: 5px 10px;
+    min-width: 280px;
+}
+.tableWrap .tabBox1 h4{
+	text-align: center;
+}
+.tableWrap .tabBox1::after {
+    left: 44%;
+}
+.tableWrap .tabBox2{
+	width: 17%;
+	left: 82%;
+
+	padding: 15px 5px 10px;
+}
+.tableWrap .tabBox2::after {
+    left: 44%;
+}
+.tableWrap .tabBox2>div{
+	margin: 5px 0;
+	padding: 0 10px;
+}
+.tabBox1_top{
+	overflow: hidden;
+}
+.tabBox1_top_l{
+	float: left;
+	width: 60%;
+}
+.tabBox1_top_r{
+	float: left;
+	width: 40%;
+}
+.tableWrap .tabBox3{
+	left: 2%;
+	border-radius: 5px;
+	padding: 15px 5px 10px;
+	width: 80%;
+	min-width: 1055px;
+}
+.tableWrap .tabBox3::after {
+    left: 44%;
+}
+.tabBox3>div{
+	margin: 10px 0;
+}
+.tabBox3>div span.red{
+	color: red;
+	margin:  0 5px;
+}
+.tabBox3 td.red{
+	color: red;
+}
+.tabBox3 td.blue{
+	color: #00f;
+}
+.tabBox3 td.sblue{
+	color: #33ccff;
+}
+.tabBox3 td.ablue{
+	color: #0099ff;
+}
+.tabBox3 td.green{
+	color: #009900;
+}
+.tabBox3 td.orange{
+	color: orange;
+}
+.tabBox3 td.yin{
+	color: #adabab;
+}
+

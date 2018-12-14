@@ -1,0 +1,219 @@
+
+html,body{
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+}
+.wrap{
+	min-width: 1005px;
+}
+.header{
+	padding:10px;
+	border-bottom:1px solid #ccc;
+}
+.header select,.header input{
+	width: 120px;
+    height: 28px;
+    margin: 0 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+	padding: 0 5px;
+	text-align: center;
+}
+.header .follow,.header .search{
+	margin-top:15px;
+}
+.header .follow select,.header .search input[type=text]{
+	margin-left:0;
+}
+.header .search input[type=text]{
+	width:300px;
+	height: 28px;
+}
+.header .search input[type=button]{
+	width:80px;
+	height: 30px;
+	background:#00ccff;
+	border-radius: 5px;
+	border:none;
+	color:#fff;
+	cursor: pointer;
+}
+.content a.btn{
+	display:block;
+	margin:10px;
+	width:85px;
+    height: 28px;
+	background:#FF0000;
+	color:#fff;
+	text-align: center;
+	line-height: 30px;
+	cursor: pointer;
+	padding: 0
+}
+.content .tabWrap{
+	overflow-x:scroll;
+}
+.content .tab table{
+	border-collapse:collapse;
+	text-align: center;
+}
+.content .tab table thead{
+	background:#0cc;
+}
+.content .tab table thead td{
+	color:#fff;
+	line-height: 16px;
+}
+.content .tab table td{
+	white-space:nowrap;
+	line-height: 26px;
+}
+.content .tab table tbody td:nth-child(2){
+	color: #00ccff;
+}
+.content .tab table tbody td:nth-child(4){
+	color: #cfcf07;
+}
+
+.content .tab table tbody td.toblue{
+	color: rgba(0, 153, 255, 1);
+}
+.content .tab table tbody td.tored{
+	color: red;
+}
+.content .tab table tbody td.toyen{
+	color: #adabab;
+}
+.content .tab table tbody td:nth-child(22){
+	color: #f90;
+}
+.content .tab table tbody tr:nth-child(even){
+	background:#ecffff;
+}
+.content .tab table tbody tr td:last-child{
+	color:red;
+	cursor: pointer;
+}
+.content .tab .page{
+	margin:15px 0;
+}
+.content .tab .page p{
+	margin-left:20px;
+}
+.content .tab .page ul li{
+	float:left;
+	margin:0 8px;
+	padding:0 10px;
+	border:1px solid #ccc;
+	height:25px;
+	border-radius: 5px;
+	line-height: 25px;
+	cursor: pointer;
+}
+.content .tab .page ul li:nth-child(3),.content .tab .page ul li:last-child{
+	cursor: default;
+}
+.content .tab .page ul li:last-child{
+	border:none;
+}
+.content .tab .page ul li input{
+	width:50px;
+	margin:0 5px;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

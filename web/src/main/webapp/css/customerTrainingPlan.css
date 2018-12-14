@@ -1,0 +1,352 @@
+#customerTrainingPlan .top{
+	margin-top:10px;
+	border-bottom:1px solid #ccc;
+}
+#customerTrainingPlan .top span{
+	display: block;
+	margin-left:10px;
+	width:100px;
+	height:32px;
+	border:1px solid #ccc;
+	border-bottom:none;
+	line-height: 32px;
+	text-align: center;
+}
+#customerTrainingPlan .middle{
+	padding:8px;
+}
+#customerTrainingPlan .middle fieldset{
+	padding:20px 70px 10px;
+}
+#customerTrainingPlan .middle legend{
+	text-indent: -45px;
+	color:#00CCCC;
+}
+#customerTrainingPlan .middle p{
+	margin:10px 0;
+} 
+#customerTrainingPlan .middle label + label{
+	margin-left:20px;
+}
+#customerTrainingPlan .middle label span{
+	color:#333333;
+}
+#customerTrainingPlan .middle input{
+	width:205px;
+	height:34px;
+	border:1px solid #ccc;
+	border-radius:3px;
+	margin:0 5px;
+	text-indent: 10px;
+	color:#333333;
+}
+#customerTrainingPlan .middle .toBlue{
+	display:inline-block;
+	margin:0 5px;
+	width:84px;
+	height:25px;
+	border:1px solid #0cc;
+	color:#0cc;
+	line-height: 25px;
+	text-align: center;
+	cursor: pointer;
+}
+#customerTrainingPlan .middle input[type=time]{
+	width:110px;
+	text-align: center;
+}
+#customerTrainingPlan .middle textarea{
+	margin:0 5px;
+	width:670px;
+	height:85px;
+	vertical-align: top;
+	border-radius:3px;
+	resize:none;
+}
+#customerTrainingPlan .middle input[type=submit]{
+	margin:10px 0 0 170px;
+	width:140px;
+	height:40px;
+	border:none;
+	border-radius:5px;
+	outline: none;
+	background: #169bd0;
+	color:#fff;
+	text-indent: 0;
+}
+#customerTrainingPlan .middle table{
+	margin:25px 0;
+	width:100%;
+	text-align: center;
+}
+#customerTrainingPlan .middle table thead{
+	background: #0cc;
+}
+#customerTrainingPlan .middle table tbody tr:nth-child(even){
+	background: #f0ffff;
+}
+#customerTrainingPlan .middle table tbody td:nth-child(6){
+	cursor: pointer;
+	color:#00CCCC;
+}
+#customerTrainingPlan .middle table tr{
+	height:30px;
+}
+#customerTrainingPlan .middle table span{
+	color:#FF0000;
+	cursor: pointer;
+}
+#customerTrainingPlan .middle table span + span{
+	margin-left:5px;
+	color:#ccc;
+}
+#customerTrainingPlan .middle .box{
+	display: none;
+	position: absolute;
+	top:150px;
+	left:0;
+	right:0;
+	margin:auto;
+	padding-bottom: 60px;
+	width:980px;
+	background: #fff;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+	text-align: center;
+}
+#customerTrainingPlan .middle .box .title{
+	margin:0;
+	height:35px;
+	background: #00CCCC;
+	line-height: 35px;
+	color:#fff;
+}
+#customerTrainingPlan .middle .box .close{
+	position: absolute;
+	top:2px;
+	right:8px;
+	font-size: 20px;
+	font-weight: bold;
+	-webkit-user-select: none;
+	cursor: pointer;
+}
+#customerTrainingPlan .middle .box .tab{
+	margin:10px 0;
+	text-align: left;
+}
+#customerTrainingPlan .middle .box .tab span{
+	display: inline-block;
+	margin:0 15px;
+	width:140px;
+	height:32px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	line-height: 32px;
+	text-align: center;
+}
+#customerTrainingPlan .middle .box .toBlue{
+	background:#169bd5;
+	color: #fff;
+}
+#customerTrainingPlan .middle .box .toGreen{
+	background:#0c0;
+	color: #fff;
+}
+#customerTrainingPlan .middle .box table{
+	margin:0;
+}
+#customerTrainingPlan .middle .box table tbody td:nth-child(6){
+	color:#333;
+}
+#customerTrainingPlan .middle .box table tbody tr{
+	height:190px;
+}
+#customerTrainingPlan .middle .box table img{
+	margin:auto;
+	width:205px;
+	height:180px;
+}
+#customerTrainingPlan .middle .box table span{
+	display: inline-block;
+	width:65px;
+	height:30px;
+	border-radius: 5px;
+	line-height: 30px;
+	text-align: center;
+}
+#customerTrainingPlan .middle .box table tbody tr:nth-child(even){
+	background:none;
+}
+#customerTrainingPlan .middle .box .noBg{
+	border:1px solid #ccc;
+}
+#customerTrainingPlan .middle .box .wrap{
+	display: none;
+	position: absolute;
+	top:30px;
+	left:0;
+	right:0;
+	margin:auto;
+	padding-bottom: 50px;
+	width:830px;
+	background: #fff;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+	text-align: center;
+}
+#customerTrainingPlan .middle .box .wrap .content{
+	position: relative;
+}
+#customerTrainingPlan .middle .box .wrap .content::after{
+	display: block;
+	content: '';
+	clear: both;
+}
+#customerTrainingPlan .middle .box .wrap .content::before{
+	display: block;
+	position: absolute;
+	top:0px;
+	left:165px;
+	content: '';
+	height:480px;
+	border:1px solid #ccc;
+}
+#customerTrainingPlan .middle .box .wrap .lef{
+	float:left;
+	width:165px;
+	height:430px;
+}
+#customerTrainingPlan .middle .box .wrap .lef ul{
+	margin-left: 15px;
+}
+#customerTrainingPlan .middle .box .wrap .lef .ulUp{
+	border-left: 1px dashed #ccc;
+}
+#customerTrainingPlan .middle .box .wrap .lef .ulDown li{
+	position: relative;
+}
+#customerTrainingPlan .middle .box .wrap .lef .ulDown li::before{
+	display: block;
+	position: absolute;
+	top:12px;
+	left:-12px;
+	content: "";
+	border:1px dashed #ccc;
+	width:15px;
+}
+#customerTrainingPlan .middle .box .wrap input{
+	position: relative;
+	top:2px;
+	width:13px;
+	height:13px;
+}
+#customerTrainingPlan .middle .box .wrap .lef li{
+	text-align: left;
+	line-height: 30px;
+}
+#customerTrainingPlan .middle .box .wrap .lef li.sup{
+	margin-left: -11px;
+}
+#customerTrainingPlan .middle .box .wrap .rig{
+	float:left;
+	width:663px;
+}
+#customerTrainingPlan .middle .box .wrap .rig p{
+	margin-left:15px;
+	text-align:left;
+}
+#customerTrainingPlan .middle .box .wrap .rig span{
+	display: inline-block;
+	width:140px;
+	height:30px;
+	background: #169bd5;
+	cursor: pointer;
+	border-radius: 5px;
+	line-height: 30px;
+	color:#fff;
+	text-align: center;
+}
+#customerTrainingPlan .middle .box .wrap .rig tr{
+	height:30px;
+}
+#customerTrainingPlan .middle .box .wrap .rig tbody tr:nth-child(even){
+	background:#f0ffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCategoryItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCategoryItem">
+        <id column="id" property="id" />
+        <result column="category" property="category" />
+        <result column="item_name" property="itemName" />
+        <result column="sdaduim_id" property="sdaduimId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="flag" property="flag" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="is_using" property="isUsing" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="update_time" property="updateTime" />
+        <result column="type" property="type" />
+        <result column="update_user_id" property="updateUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        category, item_name AS itemName, sdaduim_id AS sdaduimId, create_time AS createTime, id, update_user_name AS updateUserName, flag, create_user_id AS createUserId, create_user_name AS createUserName, is_using AS isUsing, CustomerCode, update_time AS updateTime, type, update_user_id AS updateUserId
+    </sql>
+
+    <select id="selectItemsBySdaduimId" resultType="com.yj.dal.dto.CategoryItemDTO">
+         SELECT
+            ci.id,
+            ci.is_using checked ,
+            ci.item_name itemName,
+            ci.create_time createTime,
+	        scc.id sccId,
+            scc.kzje,
+            scc.usage_mode usageMode,
+            scc.mode_price modePrice,
+            scc.mode_way modeWay,
+            scc.mode_discount modeDiscount,
+            scc.pl_set plSet,
+            scc.pl_left plLeft,
+            scc.pl_time plTime,
+            scc.pl_right plRight,
+            scc.pl_right plRight,
+            scc.pl_right plRight,
+            scc.mode_time    modeNum,
+            scc.mode_num      modeTime,
+--             scc.pl_set_id plSetId,
+--             scc.pl_added_set_id plAddedSetId,
+            scc.CustomerCode
+--             (case when scc.pl_set_id is null then 0 else 1 end) setChecked
+      FROM
+            fr_category_item ci
+            left join
+            fr_shop_ctype_consume scc
+            on scc.item_id = ci.id
+        WHERE
+            ci.sdaduim_id = #{sdaduimId}
+    </select>
+
+</mapper>

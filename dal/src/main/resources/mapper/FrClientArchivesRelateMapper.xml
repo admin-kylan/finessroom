@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrClientArchivesRelateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrClientArchivesRelate">
+        <id column="id" property="id"/>
+        <result column="archives_id" property="archivesId"/>
+        <result column="archives_type_id" property="archivesTypeId"/>
+        <result column="archives_type_content" property="archivesTypeContent"/>
+        <result column="type" property="type"/>
+        <result column="is_using" property="isUsing"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        archives_id AS archivesId, archives_type_id AS archivesTypeId, archives_type_content AS archivesTypeContent, type, is_using AS isUsing, id
+    </sql>
+
+    <update id="updateText" parameterType="java.lang.String">
+        UPDATE fr_client_archives_relate set archives_type_content=#{text} WHERE archives_type_id=#{typeId} and type=#{type}
+    </update>
+
+    <select id="getRelate"  resultType="com.yj.dal.model.FrClientArchivesRelate">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        from fr_client_archives_relate where archives_id=(SELECT id FROM fr_client_archives where save_date=#{date} AND
+        client_id=#{cid} and type=#{type})
+    </select>
+
+</mapper>

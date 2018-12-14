@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的客户</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/base.css"/>
+    <link rel="stylesheet" href="../css/skin/jedate.css"/>
+    <link rel="stylesheet" href="../css/myCustomerPotential.css"/>
+    <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../css/myPagination.css"/>
+</head>
+
+<body>
+<div id="myCustomerPotential">
+    <div class="tab clearfix">
+        <a class="on" href="myCustomerPotential.html" target="rightFrame">我的潜在客户</a>
+        <a href="myCustomer.html" target="rightFrame">我的客户</a>
+        <a href="myCustomerAnalysis.html" target="rightFrame">客户信息分析</a>
+    </div>
+    <div class="tableWrap">
+        <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+            <thead>
+            <tr>
+                <td>潜在客户</td>
+                <td>现有客户</td>
+                <td>今日跟进数量</td>
+                <td>今日成交数</td>
+                <td>到访人数</td>
+                <td>今日新增客户数</td>
+                <td>今日成交客户数</td>
+                <td>成交率</td>
+                <td>今日生日客户数</td>
+                <td>1月内卡到期客户</td>
+                <td>本月来到访客户</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>150</td>
+                <td>50</td>
+                <td class="tored">5<img src="../img/lin/down1.png"></td>
+                <td class="togreen">0<img src="../img/lin/down1.png"></td>
+                <td>1<img src="../img/lin/down1.png"></td>
+                <td class="tored">30<img src="../img/lin/up1.png"></td>
+                <td class="togreen">10<img src="../img/lin/up1.png"></td>
+                <td class="tored">66.7%</td>
+                <td>2</td>
+                <td class="toyellow">20</td>
+                <td class="toyen">20</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <fieldset class="section1">
+        <legend>选择客户类型</legend>
+        <div class="category">
+            <span value="1" @click="clientType(1)">今日到访</span>
+            <span value="2" @click="clientType(2)">今日生日客户</span>
+            <span value="3" @click="clientType(3)">本月未到访客户</span>
+            <span value="4" @click="clientType(4)">已设置提醒用户</span>
+            <span value="5" @click="clientType(5)">未设置提醒用户</span>
+            <span value="6" @click="clientType(6)">今日待跟进</span>
+            <span value="7" @click="clientType(7)">昨日跟进</span>
+        </div>
+    </fieldset>
+    <fieldset class="section2">
+        <legend>筛选条件</legend>
+        <div class="follow">
+            <div class="follow">
+                <select name="" id="dateType" v-model="customerFilter.dateType">
+                    <option value="0">下跟进次</option>
+                    <option value="1">计划来访</option>
+                    <option value="2">实际来访</option>
+                    <option value="3">计划购买</option>
+                    <option value="4">建档日期</option>
+                    <option value="5">客户认领</option>
+                    <option value="6">客户分配</option>
+                </select>
+                <input type="text" class="jeinput startDate" placeholder="开始日期" v-model="customerFilter.startTime"
+                       readonly/>至
+                <input type="text" class="jeinput endDate" placeholder="结束日期" v-model="customerFilter.endTime"
+                       readonly/>
+                <input type="submit" value="全部" @click="clickTime(0)"/>
+                <input type="submit" value="本天" @click="clickTime(1)"/>
+                <input type="submit" value="本周" @click="clickTime(2)"/>
+                <input type="submit" value="本月" @click="clickTime(3)"/>
+                <input type="submit" value="本季度" @click="clickTime(4)"/>
+                <input type="submit" value="本年" @click="clickTime(5)"/>
+            </div>
+            <div class="screening">
+                筛选条件：<input type="text" placeholder="剩余保护天数" v-model="customerFilter.protectDay"
+                            @keyup.enter="buildFilterDate"/>
+                <input type="text" placeholder="消费频率（天/次）"/>
+                <input type="text" placeholder="多少天无人跟进" v-model="customerFilter.noFollow"
+                       @keyup.enter="buildFilterDate"/>
+                <select id="customerLevel" v-model="customerFilter.customerLevel">
+                    <option value="">--客户等级--</option>
+                    <option :value="index" v-for="(item,index) in levelList">{{item}}</option>
+                </select>
+                <select name="" id="fwhjNameId" v-model="customerFilter.fwhjNameId">
+                    <option value="">--服务会籍--</option>
+                    <option :value="item.mobile" v-for="(item,index) in ServicePersonnel">{{item.relName}}</option>
+                </select>
+                <select id="followPerson" v-model="customerFilter.followPerson">
+                    <option value="" selected="selected">--跟进人--</option>
+                    <option :value="item.id" v-for="(item,index) in followPersonal">{{item.relName}}</option>
+                </select>
+            </div>
+            <div class="search">
+                <input type="text" placeholder="姓名/手机号码/跟进内容关键字/意向卡类别.意向卡名称" v-model="customerFilter.keyword"
+                       @keyup.enter="buildFilterDate"/>
+                <input type="submit" value="搜索" @click="buildFilterDate"/>
+                <input type="submit" value="打印"  @click="print"/>
+                <input type="submit" value="导出"  @click="exportExcel"/>
+            </div>
+        </div>
+    </fieldset>
+    <p class="operation">
+        <span>操作类型：</span><a href="leadCustomerEntry.html" target="rightFrame"><span>新建潜在客户</span></a>
+        <a href="myClaimingCustomersPotential.html" target="rightFrame"><span>可认领客户</span></a>
+        <a href="customerAllocation.html" target="rightFrame"><span>客户分配</span></a>
+        <span>该客户到店则提醒</span><span>发送短信</span>
+    </p>
+    <div class="tableWrap">
+        <div class="tabW">
+            <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+                <thead>
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>序号</td>
+                    <td>会员姓名</td>
+                    <td>性别</td>
+                    <td>联系方式</td>
+                    <td>保护天数</td>
+                    <td>微信</td>
+                    <td>总联系数</td>
+                    <td>客户等级</td>
+                    <td>意向门店</td>
+                    <td>渠道来源</td>
+                    <td>跟进总次数</td>
+                    <td>最早消费时间</td>
+                    <td>最近消费时间</td>
+                    <td>消费总数</td>
+                    <td>频率（天/次）</td>
+                    <td>建档时间</td>
+                    <td>最近来访时间</td>
+                    <td>购买意向</td>
+                    <td>服务会籍</td>
+                    <td>跟进人</td>
+                    <td>首次跟进时间</td>
+                    <td>最近跟进日期</td>
+                    <td>跟进内容</td>
+                    <td>意向卡类别</td>
+                    <td>意向卡名称</td>
+                    <td>意向卡价格</td>
+                </tr>
+                <tbody>
+                <tr v-for="(item,index) in customerTable.list">
+                    <td><input type="checkbox"/></td>
+                    <td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
+                    <td class="toblue">{{item.clientName}}</td>
+                    <td>{{item.sex==0?'男':'女'}}</td>
+                    <td>{{item.mobile}}</td>
+                    <td class="tored">{{item.protectDay}}</td>
+                    <td>{{item.wechat}}</td>
+                    <td>{{item.contactCount}}</td>
+                    <td>
+                        <span v-if="item.vipLevel == index1" v-for="(level,index1) in levelList">{{level}}</span>
+                    </td>
+                    <td>{{item.shopName}}</td>
+                    <td>{{item.customerSource}}</td>
+                    <td class="tored">{{item.followCount}}</td>
+                    <td>2018-08-23</td>
+                    <td>2018-08-23</td>
+                    <td class="togreen">0</td>
+                    <td class="togreen">0</td>
+                    <td>{{item.buildDate}}</td>
+                    <td>{{item.visitingTime}}</td>
+                    <td>
+                        <span v-if="item.purchaseWill == 0">肯定买</span>
+                        <span v-else-if="item.purchaseWill == 1">有点想</span>
+                        <span v-else-if="item.purchaseWill == 2">不清楚</span>
+                        <span v-else-if="item.purchaseWill == 3">确定不买</span>
+                    </td>
+                    <td class="toceng">{{item.fwhjName}}</td>
+                    <td>{{item.followName}}</td>
+                    <td>{{item.firstFollowTime}}</td>
+                    <td>{{item.followTime}}</td>
+                    <td class="toshallow">{{item.followContent}}</td>
+                    <td class="toyen">{{item.willingCardType}}</td>
+                    <td class="toyen">{{item.willingCardName}}</td>
+                    <td class="toyen">{{item.willingPrice}}</td>
+                </tr>
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><input type="checkbox"/></td>-->
+                <!--<td>1</td>-->
+                <!--<td class="toblue">王一</td>-->
+                <!--<td>男</td>-->
+                <!--<td>18677789054</td>-->
+                <!--<td class="tored">0</td>-->
+                <!--<td>demacia</td>-->
+                <!--<td>0</td>-->
+                <!--<td>优质</td>-->
+                <!--<td>软件园店</td>-->
+                <!--<td>现场来访</td>-->
+                <!--<td class="tored">1</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td>2018-08-23</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td class="togreen">0</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td>无</td>-->
+                <!--<td>肯定想买</td>-->
+                <!--<td class="toceng">keven</td>-->
+                <!--<td>keven</td>-->
+                <!--<td>2018-06-14</td>-->
+                <!--<td>2018-06-14 10:05</td>-->
+                <!--<td class="toshallow">手动：客户接待自动来访</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--<td class="toyen">无</td>-->
+                <!--</tr>-->
+
+                </tbody>
+                </thead>
+            </table>
+
+        </div>
+        <div id="pagination" class="pagination"></div>
+        <!--<div class="page clearfix" >-->
+        <!--<p class="fl">【共5页/总100条】</p>-->
+        <!--<ul class="fr">-->
+        <!--<li>首页</li>-->
+        <!--<li>上一页</li>-->
+        <!--<li>1</li>-->
+        <!--<li>下一个</li>-->
+        <!--<li>尾页</li>-->
+        <!--<li>第<input type="text">页</li>-->
+        <!--</ul>-->
+        <!--</div>-->
+    </div>
+</div>
+<!--基础-->
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<!--插件-->
+<script src="../js/loading.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="/js/myPagination.js"></script>
+<script src="myCustomerPotential.js"></script>
+<script>
+    myCustomerPotential.init();
+</script>
+</body>
+</html>
+

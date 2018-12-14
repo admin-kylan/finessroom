@@ -1,0 +1,272 @@
+.contains .conWrap{
+	height:56px;
+	line-height: 56px;
+	font-size:18px;
+	font-weight: bold;
+	text-align: center;
+}
+.contains .conWrap .spanWrap span{
+	float:left;
+	margin:20px 10px 0 0;
+	width:70px;
+	height:30px;
+	border-radius: 5px;
+	cursor: pointer;
+	line-height: 30px;
+	color:#fff;
+}
+.contains .conWrap .spanWrap span.green{
+	background:#090;
+}
+.contains .conWrap .spanWrap span.orange{
+	background:#f90;
+}
+.contains fieldset{
+	margin-bottom: 20px;
+}
+.contains fieldset legend{
+	color:#ff9900;
+}
+.contains fieldset .follow{
+	margin-right:15px;
+	border-radius: 5px;
+	width:150px;
+	height:35px;
+}
+.contains .navBar{
+	margin-bottom: 0;
+}
+.contains .tab table .green{
+	color:#090;
+}
+.contains .tab table .deepBlue{
+	color:#00f;
+}
+.contains .conWrap select{
+	margin:14px 0 0 20px;
+	width:120px;
+	height:28px;
+	font-size: 16px;
+	font-weight: normal;
+}
+.contains fieldset .line label{
+	margin-right:30px;
+}
+.contains fieldset input[type=radio]{
+	position: relative;
+	top:2px;
+}
+.contains fieldset input[type=checkbox]{
+	position: relative;
+	top:2px;
+}
+.contains fieldset input[type=text]{
+	width:160px;
+	height:26px;
+}
+.contains fieldset label{
+	margin-right:30px;
+}
+.contains fieldset .line input[type=text]{
+	width:45px;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+}
+.contains fieldset .line .toMarginLeft{
+	margin-left:52px;
+}
+.contains fieldset .line input[type=date]{
+	margin:0 5px;
+}
+.contains fieldset select{
+	width:140px;
+	height:26px;
+}
+.contains fieldset .distribution{
+	display: inline-block;
+	margin:0 15px;
+	width:75px;
+	height:26px;
+	border-radius: 5px;
+	cursor: pointer;
+	background:#169bd5;
+	line-height: 26px;
+	text-align: center;
+	color:#fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

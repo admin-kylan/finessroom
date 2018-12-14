@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrIndustryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrIndustry">
+        <id column="id" property="id" />
+        <result column="industry" property="industry" />
+        <result column="role" property="role" />
+        <result column="customer_type" property="customerType" />
+        <result column="days" property="days" />
+        <result column="note" property="note" />
+        <result column="rl_hours" property="rlHours" />
+        <result column="rl_num" property="rlNum" />
+        <result column="xy_gj_num" property="xyGjNum" />
+        <result column="qz_gj_num" property="qzGjNum" />
+        <result column="flag" property="flag" />
+        <result column="type" property="type" />
+        <result column="is_using" property="isUsing" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        industry, role, customer_type AS customerType, days, note, rl_hours AS rlHours, rl_num AS rlNum, xy_gj_num AS xyGjNum, qz_gj_num AS qzGjNum, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, id
+    </sql>
+
+    <!--修改行业表-->
+    <update id="updateByEntity" parameterType="com.yj.dal.model.FrIndustry">
+        UPDATE fr_industry
+        <trim prefix="set" suffixOverrides=",">
+            <if test="frIndustry.industry!=null">
+                industry = #{frIndustry.industry},
+            </if>
+            <if test="frIndustry.role!=null">
+                role = #{frIndustry.role},
+            </if>
+            <if test="frIndustry.customerType!=null">
+                customer_type = #{frIndustry.customerType},
+            </if>
+            <if test="frIndustry.days!=null">
+                days = #{frIndustry.days},
+            </if>
+            <if test="frIndustry.note!=null">
+                note = #{frIndustry.note},
+            </if>
+            <if test="frIndustry.type!=null">
+                type = #{frIndustry.type},
+            </if>
+            <if test="frIndustry.CustomerCode!=null">
+                CustomerCode = #{frIndustry.CustomerCode},
+            </if>
+            <if test="frIndustry.rlHours!=null">
+                rl_hours = #{frIndustry.rlHours},
+            </if>
+            <if test="frIndustry.rlNum!=null">
+                rl_num = #{frIndustry.rlNum},
+            </if>
+            <if test="frIndustry.xyGjNum!=null">
+                xy_gj_num = #{frIndustry.xyGjNum},
+            </if>
+            <if test="frIndustry.qzGjNum!=null">
+                qz_gj_num = #{frIndustry.qzGjNum},
+            </if>
+            <if test="frIndustry.createTime!=null">
+                create_time = #{frIndustry.createTime},
+            </if>
+            <if test="frIndustry.createUserId!=null">
+                create_user_id = #{frIndustry.createUserId},
+            </if>
+            <if test="frIndustry.updateUserId!=null">
+                update_user_id = #{frIndustry.updateUserId},
+            </if>
+            <if test="frIndustry.updateUserName!=null">
+                update_user_name = #{frIndustry.updateUserName},
+            </if>
+            <if test="frIndustry.flag!=null">
+                flag = #{frIndustry.flag},
+            </if>
+            <if test="frIndustry.updateTime!=null">
+                update_time = #{frIndustry.updateTime},
+            </if>
+            <if test="frIndustry.createUserName!=null">
+                create_user_name = #{frIndustry.createUserName},
+            </if>
+        </trim>
+        <where>
+            is_using = 1
+            <if test="frIndustry.industry!=null">
+                and industry = #{frIndustry.industry}
+            </if>
+            <if test="frIndustry.role!=null">
+                and role = #{frIndustry.role}
+            </if>
+            <if test="frIndustry.customerType!=null">
+                and customer_type = #{frIndustry.customerType}
+            </if>
+        </where>
+
+    </update>
+
+    <!--查询客户保护天数设置列表-->
+    <select id="selectProtectionDaysList" resultType="com.yj.dal.model.FrIndustry">
+        SELECT
+            create_time createTime,
+            create_user_name createUserName,
+            customer_type customerType,
+            CustomerCode,
+            days,
+            id,
+            industry,
+            note,
+            update_time updateTime,
+            update_user_name updateUserName,
+            role
+        FROM
+            fr_industry
+        WHERE
+        is_using= 1 and CustomerCode = #{customerCode}
+        ORDER BY
+        customer_type asc,
+        create_time desc
+    </select>
+
+    <!--查询客户认领设置列表-->
+    <select id="selectClaimSetList" resultType="com.yj.dal.model.FrIndustry">
+        SELECT
+            a.create_time createTime,
+            b.industry,
+            b.role,
+            b.rl_hours rlHours,
+            b.rl_num rlNum
+        FROM
+            ( SELECT create_time, role FROM fr_industry ) AS a,
+            (
+        SELECT
+            dbo.fr_industry.industry,
+            dbo.fr_industry.role,
+            dbo.fr_industry.rl_hours,
+            dbo.fr_industry.rl_num
+        FROM
+            dbo.fr_industry
+        WHERE
+            dbo.fr_industry.is_using = 1
+            and dbo.fr_industry.CustomerCode=#{customerCode}
+        GROUP BY
+            dbo.fr_industry.role,
+            dbo.fr_industry.industry,
+            dbo.fr_industry.rl_hours,
+            dbo.fr_industry.rl_num
+            ) AS b
+        WHERE
+            a.role = b.role
+        GROUP BY
+            a.create_time,
+            b.industry,
+            b.role,
+            b.rl_hours,
+            b.rl_num
+        ORDER BY
+            a.create_time DESC
+    </select>
+
+    <!--查询客户跟进列表-->
+    <select id="selectFollowList" resultType="com.yj.dal.model.FrIndustry">
+         SELECT
+            industry,
+            role,
+            customer_type customerType,
+            qz_gj_num qzGjNum,
+            xy_gj_num xyGjNum
+        FROM
+            fr_industry
+        <where>
+            is_using = 1 and CustomerCode = #{customerCode}
+            <if test="customerType!=null">
+              and customer_type = #{customerType}
+            </if>
+
+        </where>
+        GROUP BY
+            role,
+            industry,
+            qz_gj_num,
+            xy_gj_num,
+            rl_hours,
+            rl_num,
+            customer_type
+    </select>
+
+</mapper>

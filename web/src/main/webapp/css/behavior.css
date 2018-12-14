@@ -1,0 +1,244 @@
+.top{
+	height:60px;
+	padding-left:20px;
+	background: #0cc;
+	line-height: 60px;
+	font-size: 18px;
+	font-weight: bold;
+}
+.left{
+	float:left;
+	width:12%;
+}
+.left li{
+	height:40px;
+	cursor: pointer;
+	border-bottom:1px solid #ccc;
+	line-height: 40px;
+	text-align: center;
+}
+.left li.on{
+	background: #0cc;
+	color:#fff;
+}
+.right{
+	position: relative;
+	float:left;
+	width:88%;
+	/*border-left:1px solid #ccc;*/
+}
+.right::after{
+	position: absolute;
+	display: block;
+	content:'';
+	top:0;
+	left:0;
+	height:100%;
+	width:1px;
+	background: #ccc;
+	
+}
+.header{
+	height:60px;
+	border-bottom:1px solid #ccc;
+	line-height: 60px;
+}
+.header span{
+	display: inline-block;
+	margin-left:40px;
+	width:90px;
+	height:30px;
+	background: #f00;
+	cursor: pointer;
+	border-radius: 5px;
+	line-height: 30px;
+	color:#fff;
+	text-align: center;
+}
+.contains h3{
+	margin-top:10px;
+	height:40px;
+	line-height: 40px;
+	text-align: center;
+}
+.contains .navBar{
+	margin-bottom: 20px;
+}
+.contains .choose{
+	padding-left:20px;
+}
+.contains .choose select{
+	margin-right:10px;
+	width:130px;
+	height:30px;
+}
+.contains .choose input{
+	margin:0 10px;
+	width:160px;
+	height:28px;
+}
+.contains .choose span{
+	margin-right:10px;
+	width:70px;
+	height:30px;
+	cursor: pointer;
+	border-radius: 5px;
+	color:#fff;
+	line-height: 30px;
+	text-align: center;
+}
+.contains .choose span.toYellow{
+	background: #f90;
+}
+.contains .choose span.toLightBlue{
+	background: #0cc;
+}
+.contains .choose span.toDeepBlue{
+	background: #00c;
+}
+.contains .search{
+	margin-right:60px;
+	width:280px;
+	height:35px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	line-height: 35px;
+}
+.contains .search .txt{
+	width:235px;
+	border:none;
+	background: transparent;
+	text-align: center;
+}
+.contains .search .submit{
+	width:45px;
+	border:none;
+	background:#ccc;
+	color:#fff;
+}
+.contains .tab table{
+	border-collapse: collapse;
+	width:100%;
+	text-align: center;
+}
+.contains .tab table thead{
+	background: #0cc;
+}
+.contains .tab table tr{
+	height:30px;
+}
+.contains .tab table .blue{
+	color: #00ccff;
+}
+.contains .tab table .orange{
+	color: #ff9900;
+}
+.contains .tab table .red{
+	color:#ff0000;
+}
+.contains .tab table .grey{
+	color:#999;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

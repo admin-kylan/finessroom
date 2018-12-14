@@ -1,0 +1,115 @@
+
+#employee{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #fff;
+}
+#employee .main_top{
+    border-bottom: 1px solid #ccc;
+    line-height: 30px;
+    padding: 7px 20px;
+    border-right: 1px solid #ccc;
+    font-size: 13px;
+    min-width: 1100px;
+}
+#employee .main_box{
+    padding: 30px;
+    overflow-y: auto;
+    height: 90%;
+    border-right: 1px solid #ccc;
+    min-width: 1100px;
+    min-height: 480px;
+}
+#employee .form{
+    line-height: 30px;
+}
+#employee .form .form_box{
+    overflow: hidden;
+}
+
+#employee .form .form_box .form_box_left{
+    float: left;
+    width: 11%;
+    padding: 0 10px;
+    text-align: right;
+}
+
+#employee .form .form_box .form_box_right{
+    float: left;
+    width: 87%;
+}
+
+#employee .form .form_box .form_box_right .form_box_right_cb{
+    border: 1px #ccc dashed;
+    width: 60%;
+    padding: 5px 15px;
+}
+
+#employee .main_sub{
+    padding: 40px;
+    line-height: 30px;
+}
+#employee .form .form_box .form_box_right .form_box_right_cb ul{
+    margin-left: 20px;
+    overflow: hidden;
+}
+#employee .form .form_box .form_box_right .form_box_right_cb ul li{
+    float: left;
+    margin: 0 10px;
+    min-width: 70px;
+}
+#employee .main_sub a{
+    padding: 10px 40px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius:4px; 
+    margin-right: 15px;
+}
+#employee .main_sub a.on{
+    background-color: #169bd5;
+    border-color: #169bd5;
+    color: #fff;
+}
+#employee .form .form_box .form_box_right .form_box_right_red{
+    color: red;
+}
+#employee .form .form_box .form_box_right .form_box_right_red.on{
+    padding: 0 15px;
+}
+#employee .form .form_box .form_box_right .form_box_right_inp{
+    padding: 0px 15px;
+    min-width: 40%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#employee .form .form_box .form_box_right.shuxing ul{
+    overflow: hidden;
+    max-width: 50%;
+}
+#employee .form .form_box .form_box_right.shuxing ul li{
+    float: left;
+    /* margin: 0 10px; */
+    min-width: 70px;
+}
+#employee .form .form_box .form_box_right.shuxing span{
+    float: left;
+   
+}
+#employee .form .form_box .form_box_right.shuxing input{
+    margin-top: 9px;
+    margin-right: 2px
+   
+}
+#employee .form .form_box .form_box_right.on span {
+    float: left;
+}
+#employee .form .form_box .form_box_right.on div {
+    overflow: hidden;
+}
+
+#employee .form .form_box .form_box_right.on input {
+    margin-right: 2px;
+    margin-top: 9px;
+}

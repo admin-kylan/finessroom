@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ShopMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.Shop">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="customerCode" />
+        <result column="ShopName" property="shopName" />
+        <result column="CityName" property="cityName" />
+        <result column="ShopTel" property="shopTel" />
+        <result column="ShopAddress" property="shopAddress" />
+        <result column="ProvinceId" property="provinceId" />
+        <result column="ProvinceName" property="provinceName" />
+        <result column="CityId" property="cityId" />
+        <result column="AreaId" property="areaId" />
+        <result column="AreaName" property="areaName" />
+        <result column="PlaceType" property="placeType" />
+        <result column="Status" property="status" />
+        <result column="ShopStatus" property="shopStatus" />
+        <result column="AreaCount" property="areaCount" />
+        <result column="EmployCount" property="employCount" />
+        <result column="SdadiumCount" property="sdadiumCount" />
+        <result column="Money" property="money" />
+        <result column="MerchantId" property="merchantId" />
+        <result column="ManageList" property="manageList" />
+        <result column="OtherProject" property="otherProject" />
+        <result column="ExtendField1" property="extendField1" />
+        <result column="CreateID" property="createID" />
+        <result column="SimpleAddrs" property="simpleAddrs" />
+        <result column="CreateName" property="createName" />
+        <result column="ExtendField2" property="extendField2" />
+        <result column="ExtendField3" property="extendField3" />
+        <result column="CreateTime" property="createTime" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.yj.dal.model.Shop">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="customerCode" />
+        <result column="ShopName" property="shopName" />
+        <result column="CityName" property="cityName" />
+        <result column="ShopTel" property="shopTel" />
+        <result column="ShopAddress" property="shopAddress" />
+        <result column="ProvinceId" property="provinceId" />
+        <result column="ProvinceName" property="provinceName" />
+        <result column="CityId" property="cityId" />
+        <result column="AreaId" property="areaId" />
+        <result column="AreaName" property="areaName" />
+        <result column="PlaceType" property="placeType" />
+        <result column="Status" property="status" />
+        <result column="ShopStatus" property="shopStatus" />
+        <result column="AreaCount" property="areaCount" />
+        <result column="EmployCount" property="employCount" />
+        <result column="SdadiumCount" property="sdadiumCount" />
+        <result column="Money" property="money" />
+        <result column="MerchantId" property="merchantId" />
+        <result column="ManageList" property="manageList" />
+        <result column="OtherProject" property="otherProject" />
+        <result column="ExtendField1" property="extendField1" />
+        <result column="CreateID" property="createID" />
+        <result column="SimpleAddrs" property="simpleAddrs" />
+        <result column="CreateName" property="createName" />
+        <result column="ExtendField2" property="extendField2" />
+        <result column="ExtendField3" property="extendField3" />
+        <result column="CreateTime" property="createTime" />
+        <!--相关系列卡-->
+        <collection property="frCardTypeList" ofType="com.yj.dal.model.FrCardType">
+            <id column="f_id" property="id" />
+            <result column="f_p_id" property="pId" />
+            <result column="f_card_type_name" property="cardTypeName" />
+            <result column="f_service_life" property="serviceLife" />
+            <result column="f_swiping_interval" property="swipingInterval" />
+            <result column="f_swiping_time" property="swipingTime" />
+            <result column="f_used_num" property="usedNum" />
+            <result column="f_pzfs" property="pzfs" />
+            <result column="f_original_price" property="originalPrice" />
+            <result column="f_sales_price" property="salesPrice" />
+            <result column="f_total_num" property="totalNum" />
+            <result column="f_stop_num" property="stopNum" />
+            <result column="f_stop_days" property="stopDays" />
+            <result column="f_total_days" property="totalDays" />
+            <result column="f_out_price" property="outPrice" />
+            <result column="f_qt_xxjg_update" property="qtXxjgUpdate" />
+            <result column="f_qt_xxqy_update" property="qtXxqyUpdate" />
+            <result column="f_qt_zsqy_update" property="qtZsqyUpdate" />
+            <result column="f_qt_lrzp_update" property="qtLrzpUpdate" />
+            <result column="f_qt_zdxxjg" property="qtZdxxjg" />
+            <result column="f_qt_zdqy" property="qtZdqy" />
+            <result column="f_can_transfer" property="canTransfer" />
+            <result column="f_can_change_type" property="canChangeType" />
+            <result column="f_transfer_fee" property="transferFee" />
+            <result column="f_renew_common_price" property="renewCommonPrice" />
+            <result column="f_renew_level1_price" property="renewLevel1Price" />
+            <result column="f_renew_level2_price" property="renewLevel2Price" />
+            <result column="f_renew_level3_price" property="renewLevel3Price" />
+            <result column="f_renew_level4_price" property="renewLevel4Price" />
+            <result column="f_qt_can_renew" property="qtCanRenew" />
+            <result column="f_zk_num" property="zkNum" />
+            <result column="f_zk_cyfs" property="zkCyfs" />
+            <result column="f_zk_tkqy" property="zkTkqy" />
+            <result column="f_zk_xffs" property="zkXffs" />
+            <result column="f_zk_clfs" property="zkClfs" />
+            <result column="f_zk_sjjg" property="zkSjjg" />
+            <result column="f_zk_jcszsm" property="zkJcszsm" />
+            <result column="f_type_set_state" property="typeSetState" />
+            <result column="f_flag" property="flag" />
+            <result column="f_type" property="type" />
+            <result column="f_is_using" property="isUsing" />
+            <result column="f_create_time" property="createTime" />
+            <result column="f_update_time" property="updateTime" />
+            <result column="f_create_user_name" property="createUserName" />
+            <result column="f_update_user_name" property="updateUserName" />
+            <result column="f_CustomerCode" property="CustomerCode" />
+            <result column="f_create_user_id" property="createUserId" />
+            <result column="f_update_user_id" property="updateUserId" />
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID AS id, CustomerCode, ShopName, CityName, ShopTel, ShopAddress, ProvinceId, ProvinceName, CityId, AreaId, AreaName, PlaceType, Status, ShopStatus, AreaCount, EmployCount, SdadiumCount, Money, MerchantId, ManageList, OtherProject, ExtendField1, CreateID, SimpleAddrs, CreateName, ExtendField2, ExtendField3, CreateTime
+    </sql>
+
+    <select id="selectShopListByCity" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        Shop s
+        WHERE 1 = 1
+        <if test="shopId != null" >
+            and s.id = #{shopId}
+        </if>
+        <if test="cityId != null" >
+            and s.CityId = #{cityId}
+        </if>
+        <if test="customerCode != null" >
+            and s.CustomerCode = #{customerCode}
+        </if>
+        ORDER BY s.CityId
+    </select>
+
+
+    <select id="selectShopItemList" resultType="com.yj.dal.dto.ShopItemDTO">
+        SELECT
+            s.id,
+            s.ShopName,
+            st.single_status singleStatus
+        FROM
+            Shop s
+            JOIN fr_store st ON st.shop_id = s.ID
+        WHERE s.Status = 0 and s.CustomerCode = #{customerCode} and s.CityName = #{cityName}
+    </select>
+    <!--查询指定门店下的卡系列-->
+    <select id="getByShopIdList" resultMap="BaseResultMap1">
+        select
+        s.*,
+        ct.id f_id, ct.p_id f_p_id, ct.card_type_name f_card_type_name, ct.service_life f_service_life,
+        ct.swiping_interval f_swiping_interval, ct.swiping_time f_swiping_time,
+        ct.used_num f_used_num, ct.pzfs f_pzfs, ct.original_price f_original_price,
+        ct.sales_price f_sales_price, ct.total_num f_total_num, ct.stop_num f_stop_num,
+        ct.stop_days f_stop_days, ct.total_days f_total_days, ct.out_price f_out_price,
+        ct.qt_xxjg_update f_qt_xxjg_update, ct.qt_xxqy_update f_qt_xxqy_update,
+        ct.qt_zsqy_update f_qt_zsqy_update, ct.qt_lrzp_update f_qt_lrzp_update,
+        ct.qt_zdxxjg f_qt_zdxxjg, ct.qt_zdqy f_qt_zdqy, ct.can_transfer f_can_transfer,
+        ct.can_change_type f_can_change_type, ct.transfer_fee f_transfer_fee,
+        ct.renew_common_price f_renew_common_price, ct.renew_level1_price f_renew_level1_price,
+        ct.renew_level2_price f_renew_level2_price, ct.renew_level3_price f_renew_level3_price,
+        ct.renew_level4_price f_renew_level4_price, ct.qt_can_renew f_qt_can_renew,
+        ct.zk_num f_zk_num, ct.zk_cyfs f_zk_cyfs, ct.zk_tkqy f_zk_tkqy, ct.zk_xffs f_zk_xffs,
+        ct.zk_clfs f_zk_clfs, ct.zk_sjjg f_zk_sjjg, ct.zk_jcszsm f_zk_jcszsm,
+        ct.type f_type, ct.is_using f_is_using, ct.CustomerCode f_CustomerCode,
+        ct.create_user_name f_create_user_name, ct.create_time f_create_time, ct.flag f_flag,
+        ct.type_set_state f_type_set_state, ct.update_time f_update_time
+        FROM
+        Shop s
+        LEFT JOIN
+        fr_shop_card_type_relate sc
+        ON
+        s.ID = sc.shop_id
+        LEFT JOIN
+        fr_card_type ct
+        ON
+        sc.card_type_id = ct.id AND ct.type_set_state = 2 AND ct.is_using = 1
+        WHERE s.CustomerCode = #{code}
+        AND s.id = #{shopId}
+        <if test="type !=0 ">
+           AND ct.type = #{type}
+        </if>
+    </select>
+    <!--查询门店下的卡系列-->
+    <select id="getFrCardType" resultMap="BaseResultMap1" parameterType="java.lang.String">
+        select
+        s.*,
+        ct.id f_id, ct.p_id f_p_id, ct.card_type_name f_card_type_name, ct.service_life f_service_life,
+        ct.swiping_interval f_swiping_interval, ct.swiping_time f_swiping_time,
+        ct.used_num f_used_num, ct.pzfs f_pzfs, ct.original_price f_original_price,
+        ct.sales_price f_sales_price, ct.total_num f_total_num, ct.stop_num f_stop_num,
+        ct.stop_days f_stop_days, ct.total_days f_total_days, ct.out_price f_out_price,
+        ct.qt_xxjg_update f_qt_xxjg_update, ct.qt_xxqy_update f_qt_xxqy_update,
+        ct.qt_zsqy_update f_qt_zsqy_update, ct.qt_lrzp_update f_qt_lrzp_update,
+        ct.qt_zdxxjg f_qt_zdxxjg, ct.qt_zdqy f_qt_zdqy, ct.can_transfer f_can_transfer,
+        ct.can_change_type f_can_change_type, ct.transfer_fee f_transfer_fee,
+        ct.renew_common_price f_renew_common_price, ct.renew_level1_price f_renew_level1_price,
+        ct.renew_level2_price f_renew_level2_price, ct.renew_level3_price f_renew_level3_price,
+        ct.renew_level4_price f_renew_level4_price, ct.qt_can_renew f_qt_can_renew,
+        ct.zk_num f_zk_num, ct.zk_cyfs f_zk_cyfs, ct.zk_tkqy f_zk_tkqy, ct.zk_xffs f_zk_xffs,
+        ct.zk_clfs f_zk_clfs, ct.zk_sjjg f_zk_sjjg, ct.zk_jcszsm f_zk_jcszsm,
+        ct.type f_type, ct.is_using f_is_using, ct.CustomerCode f_CustomerCode,
+        ct.create_user_name f_create_user_name, ct.create_time f_create_time, ct.flag f_flag,
+        ct.type_set_state f_type_set_state, ct.update_time f_update_time
+        FROM
+        Shop s
+        LEFT JOIN
+        fr_card_type ct
+        ON
+        s.ID = ct.shop_id AND ct.p_id = '0' AND ct.type_set_state = 2 AND ct.is_using = 1
+        WHERE s.CustomerCode = #{code}
+        ORDER BY s.CityId
+    </select>
+
+
+    <!--查询前台不显示下的卡系列-->
+    <select id="getAllFrCardType" resultMap="BaseResultMap1" parameterType="java.lang.String">
+        select
+        s.*,
+        ct.id f_id, ct.p_id f_p_id, ct.card_type_name f_card_type_name, ct.service_life f_service_life,
+        ct.swiping_interval f_swiping_interval, ct.swiping_time f_swiping_time,
+        ct.used_num f_used_num, ct.pzfs f_pzfs, ct.original_price f_original_price,
+        ct.sales_price f_sales_price, ct.total_num f_total_num, ct.stop_num f_stop_num,
+        ct.stop_days f_stop_days, ct.total_days f_total_days, ct.out_price f_out_price,
+        ct.qt_xxjg_update f_qt_xxjg_update, ct.qt_xxqy_update f_qt_xxqy_update,
+        ct.qt_zsqy_update f_qt_zsqy_update, ct.qt_lrzp_update f_qt_lrzp_update,
+        ct.qt_zdxxjg f_qt_zdxxjg, ct.qt_zdqy f_qt_zdqy, ct.can_transfer f_can_transfer,
+        ct.can_change_type f_can_change_type, ct.transfer_fee f_transfer_fee,
+        ct.renew_common_price f_renew_common_price, ct.renew_level1_price f_renew_level1_price,
+        ct.renew_level2_price f_renew_level2_price, ct.renew_level3_price f_renew_level3_price,
+        ct.renew_level4_price f_renew_level4_price, ct.qt_can_renew f_qt_can_renew,
+        ct.zk_num f_zk_num, ct.zk_cyfs f_zk_cyfs, ct.zk_tkqy f_zk_tkqy, ct.zk_xffs f_zk_xffs,
+        ct.zk_clfs f_zk_clfs, ct.zk_sjjg f_zk_sjjg, ct.zk_jcszsm f_zk_jcszsm,
+        ct.type f_type, ct.is_using f_is_using, ct.CustomerCode f_CustomerCode,
+        ct.create_user_name f_create_user_name, ct.create_time f_create_time, ct.flag f_flag,
+        ct.type_set_state f_type_set_state, ct.update_time f_update_time
+        FROM
+        Shop s
+        LEFT JOIN
+        fr_card_type ct
+        ON
+        s.ID = ct.shop_id AND ct.p_id = '0' AND ct.type_set_state = 2
+        WHERE s.CustomerCode = #{code}
+        ORDER BY s.CityId
+    </select>
+    <!--查询当前登录用户所在的门店id-->
+    <select id="selectShopIdByPersonnelId" resultType="java.lang.String">
+        SELECT
+            pr.ShopId
+        FROM
+            PersonnelInfo p
+            JOIN PersonlRole pr ON p.id = pr.PersonnelInfoId
+        and p.id = #{id}
+    </select>
+    <!--根据客户id查询客户所在门店-->
+    <select id="selectShopByClientId" resultType="com.yj.dal.model.Shop">
+        SELECT
+            s.AreaCount,
+            s.AreaId,
+            s.AreaName,
+            s.CityId,
+            s.CityName,
+            s.CreateID,
+            s.CreateName,
+            s.CreateTime,
+            s.CustomerCode,
+            s.EmployCount,
+            s.ExtendField1,
+            s.ExtendField2,
+            s.ExtendField3,
+            s.ID,
+            s.ManageList,
+            s.MerchantId,
+            s.Money,
+            s.OtherProject,
+            s.PlaceType,
+            s.ProvinceId,
+            s.ProvinceName,
+            s.SdadiumCount,
+            s.ShopAddress,
+            s.ShopName,
+            s.ShopStatus,
+            s.ShopTel,
+            s.SimpleAddrs,
+            s.Status
+        FROM
+            fr_client_latence_personal AS fclp
+            LEFT JOIN Shop AS s ON s.ID = fclp.shop_id
+        WHERE
+            fclp.client_id = #{id}
+    </select>
+
+    <select id="getShopName" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT ShopName FROM Shop where ID=(
+        SELECT shop_id FROM fr_client_latence_personal WHERE client_id=#{cid})
+    </select>
+</mapper>

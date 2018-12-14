@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>客户管理</title>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    function setParam(val) {
+        $("#leftFrame").attr("data-param",val);
+    }
+    function getParam(val) {
+        return $("#leftFrame").attr("data-param");
+    }
+</script>
+</head>
+<frameset cols="0,*" frameborder="no" border="0" framespacing="0" style="min-width: 1366px">
+        <frame src="about:blank"></frame>
+        <frameset frameborder="no" border="0" framespacing="0" id="top_frameset" scrolling="No" rows="0,*">
+            <frame name="topFrame" id="topFrame" scrolling="no" noresize="noresize" src="">
+            <frameset frameborder="no" border="0" framespacing="0" id="main_frameset"  cols="165,*">
+                <frame name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame" title="leftFrame" src="customerLeft.html" >
+                <frame  name="rightFrame" scrolling="No" id="rightFrame" title="rightFrame" src="existingCustomer.html">
+            </frameset>
+        </frameset>
+        <frame src="about:blank"></frame>
+        </frameset>
+        <noframes>
+            <body>
+            </body>
+        </noframes>
+</html>

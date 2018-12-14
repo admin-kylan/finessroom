@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrClientPhysicalTestMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrClientPhysicalTest">
+        <id column="id" property="id"/>
+        <result column="stature" property="stature"/>
+        <result column="weight" property="weight"/>
+        <result column="upperarm_left_normal" property="upperarmLeftNormal"/>
+        <result column="upperarm_right_normal" property="upperarmRightNormal"/>
+        <result column="upperarm_left_nervous" property="upperarmLeftNervous"/>
+        <result column="upperarm_right_nervous" property="upperarmRightNervous"/>
+        <result column="forearm_left_normal" property="forearmLeftNormal"/>
+        <result column="forearm_right_normal" property="forearmRightNormal"/>
+        <result column="forearm_left_nervous" property="forearmLeftNervous"/>
+        <result column="forearm_right_nervous" property="forearmRightNervous"/>
+        <result column="bust_normal" property="bustNormal"/>
+        <result column="bust_nervous" property="bustNervous"/>
+        <result column="hipline" property="hipline"/>
+        <result column="waistline" property="waistline"/>
+        <result column="waist_hip_ratio" property="waistHipRatio"/>
+        <result column="twelve_run_evaluation" property="twelveRunEvaluation"/>
+        <result column="thigh_left_normal" property="thighLeftNormal"/>
+        <result column="thigh_right_normal" property="thighRightNormal"/>
+        <result column="thigh_left_nervous" property="thighLeftNervous"/>
+        <result column="thigh_right_nervous" property="thighRightNervous"/>
+        <result column="calf_left_normal" property="calfLeftNormal"/>
+        <result column="calf_right_normal" property="calfRightNormal"/>
+        <result column="calf_left_nervous" property="calfLeftNervous"/>
+        <result column="calf_right_nervous" property="calfRightNervous"/>
+        <result column="bodyfat" property="bodyfat"/>
+        <result column="pulse" property="pulse"/>
+        <result column="blood_pressure" property="bloodPressure"/>
+        <result column="maximal_heart_rate" property="maximalHeartRate"/>
+        <result column="proper_heart_rate" property="properHeartRate"/>
+        <result column="cardiovascular_heart_rate" property="cardiovascularHeartRate"/>
+        <result column="resting_heart_rate" property="restingHeartRate"/>
+        <result column="dynamic_heart_rate" property="dynamicHeartRate"/>
+        <result column="supination_evaluation" property="supinationEvaluation"/>
+        <result column="myodynamia_chest" property="myodynamiaChest"/>
+        <result column="myodynamia_abdomen" property="myodynamiaAbdomen"/>
+        <result column="myodynamia_Back" property="myodynamiaBack"/>
+        <result column="body_flexibility" property="bodyFlexibility"/>
+        <result column="back_health_assessment" property="backHealthAssessment"/>
+        <result column="basal_metabolic_rate" property="basalMetabolicRate"/>
+        <result column="BML_index" property="bmlIndex"/>
+        <result column="personal_trainer_advice" property="personalTrainerAdvice"/>
+        <result column="superior_evaluation" property="superiorEvaluation"/>
+        <result column="physical_pic" property="physicalPic"/>
+        <result column="evaluation_date" property="evaluationDate"/>
+        <result column="personal_id" property="personalId"/>
+        <result column="build_date" property="buildDate"/>
+        <result column="client_id" property="clientId"/>
+        <result column="result" property="result"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        stature, weight, upperarm_left_normal AS upperarmLeftNormal, upperarm_right_normal AS upperarmRightNormal, upperarm_left_nervous AS upperarmLeftNervous, upperarm_right_nervous AS upperarmRightNervous, forearm_left_normal AS forearmLeftNormal, forearm_right_normal AS forearmRightNormal, forearm_left_nervous AS forearmLeftNervous, forearm_right_nervous AS forearmRightNervous, bust_normal AS bustNormal, bust_nervous AS bustNervous, hipline, waistline, waist_hip_ratio AS waistHipRatio, twelve_run_evaluation AS twelveRunEvaluation, thigh_left_normal AS thighLeftNormal, thigh_right_normal AS thighRightNormal, thigh_left_nervous AS thighLeftNervous, thigh_right_nervous AS thighRightNervous, calf_left_normal AS calfLeftNormal, calf_right_normal AS calfRightNormal, calf_left_nervous AS calfLeftNervous, calf_right_nervous AS calfRightNervous, bodyfat, pulse, blood_pressure AS bloodPressure, maximal_heart_rate AS maximalHeartRate, proper_heart_rate AS properHeartRate, cardiovascular_heart_rate AS cardiovascularHeartRate, resting_heart_rate AS restingHeartRate, dynamic_heart_rate AS dynamicHeartRate, supination_evaluation AS supinationEvaluation, myodynamia_chest AS myodynamiaChest, myodynamia_abdomen AS myodynamiaAbdomen, myodynamia_Back AS myodynamiaBack, body_flexibility AS bodyFlexibility, back_health_assessment AS backHealthAssessment, basal_metabolic_rate AS basalMetabolicRate, BML_index AS bmlIndex, personal_trainer_advice AS personalTrainerAdvice, superior_evaluation AS superiorEvaluation, physical_pic AS physicalPic, evaluation_date AS evaluationDate, personal_id AS personalId, build_date AS buildDate, client_id AS clientId, result, id
+    </sql>
+    <select id="findOne" resultType="com.yj.dal.model.FrClientPhysicalTest">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM fr_client_physical_test where client_id=#{cid} AND build_date=#{date} AND result=0
+    </select>
+</mapper>

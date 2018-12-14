@@ -1,0 +1,171 @@
+﻿/*搜索下拉框*/
+
+/*正常显示文本*/
+.selectinf {
+    cursor: pointer;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    line-height: calc(100% - 2px);
+    border: 1px solid silver;
+    background-color: #FFFFFF;
+    text-align: left;
+    text-indent: 10px;
+}
+
+    /*文本*/
+    .selectinf .text-contents {
+        float: left;
+        width: calc(100% - 20px);
+        height: 100%;
+    }
+
+    /*图标*/
+    .selectinf > div:nth-child(2) {
+        float: right;
+        width: 19px;
+        height: 100%;
+        border-left: 1px silver solid;
+        background-color: #dddddd;
+    }
+
+    .selectinf .down {
+        background: url("../img/down.png") no-repeat center;
+    }
+
+    .selectinf .up {
+        background: url("../img/up.png") no-repeat center;
+    }
+
+/*下拉框div元素*/
+.combobox > div {
+    float: left;
+    width: 100%;
+}
+
+/*下拉框主体*/
+.combobox {
+    display: none;
+    z-index: 9999;
+    position: absolute;
+    top: 43px;
+    left: 20px;
+    width: 200px;   
+    border: 1px solid silver;
+    background-color: #FFFFFF;
+    -moz-box-shadow: 2px 2px 5px #909090;
+    -webkit-box-shadow: 2px 2px 5px #909090;
+    box-shadow: 2px 2px 5px #909090;
+}
+
+    /*搜索*/
+    .combobox .search {
+        width: calc(100% - 6px);
+        height: 23px;
+        border: 1px silver solid;
+        line-height: 23px;
+        margin: 2px 2px;
+    }
+
+        /*搜索输入框*/
+        .combobox .search input {
+            width: calc(100% - 20px);
+            text-indent: 6px;
+            border: none;
+            outline: medium;
+            background-color: transparent;
+        }
+
+        /*搜索图标*/
+        .combobox .search span {
+            color: #dddddd;
+            cursor: pointer;
+        }
+
+/*placeholder 字体样式设置*/
+::-webkit-input-placeholder { /*webkit browsers*/
+    font-size: 11px;
+}
+
+:-moz-placeholder { /*firefox 4 to 18*/
+    font-size: 11px;
+}
+
+::-moz-placeholder { /*firefox 19+*/
+    font-size: 11px;
+}
+
+:-ms-input-placeholder { /*ie 10+*/
+    font-size: 11px;
+}
+
+.combobox .main {
+    margin-bottom: 2px;
+    height: calc(100% - 54px);
+    max-height: 200px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/*菜单栏ul,li*/
+ul,
+li {
+    list-style: none;
+    font-size: 13px;
+}
+
+a:link,
+a:visited {
+    text-decoration: none;
+}
+
+.combobox ul {
+    margin-left: 10px;
+}
+
+.combobox .main .navMenu2Cbb li {
+    margin: 10px 0;
+}
+
+    .combobox .main .navMenu2Cbb li a span:nth-child(2) {
+        /*float: right;*/
+        /*margin-right: -10px;*/
+    }
+
+    .combobox .main .navMenu2Cbb li a {
+        color: #3C3C3C;
+    }
+
+        /*下拉图标*/
+        .combobox .main .navMenu2Cbb li a .arrow.open:before {
+            float: right;
+            margin-top: 1px;
+            margin-right: 15px;
+            display: inline;
+            font-family: FontAwesome;
+            height: auto;
+            font-size: 16px;
+            content: "\f107";
+            font-weight: 300;
+            text-shadow: none;
+        }
+
+        .combobox .main .navMenu2Cbb li a .arrow:before {
+            display: block;
+            float: right;
+            margin-top: 1px;
+            margin-right: 15px;
+            display: inline;
+            font-size: 16px;
+            font-family: FontAwesome;
+            height: auto;
+            content: "\f105";
+            font-weight: 300;
+            text-shadow: none;
+        }
+
+        /* a元素鼠标滑过及选择样式设置*/
+        .combobox .main .navMenu2Cbb li a.active,
+        .combobox .main .navMenu2Cbb li a:hover {
+            color: #0B7CED;
+            /*background: rgba(11,124,237, .3);*/
+        }

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderBackMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderBack">
+        <id column="a.id" property="id" />
+        <result column="a.card_id" property="cardId" />
+        <result column="a.client_id" property="clientId" />
+        <result column="a.personnel_id" property="personnelId" />
+        <result column="a.total_price" property="totalPrice" />
+        <result column="a.need_price" property="needPrice" />
+        <result column="a.proced_prcie" property="procedPrcie" />
+        <result column="a.allot_set_type" property="allotSetType" />
+        <result column="a.account_number" property="accountNumber" />
+        <result column="a.refund_type" property="refundType" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.status" property="status" />
+        <result column="a.audit_status" property="auditStatus" />
+        <result column="a.status_user_id" property="statusUserId" />
+        <result column="a.audit_user_id" property="auditUserId" />
+        <result column="a.flag" property="flag" />
+        <result column="a.type" property="type" />
+        <result column="a.card_flag" property="cardFlag" />
+        <result column="a.card_type_name" property="cardTypeName" />
+        <result column="a.is_using" property="isUsing" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_id AS cardId,
+        a.client_id AS clientId,
+        a.personnel_id AS personnelId,
+        a.total_price AS totalPrice,
+        a.need_price AS needPrice,
+        a.proced_prcie AS procedPrcie,
+        a.allot_set_type AS allotSetType,
+        a.account_number AS accountNumber,
+        a.refund_type AS refundType,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.status,
+        a.audit_status AS auditStatus,
+        a.status_user_id AS statusUserId,
+        a.audit_user_id AS auditUserId,
+        a.flag,
+        a.type,
+        a.card_flag AS cardFlag,
+        a.card_type_name AS cardTypeName,
+        a.id,
+        a.is_using AS isUsing
+    </sql>
+
+    <select id="queryBlackCardList" resultType="java.util.Map">
+        SELECT
+         (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id) saleName,
+         (SELECT p.Status FROM PersonnelInfo p WHERE a.personnel_id = p.id) saleStatus,
+          <include refid="Base_Column_List"/>
+        FROM fr_card_order_back a
+        WHERE  a.is_using = 1
+        AND   a.CustomerCode = #{CustomerCode}
+        AND   a.client_id = #{clientId}
+    </select>
+
+    <select id="queryBlackCardSum" resultType="java.lang.Double">
+        SELECT
+           SUM(a.proced_prcie)
+        FROM fr_card_order_back a
+        WHERE  a.is_using = 1
+        AND   a.CustomerCode = #{CustomerCode}
+        AND   a.client_id = #{clientId}
+    </select>
+
+</mapper>

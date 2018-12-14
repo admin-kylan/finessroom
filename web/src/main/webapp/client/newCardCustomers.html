@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>续卡操作</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/skin/jedate.css" />
+    <link rel="stylesheet" href="../css/customerMembershipCard.css"/>
+    <link rel="stylesheet" href="../css/newCardCustomers.css" />
+    <link rel="stylesheet" href="../css/combobox.css" />
+    <link rel="stylesheet" href="../css/jquery-confirm.css" />
+</head>
+
+<body>
+    <div id="newCardCustomers">
+        <div class="tab" v-if="LiIndex==2">
+            <span><img src="../img/goback.png"  @click="closeCustomer"></span>
+            <h3 class="NewHY-title">续卡操作</h3>
+            <span> <strong> 操作人：</strong> </span>
+            <span>Demacia</span>
+            <span> <strong> 是否有权限：</strong> </span>
+            <span>有</span>
+        </div>
+        <div class="section" v-if="LiIndex==2">
+            <div class="section1">
+                <fieldset>
+                    <legend>会员信息</legend>
+                    <div class="section1_box">
+                        <div class="col_box">
+                            <div>
+                                <div><span>*</span>会员姓名</div>
+                                <div><span>*</span>手机号码</div>
+                                <div>微信</div>
+                                <div>籍贯</div>
+                                <div>身高</div>
+                            </div>
+                            <div>
+                                <div><input type="text" placeholder="填写会员姓名" v-model="loadData2.clitenUser.clientName"></div>
+                                <div><input type="text" placeholder="填写手机号码" v-model="loadData2.clitenUser.mobile"></div>
+                                <div><input type="text" placeholder="填写微信" v-model="loadData2.clitenUser.wechat"></div>
+                                <div><input type="text" placeholder="填写籍贯" v-model="loadData2.clitenUser.nativePlace"></div>
+                                <div><input type="text" placeholder="身高" v-model="loadData2.clitenUser.stature">cm</div>
+                            </div>
+                            <div>
+                                <div><span>*</span>性别</div>
+                                <div>联系电话</div>
+                                <div>QQ</div>
+                                <div>出生日期</div>
+                                <div>体重</div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label>
+                                        <input type="radio" name="nan" value="0" v-model="loadData2.clitenUser.sex">
+                                        男
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="nan" value="1" v-model="loadData2.clitenUser.sex">
+                                        女
+                                    </label>
+                                </div>
+                                <div><input type="text" placeholder="填写联系电话" v-model="loadData2.clitenUser.tel" ></div>
+                                <div><input type="text" placeholder="填写QQ" v-model="loadData2.clitenUser.qq" ></div>
+                                <div><input type="date" v-model="loadData2.clitenUser.birthday"></div>
+                                <div><input type="text" placeholder="体重" v-model="loadData2.clitenUser.weight">kg</div>
+                            </div>
+                            <div>
+                                <img id="img_avatar" class="img-responsive" :src="clientURL" >
+                                <span v-if="LiIndex !=2">
+                                     <a class="btn btn-primary">上传图片</a>
+                                     <input  style="display: none;" ref="avatar" name="file" type="file" multiple accept="image/png,image/jpeg,image/gif,image/jpg">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col_box col_box1">
+                            <div>
+                                <div>身份证号码</div>
+                                <div>推荐人电话</div>
+                                <div><span>*</span>销售顾问</div>
+                                <div>建档日期</div>
+                                <div>归属门店</div>
+                            </div>
+                            <div>
+                                <div><input type="text" placeholder="身份证号码" v-model="loadData2.clitenUser.idNo"></div>
+                                <div><input type="text" placeholder="填写推荐人电话"  v-model="loadData2.clitenUser.referenceTel"></div>
+                                <div>
+                                    <select name="1"  v-model="loadData2.clitenUser.consultantId">
+                                        <option value="">选择销售顾问</option>
+                                        <option :value="item.id" v-for="item in salespersonList">{{item.relName}}</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <input type="date" v-model="loadData2.clitenUser.buildDate"></div>
+                                <div>
+                                    <select name="1"  v-model="cardMap.shopId" >
+                                        <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" selected>
+                                            {{item.shopName}}
+                                        </option>
+                                        <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index>0">
+                                            {{item.shopName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div>居住地址</div>
+                                <div>推荐人姓名</div>
+                                <div>服务顾问</div>
+                                <div>申请日期</div>
+                                <div>业绩分配</div>
+                            </div>
+                            <div>
+                                <div>
+                                    <input type="text" placeholder="填写居住地址" v-model="loadData2.clitenUser.homeAdd" >
+                                </div>
+                                <div><input type="text" placeholder="推荐人姓名" v-model="loadData2.clitenUser.referenceName" ></div>
+                                <div>
+                                    <select name="1">
+                                        <option value="1">选择服务顾问</option>
+                                        <option value="1">选择服务顾问</option>
+                                        <option value="1">选择服务顾问</option>
+                                        <option value="1">选择服务顾问</option>
+                                    </select>
+                                </div>
+                                <div><input type="date" v-model="loadData2.clitenUser.createTime" ></div>
+                                <div><a href="#" @click="performances">业绩分配</a></div>
+                            </div>
+                        </div>
+                        <div class="col_box2">
+                            <div>
+                                <div>定期开卡日期：</div>
+                                <div>内部审批：</div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label>
+                                        <input type="radio" name="you" v-model="cardMap.isFlage" value="0"  @change="chackBindTime" id="wu">
+                                        无
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="you" v-model="cardMap.isFlage" value="1"  @change="chackBindTime" id="you">
+                                        有
+                                        <input type="date" v-model="cardMap.bindTime" id="bindTime">
+                                    </label>
+                                </div>
+                                <div>
+                                    <textarea  v-model="cardMap.note"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="section2">
+                <fieldset>
+                    <legend>产品信息</legend>
+                    <div class="section2_box">
+                        <div class="section2_box_top">
+                            <a href="#" class="on">购买会员卡信息</a>
+                        </div>
+                        <div class="section2_boxs">
+                            <div class="section2_boxs1 on">
+                                <div class="section2_boxs1_left">
+                                    <div class="section2_boxs1_top">
+                                        <select name="1"  v-model="cardMap.shopId" @change="products">
+                                            <option value="" selected >--选择门店--</option>
+                                            <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" >
+                                                    {{item.shopName}}</option>
+                                            <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index>0">
+                                                    {{item.shopName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="section2_boxs1_botton" v-if="LiIndex!=2">
+                                        <ul v-for="items in loadData2.cardFlagList">
+                                            <li><span><img src="../img/u25_selected.png" alt=""><i>{{items.cardFlag}}</i></span></li>
+                                            <li>
+                                                <ul v-for="cardN in loadData1.cardsList" v-if="cardN.cardFlag == items.cardFlag"
+                                                             @click="checkCardType(cardN)">
+                                                    <li>{{cardN.cardTypeName}}</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="section2_boxs1_right">
+                                    <div class="section2_boxs1_top">
+                                        <div>会员卡号</div>
+                                        <div>外部卡号</div>
+                                        <div>会员卡类别</div>
+                                        <div>会员卡名称</div>
+                                        <div>会员卡价格</div>
+                                        <div>购卡金额</div>
+                                        <div>有效期时长</div>
+                                        <div>购买权益</div>
+                                        <div>赠送权益</div>
+                                        <div>可用权益</div>
+                                        <div>备注</div>
+                                    </div>
+                                    <div class="section2_boxs1_botton">
+                                        <div><input type="text" placeholder="会员卡号" id='cardNum' @blur.prevent="checkCardNum('cardNum')" v-model="cardMap.cardNo" >
+                                            <a href="#" class="suij" @click="addCardNumMet('cardNum')" id="suij1">随机号</a><a href="#" class="xieIC">写IC卡</a>
+                                        </div>
+                                        <div><input type="text" placeholder="外部卡号"  @blur.prevent="checkExternalCard('externalCard')" id="externalCard" v-model="cardMap.externalNo"></div>
+                                        <div><input type="text" :value="loadData2.careFlag" readonly></div>
+                                        <div><input type="text" :value="loadData2.cardName" readonly></div>
+                                        <div><input type="text" :value="loadData2.salesPrice" readonly></div>
+                                        <div><input type="text" placeholder="请输入购卡金额" id="minPrice" @blur="checkMinPrice" v-model="payMentMoney.price" ></div>
+                                        <div><input type="text" :value="loadData2.serviceLife" readonly ></div>
+                                        <div><input type="text" :value="cardMap.buyRightsNum" readonly></div>
+                                        <div><input type="text" :value="cardMap.giveRightsNum" readonly></div>
+                                        <div><input type="text" :value="loadData2.haveRightsNum" readonly></div>
+                                        <div><textarea v-model="cardMap.note">备注</textarea></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section2_boxs1 section2_boxs3">
+                                <div class="section2_boxs1_left2">
+                                    <div>
+                                        <select name="1" id="">
+                                            <option value="1">软件园店</option>
+                                        </select>
+                                        <select name="0" id="=">
+                                            <option value="0">所在场馆</option>
+                                            <option value="1">健身私教</option>
+                                            <option value="2">健身私教</option>
+                                            <option value="3">健身私教</option>
+                                        </select>
+                                        <span>日期：2018-08-24</span>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <input type="text" placeholder="协议编号"><a href="#"
+                                                                                     class="btn btn-success">随机号</a>
+                                        </div>
+                                        <div class="=">
+                                            销售类型：
+                                            <select name="1" id="">
+                                                <option value="">POS销售</option>
+                                                <option value="">新会员购买</option>
+                                                <option value="">续课</option>
+                                                <option value="">产地开课</option>
+                                                <option value="">br销售</option>
+                                                <option value="">横推销售</option>
+                                                <option value="">跟进销售</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <select name="1" id="">
+                                                <option value="1">选择服务角色（教练/美容师）</option>
+                                                <option value="1">健身私教</option>
+                                                <option value="1">健身私教</option>
+                                                <option value="1">健身私教</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <select name="1" id="">
+                                                <option value="1">选择服务助教（教练/美容师）</option>
+                                                <option value="1">健身私教</option>
+                                                <option value="1">健身私教</option>
+                                                <option value="1">健身私教</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="section2_boxs1_right2">
+                                    <div class="section2_boxs1_right2_top">
+                                        <div><span class="on">项目/产品</span><span>套餐</span></div>
+                                    </div>
+                                    <div class="section2_boxs1_right2_botton">
+                                        <div class="section2_boxs1_right2_botton_left on">
+                                            <div><span>*</span>购买项目/产品：<input type="text"
+                                                                              placeholder="选择购买项目">
+                                                <select name="0" id="projects">
+                                                    <option value="0">选择</option>
+                                                    <option value="1">项目</option>
+                                                    <option value="2">商品</option>
+                                                </select>
+                                                单价：<input type="text" placeholder="单价">
+                                            </div>
+                                            <div>
+                                                <span>*</span> 购买数量：<input type="text"
+                                                                           placeholder="填写购买数量">
+                                                <span>*</span> 赠送数量：<input type="text"
+                                                                           placeholder="填写赠送数量">
+                                                可用数量：0
+                                            </div>
+                                            <div>
+                                                <span>*</span>有效期：
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    一个月
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    三个月
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    六个月
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    一年
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    以卡同期
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    自定义
+                                                    <input type="text" placeholder="填写天数">
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <span>*</span>开始日期：<input type="date">
+                                                失效日期：2019-08-24
+                                            </div>
+                                        </div>
+                                        <div class="section2_boxs1_right2_botton_left">
+                                            <div><span>*</span>购买套餐：<input type="text"
+                                                                           placeholder="选择购买项目">
+                                                <a href="#" id="packages"
+                                                   class="btn btn-default">选择</a>
+                                                单价：<input type="text" placeholder="单价">
+                                                可用数量：0
+                                            </div>
+
+                                            <div>
+                                                <span>*</span>有效期：
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    一个月
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    三个月
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    六个月
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    一年
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    以卡同期
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="yue">
+                                                    自定义
+                                                    <input type="text" placeholder="填写天数">
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <span>*</span>开始日期：<input type="date">
+                                                失效日期：2019-08-24
+                                            </div>
+                                            <div class="tabs">
+                                                <div>可消费项目：</div>
+                                                <div class="xiaofei">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>门店</th>
+                                                            <th>场馆</th>
+                                                            <th>项目</th>
+                                                            <th>指定数量</th>
+                                                            <th>每天限用数量</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>门店</td>
+                                                            <td>场馆</td>
+                                                            <td>项目</td>
+                                                            <td>指定数量</td>
+                                                            <td>每天限用数量</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="newTab"  v-if="LiIndex==1">
+            <div class="newCustomers_maskLayer_box_top">
+                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="closeCustomer">X</a>
+            </div>
+        </div>
+        <div class="customerMembershipCard LiIndexOffer">
+            <fieldset class="customerMembershipCard LiIndexOffer1 section666" v-if="LiIndex==1">
+                <legend class="col-red">消费人员信息</legend>
+                <div id="user">
+                    <span>会员姓名：<strong>{{clientUserName}}</strong></span>
+                    <span>手机号码：<strong>{{clientPhone}}</strong></span>
+                    <span>性别：<strong>{{clientSet}}</strong></span>
+                </div>
+            </fieldset>
+            <fieldset class="customerMembershipCard LiIndexOffer1 newCustomers_maskLayer_box_shen cus666" v-if="LiIndex==1">
+                <legend  class="col-red">产品信息</legend>
+                <div class="section3_box">
+                    <div class="section3_box_top">
+                        <span>订单编号：<strong class="col-orange">{{cardMap.orderNo}}</strong> </span>
+                        创建时间：<span>{{creatTime}}</span>
+                    </div>
+                    <div class="section3_box_botton">
+                        <div class="section3_box_botton_left">
+                            <img :src="clientURL" >
+                        </div>
+                        <div class="section3_box_botton_rigth">
+                            <div>
+                                <strong></strong>
+                                <span>单价：<strong>{{loadData1.salesPrice}}</strong></span>
+                                <span>可用权益：<strong></strong></span>
+                                <span>总价：<strong>{{payMentMoney.price}}</strong></span>
+                            </div>
+                            <div>
+                                <span>有效期：<strong></strong>（自开卡日期开始计算）</span>
+                                <span>购买权益：<strong></strong></span>
+                            </div>
+                            <div>
+                                <span>赠送权益：<strong>{{cardMap.giveRightsNum}}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="section4">
+                <legend class="col-orange">结账</legend>
+                <div class="section4_box">
+                    <div class="section4_box_top">
+                        <div>付款类型：
+                            <label @click="section4BoxTop(0)"><input type="radio" name="quan" value="1" v-model="loadData1.paremt.payType" selected="">全款</label>
+                            <label @click="section4BoxTop(1)"><input type="radio" name="quan" value="2" v-model="loadData1.paremt.payType">定金</label>
+                            <label @click="section4BoxTop(2)"><input type="radio" name="quan" value="3" v-model="loadData1.paremt.payType">赠送</label>
+                            <label @click="section4BoxTop(3)"><input type="radio" name="quan" value="4" v-model="loadData1.paremt.payType">置换</label>
+                            <label @click="section4BoxTop(4)"><input type="radio" name="quan" value="5" v-model="loadData1.paremt.payType">分期付款</label>
+                        </div>
+                    </div>
+                    <div class="section4_box_botton">
+                        <fieldset style="display: block;" class="JZ-QK-con">
+                            <div>
+                                选择全款，请填写对应的支付方式，以及对应支付金额，完成结账！
+                            </div>
+                        </fieldset>
+                        <fieldset class="JZ-DJ-con">
+                            <div>
+                                <span>补余期限：</span>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="3">3天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="5">5天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="7">7天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="15">15天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime"value="30">30天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="90">90天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="180">180天</label>
+                                <label><input type="radio" name="tian" v-model="loadData1.paremt.depositTime" value="其他">其他<span><input type="text" name="tian" v-model="loadData1.depositTime" style="height: 22%">天</span></label>
+                            </div>
+                        </fieldset>
+                        <fieldset class="fieldset3 JZ-ZS-con">
+                            <div>
+                                赠送人：
+                                <select name="1" v-model="loadData1.paremt.authorizingUserId">
+                                    <option v-for="(items,index) in maeketUserList" :value="items.id" v-if="index==0" selected="">
+                                        {{items.relName}}
+                                    </option>
+                                    <option v-for="(items,index) in maeketUserList" :value="items.id" v-if="index>0">
+                                        {{items.relName}}
+                                    </option>
+                                </select>
+                                输入授权（密码/指纹/指静脉）：
+                                <input type="password" style="float:initial" v-model="loadData1.authorizingPass">
+                            </div>
+                        </fieldset>
+                        <fieldset class="JZ-ZH-con">
+                            <div>
+                                <span> 置换单位名称：</span><input type="text" v-model="loadData1.paremt.displaceCompany" style="height: 22%">
+                                <span>置换方式：</span><input type="text" v-model="loadData1.paremt.displaceWay" style="height: 22%">
+                            </div>
+                            <div>
+                                <span>审核人：</span>
+                                <select name="1" v-model="loadData1.paremt.authorizingUserId">
+                                    <option v-for="(items,index) in maeketUserList" :value="items.id" v-if="index==0" selected="">
+                                        {{items.relName}}
+                                    </option>
+                                    <option v-for="(items,index) in maeketUserList" :value="items.id" v-if="index>0">
+                                        {{items.relName}}
+                                    </option>
+                                </select>
+                                <span>输入授权（密码/指纹/指静脉）：</span>
+                                <input type="password" v-model="loadData1.authorizingPass">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="LiIndexOffer maskLayerAlert">
+                                <div class="maskLayerAlert_box">
+                                    <div class="table_hide">
+                                        <table class="table table-bordered text-center table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>购卡价格</th>
+                                                <th>首付</th>
+                                                <th>分期金额</th>
+                                                <th>期限</th>
+                                                <th>分期付款类型</th>
+                                                <th>内容</th>
+                                                <th>分期类型</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="item in loadData1.splitSet.cardTypeSplitSetIdList">
+                                                <td>{{item.totalPrice|toManey}}</td>
+                                                <td>{{item.firstPrice|toManey}}</td>
+                                                <td>{{item.splitPrice|toManey}}</td>
+                                                <td>{{item.splitNum}}</td>
+                                                <td v-for="split in parameterList.splitType"
+                                                    v-if="split.vue== item.splitType">
+                                                    {{split.lav}}
+                                                </td>
+                                                <td>{{item.splitContent}}</td>
+                                                <td><a href="#" @click="getCardTypeSplitDD()">分期详情</a>
+                                                </td>
+                                                <td><a href="#" @click="getCardTypeSplit">重新选择</a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="maskLayerAlert_box_alert" style="display: none;">
+                                        <div class="maskLayerAlert_box_alert_a">分期详情<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a></div>
+                                        <div>
+                                            <p v-for="item in loadData1.splitSet.cardTypeSplitSetDD">
+                                                {{item.splitOrder}}/{{loadData1.splitNum}}期，还款时间：{{item.splitDate|formatDate}}
+                                                分期比例：30% 还款金额：￥{{item.splitNum|toManey}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="maskLayerAlert_box_alert2" style="display: none;">
+                                        <div class="maskLayerAlert_box_alert_a">选择分期类型<a href="#" class="setting_hide_a" onclick="settingOut_a2()">X</a></div>
+                                        <div>
+                                            <div class="maskLayerAlert">
+                                                <div class="maskLayerAlert_box">
+                                                    <div class="table_hide">
+                                                        <table class="table table-bordered text-center table-hover">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>选择</th>
+                                                                <th>购卡价格</th>
+                                                                <th>首付</th>
+                                                                <th>分期金额</th>
+                                                                <th>期限</th>
+                                                                <th>分期付款类型</th>
+                                                                <th>内容</th>
+                                                                <th>分期类型</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr v-for="item in loadData1.splitSet.cardTypeSplitSetList">
+                                                                <td><label><input type="radio" @click="choice(item)" :value="item.id" v-model="loadData1.splitSet.cardTypeSplitSetIdT"></label></td>
+                                                                <td>{{item.totalPrice|toManey}}</td>
+                                                                <td>{{item.firstPrice|toManey}}</td>
+                                                                <td>{{item.splitPrice|toManey}}</td>
+                                                                <td>{{item.splitNum}}</td>
+                                                                <td v-for="split in parameterList.splitType" v-if="split.vue== item.splitType">
+                                                                    {{split.lav}}
+                                                                </td>
+                                                                <td>{{item.splitContent}}</td>
+                                                                <td><a href="javascript:;" @click="getCardTypeSplitDD(item.id,item.splitNum)">分期详情</a></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <a href="javascript:;" class="btn btn-default" @click="choiceSplit">确定</a>
+                                                    </div>
+                                                    <div class="maskLayerAlert_box_alert" style="display: none;">
+                                                        <div class="maskLayerAlert_box_alert_a">
+                                                            分期详情<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a>
+                                                        </div>
+                                                        <div>
+                                                            <p v-for="item in loadData1.splitSet.cardTypeSplitSetDD">
+                                                                {{item.splitOrder}}/{{loadData1.splitNum}}期，还款时间：{{item.splitDate|formatDate}}
+                                                                分期比例：30%
+                                                                还款金额：￥{{item.splitNum|toManey}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="maskLayerAlert_footer">
+                                                    <div class="category_span_red">
+                                                        注:时间到期,卡自动进入待补余未开卡状态,必须支付对应金额才能开卡。可以一次性把剩余卡卡价付清。
+                                                        <p>默认有几种平均分期情况。如果不一样请自行修改或者添加。</p>
+                                                        <p>
+                                                            购卡总金额:等于卡销售价+实际利息。如果实际利息为0那么就等于卡销售价。请自行修改。</p>
+                                                        <p>
+                                                            首付:是指第一次需要付款的金额。如果直接是购卡总金额上做分期的。那么首付请填写0。</p>
+                                                        <p>分期金额:等于购卡总金额一首付。</p>
+                                                        <p>账期:是指分期金额需要分几期还完。</p>
+                                                        <p>
+                                                            类型:可以是按照设置的金额每期还款多少钱,也可以按照设置比例来确定每期还款多少钱</p>
+                                                        <p>分期详情:具体设置每期的还款时间和还款金额。</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="payment_method">
+                <div class="payment_method_top">
+                    <ul class="XFFS-list">
+                        <li class="on" @click="paymentMethodTop(0,1)" value="1" >会员消费</li>
+                        <li @click="paymentMethodTop(1,2)" value="2" >普通消费</li>
+                        <li class="">员工领用</li>
+                        <li class="">协议单位</li>
+                        <!--<li @click="paymentMethodTop(2)" value="3" v-model="loadData1.paremt.consumeType">员工领用</li>-->
+                        <!--<li @click="paymentMethodTop(3)" value="4" v-model="loadData1.paremt.consumeType">协议单位</li>-->
+                    </ul>
+                </div>
+                <div class="XFFS-divs">
+                    <!--会员消费-->
+                    <div class="active XFFS-div">
+                        <div class="TCR-tables ">
+                            <!--会员消费-->
+                            <div class="TCR-tables-box1 TCR-tables-box1T" v-if="paymentMethodTops==0">
+                                <div class="TCR-table-con1-query TCR-table-con1-queryT"><span>手机号码：</span>
+                                    <strong class="TCR-table-con1-query-btn" @click="getClientList('tickMark')">搜索</strong>
+                                    <input type="text" placeholder="输入手机号码" v-model="givePhone">
+                                </div>
+                                <div class="TCR-table-con1T">
+                                    <div class="TCR-overflow-box">
+                                        <table border="0" cellspacing="0" cellpadding="0" class="green-head-table">
+                                            <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>票券号码</th>
+                                                <th>票券名称</th>
+                                                <th>可用权益</th>
+                                                <th>使用</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(item,index) in ticketPrice.ticketPriceList">
+                                                <td>{{++index}}</td>
+                                                <td>{{item.tickNo}}</td>
+                                                <td class='col-blue'>{{item.tickName}}</td>
+                                                <td class='font-bold'>{{item.tickNum}}</td>
+                                                <td>
+                                                    <input type="checkbox" v-model="ticketPrice.ticketPriceListOk" :value="item" @change="changeTicket">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <strong class="showAllTable-btn">显示更多</strong></div>
+                                </div>
+                                <div class="TCR-table-con2">
+                                    <div><span>会员卡号：</span> <strong class="font-bold">{{ticketPrice.cardNo}}</strong></div>
+                                    <div><span>会员名称：</span> <strong class="font-bold">{{ticketPrice.cardUserName}}</strong></div>
+                                    <div><span>票劵差价：</span><strong class="font-bold col-red">{{ticketPrice.differencePrice|toManey}}</strong></div>
+                                    <div><span>票劵抵扣：</span><strong class="font-bold col-red">{{ticketPrice.totalPrice|toManey}}</strong></div>
+                                    <div><span>卡中储值金额：</span> <strong class="font-bold col-red">{{ticketPrice.storage0rderPrice|toManey}}</strong></div>
+                                    <div><span>扣储值金额：</span> <input type="text" v-model="ticketPrice.storagePirc" @change="changeTicket"  style="width: 53%;"></div>
+                                    <div><span>输入凭证：</span> <input style="width: 53%;" type="password" v-model="ticketPrice.userPass"></div>
+                                </div>
+                            </div>
+                            <!--普通消费-->
+                            <div class="TCR-tables-box1 TCR-tables-box1T" v-if="paymentMethodTops==1">
+                                <div class="TCR-table-con1-query TCR-table-con1-queryT"><span>手机号码：</span>
+                                    <strong class="TCR-table-con1-query-btn" @click="getClientList('tickMark')">搜索</strong>
+                                    <input type="text" placeholder="输入手机号码" v-model="givePhone">
+                                </div>
+                                <div class="TCR-table-con1T">
+                                    <div class="TCR-overflow-box">
+                                        <table border="0" cellspacing="0" cellpadding="0"
+                                               class="green-head-table">
+                                            <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>票券号码</th>
+                                                <th>票券名称</th>
+                                                <th>可用权益</th>
+                                                <th>使用</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(item,index) in ticketPrice.ticketPriceList">
+                                                <td>{{++index}}</td>
+                                                <td>{{item.tickNo}}</td>
+                                                <td class='col-blue'>{{item.tickName}}</td>
+                                                <td class='font-bold'>{{item.tickNum}}</td>
+                                                <td>
+                                                    <input type="checkbox" v-model="ticketPrice.ticketPriceListOk" :value="item" @change="changeTicket">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <strong class="showAllTable-btn">显示更多</strong></div>
+                                </div>
+                                <div class="TCR-table-con2">
+                                    <div><span>票券可用总权益：</span> <strong class="font-bold">{{ticketPrice.totalPrice|toManey}}</strong></div>
+                                    <div><span>输入使用权益：</span> <input type="text" name="" value="" style="width: 45%;"></div>
+                                    <div><span>票券需补差价：</span> <strong class="font-bold col-blue">{{ticketPrice.differencePrice|toManey}}</strong></div>
+                                    <div class="PTXFSM">
+                                        <strong>普通消费说明</strong>
+                                        <p>
+                                            1、本阶段只支持系统存在的潜在客户消费;</br>
+                                            2、如果系统不存在的客户想用票券消费;</br>
+                                            1）新建潜在客户必须要有手机号码、姓名；</br>
+                                            2）销售/赠送票券;</br>
+                                            3）在本届面录入手机号码，如果有消费权益就会自动带出 ;</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--员工领用-->
+                            <div class="TCR-tables-box1 TCR-tables-box1T" v-if="paymentMethodTops==2">
+                                <div class="YGLY-select">
+                                    <strong class="TCR-tables-title col-orange">人员选择</strong>
+                                    <div class="YGLY-select-con">
+                                        <strong class="YGLY-select-name">选择门店</strong>
+                                        <div class="YGLY-hide-box">
+                                            <div class="YGLY-query-box">
+                                                <input type="text" placeholder="门店名称">
+                                                <strong class="YGLY-query-Btn"></strong>
+                                            </div>
+                                            <ul class="YGLY-select-ul">
+                                                <li>软件园店</li>
+                                                <li>思明店</li>
+                                                <li>湖里店</li>
+                                                <li>海沧店</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="YGLY-select-con">
+                                        <strong class="YGLY-select-name">选择部门</strong>
+                                        <div class="YGLY-hide-box">
+                                            <div class="YGLY-query-box">
+                                                <input type="text" placeholder="部门名称">
+                                                <strong class="YGLY-query-Btn"></strong>
+                                            </div>
+                                            <ul class="YGLY-select-ul">
+                                                <li>XX部</li>
+                                                <li>TT部</li>
+                                                <li>EE部</li>
+                                                <li>DD部</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="YGLY-select-con">
+                                        <strong class="YGLY-select-name">选择人员</strong>
+                                        <div class="YGLY-hide-box">
+                                            <div class="YGLY-query-box">
+                                                <input type="text" placeholder="人员名称">
+                                                <strong class="YGLY-query-Btn"></strong>
+                                            </div>
+                                            <ul class="YGLY-select-ul">
+                                                <li>某某</li>
+                                                <li>某某1</li>
+                                                <li>某某2</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                                <li>某某3</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="YGLY-Btns">
+                                    <span>输入授权人凭证：</span>
+                                    <input type="text" placeholder="输入密码">
+                                    </br>
+                                    <strong class="yellow-btn">领用</strong>
+                                    <strong class="blue-btn">借用</strong>
+                                    <strong class="green-btn">归还</strong>
+                                    <strong class="red-btn">消耗</strong>
+                                    <strong class="gray-btn">废弃</strong>
+                                </div>
+                            </div>
+                            <!--协议单位-->
+                            <div class="TCR-tables-box1 TCR-tables-box1T" v-if="paymentMethodTops==3">
+                                <div class="XFFS-XYDW-inputs">
+                                    <input type="text" placeholder="手机号码/协议号/部门/公司名称">
+                                    <label>
+                                        <span>企业扣费： </span>
+                                        <input type="text">
+                                    </label>
+                                    <input type="text" placeholder="公司名称">
+                                    <input type="text" placeholder="部门名称">
+                                    <input type="text" placeholder="手机号码">
+                                    <input type="text" placeholder="使用人">
+                                </div>
+                            </div>
+                            <div class="TCR-tables-box2">
+                                <strong class="TCR-tables-title col-orange">支付方式</strong>
+                                <table border="0" cellspacing="0" cellpadding="0"
+                                       class="green-head-table2">
+                                    <thead>
+                                    <tr>
+                                        <th>支付方式</th>
+                                        <th>支付金额</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>支付宝</td>
+                                        <td><span>￥</span><input type="text" v-model="payModel.L1" @change="isCommonMoney(payModel.L1,'L1')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>刷卡</td>
+                                        <td><span>￥</span><input type="text" v-model="payModel.L2" @change="isCommonMoney(payModel.L2,'L2')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>微信</td>
+                                        <td><span>￥</span><input type="text" v-model="payModel.L3" @change="isCommonMoney(payModel.L3,'L3')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>现金</td>
+                                        <td><span>￥</span><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>转账</td>
+                                        <td><span>￥</span><input type="text" v-model="payModel.L5" @change="isCommonMoney(payModel.L5,'L5')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>花呗</td>
+                                        <td><span>￥</span><input type="text" v-model="payModel.L6" @change="isCommonMoney(payModel.L6,'L6')"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="TCR-tables-box4">
+                                <strong class="TCR-tables-title col-orange">折扣优惠</strong>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="2">整单打折</td>
+                                    </tr>
+                                    <tr>
+                                        <td>优惠折扣：</td>
+                                        <td><input type="text" v-model="discount.num" @change="checkDiscounts(1,'num')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>整单去零：</td>
+                                        <td><input type="text" v-model="discount.changeNum" @change="checkDiscounts(2,'changeNum')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <label>
+                                                <input type="radio" name="discount-type-radio" value="1" v-model="discount.fullType" @click="switchType">
+                                                <span>整单打折(重复使用)</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-align-right">满：</td>
+                                        <td class="text-align-right">
+                                            <input type="text" v-model="discount.discountFullOne" @change="switchFullReduction(discount.discountFullOne,'discountFullOne',1)">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-align-right">减：</td>
+                                        <td class="text-align-right">
+                                            <input type="text" v-model="discount.discountReduceOne" @change="switchFullReduction(discount.discountReduceOne,'discountReduceOne',1)">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <label>
+                                                <input type="radio" name="discount-type-radio" value="0" v-model="discount.fullType" @click="switchType">
+                                                <span>整单打折(单次使用)</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-align-right">满：</td>
+                                        <td>
+                                            <input type="text" v-model="discount.discountFullTwo" @change="switchFullReduction(discount.discountFullTwo,'discountFullTwo',0)">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-align-right">减：</td>
+                                        <td>
+                                            <input type="text" v-model="discount.discountReduceTwo" @change="switchFullReduction(discount.discountReduceTwo,'discountReduceTwo',0)">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="TCR-tables-box3">
+                                <strong class="TCR-tables-title col-green">支付详情</strong>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tbody>
+                                    <tr>
+                                        <td>小计：</td>
+                                        <td>￥ {{payMentMoney.totalPrice|toManey}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>抵扣/优惠：</td>
+                                        <td>￥ {{payMentMoney.discount|toManey}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>抵扣金额：</td>
+                                        <td>￥ {{payMentMoney.discountNum|toManey}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>应付金额：</td>
+                                        <td>￥ {{payMentMoney.needPrice|toManey}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>未付：<span>￥ {{payMentMoney.noPrice|toManey}}</span></td>
+                                        <td>找零：<span class="col-red">￥ {{payMentMoney.retChange|toManey}}</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="XFFS-gray-btns">
+                                    <strong class="XFFS-gray-btn">挂账</strong>
+                                    <strong class="XFFS-gray-btn">挂单</strong>
+                                </div>
+                                <strong class="XFFS-green-btn" @click="settlement">转账</strong>
+                                <label>
+                                    <input type="checkbox" v-model="cardMap.invoiceStatus" value="1"><span>购置发票</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 业绩分配弹窗 -->
+        <div id="performance" class="newCustomers_maskLayer">
+            <div class="newCustomers_maskLayer_box">
+                <div class="newCustomers_maskLayer_box_top">
+                    <span>销售业绩分配</span><a href="#" class="newCustomers_maskLayer_X"  @click="newCustomers_maskLayer_X">X</a>
+                </div>
+                <div class="newCustomers_maskLayer_box_shen">
+                    <fieldset>
+                        <legend>销售价格分配比例/金额</legend>
+                        <div>
+                            <label><input type="radio" v-model="loadData1.orderAllotSet.allotType" value="1">以实际销售价格</label>
+                            <label><input type="text" placeholder="分配比例" v-model="loadData1.orderAllotSet.allotNumOne">%为销售业绩</label>
+
+                            <label><input type="radio" v-model="loadData1.orderAllotSet.allotType" value="2">以实际销售价格</label>
+                            <label><input type="text" placeholder="分配金额" v-model="loadData1.orderAllotSet.allotNumTwo">元为销售业绩</label>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>销售人员销售业绩分配比例/金额</legend>
+                        <div>
+                            <div>
+                                <label><input type="radio" v-model="loadData1.orderAllotSet.saleAllotType" value="1">销售业绩按比例分配</label>
+                                <label><input type="radio" v-model="loadData1.orderAllotSet.saleAllotType" value="2">销售业绩按金额分配</label>
+                            </div>
+                            <div>
+                                选择销售人员：
+                                <select name="1" v-model="loadData1.orderAllotSet.personnelId">
+                                    <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                        {{items.relName}}
+                                    </option>
+                                    <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                        {{items.relName}}
+                                    </option>
+                                </select>
+                                <input type="text" placeholder="分配比例/金额" v-model="loadData1.orderAllotSet.saleAllotNum" @change="checkNum(3,'saleAllotNum')">
+                                <a href="#" class="btn btn-primary" @click="addOrderAllotSetOne">添加</a>
+                            </div>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>销售人员</th>
+                                    <th>分配比例/金额</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item,index) in loadData1.orderAllotSetListOne" class="orderAllotSet">
+                                    <td>{{index+1}}</td>
+                                    <td v-for='(items,index) in maeketUserList' v-if="item.personnelId == items.id">
+                                        {{items.relName}}
+                                    </td>
+                                    <td>{{item.saleAllotNum}}</td>
+                                    <td>
+                                        <a href="#" @click="updateFamily(index)">修改</a>
+                                        /<a href="#" @click="deleteFamily(index)">删除</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="newCustomers_maskLayer_box_botton">
+                    <a href="#" class="btn btn-success" @click="addOrderAllotSet">保存</a>
+                </div>
+            </div>
+        </div>
+        <!-- 业绩分配弹窗 -->
+        <!--表格1-->
+        <div class="newCustomers_maskLayer performance" style="display:none;" id="clientList">
+            <div class="newCustomers_maskLayer_box">
+                <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span><a href="#" class="newCustomers_maskLayer_X" @click="colseX('clientList')">X</a>
+                </div>
+                <div class="KHGL-table-box">
+                    <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>标识</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>创建时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in optionClientList">
+                            <td><span class="col-green" :value="item.id" @click="catcherClientList(item)">选择</span></td>
+                            <td><span class="col-red">{{item.CustomerMark}}</span></td>
+                            <td>{{item.clientName}}</td>
+                            <td v-for="sexs in parameterList.sexList" v-if="sexs.vue == item.sex">{{sexs.lav}}</td>
+                            <td>{{item.applyTime|formatDate(true)}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 表格1 -->
+        <!-- 表格2 -->
+        <div class="newCustomers_maskLayer performance" style="display: none;" id="clientCardList">
+            <div class="newCustomers_maskLayer_box">
+                <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span><a href="#" class="newCustomers_maskLayer_X" @click="colseX('clientCardList')">X</a>
+                </div>
+                <h5 class="KHGL-title">选择要储值的会员卡</h5>
+                <div class="KHGL-table-box">
+                    <table class="KHGL-table2" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>姓名</th>
+                            <th>手机号码</th>
+                            <th>卡系列</th>
+                            <th>卡名称</th>
+                            <th>开始日期</th>
+                            <th>失效日期</th>
+                            <th>剩余权益</th>
+                            <th>剩余储值</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in optionClientCardList">
+                            <td class="cursorP" :value="item.id"@click="catcheCardId(item)">选择</td>
+                            <td class='col-blue'>{{item.clientName}}</td>
+                            <td>{{item.mobile}}</td>
+                            <td>{{item.cardFlag}}</td>
+                            <td class='col-red'>{{item.cardTypeName}}</td>
+                            <td>{{item.bindTime}}</td>
+                            <td>{{item.invalidTime|formatDate}}</td>
+                            <td>{{item.orderRightsNum}}</td>
+                            <td>{{item.orderPrice}}</td>
+                            <td>{{item.a_status}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--表格2-->
+    </div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="/js/myPagination.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="newCardCustomers.js"></script>
+<script>
+    newCardCustomers.init();
+    $(function () {
+        $('.section2_box_top a').click(function () {
+            var inex = $(this).index();
+            $('.section2_boxs1').eq(inex).addClass('on').siblings().removeClass('on');
+            $(this).addClass('on').siblings().removeClass('on');
+        })
+        $('#changguan').change(function () {
+            var changguan = $(this).val();
+            if (changguan == 1) {
+                $('.xioshou').show();
+            } else {
+                $('.xioshou').hide();
+            }
+        })
+        $('.section2_boxs1_right2_top span').click(function () {
+            var inx = $(this).index();
+            $(this).addClass('on').siblings().removeClass('on');
+            $('.section2_boxs1_right2_botton_left').eq(inx).addClass('on').siblings().removeClass('on');
+        })
+        $('.section4_box_top label input[name=quan]').click(function () {
+            if ($(this).is(':checked')) {
+                if ($(this).parent().index()) {
+                    $('.section4_box_botton fieldset').eq($(this).parent().index() - 1).show().siblings()
+                        .hide();
+                } else {
+                    $('.section4_box_botton fieldset').hide();
+                }
+            }
+        })
+        $('#projects').change(function () {
+            if ($(this).val()) {
+                if ($(this).val() == 1) {
+                    $('#project').show();
+                }
+                if ($(this).val() == 2) {
+                    $('#product').show();
+                }
+            }
+        })
+        $('#packages').click(function () {
+            $('#package').show();
+        })
+        $('#ticketGifts').click(function () {
+            $('#ticketGift').show();
+        })
+        $('#offers').click(function () {
+            $('#offer').show();
+        })
+        $('.payment_method_top li').click(function () {
+            $(this).addClass('on').siblings().removeClass('on');
+            $('.payment_method_left li').eq($(this).index()).addClass('on').siblings().removeClass('on');
+        })
+
+    })
+    //设置小弹窗
+    function setting_a() {
+        $('.maskLayerAlert_box_alert').show();
+    }
+    //关闭小弹窗
+    function settingOut_a() {
+        $('.maskLayerAlert_box_alert').hide();
+    }
+    // 关闭弹窗
+    function newCustomers_maskLayer_X() {
+        $('.newCustomers_maskLayer').hide();
+    }
+</script>
+
+</html>

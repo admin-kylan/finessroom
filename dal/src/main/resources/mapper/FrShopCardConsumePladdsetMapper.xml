@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrShopCardConsumePladdsetMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrShopCardConsumePladdset">
+        <id column="id" property="id" />
+        <result column="use_limit" property="useLimit" />
+        <result column="use_day_star" property="useDayStar" />
+        <result column="use_day_end" property="useDayEnd" />
+        <result column="UseSelect" property="UseSelect" />
+        <result column="use_time_star" property="useTimeStar" />
+        <result column="use_time_end" property="useTimeEnd" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="card_consume_id" property="cardConsumeId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        use_limit AS useLimit, use_day_star AS useDayStar, use_day_end AS useDayEnd, UseSelect, use_time_star AS useTimeStar, use_time_end AS useTimeEnd, CustomerCode, card_consume_id AS cardConsumeId, id
+    </sql>
+
+</mapper>

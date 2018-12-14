@@ -1,0 +1,16 @@
+#------------------------项目基本配置------------------------#
+server:
+  port: 8084
+  tomcat:
+      uri-encoding: UTF-8
+#  context-path: /web
+#------------------------运行环境------------------------#
+spring:
+  profiles:
+    active: dev
+  http:
+      encoding:
+        enabled: true
+        charset: utf-8
+        force: true
+

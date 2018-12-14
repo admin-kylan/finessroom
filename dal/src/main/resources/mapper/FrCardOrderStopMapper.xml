@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderStopMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderStop">
+        <id column="a.id" property="id" />
+        <result column="a.card_id" property="cardId" />
+        <result column="a.start_time" property="startTime" />
+        <result column="a.est_end_time" property="estEndTime" />
+        <result column="a.flag" property="flag" />
+        <result column="a.personnel_id" property="personnelId" />
+        <result column="a.end_time" property="endTime" />
+        <result column="a.est_stop_time" property="estStopTime" />
+        <result column="a.stop_time" property="stopTime" />
+        <result column="a.invalid_time" property="invalidTime" />
+        <result column="a.total_price" property="totalPrice" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.status" property="status" />
+        <result column="a.audit_status" property="auditStatus" />
+        <result column="a.status_user_id" property="statusUserId" />
+        <result column="a.audit_user_id" property="auditUserId" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.client_id" property="clientId" />
+        <result column="a.price_status" property="priceStatus" />
+        <result column="a.type" property="type" />
+        <result column="a.stop_status" property="stopStatus" />
+        <result column="a.stop_user_id" property="stopUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.card_id AS cardId,
+        a.start_time AS startTime,
+        a.est_end_time AS estEndTime,
+        a.flag,
+        a.personnel_id AS personnelId,
+        a.end_time AS endTime,
+        a.est_stop_time AS estStopTime,
+        a.stop_time AS stopTime,
+        a.invalid_time AS invalidTime,
+        a.total_price AS totalPrice,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.status,
+        a.audit_status AS auditStatus,
+        a.status_user_id AS statusUserId,
+        a.audit_user_id AS auditUserId,
+        a.is_using AS isUsing,
+        a.client_id AS clientId,
+        a.price_status AS priceStatus,
+        a.type,
+        a.stop_status AS stopStatus,
+        a.stop_user_id AS stopUserId,
+        a.id
+    </sql>
+    <sql id="query_where_sql">
+        <if test="stopStatus !=null and stopStatus >= 0">
+            AND a.stop_status = #{stopStatus}
+        </if>
+        <if test="type !=null and type >= 0">
+            AND a.type = #{type}
+        </if>
+    </sql>
+
+    <select id="getStopCardListByType" resultType="java.util.Map">
+        SELECT
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id AND p.IsDel = 0) personnerlName,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE a.stop_user_id = p.id AND p.IsDel = 0) stopUserName,
+        (SELECT p.pic_link FROM fr_card_order_stop_pic p WHERE a.id = p.stop_id AND p.pic_state = 1) picLink,
+        (SELECT STUFF((SELECT ','+ltrim(cast(
+                  CASE
+                    WHEN pay_mode =1 THEN '支付宝'
+                    WHEN pay_mode =2  THEN '刷卡'
+                    WHEN pay_mode =3  THEN '微信'
+                    WHEN pay_mode =4 THEN '现金'
+                    WHEN pay_mode =5 THEN '转账'
+                    WHEN pay_mode =6 THEN '花呗'
+                    WHEN pay_mode =7 THEN '其他'
+                  ELSE '未设置'
+            END as varchar(10))+':'+cast(pay_price as varchar(10)))
+            FROM fr_card_order_pay_mode WHERE order_id = a.id and order_type ='8' FOR XML PATH('')), 1, 1, '') AS keyword
+         FROM fr_card_order_pay_mode t
+         WHERE t.order_id = a.id
+         GROUP BY t.order_id, t.order_type ) paymentMoney,
+          <include refid="Base_Column_List"/>
+        FROM fr_card_order_stop a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND a.is_using = 1
+        AND a.client_id = #{clientId}
+        AND a.card_id = #{cardId}
+        <include refid="query_where_sql"/>
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,527 @@
+.sc-calendar {
+  width: 100%;
+  /*height: 500px;*/
+  font-family: "Microsoft Yahei";
+  color: #4A4A4A;
+  border-width: 1px 0 0 1px;
+  border-color: #fff;
+  border-style: solid;
+  float: left;
+  margin-right: 20px;
+  -moz-user-select: none;
+  /*火狐*/
+  -webkit-user-select: none;
+  /*webkit浏览器*/
+  -ms-user-select: none;
+  /*IE10*/
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  font-size: 16px;
+}
+
+.sc-header {
+  height: 35px;
+  border-bottom: 0;
+}
+
+.sc-body {
+  height: 93%;
+  /*height: calc(100% - 35px);*/
+  clear: both;
+  /* overflow: hidden; */
+  position: relative;
+}
+
+.sc-week {
+  margin-top: 5px;
+  height: 12%;
+  font-weight: 400;
+  font-size: 20px;
+  color: #4A4A4A;
+  margin-right: -8px;
+}
+
+.sc-days {
+  height: 88%;
+  margin-right: -8px;
+}
+
+.sc-item {
+  position: relative;
+  height: 20%;
+  height: 170px;
+  float: left;
+  font-weight: 600;
+  color: #565555;
+  width: 14.285%;
+  padding-top: 10px;
+  background-color: #ffffff;
+  border-width: 1px;
+  border-color: #F1EBE4;
+  border-style: solid;
+  box-sizing: border-box;
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+/*.item-nolunar {
+  padding-top: 20px;
+}*/
+/*.sc-item:nth-child(7n) .day, .sc-item:nth-child(7n+6) .day {
+  color: rgba(224, 8, 8, 0.74);
+}*/
+.sc-vocation {
+  background-color: #FFEBEC;
+}
+
+.sc-mark {
+  background-color: #FF005B;
+  color: #FFFFFF;
+}
+
+.sc-vocation:before {
+  content: '休';
+  display: block;
+  position: absolute;
+  font-size: 0.7em;
+  width: 1.2em;
+  font-weight: 100;
+  color: white;
+  background-color: #E00808;
+  margin-top: -10px;
+}
+
+.sc-othermenth {
+  color: #C1C0C0 !important;
+}
+
+.sc-othermenth .day,
+.sc-othermenth .lunar-day {
+  color: #C1C0C0 !important;
+}
+
+.sc-active-day,
+.sc-selected {
+  border-color: #0cc;
+  z-index: 1;
+}
+
+.sc-today {
+  background-color: #dcdcdc;
+  color: white;
+  border: 1px solid #dcdcdc;
+}
+
+.sc-item .day {
+  font-size: 1.5em;
+  padding: 0 5px;
+}
+
+/*.sc-today .day {
+  color: white !important;
+}*/
+.sc-item .lunar-day {
+  font-size: 10px;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sc-festival .lunar-day {
+  color: #E00808;
+}
+
+/*.sc-item:last-child, .sc-item:nth-child(7n) {
+  border-width: 0 1px 1px 1px;
+}*/
+
+.sc-week-item {
+  height: 30px;
+  float: left;
+  width: 14.285%;
+  background-color: #0cc;
+  border-width: 1px;
+  border-color: #0cc;
+  margin-left: -1px;
+  border-style: solid;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 30px;
+  text-align: center;
+}
+
+.sc-item-small {
+  font-size: 10px !important;
+}
+
+.sc-week-item:last-child {
+  border-width: 1px 1px 1px 1px;
+}
+
+/*.sc-week-item:nth-child(7n), .sc-week-item:nth-child(7n+6) {
+  color: rgba(224, 8, 8, 0.74)!important;
+}*/
+
+.sc-actions {
+  float: left;
+  width: 100%;
+  padding: 5px;
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+}
+
+.sc-actions:last-child {
+  float: right;
+}
+
+.sc-actions-big {
+  width: 50%;
+}
+
+@media screen and (max-width : 500px) {
+  .sc-actions {
+    width: 50%;
+  }
+}
+
+.sc-header select {
+  position: relative;
+  top: -6px;
+  border-color: rgba(0, 0, 0, 0);
+  padding: 0.2em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-family: "Microsoft Yahei";
+  color: #000;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sc-header input {
+  border-color: rgba(0, 0, 0, 0);
+  padding: 0.2em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-family: "Microsoft Yahei";
+  color: #606060;
+}
+
+.sc-actions div {
+  display: inline-block;
+  /*border: 1px solid #ccc;*/
+  vertical-align: bottom;
+  width: 150px;
+  padding-bottom: 5px;
+  font-size: 13px;
+  line-height: 0.9em;
+}
+
+.sc-return-today {
+  display: block;
+  background-color: #F5F5F9;
+  border-radius: 2px;
+  /* border: 1px solid #ccc; */
+  width: 60px;
+  font-size: 0.8em;
+  padding: 0.3em;
+  margin: auto;
+}
+
+.sc-time {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.8em;
+}
+
+
+
+
+
+.sc-actions:nth-child(1),
+.sc-actions:nth-child(3),
+.sc-actions:nth-child(4) {
+  display: none;
+}
+
+.sc-actions .sc-pull-right {
+  min-width: 320px;
+  position: absolute;
+  right: 0;
+  height: 30px;
+  display: none;
+}
+
+.sc-pull-right>div {
+  float: left;
+  width: 25%;
+  line-height: 20px;
+  margin-top: 5px;
+}
+
+.sc-pull-right>div span {
+  float: left;
+}
+
+.sc-pull-right>div strong {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  display: inline-block;
+  float: left;
+  margin-right: 5px;
+}
+
+.sc-pull-right>div strong.sc-hui {
+  background-color: rgba(204, 204, 204, 1);
+}
+
+.sc-pull-right>div strong.sc-green {
+  background-color: rgba(0, 204, 0, 1);
+}
+
+.sc-pull-right>div strong.sc-hei {
+  background-color: #000;
+}
+
+.sc-pull-right>div strong.sc-red {
+  background-color: red;
+}
+
+.dataday p {
+  text-align: center;
+}
+
+.dataday .green p {
+  color: rgba(0, 204, 0, 1);
+}
+
+.dataday .red p {
+  color: red;
+}
+
+.dataday .hui p {
+  color: #000;
+}
+.dataday .huihui p {
+  color: rgba(204, 204, 204, 1);
+}
+
+/* //周 */
+#week {
+  overflow: hidden;
+}
+
+#week .sc-header {
+  height: 42px;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+}
+
+#week .sc-header .btn-danger {
+  background-color: red;
+  color: #fff;
+  min-width: 80px;
+  border-color: red;
+  margin: 4px 0;
+  display: none;
+}
+
+#week .sc-header ul {
+  overflow: hidden;
+  width: 90%;
+  float: left;
+}
+
+#week .sc-header ul li {
+  float: left;
+  min-width: 90px;
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 5px 10px;
+  margin: 5px 0;
+  border-left: none;
+}
+
+#week .sc-header ul li:first-child {
+  border-left: 1px solid #ccc;
+  margin-left: 10px;
+}
+
+#week .sc-body h4 {
+  margin: 20px 0;
+  text-align: center;
+}
+
+#week .sc-body .sc-week-item {
+  width: 12.48%;
+  color: #fff;
+}
+
+#week .sc-body .sc-item {
+  width: 12.48%;
+  height: 80px;
+  text-align: center;
+  line-height: 60px;
+  position: relative;
+}
+
+#week .sc-body .sc-item .tool {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 20px;
+  display: none;
+}
+#week .sc-body .sc-item .tool.on{
+  display: block;
+}
+#week .sc-body .sc-item .tool .toolblur {
+  color: #0cc;
+  cursor: pointer;
+  display: none;
+  margin: 0 5px;
+}
+
+#week .sc-body .sc-item .tool .toolorange {
+  color: #ff9900;
+  cursor: pointer;
+  display: none;
+  margin: 0 5px;
+}
+
+#week .sc-body .sc-item .tool .toolred {
+  color: red;
+  cursor: pointer;
+  display: none;
+  margin: 0 5px;
+}
+
+#week .sc-body .sc-item .tool .toolblur.on {
+  display: inline-block;
+}
+
+#week .sc-body .sc-item .tool .toolorange.on {
+  display: inline-block;
+}
+
+#week .sc-body .sc-item .tool .toolred.on {
+  display: inline-block;
+}
+
+#week .sc-item .dataday {
+  line-height: 30px;
+  cursor: pointer;
+  min-height: 60px;
+}
+
+#week .sc-days>div {
+  overflow: hidden;
+  width: 100%;
+}
+
+#week .sc-days>div .sc-item.on {
+  background-color: #FFFCEE;
+}
+
+#week .sc-days>div .sc-item:first-child .jeinput {
+  max-width: 50px;
+  line-height: 20px;
+}
+
+#week .subjoin {
+  width: 99.7%;
+  height: 40px;
+  text-align: center;
+  color: #888;
+  line-height: 40px;
+  border: 1px solid #F1EBE4;
+  border-top: none;
+}
+
+#week .yuan {
+  width: 18px;
+  height: 18px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  float: left;
+}
+
+#week .yuan.active {
+  background-color: #0cc;
+}
+
+.sc-bottom{
+  position: absolute;
+  background-color: #fff;
+  min-width: 190px;
+  max-width: 190px;
+  padding: 10px;
+  box-shadow: 0 0 10px 1px #ccc;
+  border-radius: 5px;
+  font-weight: 600;
+  line-height: 22px;
+  z-index: 50;
+  display: none;
+  left: 180px;
+  top: 10px;
+}
+.sc-bottom>div{
+  position: relative;
+}
+.sc-bottom .btns{
+  position: absolute;
+  right: 15px;
+  line-height: 20px;
+  color: red;
+  top: 0;
+}
+.day a{
+  margin: 0 5px;
+  display: none;
+  float: right;
+}
+.day .toolblur{
+  color: #0cc;
+  text-decoration: none;
+  cursor: pointer;
+}
+.day .toolorange{
+  color: #ff9900;
+  text-decoration: none;
+  cursor: pointer;
+}
+.day .toolred{
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.day .toolblur.on {
+  display: inline-block;
+}
+
+.day .toolorange.on {
+  display: inline-block;
+}
+
+.day .toolred.on {
+  display: inline-block;
+}
+
+.dataday p a{
+    color: red;
+    float: right;
+    margin-right: 10px;
+    text-decoration: none;
+    width: 15px;
+    cursor: pointer;
+}
+.dataday p span{
+  cursor: pointer;
+}

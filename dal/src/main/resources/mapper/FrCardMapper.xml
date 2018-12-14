@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCard">
+        <id column="id" property="id" />
+        <result column="card_no" property="cardNo" />
+        <result column="client_id" property="clientId" />
+        <result column="shop_id" property="shopId" />
+        <result column="card_type_id" property="cardTypeId" />
+        <result column="status" property="status" />
+        <result column="invalid_time" property="invalidTime" />
+        <result column="bind_time" property="bindTime" />
+        <result column="flag" property="flag" />
+        <result column="type" property="type" />
+        <result column="is_using" property="isUsing" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="card_num_id" property="cardNumId" />
+        <result column="have_rights_num" property="haveRightsNum" />
+        <result column="external_no" property="externalNo" />
+        <result column="original_id" property="originalId" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        card_no AS cardNo, client_id AS clientId, shop_id AS shopId, card_type_id AS cardTypeId, status, invalid_time AS invalidTime, bind_time AS bindTime, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, card_num_id AS cardNumId, have_rights_num AS haveRightsNum, external_no AS externalNo, original_id AS originalId, note, id
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List_Frcard">
+        a.card_no AS cardNo,
+        a.client_id AS clientId,
+        a.shop_id AS shopId,
+        a.card_type_id AS cardTypeId,
+        a.status,
+        a.invalid_time AS invalidTime,
+        a.bind_time AS bindTime,
+        a.flag,
+        a.type,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.card_num_id AS cardNumId,
+        a.have_rights_num AS haveRightsNum,
+        a.external_no AS externalNo,
+        a.original_id AS originalId,
+        a.note,
+        a.id
+    </sql>
+    <sql id="Base_Column_List_FrCardOrderInfo">
+        b.card_id AS b_cardId,
+        b.card_type_id AS b_cardTypeId,
+        b.order_no AS b_orderNo,
+        b.client_id AS b_clientId,
+        b.pay_type AS b_payType,
+        b.consume_type AS b_consumeType,
+        b.order_state AS b_orderState,
+        b.total_price AS b_totalPrice,
+        b.discount b_discount,
+        b.change_num AS b_changeNum,
+        b.full_type AS b_fullType,
+        b.discount_full AS b_discountFull,
+        b.discount_reduce AS b_discountReduce,
+        b.discount_price AS b_discountPrice,
+        b.discount_num AS b_discountNum,
+        b.need_price AS b_needPrice,
+        b.no_price AS b_noPrice,
+        b.ret_change AS b_retChange,
+        b.shop_id AS b_shopId,
+        b.personnel_id AS b_personnelId,
+        b.flag b_flag,
+        b.type b_type,
+        b.is_using AS b_isUsing,
+        b.create_time AS b_createTime,
+        b.update_time AS b_updateTime,
+        b.create_user_name AS b_createUserName,
+        b.update_user_name AS b_updateUserName,
+        b.CustomerCode b_CustomerCode,
+        b.create_user_id AS b_createUserId,
+        b.update_user_id AS b_updateUserId,
+        b.buy_rights_num AS b_buyRightsNum,
+        b.give_rights_num AS b_giveRightsNum,
+        b.status AS b_status,
+        b.audit_status AS b_auditStatus,
+        b.status_user_id AS b_statusUserId,
+        b.audit_user_id AS b_auditUserId,
+        b.id AS b_id,
+    </sql>
+    <sql id="query_where_sql">
+        <if test="id != null and id != ''">
+            AND a.id = #{id}
+        </if>
+        <if test="clientId != null and clientId != '' ">
+            AND a.client_id = #{clientId}
+        </if>
+        <if test="status != null and status != ''">
+            AND  a.status = #{status}
+        </if>
+        <if test="isUsing==true">
+            AND  a.is_using = 1
+        </if>
+    </sql>
+    <!--添加会员号-->
+    <insert id="insertList">
+        INSERT INTO fr_card (
+        card_no,
+        create_time,
+        update_time,
+        start_no,
+        end_no,
+        notin_num,
+        batch_num,
+        id
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item},
+            #{param.createTime},
+            #{param.updateTime},
+            #{param.startNo},
+            #{param.endNo},
+            #{param.notinNum},
+            #{param.batchNum},
+            replace(newid(),'-','')
+            )
+        </foreach>
+    </insert>
+
+    <!--查询数据库中是否已存在list中的数据-->
+    <select id="selectListExisted" resultType="java.lang.Integer">
+        SELECT
+        count(card_no) as n
+        FROM
+        fr_card c
+        WHERE
+        EXISTS (
+            SELECT
+            t.card_no
+            FROM
+            (
+                <foreach collection="list" item="item" separator="UNION">
+                    (SELECT #{item} AS card_no)
+                </foreach>
+            ) as t
+            WHERE t.card_no = c.card_no
+        )
+    </select>
+
+    <!--查询数据库中是否已存在list中的数据-->
+    <select id="selectListExisted2" resultType="java.lang.Integer">
+        SELECT
+        count(card_no) as n
+        FROM
+        fr_card
+        WHERE
+        card_no in
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <!--根据会员卡id查询：card_type_id,失效日期，剩余权益，售价，本次购买权益-->
+    <select id="queryCardType" resultType="java.util.Map">
+        SELECT a.card_type_id cardTypeId ,a.invalid_time invalidTime,
+           (SELECT f.sales_price FROM fr_card_type f WHERE f.id = a.card_type_id) fSalesPrice,
+           (SELECT f.total_num FROM fr_card_type f WHERE f.id = a.card_type_id) fTotalNum,
+           (SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c WHERE c.client_id = a.client_id  AND c.is_using = 1
+                   AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2 ORDER BY c.create_time DESC)orderPrice,
+           (SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c  WHERE c.client_id = a.client_id  AND c.is_using = 1
+                   AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1 ORDER BY c.create_time DESC)orderRightsNum
+        FROM fr_card a
+        WHERE a.id = #{cardId} AND a.is_using = 1
+    </select>
+
+    <!--查询指定会员会员卡的数据（新）-->
+    <select id="queryUserCardList" resultType="java.util.Map">
+        SELECT
+         (SELECT s.ShopName FROM  Shop s WHERE s.id = a.shop_id) shopName,
+         (SELECT TOP 1 t.used_num FROM fr_card_original_set t WHERE t.card_id = a.id) userdNum,
+         (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = a.card_type_id) cardTypeName,
+         (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = (SELECT c.p_id FROM fr_card_type c WHERE c.id = a.card_type_id)) cardFlag,
+         (SELECT t.service_life FROM fr_card_type t WHERE t.id = a.card_type_id) seviceLife,
+         (SELECT p.RelName FROM PersonnelInfo p WHERE b.personnel_id = p.id) saleName,
+         (SELECT TOP 1 t.agreement_no FROM fr_card_agreement t WHERE  t.card_id = a.id) agreementNo,
+         (SELECT SUM(c.order_price) FROM fr_card_order_datail c WHERE c.client_id = a.client_id  AND c.is_using = 1
+             AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2)orderPrice,
+         (SELECT SUM(c.order_rights_num) FROM fr_card_order_datail c  WHERE c.client_id = a.client_id  AND c.is_using = 1
+             AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1)orderRightsNum,
+         <include refid="Base_Column_List_FrCardOrderInfo"/>
+         <include refid="Base_Column_List_Frcard"/>
+         FROM fr_card a
+         LEFT JOIN fr_card_order_info b
+         ON b.card_id = a.id
+         WHERE a.CustomerCode = #{CustomerCode}
+        <include refid="query_where_sql"/>
+         ORDER BY  a.update_time DESC
+    </select>
+
+    <!--查询指定会员会员卡的数据（新）-->
+    <select id="queryByFrCardList" resultType="java.util.Map">
+        SELECT
+        (SELECT s.ShopName FROM  Shop s WHERE s.id = a.shop_id) shopName,
+        (SELECT p.client_name FROM fr_client p WHERE p.id = a.client_id) clientName,
+        (SELECT p.mobile FROM fr_client p WHERE p.id = a.client_id) mobile,
+        (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = a.card_type_id) cardTypeName,
+        (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = (SELECT c.p_id FROM fr_card_type c WHERE c.id = a.card_type_id)) cardFlag,
+        (SELECT COUNT(1) FROM fr_card_order_info t WHERE t.card_id = a.id AND t.order_state !=3 AND t.order_state !=4 AND t.order_state !=5 ) orderState,
+        ( CASE
+        WHEN a.status =0 THEN '正常'
+        WHEN a.status =1  THEN '停卡'
+        WHEN a.status =2  THEN '冻结'
+        WHEN a.status =3 THEN '已过期'
+        WHEN a.status =4 THEN '未开卡'
+        WHEN a.status =5 THEN '待补余'
+        WHEN a.status =6 THEN '历史'
+        ELSE '未设置'
+        END) a_status,
+        (SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c WHERE c.client_id = a.client_id  AND c.is_using = 1
+        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2 ORDER BY c.create_time DESC)orderPrice,
+        (SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c  WHERE c.client_id = a.client_id  AND c.is_using = 1
+        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1 ORDER BY c.create_time DESC)orderRightsNum,
+        <include refid="Base_Column_List_Frcard"/>
+        FROM fr_card a
+        WHERE a.CustomerCode = #{CustomerCode} AND a.status != 6
+        <include refid="query_where_sql"/>
+        ORDER BY  a.update_time DESC
+    </select>
+
+    <select id="queryCollectionOriginalSet" resultType="java.util.Map">
+        SELECT
+        (SELECT f.stop_num FROM fr_card_original_set f WHERE a.original_id = f.id) stopNum,
+        (SELECT f.stop_days FROM fr_card_original_set f WHERE a.original_id = f.id) stopDays,
+        (SELECT f.total_days FROM fr_card_original_set f WHERE a.original_id = f.id) totalDays,
+        (SELECT f.out_price FROM fr_card_original_set f WHERE a.original_id = f.id) outPrice,
+        ( CASE
+        WHEN a.status =0 THEN '正常'
+        WHEN a.status =1  THEN '停卡'
+        WHEN a.status =2  THEN '冻结'
+        WHEN a.status =3 THEN '已过期'
+        WHEN a.status =4 THEN '未开卡'
+        WHEN a.status =5 THEN '待补余'
+        WHEN a.status =6 THEN '历史'
+        ELSE '未设置'
+        END) a_status,
+        <include refid="Base_Column_List_Frcard"/>
+        FROM fr_card a
+        WHERE a.CustomerCode = #{CustomerCode}
+        <include refid="query_where_sql"/>
+        ORDER BY  a.update_time DESC
+    </select>
+
+    <select id="queryNumCard" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM fr_card a
+        WHERE a.is_using = 1
+        AND  a.status != 4   AND  a.status != 6   AND  a.status != 3
+        AND  a.CustomerCode = #{CustomerCode}
+        AND  a.client_id = #{clientId}
+        AND  a.invalid_time between #{startTime} and #{endTime}
+    </select>
+</mapper>

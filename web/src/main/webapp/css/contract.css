@@ -1,0 +1,203 @@
+.contains .conWrap{
+	height:56px;
+	line-height: 56px;
+	font-size:18px;
+	font-weight: bold;
+	text-align: center;
+}
+.contains .conWrap .spanWrap span{
+	float:left;
+	margin:20px 10px 0 0;
+	width:70px;
+	height:30px;
+	border-radius: 5px;
+	cursor: pointer;
+	line-height: 30px;
+	color:#fff;
+}
+.contains .conWrap .spanWrap span.green{
+	background:#090;
+}
+.contains .conWrap .spanWrap span.orange{
+	background:#f90;
+}
+.contains fieldset{
+	margin-bottom: 20px;
+}
+.contains fieldset legend{
+	color:#ff9900;
+}
+.contains fieldset .follow{
+	margin-right:15px;
+	border-radius: 5px;
+	width:150px;
+	height:35px;
+}
+.contains .navBar{
+	margin-bottom: 0;
+}
+.contains .tab{
+	overflow-x: scroll;
+}
+.contains .tab table {
+	width:2500px;
+}
+.contains .tab table .green{
+	color:#090;
+}
+.contains .tab table .deepBlue{
+	color:#00f;
+}
+.contains .line{
+	padding-left: 20px;
+	height:30px;
+}
+.contains .line .txt{
+	margin-right: 45px;
+	font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrStoreCommonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrStoreCommon">
+        <id column="a.id" property="id" />
+        <result column="a.xy_show_mobile" property="xyShowMobile" />
+        <result column="a.show_card_num" property="showCardNum" />
+        <result column="a.member_transfer" property="memberTransfer" />
+        <result column="a.xs_update" property="xsUpdate" />
+        <result column="a.red_disabled" property="redDisabled" />
+        <result column="a.red_birthday" property="redBirthday" />
+        <result column="a.open_update" property="openUpdate" />
+        <result column="a.stop_update" property="stopUpdate" />
+        <result column="a.cztk" property="cztk" />
+        <result column="a.invoice_update" property="invoiceUpdate" />
+        <result column="a.zrhb" property="zrhb" />
+        <result column="a.qz_show_mobile" property="qzShowMobile" />
+        <result column="a.qz_xsgw_update" property="qzXsgwUpdate" />
+        <result column="a.qz_level" property="qzLevel" />
+        <result column="a.xytjr_update" property="xytjrUpdate" />
+        <result column="a.tjy_input_time" property="tjyInputTime" />
+        <result column="a.show_mobile" property="showMobile" />
+        <result column="a.czje_use" property="czjeUse" />
+        <result column="a.flag" property="flag" />
+        <result column="a.type" property="type" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.xy_show_mobile AS xyShowMobile,
+        a.show_card_num AS showCardNum,
+        a.member_transfer AS memberTransfer,
+        a.xs_update AS xsUpdate,
+        a.red_disabled AS redDisabled,
+        a.red_birthday AS redBirthday,
+        a.open_update AS openUpdate,
+        a.stop_update AS stopUpdate,
+        a.cztk,
+        a.invoice_update AS invoiceUpdate,
+        a.zrhb,
+        a.qz_show_mobile AS qzShowMobile,
+        a.qz_xsgw_update AS qzXsgwUpdate,
+        a.qz_level AS qzLevel,
+        a.xytjr_update AS xytjrUpdate,
+        a.tjy_input_time AS tjyInputTime,
+        a.show_mobile AS showMobile,
+        a.czje_use AS czjeUse,
+        a.flag,
+        a.type,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.id
+    </sql>
+
+    <select id="selectTopOne" resultMap="BaseResultMap">
+        SELECT TOP 1
+        <include refid="Base_Column_List" />
+        FROM fr_store_common a
+        WHERE a.is_using = 1
+        AND a.CustomerCode = #{CustomerCode}
+        ORDER BY a.create_time DESC
+    </select>
+</mapper>

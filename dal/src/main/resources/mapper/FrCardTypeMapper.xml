@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardType">
+        <id column="a.id" property="id" />
+        <result column="a.p_id" property="pId" />
+        <result column="a.card_type_name" property="cardTypeName" />
+        <result column="a.service_life" property="serviceLife" />
+        <result column="a.swiping_interval" property="swipingInterval" />
+        <result column="a.swiping_time" property="swipingTime" />
+        <result column="a.used_num" property="usedNum" />
+        <result column="a.pzfs" property="pzfs" />
+        <result column="a.original_price" property="originalPrice" />
+        <result column="a.sales_price" property="salesPrice" />
+        <result column="a.total_num" property="totalNum" />
+        <result column="a.stop_num" property="stopNum" />
+        <result column="a.stop_days" property="stopDays" />
+        <result column="a.total_days" property="totalDays" />
+        <result column="a.out_price" property="outPrice" />
+        <result column="a.qt_xxjg_update" property="qtXxjgUpdate" />
+        <result column="a.qt_xxqy_update" property="qtXxqyUpdate" />
+        <result column="a.qt_zsqy_update" property="qtZsqyUpdate" />
+        <result column="a.qt_lrzp_update" property="qtLrzpUpdate" />
+        <result column="a.qt_zdxxjg" property="qtZdxxjg" />
+        <result column="a.qt_zdqy" property="qtZdqy" />
+        <result column="a.can_transfer" property="canTransfer" />
+        <result column="a.can_change_type" property="canChangeType" />
+        <result column="a.transfer_fee" property="transferFee" />
+        <result column="a.renew_common_price" property="renewCommonPrice" />
+        <result column="a.renew_level1_price" property="renewLevel1Price" />
+        <result column="a.renew_level2_price" property="renewLevel2Price" />
+        <result column="a.renew_level3_price" property="renewLevel3Price" />
+        <result column="a.renew_level4_price" property="renewLevel4Price" />
+        <result column="a.qt_can_renew" property="qtCanRenew" />
+        <result column="a.zk_num" property="zkNum" />
+        <result column="a.zk_cyfs" property="zkCyfs" />
+        <result column="a.zk_tkqy" property="zkTkqy" />
+        <result column="a.zk_xffs" property="zkXffs" />
+        <result column="a.zk_clfs" property="zkClfs" />
+        <result column="a.zk_sjjg" property="zkSjjg" />
+        <result column="a.zk_jcszsm" property="zkJcszsm" />
+        <result column="a.type_set_state" property="typeSetState" />
+        <result column="a.flag" property="flag" />
+        <result column="a.type" property="type" />
+        <result column="a.is_using" property="isUsing" />
+        <result column="a.create_time" property="createTime" />
+        <result column="a.update_time" property="updateTime" />
+        <result column="a.create_user_name" property="createUserName" />
+        <result column="a.update_user_name" property="updateUserName" />
+        <result column="a.CustomerCode" property="CustomerCode" />
+        <result column="a.create_user_id" property="createUserId" />
+        <result column="a.update_user_id" property="updateUserId" />
+        <result column="a.card_type_set" property="cardTypeSet" />
+        <result column="a.shop_id" property="shopId" />
+        <result column="a.change_transfer_fee" property="changeTransferFee" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.p_id AS pId,
+        a.card_type_name AS cardTypeName,
+        a.service_life AS serviceLife,
+        a.swiping_interval AS swipingInterval,
+        a.swiping_time AS swipingTime,
+        a.used_num AS usedNum,
+        a.pzfs,
+        a.original_price AS originalPrice,
+        a.sales_price AS salesPrice,
+        a.total_num AS totalNum,
+        a.stop_num AS stopNum,
+        a.stop_days AS stopDays,
+        a.total_days AS totalDays,
+        a.out_price AS outPrice,
+        a.qt_xxjg_update AS qtXxjgUpdate,
+        a.qt_xxqy_update AS qtXxqyUpdate,
+        a.qt_zsqy_update AS qtZsqyUpdate,
+        a.qt_lrzp_update AS qtLrzpUpdate,
+        a.qt_zdxxjg AS qtZdxxjg,
+        a.qt_zdqy AS qtZdqy,
+        a.can_transfer AS canTransfer,
+        a.can_change_type AS canChangeType,
+        a.transfer_fee AS transferFee,
+        a.renew_common_price AS renewCommonPrice,
+        a.renew_level1_price AS renewLevel1Price,
+        a.renew_level2_price AS renewLevel2Price,
+        a.renew_level3_price AS renewLevel3Price,
+        a.renew_level4_price AS renewLevel4Price,
+        a.qt_can_renew AS qtCanRenew,
+        a.zk_num AS zkNum,
+        a.zk_cyfs AS zkCyfs,
+        a.zk_tkqy AS zkTkqy,
+        a.zk_xffs AS zkXffs,
+        a.zk_clfs AS zkClfs,
+        a.zk_sjjg AS zkSjjg,
+        a.zk_jcszsm AS zkJcszsm,
+        a.type_set_state AS typeSetState,
+        a.flag,
+        a.type,
+        a.is_using AS isUsing,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.create_user_name AS createUserName,
+        a.update_user_name AS updateUserName,
+        a.CustomerCode,
+        a.create_user_id AS createUserId,
+        a.update_user_id AS updateUserId,
+        a.card_type_set AS cardTypeSet,
+        a.shop_id AS shopId,
+        a.change_transfer_fee AS changeTransferFee,
+        a.id
+    </sql>
+
+    <select id="selectCardTypetByIdAndName" resultMap="BaseResultMap">
+        SELECT
+          ct.*
+        FROM
+        fr_card_type ct
+        WHERE 1 = 1
+        <if test="shopId != null" >
+            and ct.shop_id = #{shopId}
+        </if>
+        <if test="cardTypeId != null" >
+            and ct.id = #{cardTypeId}
+        </if>
+        <if test="cardTypeName != null" >
+            and ct.card_type_name = #{cardTypeName}
+        </if>
+        <if test="pId != null" >
+            and ct.p_id = #{pId}
+        </if>
+        <if test="typeSetState != null" >
+            and ct.type_set_state = #{typeSetState}
+        </if>
+        ORDER BY ct.p_id
+    </select>
+
+    <select id="selectCardTypetCount" resultType="int">
+        select
+          count(ct.id)
+        FROM
+        fr_card_type ct
+        WHERE 1 = 1
+        <if test="shopId != null" >
+            and ct.shop_id = #{shopId}
+        </if>
+        <if test="cardTypeId != null" >
+            and ct.id = #{cardTypeId}
+        </if>
+        <if test="cardTypeName != null" >
+            and ct.card_type_name = #{cardTypeName}
+        </if>
+        <if test="pId != null" >
+            <if test="pId == '-1'" >
+                and ct.p_id != '0'
+            </if>
+            <if test="pId != '-1'" >
+                and ct.p_id = #{pId}
+            </if>
+        </if>
+        <if test="typeSetState != null" >
+            and ct.type_set_state = #{typeSetState}
+        </if>
+    </select>
+
+    <select id="queryByShopIdList" resultType="java.util.Map">
+        SELECT
+          (SELECT s.ShopName FROM Shop s WHERE s.ID = b.shop_id) shopName,
+          (SELECT c.card_type_name FROM fr_card_type c WHERE a.p_id = c.id) cardFlag,
+          <include refid="Base_Column_List"/>
+        FROM fr_shop_card_type_relate b
+        LEFT JOIN  fr_card_type a
+        ON a.id = b.card_type_id
+        WHERE a.is_using = 1
+          AND a.type_set_state = 2
+          AND b.CustomerCode = #{CustomerCode}
+          AND b.shop_id = #{shopId}
+          <if test="type !=null and typ >= 0">
+             AND a.type = #{type}
+          </if>
+    </select>
+
+    <select id="queryByCardId" resultType="com.yj.dal.model.FrCardType" >
+        SELECT
+          <include refid="Base_Column_List" />
+        FROM fr_card_type a
+        WHERE a.is_using = 1
+        AND a.CustomerCode = #{CustomerCode}
+        AND a.id = (SELECT b.card_type_id  FROM  fr_card b WHERE b.id = #{cardId})
+    </select>
+
+</mapper>

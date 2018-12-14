@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>身体</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/base.css">
+	<link rel="stylesheet" href="../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../css/jquery-confirm.css">
+	<link rel="stylesheet" href="../css/common.css">
+	<link rel="stylesheet" href="../css/skin/jedate.css">
+	<link rel="stylesheet" href="../css/right.css">
+	<script src="../js/vue.js"></script>
+
+</head>
+
+<body>
+	<div id="right">
+		<div class="main_top">卡权益设置</div>
+		<div class="main_box">
+
+			<!-- 基础卡权益 -->
+			<div class="common on">
+				<span class="common_span">基础卡权益</span>
+				<div class="form basis">
+					<form action="#" id="common-form" method="post">
+						<div class="form_top">
+							<div>卡名称：<strong id="years">{{cardTypeSet.cardTypeName}}</strong></div>
+							<div>卡性质：<strong id="time">{{cardTypeSet.cardTypeName}}</strong></div>
+						</div>
+						<div class="common">
+							<span class="common_span">会员卡价格设置</span>
+							<div class="common1 co">
+								<span>原价：</span><span><input type="text" placeholder="会员卡原价" v-model="cardTypeSet.originalPrice"></span>
+								<span>销售价：</span><span><input type="text" placeholder="会员卡销售价" v-model="cardTypeSet.salesPrice"></span>
+								<span><a href="#" class="btn btn-success" onclick="setting(this)">分期付款</a></span>
+								<span><input type="checkbox"></span><span>前台卡剩余金额显示为0</span>
+								<p>说明：选择“口扣卡消费"，则该行后面的“项目使用方式“消费都是扣卡里金额；不选择，则该项目视同免费使用或需要付现金消费。</p>
+							</div>
+						</div>
+						<div class="common">
+							<span class="common_span">会员卡扣卡权益设置</span>
+							<div class="common2 co">
+								<div>
+									<span class="total">总时长：</span>
+									<span><input type="text" placeholder="总时长(天)" class="total_input" v-model="cardTypeSet.totalNum"></span>
+									<span>使用期限：</span>
+									<span>
+										<input type="text" placeholder="使用期限" id="service" style="width: 50%">
+										<select id="life" class="form-control">
+											<option value="小时">小时</option>
+											<option value="天">天</option>
+											<option value="周">周</option>
+											<option value="月">月</option>
+											<option value="年">年</option>
+										</select>
+									</span>
+									<p>（填写使用期限，如果期限已到，该卡权益失效）</p>
+								</div>
+								<div>
+									<span>刷卡间隔：</span>
+									<span>
+										<input type="text" name="swiping" value="0" id="swiping" style="width: 50%">
+										<select name="interval" id="interval" class="form-control">
+											<option value="秒">秒</option>
+											<option value="分钟">分钟</option>
+											<option value="小时">小时</option>
+											<option value="天">天</option>
+										</select>
+									</span>
+									<span style="min-width: 100px;">每
+										<select name="swiping1" id="swiping1" class="form-control">
+											<option value="秒">秒</option>
+											<option value="分钟">分钟</option>
+											<option value="小时">小时</option>
+											<option value="天">天</option>
+										</select></span>
+									<span>刷卡次数</span>
+									<span><input type="text" id="timess" value="0" name="timess"></span>
+								</div>
+							</div>
+						</div>
+						<div class="common">
+							<span class="common_span">停卡设置</span>
+							<div class="common3 co">
+								<span>共可停卡</span><span><input type="text" name="stopNum" placeholder="次数" v-model="cardTypeSet.stopNum"></span><span>次，
+									每次停卡最多</span><span><input type="text" name="stopDays" placeholder="天数" v-model="cardTypeSet.stopDays"></span><span>天，
+									总停卡时间</span><span><input type="text" name="totalDays" placeholder="天数" v-model="cardTypeSet.totalDays"></span>
+								<span>天，超出时间按
+								</span><span><input type="text" name="outPrice" placeholder="价格" v-model="cardTypeSet.outPrice"></span><span>天/元</span>
+							</div>
+						</div>
+						<div class="common">
+							<span class="common_span">使用人数设置</span>
+							<div class="common4 co">
+								<span>本卡使用人数：</span><span><input type="text" v-model="cardTypeSet.usedNum"></span>
+								<!--//:value="cardTypeSet.usedNum"-->
+								<span>凭证方式：</span>
+								<ul>
+									<li>
+										<label>
+											<input value="0" name="pzfs0" type="checkbox" v-model="pzfsArr">
+											<span>刷卡</span>
+										</label></li>
+									<li> <label>
+											<input value="1" name="pzfs1" type="checkbox" v-model="pzfsArr">
+											<span>密码</span>
+										</label></li>
+									<li> <label>
+											<input value="2" name="pzfs2" type="checkbox" v-model="pzfsArr">
+											<span>指纹</span>
+										</label></li>
+									<li> <label>
+											<input value="3" name="pzfs3" type="checkbox" v-model="pzfsArr">
+											<span>静脉</span>
+										</label></li>
+									<li> <label>
+											<input value="4" name="pzfs4" type="checkbox" v-model="pzfsArr">
+											<span>脸谱</span>
+										</label></li>
+									<li> <label>
+											<input value="5" name="pzfs5" type="checkbox" v-model="pzfsArr">
+											<span>二维码</span>
+										</label></li>
+
+								</ul>
+							</div>
+						</div>
+						<div class="common">
+							<span class="common_span">前台可修改权益设置</span>
+							<div class="common5">
+								<ul>
+									<li>
+										<span>前台是否可修改实际销售价格：</span>
+										<label>
+											<input type="radio" name="qtXxjgUpdate" value="1" v-model="cardTypeSet.qtXxjgUpdate">
+											<span>可修改</span>
+										</label>
+										<label>
+											<input type="radio" name="qtXxjgUpdate" value="0" v-model="cardTypeSet.qtXxjgUpdate">
+											<span>不可修改</span>
+										</label>
+										<span>前台可修改最低销售价格：</span>
+										<span><input type="text" name="qtZdxxjg" placeholder="最低销售价" v-model="cardTypeSet.qtZdxxjg"></span>
+										<span>元</span>
+										<p>（设置可修改时，前台可填写的最低价格）</p>
+									</li>
+									<li>
+										<span>前台是否可修改销售权益/有效期：</span>
+										<label>
+											<input type="radio" name="qtXxqyUpdate" value="1" v-model="cardTypeSet.qtXxqyUpdate">
+											<span>可修改</span>
+										</label>
+										<label>
+											<input type="radio" name="qtXxqyUpdate" value="0" v-model="cardTypeSet.qtXxqyUpdate">
+											<span>不可修改</span>
+										</label>
+									</li>
+									<li>
+										<span>前台是否可以修改赠送权益：</span>
+										<label>
+											<input type="radio" name="qtZsqyUpdate" value="1" v-model="cardTypeSet.qtZsqyUpdate">
+											<span>可修改</span>
+										</label>
+										<label>
+											<input type="radio" name="qtZsqyUpdate" value="0" v-model="cardTypeSet.qtZsqyUpdate">
+											<span>不可修改</span>
+										</label>
+										<span>前台可赠送的最大权益：</span>
+										<span><input type="text" name="qtZdqy" placeholder="最大赠送价格" v-model="cardTypeSet.qtZdqy"></span>
+										<span>元</span>
+										<p>（设置可修改时，前台可填写的最大赠送权益）</p>
+									</li>
+									<li>
+										<span>前台开卡后是否需要录入照片：</span>
+										<label>
+											<input type="radio" name="qtLrzpUpdate" value="1" v-model="cardTypeSet.qtLrzpUpdate">
+											<span>必须</span>
+										</label>
+										<label>
+											<input type="radio" name="qtLrzpUpdate" value="0" v-model="cardTypeSet.qtLrzpUpdate">
+											<span>不必须</span>
+										</label>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="common">
+							<span class="common_span">转让续卡设置</span>
+							<div class="common6 co">
+								<ul>
+									<li>
+										<span>此会员卡是否转让他人：</span>
+										<label>
+											<input type="radio" name="canTransfer" value="0" v-model="cardTypeSet.canTransfer">
+											<span>可转让</span>
+										</label>
+										<label>
+											<input type="radio" name="canTransfer" value="1" v-model="cardTypeSet.canTransfer">
+											<span>不可转让</span>
+										</label>
+									</li>
+									<li>
+										<span>此会员卡是否可转成其他卡种：</span>
+										<label>
+											<input type="radio" name="canChangeType" value="1" v-model="cardTypeSet.canChangeType">
+											<span>可转让</span>
+										</label>
+										<span>转让时余额需扣除费用：</span>
+										<span><input type="text" name="transferFee" value="0" :value="cardTypeSet.transferFee"></span>
+										<span>元，设置为（0或者空时，前台可以自行设置）</span>
+										<label>
+											<input type="radio" name="canChangeType" value="0" v-model="cardTypeSet.canChangeType">
+											<span>不可转让</span>
+										</label>
+									</li>
+									<li>
+										<span>会员卡续卡价格：</span>
+										<span><input type="text" name="renewCommonPrice" value="0.00" v-model="cardTypeSet.renewCommonPrice"></span>
+										<span>元</span>
+										<label>
+											<input type="checkbox" class="special_checkbox" v-on:click="special_checkbox()">
+											<span>特殊续卡价格</span>
+										</label>
+										<div class="special">
+											<label>
+												<span>普通会员：</span>
+												<input type="text" value="0" name="renewLevel1Price" v-model="cardTypeSet.renewLevel1Price">
+											</label>
+											<label>
+												<span>银卡会员：</span>
+												<input type="text" value="0" name="renewLevel2Price" v-model="cardTypeSet.renewLevel2Price">
+											</label>
+											<label>
+												<span>金卡会员：</span>
+												<input type="text" value="0" name="renewLevel3Price" v-model="cardTypeSet.renewLevel3Price">
+											</label>
+											<label>
+												<span>钻卡会员：</span>
+												<input type="text" value="0" name="renewLevel4Price" v-model="cardTypeSet.renewLevel4Price">
+											</label>
+										</div>
+
+									</li>
+									<li>
+										<span>会员卡续卡价格前台是否可以修改：</span>
+
+										<label>
+											<input type="radio" name="qtCanRenew" value="1" v-model="cardTypeSet.qtCanRenew">
+											<span>前台可修改</span>
+										</label>
+										<label>
+											<input type="radio" name="qtCanRenew" value="0" v-model="cardTypeSet.qtCanRenew">
+											<span>前台不可修改</span>
+										</label>
+
+									</li>
+								</ul>
+							</div>
+						</div>
+					</form>
+
+					<div class="common">
+						<span class="common_span">子卡设置</span>
+						<div class="common7 co">
+							<ul>
+								<li>
+									<span>此卡共可设置子卡：</span>
+									<span><input type="text" value="0"></span>
+									<span>张</span>
+								</li>
+								<li>
+									<span>子卡持有方式：</span>
+
+									<label>
+										<input type="radio" name="zkCyfs" value="1" v-model="cardTypeSet.cyfs">
+										<span>指定人员持有子卡</span>
+									</label>
+									<label>
+										<input type="radio" name="zkCyfs" value="0" v-model="cardTypeSet.cyfs">
+										<span>子卡不限人员使用</span>
+									</label>
+									<p>仅针对是否需要录入持有人信息，指定持有人信息不可修改</p>
+								</li>
+								<li>
+									<span>子卡停卡权益：</span>
+
+									<label>
+										<input type="radio" value="0" v-model="cardTypeSet.zkTkqy">
+										<span>子卡与主卡同步停卡</span>
+									</label>
+									<label>
+										<input type="radio" value="1" v-model="cardTypeSet.zkTkqy">
+										<span>子卡独立停卡</span>
+									</label>
+
+								</li>
+								<li>
+									<div style="overflow: hidden;">
+										<span>子卡消费方式：</span>
+										<label>
+											<input type="checkbox">
+											<span>最长间隔时间</span>
+										</label>
+										<span><input type="text"></span>
+										<span>分钟</span>
+									</div>
+									<div style="overflow: hidden;margin-left: 94px;">
+
+										<label>
+											<input type="checkbox" value="1" v-model="cardTypeSet.zkXffs">
+											<span>子卡与主卡分割额度使用</span>
+										</label>
+									</div>
+									<div style="overflow: hidden;margin-left: 94px;">
+										<label>
+											<input type="checkbox" value="2" v-model="cardTypeSet.zkXffs">
+											<span>子卡与主卡享有同等权益</span>
+										</label>
+									</div>
+								</li>
+								<li>
+									<span>子卡处理方式：</span>
+
+									<label>
+										<input type="radio" value="0" v-model="cardTypeSet.zkCyfs">
+										<span>子卡存在</span>
+									</label>
+									<label>
+										<input type="radio" value="1" v-model="cardTypeSet.zkCyfs">
+										<span>独立分卡</span>
+									</label>
+								</li>
+								<li>
+									<div>基础设置说明：</div>
+									<ul class="uls">
+										<li>最低价格为，前台在改动价格时，不允许低于最低价格，若需要低于，需对应销售人员上级授权。</li>
+										<li>与主卡享有同等权益:即主卡可以用什么，子卡就用什么，如果是充值卡，就是一起刷金额；</li>
+										<li>随主卡同步附属使用:即主卡与子卡必须同时使用，如主卡刷卡后15分钟内，子卡才可以刷卡</li>
+										<li>与主卡分割额度使用:即从主卡的权益中,分割一部分给予子卡使用。如果主卡1000元,子卡分割200元,则主卡只剩下200元。次卡,年卡相同</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 基础卡权益 -->
+			<!-- 使用场馆/消费权益 -->
+			<div class="common on">
+				<span class="common_span">使用场馆/消费权益</span>
+				<div class="form">
+					<div class="form_box">
+						<div class="form_box_left">可使用门店：</div>
+						<div class="form_box_right on">
+							<div id="keshiyongmendian" class="form_box_right_cb" v-for="(SetStore,index) in Storelist ">
+								<div>
+									<label>
+										<input class="checks" type="checkbox" :value="SetStore.cityId">
+										<span>{{SetStore.cityName}}</span>
+									</label>
+								</div>
+								<ul>
+									<li v-for="SetStore1 in SetStoreItems" v-if="SetStore1.cityId==SetStore.cityId"><label>
+											<input type="checkbox" class="checks" :value="SetStore1.id" @change="checkboxClick(SetStore1.id)">
+											<span>{{SetStore1.shopName}}</span>
+										</label></li>
+
+								</ul>
+								<!--<div><label>
+                                            <input type="checkbox">
+                                            <span>软件园店</span>
+                                        </label></div>
+										<ul>
+											<li><label>
+                                                <input type="checkbox">
+                                                <span>软件园店</span>
+                                            </label></li>
+										</ul>
+										-->
+							</div>
+							<div>
+								<a id="all">
+									<label>
+										<input id="checkboxAll" type="checkbox" @click="checkboxAll()">
+										<span>全选（各大连锁店通用）</span>
+									</label>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="form_box sdaduim_hide">
+						<div class="form_box_left">可使用场馆：</div>
+						<div class="form_box_right on">
+							<div class="form_box_right_cb" id="kysdaduim">
+								<div v-for="shop in shopList">
+									<div class="keshiyong">
+										<label>
+											<input type="checkbox" class="Scheck" :value="shop.id">
+											<span>{{shop.shopName}}</span>
+										</label>
+									</div>
+									<ul>
+										<li v-for="sdaduim in shop.sdaduimArrayList">
+											<label>
+												<input type="checkbox" class="Scheck" :value="sdaduim.id" @click="sdaduimCheckClick(sdaduim.id,sdaduim.shopId)">
+												<input type="hidden" name="" id="" value="" />
+
+												<span>{{sdaduim.name}}</span>
+											</label>
+										</li>
+									</ul>
+								</div>
+
+							</div>
+							<div><label>
+									<input type="checkbox" id="sdaduimCheck" @click="sdaduimCheckAll()">
+									<span>全选</span>
+								</label></div>
+						</div>
+					</div>
+					<div class="form_box item_hide">
+						<div class="form_box_left">使用项目设置：</div>
+						<div class="form_box_right on">
+							<div class="form_box_right_cb">
+
+								<div class="xiangMu">
+									<!--<div v-for="(sdaduim,index) in sdaduimItems">-->
+									<div v-for="(sdaduim,index) in shopCardConsume.list" id="items">
+										<!--v-if="Storelist."-->
+										<!--{{Storelist}}-->
+
+										<div class="xiangMu_list Storeid">{{index}}</div>
+										<ul>
+											<li v-for="(sd,index) in sdaduim">
+												<div class="xiangMu_list">{{sd.name}}</div>
+												<div class="table-responsive">
+
+													<table class="table table-bordered" id="table">
+														<thead>
+															<tr>
+																<th><input type="checkbox"></th>
+																<th>类别</th>
+																<th>使用项目名称</th>
+																<th>卡种金额</th>
+																<th>项目使用方式设置</th>
+																<th>使用限制</th>
+															</tr>
+														</thead>
+														<tbody>
+
+															<!--项目开始-->
+															<tr v-for="(categoryItem,index) in sd.categoryItemlist">
+																<div>
+																	<!--{{categoryItem.sdaduimId}}-----{{sdaduim.id}}-->
+																	<td><input type="checkbox" class="chbox xm" v-model="categoryItem.checked"></td>
+																	<td><span>项目</span></td>
+																	<td><span>{{categoryItem.itemName}}</span></td>
+																	<td>
+																		<label>
+																			<input type="checkbox" class="kje" v-model="categoryItem.kzje">
+																			<span>扣卡消费</span>
+																		</label>
+																	</td>
+																	<td>
+																		<label>
+																			<input type="radio" class="radio1" :name="'usage_mode'+index" value="0" v-model="categoryItem.usageMode" />
+																			<span>免费通用</span>
+																		</label>
+																		<label>
+																			<input type="radio" class="radio2" :name="'usage_mode'+index" value="1" v-model="categoryItem.usageMode">
+																			<span>按</span>
+																			<input type="text" placeholder="价格" class="modePrice mPrice" v-model="categoryItem.modePrice">
+																			<span>元/次消费</span>
+																		</label>
+																		<label>
+																			<input type="radio" class="radio3" :name="'usage_mode'+index" value="2" v-model="categoryItem.usageMode">
+																			<span>按</span>
+																			<select name="modeWay" class="mWay" v-model="categoryItem.modeWay">
+																				<option value="0">市场价</option>
+																				<option value="1">促销价</option>
+																				<option value="2">会员价</option>
+																			</select>
+																			<input type="text" class="discount" placeholder="折扣" v-model="categoryItem.modeDiscount">
+																			<span>折扣费</span>
+																		</label>
+																		<label>
+																			<input type="radio" class="radio4" :name="'usage_mode'+index" value="3" v-model="categoryItem.usageMode">
+
+																			<select name="modeTime" class="modeTime" v-model="categoryItem.modeNum">
+																				<option value="0">每小时</option>
+																				<option value="1">每分钟</option>
+																				<option value="2">每次</option>
+																			</select>
+																			<span>扣</span>
+																			<input type="text" placeholder="次" class="modeNum" name="modeTime" v-model="categoryItem.modeTime">
+																			<span>次</span>
+																		</label>
+																	</td>
+																	<td>
+																		<label>
+																			<input type="radio" :name="'plSet'+index" value="false" v-model="categoryItem.setChecked">
+																			<span>无</span>
+																		</label>
+																		<label>
+																			<!--<input  type="radio"  class="setting" v-on:click="setting(categoryItem.sccId)" :name="'plSet'+index" value="true" v-model="categoryItem.setChecked">-->
+																			<input type="radio" @click="ClickingPopup(categoryItem.sccId)" class="setting" :name="'plSet'+index"
+																			 value="true" v-model="categoryItem.setChecked">
+																			<span>设置</span>
+																		</label>
+																	</td>
+																</div>
+
+															</tr>
+															<!--项目结束-->
+
+														</tbody>
+													</table>
+												</div>
+											</li>
+
+										</ul>
+									</div>
+
+									<ul class="ul_on">
+										<li>
+											<label>
+												<input type="checkbox" id="xmAll" @click="categoryItemCheckAll()">
+												<span>全选/项目</span>
+											</label>
+											<label>
+												<input type="checkbox" id="jeAll" @click="jeItemCheckAll()">
+												<span>全选</span>
+											</label>
+											<label>
+												<input type="radio" id="rdio1" name="tong21" @click="setCheckAll()">
+												<span>全选</span>
+											</label>
+											<label>
+												<input type="radio" id="rdio2" name="tong21" @click="setusageModeCheckAll()">
+												<span>按</span>
+												<input type="text" placeholder="价格" id="setPrice" @change="setModePrice()">
+												<span>元/次消费</span>
+											</label>
+											<label>
+												<input type="radio" id="rdio3" name="tong21" @click="setmodeWayCheckAll()">
+												<span>按</span>
+												<select id="mWay" @change="setmWay()">
+													<option value="0">市场价</option>
+													<option value="1">促销价</option>
+													<option value="2">会员价</option>
+												</select>
+												<input type="text" placeholder="折扣" id="modeWay" @change="setModeWay()">
+												<span>折扣费</span>
+											</label>
+											<label>
+												<input type="radio" id="rdio4" name="tong21" @click="setmodePriceCheckAll()">
+
+												<select id="ModeTime" @change="setModeTime()">
+													<option value="0">每小时</option>
+													<option value="1">每分钟</option>
+													<option value="2">每次</option>
+												</select>
+												<span>扣</span>
+												<input type="text" id="ModeNum" placeholder="次" @change="setModeNum()">
+												<span>次</span>
+											</label>
+											<label>
+												<input type="radio" class="set" name="setting21">
+												<span>无</span>
+											</label>
+											<label>
+												<input type="radio" name="setting21" class="setting">
+												<span>设置</span>
+											</label>
+										</li>
+									</ul>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- 使用场馆/消费权益 -->
+			<!-- 卡权益总结说明 -->
+			<div class="common on">
+				<span class="common_span">卡权益总结说明（根据使用权益自动生成）</span>
+				<div>
+					<textarea name="" id="textarea" readonly="readonly" placeholder="卡类别：次卡，卡名称：一次卡，可使用门店：软件园店、集美店，可使用场馆：软件园店-健身房、软件园店-健身私教、软件园店-健身团课、软件园店-游泳、集美店-健身房、集美店-健身私教、集美店-健身团课、集美店-游泳，使用项目：（1）、增肌，扣卡消费，无使用限制；（2）、体态调整，免费通用，无使用限制；"></textarea>
+				</div>
+			</div>
+			<!-- 卡权益总结说明 -->
+
+			<div class="main_sub">
+				<a href="#" class="on" @click="addMemberCard()">保存</a>
+				<a href="#">取消</a>
+			</div>
+		</div>
+		<!-- 卡使用时间限制 -->
+		<div class="mask">
+			<div class="maskLayerAlert">
+				<div class="maskLayerAlert_top">
+					<span>卡使用时间限制（时间为24小时制）</span>
+					<a href="#" class="setting_hide">X</a>
+				</div>
+				<div class="maskLayerAlert_box">
+					<div>
+						<div class="col-md text-center">
+							<div class="col-md4">时间选择设置</div>
+							<div class="col-md4">上午时间</div>
+							<div class="col-md4">下午时间</div>
+						</div>
+<div>
+	
+	<form action="#" method="post" id="setTimeform" >
+		
+	
+	
+<!--v-for="ConsumePlset in cardConsumeSetDTO.cardConsumePlsetDTO"--> 
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox" class="jddatess1" value="1"  name="setTimeList[0].useSelect"> </label>周一</div>
+							<div class="col-md4"><input class="jeinput test1 jddate1" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[0].AM" type="text" ></div>
+							<div class="col-md4"><input class="jeinput test1 jddates1" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[0].PM"  type="text"></div>
+							<input type="hidden" name="setTimeList[0].consumeId" v-model="Consumeids" />
+							<input type="hidden" class="setid1" name="setTimeList[0].id"/>
+							<input type="hidden"  value="1" name="setTimeList[0].useDays"/>
+						</div>
+
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox" class="jddatess2" value="1" name="setTimeList[1].useSelect"> </label>周二</div>
+							<div class="col-md4"><input class="jeinput test1 jddate2" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[1].AM" type="text"></div>
+							<div class="col-md4"><input class="jeinput test1 jddates2" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[1].PM"  type="text"></div>
+						<input type="hidden" name="setTimeList[1].consumeId" v-model="Consumeids" />
+						<input type="hidden" class="setid2" name="setTimeList[1].id"/>
+						<input type="hidden"  value="2" name="setTimeList[1].useDays"/>
+						</div>
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox" class="jddatess3" value="1" name="setTimeList[2].useSelect"> </label>周三</div>
+							<div class="col-md4"><input class="jeinput test1 jddate3" placeholder="时:分:秒 至 时:分:秒"  name="setTimeList[2].AM" type="text"></div>
+							<div class="col-md4"><input class="jeinput test1 jddates3" placeholder="时:分:秒 至 时:分:秒"  name="setTimeList[2].PM" type="text"></div>
+						<input type="hidden" name="setTimeList[2].consumeId" v-model="Consumeids" />
+						<input type="hidden" class="setid3" name="setTimeList[2].id"/>
+						<input type="hidden"  value="3" name="setTimeList[2].useDays"/>
+						</div>
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox" class="jddatess4" value="1" name="setTimeList[3].useSelect"> </label>周四</div>
+							<div class="col-md4"><input class="jeinput test1 jddate4" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[3].AM" type="text"></div>
+							<div class="col-md4"><input class="jeinput test1 jddates4" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[3].PM" type="text"></div>
+						<input type="hidden" name="setTimeList[3].consumeId" v-model="Consumeids" />
+						<input type="hidden" class="setid4" name="setTimeList[3].id"/>
+						<input type="hidden"  value="4" name="setTimeList[3].useDays"/>
+						</div>
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox"  class="jddatess5"  value="1" name="setTimeList[4].useSelect"> </label>周五</div>
+							<div class="col-md4"><input class="jeinput test1 jddate5" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[4].AM" type="text"></div>
+							<div class="col-md4"><input class="jeinput test1 jddates5" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[4].PM"  type="text"></div>
+						<input type="hidden" name="setTimeList[4].consumeId" v-model="Consumeids" />
+						<input type="hidden" class="setid5" name="setTimeList[4].id"/>
+						<input type="hidden"  value="5" name="setTimeList[4].useDays"/>
+						</div>
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox" class="jddatess6" value="1" name="setTimeList[5].useSelect"> </label>周六</div>
+							<div class="col-md4"><input class="jeinput test1 jddate6" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[5].AM" type="text"></div>
+							<div class="col-md4"><input class="jeinput test1 jddates6" placeholder="时:分:秒 至 时:分:秒"  name="setTimeList[5].PM" type="text"></div>
+						<input type="hidden" name="setTimeList[5].consumeId" v-model="Consumeids" />
+						<input type="hidden" class="setid6" name="setTimeList[5].id"/>
+						<input type="hidden"  value="6" name="setTimeList[5].useDays"/>
+						</div>
+						<div class="col-md text-center">
+							<div class="col-md4"><label><input type="checkbox" class="jddatess7" value="1" name="setTimeList[6].useSelect"> </label>周日</div>
+							<div class="col-md4"><input class="jeinput test1 jddate7" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[6].AM" type="text"></div>
+							<div class="col-md4"><input class="jeinput test1 jddates7" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[6].PM" type="text"></div>
+						<input type="hidden" name="setTimeList[6].consumeId" v-model="Consumeids" />
+						<input type="hidden" class="setid7" name="setTimeList[6].id"/>
+						<input type="hidden"  value="7" name="setTimeList[6].useDays"/>
+						</div>
+						</form>
+					</div>	
+					</div>		
+					<p>其他可用或者禁用时间设置（日期不需要年，只需要月日，可针对与节假日设置）</p>
+					<div class="table_hide">
+						<table class="table table-bordered text-center">
+							<thead>
+								<tr>
+									<th>序号</th>
+									<th>禁止/可以</th>
+									<th>开始日期</th>
+									<th>至</th>
+									<th>结束日期</th>
+									<th>不限时</th>
+									<th>开始时间</th>
+									<th>结束时间</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="tbodys">
+
+								<tr v-for="(Pladdset,index) in cardConsumeSetDTO.cardConsumePladdsetDTO">
+									<td>{{index+1}}</td>
+									<td><label><input type="radio" :name="'pset'+index"> <span>禁止</span></label>
+										<label><input type="radio" :name="'pset'+index"><span>可以</span></label>
+									</td>
+									<td><input class="jeinput startDate datelen " :class="'startDate'+index" v-model="Pladdset.useDayStar" type="text"
+										 readonly></td>
+									<td>至</td>
+									<td><input class="jeinput endDate datelen" :class="'endDate'+index" v-model="Pladdset.useDayEnd" type="text"
+										 readonly></td>
+									<td><label> <input type="checkbox" v-model="Pladdset.useSelect" value="1"></label></td>
+									<td><input class="jeinput startTime datelen" :class="'startTime'+index" v-model="Pladdset.useTimeStar" type="text"
+										 readonly></td>
+									<td><input class="jeinput endTime datelen" :class="'endTime'+index" v-model="Pladdset.useTimeEnd" type="text"
+										 readonly></td>
+									<td>
+										<a class="#" onclick="xiugai(this)">修改</a>
+										<!-- <a class="#" v-if="index==0" onclick="dsada(this)">新增</a> -->
+									</td>
+								</tr>
+
+								<tr>
+										<td>0</td>
+										<td><label><input type="radio" name="pset" value="0" v-model="Pladdsets.useLimit"> <span>禁止</span></label>
+											<label><input type="radio" name="pset" value="1" v-model="Pladdsets.useLimit"><span>可以</span></label>
+										</td>
+										<td><input class="jeinput startDate" type="text" v-model="Pladdsets.useDayStar" readonly></td>
+										<td>至</td>
+										<td><input class="jeinput endDate" type="text" v-model="Pladdsets.useDayEnd" readonly></td>
+										<td><label> <input type="checkbox" v-model="Pladdsets.UseSelect"></label></td>
+										<td><input class="jeinput startTime" type="text" v-model="Pladdsets.useTimeStar" readonly></td>
+										<td><input class="jeinput endTime" type="text" v-model="Pladdsets.useTimeEnd" readonly></td>
+										<td>
+											<a class="#" onclick="right.dsada(this)">新增</a>
+										</td>
+									</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+
+					<p>
+						<span>使用频率限制：每 </span>
+						<span>
+							<!--v-model="categoryItem.plLeft"-->
+							<select>
+								<option value="1">年</option>
+								<option value="2">月</option>
+								<option value="3">天</option>
+							</select>
+						</span>
+						<span style="min-width: 100px;">
+							最多使用：
+							<!--v-model="categoryItem.plTime" v-model="categoryItem.plRight"-->
+							<input type="text" value="0">
+							<select>
+								<option value="1">次</option>
+								<option value="2">分钟</option>
+								<option value="3">小时</option>
+							</select>
+						</span>
+					</p>
+				</div>
+				<div class="maskLayerAlert_footer">
+					<!--<a href="#" class="btn btn-default btn-success" onclick="settingbao()">保存</a>-->
+					<a href="#" class="btn btn-default btn-success" @click="setsetTime()">保存</a>
+				</div>
+			</div>
+			<div class="maskLayer"></div>
+		</div>
+		<!-- 卡使用时间限制 -->
+		<!-- 分期付款 -->
+		<div class="mask1">
+			<div class="maskLayerAlert">
+				<div class="maskLayerAlert_top">
+					<span>分期付款</span>
+					<a href="#" class="setting_hide" onclick="settingOut()">X</a>
+				</div>
+				<div class="maskLayerAlert_box">
+					<fieldset class="section1">
+						<legend>分期付款设置</legend>
+						<div class="category">
+							<div>
+								<span style="margin-left: 10px;"> 购卡金额: </span><span class="category_span_red">3960.00</span>
+							</div>
+							<div>
+								<span class="category_span_red">*</span> <span>首付金额: <input type="text" value="300.00"></span><span class="category_span_red">*</span>
+								<span>分期数量: <input type="text" value="2"></span>
+							</div>
+							<div>
+								<span style="margin-left: 10px;"> 分期金额: </span> <span class="category_span_red">3360.00</span>
+
+							</div>
+							<div>
+								<span class="category_span_red">*</span> <span> 分期类型: </span> <label><input type="radio"><span>比例</span></label><label><input
+									 type="radio"><span>金额</span></label>
+							</div>
+
+							<div class="category_box">
+								<div class="category_box_left"><span class="category_span_red">*</span>分期详情:</div>
+								<div class="category_box_right">
+									<div>
+										<div class="category_span_red">分期总金额:3360.00</div>
+										<div><input type="text" value="30">天后支付第一期<input type="text" value="1680">元</div>
+										<div><input type="text" value="60">天后支付第二期<input type="text" value="1680">元</div>
+									</div>
+									<div>
+										<p class="category_span_red">注:天数和每期付款金额可以自己更改,全部分期付款的总和要等于分期总金额。</p>
+										<p class="category_span_red">时间到期,卡自动进入待补余未开卡状态,必须支付对应金额才能开卡。</p>
+										<p class="category_span_red">可以一次性把剩余卡卡价付清</p>
+									</div>
+								</div>
+							</div>
+							<div>
+								<span> 内容: </span> <textarea name="1" id=""></textarea>
+							</div>
+							<div>
+								<a href="#" class="btn btn-danger">添加</a>
+							</div>
+						</div>
+					</fieldset>
+					<div class="table_hide">
+						<table class="table table-bordered text-center">
+							<thead>
+								<tr>
+									<th>启用</th>
+									<th>购卡金额</th>
+									<th>首付</th>
+									<th>分期金额</th>
+									<th>期限</th>
+									<th>类型</th>
+									<th>内容</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><input type="checkbox"></td>
+									<td>3960.00</td>
+									<td>1000.00</td>
+									<td>2960.00</td>
+									<td>3</td>
+									<td>金额</td>
+									<td>大多数</td>
+									<td>
+										<a href="#" onclick="setting_a()">分期详情</a>/
+										<a href="#">修改</a>/
+										<a href="#">删除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox"></td>
+									<td>3960.00</td>
+									<td>1000.00</td>
+									<td>2960.00</td>
+									<td>3</td>
+									<td>比例</td>
+									<td>大多数</td>
+									<td>
+										<a href="#" onclick="setting_a()">分期详情</a>/
+										<a href="#">修改</a>/
+										<a href="#">删除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox"></td>
+									<td>3960.00</td>
+									<td>1000.00</td>
+									<td>2960.00</td>
+									<td>3</td>
+									<td>金额</td>
+									<td>大多数</td>
+									<td>
+										<a href="#">分期详情</a>/
+										<a href="#">修改</a>/
+										<a href="#">删除</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="maskLayerAlert_box_alert">
+						<div class="maskLayerAlert_box_alert_a">分期付款
+							<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a>
+						</div>
+						<div><input type="text" value="30">天后支付第一期<input type="text" value="1680">元</div>
+						<div><input type="text" value="60">天后支付第二期<input type="text" value="1680">元</div>
+						<div style="margin-top: 15px;">
+							<a href="#" class="btn btn-success">保存</a>
+							<a href="#" class="btn btn-default">取消</a>
+						</div>
+					</div>
+				</div>
+				<div class="maskLayerAlert_footer">
+					<div class="category_span_red">
+						注:时间到期,卡自动进入待补余未开卡状态,必须支付对应金额才能开卡。可以一次性把剩余卡卡价付清。
+						<p>默认有几种平均分期情况。如果不一样请自行修改或者添加。</p>
+						<p>购卡总金额:等于卡销售价+实际利息。如果实际利息为0那么就等于卡销售价。请自行修改。</p>
+						<p>首付:是指第一次需要付款的金额。如果直接是购卡总金额上做分期的。那么首付请填写0。</p>
+						<p>分期金额:等于购卡总金额一首付。</p>
+						<p>账期:是指分期金额需要分几期还完。</p>
+						<p>类型:可以是按照设置的金额每期还款多少钱,也可以按照设置比例来确定每期还款多少钱</p>
+						<p>分期详情:具体设置每期的还款时间和还款金额。</p>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!-- 分期付款 -->
+	</div>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/loading.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/common2.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="employee.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	right.init();
+
+	//初始化:ru
+	//		jeDate('.jddate', {
+	//		    format: "mm:dd",
+	//		    donefun: function(obj){
+	//		    	console.log(obj.val)
+	//		      //  lcapp.customerData.base.birthday = obj.val;
+	//		    }
+	//		});
+	//		//初始化:结束日期
+	//		jeDate('.jddate', {
+	//		    format:  "mm:dd",
+	//		    donefun: function(obj){
+	//		    	console.log(obj.val)
+	//		     //   lcapp.customerData.base.birthday = obj.val;
+	//		    }
+	//		});
+
+	//设置弹窗f
+	//		$('.setting').click(function() {
+	//			if($(this).is(':checked')) {
+	//				$('.mask').show();
+	//				$('.mask .setting_hide').attr('id', $(this).attr('name').replace('setting', ''))
+	//			}
+	//		})
+	//		// 关闭弹窗
+	$('.setting_hide').click(function () {
+		$('.mask').hide();
+		$('.setting').eq(parseInt($(this).attr('id')) - 1).prop("checked", false);
+	})
+	// 保存
+	function settingbao() {
+		$('.setting').eq(parseInt($(this).attr('id')) - 1).prop("checked", true);
+		$('.mask').hide();
+	}
+	//设置弹窗2
+	function setting() {
+		$('.mask1').show();
+	}
+	// 关闭弹窗2
+	function settingOut() {
+		$('.mask1').hide();
+	}
+	//设置小弹窗
+	function setting_a() {
+		$('.maskLayerAlert_box_alert').show();
+	}
+	//关闭小弹窗
+	function settingOut_a() {
+		$('.maskLayerAlert_box_alert').hide();
+	}
+
+
+	//删除
+	function del(e) {
+		$(e).parent().parent().remove();
+		table_hide()
+	}
+	//修改确认
+	function queren(e) {
+		$(e).parent().html('<a href="#" onclick="xiugai(this)">修改</a>');
+		table_hide()
+	}
+	// 修改
+	function xiugai(e) {
+		$(e).parent().html('<a href="#" onclick="right.queren(this)">确认</a>/<a href="#" onclick="del(this)">删除</a>');
+		startDate();
+	}
+</script>

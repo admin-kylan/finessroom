@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/reset.css" />
+		<link rel="stylesheet" href="../css/base.css" />
+		<link rel="stylesheet" href="../css/skin/jedate.css" />
+		<link rel="stylesheet" href="../css/behavior.css" />
+		<link rel="stylesheet" href="../css/charge.css" />
+		<link rel="stylesheet" href="../css/combobox.css" />
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="top">报表管理</div>
+			<div class="content clearfix">
+				<div class="left">
+					<ul>
+						<li>财务审核管理</li>
+						<li class="on">报表管理</li>
+					</ul>
+				</div>
+				<div class="right">
+					<div class="header">
+						<a href="../fitness/training.html?LiIndex=7">
+							<span>返回</span>
+						</a>
+					</div>
+					<div class="contains">
+						<div class="conWrap clearfix">
+							<select name="" class="fl">
+								<option value="" selected>软件园店</option>
+							</select>
+							软件园店 没有收费课会员服务/分配/跟进管理表
+						</div>
+						<fieldset>
+							<legend>条件筛选</legend>
+							<div  class="line">
+								<span class="title">新资源：</span>
+								<label >
+									<input type="radio" />
+									<span class="txt">新会员（待分配）</span>
+								</label>
+								<label >
+									<input type="radio" />
+									<span class="txt">在<input type="text" />天内入会，无增购项目会员</span>
+								</label>
+								<label >
+									<input type="radio" />
+									<span class="txt">全部</span>
+								</label>
+							</div>
+							<div class="line">
+								<p>
+									<span class="title">再分配：</span>
+									<label >
+										<input type="radio" />
+										<span class="txt">有免费课程但从未上过课的会员</span>
+									</label>
+									<label >
+										<input type="radio" />
+										<span class="txt">在<input type="text" />天内以上没有教练跟进的无增购项目的会员</span>
+									</label>
+									<label >
+										<input type="radio" />
+										<span class="txt">在<input type="text" />天来过，有免费课程从来没上过的会员</span>
+									</label>
+								</p>
+								<p class="toMarginLeft">
+									<label >
+										<input type="radio" />
+										<span class="txt">过保护期（公共资源）<input type="text" />天的会员</span>
+									</label>
+									<label >
+										<input type="radio" />
+										<span class="txt">最近一次免费课完成后<input type="text" />天来内，仍没有完成增购的会员</span>
+									</label>
+									<label >
+										<input type="radio" />
+										<span class="txt">收费课结束后<input type="text" />天来内，未续购的会员</span>
+									</label>
+								</p>
+								<p class="toMarginLeft">
+									<label >
+										<input type="radio" />
+										<span class="txt">在<input type="date" />到<input type="date" />内分配<input type="text" />次以内，仍没有增购的会员</span>
+									</label>
+								</p>
+							</div>
+						</fieldset>
+						<fieldset>
+							<legend>条件搜索</legend>
+							<p>
+								<label >
+									<input type="radio" name="ifno"/>
+									<span class="txt">无收费课程会员</span>
+								</label>
+								<label >
+									<input type="radio" name="ifno"/>
+									<span class="txt">有收费课程会员</span>
+								</label>
+								<label >
+									<span>会员姓名：</span>
+									<input type="text" />
+								</label>
+								<label >
+									<span>手机号码：</span>
+									<input type="text" />
+								</label>
+							</p>
+						</fieldset>
+						<fieldset>
+							<legend>教练分配</legend>
+							<p>
+								<label >
+									<input type="checkbox"/>
+									<span class="txt">选择前100行</span>
+								</label>
+								<label >
+									<span>指定跟进教练：</span>
+									<select name="">
+										<option value="">选择分配教练</option>
+									</select>
+									<span class="distribution">分配</span>
+								</label>
+								<label >
+									<span>上级批注：</span>
+									<input type="text" />
+									<span class="distribution">保存</span>
+								</label>
+							</p>
+						</fieldset>
+						<div class="tab">
+							<table border="1" bordercolor="#ccc">
+								<thead>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>序号</td>
+										<td>姓名</td>
+										<td>性别</td>
+										<td>手机号码</td>
+										<td>保护天数</td>
+										<td>入会日期</td>
+										<td>免费课程<br />（节数）</td>
+										<td>已用课时数<br />（免费）</td>
+										<td>收费课程</td>
+										<td>已用课时数<br />（自费）</td>
+										<td>是否续费项目</td>
+										<td>服务会籍</td>
+										<td>服务人员</td>
+										<td>销售人员</td>
+										<td>教练</td>
+										<td>教练跟进次数</td>
+										<td>课程类型</td>
+										<td>上级批座</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" /></td>
+										<td>1</td>
+										<td class="blue">吴改</td>
+										<td>男</td>
+										<td class="orange">13588888888</td>
+										<td class="orange">10</td>
+										<td>2018-07-14</td>
+										<td>10</td>
+										<td class="grey">5</td>
+										<td>4<span class="orange">展开</span></td>
+										<td class="grey">0</td>
+										<td>否</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td>Klaus</td>
+										<td class="blue">查看</td>
+										<td>20</td>
+										<td class="grey">无</td>
+										<td class="grey">无</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+

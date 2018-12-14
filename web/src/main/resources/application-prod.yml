@@ -1,0 +1,50 @@
+#**********************************************************#
+#**************************生产环境*************************#
+#**********************************************************#
+
+#------------------------文件上传路路径------------------------#
+fitness:
+  uploadPath: D:/fitness/upload/
+#------------------------Mybatis配置------------------------#
+spring:
+  application:
+    name: spring-cloud-consumer
+  datasource:
+    name: finessroom
+    url: jdbc:sqlserver://rm-bp1owsxurh970700b8o.sqlserver.rds.aliyuncs.com:3433;DatabaseName=jiejing
+    username: ldjiejing
+    password: liandeng@0592
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    initialSize: 1
+    minIdle: 1
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,slf4j
+    maxOpenPreparedStatements: 20
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#------------------------是否需要打印sql语句(线上不推荐开启)------------------------#
+sql:
+  isPrint: true
+#------------------------Mybatis-plus配置------------------------#
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.yj.dal.model
+  global-config:
+      meta-object-handler: com.yj.dal.config.mybatis.MyMetaObjectHandler
+#------------------------日志级别------------------------#
+logging:
+  level:
+    root: info
+    com.yj.dal.dao: debug
+  config: classpath:config/logback-spring.xml

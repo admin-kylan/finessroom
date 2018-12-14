@@ -1,0 +1,281 @@
+html,body{
+    height: 100%;
+    width: 100%;
+    overflow-x: auto;
+}
+#customerConsumptionHistory{
+    padding: 0px
+}
+
+#customerConsumptionHistory .tableWrap {
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+#customerConsumptionHistory .tableWrap table {
+    border-collapse: collapse;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+#customerConsumptionHistory .tableWrap table thead tr {
+    background: #0cc;
+}
+
+#customerConsumptionHistory .tableWrap table thead tr td {
+    color: #000;
+    border-bottom: none;
+    line-height: 21px;
+}
+
+#customerConsumptionHistory .tableWrap table td img {
+    margin: 0 5px;
+    vertical-align: bottom;
+}
+
+#customerConsumptionHistory .tableWrap table td.tored {
+    color: #FF0000;
+}
+
+#customerConsumptionHistory .tableWrap table td.togreen {
+    color: #00cc00;
+}
+
+#customerConsumptionHistory .tableWrap table td.toyellow {
+    color: #cfcf07;
+}
+
+#customerConsumptionHistory .tableWrap table td.toyen {
+    color: #adabab !important;
+}
+
+#customerConsumptionHistory .tableWrap table td.toceng {
+    color: #f90;
+}
+
+#customerConsumptionHistory .tableWrap table td.toshallow {
+    color: #00ccff;
+}
+
+#customerConsumptionHistory .tableWrap table td.toblue {
+    color: rgba(0, 153, 255, 1);
+}
+
+#customerConsumptionHistory .tableWrap table td {
+    white-space: nowrap;
+    padding: 4px;
+    line-height: 21px;
+}
+#customerConsumptionHistory .tableWrap .page {
+    margin: 15px 0;
+}
+
+#customerConsumptionHistory .tableWrap .page p {
+    margin-left: 20px;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li:nth-child(3),
+.content .tab .page ul li:last-child {
+    cursor: default;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li:last-child {
+    border: none;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+
+#customerConsumptionHistory .tabW{
+    display: none;
+}
+#customerConsumptionHistory .tabW.on{
+    display: block;
+}
+#customerConsumptionHistory .tabW_top div{
+    height: 39px;
+    line-height: 39px;
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    padding: 0 10px;
+}
+#customerConsumptionHistory .tabW_top div:nth-child(3){
+    border-bottom: none;
+}
+#customerConsumptionHistory .tabW_top_left{
+    float: left;
+    line-height: 35px;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+}
+#customerConsumptionHistory .tabW_top_left strong{
+    font-weight: 500; 
+    margin-right: 20px;
+}
+#customerConsumptionHistory .tabW_top a {
+    padding: 0px 15px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #ccc;
+    min-width: 60px;
+    height: 30px;
+    line-height: 28px;
+}
+#customerConsumptionHistory .tabW_top .tabW_top_left a{
+    margin-right: 10px;
+    background-color: #ddd;
+    border-color: #ddd;
+}
+#customerConsumptionHistory .tabW_top .tabW_top_left a.active {
+    background: #0cc;
+    color: #fff;
+}
+#customerConsumptionHistory .tabW_top a#performances{
+    margin-right: 10px;
+}
+#customerConsumptionHistory .tabW_top a#ticketGifts{
+    background-color: #888;
+    color: #fff;
+    min-width: 100px;
+    border-color: #888;
+    float: right;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    margin: 4px 0;
+}
+#customerConsumptionHistory .tableWrap .mances{
+    position: absolute;
+    bottom: 0;
+    height: 32px;
+    border-bottom: none;
+    padding: 0;
+}
+#customerConsumptionHistory .tableWrap .mances a.on{
+    border-color: rgba(0, 204, 204, 1);
+    background-color: rgba(0, 204, 204, 1);
+    color: #fff;
+}
+
+#customerConsumptionHistory .tabW_top input{
+    height: 30px;
+    margin-right: 10px;
+    text-align: center;
+}
+#customerConsumptionHistory .tableWrap .page {
+    margin: 15px 0;
+}
+
+#customerConsumptionHistory .tableWrap .page p {
+    margin-left: 20px;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li {
+    float: left;
+    margin: 0 8px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+#customerConsumptionHistory .tableWrap .mances a{
+    border-bottom: none;
+ }
+#customerConsumptionHistory .tableWrap .page ul li:nth-child(3),
+.content .tab .page ul li:last-child {
+    cursor: default;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li:last-child {
+    border: none;
+}
+
+#customerConsumptionHistory .tableWrap .page ul li input {
+    width: 50px;
+    margin: 0 5px;
+    text-align: center;
+}
+#customerConsumptionHistory .tableWrap .tabW_div{
+    border:1px solid #ccc;
+    border-top: 0; 
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+#customerConsumptionHistory .newCustomers_maskLayer{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: none;
+}
+#customerConsumptionHistory .newCustomers_maskLayer .newCustomers_maskLayer_box_top{
+    line-height: 36px;
+    background-color: rgba(0, 153, 255, 1);
+    text-align: center;
+}
+#customerConsumptionHistory .newCustomers_maskLayer .newCustomers_maskLayer_box_top span{
+   color: #fff;
+}
+#customerConsumptionHistory .newCustomers_maskLayer .newCustomers_maskLayer_box_top a{
+ position: absolute;
+ right: 0px;
+ color: #000;
+ font-size: 18px;
+ font-weight: 900;
+ padding: 0 10px;
+}
+
+
+#performance .newCustomers_maskLayer_box{
+    top: 20%;
+    max-width: 300px;
+    position: relative;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px 1px #000;
+}
+
+#performance .newCustomers_maskLayer_box_shen{
+    padding: 20px 40px;
+}
+
+#performance .newCustomers_maskLayer_box_shen input{
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 15px;
+} 
+#performance .newCustomers_maskLayer_box_botton{
+    text-align: center;
+    padding-bottom: 10px;
+}
+#performance .newCustomers_maskLayer_box_botton a{
+   display: inline-block;
+   min-width: 60px;
+}

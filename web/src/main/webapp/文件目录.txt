@@ -1,0 +1,98 @@
+﻿individual : 后台管理模块  http://www.4006337366.com:8080/individual/index.html
+
+	individual:门店设置
+
+member : 会员卡模块   http://www.4006337366.com:8080/member/index.html
+
+	right:卡权益
+
+	main: 会员卡设置
+
+	employee :添加卡种
+
+client : 客户端管理  http://www.4006337366.com:8080/client/index.html
+
+	customerLeft :客户左边栏
+	
+	|______ existingCustomer :现有客户
+	|
+	|______  newCustomers :新建现有客户
+	|
+	|______  invoicing : 发票开具
+	|	
+	|______  customerInformation : 客户信息
+
+		|
+		|______ customerMemberBenefits : 会员权益
+		|
+		|______ customerMembershipCard : 会员卡
+		|
+		|______ customerCourseProject : 课程项目/产品
+		|
+		|______ customerTicketPoint : 票券/积分
+		|
+		|______ customerConsumptionHistory : 消费历史
+		|
+		|______ customerPersonalDetails : 个人详情
+		|
+		|______ customerPhysicalFitnessTest : 体能测试
+		|
+		|______ customerFollowUpRecord : 跟进记录
+		|
+		|______ customerTrainingPlan : 训练计划
+	|
+	|______ customerAllocation : 客户分配
+
+
+
+
+	|______     potentialCustomers:潜在客户
+	|
+	|______	leadCustomerEntry : 潜在客户录入
+
+
+	|myCustomer:我的客户
+	|
+	|______	myCustomerAnalysis : 客户信息分析
+	|
+	|______	myCustomerPotential 我的潜在客户
+	|
+	|______ myClaimingCustomers 可认领客户
+
+gym 健身馆设置 http://www.4006337366.com:8080/gym/gymSetting.html
+	|
+	|______ groupTeaching :健身团教设置
+	|
+	|______ personalEducationSetting :健身私教设置
+
+
+fitness 健身馆管理 http://www.4006337366.com:8080/fitness/appointment.html
+	|
+	|______ admissionManagement 出入场管理
+	|
+	|______ appointment 团操约课管理
+	|
+	|______ training私教约课管理
+
+
+financial 财务/报表管理
+
+	|
+	|______ behavior  个人行为绩效分析表
+	|
+	|______ charge  没有收费课会员服务/分配/跟进管理表
+	|
+	|______ compare  课程比较分析表
+	|
+	|______ contract  私教合同管理一览表
+	|
+	|______ course  团操课程信息统计分析表
+	|
+	|______ work  私教教练工作状态表
+http://127.0.0.1:8084/member/index.html
+
+
+
+
+
+

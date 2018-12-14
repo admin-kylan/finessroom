@@ -1,0 +1,2374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrClientMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrClient">
+        <id column="id" property="id"/>
+        <result column="client_name" property="clientName"/>
+        <result column="english_name" property="englishName"/>
+        <result column="mobile" property="mobile"/>
+        <result column="tel" property="tel"/>
+        <result column="sex" property="sex"/>
+        <result column="stature" property="stature"/>
+        <result column="weight" property="weight"/>
+        <result column="school" property="school"/>
+        <result column="major" property="major"/>
+        <result column="birthday" property="birthday"/>
+        <result column="speciality" property="speciality"/>
+        <result column="level_id" property="levelId"/>
+        <result column="marital_status" property="maritalStatus"/>
+        <result column="id_type" property="idType"/>
+        <result column="id_no" property="idNo"/>
+        <result column="id_address" property="idAddress"/>
+        <result column="home_add" property="homeAdd"/>
+        <result column="email" property="email"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="company_name" property="companyName"/>
+        <result column="job_title" property="jobTitle"/>
+        <result column="company_address" property="companyAddress"/>
+        <result column="business_scope" property="businessScope"/>
+        <result column="car_num" property="carNum"/>
+        <result column="attention_problem" property="attentionProblem"/>
+        <result column="company_tel" property="companyTel"/>
+        <result column="income" property="income"/>
+        <result column="car_brand" property="carBrand"/>
+        <result column="note" property="note"/>
+        <result column="reference_name" property="referenceName"/>
+        <result column="reference_tel" property="referenceTel"/>
+        <result column="consultant_id" property="consultantId"/>
+        <result column="consultant_name" property="consultantName"/>
+        <result column="consultant_tel" property="consultantTel"/>
+        <result column="fwhj_name" property="fwhjName"/>
+        <result column="fwhj_tel" property="fwhjTel"/>
+        <result column="protect_day" property="protectDay"/>
+        <result column="source_id" property="sourceId"/>
+        <result column="customer_source" property="customerSource"/>
+        <result column="apply_time" property="applyTime"/>
+        <result column="flag" property="flag"/>
+        <result column="type" property="type"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="update_user_name" property="updateUserName"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="status" property="status"/>
+        <result column="willing_card_type" property="willingCardType"/>
+        <result column="presale_status" property="presaleStatus"/>
+        <result column="CustomerMark" property="CustomerMark"/>
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.yj.dal.model.FrClient">
+        <id column="id" property="id"/>
+        <result column="client_name" property="clientName"/>
+        <result column="english_name" property="englishName"/>
+        <result column="mobile" property="mobile"/>
+        <result column="tel" property="tel"/>
+        <result column="sex" property="sex"/>
+        <result column="stature" property="stature"/>
+        <result column="weight" property="weight"/>
+        <result column="school" property="school"/>
+        <result column="major" property="major"/>
+        <result column="birthday" property="birthday"/>
+        <result column="speciality" property="speciality"/>
+        <result column="level_id" property="levelId"/>
+        <result column="marital_status" property="maritalStatus"/>
+        <result column="id_type" property="idType"/>
+        <result column="id_no" property="idNo"/>
+        <result column="id_address" property="idAddress"/>
+        <result column="home_add" property="homeAdd"/>
+        <result column="email" property="email"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="company_name" property="companyName"/>
+        <result column="job_title" property="jobTitle"/>
+        <result column="company_address" property="companyAddress"/>
+        <result column="business_scope" property="businessScope"/>
+        <result column="car_num" property="carNum"/>
+        <result column="attention_problem" property="attentionProblem"/>
+        <result column="company_tel" property="companyTel"/>
+        <result column="income" property="income"/>
+        <result column="car_brand" property="carBrand"/>
+        <result column="note" property="note"/>
+        <result column="reference_name" property="referenceName"/>
+        <result column="reference_tel" property="referenceTel"/>
+        <result column="consultant_id" property="consultantId"/>
+        <result column="consultant_name" property="consultantName"/>
+        <result column="consultant_tel" property="consultantTel"/>
+        <result column="fwhj_name" property="fwhjName"/>
+        <result column="fwhj_tel" property="fwhjTel"/>
+        <result column="protect_day" property="protectDay"/>
+        <result column="source_id" property="sourceId"/>
+        <result column="customer_source" property="customerSource"/>
+        <result column="apply_time" property="applyTime"/>
+        <result column="build_date" property="buildDate"/>
+        <result column="wechat" property="wechat"/>
+        <result column="c_flag" property="flag"/>
+        <result column="type" property="type"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="update_user_name" property="updateUserName"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="status" property="status"/>
+        <result column="willing_card_type" property="willingCardType"/>
+        <result column="presale_status" property="presaleStatus"/>
+        <result column="caution_question" property="cautionQuestion"/>
+        <result column="qq" property="qq"/>
+        <collection property="clientPic" ofType="com.yj.dal.model.FrClientPic">
+            <id column="cp_id" property="id"/>
+            <result column="client_id" property="clientId"/>
+            <result column="pic_link" property="picLink"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        presale_status AS presaleStatus,source_id AS sourceId,consultant_id AS consultantId,willing_card_type AS willingCardType,client_name AS clientName, english_name AS englishName, mobile, tel, sex, stature, weight, school, major, birthday, speciality, level_id AS levelId, marital_status AS maritalStatus, id_type AS idType, id_no AS idNo, id_address AS idAddress, home_add AS homeAdd, email, native_place AS nativePlace, company_name AS companyName, job_title AS jobTitle, company_address AS companyAddress, business_scope AS businessScope, car_num AS carNum, attention_problem AS attentionProblem, company_tel AS companyTel, income, car_brand AS carBrand, note, reference_name AS referenceName, reference_tel AS referenceTel, consultant_name AS consultantName, consultant_tel AS consultantTel, fwhj_name AS fwhjName, fwhj_tel AS fwhjTel, protect_day AS protectDay, customer_source AS customerSource, apply_time AS applyTime, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, status, CustomerMark, id
+    </sql>
+    <select id="getClient" resultMap="BaseResultMap1" parameterType="java.lang.String">
+        SELECT
+        cl.*,qq,caution_question,
+        le.level_name c_flag,
+        cp.id cp_id, cp.client_id client_id, cp.pic_link pic_link
+        FROM
+        fr_client cl
+        <!-- 查询会员等级 -->
+        LEFT JOIN fr_level le ON le.id = cl.level_id
+        <!-- 头像 -->
+        LEFT JOIN fr_client_pic cp ON cp.client_id = cl.id
+        WHERE cl.id = #{id}
+    </select>
+    <!--<select id="selectExistenceList" resultType="com.yj.dal.dto.ExistenceClientDTO">-->
+    <!--SELECT-->
+    <!--id,-->
+    <!--[name],-->
+    <!--sex,-->
+    <!--levelId,-->
+    <!--levelName,-->
+    <!--cardCount,-->
+    <!--mobile,-->
+    <!--birthday,-->
+    <!--createTime,-->
+    <!--createUser,-->
+    <!--fwhjName,-->
+    <!--referenceName,-->
+    <!--headPortrait,-->
+    <!--updateUser,-->
+    <!--protectDay,-->
+    <!--customerSource,-->
+    <!--applyTime,-->
+    <!--status-->
+    <!--FROM (-->
+    <!--SELECT-->
+    <!--cl.id,-->
+    <!--cl.name,-->
+    <!--cl.sex,-->
+    <!--le.id levelId,-->
+    <!--le.name levelName,-->
+    <!--ISNULL(cac.cardCount,0) cardCount,-->
+    <!--cl.mobile,-->
+    <!--cl.birthday,-->
+    <!--cl.create_time createTime,-->
+    <!--cl.create_user createUser,-->
+    <!--cl.fwhj_name fwhjName,-->
+    <!--cl.reference_name referenceName,-->
+    <!--cl.head_portrait headPortrait,-->
+    <!--cl.update_user updateUser,-->
+    <!--cl.protect_day protectDay,-->
+    <!--cl.customer_source customerSource,-->
+    <!--cl.apply_time applyTime,-->
+    <!--status-->
+    <!--FROM-->
+    <!--fr_client cl-->
+    <!--&lt;!&ndash; 查询会员等级 &ndash;&gt;-->
+    <!--LEFT JOIN fr_level le ON le.id = cl.level_id-->
+    <!--&lt;!&ndash; 查询会员卡数 &ndash;&gt;-->
+    <!--LEFT JOIN ( SELECT client_id, count( 1 ) cardCount FROM fr_card where type != 2 and is_using = 1 GROUP BY client_id ) cac ON cl.id = cac.client_id-->
+    <!--&lt;!&ndash; 查询keyword 手机号码 姓名 会员卡号 &ndash;&gt;-->
+    <!--<if test="keyword != null ">-->
+    <!--INNER JOIN (-->
+    <!--SELECT id-->
+    <!--FROM (-->
+    <!--SELECT cl.id FROM fr_client cl INNER JOIN fr_card ca ON ca.client_id =cl.id WHERE cl.is_using =1 AND ca.is_using =1 AND card_no LIKE '%'+#{keyword}+'%'-->
+    <!--UNION-->
+    <!--SELECT id FROM fr_client WHERE is_using =1 and [name] LIKE '%'+#{keyword}+'%'-->
+    <!--UNION-->
+    <!--SELECT id FROM fr_client WHERE is_using = 1 AND mobile LIKE '%'+#{keyword}+'%'-->
+    <!--) s-->
+    <!--) s on s.id = cl.id-->
+    <!--</if>-->
+    <!--&lt;!&ndash; 判断日期类型 &ndash;&gt;-->
+    <!--<choose>-->
+    <!--<when test="dateType == '1'.toString()">-->
+    <!--&lt;!&ndash; 根据申请时间查询 &ndash;&gt;-->
+    <!--<if test="startTime != null and endTime != null and startTime != '' and endTime != ''">-->
+    <!--JOIN (-->
+    <!--SELECT id-->
+    <!--FROM fr_client-->
+    <!--WHERE apply_time-->
+    <!--BETWEEN-->
+    <!--#{startTime}-->
+    <!--AND-->
+    <!--CONCAT(#{endTime}, ' 23:59:59')-->
+    <!--) as sqsj on sqsj.id = cl.id-->
+    <!--</if>-->
+    <!--</when>-->
+    <!--<when test="dateType == '2'.toString()">-->
+    <!--&lt;!&ndash; 根据开卡日期查询 &ndash;&gt;-->
+    <!--<if test="startTime != null and endTime != null and startTime != '' and endTime != ''">-->
+    <!--JOIN (-->
+    <!--SELECT-->
+    <!--client_id as id-->
+    <!--FROM-->
+    <!--fr_card-->
+    <!--WHERE-->
+    <!--bind_time-->
+    <!--BETWEEN-->
+    <!--#{startTime}-->
+    <!--AND-->
+    <!--CONCAT(#{endTime}, ' 23:59:59')-->
+    <!--GROUP BY-->
+    <!--client_id-->
+    <!--) kkrq on kkrq.id = cl.id-->
+    <!--</if>-->
+    <!--</when>-->
+    <!--<when test="dateType == '3'.toString()">-->
+    <!--&lt;!&ndash; 根据失效日期查询 &ndash;&gt;-->
+    <!--<if test="startTime != null and endTime != null and startTime != '' and endTime != ''">-->
+    <!--JOIN (-->
+    <!--SELECT-->
+    <!--client_id as id-->
+    <!--FROM-->
+    <!--fr_card-->
+    <!--WHERE-->
+    <!--invalid_time-->
+    <!--BETWEEN-->
+    <!--#{startTime}-->
+    <!--AND-->
+    <!--CONCAT(#{endTime}, ' 23:59:59')-->
+    <!--GROUP BY-->
+    <!--client_id-->
+    <!--) kkrq on kkrq.id = cl.id-->
+    <!--</if>-->
+    <!--</when>-->
+    <!--<when test="dateType == '4'.toString()">-->
+    <!--&lt;!&ndash; 根据客户被认领时间查询 &ndash;&gt;-->
+    <!--<if test="startTime != null and endTime != null and startTime != '' and endTime != ''">-->
+
+    <!--</if>-->
+    <!--</when>-->
+    <!--<when test="dateType == '5'.toString()">-->
+    <!--&lt;!&ndash; 根据客户被分配时间查询 &ndash;&gt;-->
+    <!--<if test="startTime != null and endTime != null and startTime != '' and endTime != ''">-->
+
+    <!--</if>-->
+    <!--</when>-->
+    <!--<when test="dateType == '6'.toString()">-->
+    <!--&lt;!&ndash; 根据客户下次跟进时间查询 todo &ndash;&gt;-->
+    <!--<if test="startTime != null and endTime != null and startTime != '' and endTime != ''">-->
+
+    <!--</if>-->
+    <!--</when>-->
+    <!--<otherwise>-->
+    <!--</otherwise>-->
+    <!--</choose>-->
+    <!--WHERE cl.is_using = 1 and le.is_using = 1-->
+    <!--) as t-->
+    <!--<where>-->
+    <!--&lt;!&ndash; 根据会员等级筛选 &ndash;&gt;-->
+    <!--<if test="levelId != null and levelId != ''">-->
+    <!--and levelId = #{levelId}-->
+    <!--</if>-->
+    <!--&lt;!&ndash; 根据保护天数筛选 &ndash;&gt;-->
+    <!--<if test="protectDay != null and protectDay != ''">-->
+    <!--protectDay = #{protectDay}-->
+    <!--</if>-->
+    <!--</where>-->
+
+    <!--</select>-->
+    <!--查询现有客户列表-->
+    <select id="selectExistenceList" resultType="com.yj.dal.dto.ExistenceClientDTO">
+        SELECT
+        id,
+        pic_link picLink,
+        client_name clientName,
+        sex,
+        levelId,
+        level_name levelName,
+        cardCount,
+        protect_day protectDay,
+        mobile,
+        birthday,
+        apply_time applyTime,
+        visiting_time visitingTime,
+        fwhj_name fwhjName,
+        reference_name referenceName,
+        create_time createTime,
+        create_user_name createUserName,
+        update_user_name updateUserName,
+        customer_source customerSource,
+        status,
+        CustomerCode
+        FROM (
+        SELECT
+        cl.id,
+        cp.pic_link ,
+        cl.client_name,
+        cl.sex,
+        le.id levelId,
+        le.level_name,
+        ISNULL(cac.cardCount,0) cardCount,
+        <!--TODO 保护天数-->
+        cl.protect_day,
+        cl.mobile,
+        cl.birthday,
+        cl.apply_time,
+        clv.visiting_time,
+        cl.fwhj_name,
+        cl.reference_name,
+        clp.create_time,
+        cl.create_user_name,
+        cl.update_user_name,
+        cl.customer_source,
+        cl.status,
+        cl.CustomerCode
+        FROM
+        fr_client cl
+        <!-- 查询会员等级 -->
+        LEFT JOIN fr_level le ON le.id = cl.level_id AND cl.CustomerCode = #{customerCode}
+        <!-- 头像 -->
+        LEFT JOIN fr_client_pic cp ON cp.client_id = cl.id AND cp.pic_state = 1 AND cp.pic_type = 1
+        <!-- 现有客户关系 -->
+        JOIN fr_client_personal clp ON clp.client_id = cl.id AND clp.shop_id = #{shopId} AND clp.CustomerCode =
+        #{customerCode}
+        <!-- 查询会员卡数 -->
+        LEFT JOIN (SELECT client_id, COUNT ( 1 ) cardCount FROM fr_card WHERE CustomerCode = #{customerCode} AND
+        is_using = 1 GROUP BY client_id ) cac ON cac.client_id = cl.id
+        <!-- 关联到访记录 -->
+        LEFT JOIN fr_client_visiting clv ON clv.client_id = cl.id
+        <!-- 查询keyword 手机号码 姓名 会员卡号 -->
+        <if test="keyword != null ">
+            INNER JOIN (
+            SELECT id
+            FROM (
+            SELECT cl.id FROM fr_client cl INNER JOIN fr_card ca ON ca.client_id =cl.id WHERE cl.is_using =1 AND
+            ca.is_using =1 AND card_no LIKE '%'+#{keyword}+'%'
+            UNION
+            SELECT id FROM fr_client WHERE is_using =1 and client_name LIKE '%'+#{keyword}+'%'
+            UNION
+            SELECT id FROM fr_client WHERE is_using = 1 AND mobile LIKE '%'+#{keyword}+'%'
+            ) s
+            ) s on s.id = cl.id
+        </if>
+        <!-- 判断日期类型 -->
+        <choose>
+            <when test="dateType == '1'.toString()">
+                <!-- 根据申请时间查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT id
+                    FROM fr_client
+                    WHERE apply_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    ) as sqsj on sqsj.id = cl.id
+                </if>
+            </when>
+            <when test="dateType == '2'.toString()">
+                <!-- 根据开卡日期查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT
+                    client_id as id
+                    FROM
+                    fr_card
+                    WHERE
+                    bind_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    GROUP BY
+                    client_id
+                    ) kkrq on kkrq.id = cl.id
+                </if>
+            </when>
+            <when test="dateType == '3'.toString()">
+                <!-- 根据失效日期查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT
+                    client_id as id
+                    FROM
+                    fr_card
+                    WHERE
+                    invalid_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    GROUP BY
+                    client_id
+                    ) kkrq on kkrq.id = cl.id
+                </if>
+            </when>
+            <when test="dateType == '4'.toString()">
+                <!-- 根据客户被认领时间查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                </if>
+            </when>
+            <when test="dateType == '5'.toString()">
+                <!-- 根据客户被分配时间查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                </if>
+            </when>
+            <when test="dateType == '6'.toString()">
+                <!-- 根据客户下次跟进时间查询 todo -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT
+                    client_id id
+                    FROM
+                    fr_employee_client_follow
+                    WHERE
+                    next_follow_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    GROUP BY
+                    client_id
+                    ) xcgj on xcgj.id = cl.id
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        WHERE cl.is_using = 1 and le.is_using = 1
+        ) as t
+        <where>
+            <!-- 根据会员等级筛选 -->
+            <if test="levelId != null and levelId != ''">
+                and levelId = #{levelId}
+            </if>
+            <!-- 根据保护天数筛选 -->
+            <if test="protectDay != null and protectDay != ''">
+                and protect_day = #{protectDay}
+            </if>
+        </where>
+        order by create_time desc
+
+    </select>
+
+
+    <!--查询最近N天生日的会员数-->
+    <select id="selectBirthdayCount" resultType="java.lang.Integer">
+        <!-- 定义当前时间 -->
+        declare @nowdate datetime
+        set @nowdate=convert(datetime,GETDATE())
+        SELECT
+        count(1)
+        FROM
+        (
+        SELECT
+        cl.id,
+        (
+        CASE
+        WHEN NOT (
+        YEAR ( @nowdate ) % 4 = 0
+        AND YEAR ( @nowdate ) % 100 <![CDATA[ <> ]]> 0
+        OR YEAR ( @nowdate ) % 400 = 0
+        )
+        AND MONTH ( cl.birthday ) = 2
+        AND DAY ( cl.birthday ) = 29
+        THEN
+        CONVERT (
+        datetime,
+        CONVERT ( VARCHAR ( 4 ), YEAR ( @nowdate ) ) + substring( CONVERT ( VARCHAR ( 10 ), dateadd ( DAY, 1,
+        cl.birthday ), 120 ), 5, 10 )
+        ) ELSE
+        CONVERT (
+        datetime,
+        CONVERT ( VARCHAR ( 4 ), YEAR ( @nowdate ) ) + substring( CONVERT ( VARCHAR ( 10 ), cl.birthday, 120 ), 5, 10 )
+        )
+        END
+        ) as thisYearBirth
+        FROM
+        fr_client cl join fr_client_personal clp on clp.client_id = cl.id
+        where cl.CustomerCode = #{code}
+        <if test="shopId!=null and shopId!=''">
+            and clp.shop_id = #{shopId}
+        </if>
+        ) as a
+        WHERE datediff(day,@nowdate,thisYearBirth) <![CDATA[ >= ]]> 0 and datediff(day,@nowdate,thisYearBirth)
+        <![CDATA[ < ]]> #{dayNum}
+    </select>
+
+    <!--查询潜在客户列表-->
+    <select id="selectPotentialList" resultType="com.yj.dal.dto.PotentialClientDTO">
+        select
+        id,
+        pic_link picLink,
+        client_name clientName,
+        sex,
+        mobile,
+        source_id sourceId,
+        contactCount,
+        create_time createTime,
+        build_date buildDate,
+        follow_time followTime,
+        next_follow_time nextFollowTime,
+        plan_follow_time planFollowTime,
+        plan_visit_time planVisitTime,
+        visiting_time visitingTime,
+        plan_purchase_time planPurchaseTime,
+        reference_name referenceName,
+        fwhj_name fwhjName,
+        consultant_id consultantId,
+        consultant_name consultantName,
+        personalId,
+        followName ,
+        update_user_id updateUserId,
+        update_user_name updateUserName,
+        willing_price willingPrice,
+        willing_card_type willingCardType,
+        wechat,
+        vip_level vipLevel,
+        purchase_will purchaseWill,
+        customer_source customerSource,
+        presale_status presaleStatus,
+        isReferrer
+        from (
+        SELECT
+        cl.id,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.mobile,
+        cl.source_id,
+        cl.presale_status,
+        ISNULL(tcc.contactCount,0) contactCount,
+        cl.create_time,
+        cl.build_date,
+        fof.follow_time,
+        fof.next_follow_time,
+        fof.plan_follow_time,
+        fof.plan_visit_time,
+        vi.visiting_time,
+        fof.plan_purchase_time,
+        cl.reference_name,
+        (CASE WHEN isnull(cl.reference_name,0)!='0' THEN 1 ELSE 0 END) isReferrer,
+        cl.fwhj_name,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        fof.personalId,
+        fof.personalName followName,
+        cl.update_user_id,
+        cl.update_user_name,
+        pi.id consultantId,
+        pi.RelName,
+        cl.willing_price,
+        cl.willing_card_type,
+        cl.wechat,
+        cl.vip_level,
+        cl.purchase_will,
+        cl.customer_source
+        FROM
+        fr_client cl
+        <!--关联潜在客户图片表-->
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id AND fcpi.pic_state = 1 AND fcpi.pic_type = 1
+        <!--关联潜在客户关系表-->
+        JOIN fr_client_latence_personal fcp ON fcp.client_id = cl.id
+        <!--潜在客户是否需要根据门店筛选-->
+        AND fcp.shop_id = #{shopId}
+        AND fcp.CustomerCode = #{customerCode}
+        AND fcp.is_using = 1
+        AND cl.is_using = 1
+        <!--关联员工表-->
+        LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
+        <!--关联员工表 查询销售顾问-->
+        LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        <!--关联潜在客户跟进记录表-->
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) contactCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) tcc on tcc.client_id = cl.id
+        <!--关联最近跟进记录-->
+        LEFT JOIN (
+        SELECT
+        top 1 flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        pi.id personalId,
+        pi.RelName personalName
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode}
+        WHERE flf.create_time = (select max(create_time) from fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode})
+        ) fof on fof.client_id = cl.id
+        <!--关联最近访问时间-->
+        LEFT JOIN (
+        SELECT
+        top 1
+        fcv.client_id,
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.create_time=(select max(create_time) from fr_client_visiting)
+        ) vi on vi.client_id = cl.id) tt
+        <where>
+            <!-- 根据客户等级筛选 -->
+            <if test="customerLevel != null">
+                and vip_level = #{customerLevel}
+            </if>
+            <!-- 根据购买意向筛选 -->
+            <if test="purchaseWill != null">
+                and purchase_will = #{purchaseWill}
+            </if>
+            <!-- 根据来源id筛选 -->
+            <if test="sourceId != null and sourceId != ''">
+                and source_id = #{sourceId}
+            </if>
+            <!-- 根据是否有推荐人筛选 -->
+            <if test="isReferrer != null">
+                and isReferrer = #{isReferrer}
+            </if>
+            <!-- 根据预售筛选 -->
+            <if test="presaleStatus != null and presaleStatus != ''">
+                and presale_status = #{presaleStatus}
+            </if>
+            <!-- 根据销售顾问/教练名字筛选 -->
+            <if test="consultantName != null and consultantName != ''">
+                and consultant_name like '%'+#{consultantName}+'%'
+            </if>
+            <!-- 根据操作人筛选 -->
+            <if test="updateUserName != null and updateUserName != ''">
+                and update_user_name like '%'+#{updateUserName}+'%'
+            </if>
+            <if test="dateType !=null">
+                <!-- 判断日期类型 -->
+                <choose>
+                    <when test="dateType == '0'.toString()">
+                        <!-- 下次根进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND next_follow_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '1'.toString()">
+                        <!-- 计划来访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND plan_visit_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '2'.toString()">
+                        <!-- 实际来访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '3'.toString()">
+                        <!-- 计划购买 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND plan_purchase_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '4'.toString()">
+                        <!-- 建档日期 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND build_date BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '5'.toString()">
+                        <!-- 客户认领 todo -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                        </if>
+                    </when>
+                    <when test="dateType == '6'.toString()">
+                        <!-- 客户分配 todo -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+    <update id="updateClient" parameterType="com.yj.dal.model.FrClient">
+        update fr_client
+        <set>
+            <if test="clientName != null ">
+                client_name =#{clientName},
+            </if>
+            <if test="englishName != null ">
+                english_name=#{englishName},
+            </if>
+            <if test="mobile != null ">
+                mobile=#{mobile},
+            </if>
+            <if test="tel != null ">
+                tel=#{tel},
+            </if>
+            <if test="sex != null ">
+                sex=#{sex},
+            </if>
+            <if test="stature != null ">
+                stature=#{stature},
+            </if>
+            <if test="weight != null ">
+                weight=#{weight},
+            </if>
+            <if test="school != null ">
+                school=#{school},
+            </if>
+            <if test="major != null ">
+                major=#{major},
+            </if>
+            <if test="birthday != null ">
+                birthday=#{birthday},
+            </if>
+            <if test="speciality != null ">
+                speciality=#{speciality},
+            </if>
+            <if test="levelId != null ">
+                level_id=#{levelId},
+            </if>
+            <if test="maritalStatus == false">
+                marital_status = 0,
+            </if>
+            <if test="maritalStatus == true">
+                marital_status = 1,
+            </if>
+            <if test="idType != null ">
+                id_type=#{idType},
+            </if>
+            <if test="idNo != null ">
+                id_no=#{idNo},
+            </if>
+            <if test="idAddress != null ">
+                id_address=#{idAddress},
+            </if>
+            <if test="homeAdd != null ">
+                home_add=#{homeAdd},
+            </if>
+            <if test="email != null ">
+                email=#{email},
+            </if>
+            <if test="nativePlace != null ">
+                native_place=#{nativePlace},
+            </if>
+            <if test="companyName != null ">
+                company_name=#{companyName},
+            </if>
+            <if test="jobTitle != null ">
+                job_title=#{jobTitle},
+            </if>
+            <if test="companyAddress != null ">
+                company_address=#{companyAddress},
+            </if>
+            <if test="businessScope != null ">
+                business_scope=#{businessScope},
+            </if>
+            <if test="carNum != null ">
+                car_num=#{carNum},
+            </if>
+            <if test="attentionProblem != null ">
+                attention_problem=#{attentionProblem},
+            </if>
+            <if test="companyTel != null ">
+                company_tel=#{companyTel},
+            </if>
+            <if test="income != null ">
+                income=#{income},
+            </if>
+            <if test="carBrand != null ">
+                car_brand=#{carBrand},
+            </if>
+            <if test="note != null ">
+                note=#{note},
+            </if>
+            <if test="referenceName != null ">
+                reference_name=#{referenceName},
+            </if>
+            <if test="referenceTel != null ">
+                reference_tel=#{referenceTel},
+            </if>
+            <if test="consultantName != null ">
+                consultant_name=#{consultantName},
+            </if>
+            <if test="consultantTel != null ">
+                consultant_tel=#{consultantTel},
+            </if>
+            <if test="fwhjName != null ">
+                fwhj_name=#{fwhjName},
+            </if>
+            <if test="fwhjTel != null ">
+                fwhj_tel=#{fwhjTel},
+            </if>
+            <if test="protectDay != null ">
+                protect_day=#{protectDay},
+            </if>
+            <if test="customerSource != null ">
+                customer_source=#{customerSource},
+            </if>
+            <if test="applyTime != null ">
+                apply_time=#{applyTime},
+            </if>
+            <if test="flag != null ">
+                flag=#{flag},
+            </if>
+            <if test="type != null ">
+                type=#{type},
+            </if>
+            <if test="isUsing == false">
+                is_using = 0,
+            </if>
+            <if test="isUsing == true">
+                is_using = 1,
+            </if>
+            <if test="createTime != null ">
+                create_time=#{createTime},
+            </if>
+            <if test="updateTime != null ">
+                update_time=#{updateTime},
+            </if>
+            <if test="createUserName != null ">
+                create_user_name=#{createUserName},
+            </if>
+            <if test="updateUserName != null ">
+                update_user_name=#{updateUserName},
+            </if>
+            <if test="CustomerCode != null ">
+                CustomerCode=#{CustomerCode},
+            </if>
+            <if test="createUserId != null ">
+                create_user_id=#{createUserId},
+            </if>
+            <if test="updateUserId != null ">
+                update_user_id=#{updateUserId},
+            </if>
+            <if test="status == false">
+                status = 0,
+            </if>
+            <if test="status == true">
+                status = 1,
+            </if>
+            <if test="wechat != null ">
+                wechat=#{wechat},
+            </if>
+            <if test="qq != null ">
+                qq=#{qq},
+            </if>
+            <if test="vipLevel != null ">
+                vip_level=#{vipLevel},
+            </if>
+            <if test="purchaseWill != null ">
+                purchase_will=#{purchaseWill},
+            </if>
+            <if test="willingPrice != null ">
+                willing_price=#{willingPrice},
+            </if>
+            <if test="buildDate != null ">
+                build_date=#{buildDate},
+            </if>
+            <if test="cautionQuestion != null ">
+                caution_question=#{cautionQuestion},
+            </if>
+            <if test="willingCardType != null ">
+                willing_card_type=#{willingCardType},
+            </if>
+            <if test="consultantId != null ">
+                consultant_id=#{consultantId},
+            </if>
+            <if test="presaleStatus != null ">
+                presale_status=#{presaleStatus},
+            </if>
+            <if test="sourceId != null ">
+                source_id=#{sourceId}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getById" resultType="com.yj.dal.model.FrClient" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"></include>
+        from fr_client where id=#{id} and CustomerCode=#{customerCode}
+    </select>
+    <!-- 潜在客户 -->
+    <select id="findPotential" resultType="com.yj.dal.dto.MyPotentialClientDTO">
+        select DISTINCT
+        id,
+        pic_link picLink,
+        client_name clientName,
+        sex,
+        mobile,
+        source_id sourceId,
+        contactCount,
+        create_time createTime,
+        build_date buildDate,
+        protect_day protectDay,
+        wechat,
+        follow_time followTime,
+        follow_content followContent,
+        next_follow_time nextFollowTime,
+        plan_follow_time planFollowTime,
+        plan_visit_time planVisitTime,
+        visiting_time visitingTime,
+        plan_purchase_time planPurchaseTime,
+        reference_name referenceName,
+        fwhj_name fwhjName,
+        fwhj_tel fwhjTel,
+        consultant_id consultantId,
+        consultant_name consultantName,
+        personalId ,
+        followName ,
+        update_user_id updateUserId,
+        update_user_name updateUserName,
+        willing_price willingPrice,
+        willing_card_type willingCardType,
+        willing_card_name willingCardName,
+        vip_level vipLevel,
+        purchase_will purchaseWill,
+        customer_source customerSource,
+        presale_status presaleStatus,
+        birthday,
+        firstFollowTime,
+        shopName,
+        shopid,
+        followCount,
+        isReferrer,
+        followPerson,
+        ctime
+        from (
+        SELECT DISTINCT
+        cl.id,
+        cl.birthday,
+        cl.protect_day,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.mobile,
+        cl.source_id,
+        cl.presale_status,
+        ISNULL(tcc.contactCount,0) contactCount,
+        cl.create_time,
+        cl.build_date,
+        fof.follow_time,
+        fof.next_follow_time,
+        fof.plan_follow_time,
+        fof.follow_content,
+        fof.plan_visit_time,
+        vi.visiting_time,
+        fof.plan_purchase_time,
+        cl.reference_name,
+        (CASE WHEN isnull(cl.reference_name,0)!='0' THEN 1 ELSE 0 END) isReferrer,
+        cl.fwhj_name,
+        cl.fwhj_tel,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        fof.personalName followName,
+        fof.personalId followPerson,
+        cl.update_user_id,
+        cl.update_user_name,
+        pi.id consultantId,
+        pi.RelName,
+        shop.ShopName shopName,
+        shop.ID shopid,
+        cl.willing_price,
+        cl.willing_card_type,
+        cl.willing_card_name,
+        cl.wechat,
+        cl.vip_level,
+        cl.purchase_will,
+        fof2.firstFollowTime,
+        ISNULL(fc.followCount,0) followCount,
+        cl.customer_source,
+        fcpr.personal_id personalId,
+        fcpr2.create_time ctime
+        FROM
+        fr_client cl
+        <!--关联潜在客户图片表-->
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id AND fcpi.pic_state = 1 AND fcpi.pic_type = 1
+        <!--关联潜在客户关系表-->
+        JOIN fr_client_latence_personal fcp ON fcp.client_id = cl.id
+        <!--潜在客户是否需要根据门店筛选-->
+        and fcp.shop_id = #{shopId}
+        AND fcp.CustomerCode = #{customerCode}
+        AND fcp.is_using = 1
+        AND cl.is_using = 1
+        <!--关联员工表-->
+        LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
+        <!--关联员工表 查询销售顾问-->
+        LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        <!--关联客户员工关系 根据当前操作人-->
+        LEFT JOIN (
+        select is_using,client_id,personal_id,create_time,update_time from fr_client_personnel_relate where
+        personal_id=#{personalId}
+        )fcpr ON cl.id= fcpr.client_id
+        and fcpr.is_using = 1
+        LEFT JOIN (
+        select is_using,client_id,create_time from fr_client_personnel_relate where type=1
+        )fcpr2 ON cl.id= fcpr2.client_id
+        and fcpr2.is_using = 1
+        LEFT JOIN Shop shop ON fcp.shop_id = shop.ID
+        <!--关联潜在客户跟进记录表-->
+        LEFT JOIN (
+        SELECT DISTINCT
+        client_id,
+        COUNT(1) contactCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) tcc on tcc.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time firstFollowTime
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode =#{customerCode}
+        AND is_using = 1
+        where flf.follow_time in(select min(flf.follow_time)from fr_latence_follow flf group by flf.client_id)
+        )fof2 on fof2.client_id = cl.id
+        <!--关联最近跟进记录-->
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        flf.follow_content,
+        pi.id personalId,
+        pi.RelName personalName
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode}
+        where flf.follow_time in(select max(flf.follow_time)from fr_latence_follow flf group by flf.client_id)
+        ) fof on fof.client_id = cl.id
+        <!--总跟进-->
+        LEFT JOIN (
+        SELECT DISTINCT
+        client_id,
+        COUNT(1) followCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) fc on fc.client_id = cl.id
+        <!--关联最近访问时间-->
+        LEFT JOIN (
+        SELECT
+        fcv.client_id,
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.visiting_time in(select max(fcv.visiting_time)from fr_client_visiting fcv group by fcv.client_id )
+        ) vi on vi.client_id = cl.id) tt
+        <where>
+            <if test="personalId != null and personalId != ''">
+                and personalId= #{personalId}
+            </if>
+            <!-- 根据客户等级筛选 -->
+            <if test="customerLevel != null">
+                and vip_level = #{customerLevel}
+            </if>
+            <!-- 跟进人 -->
+            <if test="followPerson != null and followPerson != ''">
+                and followPerson = #{followPerson}
+            </if>
+            <!-- 服务会稽 -->
+            <if test="fwhjNameId != null and fwhjNameId != ''">
+                and fwhj_tel = #{fwhjNameId}
+            </if>
+            <!-- 根据保护天数筛选 -->
+            <if test="protectDay != null and protectDay != ''">
+                and protect_day = #{protectDay}
+            </if>
+            <!-- 无人跟进筛选 -->
+            <if test="noFollow != null and noFollow != '' and newDate != null and newDate != ''">
+                AND DateAdd(DAY,#{noFollow},follow_time) BETWEEN #{newDate} AND (#{newDate}+' 23:59:59')
+            </if>
+
+            <if test="dateType !=null">
+                <!-- 判断日期类型 -->
+                <choose>
+                    <when test="dateType == '0'.toString()">
+                        <!-- 下次根进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND next_follow_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '1'.toString()">
+                        <!-- 计划来访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND plan_visit_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '2'.toString()">
+                        <!-- 实际来访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '3'.toString()">
+                        <!-- 计划购买 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND plan_purchase_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '4'.toString()">
+                        <!-- 建档日期 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND build_date BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '5'.toString()">
+                        <!-- 客户认领 todo -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND ctime BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '6'.toString()">
+                        <!-- 客户分配 todo -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="clientType!=null">
+                <choose>
+                    <when test="clientType=='1'.toString()">
+                        <!--今日到访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="clientType=='2'.toString()">
+                        <!--今日生日 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND birthday BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="clientType=='3'.toString()">
+                        <!--本月未到访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="clientType=='6'.toString()">
+                        <!--今日待跟进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND (follow_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')) or follow_time = ''
+                            or follow_time IS NULL
+                        </if>
+                    </when>
+                    <when test="clientType=='7'.toString()">
+                        <!--昨日跟进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND follow_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+                OR willing_card_type LIKE '%'+#{keyword}+'%'
+                OR willing_card_name LIKE '%'+#{keyword}+'%'
+                OR follow_content LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+    <select id="getFollowCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) as fcount  from fr_latence_follow where client_id= #{cid}
+    </select>
+    <!--潜在未被认领 -->
+    <select id="getNoCollerClient" resultType="com.yj.dal.dto.CollarClientDTO">
+        SELECT DISTINCT
+        id,
+        pic_link AS picLink,
+        client_name AS clientName,
+        sex,
+        mobile,
+        create_time AS createTime,
+        build_date AS buildDate,
+        follow_time AS followTime,
+        follow_content AS followContent,
+        next_follow_time AS nextFollowTime,
+        plan_follow_time AS planFollowTime,
+        plan_visit_time AS planVisitTime,
+        visiting_time AS visitingTime,
+        plan_purchase_time AS planPurchaseTime,
+        fwhj_name AS fwhjName,
+        fwhj_tel AS fwhjTel,
+        consultant_id AS consultantId,
+        consultant_name AS consultantName,
+        followName,
+        update_user_id AS updateUserId,
+        update_user_name AS updateUserName,
+        update_time AS updateTime,
+        presale_status AS presaleStatus,
+        automaticCount,
+        manualCount,
+        protectDay,
+        shopName,
+        shopid,
+        type
+        FROM
+        (
+        SELECT DISTINCT
+        cl.id,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.mobile,
+        cl.protect_day protectDay,
+        cl.presale_status,
+        ISNULL(tcc1.automaticCount,0) AS automaticCount,
+        ISNULL(tcc2.manualCount,0) AS manualCount,
+        cl.create_time,
+        cl.build_date,
+        fof.follow_time,
+        fof.next_follow_time,
+        fof.plan_follow_time,
+        fof.follow_content,
+        fof.plan_visit_time,
+        vi.visiting_time,
+        fof.plan_purchase_time,
+        cl.fwhj_name,
+        cl.fwhj_tel,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        fof.personalName followName,
+        cl.update_user_id,
+        cl.update_user_name,
+        cl.update_time,
+        pi.id consultantId,
+        pi.RelName,
+        shop.ShopName shopName,
+        shop.ID shopid,
+        cl.wechat,
+        fcpr.type
+        FROM
+        fr_client cl
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id AND fcpi.pic_state = 1 AND fcpi.pic_type = 1
+        JOIN fr_client_latence_personal fcp ON fcp.client_id = cl.id
+        AND fcp.shop_id is not null
+        AND fcp.CustomerCode =#{customerCode}
+        AND fcp.is_using = 1
+        AND cl.is_using = 1
+        LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
+        LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        LEFT JOIN fr_client_personnel_relate fcpr ON cl.id= fcpr.client_id AND fcpr.is_using = 1
+        LEFT JOIN Shop shop ON fcp.shop_id = shop.ID
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) automaticCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        and follow_type = '0'
+        AND CustomerCode =#{customerCode}
+        AND shop_id is not null
+        GROUP BY
+        client_id
+        ) AS tcc1 ON tcc1.client_id= cl.id
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) manualCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        and follow_type = '1'
+        AND CustomerCode =#{customerCode}
+        AND shop_id is not null
+        GROUP BY
+        client_id
+        ) AS tcc2 ON tcc2.client_id= cl.id
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        flf.follow_content,
+        pi.id ,
+        pi.RelName personalName
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode =#{customerCode}
+        where flf.follow_time in(select max(flf.follow_time)from fr_latence_follow flf group by flf.client_id)
+        ) fof on fof.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        fcv.client_id,
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.visiting_time in(select max(fcv.visiting_time)from fr_client_visiting fcv group by fcv.client_id )
+        ) vi on vi.client_id = cl.id
+        <!-- 根据教练 -->
+        <if test="personalId != null and personalId != ''">
+            JOIN (
+            select client_id,personal_id from fr_client_personnel_relate where type=0
+            )relate on relate.client_id=cl.id and relate.personal_id in (#{personalId})
+        </if>
+        <!-- 门店 -->
+        <if test="shopId != null and shopId != ''">
+            JOIN(
+            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{shopId}
+            )sd on sd.client_id=cl.id
+        </if>
+        ) AS tt
+        <where>
+            <if test="type==null">
+                and ((tt.id not in( SELECT
+                fcv.client_id
+                FROM
+                fr_client_personnel_relate fcv
+                where fcv.type=1) or protectDay &lt; 0) and (type=0 or type is null))
+            </if>
+            <!-- 根据性别 -->
+            <if test="sex != null ">
+                and sex = #{sex}
+            </if>
+            <!-- 根据服务会稽 -->
+            <if test="fwhjNameId != null and fwhjNameId != ''">
+                and fwhj_tel = #{fwhjNameId}
+            </if>
+
+            <!-- 销售顾问 -->
+            <if test="consultantId != null and consultantId != ''">
+                and consultant_id = #{consultantId}
+            </if>
+
+            <!-- 手动跟进次数 -->
+            <if test="manualCount != null ">
+                and manualCount = #{manualCount}
+            </if>
+            <!-- 自动跟进次数 -->
+            <if test="automaticCount != null ">
+                and automaticCount = #{automaticCount}
+            </if>
+            <!-- 无人跟进筛选 -->
+            <if test="noFollow != null and noFollow != '' and newDate != null and newDate != ''">
+                AND DateAdd(DAY,#{noFollow},follow_time) BETWEEN #{newDate} AND (#{newDate}+' 23:59:59')
+            </if>
+            <if test="dateType !=null">
+                <!-- 判断日期类型 -->
+                <choose>
+                    <when test="dateType == '0'.toString()">
+                        <!-- 建档时间 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND build_date BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '1'.toString()">
+                        <!-- 更新时间 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND update_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+    <!-- 现有客户 -->
+    <select id="findMyExistenceList" resultType="com.yj.dal.dto.MyExistenceClientDTO">
+        SELECT DISTINCT
+        id,
+        pic_link AS picLink,
+        client_name AS clientName,
+        sex,
+        mobile,
+        wechat,
+        protect_day protectDay,
+        create_time AS createTime,
+        build_date AS buildDate,
+        follow_time AS followTime,
+        follow_content AS followContent,
+        next_follow_time AS nextFollowTime,
+        plan_follow_time AS planFollowTime,
+        plan_visit_time AS planVisitTime,
+        visiting_time AS visitingTime,
+        plan_purchase_time AS planPurchaseTime,
+        fwhj_name AS fwhjName,
+        fwhj_tel AS fwhjTel,
+        consultant_id AS consultantId,
+        consultant_name AS consultantName,
+        personalId,
+        followName,
+        update_user_id AS updateUserId,
+        update_user_name AS updateUserName,
+        presale_status AS presaleStatus,
+        levelName,
+        levelId,
+        firstFollowTime,
+        followCount,
+        birthday,
+        followPerson,
+        ctime,
+        contactCount
+        FROM
+        (
+        SELECT DISTINCT
+        cl.id,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.protect_day,
+        cl.mobile,
+        cl.presale_status,
+        cl.create_time,
+        cl.build_date,
+        cl.birthday,
+        fof.follow_time,
+        fof.next_follow_time,
+        fof.plan_follow_time,
+        fof.follow_content,
+        fof.plan_visit_time,
+        vi.visiting_time,
+        fof.plan_purchase_time,
+        ISNULL(tcc.contactCount,0) contactCount,
+        cl.fwhj_name,
+        cl.fwhj_tel,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        fof.personalName followName,
+        cl.update_user_id,
+        cl.update_user_name,
+        pi.id consultantId,
+        pi.RelName,
+        fof.pid followPerson,
+        le.level_name levelName,
+        le.id levelId,
+        fof2.firstFollowTime,
+        ISNULL(fc.followCount,0) followCount,
+        fcpr.personal_id personalId,
+        fcpr2.create_time ctime,
+        cl.wechat
+        FROM
+        fr_client cl
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id AND fcpi.pic_state = 1 AND fcpi.pic_type = 1
+        JOIN fr_client_personal fcp ON fcp.client_id = cl.id
+        AND fcp.shop_id = #{shopId}
+        AND fcp.CustomerCode = #{customerCode}
+        AND fcp.is_using = 1
+        AND cl.is_using = 1
+        LEFT JOIN (
+        select is_using,client_id,personal_id from fr_client_personnel_relate where
+        personal_id=#{personalId}
+        )fcpr ON cl.id= fcpr.client_id
+        and fcpr.is_using = 1
+        LEFT JOIN (
+        select is_using,client_id,create_time from fr_client_personnel_relate where
+        type=1
+        )fcpr2 ON cl.id= fcpr2.client_id
+        LEFT JOIN fr_level le ON cl.level_id = le.id
+        LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
+        LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        flf.follow_content,
+        pi.id pid,
+        pi.RelName personalName
+        FROM
+        fr_employee_client_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode}
+        where flf.follow_time in(select max(flf.follow_time)from fr_employee_client_follow flf group by flf.client_id)
+        ) fof on fof.client_id = cl.id
+        LEFT JOIN (
+        SELECT DISTINCT
+        client_id,
+        COUNT(1) followCount
+        FROM
+        fr_employee_client_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) fc on fc.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time firstFollowTime
+        FROM
+        fr_employee_client_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode =#{customerCode}
+        where flf.follow_time in(select min(flf.follow_time)from fr_employee_client_follow flf group by flf.client_id)
+        )fof2 on fof2.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) contactCount
+        FROM
+        fr_employee_client_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) tcc on tcc.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        fcv.client_id,
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.visiting_time in(select max(fcv.visiting_time)from fr_client_visiting fcv group by fcv.client_id )
+        ) vi on vi.client_id = cl.id
+        <!-- 判断日期类型 -->
+        <choose>
+            <when test="dateType == '1'.toString()">
+                <!-- 根据申请时间查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT id
+                    FROM fr_client
+                    WHERE apply_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    ) as sqsj on sqsj.id = cl.id
+                </if>
+            </when>
+            <when test="dateType == '2'.toString()">
+                <!-- 根据开卡日期查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT
+                    client_id as id
+                    FROM
+                    fr_card
+                    WHERE
+                    bind_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    GROUP BY
+                    client_id
+                    ) kkrq on kkrq.id = cl.id
+                </if>
+            </when>
+            <when test="dateType == '3'.toString()">
+                <!-- 根据失效日期查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT
+                    client_id as id
+                    FROM
+                    fr_card
+                    WHERE
+                    invalid_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    GROUP BY
+                    client_id
+                    ) kkrq on kkrq.id = cl.id
+                </if>
+            </when>
+            <when test="dateType == '5'.toString()">
+                <!-- 根据客户被分配时间查询 -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                </if>
+            </when>
+            <when test="dateType == '6'.toString()">
+                <!-- 根据客户下次跟进时间查询 todo -->
+                <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                    JOIN (
+                    SELECT
+                    client_id id
+                    FROM
+                    fr_employee_client_follow
+                    WHERE
+                    next_follow_time
+                    BETWEEN
+                    #{startTime}
+                    AND
+                    (#{endTime}+' 23:59:59')
+                    GROUP BY
+                    client_id
+                    ) xcgj on xcgj.id = cl.id
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <!-- 会员卡多少天到期 todo -->
+        <if test=" expireDay !=null and expireDay!='' and newDate != null and newDate != ''">
+            JOIN (
+            SELECT
+            client_id as id
+            FROM
+            fr_card
+            WHERE
+            DateAdd(DAY,#{expireDay},invalid_time) BETWEEN #{newDate} AND (#{newDate}+' 23:59:59')
+            GROUP BY
+            client_id
+            ) ed on ed.id = cl.id
+        </if>
+        <!-- 7天内会员卡到期 todo -->
+        <if test=" clientType =='6'.toString() and startTime != null and startTime != ''">
+            JOIN (
+            SELECT
+            client_id as id
+            FROM
+            fr_card
+            WHERE
+            DATEDIFF(DAY,#{startTime}, invalid_time ) &lt; 7 and DATEDIFF(DAY,#{startTime}, invalid_time ) &gt;=0
+            GROUP BY
+            client_id
+            ) dq on dq.id = cl.id
+        </if>
+        WHERE cl.is_using = 1 and le.is_using = 1
+        ) AS tt
+        <where>
+            <if test="personalId != null and personalId != ''">
+                and personalId=#{personalId}
+            </if>
+            <!-- 根据客户等级筛选 -->
+            <if test="levelId != null and levelId != ''">
+                and levelId = #{levelId}
+            </if>
+            <!-- 跟进人 -->
+            <if test="followPerson != null and followPerson != ''">
+                and followPerson = #{followPerson}
+            </if>
+            <!-- 无人跟进筛选 -->
+            <if test="noFollow != null and noFollow != '' and newDate != null and newDate != ''">
+                AND DateAdd(DAY,#{noFollow},follow_time) BETWEEN #{newDate} AND (#{newDate}+' 23:59:59')
+            </if>
+            <!-- 超过多少天无人跟进筛选 -->
+            <if test="noFollowDay != null and noFollowDay != '' and newDate != null and newDate != ''">
+                AND DATEDIFF(DAY,follow_time,#{newDate}) &gt; #{noFollowDay}
+            </if>
+            <choose>
+                <when test="dateType == '4'.toString()">
+                    <!-- 客户认领 todo -->
+                    <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                        AND ctime BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                    </if>
+                </when>
+            </choose>
+            <if test="clientType!=null">
+                <choose>
+                    <when test="clientType=='1'.toString()">
+                        <!--今日到访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="clientType=='2'.toString()">
+                        <!--今日生日 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND birthday BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="clientType=='3'.toString()">
+                        <!--本月未到访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="clientType=='7'.toString()">
+                        <!--今日待跟进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND (follow_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')) or follow_time = ''
+                            or follow_time IS NULL
+                        </if>
+                    </when>
+                    <when test="clientType=='8'.toString()">
+                        <!--昨日跟进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND follow_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+                OR follow_content LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+
+
+    <!--现有未被认领 -->
+    <select id="getNoExistingClient" resultType="com.yj.dal.dto.CollarClientDTO">
+        SELECT DISTINCT
+        id,
+        pic_link AS picLink,
+        client_name AS clientName,
+        sex,
+        mobile,
+        create_time AS createTime,
+        build_date AS buildDate,
+        follow_time AS followTime,
+        follow_content AS followContent,
+        next_follow_time AS nextFollowTime,
+        plan_follow_time AS planFollowTime,
+        plan_visit_time AS planVisitTime,
+        plan_purchase_time AS planPurchaseTime,
+        fwhj_name AS fwhjName,
+        fwhj_tel AS fwhjTel,
+        consultant_id AS consultantId,
+        consultant_name AS consultantName,
+        followName,
+        update_user_id AS updateUserId,
+        update_user_name AS updateUserName,
+        update_time AS updateTime,
+        presale_status AS presaleStatus,
+        automaticCount,
+        manualCount,
+        protectDay,
+        shopName,
+        shopid,
+        type
+        FROM
+        (
+        SELECT DISTINCT
+        cl.id,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.mobile,
+        cl.protect_day protectDay,
+        cl.presale_status,
+        ISNULL(tcc1.automaticCount,0) AS automaticCount,
+        ISNULL(tcc2.manualCount,0) AS manualCount,
+        cl.create_time,
+        cl.build_date,
+        fof.follow_time,
+        fof.next_follow_time,
+        fof.plan_follow_time,
+        fof.follow_content,
+        fof.plan_visit_time,
+        fof.plan_purchase_time,
+        cl.fwhj_name,
+        cl.fwhj_tel,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        fof.personalName followName,
+        cl.update_user_id,
+        cl.update_user_name,
+        cl.update_time,
+        pi.id consultantId,
+        pi.RelName,
+        shop.ShopName shopName,
+        shop.ID shopid,
+        cl.wechat,
+        fcpr.type
+        FROM
+        fr_client cl
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id AND fcpi.pic_state = 1 AND fcpi.pic_type = 1
+        JOIN fr_client_personal fcp ON fcp.client_id = cl.id
+        AND fcp.shop_id is not null
+        AND fcp.CustomerCode =#{customerCode}
+        AND fcp.is_using = 1
+        AND cl.is_using = 1
+        LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
+        LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        LEFT JOIN fr_client_personnel_relate fcpr ON cl.id= fcpr.client_id AND fcpr.is_using = 1
+        LEFT JOIN Shop shop ON fcp.shop_id = shop.ID
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) automaticCount
+        FROM
+        fr_employee_client_follow
+        WHERE
+        is_using = 1
+        and follow_type = '0'
+        AND CustomerCode =#{customerCode}
+        AND shop_id is not null
+        GROUP BY
+        client_id
+        ) AS tcc1 ON tcc1.client_id= cl.id
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) manualCount
+        FROM
+        fr_employee_client_follow
+        WHERE
+        is_using = 1
+        and follow_type = '1'
+        AND CustomerCode =#{customerCode}
+        AND shop_id is not null
+        GROUP BY
+        client_id
+        ) AS tcc2 ON tcc2.client_id= cl.id
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        flf.follow_content,
+        pi.id ,
+        pi.RelName personalName
+        FROM
+        fr_employee_client_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode =#{customerCode}
+        where flf.follow_time in(select max(flf.follow_time)from fr_employee_client_follow flf group by flf.client_id)
+        ) fof on fof.client_id = cl.id
+        <!-- 根据教练 -->
+        <if test="personalId != null and personalId != ''">
+            JOIN (
+            select client_id,personal_id from fr_client_personnel_relate where type=0
+            )relate on relate.client_id=cl.id and relate.personal_id in (#{personalId})
+        </if>
+        <!-- 门店 -->
+        <if test="shopId != null and shopId != ''">
+            JOIN(
+            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{shopId}
+            )sd on sd.client_id=cl.id
+        </if>
+        ) AS tt
+        <where>
+            <if test="type==null">
+                and ((tt.id not in( SELECT
+                fcv.client_id
+                FROM
+                fr_client_personnel_relate fcv
+                where fcv.type=1) or protectDay &lt; 0) and (type=0 or type is null))
+            </if>
+            <!-- 根据性别 -->
+            <if test="sex != null ">
+                and sex = #{sex}
+            </if>
+            <!-- 根据服务会稽 -->
+            <if test="fwhjNameId != null and fwhjNameId != ''">
+                and fwhj_tel = #{fwhjNameId}
+            </if>
+            <!-- 销售顾问 -->
+            <if test="consultantId != null and consultantId != ''">
+                and consultant_id = #{consultantId}
+            </if>
+
+            <!-- 手动跟进次数 -->
+            <if test="manualCount != null ">
+                and manualCount = #{manualCount}
+            </if>
+            <!-- 自动跟进次数 -->
+            <if test="automaticCount != null ">
+                and automaticCount = #{automaticCount}
+            </if>
+            <!-- 无人跟进筛选 -->
+            <if test="noFollow != null and noFollow != '' and newDate != null and newDate != ''">
+                AND DateAdd(DAY,#{noFollow},follow_time) BETWEEN #{newDate} AND (#{newDate}+' 23:59:59')
+            </if>
+            <if test="dateType !=null">
+                <!-- 判断日期类型 -->
+                <choose>
+                    <when test="dateType == '0'.toString()">
+                        <!-- 建档时间 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND build_date BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '1'.toString()">
+                        <!-- 更新时间 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND update_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+    <select id="getClientAllot" resultType="com.yj.dal.dto.CollarClientDTO">
+        SELECT DISTINCT
+        id,
+        pic_link picLink,
+        client_name clientName,
+        sex,
+        mobile,
+        contactCount,
+        build_date buildDate,
+        follow_time followTime,
+        follow_content followContent,
+        fwhj_name fwhjName,
+        fwhj_tel fwhjTel,
+        consultant_id consultantId,
+        consultant_name consultantName,
+        personalId,
+        followName,
+        update_user_id updateUserId,
+        update_user_name updateUserName,
+        birthday,
+        firstFollowTime,
+        shopName,
+        shopid,
+        automaticCount,
+        manualCount,
+        followCount,
+        clientType,
+        operator
+        FROM
+        (
+        SELECT DISTINCT
+        cl.id,
+        cl.birthday,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.mobile,
+        ISNULL( tcc.contactCount, 0 ) contactCount,
+        cl.build_date,
+        fof.follow_time,
+        fof.follow_content,
+        cl.reference_name,
+        cl.fwhj_name,
+        cl.fwhj_tel,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        pl.personal_id personalId,
+        fof.personalName followName,
+        cl.update_user_id,
+        cl.update_user_name,
+        pi.id consultantId,
+        pi.RelName,
+        shop.ShopName shopName,
+        shop.ID shopid,
+        fof2.firstFollowTime,
+        ISNULL( fc.followCount, 0 ) followCount,
+        fcp.clientType clientType,
+        ISNULL(tcc1.automaticCount,0) AS automaticCount,
+        ISNULL(tcc2.manualCount,0) AS manualCount,
+        pi3.RelName operator
+        FROM
+        fr_client cl
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id
+        AND fcpi.pic_state = 1
+        AND fcpi.pic_type = 1
+        LEFT JOIN ( SELECT *, CAST ( '潜在客户' AS VARCHAR ) AS 'clientType' FROM fr_client_latence_personal UNION SELECT *,
+        CAST ( '现有客户' AS VARCHAR ) AS 'clientType' FROM fr_client_personal ) AS fcp ON cl.id = fcp.client_id
+        AND fcp.shop_id= #{shopId}
+        AND fcp.CustomerCode= #{customerCode}
+        AND fcp.is_using= 1
+        AND cl.is_using = 1
+        LEFT JOIN (
+        SELECT
+        *
+        FROM
+        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr JOIN fr_client_latence_personal fclp
+        ON fclp.client_id= fpr.client_id ) le UNION
+        SELECT
+        *
+        FROM
+        ( SELECT
+        lp.client_id, lp.personal_id
+        FROM
+        fr_client cl
+        LEFT JOIN
+        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr JOIN fr_client_personal fclp ON
+        fclp.client_id= fpr.client_id ) lp on lp.client_id=cl.id
+        LEFT JOIN fr_level fl on fl.id=cl.level_id
+        WHERE cl.is_using = 1 and fl.is_using = 1 ) lp
+        ) AS pl ON cl.id = pl.client_id
+        LEFT JOIN PersonnelInfo pi ON pi.ID = fcp.personal_id
+        AND pi.Status = 0
+        LEFT JOIN PersonnelInfo pi2 ON pi2.ID = cl.consultant_id
+        AND pi2.Status = 0
+        LEFT JOIN PersonnelInfo pi3
+        ON pi3.ID = #{personalId}
+        AND pi3.Status = 0
+        LEFT JOIN fr_client_personnel_relate fcpr ON cl.id= fcpr.client_id
+        LEFT JOIN Shop shop ON fcp.shop_id = shop.ID
+        LEFT JOIN (
+        SELECT DISTINCT
+        client_id,
+        COUNT ( 1 ) contactCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) tcc ON tcc.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) automaticCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        and follow_type = '0'
+        AND CustomerCode =#{customerCode}
+        AND shop_id is not null
+        GROUP BY
+        client_id
+        ) AS tcc1 ON tcc1.client_id= cl.id
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) manualCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        and follow_type = '1'
+        AND CustomerCode =#{customerCode}
+        AND shop_id is not null
+        GROUP BY
+        client_id
+        ) AS tcc2 ON tcc2.client_id= cl.id
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time firstFollowTime
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode}
+        WHERE
+        flf.follow_time IN ( SELECT MIN ( flf.follow_time ) FROM fr_latence_follow flf GROUP BY flf.client_id )
+        ) fof2 ON fof2.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        flf.follow_content,
+        pi.id personalId,
+        pi.RelName personalName
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode}
+        WHERE
+        flf.follow_time IN ( SELECT MAX ( flf.follow_time ) FROM fr_latence_follow flf GROUP BY flf.client_id )
+        ) fof ON fof.client_id = cl.id
+        LEFT JOIN (
+        SELECT DISTINCT
+        client_id,
+        COUNT ( 1 ) followCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) fc ON fc.client_id = cl.id
+        <!-- 根据门店 -->
+        <if test="storeId != null and storeId != ''">
+            JOIN(
+            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{storeId}
+            )sd on sd.client_id=cl.id
+        </if>
+        <!-- 根据教练 -->
+        <if test="coachId != null and coachId != ''">
+            JOIN (
+            select client_id,personal_id from fr_client_personnel_relate where type=0
+            )relate on relate.client_id=cl.id and relate.personal_id in (#{coachId})
+        </if>
+        ) tt
+        <where>
+            tt.personalId= #{personalId} and tt.clientType is not null
+            <!-- 根据性别 -->
+            <if test="sex != null ">
+                and sex = #{sex}
+            </if>
+            <!-- 根据服务会稽 -->
+            <if test="fwhjNameId != null and fwhjNameId != ''">
+                and fwhj_tel = #{fwhjNameId}
+            </if>
+            <!-- 销售顾问 -->
+            <if test="consultantId != null and consultantId != ''">
+                and consultant_id = #{consultantId}
+            </if>
+            <!-- 客户类型 -->
+            <if test="clientType != null and clientType != ''and clientType != '0'">
+                and clientType = #{clientType}
+            </if>
+            <!-- 手动跟进次数 -->
+            <if test="manualCount != null and manualCount!=''">
+                and manualCount = #{manualCount}
+            </if>
+            <!-- 自动跟进次数 -->
+            <if test="automaticCount != null and automaticCount!=''">
+                and automaticCount = #{automaticCount}
+            </if>
+            <!-- 无人跟进筛选 -->
+            <if test="noFollow != null and noFollow != '' and newDate != null and newDate != ''">
+                AND DateAdd(DAY,#{noFollow},follow_time) BETWEEN #{newDate} AND (#{newDate}+' 23:59:59')
+            </if>
+            <if test="dateType !=null">
+                <!-- 判断日期类型 -->
+                <choose>
+                    <when test="dateType == '0'.toString()">
+                        <!-- 建档时间 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND build_date BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '1'.toString()">
+                        <!-- 更新时间 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND update_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 客户信息分析 -->
+    <select id="getClientInformation" resultType="com.yj.dal.dto.ClientInformationDTO">
+        SELECT
+        id ,
+        mobile ,
+        clientName,
+        sex,
+        sourceId,
+        fwhjName,
+        customerSource,
+        cardMoneyCount,
+        cardCount,
+        mostPriceCard,
+        mostCheapCard ,
+        clientType,
+        <!-- rank() OVER (partition BY cardMoneyCount ORDER BY cardMoneyCount desc) AS clientRanking, -->
+        personalId
+
+        FROM
+        (
+        SELECT
+        cl.id ,
+        cl.mobile ,
+        cl.client_name clientName,
+        cl.sex,
+        cl.source_id sourceId,
+        cl.fwhj_name fwhjName,
+        cl.customer_source customerSource,
+        ISNULL( cc.cardMoneyCount, 0 ) cardMoneyCount,
+        ( SELECT COUNT ( 1 ) cardCount FROM (
+        SELECT fc.id FROM fr_card  fc where fc.client_id=cl.id
+        )fc ) cardCount,
+        mop.mostPriceCard,
+        mop2.mostCheapCard ,
+        fcp.clientType clientType,
+        pl.personal_id personalId
+        FROM
+        fr_client cl
+        LEFT JOIN ( SELECT *, CAST ( '现有客户' AS VARCHAR ) AS 'clientType' FROM fr_client_personal ) AS fcp ON cl.id =
+        fcp.client_id
+        AND fcp.shop_id= #{shopId}
+        AND fcp.CustomerCode= #{customerCode}
+        AND fcp.is_using= 1
+        AND cl.is_using = 1
+        LEFT JOIN (
+        SELECT
+        *
+        FROM
+        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr JOIN fr_client_latence_personal fclp
+        ON fclp.client_id= fpr.client_id ) le UNION
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        lp.client_id,
+        lp.personal_id
+        FROM
+        fr_client cl
+        LEFT JOIN ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr JOIN fr_client_personal
+        fclp ON fclp.client_id= fpr.client_id ) lp ON lp.client_id= cl.id
+        LEFT JOIN fr_level fl ON fl.id= cl.level_id
+        WHERE
+        cl.is_using = 1
+        AND fl.is_using = 1
+        ) lp
+        ) AS pl ON cl.id = pl.client_id
+        LEFT JOIN ( SELECT -SUM ( order_price ) cardMoneyCount, client_id FROM fr_card_order_price_datail GROUP BY
+        client_id ) cc ON cc.client_id= cl.id
+        LEFT JOIN (
+        SELECT MAX
+        ( qq.original_price ) mostPriceCard,
+        qq.client_id
+        FROM
+        (
+        SELECT
+        card_id,
+        client_id,
+        ( SELECT original_price FROM fr_card_type fct WHERE fct.id= ( SELECT card_type_id FROM fr_card fcard WHERE
+        fcard.id= fc.card_id ) ) original_price
+        FROM
+        fr_card_order_price_datail fc
+        ) qq
+        GROUP BY
+        qq.client_id
+        ) mop ON mop.client_id= cl.id
+        LEFT JOIN (
+        SELECT MIN
+        ( qq.original_price ) mostCheapCard,
+        qq.client_id
+        FROM
+        (
+        SELECT
+        card_id,
+        client_id,
+        ( SELECT original_price FROM fr_card_type fct WHERE fct.id= ( SELECT card_type_id FROM fr_card fcard WHERE
+        fcard.id= fc.card_id ) ) original_price
+        FROM
+        fr_card_order_price_datail fc
+        ) qq
+        GROUP BY
+        qq.client_id
+        ) mop2 ON mop2.client_id= cl.id
+        ) tt
+        <where>
+            <if test="personalId!=null and personalId!=''">
+                tt.personalId= #{personalId}
+                AND tt.clientType IS NOT NULL
+            </if>
+            <!-- 根据性别 -->
+            <if test="sex != null and sex !=''">
+                and sex = #{sex}
+            </if>
+            <!-- 根据了解渠道 -->
+            <if test="sourceId != null and sourceId !=''">
+                and sourceId = #{sourceId}
+            </if>
+            <!-- 根据交通工具 -->
+            <if test="vehicleId != null and vehicleId !=''">
+                and ${vehicleId}in (select life_type_id from fr_client_life_relate fclr where type=4 and
+                fclr.client_id=tt.id)
+            </if>
+            <!-- 根据行业 -->
+            <if test="industryId != null and industryId  !=''">
+                and ${industryId}in (select work_type_id from fr_client_work_relate fcwr where type=1 and
+                fcwr.client_id=tt.id)
+            </if>
+            <!-- 根据购卡数量 -->
+            <if test="cardCount != null and cardCount !=''">
+                and cardCount= #{cardCount}
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR fwhj_name LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getClientEssentialInformation" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+        cl.client_name clientName,
+        cl.sex,
+        cl.birthday,
+        cl.home_add home,
+        (select pic_link from fr_client_pic where client_id=cl.id) pic,
+        ISNULL((select stuff((select ','+physiology_type_content from fr_client_physiology_relate fc where fc.client_id=cl.id and type=3 for xml path('')),1,1,'')),'无统计') healthy,
+        ISNULL((select stuff((select ','+life_type_content from fr_client_life_relate fc where fc.client_id=cl.id and type=4 for xml path('')),1,1,'')),'无记录') vehicle,
+        ISNULL((select stuff((select ','+work_type_content from fr_client_work_relate fc where fc.client_id=cl.id and type=1 for xml path('')),1,1,'')),'无记录') industry,
+        ISNULL((select stuff((select ','+life_type_content from fr_client_life_relate fc where fc.client_id=cl.id and type=8 for xml path('')),1,1,'')),'无记录') hobby
+        FROM
+        fr_client cl
+        where  cl.id=#{cid}
+    </select>
+</mapper>

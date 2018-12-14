@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrCardOrderSplitSetDdMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrCardOrderSplitSetDd">
+        <id column="a.id" property="id" />
+        <result column="a.split_set_id" property="splitSetId" />
+        <result column="a.split_date" property="splitDate" />
+        <result column="a.split_num" property="splitNum" />
+        <result column="a.split_order" property="splitOrder" />
+        <result column="a.status" property="status" />
+        <result column="a.complement_id" property="complementId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.split_set_id AS splitSetId,
+        a.split_date AS splitDate,
+        a.split_num AS splitNum,
+        a.split_order AS splitOrder,
+        a.status,
+        a.complement_id AS complementId,
+        a.id
+    </sql>
+
+</mapper>

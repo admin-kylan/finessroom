@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>左边</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/left.css">
+
+
+</head>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/loading.js"></script>
+<body>
+    <div id="left">
+        <div class="left_top">
+            <div class="left_top_left on" v-on:click="getYesList()">前台显示卡种</div>
+            <div class="left_top_right" v-on:click="getNotList()">前台不显示卡种</div>
+        </div>
+        <!--通用门店-->
+        <div class="left_box">
+        <div id="yes">
+            <div class="left_box_div on" id="tong" onclick="leftBoxDiv(this)">连锁店通用</div>
+            <ul class="ul_li on">
+                <div class="left_box_red"><a href="current.html" target="rightFrame">添加卡类别</a></div>
+
+                <!--通用门店卡系列-->
+                <div v-for="treers in frCardTypeList">
+                    <li>
+                        <span><img onclick="ul_liImg(this)" src="../img/u25_selected.png"></span>
+                        <span><input type="checkbox" class="series" :title="''+treers.id"></span>
+                        <span>{{treers.cardTypeName}}</span>
+                        <span class="span_sd">
+                                <a :href="'main1.html?id='+treers.id+'&shopId='" target="rightFrame" class="success">修改</a>
+                                <a href="#" class="del" v-on:click="delCurrent(treers.id)">删除</a>
+                        </span>
+                    </li>
+                    <li>
+                        <div>
+                            <a v-if="treers.type == 7" :href="'yuangong.html?pId='+treers.id" target="rightFrame">+ 添加卡种设置</a>
+                            <a v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id" target="rightFrame">+ 添加卡种设置</a>
+                        </div>
+                        <ul>
+                            <li v-for="tferr in treers.frCardTypeList">
+                                <span><input type="checkbox" :title="''+tferr.id"></span>
+                                <span>
+                                    <!--按卡种类型跳相关页面-->
+                                    <a v-on:click="modify(tferr.id,tferr.type)"  href="right.html" target="rightFrame">{{tferr.cardTypeName}}</a>
+                                </span>
+                                <span class="span_sd">
+                                    <a :href="'updateCurrent.html?id='+tferr.id" target="rightFrame" class="success">修改</a>
+                                    <a href="#" class="del" v-on:click="dels(tferr.id)">删除</a>
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>员工用卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('mains')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(1)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(1)" target="rightFrame">股东卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(2)" target="rightFrame">经理卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(3)" target="rightFrame">员工卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(3)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            </ul>
+
+            <!--分门店-->
+            <div>
+                <div v-for="tf in storeList" >
+                    <div class="left_box_div" onclick="leftBoxDiv(this)">{{tf.shopName}}</div>
+                    <ul class="ul_li">
+                        <div class="left_box_red"><a href="main.html" target="rightFrame">添加卡类别</a></div>
+                        <div v-for="tfers in tf.frCardTypeList">
+                            <li>
+                                <span><img onclick="ul_liImg(this)" src="../img/u25_selected.png"></span>
+                                <span><input type="checkbox" class="series" :title="''+tfers.id"></span>
+                                <span>{{tfers.cardTypeName}}</span>
+                                <span class="span_sd">
+                                <a :href="'main1.html?id='+tfers.id+'&storeId='+tf.id" target="rightFrame" class="success">修改</a>
+                                <a href="#" class="del" v-on:click="del(tfers.id,tf.id)">删除</a>
+                        </span>
+                            </li>
+                            <li>
+                                <div><a :href="'employee.html?pId='+tfers.id+'&storeId='+tf.id" target="rightFrame">+ 添加卡种设置</a></div>
+                                <ul>
+                                    <li v-for="tfer in tfers.frCardTypeList">
+                                        <span><input type="checkbox" :title="''+tfer.id"></span>
+                                        <span>
+                                            <!--按卡种类型跳相关页面-->
+                                            <a href="right.html" v-on:click="modify(tfer.id,tfer.type)" target="rightFrame">{{tfer.cardTypeName}}</a>
+                                        </span>
+                                        <span class="span_sd">
+                                    <a :href="'employee1.html?id='+tfer.id"  target="rightFrame" class="success">修改</a>
+                                    <a href="#" class="del" v-on:click="dels(tfer.id,tf.id)">删除</a>
+                                </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+            </div>
+            <!--<div class="left_box_div">莲花店</div>-->
+                <!--<ul class="ul_li" style="margin-bottom: 90px;border-bottom: none">-->
+                <!--<div class="left_box_red"><a href="main.html" target="rightFrame">添加卡类别</a></div>-->
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>员工用卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('mains')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(1)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(1)" target="rightFrame">股东卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(2)" target="rightFrame">经理卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(3)" target="rightFrame">员工卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(3)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>次卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(2)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(4)" target="rightFrame">一次卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(2)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(5)" target="rightFrame">30次卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(2)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>年卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(3)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(6)" target="rightFrame">一年卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(3)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(7)" target="rightFrame">二年卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(3)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(8)" target="rightFrame">三年卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(3)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(3)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>小时卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(4)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(9)" target="rightFrame">10小时卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(4)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>充值卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(5)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(10)" target="rightFrame">充值卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(5)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<span><img src="../img/u25_selected.png"></span>-->
+                    <!--<span><input type="checkbox" class="series"></span>-->
+                    <!--<span>储蓄卡系列</span>-->
+                    <!--<span class="span_sd">-->
+                            <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
+                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                    <!--</span>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div><a href="employee.html" target="rightFrame" v-on:click="employee(6)">+ 添加卡种设置</a></div>-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<span><input type="checkbox"></span>-->
+                            <!--<span><a href="right.html" v-on:click="modify(11)" target="rightFrame">储蓄卡</a></span>-->
+                            <!--<span class="span_sd">-->
+                                <!--<a href="employee.html" v-on:click="employee(6)" target="rightFrame" class="success">修改</a>-->
+                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--</span>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            <!--</ul>-->
+
+           <div id="Not">
+            <div class="left_box_div" id="tong1" onclick="leftBoxDiv(this)">连锁店通用</div>
+            <ul class="ul_li on">
+                <div class="left_box_red"><a href="current.html" target="rightFrame">添加卡类别</a></div>
+
+                <!--通用门店卡系列-->
+                <div v-for="trea in currentNotList" v-if="trea.flag != '1'">
+                    <li>
+                        <span><img onclick="ul_liImg(this)" src="../img/u25_selected.png"></span>
+                        <span><input type="checkbox" class="series" :title="''+trea.id"></span>
+                        <span>{{trea.cardTypeName}}</span>
+                        <span class="span_sd">
+                                <a :href="'main1.html?id='+trea.id+'&shopId='" target="rightFrame" class="success">修改</a>
+                                <a href="#" class="del" v-on:click="delCurrent(trea.id)">删除</a>
+                        </span>
+                    </li>
+                    <li>
+                        <div>
+                            <a v-if="trea.type == 7" :href="'yuangong.html?pId='+trea.id" target="rightFrame">+ 添加卡种设置</a>
+                            <a v-if="trea.type != 7" :href="'addCurrentCard.html?pId='+trea.id" target="rightFrame">+ 添加卡种设置</a>
+                        </div>
+                        <ul>
+                            <li v-for="tferrse in trea.frCardTypeList">
+                                <span><input type="checkbox" :title="''+tferrse.id"></span>
+                                <span>
+                                    <!--按卡种类型跳相关页面-->
+                                    <a v-on:click="modify(tferrse.id,tferrse.type)"  href="right.html" target="rightFrame">{{tferrse.cardTypeName}}</a>
+                                </span>
+                                <span class="span_sd">
+                                    <a :href="'updateCurrent.html?id='+tferrse.id" target="rightFrame" class="success">修改</a>
+                                    <a href="#" class="del" v-on:click="dels(tferrse.id)">删除</a>
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+            </ul>
+
+            <!--分门店-->
+            <div>
+                <div v-for="nots in notList" >
+                    <div class="left_box_div" onclick="leftBoxDiv(this)">{{nots.shopName}}</div>
+                    <ul class="ul_li">
+                        <div class="left_box_red"><a href="main.html" target="rightFrame">添加卡类别</a></div>
+                        <div v-for="tfers in nots.frCardTypeList" v-if="tfers.flag != '1'">
+                            <li>
+                                <span><img onclick="ul_liImg(this)" src="../img/u25_selected.png"></span>
+                                <span><input type="checkbox" class="series" :title="''+tfers.id"></span>
+                                <span>{{tfers.cardTypeName}}</span>
+                                <span class="span_sd">
+                                <a :href="'main1.html?id='+tfers.id+'&storeId='+nots.id" target="rightFrame" class="success">修改</a>
+                                <a href="#" class="del" v-on:click="del(tfers.id,nots.id)">删除</a>
+                        </span>
+                            </li>
+                            <li>
+                                <div><a :href="'employee.html?pId='+tfers.id+'&storeId='+nots.id" target="rightFrame">+ 添加卡种设置</a></div>
+                                <ul>
+                                    <li v-for="tfer in tfers.frCardTypeList">
+                                        <span><input type="checkbox" :title="''+tfer.id"></span>
+                                        <span>
+                                            <!--按卡种类型跳相关页面-->
+                                            <a href="right.html" v-on:click="modify(tfer.id,tfer.type)" target="rightFrame">{{tfer.cardTypeName}}</a>
+                                        </span>
+                                        <span class="span_sd">
+                                    <a :href="'employee1.html?id='+tfer.id"  target="rightFrame" class="success">修改</a>
+                                    <a href="#" class="del" v-on:click="dels(tfer.id,nots.id)">删除</a>
+                                </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+           </div>
+
+
+            <div class="left_footer">
+                <ul>
+                    <li><input type="checkbox" id="expand_list">展开列表</li>
+                    <li style="text-align: center"><a href="#" v-on:click="updateIsUsing()">前台显示选中会员卡</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    var left = new Vue({
+        el: '#left',
+        data: {
+            storeList: [],//门店，卡系列，卡种列表
+            frCardTypeList:[],//通用门店卡系列列表
+            notList:[],//前台不显示列表
+            currentNotList:[],//通用门店前台不显示列表
+        },
+        created:function () {
+            var that = this;
+            that.getGeneralStoreList();
+            var url = $.stringFormat("{0}/shop/getFrCardTypeList",$.cookie('url'));
+            $.get(url, {
+                },
+                function(res) {
+                    if(res.code == 200) {
+                        that.storeList = res.data.data;
+                        $("#Not").hide();
+                    } else {
+                        //alert(res.msg);
+                        //$('#tip').text(res.msg);//异常处理
+                    }
+
+                }
+            );
+        },
+        methods: {
+            //获取通用门店卡系列列表
+            getGeneralStoreList:function () {
+                var that = this;
+                var url = $.stringFormat("{0}/frCardType/getGeneralStoreList",$.cookie('url'));
+                $.get(url, {
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            that.frCardTypeList = res.data.data;
+                        } else {
+                            alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+
+                var url1 = $.stringFormat("{0}/shop/getFrCardTypeList",$.cookie('url'));
+                $.get(url1, {
+            },
+                    function(res) {
+                        if(res.code == 200) {
+                            that.storeList = res.data.data;
+                            $("#Not").hide();
+                        } else {
+                            //alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+            },
+            init:function(){
+
+            },
+            // 设置卡类别参数
+            main:function(t){
+                console.log(t);
+                window.parent.setParam(t);
+            },
+            // 设置卡种参数
+            employee:function(t){
+                window.parent.setParam(t);
+            },
+              // 跳转相应卡权益页面
+            modify:function(cardId,type){
+                var cardId = cardId;//卡种ID
+                var type = type;//卡类型
+                window.parent.setParam(cardId);
+                window.parent.setType(type);
+            },
+            // 删除卡系列
+            del:function(t,storeId){
+                if (!confirm('是否删除!')) {
+                   return;
+                }
+                var that = this;
+                var storeId = storeId;
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/frCardType/deleteFrCardType",$.cookie('url'));
+                $.get(url, {
+                        id:t,//卡系列id
+                        storeId:storeId,//门店id
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            alert("删除成功！")
+
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                        } else {
+                            alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+
+            },
+            // 删除卡种
+            dels:function(t,shopId){
+                if (!confirm('是否删除该卡种!')) {
+                    return;
+                }
+                var that = this;
+                var shopId = shopId;
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/frCardType/deleteCardType",$.cookie('url'));
+                $.get(url, {
+                        id:t,//卡种id
+                        shopId:shopId,//门店id
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            alert("删除成功！");
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                        } else {
+                            alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+
+            },
+            //通用门店删除卡系列
+            delCurrent:function(t,storeId){
+            if (!confirm('是否删除!')) {
+                return;
+            }
+            var that = this;
+            Loading.prototype.show();
+                var url = $.stringFormat("{0}/frCardType/deleteFrCardType",$.cookie('url'));
+            $.get(url, {
+                    id:t,//卡系列id
+                    storeId:'',//门店id
+                },
+                function(res) {
+                    if(res.code == 200) {
+                        alert("删除成功！")
+
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                    } else {
+                        alert(res.msg);
+                        //$('#tip').text(res.msg);//异常处理
+                    }
+
+                }
+            );
+
+            },
+            //设置前台不显示卡种
+            updateIsUsing:function () {
+                var ids = new Array();
+                $(".left_box input:checked").each(function() {
+                    //将标签的值放入数组中
+                    ids.push($(this).attr("title"));
+                });
+                if(ids.length <1){
+                    alert("还未选择");
+                    return;
+                }
+                Loading.prototype.show();
+                var updateUserName = $.cookie('name');
+                var CustomerCode = $.cookie("code");
+                var updateUserId = $.cookie("id");
+                var url = $.stringFormat(
+                    "{0}/frCardType/updateIsUsing?"+"Ids="+ids+
+                    "&updateUserName="+ updateUserName +
+                    "&CustomerCode="+CustomerCode+"&updateUserId="+updateUserId,$.cookie('url'));
+                $.ajax({
+                    type: "get",
+                    url: url,
+//                    data: {username:name, id:Ids,ty:0},
+                    dataType: "json",
+                    success: function(data){
+                        if(data.code == 200) {
+                            alert("添加成功！");
+                            window.location.reload()
+                            window.parent.rightFrame();
+                            Loading.prototype.hide();
+                        } else {
+                            alert(data.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+                    }
+                });
+
+
+            },
+
+            //获取前台不显示列表
+            getNotList:function () {
+                $("#yes").hide();
+                $("#Not").show();
+                var that = this;
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/shop/getIsUsingIsTrue",$.cookie('url'));
+                $.get(url, {
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            that.notList = res.data.data;
+                            Loading.prototype.hide();
+                        } else {
+                            alert(res.msg);
+                            Loading.prototype.hide();
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+                //获取通用门店前台不显示的列表
+                that.getGeneralStoreNotList();
+            },
+            getYesList:function () {
+                $("#Not").hide();
+                $("#yes").show();
+
+            },
+            //获取通用门店前台不显示的列表
+            getGeneralStoreNotList:function () {
+                var that = this;
+                Loading.prototype.show();
+                var url = $.stringFormat("{0}/frCardType/getGeneralStoreNotList",$.cookie('url'))
+                $.get(url, {
+                    },
+                    function(res) {
+                        if(res.code == 200) {
+                            Loading.prototype.hide();
+                            that.currentNotList = res.data;
+                        } else {
+                            alert(res.msg);
+                            //$('#tip').text(res.msg);//异常处理
+                        }
+
+                    }
+                );
+            },
+
+        },
+    })
+ 
+    //前台显示卡种切换
+    $('.left_top div').click(function () {
+        $(this).addClass('on').siblings().removeClass('on');
+    });
+    //店面的切换
+    function leftBoxDiv(T) {
+        $("#tong").removeClass('on');
+        $("#tong1").removeClass('on');
+        $(".left_box_div").removeClass('on');
+        //$(T).parent().addClass('on').siblings().removeClass('on');
+        $(T).addClass('on').siblings().removeClass('on');
+        $('.ul_li').removeClass('on');
+        $(T).next().addClass('on');
+    }
+
+    //展开关闭
+        function ul_liImg(t){
+            if ($(t).attr('src') == '../img/u25.png') {
+                $(t).attr('src', '../img/u25_selected.png');
+                $(t).parent().parent().next().find('ul').show();
+        } else {
+                $(t).attr('src', '../img/u25.png');
+                $(t).parent().parent().next().find('ul').hide();
+        }
+        }
+    //全选反选
+    $('#expand_list').change(function () {
+        if ($(this).is(':checked')) {
+            $('.ul_li').addClass('on');
+            $('.left_box_div').addClass('on');
+        } else {
+            $('.ul_li').removeClass('on');
+            $('.left_box_div').removeClass('on');
+        }
+    })
+</script>
+
+</html>
