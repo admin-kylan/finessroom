@@ -307,6 +307,10 @@
 	position: relative;
 	top:8px;
 }
+#customerCourseProject .list input[type=radio]{
+	position: relative;
+	top:8px;
+}
 #customerCourseProject .list6 textarea{
 	vertical-align: top;
 	width:550px;

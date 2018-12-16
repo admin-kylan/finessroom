@@ -1,47 +1,130 @@
 <div id="course-new-buy-head">
-    <p class="line">
-        <label>
-            <span>销售门店：</span>
-            <select name="" v-model="shopId">
-                <!--<option value="" selected="">软件园店</option>-->
-                <option v-for='(item,index) in shopList' :value="item.id">
-                    {{item.shopName}}
-                </option>
-            </select>
-        </label>
-        <label>
-            <span>选择场馆：</span>
-            <select name="">
-                <option value="" selected="">美容院</option>
-            </select>
-        </label>
-        <label>
-            <span>协议编号：</span>
-            <input type="text" placeholder="填写协议编号或者随机生成" v-model="agreementData" @blur.prevent="checkCardAgreement"/>
-            <span :class="agreementError.style">{{agreementError.msg}}</span>
-            <span class="random" @click="addCardAgreement">随机号</span>
+    <div class="boxChoose on" style=" border-bottom: 0;">
+        <p class="line">
+            <label>
+                <span>销售门店：</span>
+                <select name="" v-model="shopId">
+                    <!--<option value="" selected="">软件园店</option>-->
+                    <option v-for='(item,index) in shopList' :value="item.id">
+                        {{item.shopName}}
+                    </option>
+                </select>
+            </label>
+            <label>
+                <span>选择场馆：</span>
+                <select name="" v-model="sdaduimId">
+                    <option v-for='(item,index) in sdaduimArrayList' :value="item.id">
+                        {{item.name}}
+                    </option>
+                    <!--<option value="" selected="">美容院</option>-->
+                </select>
+            </label>
+            <label>
+                <span>协议编号：</span>
+                <input type="text" placeholder="填写协议编号或者随机生成" v-model="agreementData"
+                       @blur.prevent="checkCardAgreement"/>
+                <span :class="agreementError.style">{{agreementError.msg}}</span>
+                <span class="random" @click="addCardAgreement">随机号</span>
 
-        </label>
-        <label>
-            <span>购买日期：</span>
-            <span class="date">{{currentDate}}</span>
-        </label>
-    </p>
-    <p class="line">
-        <label>
-            <span>销售人员：</span>
-            <select name="" v-model="marketUserId">
-                <!--<option value="" selected="">Nicolas Klaus</option>-->
-                <option v-for='(item,index) in marketUserList' :value="item.id">
-                    {{item.relName}}
-                </option>
-            </select>
-            <span class="distribution">业绩分配</span>
-        </label>
-    </p>
+            </label>
+            <label>
+                <span>购买日期：</span>
+                <span class="date">{{currentDate}}</span>
+            </label>
+        </p>
+        <p class="line">
+            <label>
+                <span>销售人员：</span>
+                <select name="" v-model="marketUserId">
+                    <!--<option value="" selected="">Nicolas Klaus</option>-->
+                    <option v-for='(item,index) in marketUserList' :value="item.id">
+                        {{item.relName}}
+                    </option>
+                </select>
+                <span class="distribution" @click="isShowPerformance = true">业绩分配</span>
+            </label>
+        </p>
+
+    </div>
+
+
+    <!-- 业绩分配 -->
+    <div id="performance" class="newCustomers_maskLayer" v-show="isShowPerformance"
+         style="display: block;z-index: 9999;">
+        <div class="newCustomers_maskLayer_box">
+            <div class="newCustomers_maskLayer_box_top">
+                <span>销售业绩分配</span><a href="javascript:;" @click="isShowPerformance = false"
+                                      class="newCustomers_maskLayer_X">X</a>
+            </div>
+            <div class="newCustomers_maskLayer_box_shen">
+                <fieldset>
+                    <legend>销售价格分配比例/金额</legend>
+                    <div>
+                        <label><input type="radio" v-model="performance.salesType" value="rate">以实际销售价格</label>
+                        <label><input type="text" placeholder="分配比例"
+                                      v-model="performance.salesValueSales">%为销售业绩</label>
+
+                        <label><input type="radio" v-model="performance.salesType" value="num">以实际销售价格</label>
+                        <label><input type="text" placeholder="分配金额" v-model="performance.salesValueNum">元为销售业绩</label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>销售人员销售业绩分配比例/金额</legend>
+                    <div>
+
+                        <div>
+                            <label><input type="radio" value="rate"
+                                          v-model="performance.distributionType">销售业绩按比例分配</label>
+                            <label><input type="radio" value="num"
+                                          v-model="performance.distributionType">销售业绩按金额分配</label>
+                        </div>
+                        <div>
+                            选择销售人员：
+                            <select name="1" v-model="performance.saleId">
+
+                                <option v-for='(item,index) in marketUserList' :value="item.id">
+                                    {{item.relName}}
+                                </option>
+                            </select>
+                            <input type="text" placeholder="分配比例/金额" v-model="performance.result"
+                                   oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                            <a href="javascript:;" class="btn btn-primary" @click="addDistribution">添加</a>
+                        </div>
+
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>销售人员</th>
+                                <th>分配比例/金额</th>
+                                <th>操作</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item, index) in performance.list">
+                                <td v-text="index + 1"></td>
+                                <td v-text="item.saleName"></td>
+                                <td v-text="item.num"></td>
+                                <td>
+                                    <a href="#">修改</a>
+                                    /<a href="#">删除</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </fieldset>
+            </div>
+            <div class="newCustomers_maskLayer_box_botton">
+                <a href="javascript:;" class="btn btn-success" @click="savePerformance">保存</a>
+            </div>
+        </div>
+    </div>
+
+
 </div>
-
-
 <script>
     new Vue({
         el: '#course-new-buy-head',
@@ -57,13 +140,30 @@
             currentDate: '', //用当前时间计算购买日期
             marketUserList: [], //销售人员list
             marketUserId: "", //销售人员ID
+            sdaduimArrayList: [], //场馆数组对象
+            sdaduimId: '', //场馆ID
+            isShowPerformance: false, //是否显示业绩分配的弹窗
+            performance: { //销售业绩分配的一个对象obj
+                salesType: '', //比例，金额 类型
+                salesValueSales: '', //默认为0
+                salesValueNum: '', //默认为0
+                distributionType: '', //分配的类型
+                result: '', //业绩分配填写的数据
+                saleName: '', //选择的销售人员的姓名
+                saleId: '', //选择的销售人员的Id
+                list: [], //销售人员数组
+            },
+
         },
         computed: {},
         watch: {
-            shopId(){//当选择了门店，初始化销售人员
+            shopId(){//当选择了门店，初始化销售人员, 初始化场馆
                 this.getMarketUserList();
-            }
-            //
+                this.getSdaduimByShopId();
+            },
+            'performance.saleId'(val){ //获取销售人员的姓名
+                this.performance.saleName = this.marketUserList.find(item => item.id === val)['relName'];
+            },
         },
         created: function () {
             let date = new Date();
@@ -75,8 +175,9 @@
         methods: {
             //加载门店list
             loadShopList: function () {
+                this.shopList = []; //清空门店
                 let obj = {}, data = null;
-                axiosGetParams('shop/getMarketShopList', {type: 0}, (response) => {
+                axiosGetParams(COURSE_URL.marketShop, {type: 0}, (response) => {
                     if (response.code === '200') {
                         data = response.data.data;
                         $.each(data, (i, d) => {
@@ -100,7 +201,7 @@
                     this.agreementError.msg = "输入有误，请输入数字";
                     return false;
                 }
-                axiosGetParams('frAgreement/checkCardAgreement', {agreement: this.agreementData}, (response) => {
+                axiosGetParams(COURSE_URL.checkAgreement, {agreement: this.agreementData}, (response) => {
                     if (response.code === '200') {
                         this.agreementError.style = "ag-success";
                         this.agreementError.msg = "协议号符合规则";
@@ -113,7 +214,7 @@
             },
             //新增协议编号
             addCardAgreement(){
-                axiosGetParams('frAgreement/addCardAgreement', {code: this.code}, (response) => {
+                axiosGetParams(COURSE_URL.addAgreement, {code: this.code}, (response) => {
                     if (response.code === '200') {
                         this.agreementData = response.data.agreement
                         this.agreementError.msg = "协议号符合规则";
@@ -128,7 +229,7 @@
             getMarketUserList(){
                 let obj = {}, data = null;
                 this.marketUserList = [];// 清空原来的数组
-                axiosGetParams('personnelInfo/getMarketUserList', {shopId: this.shopId}, (response) => {
+                axiosGetParams(COURSE_URL.marketUserList, {shopId: this.shopId}, (response) => {
                     if (response.code === '200') {
                         //marketUserList
                         data = response.data.data;
@@ -143,6 +244,57 @@
                         })
                     }
                 })
+            },
+            //获取场馆 根据门店ID
+            getSdaduimByShopId(){
+                let data = null;
+                this.sdaduimArrayList = []; //门店被选择时，清空原来的场馆数据
+                $.ajax({
+                    type: "post",
+                    url: baseUrl + COURSE_URL.fetchSdaduim,
+                    data: {
+                        sids: [this.shopId]
+                    },
+                    success: (res) => {
+                        console.log(res)
+                        if (res.code == '200') {
+                            data = res.data[0];// 获取第一个对象
+                            if (data) {
+                                let array = data['sdaduimArrayList'], obj = {};
+                                $.each(array, (i, d) => {
+                                    if (i == 0) {
+                                        this.sdaduimId = d.id;
+                                    }
+                                    obj.name = d.name;
+                                    obj.id = d.id;
+                                    this.sdaduimArrayList.push(obj);
+                                    obj = {};
+                                })
+
+                            }
+                        }
+
+                    }
+                });
+            },
+            //添加分配的金额或者比例
+            addDistribution(){
+                console.log(5)
+                if(this.performance.saleId == "" || this.performance.saleName ==  ""){
+                    return false; //没有选择销售人员，不让添加
+                }
+                let obj = {};
+                obj.saleId = this.performance.saleId;
+                obj.saleName = this.performance.saleName;
+                obj.num = this.performance.result == "" ? 0 : this.performance.result;
+                this.performance.list.push(obj);
+                obj = {};
+                console.log(this.performance.result)
+
+            },
+            //保存业绩分配
+            savePerformance(){
+
             }
         }
     });
