@@ -17,4 +17,7 @@ import java.util.Map;
 public interface FrCardOrderStorageMapper extends BaseMapper<FrCardOrderStorage> {
 
     List<Map<String,Object>> queryStorageCardLis(FrCardOrderStorage frCardOrderStorage);
+
+    List<FrCardOrderStorage> queryStorgeList(Map<String,Object> map);
+
 }

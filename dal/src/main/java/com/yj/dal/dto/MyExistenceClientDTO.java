@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 public class MyExistenceClientDTO {
-    /**
-     * 客户id
-     */
-    private String id;
+
     /**
      * 姓名
      */
     private String clientName;
-
+    /**
+     * 客户等级
+     */
+    private String levelName;
     /**
      * 性别
      */
@@ -25,29 +25,20 @@ public class MyExistenceClientDTO {
      */
     private String mobile;
     /**
-     * 保护天数
-     */
-    private Integer protectDay;
-    /**
      * 微信
      */
     private String wechat;
     /**
+     * 保护天数
+     */
+    private Integer protectDay;
+
+    /**
      * 总联系数
      */
     private Integer contactCount;
-    /**
-     * 客户等级
-     */
-    private String levelName;
-    /**
-     * 等级ID
-     */
-    private String levelId;
-    /**
-     * 跟进总次数
-     */
-    private Integer followCount;
+
+
     /**
      * 建档时间
      */
@@ -62,26 +53,21 @@ public class MyExistenceClientDTO {
      * 服务会籍
      */
     private String fwhjName;
-    /**
-     * 服务会籍电话
-     */
-    private String fwhjTel;
+
     /**
      * 销售顾问
      */
     private String consultantName;
-    /**
-     * 销售顾问ID
-     */
-    private String consultantId;
+
     /**
      * 跟进人
      */
     private String followName;
     /**
-     * 跟进人id
+     * 跟进总次数
      */
-    private String personalId;
+    private Integer followCount;
+
     /**
      * 首次跟进时间
      */
@@ -96,43 +82,30 @@ public class MyExistenceClientDTO {
      * 跟进内容
      */
     private String followContent;
-
+    /**
+     * 客户id
+     */
+    private String id;
+    /**
+     * 跟进人id
+     */
+    private String personalId;
+    /**
+     * 等级ID
+     */
+    private String levelId;
+    /**
+     * 销售顾问ID
+     */
+    private String consultantId;
     /**
      * 教练
      */
-    List<Map<String, String>> coachList ;
-
-    public List<Map<String, String>> getCoachList() {
-        return coachList;
-    }
-
-    public void setCoachList(List<Map<String, String>> coachList) {
-        this.coachList = coachList;
-    }
-
-    public String getConsultantName() {
-        return consultantName;
-    }
-
-    public void setConsultantName(String consultantName) {
-        this.consultantName = consultantName;
-    }
-
-    public String getConsultantId() {
-        return consultantId;
-    }
-
-    public void setConsultantId(String consultantId) {
-        this.consultantId = consultantId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    List<Map<String, String>> coachList;
+    /**
+     * 服务会籍电话
+     */
+    private String fwhjTel;
 
     public String getClientName() {
         return clientName;
@@ -140,6 +113,14 @@ public class MyExistenceClientDTO {
 
     public void setClientName(String clientName) {
         this.clientName = clientName;
+    }
+
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
     }
 
     public Integer getSex() {
@@ -158,14 +139,6 @@ public class MyExistenceClientDTO {
         this.mobile = mobile;
     }
 
-    public Integer getProtectDay() {
-        return protectDay;
-    }
-
-    public void setProtectDay(Integer protectDay) {
-        this.protectDay = protectDay;
-    }
-
     public String getWechat() {
         return wechat;
     }
@@ -174,36 +147,20 @@ public class MyExistenceClientDTO {
         this.wechat = wechat;
     }
 
+    public Integer getProtectDay() {
+        return protectDay;
+    }
+
+    public void setProtectDay(Integer protectDay) {
+        this.protectDay = protectDay;
+    }
+
     public Integer getContactCount() {
         return contactCount;
     }
 
     public void setContactCount(Integer contactCount) {
         this.contactCount = contactCount;
-    }
-
-    public String getLevelName() {
-        return levelName;
-    }
-
-    public void setLevelName(String levelName) {
-        this.levelName = levelName;
-    }
-
-    public String getLevelId() {
-        return levelId;
-    }
-
-    public void setLevelId(String levelId) {
-        this.levelId = levelId;
-    }
-
-    public Integer getFollowCount() {
-        return followCount;
-    }
-
-    public void setFollowCount(Integer followCount) {
-        this.followCount = followCount;
     }
 
     public Date getBuildDate() {
@@ -230,12 +187,12 @@ public class MyExistenceClientDTO {
         this.fwhjName = fwhjName;
     }
 
-    public String getFwhjTel() {
-        return fwhjTel;
+    public String getConsultantName() {
+        return consultantName;
     }
 
-    public void setFwhjTel(String fwhjTel) {
-        this.fwhjTel = fwhjTel;
+    public void setConsultantName(String consultantName) {
+        this.consultantName = consultantName;
     }
 
     public String getFollowName() {
@@ -246,12 +203,12 @@ public class MyExistenceClientDTO {
         this.followName = followName;
     }
 
-    public String getPersonalId() {
-        return personalId;
+    public Integer getFollowCount() {
+        return followCount;
     }
 
-    public void setPersonalId(String personalId) {
-        this.personalId = personalId;
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
     }
 
     public Date getFirstFollowTime() {
@@ -276,5 +233,53 @@ public class MyExistenceClientDTO {
 
     public void setFollowContent(String followContent) {
         this.followContent = followContent;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPersonalId() {
+        return personalId;
+    }
+
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
+    }
+
+    public String getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(String levelId) {
+        this.levelId = levelId;
+    }
+
+    public String getConsultantId() {
+        return consultantId;
+    }
+
+    public void setConsultantId(String consultantId) {
+        this.consultantId = consultantId;
+    }
+
+    public List<Map<String, String>> getCoachList() {
+        return coachList;
+    }
+
+    public void setCoachList(List<Map<String, String>> coachList) {
+        this.coachList = coachList;
+    }
+
+    public String getFwhjTel() {
+        return fwhjTel;
+    }
+
+    public void setFwhjTel(String fwhjTel) {
+        this.fwhjTel = fwhjTel;
     }
 }

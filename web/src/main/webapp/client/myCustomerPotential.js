@@ -368,7 +368,7 @@ var myCustomerPotential = new Vue({
                 dataType : 'json',
                 contentType: "application/json;charset=utf-8",
                 success : function(res) {
-alert(res.msg)
+                alert(res.msg)
                 }
             })
         },

@@ -3,13 +3,10 @@ package com.yj.service.service;
 import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
 import com.yj.dal.model.FrCardType;
-import com.yj.dal.model.FrShopCardTypeRelate;
 import com.yj.service.base.BaseService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -45,7 +42,7 @@ public interface IFrCardTypeService extends BaseService<FrCardType> {
 
     JsonResult getFrCardTypeByPid(String pId, String storeId);
 
-    JsonResult updateIsUsing(String[] ids,FrCardType frCardType);
+    JsonResult updateIsUsing(String[] ids, FrCardType frCardType, Boolean show);
 
     JsonResult getGeneralStoreNotList(String code);
 

@@ -43,8 +43,8 @@ var customerPersonalDetails = new Vue({
         date: '',
         afterImg: [],
         imgSRC1: '',
-        imgInfo1:[],
-        imgInfo2:[]
+        imgInfo1: [],
+        imgInfo2: []
     },
     computed: {},
     watch: {},
@@ -69,23 +69,23 @@ var customerPersonalDetails = new Vue({
             } else if (t == 6) {
                 that.getPsychology();
             } else if (t == 7) {
+                console.log(t)
                 that.type = 1;
-
+                that.Skinchecked.length=0;
                 that.getSaveDate();
                 $(":checkbox").attr('checked', false)
                 $("textarea").text('');
                 $("p[name='pdate']").html("");
 
-
             } else if (t == 8) {
                 that.type = 2;
-
+                that.Hairchecked.length=0;
                 that.getSaveDate();
                 $(":checkbox").attr('checked', false)
                 $("textarea").text('');
                 $("p[name='pdate']").html("");
             } else if (t == 9) {
-
+                that.Plasticitychecked.length=0;
                 that.type = 3;
                 that.getSaveDate();
                 $(":checkbox").attr('checked', false)
@@ -104,6 +104,9 @@ var customerPersonalDetails = new Vue({
             $(":checkbox").attr('checked', false)
             $("textarea").text('');
             $("p[name='pdate']").html("");
+            that.Skinchecked.length=0;
+            that.Hairchecked.length=0;
+            that.Plasticitychecked.length=0;
             $.each(that.time, function (i, n) {
                 if (n.saveDate == formatDate(new Date())) {
                     alert("当天只能新增一次")
@@ -458,8 +461,8 @@ var customerPersonalDetails = new Vue({
 
                     }
                 }
-                console.log( that.imgInfo1)
-                console.log( that.imgInfo2)
+                console.log(that.imgInfo1)
+                console.log(that.imgInfo2)
                 for (var i = 0; i < that.imgInfo1.length; i++) {
                     var num = 'plasticity' + (i + 1);
                     $("#" + num).attr('src', that.imgInfo1[i].picLink)
@@ -468,7 +471,7 @@ var customerPersonalDetails = new Vue({
                 for (var i = 0; i < that.imgInfo2.length; i++) {
                     var num = 'plasticity' + (i + 7);
                     $("#" + num).attr('src', that.imgInfo2[i].picLink)
-                    $("#" + num).attr('value',that.imgInfo2[i].id)
+                    $("#" + num).attr('value', that.imgInfo2[i].id)
                 }
 
             })
@@ -1145,7 +1148,7 @@ var customerPersonalDetails = new Vue({
             param.append('type', 1);
             param.append('date', date);
             param.append('cid', cid);
-            param.append('imgType',1)
+            param.append('imgType', 1)
             $.ajax({
                 type: 'POST',
                 url: imgUrl,
@@ -1240,7 +1243,7 @@ var customerPersonalDetails = new Vue({
             param.append('type', 2);
             param.append('date', date);
             param.append('cid', cid);
-            param.append('imgType',1)
+            param.append('imgType', 1)
             $.ajax({
                 type: 'POST',
                 url: imgUrl,
@@ -1339,8 +1342,8 @@ var customerPersonalDetails = new Vue({
                 processData: false,
                 contentType: false,
                 cache: false,
-                success: function(res){
-                    if(res.code=='200'){
+                success: function (res) {
+                    if (res.code == '200') {
                         var param2 = new FormData();
                         console.log(that.afterImg)
                         if (that.afterImg.length > 0) {
@@ -1387,11 +1390,11 @@ var customerPersonalDetails = new Vue({
             // console.log(num);
         },
         // 点击上传图片
-        picModalFile: function (){
+        picModalFile: function () {
             $('#file-fr').click();
             console.log('click');
         },
-        closeImgModal: function(){
+        closeImgModal: function () {
             $('.ImgModal-wrap').hide();
         },
         //显示图片
@@ -1442,7 +1445,7 @@ var customerPersonalDetails = new Vue({
                     if (images[i] == 'plasticity7' || images[i] == 'plasticity8' || images[i] == 'plasticity9' || images[i] == 'plasticity10' || images[i] == 'plasticity11' || images[i] == 'plasticity12') {
                         that.afterImg.push(file)
                         console.log(that.afterImg)
-                    }else{
+                    } else {
                         that.imageFiles.push(file);
                         console.log(that.imageFiles)
                     }
@@ -1452,14 +1455,14 @@ var customerPersonalDetails = new Vue({
             return isFlage;
         },
         //图片下载
-        picDownload:function () {
+        picDownload: function () {
             var that = this;
-            var alink=document.createElement("a")
-            var num=that.imgNum;
+            var alink = document.createElement("a")
+            var num = that.imgNum;
             console.log(that.imgNum)
-            alink.href=$("#"+num).attr("src");
-            console.log($("#"+num).attr("src"))
-            alink.download='img';
+            alink.href = $("#" + num).attr("src");
+            console.log($("#" + num).attr("src"))
+            alink.download = 'img';
             alink.click();
         },
         // deleimg: function (num) {
@@ -1467,6 +1470,110 @@ var customerPersonalDetails = new Vue({
         //     // this.imagesList[num].splice()
         //     $('.delete_img').eq(num).css('display', 'none')
         // }
+        //打印
+        print: function (num) {
+            var that = this;
+            var headhtml = "<html><head><title></title>  <link rel=\"stylesheet\" href=\"../css/bootstrap.min.css\"/>\n" +
+                "    <link rel=\"stylesheet\" href=\"../css/reset.css\"/>\n" +
+                "    <link rel=\"stylesheet\" href=\"../css/base.css\"/>\n" +
+                "    <link rel=\"stylesheet\" href=\"../css/skin/jedate.css\"/>\n" +
+                "    <link rel=\"stylesheet\" href=\"../css/combobox.css\"/>\n" +
+                "    <link rel=\"stylesheet\" href=\"../css/customerPersonalDetails.css\"/></head><body>";
+            var foothtml = "</body>";
+
+            // 获取div中的html内容
+            // var newhtml = document.all.item(printpage).innerHTML;
+            // 获取div中的html内容，jquery写法如下
+            if (num == 1) {
+                var newhtml = $(".skinPrint").html();
+            } else if (num == 2) {
+                var newhtml = $(".hairPrint").html();
+            } else if (num == 3) {
+                var newhtml = $(".plasticityPrint").html();
+            }
+
+            // 获取原来的窗口界面body的html内容，并保存起来
+            var oldhtml = document.body.innerHTML;
+
+            // 给窗口界面重新赋值，赋自己拼接起来的html内容
+            document.body.innerHTML = headhtml + newhtml + foothtml;
+            // 调用window.print方法打印新窗口
+            window.print();
+            // 将原来窗口body的html值回填展示
+            document.body.innerHTML = oldhtml;
+            // window.location.reload();
+            if (num == 1) {
+                window.location.reload();
+                customerPersonalDetails.LI(7);
+                console.log(11)
+            } else if (num == 2) {
+                window.location.reload();
+                customerPersonalDetails.LI(8);
+            } else if (num == 3) {
+                window.location.reload();
+                customerPersonalDetails.LI(9);
+            }
+
+            return false;
+        },
+        //导出Excel
+        exportExcel: function (num) {
+            console.log(num)
+            var that = this;
+          if(num==1){
+              var url = $.stringFormat('{0}/excel/getSkin', $.cookie('url'));
+              var data = JSON.stringify(that.Skinchecked)
+              if(data==='{}'||data==='[]' ||that.Skinchecked.length==0){
+                  alert("未选中内容");
+              }else {
+                  $.ajax({
+                      url: url,
+                      data: data,
+                      type: 'POST',
+                      dataType: 'json',
+                      contentType: "application/json;charset=utf-8",
+                      success: function (res) {
+                          alert(res.msg)
+                      }
+                  })
+              }
+          }else if(num==2){
+              var url = $.stringFormat('{0}/excel/getHair', $.cookie('url'));
+              var data = JSON.stringify(that.Hairchecked)
+              if(data==='{}'||data==='[]' ||that.Hairchecked.length==0){
+                  alert("未选中内容");
+              }else {
+                  $.ajax({
+                      url: url,
+                      data: data,
+                      type: 'POST',
+                      dataType: 'json',
+                      contentType: "application/json;charset=utf-8",
+                      success: function (res) {
+                          alert(res.msg)
+                      }
+                  })
+              }
+          }else if(num==3){
+              var url = $.stringFormat('{0}/excel/getPlasticity', $.cookie('url'));
+              var data = JSON.stringify(that.Plasticitychecked)
+              if(data==='{}'||data==='[]' ||that.Plasticitychecked.length==0){
+                  alert("未选中内容");
+              }else {
+                  $.ajax({
+                      url: url,
+                      data: data,
+                      type: 'POST',
+                      dataType: 'json',
+                      contentType: "application/json;charset=utf-8",
+                      success: function (res) {
+                          alert(res.msg)
+                      }
+                  })
+              }
+          }
+
+        },
     },
 
 
@@ -1475,7 +1582,7 @@ var customerPersonalDetails = new Vue({
         mainheight();
     }
 });
-$('body').on('click','img.img-responsive',function () {
-    $("#ImgModal-ImgUrl").attr("src",$(this).attr('src'));
+$('body').on('click', 'img.img-responsive', function () {
+    $("#ImgModal-ImgUrl").attr("src", $(this).attr('src'));
 })
 customerPersonalDetails.LI(0);

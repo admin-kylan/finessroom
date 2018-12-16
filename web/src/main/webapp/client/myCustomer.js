@@ -301,6 +301,43 @@ var myCustomer = new Vue({
                 'display': 'none'
             });
         },
+        //打印
+        print: function () {
+            var headhtml = "<html><head><title></title></head><body>";
+            var foothtml = "</body>";
+            // 获取div中的html内容
+            // var newhtml = document.all.item(printpage).innerHTML;
+            // 获取div中的html内容，jquery写法如下
+            var newhtml = $(".tabW").html();
+            // 获取原来的窗口界面body的html内容，并保存起来
+            var oldhtml = document.body.innerHTML;
+
+            // 给窗口界面重新赋值，赋自己拼接起来的html内容
+            document.body.innerHTML = headhtml + newhtml + foothtml;
+            // 调用window.print方法打印新窗口
+            window.print();
+
+            // 将原来窗口body的html值回填展示
+            document.body.innerHTML = oldhtml;
+            window.location.reload();
+            return false;
+        },
+        //导出Excel
+        exportExcel: function () {
+            var that = this;
+            var url = $.stringFormat('{0}/excel/myCustomer', $.cookie('url'));
+            var data=JSON.stringify(that.customerTable.list)
+            $.ajax({
+                url : url,
+                data : data,
+                type : 'POST',
+                dataType : 'json',
+                contentType: "application/json;charset=utf-8",
+                success : function(res) {
+                    alert(res.msg)
+                }
+            })
+        },
     }
 });
 

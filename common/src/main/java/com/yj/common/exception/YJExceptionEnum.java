@@ -42,7 +42,7 @@ public enum  YJExceptionEnum implements ServiceExceptionEnum  {
     ORDER_TYPE_STATUS(500, "冲销数据请勿重复操作"),
     STORAGE_PRICE_CARD_ID(500, "储值抵扣的会员卡信息未获取"),
     CLIENT_NUM_EXISTED(500, "此信息查询到多个客户，请重新获取设置"),
-    FRCARD_STATUS_EXISTED(500, "冻结、过期、历史卡禁止转让卡操作"),
+    FRCARD_STATUS_EXISTED(500, "冻结、过期、历史卡禁止任何操作"),
     CARD_TYPE_EXISTED(500, "此卡种信息已停止销售"),
     CARD_TYPE_TOTAL_EXISTED(500, "此卡种信息设置有误，请更换卡种"),
     NUMBER_ERROR(500, "开始数必须小于结束数"),
@@ -52,6 +52,8 @@ public enum  YJExceptionEnum implements ServiceExceptionEnum  {
     VIPCARDNO_NOT_CONFORMITY(500, "此会员号不符合，不可用"),
     PAY_TYPE_NOT_EXISTED(500, "支付类型未设置"),
     PAY_PRICE_EXISTED(500, "支付金额有误"),
+    CARD_INFO_EXISTED(500, "会员卡订单信息获取有误"),
+    BLACE_PRICE_EXISTED(500,"退款金额有变动，请重新核对后操作"),
 
     PROTOCOLNO_NOT_EXISTED(500, "协议号不存在"),
     PROTOCOLNO_ABOLISHED(500, "协议号已作废"),

@@ -408,20 +408,6 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Date followTime = collarClientDTO.getBuildDate();
-                Date nowTime = DateUtils.getNowTime2();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Integer noFollow = null;
-                try {
-                    Date endDate = simpleDateFormat.parse(simpleDateFormat.format(followTime));
-                    Date beginDate = simpleDateFormat.parse(simpleDateFormat.format(nowTime));
-                    noFollow = (int) ((beginDate.getTime() - endDate.getTime()) / (24 * 60 * 60 * 1000));
-                    collarClientDTO.setOnFollow(noFollow);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
             }
         }
     }

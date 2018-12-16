@@ -46,8 +46,8 @@
                     </li>
                     <li>
                         <div>
-                            <a v-if="treers.type == 7" :href="'yuangong.html?pId='+treers.id" target="rightFrame">+ 添加卡种设置</a>
-                            <a v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id" target="rightFrame">+ 添加卡种设置</a>
+                            <a v-if="treers.type == 7" :href="'yuangong.html?pId='+treers.id+'&name='+encodeURI(treers.cardTypeName)" target="rightFrame" >+ 添加卡种设置</a>
+                            <a v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id+'&name='+encodeURI(treers.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
                         </div>
                         <ul>
                             <li v-for="tferr in treers.frCardTypeList">
@@ -400,7 +400,8 @@
             <div class="left_footer">
                 <ul>
                     <li><input type="checkbox" id="expand_list">展开列表</li>
-                    <li style="text-align: center"><a href="#" v-on:click="updateIsUsing()">前台显示选中会员卡</a></li>
+                    <li style="text-align: center" id="show"><a href="#" v-on:click="updateIsUsing(0)">前台不显示选中会员卡</a></li>
+                    <li style="text-align: center;display: none" id="noShow" ><a href="#" v-on:click="updateIsUsing(1)">前台显示选中会员卡</a></li>
                 </ul>
             </div>
         </div>
@@ -569,7 +570,7 @@
 
             },
             //设置前台不显示卡种
-            updateIsUsing:function () {
+            updateIsUsing:function (num) {
                 var ids = new Array();
                 $(".left_box input:checked").each(function() {
                     //将标签的值放入数组中
@@ -579,6 +580,12 @@
                     alert("还未选择");
                     return;
                 }
+                //前台不显示
+                var show=false;
+                if(num==1){
+                    //前台显示
+                    var show=true
+                }
                 Loading.prototype.show();
                 var updateUserName = $.cookie('name');
                 var CustomerCode = $.cookie("code");
@@ -586,7 +593,7 @@
                 var url = $.stringFormat(
                     "{0}/frCardType/updateIsUsing?"+"Ids="+ids+
                     "&updateUserName="+ updateUserName +
-                    "&CustomerCode="+CustomerCode+"&updateUserId="+updateUserId,$.cookie('url'));
+                    "&CustomerCode="+CustomerCode+"&updateUserId="+updateUserId+"&show="+show,$.cookie('url'));
                 $.ajax({
                     type: "get",
                     url: url,
@@ -612,6 +619,8 @@
             getNotList:function () {
                 $("#yes").hide();
                 $("#Not").show();
+                $("#show").hide();
+                $("#noShow").show();
                 var that = this;
                 Loading.prototype.show();
                 var url = $.stringFormat("{0}/shop/getIsUsingIsTrue",$.cookie('url'));
@@ -635,6 +644,8 @@
             getYesList:function () {
                 $("#Not").hide();
                 $("#yes").show();
+                $("#noShow").hide();
+                $("#show").show();
 
             },
             //获取通用门店前台不显示的列表

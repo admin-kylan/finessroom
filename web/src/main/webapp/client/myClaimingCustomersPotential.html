@@ -72,8 +72,8 @@
                 <input type="text" placeholder="姓名/手机号码" v-model="customerFilter.keyword"
                        @keyup.enter="buildFilterDate"/>
                 <input type="button" value="搜索" @click="buildFilterDate"/>
-                <input type="button" value="打印"/>
-                <input type="button" value="导出"/>
+                <input type="button" value="打印" @click="print"/>
+                <input type="button" value="导出" @click="exportExcel"/>
                 <input type="button" value="帮助?"/>
             </div>
         </div>
@@ -103,7 +103,6 @@
                     <td>多少天无人跟进</td>
                     <td>销售顾问</td>
                     <td>服务会籍</td>
-                    <td>服务人员</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -121,7 +120,6 @@
                     <td class="tored">{{item.onFollow}}</td>
                     <td>{{item.consultantName}}</td>
                     <td>{{item.fwhjName}}</td>
-                    <td>Klaus</td>
                 </tr>
                 <!--<tr>-->
                 <!--<td><input type="checkbox" /></td>-->

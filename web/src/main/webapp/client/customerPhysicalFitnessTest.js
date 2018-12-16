@@ -154,7 +154,8 @@ var customerPhysicalFitnessTest = new Vue({
                         that.PhysicalInfoTwo.clientId = $.cookie("cid");
                         that.PhysicalInfoOne.result = false;
                         that.PhysicalInfoTwo.result = true;
-                        console.log(that.PhysicalInfoOne.personalId)
+                        that.PhysicalInfoTwo.superiorEvaluation=that.PhysicalInfoOne.superiorEvaluation;
+                        that.PhysicalInfoTwo.personalTrainerAdvice=that.PhysicalInfoOne.personalTrainerAdvice;
                         var pass = $("#pass").val();
                         console.log(pass)
                         PhysicalInfo.push(that.PhysicalInfoOne)

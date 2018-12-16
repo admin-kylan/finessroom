@@ -52,15 +52,17 @@ public class PersonnelInfoServiceImpl extends BaseServiceImpl<PersonnelInfoMappe
     }
 
     /**
-     * 查询角色为服务会稽的人员
+     * 查询角色根据UserType
      *
      * @return
      * @throws YJException
      */
     @Override
-    public List<PersonnelInfo> getServicePersonnel(Integer userType) throws YJException {
+    public List<PersonnelInfo> getServicePersonnel(Integer userType,String customerCode) throws YJException {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String customerCode = CookieUtils.getCookieValue(req, "code", true);
+        if(customerCode==null){
+            customerCode = CookieUtils.getCookieValue(req, "code", true);
+        }
         List<Object> rids = roleInfoService.selectObjs(new EntityWrapper<RoleInfo>().setSqlSelect("id").where("UserType={0}", userType).where("CustomerCode={0}", customerCode));
         List<PersonnelInfo> personnelInfos = new ArrayList<>();
         if (rids.size() > 0) {
@@ -72,7 +74,7 @@ public class PersonnelInfoServiceImpl extends BaseServiceImpl<PersonnelInfoMappe
             List<String> ParentIds = new ArrayList<String>(set);
             for (String parentId : ParentIds) {
                 PersonnelInfo personnelInfo = selectOne(
-                        new EntityWrapper<PersonnelInfo>().setSqlSelect("Mobile", "RelName", "ID").where("ID={0}", parentId));
+                        new EntityWrapper<PersonnelInfo>().where("ID={0}", parentId));
                 personnelInfos.add(personnelInfo);
             }
         }

@@ -97,7 +97,7 @@ public class FrCardSupplyRecordController {
 
 
     /**
-     * 添加续卡订单信息         -------------------------------需修改
+     * 添加续卡订单信息
      * @param map
      * @param request
      * @return

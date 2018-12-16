@@ -115,13 +115,13 @@
 
 
 
-    <select id="queryContinueCardLis" resultType="java.util.Map">
+   <select id="queryContinueCardLis" resultType="java.util.Map">
         SELECT
         (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id) personnelName,
         (SELECT p.buy_rights_num FROM fr_card_order_info p WHERE a.order_info_id = p.id) buyRightsNum,
         (SELECT (p.buy_rights_num + p.give_rights_num) FROM fr_card_order_info p WHERE a.order_info_id = p.id) haveRightsNum,
         (SELECT p.discount_num FROM fr_card_order_info p WHERE a.order_info_id = p.id) discountNum,
-        (SELECT STUFF((SELECT ','+ltrim(cast(
+        (SELECT  TOP 1 STUFF((SELECT ','+ltrim(cast(
         CASE
         WHEN pay_mode =1 THEN '支付宝'
         WHEN pay_mode =2  THEN '刷卡'
@@ -142,7 +142,21 @@
         AND a.CustomerCode = #{CustomerCode}
         AND a.client_id = #{clientId}
         AND a.new_card_id = #{newCardId}
-    </select>
+   </select>
+
+   <select id="quereySupplyList" resultType="com.yj.dal.model.FrCardSupplyRecord">
+        WITH cte AS
+            ( SELECT <include refid="Base_Column_List" />
+              FROM fr_card_supply_record a
+              WHERE a.new_card_id = #{newCardId}
+              AND  a.type = #{type}
+              UNION ALL
+              SELECT <include refid="Base_Column_List" />
+              FROM cte c
+              INNER JOIN fr_card_supply_record a
+              ON c.oriCardId  = a.new_card_id AND c.CustomerCode = a.CustomerCode )
+        SELECT * FROM cte
+   </select>
 
 
 </mapper>

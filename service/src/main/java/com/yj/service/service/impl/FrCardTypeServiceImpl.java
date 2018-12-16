@@ -439,12 +439,13 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
     /**
      * 前台不显示设置（修改卡系列或卡种的is_using状态）
      * @param ids
+     * @param show
      * @return
      */
     @Override
-    public JsonResult updateIsUsing(String[] ids,FrCardType frCardType) {
+    public JsonResult updateIsUsing(String[] ids, FrCardType frCardType, Boolean show) {
         frCardType.setUpdateTime(new Date());
-        frCardType.setUsing(false);
+        frCardType.setUsing(show);
         try{
             for(int i=0;i<ids.length;i++){
                 //查询不显示的是卡种还是卡系列，如是卡系列，它底下所有卡种都变不显示，如是卡种则就卡种不显示

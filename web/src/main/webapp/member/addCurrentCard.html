@@ -29,7 +29,7 @@
                     <form action="" id="form">
                         <div class="form_box">
                             <div class="form_box_left">卡类别：</div>
-                            <div class="form_box_right"><strong id="idck">{{name}}</strong></div>
+                            <div class="form_box_right"><strong id="idck">{{cardName}}</strong></div>
                         </div>
                         <div class="form_box">
                             <div class="form_box_left">卡种名称：</div>
@@ -38,42 +38,42 @@
 
                         <div class="form_box">
                             <div class="form_box_left">卡属性：</div>
-                            <div class="form_box_right shuxing">
+                            <div class="form_box_right ">
                                 <ul>
                                     <li>
                                         <label>
-                                            <input type="checkbox" value="1">
+                                            <input type="radio" name="_radio" value="1">
                                             <span>时间卡</span>
                                         </label>
 
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" value="2">
-                                            <span>小时卡</span>
+                                            <input type="radio" name="_radio" value="2">
+                                            <span >小时卡</span>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" value="3">
+                                            <input  type="radio" name="_radio" value="3">
                                             <span>次卡</span>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" value="4">
+                                            <input type="radio" name="_radio" value="4">
                                             <span>储值卡</span>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" value="5">
+                                            <input type="radio" name="_radio" value="5">
                                             <span>充值卡</span>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" value="6">
+                                            <input type="radio" name="_radio" value="6">
                                             <span>折扣卡</span>
                                         </label>
                                     </li>
@@ -151,6 +151,7 @@
             createTime:'',//最后一次添加时间
             name:'',
             storeList:[],
+            cardName:null,
         },
         created:function () {
             var that = this;
@@ -179,15 +180,17 @@
             );
         },
         methods: {
+            init: function (t) {
+                const that = this;
+                var thisUrl = decodeURI(document.URL);
+               that.cardName = thisUrl.split('=')[2]
+            },
             add: function () {
                 var that = this;
-                var type = new Array();//卡类型
                 var ids = new Array();
                 //添加卡类型属性
-                $(".shuxing input:checked").each(function() {
-                    //将标签的值放入数组中
-                    type.push($(this).attr("value"));
-                });
+               var type= $("input[name='_radio']:checked").val();
+              console.log(type)
 
                 //添加卡中销售门店
                 $(".form_box_right_cb input:checked").each(function() {
@@ -199,17 +202,15 @@
                     alert("卡销售门店不能为空");
                     return;
                 }
-                if(type == '' || type == null || type.length <1){
+                if(type == '' || type == null || typeof type){
                     alert("卡属性不能为空");
                     return;
                 }
-                if(type.length >1){
-                    alert("卡属性选择错误，只可选择一个卡种属性");
-                    return;
-                }
+
                 //获取卡系列id
                 var thisUrl = document.URL;
                 var pId = thisUrl.split('=')[1];
+                that.cardName = thisUrl.split('=')[2];
                 var name = $(".form_box_right_inp").val();
                 if(name == '' || name==null || name.length<0){
                     alert("卡种名称不能为空")
@@ -220,7 +221,7 @@
                 var CustomerCode = $.cookie("code");
                 var createUserId = $.cookie("id");
                 var url = $.stringFormat(
-                    "{0}/frCardType/addCurrentFrCardType?type=" +type[0]
+                    "{0}/frCardType/addCurrentFrCardType?type=" +type
                     +"&cardTypeName="+name+"&ids="+ids+"&ty=1&pId="
                     +pId+"&typeSetState=1&createUserName="+createUserName +
                     "&CustomerCode="+CustomerCode+"&createUserId="+createUserId,$.cookie('url'));
@@ -319,5 +320,7 @@
 
     })
 </script>
-
+<script>
+    employee.init();
+</script>
 </html>

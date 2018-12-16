@@ -1025,14 +1025,12 @@ var customerMembershipCard = new Vue({
         //查看
         toSee: function (note, mess) {
             var that = this;
-            if( that.LiIndex = 3 ){
+            if( that.LiIndex == 3 ){
                 if( 'cardNo' == note){
                     note = that.cardNo;
                 }
             }
-            if (!note) {
-                return;
-            }
+            if (!note) {  return ; }
             var m = mess + note;
             return $.alert(m);
         },
@@ -1218,6 +1216,7 @@ var customerMembershipCard = new Vue({
                     } else {
                         $.alert(res.msg)
                     }
+                    Loading.prototype.hide();
                 }
             )
         },
@@ -1991,28 +1990,12 @@ var customerMembershipCard = new Vue({
                 clientId: that.clientId,
             }, function (res) {
                 if (res.code == '200') {
+                    console.log("获取退卡信息============================");
                     console.log(res);
                     that.loadData10.saleName = res.data.saleName;
                     that.loadData10.saleStatus = res.data.saleStatus;
-                    var comPrice = parseFloat(that.getParemtDate(res.data.complementPrice, 0)); //补余金额 （审核通过的）
-                    var payPrice = parseFloat(that.getParemtDate(res.data.payPrice, 0));  //实际付款金额（审核通过的）
-                    var sum = parseFloat(payPrice) + parseFloat(comPrice);//购卡金额
-                    var buyRightsNum = parseFloat(that.getParemtDate(res.data.buyRightsNum, 0));  //购买权益
-                    var giveRightsNum = parseFloat(that.getParemtDate(res.data.giveRightsNum, 0)); //赠送权益
-                    var haveRightsNum = parseFloat(that.getParemtDate(res.data.haveRightsNum, 0));  //剩余总权益 =父卡+子卡的总剩余权益（前提是子卡独立分割权益）
-                    var allPrice = parseFloat(that.getParemtDate(res.data.orderPrice, 0));  // 可退剩余总储值金额; = 父卡+子卡的剩余储值金额
-                    var haveAll = haveRightsNum;  //剩余总权益
-                    var buyAll = buyRightsNum + giveRightsNum; //订单购买的总权益
-                    var average = 0.0;  //平均每天的权益;
-                    if (buyAll > 0) {
-                        average = sum / buyAll;
-                    }
-                    var needPrice = (average * haveAll) + allPrice;
-
-                    that.loadData10.addBlackCard.needPrice = parseFloat(0).toFixed(2);
-                    if (needPrice != null && needPrice != '') {
-                        that.loadData10.addBlackCard.needPrice = parseFloat(needPrice).toFixed(2);
-                    }
+                     var allPrice = that.getParemtDate(res.data.allPrice,0);
+                    that.loadData10.addBlackCard.needPrice = parseFloat(allPrice).toFixed(2);
                     that.loadData10.addBlackCard.totalPrice = that.loadData10.addBlackCard.needPrice;
                     that.loadData10.addBlackCard.personnelId = res.data.personnelId;
                     that.loadData10.addBlackCard.cardFlag = res.data.cardFlag;
@@ -3528,6 +3511,7 @@ var customerMembershipCard = new Vue({
                 }
                 that.loadData3.context = '选择要升级的类型卡';
                 that.getCardTypeList();
+                that.getCardSupplyList(that.loadData3.Lindex);
             }
         },
         //卡升级
@@ -3774,12 +3758,43 @@ var customerMembershipCard = new Vue({
             });
 
         },
+        getReturnStorage:function(){
+            var that = this;
+            if(!that.cardId){
+               return $.alert("请选择要操作的会员卡信息");
+            }
+            //查询可退的总储值金额
+            var url = $.stringFormat('{0}/frCardOrderStorage/getAllBlackStorage', $.cookie('url'));
+            $.get(url, {
+                    cardId: that.cardId,
+                    CustomerCode:that.code,
+                    clientId:that.clientId,
+                },
+                function (res) {
+                    if (res.code == '200') {
+                        console.log("获取可退的储值金额=====================");
+                        console.log(res);
+                        that.loadData6.addRefund.totalPrice = res.data;
+                        var clientUserName = window.parent.document.getElementById("clientUserName").innerText;
+                        that.loadData6.clientUserName = clientUserName;
+                        that.loadData6.refundStorageId = 'all';
+                        //退款授权，只能是当前门店人员才能授权
+                        that.shopId = $.cookie("shopid");
+                        that.getMarketShopPeople(that.shopId, that);
+                        $('#Refund').show();
+                    } else {
+                        $.alert(res.msg)
+                    }
+                }
+            );
+            // that.commonConfirm("realyReturnStorage","","此退款是退全部的储值，是否继续操作？");
+        },
         //第一个是确认要调用的方法名称，第二个是取消要调用的方法名称
-        commonConfirm:function(methName, methNameTwo){
+        commonConfirm:function(methName, methNameTwo,mess){
             var that = this;
             $.confirm({
                 title: '确认',
-                content: '请确认是否提交此数据?',
+                content: mess,
                 icon: 'glyphicon glyphicon-question-sign',
                 buttons: {
                     ok: {
@@ -3801,5 +3816,40 @@ var customerMembershipCard = new Vue({
                 }
             })
         },
+
+        realyReturnStorage:function(){
+            var that = this;
+            console.log("realyReturnStorage====================");
+            //避免多次点击
+            if (that.randomNumber) {
+                return $.alert("请勿太快重复点击");
+            }
+            //生成字符串
+            that.randomNumber = Math.random().toString(36).substr(2);
+            var data = {
+                code:that.code,
+                cardId:that.cardId,
+            }
+            var url = $.stringFormat('{0}/frCardOrderStorage/addStorageCard', $.cookie('url'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    if (res.code == '200') {
+                        that.getStorageCardList();
+                        that.loadData6.givePrice = 0;
+                        $("#storagePass").val('');
+                        //初始化数据
+                        that.initPayModel();
+                    } else {
+                        $.alert(res.msg)
+                    }
+                    that.randomNumber = '';
+                }
+            });
+        }
     },
 });

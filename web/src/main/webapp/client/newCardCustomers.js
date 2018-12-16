@@ -9,7 +9,8 @@ function settingOut_a2() {
 var newCardCustomers = new Vue({
     el: '#newCardCustomers',
     data: {
-        LiIndex: 1,                  // 0，新建现有客户，1 新购，2，续卡
+        loadName :'续卡操作',
+        LiIndex: 0,                  // 0，新建现有客户，1 新购，2，续卡
         accountsMeth:'',            //要调用的结账方法
         randomNumber:'',            //随机生成，防止点击过快
         salespersonList:[],         //销售顾问列表
@@ -41,10 +42,10 @@ var newCardCustomers = new Vue({
             invoiceStatus:0,       //是否购置发票
             depositTime:0,          //定金支付方式的补余期限
         },
-        clientUserName: window.parent.document.getElementById("clientUserName").innerText,    //客户姓名
-        clientPhone: window.parent.document.getElementById("clientPhone").innerText, //客户手机
-        clientSet: window.parent.document.getElementById("clientSet").innerText,   //客户性别
-        clientURL: window.parent.document.getElementById("clientURL").src,   //客户性别
+        clientUserName:'',    //客户姓名
+        clientPhone: '', //客户手机
+        clientSet: '',   //客户性别
+        clientURL: '',   //客户性别
         personnelName:$.cookie("name"),  //系统当前操作人信息
         creatTime:getNowTime(true),  //创建时间
         catcherClientId:'',      //承接的客户Id
@@ -230,10 +231,21 @@ var newCardCustomers = new Vue({
         init: function (t) {
         },
         loadL0:function(){
-
+            var that = this;
+            setTimeout(function () {
+                jeDate('.jeinput', {
+                    format: "YYYY-MM-DD hh:mm:ss",
+                    minDate: getNowTime(),
+                    donefun: function (obj) {
+                        that.cardMap.bindTime = obj.val;
+                    }
+                });
+            }, 50);
+            that.loadName = '新建会员';
         },
         loadL1:function(){
             var that = this;
+            that.getInit();
             that.initLoad1();
             that.getOrderNo();
             that.getCardUser();
@@ -241,6 +253,16 @@ var newCardCustomers = new Vue({
         },
         loadL2:function(){
             var that = this;
+            setTimeout(function () {
+                jeDate('.jeinput', {
+                    format: "YYYY-MM-DD hh:mm:ss",
+                    minDate: getNowTime(),
+                    donefun: function (obj) {
+                        that.cardMap.bindTime = obj.val;
+                    }
+                });
+            }, 50);
+            that.getInit();
             that.initLoad1();
             //获取销售门店列表
             that.getMarketShopList();
@@ -256,6 +278,13 @@ var newCardCustomers = new Vue({
                 // 获取会员卡订单信息，及卡种信息
                 that.getCardInfo();
             };
+        },
+        getInit:function(){
+           var that = this;
+           that.clientUserName = window.parent.document.getElementById("clientUserName").innerText;    //客户姓名
+           that.clientPhone = window.parent.document.getElementById("clientPhone").innerText; //客户手机
+           that.clientSet = window.parent.document.getElementById("clientSet").innerText;   //客户性别
+           that.clientURL = window.parent.document.getElementById("clientURL").src;   //客户性别
         },
         //验证凭证信息封装---------员工
         getPassParemt: function (methName,passName,personnelId) {

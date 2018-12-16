@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+<head class="headLink">
     <meta charset="UTF-8">
     <title>个人详情</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css"/>
@@ -37,7 +37,7 @@
             <li v-on:click="LI(4)">心理状况</li>
             <li v-on:click="LI(5)">家庭亲子</li>
             <li v-on:click="LI(6)">生理状况</li>
-            <li v-on:click="LI(7)">皮肤档案</li>
+            <li v-on:click="LI(7)" >皮肤档案</li>
             <li v-on:click="LI(8)">头发档案</li>
             <li v-on:click="LI(9)">塑形抗衰</li>
             <li v-on:click="LI(10)">GFP表</li>
@@ -567,6 +567,7 @@
                     <input type="submit" value="保存" @click="savePsychology"/>
                 </p>
             </li>
+            <div class="printLi7">
             <li class="on list8 lis8910" v-if="LiIndex==7">
                 <div class="lefBar">
                     <p class="date yellow">日期</p>
@@ -578,10 +579,11 @@
                     <div class="instructions">
                         <p class="lef" name="pdate"></p>
                         <p class="rig">
-                            <span class="yellow">打印</span>
-                            <span class="green">导出</span>
+                            <span class="yellow" @click="print(1)">打印</span>
+                            <span class="green" @click="exportExcel(1)">导出</span>
                         </p>
                     </div>
+                    <div class="skinPrint">
                     <fieldset>
                         <legend>皮肤实况档案</legend>
                         <div>
@@ -769,13 +771,13 @@
                             <span>图片：</span>
                             <p class="skin_img" id="skinImg">
                             <div class="skinrela">
-                                <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price1')"
-                                     id="price1">
+                                <img src="../img/addImg.png"  alt="" class="img-responsive" @click="pictureSelected('price1')"
+                                     id="price1" onerror="this.src='../img/addImg.png'">
                                 <!--<div class="delete_img" @click="deleimg(0)">X</div>-->
                             </div>
                             <div class="skinrela">
                                 <img src="../img/addImg.png" alt="" class="img-responsive" @click="pictureSelected('price2')"
-                                     id="price2">
+                                     id="price2"onerror="this.src='../img/addImg.png'">
                                 <!--<div class="delete_img" @click="deleimg(1)">X</div>-->
                             </div>
                             <div class="skinrela">
@@ -838,11 +840,13 @@
                             <textarea id="productProposal"></textarea>
                         </div>
                     </fieldset>
+                    </div>
                 </div>
                 <p class="btn">
                     <input type="submit" value="保存"  @click="saveSkin"/>
                 </p>
             </li>
+            </div>
             <li class="on list9 lis8910" v-if="LiIndex==8">
                 <div class="lefBar">
                     <p class="date yellow">日期</p>
@@ -854,10 +858,11 @@
                     <div class="instructions">
                         <p class="lef" name="pdate"></p>
                         <p class="rig">
-                            <span class="yellow">打印</span>
-                            <span class="green">导出</span>
+                            <span class="yellow" @click="print(2)">打印</span>
+                            <span class="green" @click="exportExcel(2)">导出</span>
                         </p>
                     </div>
+                    <div class="hairPrint">
                     <fieldset>
                         <legend>头发实况档案</legend>
                         <div>
@@ -1025,6 +1030,7 @@
                             <textarea id="productCollocation"></textarea>
                         </div>
                     </fieldset>
+                    </div>
                 </div>
                 <p class="btn">
                     <input type="submit" value="保存" @click="saveHair"/>
@@ -1041,10 +1047,11 @@
                     <div class="instructions">
                         <p class="lef" name="pdate"></p>
                         <p class="rig">
-                            <span class="yellow">打印</span>
-                            <span class="green">导出</span>
+                            <span class="yellow" @click="print(3)">打印</span>
+                            <span class="green" @click="exportExcel(3)">导出</span>
                         </p>
                     </div>
+                    <div class="plasticityPrint">
                     <fieldset>
                         <legend>塑行抗衰档案</legend>
                         <div>
@@ -1222,6 +1229,7 @@
                             </p>
                         </div>
                     </fieldset>
+                    </div>
                 </div>
                 <p class="btn">
                     <input type="submit" value="保存" @click="savePlasticity"/>

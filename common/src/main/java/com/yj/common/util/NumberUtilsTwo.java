@@ -65,4 +65,12 @@ public class NumberUtilsTwo{
 		}
 		return  price;
 	}
+
+	public static Double getDoublPrice(Integer intPrice){
+		Double price = 0.0;
+		if(intPrice != null){
+			price = 0.0+intPrice;
+		}
+		return  price;
+	}
 }  

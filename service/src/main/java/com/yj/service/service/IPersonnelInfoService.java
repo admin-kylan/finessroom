@@ -19,7 +19,7 @@ public interface IPersonnelInfoService extends BaseService<PersonnelInfo> {
 
     JsonResult getMarketUserList(String shopId,String code);
 
-    List<PersonnelInfo> getServicePersonnel(Integer userType)throws YJException;
+    List<PersonnelInfo> getServicePersonnel(Integer userType,String customerCode)throws YJException;
 
     List<PersonnelInfo> getUnallocatedPersonnel(String rid)throws YJException;
 }

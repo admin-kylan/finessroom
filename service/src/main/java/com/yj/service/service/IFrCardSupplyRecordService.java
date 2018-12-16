@@ -61,4 +61,18 @@ public interface IFrCardSupplyRecordService extends BaseService<FrCardSupplyReco
 
 
    String isFlagNewCardNo(String newCardNo,String code,Map<String,String> map);
+
+   /**
+    * 根据指定的会员卡id获取该会员卡的所有续卡记录
+    * @param frCardSupplyRecord
+    * @return
+    */
+   List<FrCardSupplyRecord> quereySupplyList(FrCardSupplyRecord frCardSupplyRecord);
+
+   /**
+    * 获取会员卡的所有续卡订单里的会员卡ID
+    * @param cardId
+    * @return
+    */
+   List<String> getCardIdList(String cardId,Integer type);
 }

@@ -4,12 +4,11 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
 
-/**
- * 客户分配
- */
-public class CollarClientDTO {
-
-
+public class CustomerAllocationDTO {
+    /**
+     * 客户类型 客户分配
+     */
+    private String clientType;
     /**
      * 姓名
      */
@@ -64,34 +63,18 @@ public class CollarClientDTO {
      * 服务会籍
      */
     private String fwhjName;
-
-
-    /**
-     * 客户类型 客户分配
-     */
-    private String clientType;
-
     /**
      * 操作人  客户分配
      */
     private String operator;
-    /**
-     * /**
-     * 销售顾问ID
-     */
-    private String consultantId;
-    /**
-     * 客户id
-     */
-    private String id;
-    /**
-     * 服务会籍电话
-     */
-    private String fwhjTel;
-    /**
-     * 所属门店
-     */
-    private String shopName;
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
 
     public String getClientName() {
         return clientName;
@@ -181,51 +164,11 @@ public class CollarClientDTO {
         this.fwhjName = fwhjName;
     }
 
-    public String getClientType() {
-        return clientType;
-    }
-
-    public void setClientType(String clientType) {
-        this.clientType = clientType;
-    }
-
-    public String getConsultantId() {
-        return consultantId;
-    }
-
-    public void setConsultantId(String consultantId) {
-        this.consultantId = consultantId;
-    }
-
     public String getOperator() {
         return operator;
     }
 
     public void setOperator(String operator) {
         this.operator = operator;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFwhjTel() {
-        return fwhjTel;
-    }
-
-    public void setFwhjTel(String fwhjTel) {
-        this.fwhjTel = fwhjTel;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
     }
 }

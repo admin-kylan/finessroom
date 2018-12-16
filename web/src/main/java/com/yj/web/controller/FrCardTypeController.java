@@ -190,14 +190,14 @@ public class FrCardTypeController {
      * @throws YJException
      */
     @GetMapping("/updateIsUsing")
-    public JsonResult updateIsUsing(String[] Ids,FrCardType frCardType) throws YJException {
+    public JsonResult updateIsUsing(String[] Ids,FrCardType frCardType,Boolean show) throws YJException {
         if(Ids==null || Ids.length<1){
             return JsonResult.failMessage("参数错误");
         }
         if(frCardType == null){
             return JsonResult.failMessage("参数错误");
         }
-        return frCardTypeService.updateIsUsing(Ids,frCardType);
+        return frCardTypeService.updateIsUsing(Ids,frCardType,show);
     }
 
 

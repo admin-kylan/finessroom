@@ -33,6 +33,12 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
     private IFrCardOrderDatailService iFrCardOrderDatailService;
     @Resource
     private IFrCardOrderBackService iFrCardOrderBackService;
+    @Resource
+    private IFrCardSupplyRecordService iFrCardSupplyRecordService;
+    @Resource
+    private IFrCardOrderStorageService iFrCardOrderStorageService;
+
+
 
     @Override
     public String getOrderNo() {
@@ -45,7 +51,6 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
         String orderNo;
         while (true){
             orderNo = DateUtil.dateToString(new Date(), "yyyyMMddHHmm")+(r.nextInt(99999-10000)+10000);;
-//        System.out.println(orderNo);
             if(list == null || list.size()<1){
                 break;
             }
@@ -99,46 +104,17 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
         if(frCardOrderInfo == null){
             throw new  YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
-        Double complementPrice = 0.0;
+        //查询订单信息
         frCardOrderInfo.setStatus(CommonUtils.ORDER_STATUS_1);
         frCardOrderInfo.setAuditStatus(CommonUtils.AUDIT_ORDER_STATUS_1);
         frCardOrderInfo.setUsing(true);
         Map<String, Object> map = baseMapper.getBlackCardData(frCardOrderInfo);
-        if(map != null && map.get("zkXffs") != null){
-           String num = map.get("zkXffs").toString();
-           boolean isFlag = false;
-           if("1".equals(num)){  //子卡与主卡分割额度使用
-               isFlag = true;
-           }
-            FrCardOrderBack frCardOrderBack = new FrCardOrderBack();
-            frCardOrderBack.setClientId(frCardOrderInfo.getClientId());
-            frCardOrderBack.setCardId(frCardOrderInfo.getCardId());
-            frCardOrderBack.setCustomerCode(frCardOrderInfo.getCustomerCode());
-            Map<String,Double>  getHaveNum = iFrCardOrderBackService.getHaveNum(frCardOrderBack,isFlag);
-            Double orderPrice = getHaveNum.get("orderPrice");
-            Double orderRightsNum = getHaveNum.get("orderRightsNum");
-            Double childPrice = getHaveNum.get("childPrice");
-            Double childRightsNum = getHaveNum.get("childRightsNum");
-           //剩余总权益 = 父卡剩余权益+子卡剩余权益
-           map.put("haveRightsNum",orderRightsNum+childRightsNum);
-           map.put("orderPrice",orderPrice+childPrice);
-           //根据支付方式查询需分期或者补余的金额
-           String payType = map.get("payType").toString();
-           if(CommonUtils.ORDER_INFO_PAY_TYPE_2.toString().equals(payType) || CommonUtils.ORDER_INFO_PAY_TYPE_5.toString().equals(payType)){
-                 FrCardOrderInfo frCardOrderInfo1 = new FrCardOrderInfo();
-                 frCardOrderInfo1.setCardId(frCardOrderInfo.getCardId());
-                 frCardOrderInfo1.setCustomerCode(frCardOrderInfo.getCustomerCode());
-                 complementPrice = baseMapper.queryOrderInfoAllPrice(frCardOrderInfo1);
-           }
-            map.put("complementPrice",complementPrice);  //补余金额
-        }
-        FrCardOrderDatail frCardOrderDatail = new FrCardOrderDatail();
-        frCardOrderDatail.setCardId(frCardOrderInfo.getCardId());
-        frCardOrderDatail.setClientId(frCardOrderInfo.getClientId());
-        frCardOrderDatail.setCustomerCode(frCardOrderInfo.getCustomerCode());
-        frCardOrderDatail.setType(CommonUtils.ORDER_DATAIL_TYPE_2);
-        //可退剩余总储值金额
-        Double allPrice = iFrCardOrderDatailService.querySumOrderPrice(frCardOrderDatail,false);
+        // 查询可退金额
+        FrCardOrderBack frCardOrderBack = new FrCardOrderBack();
+        frCardOrderBack.setClientId(frCardOrderInfo.getClientId());
+        frCardOrderBack.setCardId(frCardOrderInfo.getCardId());
+        frCardOrderBack.setCustomerCode(frCardOrderInfo.getCustomerCode());
+        Double allPrice = this.getAllBlackPrice(frCardOrderBack);
         if(allPrice == null){
             allPrice = 0.0;
         }
@@ -165,5 +141,133 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
            throw  new YJException(YJExceptionEnum.PARAM_ERROR);
         }
         return baseMapper.queryCardAndType(frCardOrderInfo);
+    }
+
+
+    /**
+     * 查询应退卡金额
+     * @param frCardOrderBack
+     * @return
+     * @throws YJException
+     */
+    public Double getAllBlackPrice( FrCardOrderBack frCardOrderBack) throws YJException{
+        //先初始化可退金额
+        Double blackPrice = 0.0;
+        if(frCardOrderBack == null || StringUtils.isEmpty(frCardOrderBack.getClientId())
+                ||  StringUtils.isEmpty(frCardOrderBack.getCardId()) || StringUtils.isEmpty(frCardOrderBack.getCustomerCode())){
+            return blackPrice;
+        }
+        //获取此会员卡下的所有剩余储值金额，剩余权益，计算可退款金额
+        Map<String,Double>  getHaveNum = iFrCardOrderBackService.getHaveNum(frCardOrderBack,true);
+        Double orderPrice = NumberUtilsTwo.getDoubleNum("orderPrice",getHaveNum);
+        Double orderRightsNum = NumberUtilsTwo.getDoubleNum("orderRightsNum",getHaveNum);
+        Double childPrice = NumberUtilsTwo.getDoubleNum("childPrice",getHaveNum);
+        Double childRightsNum = NumberUtilsTwo.getDoubleNum("childRightsNum",getHaveNum);
+        //剩余总权益 = 父卡剩余权益+子卡剩余权益    ------------注意下子卡金额的查询方式是否有误
+        Double allPrice  = orderPrice+childPrice;
+        Double allNum = orderRightsNum+childRightsNum;
+        List<String> list = iFrCardSupplyRecordService.getCardIdList(frCardOrderBack.getCardId(),CommonUtils.CARD_SUPPLY_RECORD_TYPE_2);
+        //--根据剩余权益  计算可退金额
+        Double  allNumPrice = this.getOrderPrice(frCardOrderBack,allNum,list);
+        //--根据剩余储值，计算可退储值金额 --- 父卡的
+        FrCardOrderStorage  frCardOrderStorage = new FrCardOrderStorage();
+        frCardOrderStorage.setClientId(frCardOrderBack.getClientId());
+        frCardOrderStorage.setCustomerCode(frCardOrderBack.getCustomerCode());
+        frCardOrderStorage.setCardId(frCardOrderBack.getCardId());
+        Double allStoragePrice  = iFrCardOrderStorageService.refundStorage(frCardOrderStorage,false,NumberUtilsTwo.getDoublPrice(orderPrice),list,false);
+        //预留一个地方查询子卡的-----------所有可退储值金额-------------
+        Double allStorageCPrice = 0.0;
+        boolean toChile = false;
+        if(toChile){
+            frCardOrderStorage.setClientId(frCardOrderBack.getClientId());
+            frCardOrderStorage.setCustomerCode(frCardOrderBack.getCustomerCode());
+//            frCardOrderStorage.setCardId(frCardOrderBack.getCardId());        --------------这边应该设置的是子卡的id
+            allStorageCPrice  = iFrCardOrderStorageService.refundStorage(frCardOrderStorage,true,NumberUtilsTwo.getDoublPrice(childPrice),list,false);
+        }
+        blackPrice = allNumPrice + allStoragePrice + allStorageCPrice;
+        return  blackPrice;
+    }
+
+
+    /**
+     * 获取指定会员卡的可退金额--不包含可退的储值金额
+     * @return
+     */
+    public Double getOrderPrice( FrCardOrderBack frCardOrderBack,Double allNum, List<String> list)throws  YJException{
+        //先初始化可退金额
+        Double blackPrice = 0.0;
+        if(frCardOrderBack == null || StringUtils.isEmpty(frCardOrderBack.getClientId())
+                ||  StringUtils.isEmpty(frCardOrderBack.getCardId())
+                || StringUtils.isEmpty(frCardOrderBack.getCustomerCode())
+                || allNum <= 0.0){
+            return blackPrice;
+        }
+        //查看是否有续卡订单
+        if(list == null){
+            list = iFrCardSupplyRecordService.getCardIdList(frCardOrderBack.getCardId(),CommonUtils.CARD_SUPPLY_RECORD_TYPE_2);
+        }
+        //获取全部的订单信息、新购、续卡、卡升级、转卡---包括补余金额
+        //获取全部的订单信息------------List
+        Map<String,Object> map = new HashMap<>();
+        map.put("CustomerCode",frCardOrderBack.getCustomerCode());
+        map.put("clientId",frCardOrderBack.getClientId());
+        map.put("status",CommonUtils.ORDER_STATUS_1);
+        map.put("auditStatus",CommonUtils.AUDIT_ORDER_STATUS_1);
+        map.put("isUsing",1);
+        map.put("cardIdList",list);
+        List<FrCardOrderInfo> frCardOrderInfoList = baseMapper.queryBrackInfoList(map);
+        if(frCardOrderInfoList == null){
+            throw  new YJException(YJExceptionEnum.CARD_INFO_EXISTED);
+        }
+        //初始化设置应退款金额
+        Double allHaveNum = allNum;
+        for(FrCardOrderInfo frCardOrderInfo:frCardOrderInfoList){
+            //购买的总权益 = 购买权益+赠送权益
+            Double allBuyNum = NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getBuyRightsNum())+NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getGiveRightsNum());
+            boolean toFlag = true;
+            if(allBuyNum < allHaveNum){
+                toFlag = false;
+                Integer orderState = frCardOrderInfo.getOrderState();
+                //订单是已结款状态的实际支付金额=应付金额
+                // 默认是未结款状态
+                boolean isFlag = true;
+                if(CommonUtils.CARD_ORDRE_STATE_3 == orderState || CommonUtils.CARD_ORDRE_STATE_4 == orderState || CommonUtils.CARD_ORDRE_STATE_5 == orderState){
+                    blackPrice = blackPrice + NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getNeedPrice());
+                    isFlag = false;
+                }
+                if(isFlag){
+                    //实际金额暂时存放在getDiscountPrice里的
+                    blackPrice = blackPrice + NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscountPrice())+NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscount());
+                }
+                allHaveNum = allHaveNum - allBuyNum;
+            }
+            //如果第一条数据，剩余权益小于购买权益，就直接退出；
+            if(toFlag){
+                //退款金额 = 购卡金额/（购买权益+赠送权益）*剩余权益
+                //购卡金额 = 实际付款金额
+                Double buyCardPrice =  NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscountPrice())+NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscount());
+                Double needPayPrice = NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getNeedPrice());
+                Double needPrice = needPayPrice;
+                //若应付款金额大于实际付款金额，购卡金额 = 实际付款金额；
+                if(buyCardPrice < needPayPrice ){
+                    needPrice = buyCardPrice;
+                }
+                Double  price  =  needPrice/allBuyNum * allHaveNum;
+                blackPrice = blackPrice + price;
+               break;
+            }
+        }
+        return  blackPrice;
+    }
+
+    public String getToString(String key,Map<String,Object> map){
+        String mess = "";
+        if(map != null){
+            Object str = map.get(key);
+            if(str != null){
+                mess = str.toString();
+            }
+        }
+        return  mess;
     }
 }

@@ -91,7 +91,11 @@ const ecapp = new Vue({
             if(avatarLink === null||avatarLink ===''||typeof avatarLink ==='undefined'){
                 return '../img/addImg.png';
             }
-            return $.stringFormat("{0}/{1}/"+avatarLink, $.cookie('url'),$.cookie('imgPath'));
+            avatarLink.onload =function() {
+              return avatarLink
+            }
+            return '../img/addImg.png';
+            // return $.stringFormat("{0}/{1}/"+avatarLink, $.cookie('url'),$.cookie('imgPath'));
         },
         /**
          * 状态判断
@@ -179,6 +183,7 @@ const ecapp = new Vue({
          */
         initExistenceList:function (params) {
             const that  = this;
+            console.log("加载现有客户列表===================================================");
             //显示加载中
             Loading.prototype.show();
             that.$nextTick(function () {
@@ -186,6 +191,7 @@ const ecapp = new Vue({
                     const url = $.stringFormat('{0}/frClient/getExistenceList',$.cookie('url'));
                     axios.get(url,{params: params})
                         .then(function (res) {
+                            console.log(res);
                             let jsonData = eval(res);
                             if(jsonData['data']['code']==='200'){
                                 that.existence = jsonData['data']['data'];

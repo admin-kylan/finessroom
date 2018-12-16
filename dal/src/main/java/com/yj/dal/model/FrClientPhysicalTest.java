@@ -229,11 +229,6 @@ public class FrClientPhysicalTest extends Model<FrClientPhysicalTest> {
     @TableField("superior_evaluation")
     private String superiorEvaluation;
     /**
-     * 体型图片
-     */
-    @TableField("physical_pic")
-    private String physicalPic;
-    /**
      * 测评日期
      */
     @TableField("evaluation_date")
@@ -597,13 +592,6 @@ public class FrClientPhysicalTest extends Model<FrClientPhysicalTest> {
         this.superiorEvaluation = superiorEvaluation;
     }
 
-    public String getPhysicalPic() {
-        return physicalPic;
-    }
-
-    public void setPhysicalPic(String physicalPic) {
-        this.physicalPic = physicalPic;
-    }
 
     public Date getEvaluationDate() {
         return evaluationDate;
@@ -702,7 +690,7 @@ public class FrClientPhysicalTest extends Model<FrClientPhysicalTest> {
                 ", bmlIndex=" + bmlIndex +
                 ", personalTrainerAdvice=" + personalTrainerAdvice +
                 ", superiorEvaluation=" + superiorEvaluation +
-                ", physicalPic=" + physicalPic +
+                ", physicalPic="  +
                 ", evaluationDate=" + evaluationDate +
                 ", personalId=" + personalId +
                 ", buildDate=" + buildDate +

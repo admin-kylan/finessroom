@@ -102,8 +102,8 @@ public class PersonnelInfoController {
     }
 
     @GetMapping("/getServicePersonnel")
-    public JsonResult getServicePersonnel(Integer userType) throws YJException{
-        List<PersonnelInfo> personnelInfos = service.getServicePersonnel(userType);
+    public JsonResult getServicePersonnel(Integer userType,String customerCode) throws YJException{
+        List<PersonnelInfo> personnelInfos = service.getServicePersonnel(userType,customerCode);
         return JsonResult.success(personnelInfos);
     }
     /**

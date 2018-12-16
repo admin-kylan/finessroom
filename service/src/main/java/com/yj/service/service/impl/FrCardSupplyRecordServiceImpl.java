@@ -48,6 +48,8 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
     private IFrCardOrderDatailService iFrCardOrderDatailService;
     @Resource
     private IFrCardAgreementService iFrCardAgreementService;
+    @Resource
+    private IFrChildCardService iFrChildCardService;
 
 
     @Override
@@ -235,10 +237,9 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         //直接延续  开卡时间 = 老会员卡的失效时间    * 开卡方式（0，直接延续 ； 1，另行开卡）
         frCardSupplyRecord.setBindTime(frCard.getBindTime());
         Integer cardOpening = 1;
-        String cardNumId = frCard.getCardNumId();
+        String cardNumId = frCard1.getCardNumId();
         if(!frCardSupplyRecord.getCardOpening()){
             cardOpening = 0;
-            cardNumId = frCard1.getCardNumId();
             frCard.setBindTime(frCard1.getInvalidTime());
             frCardSupplyRecord.setBindTime(frCard1.getBindTime());
             if(StringUtils.isEmpty(frCard1.getBindTime())){
@@ -248,7 +249,6 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
                 return  JsonResult.failMessage("此会员卡的卡失效时间未设置");
             }
         }
-        frCard.setCardNumId(cardNumId);
         mapS.put("bindTime",frCardSupplyRecord.getBindTime());
         //默认不更换卡号，需要后台生成一个新卡号，替换原先卡号
         boolean isFlag = true;
@@ -259,12 +259,15 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
             if(StringUtils.isEmpty(frCard.getCardNumId())){
                 return JsonResult.failMessage("会员卡规则ID未获取");
             }
+
             frCardSupplyRecord.setNewCardNo(frCard.getCardNo());
             frCardSupplyRecord.setOriCardNo(frCard1.getCardNo());
             frCardSupplyRecord.setOriCardId(frCard1.getId());
             //前端已经生成过，后端不需要再次生成
             isFlag = false;
+            cardNumId = frCard.getCardNumId();
         }
+        frCard.setCardNumId(cardNumId);
         //更新之前的会员卡，进行更新
         FrCard updateOld = new FrCard();
         //之前的会员卡需要更新成历史卡
@@ -322,6 +325,10 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         FrCard frCard2 = new FrCard();
         frCard2.setHaveRightsNum(frCard.getHaveRightsNum()+orderRightsNum);
         iFrCardService.update(frCard2,new EntityWrapper<FrCard>().where("id={0}",frCard.getId()).and("CustomerCode={0}",frCard.getCustomerCode()));
+        //续卡后需要把子卡都转移到此卡名下
+        FrChildCard frChildCard = new FrChildCard();
+        frChildCard.setParentCardId(frCardSupplyRecord.getNewCardId());
+        iFrChildCardService.update(frChildCard,new EntityWrapper<FrChildCard>().where("CustomerCode={0}",frCardSupplyRecord.getCustomerCode()).and("parent_card_id={0}",frCardSupplyRecord.getOriCardId()));
         return JsonResult.success(true);
     }
 
@@ -536,6 +543,7 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         frCardSupplyRecord.setOrderState(CommonUtils.ORDER_TYPE_1);
         frCardSupplyRecord.setPayPrice(NumberUtilsTwo.getDoubleNum("allPrice",payMoney));
         frCardSupplyRecord.setId(UUIDUtils.generateGUID());
+        frCardSupplyRecord.setInvalidTime(newCard.getInvalidTime());
         baseMapper.insert(frCardSupplyRecord);
         if(frCardOrderPayModes != null && frCardOrderPayModes.size()>0){
             for(FrCardOrderPayMode  frCardOrderPayMode:frCardOrderPayModes ){
@@ -698,14 +706,13 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
             cardNumId = oldCardNumId;
             isFlag = false;
         }
-        if (isFlag) {
-            if(!StringUtils.isEmpty(newcardNumId)){
-                if(isFlag){
-                    Map<String,String> map = new HashMap<>();
-                    String  cardN = this.isFlagNewCardNo(newCardNo,code,map);
-                    if("true".equals(cardN)){
-                        cardNumId = map.get("id");
-                    }
+        if(isFlag){
+            cardNumId = newcardNumId;
+            if(StringUtils.isEmpty(cardNumId)){
+                Map<String,String> map = new HashMap<>();
+                String  cardN = this.isFlagNewCardNo(newCardNo,code,map);
+                if("true".equals(cardN)){
+                    cardNumId = map.get("id");
                 }
             }
         }
@@ -793,4 +800,34 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         }
         return frCardOrderDatail;
    }
+
+
+    @Override
+    public List<FrCardSupplyRecord> quereySupplyList(FrCardSupplyRecord frCardSupplyRecord) {
+        List<FrCardSupplyRecord> frCardSupplyRecordList = null;
+        if(frCardSupplyRecord != null && frCardSupplyRecord.getType() != null && !StringUtils.isEmpty(frCardSupplyRecord.getNewCardId())){
+            frCardSupplyRecordList = baseMapper.quereySupplyList(frCardSupplyRecord);
+        }
+        return frCardSupplyRecordList;
+    }
+
+    @Override
+    public List<String> getCardIdList(String cardId,Integer type) {
+        List<String> list = new ArrayList<>();
+        list.add(cardId);
+        if(StringUtils.isEmpty(cardId)){  return list;  }
+        //查看是否有续卡订单
+        FrCardSupplyRecord frCardSupplyRecord = new FrCardSupplyRecord();
+        frCardSupplyRecord.setNewCardId(cardId);
+        frCardSupplyRecord.setType(type);
+        List<FrCardSupplyRecord> frCardSupplyRecordList = this.quereySupplyList(frCardSupplyRecord);
+        if(frCardSupplyRecordList != null){
+            for(FrCardSupplyRecord frCardSupplyRecord1 : frCardSupplyRecordList){
+                list.add(frCardSupplyRecord1.getOriCardId());
+            }
+        }
+        return list;
+    }
+
+
 }

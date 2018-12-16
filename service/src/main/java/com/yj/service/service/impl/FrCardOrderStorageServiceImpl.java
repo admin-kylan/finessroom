@@ -2,10 +2,12 @@ package com.yj.service.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.sun.xml.internal.messaging.saaj.util.FinalArrayList;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CommonUtils;
+import com.yj.common.util.NumberUtilsTwo;
 import com.yj.common.util.StringUtils;
 import com.yj.common.util.UUIDUtils;
 import com.yj.dal.model.*;
@@ -39,6 +41,9 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
     private IFrCardService iFrCardService;
     @Resource
     private IFrCardOrderInfoService frCardOrderInfoService;
+    @Resource
+    private IFrCardSupplyRecordService iFrCardSupplyRecordService;
+
 
     @Override
     public JsonResult queryStorageCardLis(FrCardOrderStorage frCardOrderStorage) throws YJException {
@@ -140,18 +145,6 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
         List<FrCardOrderDatail> frCardOrderDatailList = new ArrayList<>();
         //初始化设置会员卡订单明细
         FrCardOrderDatail frCardOrderDatail = this.getOrderDatailInfo(frCardOrderStorage,true,frCard.getType(),frCardOrderDatailList);
-//        if(storeCard != null){
-//            FrCardOrderStorage frCardOrderStorage1 = new FrCardOrderStorage();
-//            frCardOrderStorage1.setId(frCardOrderStorage.getId());
-//            frCardOrderStorage1.setCardId(storeCard.getId());
-//            frCardOrderStorage1.setClientId(storeCard.getClientId());
-//            frCardOrderStorage1.setShopId(frCardOrderStorage.getShopId());
-//            frCardOrderStorage1.setPersonnelId(frCardOrderStorage.getPersonnelId());
-//            frCardOrderStorage1.setSurplusPrice(frCardOrderStorage.getStoragePrice());
-//            //先用备用的字段暂存下数据
-//            frCardOrderStorage1.setFlag( frCard.getCardNo()+"：储值抵扣");
-//            this.getOrderDatailInfo(frCardOrderStorage1,false,storeCard.getType(),frCardOrderDatailList);
-//        }
         //数据初始化完毕准备插入数据
         baseMapper.insert(frCardOrderStorage);
         if(frCardOrderPriceDatail != null){
@@ -356,7 +349,6 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
         //统计剩余的储值金额
         Double orderPrice = this.getOrderPrice(frCardOrderStorage);
         if(frCardOrderStorage1.getSurplusPrice() >orderPrice ){
-           //实际付款金额
             return  JsonResult.failMessage("剩余储值金额不足");
         }
         //初始化要更新的储值信息
@@ -630,6 +622,192 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
                 iFrCardOrderPayModeService.insert(frCardOrderPayMode);
             }
         }
+        return JsonResult.success(true);
+    }
+
+    /**
+     * 根据指定会员卡信息获取可退的储值金额
+     * @param frCardOrderStorage   注意需包含会员卡号，子卡即为子卡id
+     * @param isFlage  是否子卡 ：true 是， false，不是
+     * @param allPrice  剩余金额
+     * @param cardList  根据会员卡查询的续卡订单中的原先的会员卡信息，如果未null 会根据frCardOrderStorage里这是的会员卡id 查询
+     * @param toFlag   如果cardList是null 是否需要查询 toFlag，true 需要，false 不需要
+     * @return
+     */
+    @Override
+    public Double refundStorage(FrCardOrderStorage frCardOrderStorage,boolean isFlage,Double allPrice,List<String> cardList,boolean toFlag){
+        //应该退款的储值金额
+        Double refundPrice = 0.0;
+        if(frCardOrderStorage == null || StringUtils.isEmpty(frCardOrderStorage.getCustomerCode())
+                || StringUtils.isEmpty(frCardOrderStorage.getCardId())
+                || StringUtils.isEmpty(frCardOrderStorage.getClientId())
+                || allPrice <= 0.0){
+            return refundPrice;
+        }
+        List<FrCardOrderStorage> frCardOrderStorages = new ArrayList<>();
+        // 如果是子卡，直接查询储值表，
+        if(isFlage){
+            frCardOrderStorages = baseMapper.selectList(
+                    new EntityWrapper<FrCardOrderStorage>().where("card_id={0}",frCardOrderStorage.getCardId())
+                            .and("client_id={0}",frCardOrderStorage.getClientId())
+                            .and("storage_status ={0}",CommonUtils.ORDER_TYPE_1).and("is_using={0}",1)
+                            .and("CustomerCode={0}",frCardOrderStorage.getCustomerCode()));
+        }
+        //如果不是子卡，获取订单信息
+        if(!isFlage){
+            //如果I
+            if(cardList == null || cardList.size() <= 0 ){
+                if(toFlag){
+                    cardList = iFrCardSupplyRecordService.getCardIdList(frCardOrderStorage.getCardId(),CommonUtils.CARD_SUPPLY_RECORD_TYPE_2);
+                }
+                if(cardList == null || cardList.size() <= 0 ){
+                    return refundPrice;
+                }
+            }
+            Map<String,Object> map = new HashMap<>();
+            map.put("CustomerCode",frCardOrderStorage.getCustomerCode());
+            map.put("clientId",frCardOrderStorage.getClientId());
+            map.put("status",CommonUtils.ORDER_STATUS_1);
+            map.put("auditStatus",CommonUtils.AUDIT_ORDER_STATUS_1);
+            map.put("isUsing",1);
+            map.put("cardIdList",cardList);
+            frCardOrderStorages = baseMapper.queryStorgeList(map);
+        }
+        if(frCardOrderStorages == null){
+            return refundPrice = 0.0;
+        }
+        Double allHavePrice = allPrice;
+        for(FrCardOrderStorage frCardOrderStorage1 : frCardOrderStorages) {
+            //只有订单是储值状态的情况下才有效
+            if (CommonUtils.ORDER_TYPE_1 == frCardOrderStorage1.getStorageStatus()) {
+                //实际付款金额
+                Double totalPrice = NumberUtilsTwo.getDoublPrice(frCardOrderStorage1.getTotalPrice());
+                //储值总金额
+                Double surplusPrice = frCardOrderStorage1.getSurplusPrice();
+                // 剩余储值金额 大于储值总金额
+                boolean allFlag = true;
+                if (allHavePrice > surplusPrice) {
+                    refundPrice = refundPrice + totalPrice;
+                    allHavePrice = allHavePrice - surplusPrice;
+                    allFlag = false;
+                }
+                if (allFlag) {
+                    //应退款储值金额 = 剩余金额*储值金额/储值总金额
+                    Double price = allHavePrice * totalPrice / surplusPrice;
+                    refundPrice = refundPrice + NumberUtilsTwo.getDoublPrice(price);
+                    //如果剩余储值金额已经小于总储值金额了，退出循环
+                    break;
+                }
+            }
+        }
+        return  refundPrice;
+    }
+
+    /**
+     *  获取指定会员卡的可退储值信息
+     * @param code
+     * @param cardId
+     * @return
+     */
+    @Override
+    public Double getAllBlackStorage(String code, String cardId,String clientId)throws YJException {
+        if(StringUtils.isEmpty(cardId) || StringUtils.isEmpty(code)){
+           throw  new  YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        FrCard frCard = iFrCardService.selectOne(new EntityWrapper<FrCard>().where("id={0}",cardId).and("CustomerCode={0}",code).and("client_id={0}",clientId));
+        if(frCard == null) {
+            throw  new  YJException(YJExceptionEnum.PARENT_CARD_ID_EXISTED);
+        }
+        if(CommonUtils.CARD_STATUS_6 == frCard.getStatus()){
+            throw  new  YJException(YJExceptionEnum.FRCARD_STATUS_EXISTED);
+        }
+        Double allPrice = this.getAllPrice(frCard);
+        return allPrice;
+    }
+
+    /**
+     * 根据会员卡信息获取剩余储值金额
+     * @param frCard
+     * @return
+     * @throws YJException
+     */
+    public Double  getAllPrice(FrCard frCard)throws YJException{
+        //获取剩余储值金额
+        FrCardOrderDatail frCardOrderDatail = new FrCardOrderDatail();
+        frCardOrderDatail.setCardId(frCard.getId());
+        frCardOrderDatail.setClientId(frCard.getClientId());
+        frCardOrderDatail.setCustomerCode(frCard.getCustomerCode());
+        frCardOrderDatail.setType(CommonUtils.ORDER_DATAIL_TYPE_2);
+        Double havaPrice = iFrCardOrderDatailService.querySumOrderPrice(frCardOrderDatail,false);
+        FrCardOrderStorage  frCardOrderStorage = new FrCardOrderStorage();
+        frCardOrderStorage.setCustomerCode(frCard.getCustomerCode());
+        frCardOrderStorage.setCardId(frCard.getId());
+        frCardOrderStorage.setClientId(frCard.getClientId());
+        Double allPrice  = this.refundStorage(frCardOrderStorage,false,havaPrice,null,true);
+        if(allPrice == null){
+            allPrice = 0.0;
+        }
+        return  allPrice;
+    }
+
+
+    /**
+     * 储值退全款
+     * @param frCardOrderStorage
+     * @return
+     * @throws YJException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public JsonResult toRefundAllPrice(FrCardOrderStorage frCardOrderStorage) throws YJException {
+        //剩余储值总金额
+        Double havePrice = this.getOrderPrice(frCardOrderStorage);
+        if(havePrice <= 0){
+            JsonResult.failMessage("剩余储值金额不足");
+        }
+        FrCard frCard = iFrCardService.selectOne(new EntityWrapper<FrCard>()
+                        .where("id={0}",frCardOrderStorage.getCardId())
+                         .and("CustomerCode={0}",frCardOrderStorage.getCustomerCode())
+                          .and("client_id={0}",frCardOrderStorage.getClientId()));
+        if(frCard == null) {
+            throw  new  YJException(YJExceptionEnum.PARENT_CARD_ID_EXISTED);
+        }
+        if(CommonUtils.CARD_STATUS_6 == frCard.getStatus()){
+            throw  new  YJException(YJExceptionEnum.FRCARD_STATUS_EXISTED);
+        }
+        //重新获取可退款金额，避免操作的时候客户再次消费；
+        Double allPrice = this.getAllPrice(frCard);
+        if(allPrice < 0 ){
+            JsonResult.failMessage("可退储值金额不足");
+        }
+        if(allPrice < frCardOrderStorage.getTotalPrice()){
+            throw new YJException(YJExceptionEnum.BLACE_PRICE_EXISTED);
+        }
+        //初始化储值订单记录
+        frCardOrderStorage.setId(UUIDUtils.generateGUID());
+        //生成订单编号
+        String orderNo = frCardOrderInfoService.getOrderNo();
+        frCardOrderStorage.setOrderNo(orderNo);
+        frCardOrderStorage.setSurplusPrice(havePrice);
+        //操作此退款的只能是审核复核通过的订单
+        frCardOrderStorage.setStorageStatus(CommonUtils.ORDER_TYPE_6);
+        frCardOrderStorage.setTotalPrice(allPrice);
+        frCardOrderStorage.setStorePrice(allPrice);
+        frCardOrderStorage.setStatus(CommonUtils.ORDER_STATUS_0);
+        frCardOrderStorage.setAuditStatus(CommonUtils.AUDIT_ORDER_STATUS_0);
+        //剩余储值金额 - 实际储值金额 = 赠送的金额
+        frCardOrderStorage.setGivePrice(havePrice-allPrice);
+
+        //初始化设置会员卡订单明细
+        FrCardOrderDatail frCardOrderDatail = this.getOrderDatailInfo(frCardOrderStorage,false,frCard.getType(),new ArrayList<>());
+        frCardOrderDatail.setFlag("退款剩余全部储值");
+        frCardOrderDatail.setOrderAmt(0.0);
+        FrCardOrderPriceDatail frCardOrderPriceDatail = null;
+        frCardOrderPriceDatail = this.getOrderPriceDatailInfo(frCardOrderStorage,true,frCard.getType());
+        frCardOrderDatail.setOrderPriceId(frCardOrderPriceDatail.getId());
+        iFrCardOrderDatailService.insert(frCardOrderDatail);
+        iFrCardOrderPriceDatailService.insert(frCardOrderPriceDatail);
+        baseMapper.insert(frCardOrderStorage);
         return JsonResult.success(true);
     }
 }

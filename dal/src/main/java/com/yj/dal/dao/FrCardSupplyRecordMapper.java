@@ -28,4 +28,11 @@ public interface FrCardSupplyRecordMapper extends BaseMapper<FrCardSupplyRecord>
 
     List<Map<String,Object>> queryContinueCardLis(Page page, Map<String,Object> map);
 
+    /**
+     * 根据指定的会员卡id获取该会员卡的所有续卡记录
+     * @param frCardSupplyRecord
+     * @return
+     */
+    List<FrCardSupplyRecord> quereySupplyList(FrCardSupplyRecord frCardSupplyRecord);
+
 }

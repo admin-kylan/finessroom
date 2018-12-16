@@ -149,7 +149,7 @@
 
     <select id="queryOrderInfoPrice" resultType="java.util.Map">
         SELECT
-           (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and b.order_type ='1' ) payPrice,
+           (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and ( b.order_type ='1' or  b.order_type ='2' )) payPrice,
            (SELECT SUM(f.total_price) FROM fr_card_order_complement f WHERE f.card_id = a.card_id
                         AND f.order_state = 1 AND f.status != 2 AND f.audit_status != 2 )complementPrice,
           <include refid="Base_Column_List" />
@@ -167,7 +167,7 @@
           (SELECT b.card_type_name FROM fr_card_original_set b where a.card_id = b.card_id) cardName,
           (SELECT p.RelName FROM PersonnelInfo p WHERE a.personnel_id = p.id) saleName,
           (SELECT p.Status FROM PersonnelInfo p WHERE a.personnel_id = p.id) saleStatus,
-          (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and b.order_type ='1' ) payPrice,
+          (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and (b.order_type ='1' or b.order_type ='2' )) payPrice,
         <include refid="Base_Column_List" />
         FROM fr_card_order_info a
         WHERE a.CustomerCode = #{CustomerCode}
@@ -221,6 +221,39 @@
         WHERE a.card_id = #{cardId}
           AND a.CustomerCode = #{CustomerCode}
           AND a.client_id = #{clientId}
+        ORDER BY a.create_time DESC
+    </select>
+
+    <!--为了好封装-->
+    <!--实际支付金额先存放在a.discount_price字段里-->
+    <!--子卡持有方式先存放在 a.consume_type字段里-->
+    <!--补余金额先存放a.discount字段里-->
+    <select id="queryBrackInfoList"  resultType="com.yj.dal.model.FrCardOrderInfo">
+         SELECT
+            (SELECT b.zk_xffs FROM fr_card_original_set b  WHERE a.card_set_id = b.id) consumeType,
+            (SELECT SUM(b.pay_price) FROM fr_card_order_pay_mode b WHERE b.order_id = a.id and (b.order_type ='1' or b.order_type ='2' )) discountPrice ,
+            (SELECT SUM(b.pay_price)  FROM fr_card_order_complement f
+                            LEFT JOIN fr_card_order_pay_mode b ON b.order_id = f.id WHERE f.card_id = a.card_id AND b.order_type = '6'
+                            AND f.order_state = 1 AND f.status = 1 AND f.audit_status = 1 ) discount,
+             a.id AS id,
+             a.pay_type AS payType,
+             a.order_state AS orderState,
+             a.total_price AS totalPrice,
+             a.need_price AS needPrice,
+             a.no_price AS noPrice,
+             a.buy_rights_num AS buyRightsNum,
+             a.give_rights_num AS giveRightsNum
+         FROM fr_card_order_info a
+         WHERE a.CustomerCode = #{CustomerCode}
+          AND  a.client_id = #{clientId}
+          AND  a.status = #{status}
+          AND  a.audit_status = #{auditStatus}
+          AND  a.is_using = #{isUsing}
+          AND (
+            <foreach collection="cardIdList" item="cardId" index="i" open="" close="" separator="or">
+                a.card_id = #{cardId}
+            </foreach>
+            )
         ORDER BY a.create_time DESC
     </select>
 

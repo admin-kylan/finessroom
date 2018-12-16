@@ -79,7 +79,11 @@ public class FrCardNumServiceImpl extends BaseServiceImpl<FrCardNumMapper, FrCar
         String id="";
         for(FrCardNum frCardNum:list){//判断是否属于开始于结束编号的范围
             String n = "";
-            if(frCardNum == null || StringUtils.isEmpty(frCardNum.getStartNo())){
+            String startNo = frCardNum.getStartNo();
+            if(startNo != null ){
+                startNo = startNo.trim();
+            }
+            if(frCardNum == null || StringUtils.isEmpty(startNo)){
                 break;
             }
             if(!(Integer.valueOf(cardNum)>=Integer.valueOf(frCardNum.getStartNo())&&

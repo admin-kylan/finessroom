@@ -28,4 +28,11 @@ public interface FrCardOrderInfoMapper extends BaseMapper<FrCardOrderInfo> {
     Double queryOrderInfoAllPrice(FrCardOrderInfo frCardOrderInfo);
 
     Map<String, Object> queryCardAndType(FrCardOrderInfo frCardOrderInfo);
+
+    /**
+     * 获取此会员卡的所有订单记录，新购，续卡
+     * @param map
+     * @return
+     */
+    List<FrCardOrderInfo> queryBrackInfoList(Map<String,Object> map);
 }

@@ -111,4 +111,22 @@
     </select>
 
 
+    <select id="queryStorgeList" resultType="com.yj.dal.model.FrCardOrderStorage">
+        SELECT
+          <include refid="Base_Column_List" />
+        FROM fr_card_order_storage a
+        WHERE a.CustomerCode = #{CustomerCode}
+        AND  a.client_id = #{clientId}
+        AND  a.status = #{status}
+        AND  a.audit_status = #{auditStatus}
+        AND  a.is_using = #{isUsing}
+        AND (
+        <foreach collection="cardIdList" item="cardId" index="i" open="" close="" separator="or">
+            a.card_id = #{cardId}
+        </foreach>
+        )
+        ORDER BY a.create_time DESC
+    </select>
+
+
 </mapper>

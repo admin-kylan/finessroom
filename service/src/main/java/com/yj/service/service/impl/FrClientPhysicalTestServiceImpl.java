@@ -59,7 +59,7 @@ public class FrClientPhysicalTestServiceImpl extends BaseServiceImpl<FrClientPhy
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public JsonResult savePhysical(List<FrClientPhysicalTest> frClientPhysicalTests) throws YJException {
         //校验参数
         if (frClientPhysicalTests.size() < 0) {

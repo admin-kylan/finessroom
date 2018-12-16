@@ -73,7 +73,7 @@
 
     <select id="queryComplementList" resultType="java.util.Map">
         SELECT
-         (SELECT STUFF((SELECT ','+ltrim(cast(
+        (SELECT  TOP 1 STUFF((SELECT ','+ltrim(cast(
               CASE
                   WHEN pay_mode =1 THEN '支付宝'  WHEN pay_mode =2  THEN '刷卡'
                   WHEN pay_mode =3  THEN '微信'   WHEN pay_mode =4 THEN '现金'

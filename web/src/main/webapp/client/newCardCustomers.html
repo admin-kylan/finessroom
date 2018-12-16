@@ -16,15 +16,15 @@
 
 <body>
     <div id="newCardCustomers">
-        <div class="tab" v-if="LiIndex==2">
+        <div class="tab" v-if="LiIndex==2 || LiIndex==0">
             <span><img src="../img/goback.png"  @click="closeCustomer"></span>
-            <h3 class="NewHY-title">续卡操作</h3>
+            <h3 class="NewHY-title">{{loadName}}</h3>
             <span> <strong> 操作人：</strong> </span>
             <span>Demacia</span>
             <span> <strong> 是否有权限：</strong> </span>
             <span>有</span>
         </div>
-        <div class="section" v-if="LiIndex==2">
+        <div class="section" v-if="LiIndex==2 || LiIndex==0">
             <div class="section1">
                 <fieldset>
                     <legend>会员信息</legend>
@@ -143,7 +143,7 @@
                                     <label>
                                         <input type="radio" name="you" v-model="cardMap.isFlage" value="1"  @change="chackBindTime" id="you">
                                         有
-                                        <input type="date" v-model="cardMap.bindTime" id="bindTime">
+                                        <input type="text" class="jeinput"  v-model="cardMap.bindTime" id="bindTime" placeholder="请选择" readonly>
                                     </label>
                                 </div>
                                 <div>
@@ -160,6 +160,7 @@
                     <div class="section2_box">
                         <div class="section2_box_top">
                             <a href="#" class="on">购买会员卡信息</a>
+                            <a href="#" v-if="LiIndex==0" >购买项目/产品信息</a>
                         </div>
                         <div class="section2_boxs">
                             <div class="section2_boxs1 on">
@@ -500,6 +501,205 @@
                                 <span>赠送权益：<strong>{{cardMap.giveRightsNum}}</strong></span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="section3" v-if="LiIndex==0" >
+                <legend>票券赠送</legend>
+                <div class="tableWrap">
+                    <div class="tabW_top">
+                        <a href="#">删除</a><a href="#" id="ticketGifts">赠送票卷</a>
+                    </div>
+                    <div class="tabW">
+                        <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+                            <thead>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>序号</td>
+                                <td>获得方式</td>
+                                <td>票券门店</td>
+                                <td>绑定会员卡</td>
+                                <td>票券系列</td>
+                                <td>票券名称</td>
+                                <td>性质</td>
+                                <td>票券编号</td>
+                                <td>创建时间</td>
+                                <td>面值</td>
+                                <td>剩余积分</td>
+                                <td>开始日期</td>
+                                <td>结束日期</td>
+                                <td>权益详情</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>1</td>
+                                <td class="tored">购卡赠送</td>
+                                <td>软件园店</td>
+                                <td class="togreen">一年卡</td>
+                                <td>团会员积分</td>
+                                <td>10积分</td>
+                                <td>电子券</td>
+                                <td class="toceng">100060001111111</td>
+                                <td>2017-12-01</td>
+                                <td>10</td>
+                                <td class="tored">10</td>
+                                <td>2017-12-01</td>
+                                <td>2017-12-01</td>
+                                <td><a href="#">查看</a></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="page clearfix">
+                        <p class="fl">【共5页/总100条】</p>
+                        <ul class="fr">
+                            <li>首页</li>
+                            <li>上一页</li>
+                            <li>1</li>
+                            <li>下一个</li>
+                            <li>尾页</li>
+                            <li>第<input type="text">页</li>
+                        </ul>
                     </div>
                 </div>
             </fieldset>

@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
+import com.yj.common.util.CommonUtils;
 import com.yj.common.util.StringUtils;
+import com.yj.dal.model.FrCard;
 import com.yj.dal.model.FrCardOrderStorage;
 import com.yj.service.service.IFrCardOrderStorageService;
 import org.springframework.web.bind.annotation.*;
@@ -133,6 +135,9 @@ public class FrCardOrderStorageController {
                 || StringUtils.isEmpty(frCardOrderStorage.getPersonnelId()) || StringUtils.isEmpty(frCardOrderStorage.getShopId())) {
             return JsonResult.failMessage("请求参数有误，请重新核对");
         }
+        if(CommonUtils.STORAGE_PRICE.equals(frCardOrderStorage.getId())){
+            return  service.toRefundAllPrice(frCardOrderStorage);
+        }
         return service.toRefundSubimt(frCardOrderStorage);
     }
 
@@ -155,6 +160,20 @@ public class FrCardOrderStorageController {
             return JsonResult.failMessage("请求参数有误，请重新核对");
         }
         return  service.toTransfersStorage(frCardOrderStorage);
+    }
+
+    /**
+     * 获取指定会员卡的可退总储值金额
+     * @param CustomerCode
+     * @param cardId
+     * @param request
+     * @return
+     */
+    @GetMapping("getAllBlackStorage")
+    public JsonResult getAllBlackStorage(@RequestParam("CustomerCode")String CustomerCode,
+                                         @RequestParam("cardId")String cardId,@RequestParam("clientId")String clientId,
+                                         HttpServletRequest request)throws  YJException{
+        return JsonResult.success(service.getAllBlackStorage(CustomerCode,cardId,clientId));
     }
 
 }
