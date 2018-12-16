@@ -1,0 +1,75 @@
+<div id="course-new-buy-project-body">
+    <p class="line">
+        <label>
+            <span>选择购买项目/商品：</span>
+            <input type="text" placeholder="选择购买项目/商品"/>
+            <span class="project" onclick="products()">选择项目</span>
+        </label>
+        <label>
+            <span>单价：</span>
+            <input type="text" placeholder="单价由项目/产品自动带出"/>
+        </label>
+    </p>
+    <p class="line">
+        <label>
+            <span>购买数量：</span>
+            <input type="text" placeholder="填写购买数量"/>
+        </label>
+        <label>
+            <span>赠送数量：</span>
+            <input type="text" placeholder="填写赠送数量"/>
+        </label>
+        <label>
+            <span>可用数量：</span>
+            <span>0</span>
+        </label>
+    </p>
+    <p class="line">
+        <label>
+            <span>选择有效期：</span>
+            <input type="radio" name="month"/>12个月
+            <input type="radio" name="month"/>1个月
+            <input type="radio" name="month"/>3个月
+            <input type="radio" name="month"/>6个月
+            <input type="radio" name="month"/>12个月
+            <input type="radio" name="month"/>与会员卡同期
+            <input type="radio" name="month"/>自定义<input type="text" placeholder="月数" class="to50"/>个月
+            <span class="red">有效期指的是：项目或者商品的有效期，有效期内才能享受项目/商品的权益</span>
+        </label>
+    </p>
+    <p class="line">
+        <label>
+            <span>开始日期：</span>
+            <input type="date"/>
+        </label>
+        <label>
+            <span>失效日期：</span>
+            <span>2018-08-25</span>
+        </label>
+    </p>
+    <p class="line">
+        <input type="submit" value="去结账" class="check"/>
+    </p>
+</div>
+<script>
+    new Vue({
+        el: '#course-new-buy-project-body',
+        data: {
+
+        },
+        computed: {},
+        watch: {
+
+            //
+        },
+        created: function () {
+
+        },
+        methods: {
+
+
+        }
+    });
+
+</script>
+

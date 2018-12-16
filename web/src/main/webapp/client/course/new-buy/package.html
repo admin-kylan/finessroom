@@ -1,0 +1,98 @@
+<div id="course-new-buy-package-body">
+    <p class="line">
+        <label >
+            <span>选择购买的套餐：</span>
+            <input type="text" placeholder="选择购买项目/商品" />
+            <span class="project" onclick="products()">选择项目</span>
+        </label>
+        <label >
+            <span>售价：</span>
+            <input type="text" placeholder="单价由套餐自动带出" />
+        </label>
+        <label >
+            <span>可用消费最多数量：</span>
+            <input type="text" placeholder="最多数量" />
+            <span class="red">前台可以执行修改最多数量，但不能超过套餐产品详情的指定数量之和</span>
+        </label>
+    </p>
+    <p class="line">
+        <label >
+            <span>选择有效期：</span>
+            <input type="radio" name="month" />12个月
+            <input type="radio" name="month" />1个月
+            <input type="radio" name="month" />3个月
+            <input type="radio" name="month" />6个月
+            <input type="radio" name="month" />12个月
+            <input type="radio" name="month" />与会员卡同期
+            <input type="radio" name="month" />自定义<input type="text" placeholder="月数" class="to50" />个月
+            <span class="red">有效期指的是：项目或者商品的有效期，有效期内才能享受项目/商品的权益</span>
+        </label>
+    </p>
+    <p class="line">
+        <label >
+            <span>开始日期：</span>
+            <input type="date" />
+        </label>
+        <label >
+            <span>失效日期：</span>
+            <span>2018-08-25</span>
+        </label>
+    </p>
+    <div class="line">
+        <label >
+            <span>套餐产品详情：<span class="red">(可消费项目)</span></span>
+            <table border="1" bordercolor="#ccc">
+                <thead>
+                <tr>
+                    <td>门店</td>
+                    <td>场馆</td>
+                    <td>项目/产品</td>
+                    <td>指定数量</td>
+                    <td>每天限用数量</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>软件园店</td>
+                    <td>私教教学</td>
+                    <td>私教一对一</td>
+                    <td>30</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>软件园店</td>
+                    <td>私教教学</td>
+                    <td>私教一对一</td>
+                    <td>30</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+            </table>
+        </label>
+    </div>
+    <p class="line">
+        <input type="submit" value="去结账" class="check" onclick="offers()" />
+    </p>
+</div>
+
+<script>
+    new Vue({
+        el: '#course-new-buy-package-body',
+        data: {
+
+        },
+        computed: {},
+        watch: {
+
+            //
+        },
+        created: function () {
+
+        },
+        methods: {
+
+
+        }
+    });
+
+</script>

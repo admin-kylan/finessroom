@@ -1,0 +1,173 @@
+<li class="list2 list on" v-if="LiIndex==1">
+    <fieldset>
+        <legend>筛选条件</legend>
+        <div class="clearfix">
+            <p class="rig">
+                <span class="title">状态选择：</span>
+                <span class="category">
+									<span class="on">全部</span>
+									<span>正常</span>
+									<span>历史</span>
+									<span>挂账</span>
+									<span>挂单</span>
+								</span>
+            </p>
+        </div>
+        <div class="clearfix">
+            <p class="lef">
+                <span class="title">销售门店：</span>
+                <input type="text" />
+            </p>
+            <p class="rig">
+                <select name="">
+                    <option value="">开始时间</option>
+                    <option value="">失效时间</option>
+                    <option value="">创建时间</option>
+                </select>
+                <input type="date" /> ~
+                <input type="date" />
+            </p>
+        </div>
+        <div>
+            <span class="title lh25">套餐搜索：</span>
+            <input type="text" placeholder="套餐名称" />
+            <input type="submit" value="搜索" class="search" />
+        </div>
+    </fieldset>
+    <div class="tab">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>操作</td>
+                <td>状态</td>
+                <td>套餐详情</td>
+                <td>所在门店</td>
+                <td>所在场馆</td>
+                <td>购买项目/产品套餐</td>
+                <td>可用数量</td>
+                <td>剩余数量</td>
+                <td>已消费数量</td>
+                <td>单价</td>
+                <td>购买金额</td>
+                <td>有效期</td>
+                <td>开始日期</td>
+                <td>结束日期</td>
+                <td>协议编号</td>
+                <td>销售类型</td>
+                <td>教练</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>
+                    <span>打印</span>
+                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
+                    <span class="red" v-on:click="LI(7)">退费</span>
+                    <span class="blue" v-on:click="LI(6)">转让</span>
+                    <span class="green" v-on:click="LI(3)">启用</span>
+                    <span class="yellow" v-on:click="LI(5)">延期</span>
+                </td>
+                <td class="deepBlue">正常</td>
+                <td class="deepBlue">查看</td>
+                <td>软件园店</td>
+                <td>健身私教</td>
+                <td class="deepBlue">私人套餐</td>
+                <td class="green">2</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1600.00</td>
+                <td>1600.00</td>
+                <td>1年</td>
+                <td>2018-08-25</td>
+                <td>2019-08-25</td>
+                <td>20180825211565</td>
+                <td>POS销售</td>
+                <td class="grey">无</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>
+                    <span>打印</span>
+                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
+                    <span class="red" v-on:click="LI(7)">退费</span>
+                    <span class="blue" v-on:click="LI(6)">转让</span>
+                    <span class="green" v-on:click="LI(3)">启用</span>
+                    <span class="yellow" v-on:click="LI(5)">延期</span>
+                </td>
+                <td class="red">挂账</td>
+                <td class="deepBlue">查看</td>
+                <td>软件园店</td>
+                <td>健身私教</td>
+                <td class="deepBlue">私人套餐</td>
+                <td class="green">2</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1600.00</td>
+                <td>1600.00</td>
+                <td>1年</td>
+                <td>2018-08-25</td>
+                <td>2019-08-25</td>
+                <td>20180825211565</td>
+                <td>POS销售</td>
+                <td class="grey">无</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>
+                    <span>打印</span>
+                    <span class="grey" v-on:click="LI(4)">补余</span>
+                    <span class="grey" v-on:click="LI(7)">退费</span>
+                    <span class="grey" v-on:click="LI(6)">转让</span>
+                    <span class="grey" v-on:click="LI(3)">启用</span>
+                    <span class="grey" v-on:click="LI(5)">延期</span>
+                </td>
+                <td class="grey">历史</td>
+                <td class="deepBlue">查看</td>
+                <td>软件园店</td>
+                <td>健身私教</td>
+                <td class="deepBlue">私人套餐</td>
+                <td class="green">2</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1600.00</td>
+                <td>1600.00</td>
+                <td>1年</td>
+                <td>2018-08-25</td>
+                <td>2019-08-25</td>
+                <td>20180825211565</td>
+                <td>POS销售</td>
+                <td class="grey">无</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>
+                    <span>打印</span>
+                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
+                    <span class="red" v-on:click="LI(7)">退费</span>
+                    <span class="blue" v-on:click="LI(6)">转让</span>
+                    <span class="green" v-on:click="LI(3)">启用</span>
+                    <span class="yellow" v-on:click="LI(5)">延期</span>
+                </td>
+                <td class="yellow">挂单</td>
+                <td class="deepBlue">查看</td>
+                <td>软件园店</td>
+                <td>健身私教</td>
+                <td class="deepBlue">私人套餐</td>
+                <td class="green">2</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1600.00</td>
+                <td>1600.00</td>
+                <td>1年</td>
+                <td>2018-08-25</td>
+                <td>2019-08-25</td>
+                <td>20180825211565</td>
+                <td>POS销售</td>
+                <td class="grey">无</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</li>

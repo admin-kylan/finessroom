@@ -1,0 +1,80 @@
+<li class="list3 list on" id="course-new-buy-li" xmlns:v-on="http://www.w3.org/1999/xhtml">
+    <div class="boxNav clearfix">
+        <span :class='{on:index == 0}' v-on:click="index = 0">购买课程项目/商品</span>
+        <span :class='{on:index == 1}' v-on:click="index = 1">购买套餐/疗程</span>
+    </div>
+
+    <div class="boxChoose on">
+        <div id="course-head-body">
+
+        </div>
+        <div id="course-main-body">
+
+        </div>
+    </div>
+
+
+
+</li>
+<script type="text/javascript">
+    new Vue({
+        el: '#course-new-buy-li',
+        data: {
+            index: -1,
+            html: '', //页面不同体的html
+            headHtml: './course/new-buy/head.html', //页面头部html
+        },
+        computed: {},
+        watch: {
+            index: function (val) {//选择不同的tab 显示不同的页面
+                switch (val) {
+                    case 0:
+                        this.html = "./course/new-buy/project.html";
+                        break;
+                    case 1:
+                        this.html = "./course/new-buy/package.html";
+                        break;
+                    default:
+                        this.html = "./course/new-buy/project.html";
+                }
+                this.load();//执行加载html，填充页面
+            },
+
+        },
+        created: function () {
+            this.index = 0; //默认执行第一个tab
+        },
+        methods: {
+            load: function () { //动态加载html
+                $('#course-main-body').load(this.html)
+                $('#course-head-body').load(this.headHtml)
+            },
+
+
+        }
+    });
+</script>
+
+<style>
+    #course-new-buy-li .ag-error {
+        float: right;
+        margin-left: 7px;
+        margin-top: 6px;
+        color: red;
+    }
+
+    #course-new-buy-li .ag-success {
+        float: right;
+        margin-left: 7px;
+        margin-top: 6px;
+        color: green;
+    }
+
+    #course-new-buy-li .ag-general {
+        float: right;
+        margin-left: 7px;
+        margin-top: 6px;
+        color: green;
+    }
+
+</style>

@@ -1,0 +1,150 @@
+<div id="course-new-buy-head">
+    <p class="line">
+        <label>
+            <span>销售门店：</span>
+            <select name="" v-model="shopId">
+                <!--<option value="" selected="">软件园店</option>-->
+                <option v-for='(item,index) in shopList' :value="item.id">
+                    {{item.shopName}}
+                </option>
+            </select>
+        </label>
+        <label>
+            <span>选择场馆：</span>
+            <select name="">
+                <option value="" selected="">美容院</option>
+            </select>
+        </label>
+        <label>
+            <span>协议编号：</span>
+            <input type="text" placeholder="填写协议编号或者随机生成" v-model="agreementData" @blur.prevent="checkCardAgreement"/>
+            <span :class="agreementError.style">{{agreementError.msg}}</span>
+            <span class="random" @click="addCardAgreement">随机号</span>
+
+        </label>
+        <label>
+            <span>购买日期：</span>
+            <span class="date">{{currentDate}}</span>
+        </label>
+    </p>
+    <p class="line">
+        <label>
+            <span>销售人员：</span>
+            <select name="" v-model="marketUserId">
+                <!--<option value="" selected="">Nicolas Klaus</option>-->
+                <option v-for='(item,index) in marketUserList' :value="item.id">
+                    {{item.relName}}
+                </option>
+            </select>
+            <span class="distribution">业绩分配</span>
+        </label>
+    </p>
+</div>
+
+
+<script>
+    new Vue({
+        el: '#course-new-buy-head',
+        data: {
+            shopList: [], //门店列表
+            shopId: '', //门店Id
+            agreementError: {
+                msg: '',
+                style: 'ag-general'
+            }, //协议的错误信息 以及样式
+            agreementData: '', //协议号
+            code: '', //客户代码
+            currentDate: '', //用当前时间计算购买日期
+            marketUserList: [], //销售人员list
+            marketUserId: "", //销售人员ID
+        },
+        computed: {},
+        watch: {
+            shopId(){//当选择了门店，初始化销售人员
+                this.getMarketUserList();
+            }
+            //
+        },
+        created: function () {
+            let date = new Date();
+            //定义初始化参数
+            this.code = $.cookie("code");
+            this.currentDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            this.loadShopList();//初始化加载门店列表
+        },
+        methods: {
+            //加载门店list
+            loadShopList: function () {
+                let obj = {}, data = null;
+                axiosGetParams('shop/getMarketShopList', {type: 0}, (response) => {
+                    if (response.code === '200') {
+                        data = response.data.data;
+                        $.each(data, (i, d) => {
+                            if (i == 0) {
+                                this.shopId = d.id;
+                            }
+                            obj.shopName = d.shopName;
+                            obj.id = d.id;
+                            this.shopList.push(obj);
+                            obj = {};
+                        })
+
+                    }
+                })
+            },
+            //检查协议编号
+            checkCardAgreement(){
+                var myreg = /^[0-9]*$/;
+                if (!myreg.test(this.agreementData)) {
+                    this.agreementError.style = "ag-error";//验证出错，提示框
+                    this.agreementError.msg = "输入有误，请输入数字";
+                    return false;
+                }
+                axiosGetParams('frAgreement/checkCardAgreement', {agreement: this.agreementData}, (response) => {
+                    if (response.code === '200') {
+                        this.agreementError.style = "ag-success";
+                        this.agreementError.msg = "协议号符合规则";
+                    } else {
+                        this.agreementError.msg = response.msg;
+                        this.agreementError.style = "ag-error";
+                    }
+                })
+
+            },
+            //新增协议编号
+            addCardAgreement(){
+                axiosGetParams('frAgreement/addCardAgreement', {code: this.code}, (response) => {
+                    if (response.code === '200') {
+                        this.agreementData = response.data.agreement
+                        this.agreementError.msg = "协议号符合规则";
+                        this.agreementError.style = "ag-success";
+                    } else {
+                        this.agreementError.msg = response.msg;
+                        this.agreementError.style = "ag-error";
+                    }
+                })
+            },
+            //获取销售人员 marketUserList
+            getMarketUserList(){
+                let obj = {}, data = null;
+                this.marketUserList = [];// 清空原来的数组
+                axiosGetParams('personnelInfo/getMarketUserList', {shopId: this.shopId}, (response) => {
+                    if (response.code === '200') {
+                        //marketUserList
+                        data = response.data.data;
+                        $.each(data, (i, d) => {
+                            if (i == 0) {
+                                this.marketUserId = d.id;
+                            }
+                            obj.relName = d.relName;
+                            obj.id = d.id;
+                            this.marketUserList.push(obj);
+                            obj = {};
+                        })
+                    }
+                })
+            }
+        }
+    });
+
+</script>

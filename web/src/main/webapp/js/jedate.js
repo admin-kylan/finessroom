@@ -571,6 +571,7 @@
             if (valobj == undefined && jet.isBool(opts.isShow)){         
                 reObj = jet.valText(valCell); 
             }else {
+                //noinspection JSAnnotator
                 var isValShow = jet.isBool(opts.isShow) ? (jet.valText(valCell) == "") : !jet.isBool(opts.isShow),
                     objarr = jet.extend({YYYY:null,MM:null,DD:null},valobj||{}),
                     ranMat = [],newArr = new Array(2),unObj = function (obj) {
