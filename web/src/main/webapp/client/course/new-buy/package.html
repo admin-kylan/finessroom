@@ -1,96 +1,238 @@
 <div id="course-new-buy-package-body">
-    <p class="line">
-        <label >
-            <span>选择购买的套餐：</span>
-            <input type="text" placeholder="选择购买项目/商品" />
-            <span class="project" onclick="products()">选择项目</span>
-        </label>
-        <label >
-            <span>售价：</span>
-            <input type="text" placeholder="单价由套餐自动带出" />
-        </label>
-        <label >
-            <span>可用消费最多数量：</span>
-            <input type="text" placeholder="最多数量" />
-            <span class="red">前台可以执行修改最多数量，但不能超过套餐产品详情的指定数量之和</span>
-        </label>
-    </p>
-    <p class="line">
-        <label >
-            <span>选择有效期：</span>
-            <input type="radio" name="month" />12个月
-            <input type="radio" name="month" />1个月
-            <input type="radio" name="month" />3个月
-            <input type="radio" name="month" />6个月
-            <input type="radio" name="month" />12个月
-            <input type="radio" name="month" />与会员卡同期
-            <input type="radio" name="month" />自定义<input type="text" placeholder="月数" class="to50" />个月
-            <span class="red">有效期指的是：项目或者商品的有效期，有效期内才能享受项目/商品的权益</span>
-        </label>
-    </p>
-    <p class="line">
-        <label >
-            <span>开始日期：</span>
-            <input type="date" />
-        </label>
-        <label >
-            <span>失效日期：</span>
-            <span>2018-08-25</span>
-        </label>
-    </p>
-    <div class="line">
-        <label >
-            <span>套餐产品详情：<span class="red">(可消费项目)</span></span>
-            <table border="1" bordercolor="#ccc">
-                <thead>
-                <tr>
-                    <td>门店</td>
-                    <td>场馆</td>
-                    <td>项目/产品</td>
-                    <td>指定数量</td>
-                    <td>每天限用数量</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>软件园店</td>
-                    <td>私教教学</td>
-                    <td>私教一对一</td>
-                    <td>30</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>软件园店</td>
-                    <td>私教教学</td>
-                    <td>私教一对一</td>
-                    <td>30</td>
-                    <td>1</td>
-                </tr>
-                </tbody>
-            </table>
-        </label>
+    <div class="boxChoose on" style=" border-top: 0;">
+        <p class="line">
+            <label >
+                <span>选择购买的套餐：</span>
+                <input type="text" placeholder="选择购买项目/商品" readonly="readonly" v-model="formData.project"/>
+                <span class="project" @click="product.isShow = true">选择项目</span>
+            </label>
+            <label >
+                <span>售价：</span>
+                <input type="text" placeholder="单价由套餐自动带出" readonly="readonly" v-model="formData.projectPrice"/>
+            </label>
+            <label >
+                <span>可用消费最多数量：</span>
+                <input type="text" placeholder="最多数量" oninput="value=value.replace(/[^\d]+/g,'')"
+                       v-model="formData.salesNum"/>
+                <span class="red">前台可以执行修改最多数量，但不能超过套餐产品详情的指定数量之和</span>
+            </label>
+        </p>
+        <p class="line">
+            <label >
+                <span>选择有效期：</span>
+                <input type="radio" name="month" v-model="formData.validityPeriod" value="1"/>1个月
+                <input type="radio" name="month" v-model="formData.validityPeriod" value="3"/>3个月
+                <input type="radio" name="month" v-model="formData.validityPeriod" value="6"/>6个月
+                <input type="radio" name="month" v-model="formData.validityPeriod" value="12"/>12个月
+                <input type="radio" name="month" v-model="formData.validityPeriod" value="all"/>与会员卡同期
+                <input type="radio" name="month" v-model="formData.validityPeriod" value="other"/>自定义
+                <input type="text"
+                       placeholder="月数"
+                       class="to50"
+                       oninput="value=value.replace(/[^\d]+/g,'')"
+                       v-model="formData.customize"/>个月
+                <span class="red">有效期指的是：项目或者商品的有效期，有效期内才能享受项目/商品的权益</span>
+            </label>
+        </p>
+        <p class="line">
+            <label>
+                <span>开始日期：</span>
+                <input type="date" v-model="formData.beginDate"/>
+            </label>
+            <label>
+                <span>失效日期：</span>
+                <span v-text="formData.endDate"></span>
+            </label>
+        </p>
+        <div class="line">
+            <label >
+                <span>套餐产品详情：<span class="red">(可消费项目)</span></span>
+                <table border="1" bordercolor="#ccc">
+                    <thead>
+                    <tr>
+                        <td>门店</td>
+                        <td>场馆</td>
+                        <td>项目/产品</td>
+                        <td>指定数量</td>
+                        <td>每天限用数量</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>软件园店</td>
+                        <td>私教教学</td>
+                        <td>私教一对一</td>
+                        <td>30</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>软件园店</td>
+                        <td>私教教学</td>
+                        <td>私教一对一</td>
+                        <td>30</td>
+                        <td>1</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </label>
+        </div>
+        <p class="line">
+            <input type="submit" value="去结账" class="check"  />
+        </p>
     </div>
-    <p class="line">
-        <input type="submit" value="去结账" class="check" onclick="offers()" />
-    </p>
+    <!-- 选择项目弹窗 -->
+    <div id="product" class="newCustomers_maskLayer" v-show="product.isShow" style="display: block;">
+        <div class="newCustomers_maskLayer_box">
+            <div class="newCustomers_maskLayer_box_top">
+                <span>现在项目/课程</span><a href="javascript:;" class="newCustomers_maskLayer_X"
+                                       @click="product.isShow = false">X</a>
+            </div>
+            <div class="newCustomers_maskLayer_box_shen">
+                <div class="shen_top">
+                    <span>
+                        <span>当前门店：</span>
+                        <strong>软件园店</strong>
+                    </span>
+                    <span>
+                        <span>当前场馆</span>
+                        <strong>软件园店</strong>
+                    </span>
+
+                    <span style="float: right;">
+                        <input style="float: none;">
+                        <a href="javascript:;" class="btn btn-primary" style="height: 30px;line-height: 13px;">查询</a>
+                    </span>
+
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>门店</th>
+                        <th>场馆</th>
+                        <th>项目</th>
+                        <th>市场价</th>
+                        <th>售价（节/元）</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tored">选择</td>
+                        <td>软件园店</td>
+                        <td>年卡</td>
+                        <td>一年卡</td>
+                        <td>60.00</td>
+                        <td>50.00</td>
+                    </tr>
+                    <tr>
+                        <td class="tored">选择</td>
+                        <td>软件园店</td>
+                        <td>年卡</td>
+                        <td>一年卡</td>
+                        <td>60.00</td>
+                        <td>50.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 选择项目弹窗 -->
+
+    <!-- 结账 -->
+    <div id="customer-new-buy-project-bill">
+
+    </div>
+    <!-- 结账 -->
 </div>
+
 
 <script>
     new Vue({
         el: '#course-new-buy-package-body',
         data: {
-
+            billHtml: './course/new-buy/bill.html', //结算的html
+            formData: { //所有数据写在from表单中
+                buyNum: "", //购买数量
+                giftNum: "", //赠送数量
+                useNum: "", //可用数量
+                customize: '', //选择自定义
+                validityPeriod: 0, //项目有效期 //按天数来算
+                beginDate: '', //开始时间
+                endDate: '', //失效时间 = 结束时间
+                project: '', //项目名称
+                projectId: '', //项目Id
+                projectPrice: '', //项目单价
+                salesNum: '', //销售最多数量
+            },
+            product: { //选择项目项
+                isShow: false,
+            }
         },
         computed: {},
         watch: {
+            'formData.beginDate'(value){ //开始时间改变触发失效时间
+                if(!value){
+                    return false;
+                }
+                let date = new Date(value);
+                let validity = this.formData.validityPeriod; //有效期选择的项
+                //这里判断val 的值
+                if (validity == "all") {
+                    //会员卡同期
+                    return false;
+                }
+                if (validity == "other") {
+                    validity = this.formData.customize;
+                    if (!validity) {
+                        validity = 0;
+                    }
+                    validity = parseInt(validity) || 0;
+                }
 
+                date.setMonth(date.getMonth() + parseInt(validity))
+                this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+            },
+            'formData.validityPeriod'(val){ //选择有效期时间
+                let date = new Date(this.formData.beginDate);
+                //这里判断val 的值
+                if (val == "all") {
+                    //会员卡同期
+                    return false;
+                }
+                if (val == "other") {
+                    val = this.formData.customize;
+                    if (!val) {
+                        val = 0;
+                    }
+                }
+                date.setMonth(date.getMonth() + parseInt(val))
+                this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            },
+            'formData.customize'(val){
+                if (!val) {
+                    val = 0;
+                }
+                if (this.formData.validityPeriod == "other") {
+                    let date = new Date(this.formData.beginDate);
+                    date.setMonth(date.getMonth() + parseInt(val))
+                    this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                }
+
+            }
             //
         },
         created: function () {
-
+            let date = new Date();
+            this.formData.beginDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            this.formData.endDate = this.formData.beginDate;
         },
         methods: {
-
+            bill(){//结账
+                $('#customer-new-buy-project-bill').load(this.billHtml)
+                console.log('45454')
+            }
 
         }
     });

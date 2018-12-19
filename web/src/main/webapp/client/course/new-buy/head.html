@@ -33,27 +33,78 @@
             </label>
         </p>
         <p class="line">
-            <label>
-                <span>销售人员：</span>
-                <select name="" v-model="marketUserId">
-                    <!--<option value="" selected="">Nicolas Klaus</option>-->
-                    <option v-for='(item,index) in marketUserList' :value="item.id">
-                        {{item.relName}}
-                    </option>
-                </select>
-                <span class="distribution" @click="isShowPerformance = true">业绩分配</span>
-            </label>
+            <template v-show="sdaduimTypeResult.status">
+                <label>
+                    <span v-text="sdaduimTypeResult.selectTitle"></span>
+                    <select name="" v-model="marketUserId">
+                        <!--<option value="" selected="">Nicolas Klaus</option>-->
+                        <option v-for='(item,index) in marketUserList' :value="item.id">
+                            {{item.relName}}
+                        </option>
+                    </select>
+                    <span class="distribution" @click="isShowPerformance = true">业绩分配</span>
+                </label>
+                <!-- 私教，团教 -->
+                <template v-if="sdaduimTypeResult.type == 'teach'">
+                    <label>
+                        <span>销售类型</span>
+                        <select v-model="sdaduimTypeResult.salesTypeId">
+                            <option v-for='(item,index) in sdaduimTypeResult.salesType' :value="item">
+                                {{item}}
+                            </option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>教练/教师</span>
+                        <select v-model="sdaduimTypeResult.coachId">
+                            <option v-for='(item,index) in sdaduimTypeResult.coach' :value="item.id">
+                            {{item.relName}}
+                            </option>
+                            <!--<option value="1">dddd</option>-->
+                        </select>
+                    </label>
+                    <label>
+                        <span>助教</span>
+                        <select  v-model="sdaduimTypeResult.assistantId">
+                            <option v-for='(item,index) in sdaduimTypeResult.assistant' :value="item.id">
+                                {{item.relName}}
+                            </option>
+                            <!--<option value="1">dddd</option>-->
+                        </select>
+                    </label>
+                </template>
+                <!-- 美容馆 -->
+                <template v-if="sdaduimTypeResult.type == 'dress'">
+                    <label>
+                        <span>美容师（可不填）</span>
+                        <select name="" v-model="sdaduimTypeResult.coachId">
+                            <option v-for='(item,index) in sdaduimTypeResult.coach' :value="item.id">
+                                {{item.relName}}
+                            </option>
+                            <!--<option value="1">dddd</option>-->
+                        </select>
+                    </label>
+                    <label>
+                        <span>美容助理（可不填）</span>
+                        <select v-model="sdaduimTypeResult.assistantId">
+                            <option v-for='(item,index) in sdaduimTypeResult.assistant' :value="item.id">
+                                {{item.relName}}
+                            </option>
+                            <!--<option value="1">dddd</option>-->
+                        </select>
+                    </label>
+                </template>
+            </template>
+
         </p>
 
     </div>
-
-
     <!-- 业绩分配 -->
     <div id="performance" class="newCustomers_maskLayer" v-show="isShowPerformance"
          style="display: block;z-index: 9999;">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>销售业绩分配</span><a href="javascript:;" @click="isShowPerformance = false"
+                <span>销售业绩分配</span><a href="javascript:;" @click="deleteMask"
                                       class="newCustomers_maskLayer_X">X</a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
@@ -62,10 +113,13 @@
                     <div>
                         <label><input type="radio" v-model="performance.salesType" value="rate">以实际销售价格</label>
                         <label><input type="text" placeholder="分配比例"
-                                      v-model="performance.salesValueSales">%为销售业绩</label>
+                                      v-model="performance.salesValueSales"
+                                      oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
+                        >%为销售业绩</label>
 
                         <label><input type="radio" v-model="performance.salesType" value="num">以实际销售价格</label>
-                        <label><input type="text" placeholder="分配金额" v-model="performance.salesValueNum">元为销售业绩</label>
+                        <label><input type="text" placeholder="分配金额" v-model="performance.salesValueNum"
+                                      oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">元为销售业绩</label>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -152,7 +206,57 @@
                 saleName: '', //选择的销售人员的姓名
                 saleId: '', //选择的销售人员的Id
                 list: [], //销售人员数组
+                isSave: false, //是否数据被保存
+
             },
+            //选择场馆显示销售类型
+            sdaduimType: {
+                teach: {//私教，团教
+                    type: 'teach', //类型
+                    id: COURSE_CONSTANT.sdaduimTypeTeachId, //默认id
+                    status: false, //默认不现实
+                    selectTitle: 'POS/销售人员：', //选择的头部类型
+                    salesType: ["POS销售","新会员购买","续课","场地开课","BR销售","横推销售","跟进销售"], //销售类型，写死数据
+                    coach: [], //教练数组
+                    assistant: [], //助教数组
+                    coachId: '', //教练Id
+                    assistantId: '', //助教Id
+                    salesTypeId: '', //销售类型Id
+
+                },
+                dress: {//美容彩妆 id
+                    type: 'dress', //类型
+                    id: COURSE_CONSTANT.sdaduimTypeRetailId, //默认id
+                    status: false, //默认不现实
+                    selectTitle: '美容销售人员：', //选择的头部类型
+                    coach: [], //教练数组
+                    assistant: [], //助教数组
+                    coachId: '', //教练Id
+                    assistantId: '', //助教Id
+                },
+                retail: {//商业零售 id
+                    type: 'retail', //类型
+                    id: COURSE_CONSTANT.sdaduimTypeRetailId, //默认id
+                    status: false, //默认不现实
+                    selectTitle: '销售人员：', //选择的头部类型
+                },
+                other: { //选择其他
+                    selectTitle: '销售人员：', //选择的头部类型
+                    status: true, //默认现实
+                }
+            },
+            sdaduimTypeResult: {
+                type: '', //类型
+                id: '', //默认id
+                status: false, //默认不现实
+                selectTitle: '', //选择的头部类型
+                salesType: [], //销售类型，写死数据
+                coach: [], //教练数组
+                assistant: [], //助教数组
+                coachId: '', //教练Id
+                assistantId: '', //助教Id
+                salesType: '', //销售类型
+            }, //选择场馆的结果展现
 
         },
         computed: {},
@@ -164,9 +268,59 @@
             'performance.saleId'(val){ //获取销售人员的姓名
                 this.performance.saleName = this.marketUserList.find(item => item.id === val)['relName'];
             },
+            sdaduimId(val){//根据场馆id选择销售id,类型
+                let businessTypeId = this.sdaduimArrayList.find(item => {
+                    return item.id == val;
+                })['businessTypeId'];
+                this.sdaduimTypeResult = this.sdaduimType.other;
+                //判断当前的typeID 属于哪一个类型的
+                for(let key in this.sdaduimType){
+                    let obj = this.sdaduimType[key];
+                    if(businessTypeId == obj['id']){
+                        this.sdaduimTypeResult = obj;
+                        continue;
+                    }
+                };
+                //
+                if(this.sdaduimTypeResult.type == "teach"){
+                    let userType = 3,array = [];
+                    axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
+                        if (response.code === '200') {
+
+                            this.sdaduimTypeResult.coach = response.data;
+                        }
+                    });
+                    userType = 4;
+                    axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
+                        if (response.code === '200') {
+                            this.sdaduimTypeResult.assistant = response.data;
+                        }
+                    })
+                }
+                //
+                if(this.sdaduimTypeResult.type == "dress"){
+                    let userType = 3;
+                    axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
+                        if (response.code === '200') {
+                            this.sdaduimTypeResult.coach = response.data;
+                        }
+                    });
+                    userType = 4;
+                    axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
+                        if (response.code === '200') {
+                            this.sdaduimTypeResult.assistant = response.data;
+                        }
+                    })
+                }
+
+
+
+
+            }
         },
         created: function () {
             let date = new Date();
+            this.sdaduimTypeResult = this.sdaduimType.other;
             //定义初始化参数
             this.code = $.cookie("code");
             this.currentDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
@@ -256,7 +410,6 @@
                         sids: [this.shopId]
                     },
                     success: (res) => {
-                        console.log(res)
                         if (res.code == '200') {
                             data = res.data[0];// 获取第一个对象
                             if (data) {
@@ -267,6 +420,7 @@
                                     }
                                     obj.name = d.name;
                                     obj.id = d.id;
+                                    obj.businessTypeId = d.businessTypeId;
                                     this.sdaduimArrayList.push(obj);
                                     obj = {};
                                 })
@@ -276,25 +430,49 @@
 
                     }
                 });
+
             },
             //添加分配的金额或者比例
             addDistribution(){
-                console.log(5)
-                if(this.performance.saleId == "" || this.performance.saleName ==  ""){
+                if (this.performance.saleId == "" || this.performance.saleName == "") {
                     return false; //没有选择销售人员，不让添加
                 }
                 let obj = {};
                 obj.saleId = this.performance.saleId;
                 obj.saleName = this.performance.saleName;
                 obj.num = this.performance.result == "" ? 0 : this.performance.result;
+                //加入数组之前判断数据是否已经存在
+                let index = this.performance.list.findIndex((item) => {
+                    return item.saleId === obj.saleId
+                });
+                if (index !== -1) {
+                    this.performance.list.splice(index, 1);//删除下标是index的对应数据
+                }
+                //判断是否存在结束
                 this.performance.list.push(obj);
                 obj = {};
-                console.log(this.performance.result)
 
+            },
+            //点击业绩分配的X按钮
+            deleteMask(){
+                this.isShowPerformance = false;
+                //并晴空数据
+                this.performance = { //销售业绩分配的一个对象obj
+                    salesType: '', //比例，金额 类型
+                    salesValueSales: '', //默认为0
+                    salesValueNum: '', //默认为0
+                    distributionType: '', //分配的类型
+                    result: '', //业绩分配填写的数据
+                    saleName: '', //选择的销售人员的姓名
+                    saleId: '', //选择的销售人员的Id
+                    list: [], //销售人员数组
+                    isSave: false, //是否数据被保存
+                };
             },
             //保存业绩分配
             savePerformance(){
-
+                this.isSave = true; //保存数据
+                this.isShowPerformance = false;//关闭弹窗
             }
         }
     });

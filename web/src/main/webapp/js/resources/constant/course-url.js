@@ -7,4 +7,5 @@ const COURSE_URL = {
     addAgreement: 'frAgreement/addCardAgreement', //检查协议编号
     marketUserList: 'personnelInfo/getMarketUserList', //获取销售人员
     fetchSdaduim: 'shop/ShopSdaduimList', //选择场馆
+    fetchTechnician: 'frCustomerCourse/getMarketUserList', //
 }
