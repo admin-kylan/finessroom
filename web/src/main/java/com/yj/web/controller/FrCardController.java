@@ -291,5 +291,81 @@ public class FrCardController {
     public JsonResult getCardInformation(String cid)throws YJException{
         return JsonResult.success(service.getCardInformation(cid));
     }
+
+    /**
+     * 新建现有客户
+     * @param map
+     * @param request
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("addSaveCustomer")
+    public JsonResult addSaveCustomer(@RequestBody Map<String,String> map,HttpServletRequest request)throws YJException{
+        if(map == null ){
+            throw  new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
+        }
+        //会员信息
+        String client = map.get("client");
+        // 会员卡
+        String cardMap = map.get("cardMap");
+        // 会员卡订单
+        String cardInfoMap = map.get("cardInfoMap");
+        // 支付
+        String payModel = map.get("payModel");
+        // 分期
+        String orderSplitId = map.get("orderSplitId");
+        //业绩分配
+        String orderAllotSetList = map.get("orderAllotSetList");
+        //业绩分配
+        String orderAllotSet = map.get("orderAllotSet");
+        //客户头像
+        String userURL = map.get("userURL");
+        //当前操作的门店id
+        String shopId = map.get("shopId");
+        if(StringUtils.isEmpty(shopId)){
+            shopId = CookieUtils.getCookieValue(request,"shopid",true);
+            if(StringUtils.isEmpty(shopId)){
+               return  JsonResult.failMessage("未获取当前操作的门店id");
+            }
+        }
+
+        if(StringUtils.isEmpty(client) || StringUtils.isEmpty(cardMap) || StringUtils.isEmpty(cardInfoMap) || StringUtils.isEmpty(payModel)){
+            throw new  YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        //客户信息
+        FrClient frClient =  JSONObject.parseObject(client,FrClient.class);
+        //会员卡
+        FrCard frCard  = JSONObject.parseObject(cardMap,FrCard.class);
+        //业绩分配
+        List<FrCardOrderAllotSet> frCardOrderAllotSetList = iFrCardOrderAllotSetService.initFrCardOrderAllotSetData(orderAllotSetList,orderAllotSet,1);
+        //会员卡订单
+        FrCardOrderInfo frCardOrderInfo  = JSONObject.parseObject(cardInfoMap,FrCardOrderInfo.class);
+        //初始化支付信息
+        Map<String,Object> payM = JSONObject.parseObject(payModel,Map.class);
+        List<FrCardOrderPayMode> frCardOrderPayModes = iFrCardOrderPayModeService.getPayModeList(payM,"L", CommonUtils.PAY_MODE_ORDER_TYPE_2);
+        if(frCard == null){
+            throw new  YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
+        }
+        if(StringUtils.isEmpty(frCard.getCustomerCode())){
+            String code = CookieUtils.getCookieValue(request,"code",true);
+            frCard.setCustomerCode(code);
+        }
+        Map<String,String> mapS = new HashMap<>();
+        mapS.put("orderSplitId",orderSplitId);
+        mapS.put("messFlag","新建现有客户");
+        mapS.put("shopId",shopId);
+        //设置头像路径
+        if(!StringUtils.isEmpty(userURL)){
+            StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true)) ;
+            imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
+            imagePath.append(userURL);
+            //客户头像路径
+            mapS.put("userURL",imagePath.toString());
+        }
+        Map<String,Integer> mapI = new HashMap<>();
+        mapI.put("infoType",CommonUtils.CARD_ORDRE_INFO_TYPE_1);
+        return  service.addSaveCustomer(frClient,frCard,frCardOrderInfo,frCardOrderPayModes,frCardOrderAllotSetList,mapS,mapI);
+    }
+
 }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrActionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrAction">
+        <result column="name" property="name" />
+        <result column="diff" property="diff" />
+        <result column="image" property="image" />
+        <result column="action_princeple" property="actionPrinceple" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="series_id" property="seriesId" />
+        <result column="update_time" property="updateTime" />
+        <result column="id" property="id" />
+        <result column="customer_code" property="customerCode" />
+        <result column="is_using" property="isUsing" />
+        <result column="create_user" property="createUser" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        name, diff, image, action_princeple AS actionPrinceple, create_time AS createTime, update_user AS updateUser, series_id AS seriesId, update_time AS updateTime, id, customer_code AS customerCode, is_using AS isUsing, create_user AS createUser
+    </sql>
+
+
+	<select id="getByList" resultType="com.yj.dal.model.FrAction">
+		select t.* from fr_action t;
+	</select>
+
+    <select id="getAction" resultType="java.util.Map" parameterType="java.lang.String">
+        select *,(select name from fr_action_series fas where fas.id=fa.series_id)sname
+         from fr_action fa where id=#{aid}
+    </select>
+</mapper>

@@ -241,35 +241,35 @@
                     <li class="on" v-if="LiIndex==1">
                         <div id="NewPurchase">
                             <div class="NewPurchase_top">
-									<span>
-										<span>销售门店：</span>
-										<select name="1" id="marketShop" @change="getMarketUser('marketShop')">
-											<option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" selected>
-												{{item.shopName}}
-											</option>
-											<option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index>0">
-												{{item.shopName}}
-											</option>
-										</select>
-									</span>
                                 <span>
-										<span>销售人员：</span>
-										<select name="1" id="maeketUser" v-model="loadData1.cardInfoMap.personnelId">
-											<option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
-												{{items.relName}}
-											</option>
-											<option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
-												{{items.relName}}
-											</option>
-										</select>
-										<a href="javascript:;" class="btn btn-default" @click="performances">业绩分配</a>
-									</span>
+                                    <span>销售门店：</span>
+                                    <select name="1" id="marketShop" @change="getMarketUser('marketShop')">
+                                        <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" selected>
+                                            {{item.shopName}}
+                                        </option>
+                                        <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index>0">
+                                            {{item.shopName}}
+                                        </option>
+                                    </select>
+                                </span>
                                 <span>
-										<span>协议编号：</span>
-										<input type="text" placeholder="填写协议号或者随机生成" id="agreement" @blur.prevent="checkCardAgreement('agreement')">
-										<a href="javascript:;" class="btn btn-primary" @click="addCardAgreement('agreement')">随机号</a>
-										<span id="spa"></span>
-									</span>
+                                    <span>销售人员：</span>
+                                    <select name="1" id="maeketUser" v-model="loadData1.cardInfoMap.personnelId">
+                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                            {{items.relName}}
+                                        </option>
+                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
+                                            {{items.relName}}
+                                        </option>
+                                    </select>
+                                    <a href="javascript:;" class="btn btn-default" @click="performances">业绩分配</a>
+								</span>
+                                <span>
+                                    <span>协议编号：</span>
+                                        <input type="text" placeholder="填写协议号或者随机生成" id="agreement" @blur.prevent="checkCardAgreement('agreement')">
+                                        <a href="javascript:;" class="btn btn-primary" @click="addCardAgreement('agreement')">随机号</a>
+                                    <span id="spa"></span>
+                                </span>
                                 <span>
                                     购买日期：<strong id="createTime">{{creatTime}}</strong>
                                 </span>

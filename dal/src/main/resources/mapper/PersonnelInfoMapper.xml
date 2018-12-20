@@ -57,4 +57,19 @@
         AND pi.CustomerCode = #{code}
     </select>
 
+
+    <!--查询销售人员列表-->
+    <select id="getPsersonnelListByShopId" resultMap="BaseResultMap">
+        select
+          pi.CustomerCode c_CustomerCode, pi.RelName c_RelName, pi.*
+        FROM  PersonnelInfo pi
+        LEFT JOIN   PersonlRole pr
+        ON  pi.ID = pr.PersonnelInfoId
+        LEFT JOIN   RoleInfo r
+        ON  pr.RoleInfoId = r.id
+        WHERE r.UserType = #{UserType}
+        AND pi.ShopId = #{shopId}
+        AND pi.CustomerCode = #{CustomerCode}
+    </select>
+
 </mapper>

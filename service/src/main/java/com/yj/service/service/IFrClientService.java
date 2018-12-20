@@ -9,6 +9,8 @@ import com.yj.dal.param.*;
 import com.yj.service.base.BaseService;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * <p>
  * 客户表 服务类
@@ -56,4 +58,6 @@ public interface IFrClientService extends BaseService<FrClient> {
     PageUtils selectClientAllot(CollarClientParam params)throws YJException;
 
     PageUtils selectClientInformation(ClientInformationParam params)throws YJException;
+
+    List<FrClient> queryByClient(FrClient frClient)throws YJException;
 }

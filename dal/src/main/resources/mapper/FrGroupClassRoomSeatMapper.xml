@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrGroupClassRoomSeatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrGroupClassRoomSeat">
+        <id column="id" property="id" />
+        <result column="create_user" property="createUser" />
+        <result column="customer_code" property="customerCode" />
+        <result column="cnt_row" property="cntRow" />
+        <result column="is_using" property="isUsing" />
+        <result column="update_time" property="updateTime" />
+        <result column="seat_num" property="seatNum" />
+        <result column="create_time" property="createTime" />
+        <result column="class_room_id" property="classRoomId" />
+        <result column="update_user" property="updateUser" />
+        <result column="cnt_col" property="cntCol" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_user AS createUser, customer_code AS customerCode, cnt_row AS cntRow, id, is_using AS isUsing, update_time AS updateTime, seat_num AS seatNum, create_time AS createTime, class_room_id AS classRoomId, update_user AS updateUser, cnt_col AS cntCol
+    </sql>
+
+</mapper>

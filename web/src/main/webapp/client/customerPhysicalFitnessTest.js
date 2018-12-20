@@ -9,6 +9,7 @@ var customerPhysicalFitnessTest = new Vue({
         imageFiles: [],
         imgNum: null,
         delImg: [],
+        ClassInfo:{},
 
     },
     crated: function () {
@@ -229,6 +230,23 @@ var customerPhysicalFitnessTest = new Vue({
 
             })
 
+        },
+      //显示推荐方案
+        show:function () {
+            const that = this;
+            that.getClass();
+            $('.box').show();
+
+        },
+        //获得推荐方案
+        getClass:function () {
+            const that = this;
+            const url = $.stringFormat('{0}/frClientPhysicalTest/getTrainClass', $.cookie('url'));
+            $.get(url, function (res) {
+                that.ClassInfo = res.data;
+                console.log(that.ClassInfo)
+
+            })
         },
         //选择图片弹窗
         pictureSelected: function (num) {

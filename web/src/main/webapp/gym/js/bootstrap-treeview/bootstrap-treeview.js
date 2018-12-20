@@ -523,7 +523,8 @@
 				.addClass(node.searchResult ? 'search-result' : '') 
 				.attr('data-nodeid', node.nodeId)
 				.attr('style', _this.buildStyleOverride(node));
-			_this.options.isShowModiyf && level==1 &&  treeItem.append(_this.template.modify);
+			// _this.options.isShowModiyf && level==1 &&  treeItem.append(_this.template.modify);
+        _this.options.isShowModiyf && level==1 &&  treeItem.append('<span class="modify-tree" id="'+node.id+'">修改</span>');//修改使其传入节点id
 			level==1 &&  treeItem.addClass('one-level');
 			level==2 &&  treeItem.addClass('second-level');
 			// Add indent/spacer to mimic tree structure

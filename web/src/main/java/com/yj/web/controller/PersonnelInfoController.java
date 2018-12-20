@@ -114,5 +114,22 @@ public class PersonnelInfoController {
         List<PersonnelInfo> personnelInfos = service.getUnallocatedPersonnel(rid);
         return JsonResult.success(personnelInfos);
     }
+
+    /**
+     * 根据门店信息，获取门店对应的角色人员
+     * @param CustomerCode
+     * @param shopId
+     * @param UserType
+     * @param request
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getPsersonnelListByShopId")
+    public JsonResult getPsersonnelListByShopId(@RequestParam("CustomerCode")String CustomerCode,@RequestParam("shopId") String shopId,
+                                           @RequestParam("UserType")Integer UserType,HttpServletRequest request) throws YJException{
+
+        List<PersonnelInfo> personnelInfos = service.getPsersonnelListByShopId(CustomerCode,shopId,UserType);
+        return JsonResult.success(personnelInfos);
+    }
 }
 

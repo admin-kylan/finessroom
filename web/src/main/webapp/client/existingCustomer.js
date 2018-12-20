@@ -50,6 +50,15 @@ const ecapp = new Vue({
     watch: {
         'level.selected':'levelSelect',
     },
+    filters: {
+        formatDate: function (time,type,typeT) {
+            if(!time){
+                return '';
+            }
+            var _time = timeFormatDate(time,type,typeT);
+            return _time;
+        },
+    },
     methods:{
         /**
          * 获取所有会员等级
@@ -91,11 +100,7 @@ const ecapp = new Vue({
             if(avatarLink === null||avatarLink ===''||typeof avatarLink ==='undefined'){
                 return '../img/addImg.png';
             }
-            avatarLink.onload =function() {
-              return avatarLink
-            }
-            return '../img/addImg.png';
-            // return $.stringFormat("{0}/{1}/"+avatarLink, $.cookie('url'),$.cookie('imgPath'));
+            return avatarLink
         },
         /**
          * 状态判断

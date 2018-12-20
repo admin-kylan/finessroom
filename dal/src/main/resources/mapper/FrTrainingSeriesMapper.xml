@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrTrainingSeriesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrTrainingSeries">
+        <result column="name" property="name" />
+        <result column="parent_id" property="parentId" />
+        <result column="is_using" property="isUsing" />
+        <result column="type" property="type" />
+        <result column="update_time" property="updateTime" />
+        <result column="customer_code" property="customerCode" />
+        <result column="update_user" property="updateUser" />
+        <result column="create_time" property="createTime" />
+        <result column="id" property="id" />
+        <result column="create_user" property="createUser" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        name, parent_id AS parentId, is_using AS isUsing, type, update_time AS updateTime, customer_code AS customerCode, update_user AS updateUser, create_time AS createTime, id, create_user AS createUser
+    </sql>
+	
+	
+	
+</mapper>

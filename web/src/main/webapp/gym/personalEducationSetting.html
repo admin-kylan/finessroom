@@ -1,13 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
 	<title>健身团教设置</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<script type="text/javascript" src="js/head_css.js"></script>
+	<script type="text/javascript" src="../js/jedate.js"></script>
 	<link rel="stylesheet" href="css/bootstrap-treeview/bootstrap-treeview.min.css" />
-	<link rel="stylesheet" href="css/fitness-setting.css" />
+  	<link rel="stylesheet" href="../css/myPagination.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />
 	<style type="text/css">
 		#settingCurse .fieldset-info>.flex-box{margin-bottom: 12px;}
 		#settingCurse .fieldset-info + .fieldset-info>.flex-box {margin-bottom: 22px;}
@@ -32,6 +34,10 @@
 		#kcFilterModel .one-level + .second-level{color: #333;}
 		#kcFilterModel .w130{border-right: 1px solid #ddd;min-height: 465px;}
 	</style>
+	<link rel="stylesheet" href="css/fitness-setting.css" />
+	<link rel="stylesheet" href="css/private-edu.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />
 </head>
 
 <body>
@@ -40,11 +46,11 @@
 		<!-- 顶部菜单 -->
 		<top-menu-bar></top-menu-bar>
 		<!-- END 顶部菜单 -->
-		
+
 		<!-- 左侧菜单  -->
 		<sidebar-nav></sidebar-nav>
 		<!-- END 左侧菜单 -->
-		
+
 		<!-- 右边容器 -->
 		<div class="main">
 			<!-- 主要内容 -->
@@ -53,22 +59,22 @@
 				<div class="ml3 min-height-page bgc-fff ptb13 border1-e4e4e4">
 				  <ul class="nav nav-tabs nav-style" role="tablist">
 				    <li role="presentation" class="active"><a href="#privateCategory" aria-controls="category" role="tab" data-toggle="tab">私教种类</a></li>
-				    <li role="presentation"><a href="#settingCurse" aria-controls="settingCurse" role="tab" data-toggle="tab">私教设置</a></li>
-				    <li role="presentation"><a href="#settingTrain" aria-controls="settingTrain" role="tab" data-toggle="tab">训练课程设置</a></li>
+				    <li role="presentation"><a href="#settingCurse" aria-controls="settingCurse" role="tab" data-toggle="tab" @click="getPrivateSetting">私教设置</a></li>
+				    <li role="presentation"><a href="#settingTrain" aria-controls="settingTrain" role="tab" data-toggle="tab" @click="actionSettingMain">训练课程设置</a></li>
 				  </ul>
-				
+
 				  <!-- Tab panes -->
 				  <div class="tab-content">
 				    <div role="tabpanel" class="tab-pane tab-pane-style active" id="privateCategory">
 				      <div class="main-tabpanel" v-show="!addPrivate && !addPrivateCourse ">
 					      <ul class="nav nav-tabs sub-nav-style" role="tablist">
 						    <li role="presentation" class="active"><a href="#privateClass" aria-controls="privateClass" role="tab" data-toggle="tab">私教课程</a></li>
-						    <li role="presentation"><a href="#privateTeachingPackage" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">单节训练课程设置</a></li>
+						    <li role="presentation" @click="getPackageList({curPage:1,limit:10})"><a href="#privateTeachingPackage" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">单节训练课程设置</a></li>
 						  </ul>
 						  <div class="tab-content">
 				    		<div role="tabpanel" class="tab-pane tab-pane-style active" id="privateClass">
 						    	<div class="plr10 ptb5">
-						    		课程种类： <span class="c-00cccc mr30">2</span>
+						    		课程种类： <span class="c-00cccc mr30">{{privateCource.totalCount}}</span>
 						    		<button class="btn btn-red add-kc" @click="addKcc">添加课程</button>
 						    	</div>
 				    			<table class="table table-striped table-bordered table-style mlr-1">
@@ -92,97 +98,34 @@
 				    					</tr>
 				    				</thead>
 				    				<tbody>
-				    					<tr>
-				    						<td>1</td>
-				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
-				    						<td>60</td>
-				    						<td><b>600.00</b></td>
-				    						<td><b class="c-ff0000">400.00</b></td>
-				    						<td><b class="c-ff9900">400.00</b></td>
-				    						<td><b class="c-0000ff">3</b>  天</td>
-				    						<td><b>0</b></td>
-				    						<td><b>是</b></td>
-				    						<td><span class="c-ffcc00">金额</span></td>
-				    						<td><span class="c-ffcc00">￥10.00</span></td>
-				    						<td>比例</td>
-				    						<td><b>2</b> %</td>
-				    						<td>是</td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>1</td>
-				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
-				    						<td>60</td>
-				    						<td><b>600.00</b></td>
-				    						<td><b class="c-ff0000">400.00</b></td>
-				    						<td><b class="c-ff9900">400.00</b></td>
-				    						<td><b class="c-0000ff">与卡同期</b></td>
-				    						<td><b>0</b></td>
-				    						<td><b>是</b></td>
-				    						<td>比例</td>
-				    						<td><b>2</b> %</td>
-				    						<td><span class="c-ffcc00">金额</span></td>
-				    						<td><span class="c-ffcc00">￥10.00</span></td>
-				    						<td>是</td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>1</td>
-				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
-				    						<td>60</td>
-				    						<td><b>600.00</b></td>
-				    						<td><b class="c-ff0000">400.00</b></td>
-				    						<td><b class="c-ff9900">400.00</b></td>
-				    						<td><b class="c-0000ff">与卡同期</b></td>
-				    						<td><b>0</b></td>
-				    						<td><b>是</b></td>
-				    						<td>比例</td>
-				    						<td><b>2</b> %</td>
-				    						<td><span class="c-ffcc00">金额</span></td>
-				    						<td><span class="c-ffcc00">￥10.00</span></td>
-				    						<td>是</td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>1</td>
-				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
-				    						<td>60</td>
-				    						<td><b>600.00</b></td>
-				    						<td><b class="c-ff0000">400.00</b></td>
-				    						<td><b class="c-ff9900">400.00</b></td>
-				    						<td><b class="c-0000ff">与卡同期</b></td>
-				    						<td><b>0</b></td>
-				    						<td><b>是</b></td>
-				    						<td>比例</td>
-				    						<td><b>2</b> %</td>
-				    						<td><span class="c-ffcc00">金额</span></td>
-				    						<td><span class="c-ffcc00">￥10.00</span></td>
-				    						<td>是</td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>1</td>
-				    						<td><img src="img/addImg.png" class="course-img" />私教一对一</td>
-				    						<td>60</td>
-				    						<td><b>600.00</b></td>
-				    						<td><b class="c-ff0000">400.00</b></td>
-				    						<td><b class="c-ff9900">400.00</b></td>
-				    						<td><b class="c-0000ff">与卡同期</b></td>
-				    						<td><b>0</b></td>
-				    						<td><b>是</b></td>
-				    						<td>比例</td>
-				    						<td><b>2</b> %</td>
-				    						<td><span class="c-ffcc00">金额</span></td>
-				    						<td><span class="c-ffcc00">￥10.00</span></td>
-				    						<td>是</td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+										<tr v-for="(cource ,index) in privateCource.list">
+				    						<td>{{(privateCource.pageNo-1)*privateCource.pageSize+(index+1)}}</td>
+				    						<td>
+												<img :src="avatarUrl(cource.privateImage)" class="course-img">{{cource.name}}
+												<!--<img src="img/addImg.png" class="course-img" />-->
+											</td>
+				    						<td>{{cource.time}}</td>
+				    						<td><b>{{cource.marketPrice}}</b></td>
+				    						<td><b class="c-ff0000">{{cource.promotionPrice}}</b></td>
+				    						<td><b class="c-ff9900">{{cource.memberPrice}}</b></td>
+											<td ><b class="c-0000ff">{{cource.validTime!=null?'':'与卡同期'}}</b> {{cource.validTime}} </td>
+				    						<!--<td><b class="c-0000ff">{{cource.validTime}}</b>  天</td>-->
+				    						<td><b>{{cource.remainCourceNum}}</b></td>
+				    						<td><b>{{cource.isAccountSpending==1?'是':'否'}}</b></td>
+				    						<td><span class="c-ffcc00">{{cource.classSchedulingType==1?'比例':'金额'}}</span></td>
+				    						<td><span class="c-ffcc00">{{cource.classSchedulingType==2?'￥':''}}{{cource.classScheduling}}{{cource.classSchedulingType==1?'%':''}}</span></td>
+				    						<td>{{cource.assignTeacherType==1?'比例':'金额'}}</td>
+				    						<td>{{cource.assignTeacherType==2?'￥':''}}<b>{{cource.assignTeacher}}</b>{{cource.assignTeacherType==1?'%':''}}</td>
+				    						<td>{{cource.isShowDesk==1?'是':'否'}}</td>
+				    						<td><span class="c-ff0000" @click="updateCourse(cource)">修改</span> <span class="c-ccc" @click="deleteAction(cource.id)">删除</span></td>
 				    					</tr>
 				    				</tbody>
 				    			</table>
+								<div id="pagination" class="pagination"></div>
 					    	</div>
 				    		<div role="tabpanel" class="tab-pane tab-pane-style" id="privateTeachingPackage">
 				    			<div class="plr10 ptb5">
-						    		课程种类： <span class="c-00cccc mr30">2</span>
+						    		课程种类： <span class="c-00cccc mr30">{{packageCource.totalCount}}</span>
 						    		<button class="btn btn-red add-kc" @click="addKc">添加课程</button>
 						    	</div>
 				    			<table class="table table-striped table-bordered table-style mlr-1">
@@ -205,88 +148,25 @@
 				    					</tr>
 				    				</thead>
 				    				<tbody>
-				    					<tr>
-				    						<td>1</td>
-				    						<td><span class="c-00ccff">减肥套餐</span></td>
-				    						<td><b class="c-009900">30</b></td>
-				    						<td><b>3000.00</b></td>
-				    						<td><b class="c-ff0000">2500.00</b></td>
-				    						<td><b class="c-ff9900">2400.00</b></td>
-				    						<td>12个月</td>
-				    						<td><b>1</b> 节</td>
-				    						<td>按1节12个月计算</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>2</td>
-				    						<td><span class="c-00ccff">减肥套餐</span></td>
-				    						<td><b class="c-009900">30</b></td>
-				    						<td><b>3000.00</b></td>
-				    						<td><b class="c-ff0000">2500.00</b></td>
-				    						<td><b class="c-ff9900">2400.00</b></td>
-				    						<td>12个月</td>
-				    						<td><b>1</b> 节</td>
-				    						<td>按1节12个月计算</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>3</td>
-				    						<td><span>私教套餐</span></td>
-				    						<td><b class="c-009900">30</b></td>
-				    						<td><b>3000.00</b></td>
-				    						<td><b class="c-ff0000">2500.00</b></td>
-				    						<td><b class="c-ff9900">2400.00</b></td>
-				    						<td>12个月</td>
-				    						<td><b>1</b> 节</td>
-				    						<td>按1节12个月计算</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>4</td>
-				    						<td><span class="c-00ccff">减肥套餐</span></td>
-				    						<td><b class="c-009900">30</b></td>
-				    						<td><b>3000.00</b></td>
-				    						<td><b class="c-ff0000">2500.00</b></td>
-				    						<td><b class="c-ff9900">2400.00</b></td>
-				    						<td>12个月</td>
-				    						<td><b>1</b> 节</td>
-				    						<td>按1节12个月计算</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
-				    					</tr>
-				    					<tr>
-				    						<td>5</td>
-				    						<td><span>私教套餐</span></td>
-				    						<td><b class="c-009900">30</b></td>
-				    						<td><b>3000.00</b></td>
-				    						<td><b class="c-ff0000">2500.00</b></td>
-				    						<td><b class="c-ff9900">2400.00</b></td>
-				    						<td>12个月</td>
-				    						<td><b>1</b> 节</td>
-				    						<td>按1节12个月计算</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td>是</td>
-				    						<td><span class="c-0000ff" @click="viewModal">查看</span></td>
-				    						<td><span class="c-ff0000">修改</span> <span class="c-ccc">删除</span></td>		
+				    					<tr v-for="(package ,index) in packageCource.list">
+				    						<td>{{(packageCource.pageNo-1)*packageCource.pageSize+(index+1)}}</td>
+				    						<td><span class="c-00ccff">{{package.name}}</span></td>
+				    						<td><b class="c-009900">{{package.count}}</b></td>
+				    						<td><b>{{package.marketPrice}}</b></td>
+				    						<td><b class="c-ff0000">{{package.promtionPrice}}</b></td>
+				    						<td><b class="c-ff9900">{{package.memberPrice}}</b></td>
+				    						<td>{{package.validValue}}{{package.validType==1?'天':(package.validType==2?'个月':'年')}}</td>
+				    						<td><b>{{package.classCount}}</b> 节</td>
+				    						<td>{{package.classCountDesc}}</td>
+				    						<td>{{package.remainCountNotice&&package.remainCountNotice>0?'是':'否'}}</td>
+				    						<td>{{package.isAccountSpending==1?'是':'否'}}</td>
+				    						<td>{{package.isShowDesk==1?'是':'否'}}</td>
+				    						<td><span class="c-0000ff" @click="viewModal(package.id,1)">查看</span></td>
+				    						<td><span class="c-ff0000" @click="updatePackage(package.id,0)">修改</span> <span class="c-ccc" @click="deletePackage(package.id)">删除</span></td>
 				    					</tr>
 				    				</tbody>
 				    			</table>
+									<div id="pagination1" class="pagination"></div>
 				    		</div>
 						  </div>
 						   <!--默认课程计划-->
@@ -299,7 +179,7 @@
 							      </div>
 							      <div class="modal-body p0">
 							      	<div class="p8">
-							      		套餐所包含课程数量：<b>3</b>
+							      		套餐所包含课程数量：<b>{{listViewCanUsingItemCount}}</b>
 							      	</div>
 							      	<div class="mlr-1">
 							      		<table class="table table-style table-bordered">
@@ -315,32 +195,14 @@
 								      			</tr>
 								      		</thead>
 								      		<tbody>
-								      			<tr>
-								      				<td>1</td>
-								      				<td>软件园店</td>
-								      				<td>私教场馆</td>
-								      				<td><span class="c-00ccff">减肥套餐</span></td>
-								      				<td><b>30</b> 节</td>
-								      				<td>1</td>
-								      				<td><span class="c-ff0000">删除</span></td>
-								      			</tr>
-								      			<tr>
-								      				<td>1</td>
-								      				<td>软件园店</td>
-								      				<td>私教场馆</td>
-								      				<td><span class="c-00ccff">减肥套餐</span></td>
-								      				<td><b>30</b> 节</td>
-								      				<td>1</td>
-								      				<td><span class="c-ff0000">删除</span></td>
-								      			</tr>
-								      			<tr>
-								      				<td>1</td>
-								      				<td>软件园店</td>
-								      				<td>私教场馆</td>
-								      				<td><span class="c-00ccff">减肥套餐</span></td>
-								      				<td><b>30</b> 节</td>
-								      				<td>1</td>
-								      				<td><span class="c-ff0000">删除</span></td>
+								      			<tr v-for="(item,index) in listViewCanUsingItem">
+								      				<td>{{index+1}}</td>
+								      				<td>{{item.shopName}}</td>
+								      				<td>{{item.sdaduimName}}</td>
+								      				<td><span class="c-00ccff">{{item.courseName}}</span></td>
+								      				<td><b>{{item.classCount}}</b> 节</td>
+								      				<td>{{item.limitCount}}</td>
+								      				<td><span class="c-ff0000" @click="singleDeleteUsingItem(item,index)">删除</span></td>
 								      			</tr>
 								      		</tbody>
 								      	</table>
@@ -362,7 +224,7 @@
 							  				<span class="c-ff0000">*</span>私教名称：
 							  			</div>
 							  			<div class="flex-box-item">
-							  				<input type="text" class="form-control w425" placeholder="私教名称" />
+							  				<input type="text" class="form-control w425" placeholder="私教名称" maxlength="12" v-model="privateCourceData.name"/>
 							  			</div>
 							     	</div>
 							  		<div class="flex-box">
@@ -370,7 +232,7 @@
 							  				<span class="c-ff0000">*</span>私教时长：
 							  			</div>
 							  			<div class="w400">
-							  				<input type="text" class="form-control" placeholder="私教时长" />
+							  				<input type="number" class="form-control" placeholder="私教时长" maxlength="3" min="0"  onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" v-model="privateCourceData.time"/>
 							  			</div>
 							  			<b class="flex-box-item">&emsp;分</b>
 							     	</div>
@@ -380,7 +242,7 @@
 								  				<span class="c-ff0000">*</span>市场价：
 								  			</div>
 								  			<div class="flex-box-item">
-								  				<input type="text" class="form-control w95" placeholder="市场价" />
+								  				<input type="text" class="form-control w95" placeholder="市场价" maxlength="12" v-model="privateCourceData.marketPrice" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 								  			</div>
 							  			</div>
 							  			<div class="flex-box mb0">
@@ -388,7 +250,7 @@
 								  				<span class="c-ff0000">*</span>促销价：
 								  			</div>
 								  			<div class="flex-box-item">
-								  				<input type="text" class="form-control w95" placeholder="促销价" />
+								  				<input type="text" class="form-control w95" placeholder="促销价" maxlength="10" v-model="privateCourceData.promotionPrice"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 								  			</div>
 							  			</div>
 							  			<div class="flex-box mb0">
@@ -396,7 +258,7 @@
 								  				<span class="c-ff0000">*</span>会员价：
 								  			</div>
 								  			<div class="flex-box-item">
-								  				<input type="text" class="form-control w95" placeholder="会员价" />
+								  				<input type="text" class="form-control w95" placeholder="会员价" maxlength="10" v-model="privateCourceData.memberPrice" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 								  			</div>
 							  			</div>
 					  				</div>
@@ -405,11 +267,13 @@
 							  				<span class="c-ff0000">*</span>有效期：
 							  			</div>
 							  			<div class="flex-box-item checkbox mtb0">
-							  				<label class="mr20"><input type="radio" />与卡同期</label>
-					  						<label><input type="radio" />选择期限&emsp;</label>
-							  				<input type="text" class="form-control w60 br0" /><select class="form-control w55 br0">
-							  					<option selected="selected">天</option>
-							  					<option>月</option>
+							  				<label class="mr20"><input type="radio" name="validTimeType" value="1" v-model="privateCourceData.validTimeType1"/>与卡同期</label>
+					  						<label><input type="radio"  name="validTimeType" value="2" v-model="privateCourceData.validTimeType1"/>选择期限&emsp;</label>
+							  				<input type="number" class="form-control w60 br0"  v-model="privateCourceData.validTime" maxlength="12"  min="0"  onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" />
+
+											<select class="form-control w55 br0" v-model="privateCourceData.dayAndMounth">
+							  					<option value="2">天</option>
+							  					<option value="3">月</option>
 							  				</select>
 							  			</div>
 							     	</div>
@@ -418,8 +282,8 @@
 							  				<span class="c-ff0000">*</span>是否挂账消费：
 							  			</div>
 							  			<div class="flex-box-item checkbox mtb0">
-							  				<label class="mr20"><input type="radio" />是</label>
-					  						<label><input type="radio" />否</label>
+							  				<label class="mr20"><input name="isAccountSpending" value="1" type="radio" v-model="privateCourceData.isAccountSpending"/>是</label>
+					  						<label><input type="radio" name="isAccountSpending" value="2" v-model="privateCourceData.isAccountSpending"/>否</label>
 							  			</div>
 							     	</div>
 					  				<div class="flex-box">
@@ -427,10 +291,10 @@
 							  				排课老师提成设置：
 							  			</div>
 							  			<div class="flex-box-item checkbox mtb0">
-							  				<label><input type="radio" />比例&emsp;</label>
-							  				<input class="form-control w65 mr20" />
-					  						<label><input type="radio" />金额&emsp;</label>
-							  				<input class="form-control w65" />
+							  				<label><input type="radio"  name="classSchedulingType" value="1" v-model="privateCourceData.classSchedulingType"/>比例&emsp;</label>
+							  				<input class="form-control w65 mr20" type="number" v-model="privateCourceData.classSchedulingBL"  v-on:input="biliInput(privateCourceData,1)"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" />
+					  						<label><input type="radio" name="classSchedulingType" value="2" v-model="privateCourceData.classSchedulingType"/>金额&emsp;</label>
+							  				<input class="form-control w65" type="number" v-model="privateCourceData.classSchedulingJY" v-on:input="biliInput(privateCourceData,2)"  min="0"  onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" />
 							  			</div>
 							     	</div>
 					  				<div class="flex-box">
@@ -438,19 +302,28 @@
 							  				指定老师提成设置：
 							  			</div>
 							  			<div class="flex-box-item checkbox mtb0">
-							  				<label><input type="radio" />比例&emsp;</label>
-							  				<input class="form-control w65 mr20" />
-					  						<label><input type="radio" />金额&emsp;</label>
-							  				<input class="form-control w65" />
+							  				<label><input type="radio" name="assignTeacherType" value="1" v-model="privateCourceData.assignTeacherType" />比例&emsp;</label>
+							  				<input class="form-control w65 mr20"  v-model="privateCourceData.assignTeacherBL" v-on:input="biliInput1(privateCourceData,1)" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+					  						<label><input type="radio" name="assignTeacherType" value="2" v-model="privateCourceData.assignTeacherType" />金额&emsp;</label>
+							  				<input class="form-control w65" v-model="privateCourceData.assignTeacherJY" v-on:input="biliInput1(privateCourceData,2)" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 							  			</div>
 							     	</div>
+									<div class="flex-box">
+										<div class="w150 text-right">
+											课程剩余提醒：
+										</div>
+										<div class="w400">
+											<input type="number" class="form-control" placeholder="课程剩余提醒" max="10"  v-model="privateCourceData.remainCourceNum"  min="0" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"/>
+										</div>
+										<b class="flex-box-item">&emsp;节</b>
+									</div>
 					  				<div class="flex-box">
 							  			<div class="w150 text-right">
 							  				<span class="c-ff0000">*</span>是否前台显示：
 							  			</div>
 							  			<div class="flex-box-item checkbox mtb0">
-							  				<label class="mr20"><input type="radio" />是</label>
-					  						<label><input type="radio" />否</label>
+							  				<label class="mr20"><input type="radio" name="isShowDesk" value="1" v-model="privateCourceData.isShowDesk"/>是</label>
+					  						<label><input type="radio" value="0" name="isShowDesk" v-model="privateCourceData.isShowDesk"/>否</label>
 							  			</div>
 							     	</div>
 					  				<div class="flex-box">
@@ -458,17 +331,17 @@
 							  				<span class="c-ff0000">*</span>默认课程计划：
 							  			</div>
 							  			<div class="flex-box-item">
-							  				<input type="text" style="background-color: #fff;" readonly="readonly" @click="defaultCurriculumPlanModal" placeholder="--选择课程计划--" class="form-control w375" />
+							  				<input id="privatemrkcjh" type="text" style="background-color: #fff;" placeholder="--选择课程计划--" :value="privateCourceData.courseName" @click="defaultCurriculumPlanModal" class="form-control w375" />
 							  			</div>
 							     	</div>
 					  			</div>
 					  			<div class="flex-box-item flex-box flex-column">
 					  				<div class="file-box">
-						  				<img src="img/positive.png" width="300px" />
-					  					<input type="file" />
+						  				<img :src="imgUrl==null?'img/positive.png':imgUrl" width="300px" />
+					  					<input type="file" @change="pictureShowVersion($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
 					  				</div>
 					  				<div class="text-center ptb10">
-					  					<button class="btn btn-primary w200">上传私教图片</button>
+					  					<button class="btn btn-primary w200" @click="uploadAvatar">上传私教图片</button>
 					  				</div>
 					  				<span class="c-ffcc00">支持JPG,PNG格式，大小不能大于1M</span>
 					  			</div>
@@ -486,8 +359,8 @@
 					  			<div class="w150 text-right">
 					  			</div>
 					  			<div class="flex-box-item btn-lg-box">
-					  				<button class="btn btn-primary">保存</button>
-					  				<button class="btn btn-fff">取消</button>
+					  				<button class="btn btn-primary" @click="saveOrUpdatePrivateAction">保存</button>
+					  				<button class="btn btn-fff" @click="cancelPrivateCourse">取消</button>
 					  			</div>
 					     	</div>
 					   </div>
@@ -503,64 +376,21 @@
 						      	<div class="flex-box flex-stretch">
 						      		<div class="w200">
 						      			<ul class="action-tree-list">
-						      				<li>
-						      					<a><span class="reduce-icon">－</span>训练课程系列1</a>
-						      					<ul class="action-tree-child">
-						      						<li>
-						      							<a>
-						      								训练课程1
-						      							</a>
-						      						</li>
-						      						<li>
-						      							<a>
-						      								训练课程1
-						      							</a>
-						      						</li>
-						      						<li>
-						      							<a>
-						      								训练课程1
-						      							</a>
-						      						</li>
-						      						<li>
-						      							<a>
-						      								<span class="zdy-text">自定义训练课程</span>
+						      				<li v-for="(item,index) in privateSingleCourse.seriesList" @click="findChild(item.id,index)">
+						      					<a><span class="reduce-icon">{{privateSingleCourse.showIndex == index?'-':'+'}}</span>{{item.name}}</a>
+						      					<ul class="action-tree-child" v-show="privateSingleCourse.showIndex == index">
+						      						<li v-for="(subItem,index) in privateSingleCourse.subSeriesList">
+						      							<a @click.stop="getPrivateList(subItem.id,index)">
+						      								{{subItem.name}}
 						      							</a>
 						      						</li>
 						      					</ul>
-						      				</li>
-						      				<li>
-						      					<a><span class="reduce-icon">－</span>训练训练课程1</a>
-						      					<ul class="action-tree-child">
-						      						<li>
-						      							<a>
-						      								训练课程1
-						      							</a>
-						      						</li>
-						      						<li>
-						      							<a>
-						      								训练课程1
-						      							</a>
-						      						</li>
-						      						<li>
-						      							<a>
-						      								训练课程1
-						      							</a>
-						      						</li>
-						      						<li>
-						      							<a>
-						      								<span class="zdy-text">自定义训练课程</span>
-						      							</a>
-						      						</li>
-						      					</ul>
-						      				</li>
-						      				<li>
-						      					<a><span class="reduce-icon">－</span><span class="zdy-text">自定义训练课程</span></a>
 						      				</li>
 						      			</ul>
 						      		</div>
 						      		<div class="flex-box-item">
 						      			<div class="p8">
-						      				<button class="btn btn-primary w140">添加选中</button>
+						      				<button class="btn btn-primary w140" @click="selectDefault">添加选中</button>
 						      			</div>
 						      			<div class=" mlr-1">
 							      			<table class="table table-bordered table-style">
@@ -577,64 +407,15 @@
 							      					</tr>
 							      				</thead>
 							      				<tbody>
-							      					<tr>
-							      						<td>1</td>
-							      						<td><img src="img/addImg.png" width="80px"/></td>
-							      						<td><span class="c-ffcc00">腹部肌群</span></td>
+							      					<tr v-for="(item,index) in privateSingleCourse.items">
+							      						<td>{{index+1}}</td>
+																<!--src="img/addImg.png"-->
+							      						<td><img :src="avatarUrl(item.image)" width="80px"/></td>
+							      						<td><span class="c-ffcc00">{{item.seriesName}}</span></td>
 							      						<td>难度增大型</td>
 							      						<td><b class="c-0000ff">20</b>分钟</td>
-							      						<td>一般</td>
+							      						<td>{{item.diff}}</td>
 							      						<td><b class="c-0000ff">30</b></td>
-							      						<td></td>
-							      					</tr>
-							      					<tr>
-							      						<td>2</td>
-							      						<td><img src="img/addImg.png" width="80px"/></td>
-							      						<td><span class="c-ffcc00">腹部肌群</span></td>
-							      						<td>难度增大型</td>
-							      						<td><b class="c-0000ff">20</b>分钟</td>
-							      						<td><span class="c-ccc">填写强度</span></td>
-							      						<td><b class="c-ccc">填写次数</b></td>
-							      						<td></td>
-							      					</tr>
-							      					<tr>
-							      						<td>3</td>
-							      						<td><img src="img/addImg.png" width="80px"/></td>
-							      						<td><span class="c-ffcc00">腹部肌群</span></td>
-							      						<td>难度增大型</td>
-							      						<td><b class="c-0000ff">20</b>分钟</td>
-							      						<td><span class="c-ccc">填写强度</span></td>
-							      						<td><b class="c-ccc">填写次数</b></td>
-							      						<td></td>
-							      					</tr>
-							      					<tr>
-							      						<td>4</td>
-							      						<td><img src="img/addImg.png" width="80px"/></td>
-							      						<td><span class="c-ffcc00">腹部肌群</span></td>
-							      						<td>难度增大型</td>
-							      						<td><b class="c-0000ff">20</b>分钟</td>
-							      						<td><span class="c-ccc">填写强度</span></td>
-							      						<td><b class="c-ccc">填写次数</b></td>
-							      						<td></td>
-							      					</tr>
-							      					<tr>
-							      						<td>5</td>
-							      						<td><img src="img/addImg.png" width="80px"/></td>
-							      						<td><span class="c-ffcc00">腹部肌群</span></td>
-							      						<td>难度增大型</td>
-							      						<td><b class="c-0000ff">20</b>分钟</td>
-							      						<td><span class="c-ccc">填写强度</span></td>
-							      						<td><b class="c-ccc">填写次数</b></td>
-							      						<td></td>
-							      					</tr>
-							      					<tr>
-							      						<td>6</td>
-							      						<td><img src="img/addImg.png" width="80px"/></td>
-							      						<td><span class="c-ffcc00">腹部肌群</span></td>
-							      						<td>难度增大型</td>
-							      						<td><b class="c-0000ff">20</b>分钟</td>
-							      						<td><span class="c-ccc">填写强度</span></td>
-							      						<td><b class="c-ccc">填写次数</b></td>
 							      						<td></td>
 							      					</tr>
 							      				</tbody>
@@ -654,26 +435,26 @@
 					  	<div class="add-private-box">
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				套餐名称：
+									<span class="c-ff0000">*</span>套餐名称：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w300" value="减肥套餐" />
+					  				<input maxlength="10" type="text" class="form-control w300" v-model="packageData.name" />
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				总数量：
+									<span class="c-ff0000">*</span>总数量：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w300" value="30" />
+					  				<input type="number" maxlength="10" class="form-control w300" v-model="packageData.count"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				市场价：
+									<span class="c-ff0000">*</span>市场价：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w300" value="3000.00" />
+					  				<input type="number" maxlength="10" class="form-control w300" v-model="packageData.marketPrice"  min="0"  onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
@@ -681,35 +462,36 @@
 					  				促销价：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w300" value="2500.00" />
+					  				<input  type="number" maxlength="10" class="form-control w300" v-model="packageData.promtionPrice"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				会员价：
+									<span class="c-ff0000">*</span>会员价：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w300" value="2400.00" />
+					  				<input  type="number" maxlength="10" class="form-control w300" v-model="packageData.memberPrice"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				有效期：
+									<span class="c-ff0000">*</span>有效期：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w220" value="2400.00" /><select class="form-control w80">
-					  					<option>天</option>
-					  					<option selected="selected">月</option>
-					  					<option>年</option>
+					  				<input  maxlength="10" class="form-control w220" v-model="packageData.validValue" type="number"   min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+										<select class="form-control w80" v-model="packageData.validType">
+					  					<option value="1">天</option>
+					  					<option value="2">月</option>
+					  					<option value="3">年</option>
 					  				</select>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				课时计算数：
+									<span class="c-ff0000">*</span>课时计算数：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w300" value="按1节12个月计算" />
+					  				<input  maxlength="10" class="form-control w300" type="number" v-model="packageData.classCount"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box flex-start">
@@ -717,7 +499,7 @@
 					  				课时计算说明：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<textarea rows="5" class="form-control w300" ></textarea>
+					  				<textarea rows="5"  maxlength="100" class="form-control w300" v-model="packageData.classCountDesc"></textarea>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
@@ -725,25 +507,25 @@
 					  				剩余课程数续购提醒数：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<input type="text" class="form-control w180" value="10" />
+					  				<input  maxlength="10" type="number" class="form-control w180" v-model="packageData.remainCountNotice"  min="0" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" />
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				是否可以挂账消费：
+									<span class="c-ff0000">*</span>是否可以挂账消费：
 					  			</div>
 					  			<div class="flex-box-item checkbox mtb0">
-					  				<label class="mr20"><input type="radio" />是</label>
-					  				<label><input type="radio" />否</label>
+					  				<label class="mr20"><input type="radio" name="isAccountSpending1" v-model="packageData.isAccountSpending" value="1"/>是</label>
+					  				<label><input type="radio" v-model="packageData.isAccountSpending" name="isAccountSpending1" value="0"/>否</label>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
 					  			<div class="w160 text-right">
-					  				前台是否显示：
+									<span class="c-ff0000">*</span>前台是否显示：
 					  			</div>
 					  			<div class="flex-box-item checkbox mtb0">
-					  				<label class="mr20"><input type="radio" />是</label>
-					  				<label><input type="radio" />否</label>
+					  				<label class="mr20"><input type="radio" name="isShowDesk1" v-model="packageData.isShowDesk" value="1"/>是</label>
+					  				<label><input type="radio" name="isShowDesk1" v-model="packageData.isShowDesk" value="0"/>否</label>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box flex-start">
@@ -751,7 +533,7 @@
 					  				可使用项目：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<p>					  					
+					  				<p>
 					  					<button type="button" @click="kcFilterModel" class="btn btn-primary add-kc w85">添加课程</button>
 					  				</p>
 					  				<table class="table w600 table-style table-bordered">
@@ -767,23 +549,14 @@
 					  						</tr>
 					  					</thead>
 					  					<tbody>
-					  						<tr>
-					  							<td>1</td>
-					  							<td>软件园店</td>
-					  							<td>私教场馆</td>
-					  							<td><span class="c-00ccff">减肥套餐</span></td>
-					  							<td><b>30</b> 节</td>
-					  							<td>1</td>
-					  							<td><span class="c-ff0000">删除</span></td>
-					  						</tr>
-					  						<tr>
-					  							<td>2</td>
-					  							<td>软件园店</td>
-					  							<td>私教场馆</td>
-					  							<td><span class="c-00ccff">减肥套餐</span></td>
-					  							<td><span class="c-ccc">填写课程数量</span></td>
-					  							<td><span class="c-ccc">填写限购数量</span></td>
-					  							<td><span class="c-ff0000">删除</span></td>
+					  						<tr v-for="(item,index) in canUsingItem">
+					  							<td>{{index+1}}</td>
+					  							<td>{{item.shopName}}</td>
+					  							<td>{{item.sdaduimName}}</td>
+					  							<td><span class="c-00ccff">{{item.courseName}}</span></td>
+					  							<td><input type="number" v-model="item.classCount" placeholder="填写课程数量" style="border: none;cursor: pointer;" /></td>
+					  							<td><input type="number" v-model="item.limitCount" placeholder="填写课程数量" style="border: none;cursor: pointer;" /></td>
+					  							<td><span class="c-ff0000" @click="deleteUsingItem(index)">删除</span></td>
 					  						</tr>
 					  					</tbody>
 					  				</table>
@@ -793,8 +566,8 @@
 					  			<div class="w120 text-right">
 					  			</div>
 					  			<div class="flex-box-item btn-lg-box">
-					  				<button class="btn btn-primary">保存</button>
-					  				<button class="btn btn-fff">取消</button>
+					  				<button class="btn btn-primary" @click="savePackage">保存</button>
+					  				<button class="btn btn-fff" @click="cancelPackage">取消</button>
 					  			</div>
 					  		</div>
 					  	</div>
@@ -809,7 +582,8 @@
 						      <div class="modal-body">
 						      	<div class="flex-box flex-stretch">
 							      	<div class="w130">
-							      		<div id="area_tree"></div>
+							      		<div id="area_tree">
+												</div>
 							      	</div>
 							       	<div class="flex-box-item mt40 mlr-1">
 							       		<table class="table table-striped table-bordered table-style">
@@ -828,61 +602,26 @@
 						    					</tr>
 						    				</thead>
 						    				<tbody>
-						    					<tr>
-						    						<td><input type="checkbox"></td>
-						    						<td>1</td>
-						    						<td>私教一对一</td>
-						    						<td>30</td>
-						    						<td><b>3000.00</b></td>
-						    						<td><b class="c-ff0000">2500.00</b></td>
-						    						<td><b class="c-ff9900">2400.00</b></td>
-						    						<td><b class="c-0000ff">3</b> 天</td>
-						    						<td><b>0</b></td>
-						    						<td>是</td>
-						    					</tr>
-						    					<tr>
-						    						<td><input type="checkbox"></td>
-						    						<td>1</td>
-						    						<td>私教一对一</td>
-						    						<td>30</td>
-						    						<td><b>3000.00</b></td>
-						    						<td><b class="c-ff0000">2500.00</b></td>
-						    						<td><b class="c-ff9900">2400.00</b></td>
-						    						<td><b class="c-0000ff">3</b> 天</td>
-						    						<td><b>0</b></td>
-						    						<td>是</td>
-						    					</tr>
-						    					<tr>
-						    						<td><input type="checkbox"></td>
-						    						<td>1</td>
-						    						<td>私教一对一</td>
-						    						<td>30</td>
-						    						<td><b>3000.00</b></td>
-						    						<td><b class="c-ff0000">2500.00</b></td>
-						    						<td><b class="c-ff9900">2400.00</b></td>
-						    						<td><b class="c-0000ff">3</b> 天</td>
-						    						<td><b>0</b></td>
-						    						<td>是</td>
-						    					</tr>
-						    					<tr>
-						    						<td><input type="checkbox"></td>
-						    						<td>1</td>
-						    						<td>私教一对一</td>
-						    						<td>30</td>
-						    						<td><b>3000.00</b></td>
-						    						<td><b class="c-ff0000">2500.00</b></td>
-						    						<td><b class="c-ff9900">2400.00</b></td>
-						    						<td><b class="c-0000ff">与卡同期</b></td>
-						    						<td><b>0</b></td>
-						    						<td>是</td>
+						    					<tr v-for="(cource,index) in packagePrivateCourse.list">
+						    						<td><input type="checkbox" :value="cource.id" @click="selectCourCK($event,cource)" class="canUsingCls"  v-model="courceIds"/></td>
+						    						<td>{{(packagePrivateCourse.pageNo-1)*packagePrivateCourse.pageSize+(index+1)}}</td>
+						    						<td>{{cource.name}}</td>
+													<td>{{cource.time}}</td>
+													<td><b>{{cource.marketPrice}}</b></td>
+													<td><b class="c-ff0000">{{cource.promotionPrice}}</b></td>
+													<td><b class="c-ff9900">{{cource.memberPrice}}</b></td>
+													<td ><b class="c-0000ff">{{cource.validTime!=null?'':'与卡同期'}}</b> {{cource.validTime}} </td>
+													<td><b>{{cource.remainCourceNum}}</b></td>
+													<td><b>{{cource.isAccountSpending==1?'是':'否'}}</b></td>
 						    					</tr>
 								       		</tbody>
 								       	</table>
+										<div id="pagination2" class="pagination"></div>
 								       	<div class="p8 checkbox mtb0">
 								       		<label>
-								       			<input type="checkbox" class="ml-15" /> 全选
+								       			<input type="checkbox" class="ml-15"  v-model='isok'  v-on:click='chooseAll(2)' /> 全选
 								       		</label>
-								       		<button class="btn btn-primary ml15 w80">确定</button>
+								       		<button class="btn btn-primary ml15 w80" @click="saveCAS">确定</button>
 								       	</div>
 							       	</div>
 							    </div>
@@ -894,6 +633,9 @@
 					</div>
 				    <div role="tabpanel" class="tab-pane tab-pane-style" id="settingCurse">
 				    	<div class="plr18">
+								<fieldset style="margin-top: 10px;">
+									<button class="btn btn-red add-kc" @click="saveSettingInfo">保存设置</button>
+								</fieldset>
 					    	<fieldset class="fieldset-info border1-ccc br4 pr30 pl60 ptb15 mt5">
 					    		<legend class="c-333 ml-40">预约限制</legend>
 					    		<div class="flex-box">
@@ -901,7 +643,7 @@
 					    				会员在私教开始前多少分钟不能预约？：
 					    			</div>
 					    			<div class="flex-box-item">
-					    				<input type="text" class="form-control w100" value="10" />&emsp;分钟
+					    				<input  maxlength="10" type="number" class="form-control w100" v-model="settingInfo.privateBNYY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>&emsp;分钟
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
@@ -909,7 +651,7 @@
 					    				会员在私教开始前多少分钟不能取消预约？：
 					    			</div>
 					    			<div class="flex-box-item">
-					    				<input type="text" class="form-control w100" value="60" />&emsp;分钟
+					    				<input   maxlength="10" type="number" class="form-control w100" v-model="settingInfo.privateBNQX" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>&emsp;分钟
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
@@ -918,181 +660,188 @@
 					    			</div>
 					    			<div class="flex-box-item">
 					    				<div class="checkbox mt0">
-								    		<label class="mr20"><input type="checkbox" value="1" />打开</label><label><input type="checkbox" value="0" />关闭</label>
+								    		<label class="mr20"><input name="privateDKQD" type="radio" value="1" v-model="settingInfo.privateDKQD"/>打开</label>
+												<label><input type="radio" value="2" name="privateDKQD" v-model="settingInfo.privateDKQD"/>关闭</label>
 								    	</div>
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
 					    			<div class="flex-box-item input-sm-box">
 					    				普通会员可以预约
-					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
-					    					<option>天</option>
-					    					<option>周</option>
-					    					<option>年</option>
-					    					<option>月</option>
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privatePTYY"  />
+											<select class="form-control w42 br0" v-model="settingInfo.privatePTYYType" >
+												<option value="1">天</option>
+												<option value="2">周</option>
+												<option value="3">年</option>
+												<option value="4">月</option>
 					    				</select>
 					    				天内的课程，同时可以存在
-					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privatePTCZ" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				天预约。会员需缴纳
-					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privatePTJDJY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				元/次  可解除冻结
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
 					    			<div class="flex-box-item input-sm-box">
 					    				银卡会员可以预约
-					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
-					    					<option>天</option>
-					    					<option>周</option>
-					    					<option>年</option>
-					    					<option>月</option>
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateYKYY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+											<select class="form-control w42 br0" v-model="settingInfo.privateYKYYType">
+												<option value="1">天</option>
+												<option value="2">周</option>
+												<option value="3">年</option>
+												<option value="4">月</option>
 					    				</select>
 					    				天内的课程，同时可以存在
-					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateYKCZ" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				天预约。会员需缴纳
-					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateYKJDJY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				元/次  可解除冻结
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
 					    			<div class="flex-box-item input-sm-box">
 					    				金卡会员可以预约
-					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
-					    					<option>天</option>
-					    					<option>周</option>
-					    					<option>年</option>
-					    					<option>月</option>
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateJKYY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+											<select class="form-control w42 br0" v-model="settingInfo.privateJKYYType" >
+												<option value="1">天</option>
+												<option value="2">周</option>
+												<option value="3">年</option>
+												<option value="4">月</option>
 					    				</select>
 					    				天内的课程，同时可以存在
-					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateJKCZ" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				天预约。会员需缴纳
-					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateJKJDJY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				元/次  可解除冻结
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
 					    			<div class="flex-box-item input-sm-box">
 					    				砖卡会员可以预约
-					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
-					    					<option>天</option>
-					    					<option>周</option>
-					    					<option>年</option>
-					    					<option>月</option>
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateZKYY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+											 <select class="form-control w42 br0" v-model="settingInfo.privateZKYYType">
+												 <option value="1">天</option>
+												 <option value="2">周</option>
+												 <option value="3">年</option>
+												 <option value="4">月</option>
 					    				</select>
 					    				天内的课程，同时可以存在
-					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateZKCZ" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				天预约。会员需缴纳
-					    				<input type="text" class="form-control br0 w60" value="100" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateZKJDJY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				元/次  可解除冻结
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
 					    			<div class="flex-box-item input-sm-box">
 					    				会员
-					    				<input type="text" class="form-control br0 w60" value="1" /><select class="form-control w42 br0">
-					    					<option>天</option>
-					    					<option>周</option>
-					    					<option>年</option>
-					    					<option>月</option>
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateHYN" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+											<select class="form-control w42 br0" v-model="settingInfo.privateHYNType">
+					    					<option value="1">天</option>
+					    					<option value="2">周</option>
+					    					<option value="3">年</option>
+					    					<option value="4">月</option>
 					    				</select>
 					    				天内有
-					    				<input type="text" class="form-control br0 w60" value="1" />
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateYYWQX" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 					    				次预约未取消未消费则
-					    				<input type="text" class="form-control br0 w60" value="100" /><select class="form-control w42 br0">
-					    					<option>天</option>
-					    					<option>周</option>
-					    					<option>年</option>
-					    					<option>月</option>
+					    				<input type="number" class="form-control br0 w60" v-model="settingInfo.privateJZYY" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+											<select class="form-control w42 br0" v-model="settingInfo.privateJZYYType">
+												<option value="1">天</option>
+												<option value="2">周</option>
+												<option value="3">年</option>
+												<option value="4">月</option>
 					    				</select>
 					    				内，禁止预约，同时将取消已预约的课程
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
-					    			<div class="flex-box-item input-sm-box">	
+					    			<div class="flex-box-item input-sm-box">
 						    			会员信息修改：仅限在预约上课前
-						    			<input type="text" class="form-control w60 br0" value="20" />
+						    			<input type="number" class="form-control w60 br0" v-model="settingInfo.privateYYSKQXG" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
 						    			小时以前可以修改
 					    			</div>
 					    		</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			上课信息：未来预约
 						    			<label class="mr15 ml3">
-						    				<input type="radio" name="access" />允许
+						    				<input type="radio" name="privateSKXXWLYY" value="1"  v-model="settingInfo.privateSKXXWLYY" />允许
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="access" />不允许&emsp;上课 
+						    				<input type="radio" name="privateSKXXWLYY" value="2" v-model="settingInfo.privateSKXXWLYY"/>不允许&emsp;上课
 					    				</label>
 						    		</div>
 						    	</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			前台开课
 						    			<label class="mr15 ml3">
-						    				<input type="radio" name="access" />允许
+						    				<input type="radio" name="privateQTKKXGJL" value="1" v-model="settingInfo.privateQTKKXGJL"/>允许
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="access" />不允许 
+						    				<input type="radio" name="privateQTKKXGJL" value="2" v-model="settingInfo.privateQTKKXGJL"/>不允许
 					    				</label>
 					    				&emsp;修改上课教练
 						    		</div>
 						    	</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			卡种次数或余额不足时
 						    			<label class="mr15 ml3">
-						    				<input type="radio" name="access" />允许现金单次支付继续消费
+						    				<input type="radio" name="privateKCSYYBZ" value="1" v-model="settingInfo.privateKCSYYBZ"/>允许现金单次支付继续消费
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="access" />不允许继续消费 
+						    				<input type="radio" name="privateKCSYYBZ" value="2" v-model="settingInfo.privateKCSYYBZ"/>不允许继续消费
 					    				</label>
 						    		</div>
 						    	</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			会员消费本模块仅限凭证（可多选）：
 						    			<label class="mr15 ml3">
-						    				<input type="checkbox" name="access" />会员卡
+						    				<input type="checkbox" class="settingckCls" value="1"  v-model="settingInfo.privateHYXFBMKCK"/>会员卡
 					    				</label>
 						    			<label class="mr15">
-						    				<input type="checkbox" name="access" />密码
+						    				<input type="checkbox" class="settingckCls" value="2"  v-model="settingInfo.privateHYXFBMKCK"/>密码
 					    				</label>
 						    			<label>
-						    				<input type="checkbox" name="access" />指纹 
+						    				<input type="checkbox" class="settingckCls" value="3"  v-model="settingInfo.privateHYXFBMKCK"/>指纹
 					    				</label>
 						    		</div>
 						    	</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			会员消费结账时是否需要输入凭证：
 						    			<label class="mr15 ml3">
-						    				<input type="radio" name="access" />需要输入
+						    				<input type="radio" name="privateJZXFSRPZ" value="1" v-model="settingInfo.privateJZXFSRPZ"/>需要输入
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="access" />不需要输入 
+						    				<input type="radio" name="privateJZXFSRPZ" value="2" v-model="settingInfo.privateJZXFSRPZ"/>不需要输入
 					    				</label>
 						    		</div>
 						    	</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			教练开始时是否需要输入指纹：
 						    			<label class="mr15 ml3">
-						    				<input type="radio" name="access" />需要
+						    				<input type="radio" name="privateJLKKSRZW" value="1" v-model="settingInfo.privateJLKKSRZW"/>需要
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="access" />不需要
+						    				<input type="radio" name="privateJLKKSRZW" value="2" v-model="settingInfo.privateJLKKSRZW"/>不需要
 					    				</label>
 						    		</div>
 						    	</div>
 					    		<div class="flex-box">
-						    		<div class="flex-box-item checkbox mtb0">						    			
+						    		<div class="flex-box-item checkbox mtb0">
 						    			模块消费前是否限制：
 						    			<label class="ml10">
-						    				<input type="radio" name="access" />启用，仅当会员卡在
+						    				<input type="radio" name="privateXFQXZ" value="1" v-model="settingInfo.privateXFQXZ"/>启用，仅当会员卡在
 					    				</label>
 					    				<button class="btn btn-primary" @click="appointModal">指定场馆（单击选择）</button> 消费后才可以在本模块消费<br />
 						    			<label style="margin-left: 134px;margin-top: 8px;">
-						    				<input type="radio" name="access" />不启用
+						    				<input type="radio" name="privateXFQXZ" value="2" v-model="settingInfo.privateXFQXZ"/>不启用
 					    				</label>
 						    		</div>
 						    	</div>
@@ -1105,10 +854,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="keman" />打开
+						    				<input type="radio" name="privateTTJL" value="1" v-model="settingInfo.privateTTJL"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="keman" />关闭
+						    				<input type="radio" name="privateTTJL" value="2"  v-model="settingInfo.privateTTJL"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1118,10 +867,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="tuanke" />打开
+						    				<input type="radio" name="privateTTHY" value="1" v-model="settingInfo.privateTTHY"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="tuanke" />关闭
+						    				<input type="radio" name="privateTTHY" value="2"  v-model="settingInfo.privateTTHY"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1131,10 +880,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="txjl" />打开
+						    				<input type="radio" name="privateQXTTJL" value="1" v-model="settingInfo.privateQXTTJL"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="txjl" />关闭
+						    				<input type="radio" name="privateQXTTJL" value="2" v-model="settingInfo.privateQXTTJL"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1144,10 +893,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="txhy" />打开
+						    				<input type="radio" name="privateQXTXHY" value="1" v-model="settingInfo.privateQXTXHY"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="txhy" />关闭
+						    				<input type="radio" name="privateQXTXHY" value="2"  v-model="settingInfo.privateQXTXHY"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1157,10 +906,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="dkhy" />打开
+						    				<input type="radio" name="privateDYTTHY" value="1"  v-model="settingInfo.privateDYTTHY"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="dkhy" />关闭
+						    				<input type="radio" name="privateDYTTHY" value="2" v-model="settingInfo.privateDYTTHY"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1170,10 +919,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="dkjl" />打开
+						    				<input type="radio" name="privateDYTTJL" value="1" v-model="settingInfo.privateDYTTJL"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="dkjl" />关闭
+						    				<input type="radio" name="privateDYTTJL" value="2" v-model="settingInfo.privateDYTTJL"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1183,10 +932,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="dkqx" />打开
+						    				<input type="radio" name="privateHYQXSJTXJL" value="1" v-model="settingInfo.privateHYQXSJTXJL"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="dkqx" />关闭
+						    				<input type="radio" name="privateHYQXSJTXJL" value="2" v-model="settingInfo.privateHYQXSJTXJL"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1196,10 +945,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="dktx" />打开
+						    				<input type="radio" name="privateHYQXSJTXHY" value="1" v-model="settingInfo.privateHYQXSJTXHY"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="dktx" />关闭
+						    				<input type="radio" name="privateHYQXSJTXHY" value="2"  v-model="settingInfo.privateHYQXSJTXHY"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1209,10 +958,10 @@
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
 					    				<label class="mr20 ml3">
-						    				<input type="radio" name="kstz" />打开
+						    				<input type="radio" name="privateSJKSQTZ" value="1" v-model="settingInfo.privateSJKSQTZ"/>打开
 					    				</label>
 						    			<label>
-						    				<input type="radio" name="kstz" />关闭
+						    				<input type="radio" name="privateSJKSQTZ" value="2" v-model="settingInfo.privateSJKSQTZ"/>关闭
 					    				</label>
 					    			</div>
 					    		</div>
@@ -1221,7 +970,7 @@
 					    				会员在私教开课前多少分钟收到通知：
 					    			</div>
 					    			<div class="flex-box-item checkbox mtb0">
-					    				<input class="form-control w100" value="10" />&emsp;分钟
+					    				<input class="form-control w100"  v-model="settingInfo.privateSJKSQFZ" type="number"/>&emsp;分钟
 					    			</div>
 					    		</div>
 					    	</fieldset>
@@ -1236,45 +985,17 @@
 						      <div class="modal-body">
 						       	<table class="table table-style table-bordered">
 						       		<tbody>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>场馆</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>私教</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>健身</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>私教</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>健身</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>健身</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>私教</td>
-						       			</tr>
-						       			<tr>
-						       				<td class="w70"><input type="checkbox"></td>
-						       				<td>健身</td>
+						       			<tr v-for="(sdaduim,index) in settingSdaduimList">
+						       				<td class="w70"><input :value="sdaduim.id" v-model="settingInfo.privateHYJZZZCSCK" type="checkbox" class="xfzdcg"></td>
+						       				<td>{{sdaduim.name}}</td>
 						       			</tr>
 						       		</tbody>
 						       	</table>
 						       	<span class="c-ff0000" style="font-size: 14px;">但选择多个场馆时，仅在一个场馆消费即可</span>
 						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-primary">修改</button>
-						        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+						      <div class="modal-footer" style="    text-align: center;">
+						        <!--<button type="button" class="btn btn-primary" data-dismiss="modal">修改</button>-->
+						        <button type="button" class="btn btn-fff" data-dismiss="modal">确定</button>
 						      </div>
 						    </div><!-- /.modal-content -->
 						  </div><!-- /.modal-dialog -->
@@ -1282,20 +1003,22 @@
 				    </div>
 				    <div role="tabpanel" class="tab-pane tab-pane-style" id="settingTrain">
 				    	 <ul class="nav nav-tabs sub-nav-style" role="tablist">
-						    <li role="presentation" class="active"><a href="#settingAction" aria-controls="settingAction" role="tab" data-toggle="tab">动作设置</a></li>
-						    <li role="presentation"><a href="#simpleLinkSetting" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">单节训练课程设置</a></li>
-						    <li role="presentation"><a href="#setMealSetting" aria-controls="setMealSetting" role="tab" data-toggle="tab">训练套餐设置</a></li>
+						    <li role="presentation" class="active" ><a href="#settingAction" aria-controls="settingAction" role="tab" data-toggle="tab" >动作设置</a></li>
+						    <li role="presentation"><a href="#simpleLinkSetting" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab" @click="simpleLinkSettingMain(1)">单节训练课程设置</a></li>
+						    <li role="presentation"><a href="#setMealSetting" aria-controls="setMealSetting" role="tab" data-toggle="tab"  @click="simpleLinkSettingMain(2)" >训练套餐设置</a></li>
 						  </ul>
 						  <div class="tab-content">
 				    		<div role="tabpanel" class="tab-pane tab-pane-style active" id="settingAction">
 				    			<div class="flex-box flex-start">
 				    				<div class="w200 min-height-page-sm">
-						    			<button class="btn btn-red btn-add-action" @click="addAction">新增动作系列</button>
+						    			<button class="btn btn-red btn-add-action" @click="addAction(0)">新增动作系列</button>
 						    			<ul class="action-list">
-						    				<li class="active"><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
+												<li v-for="(action , index) in actions" :key="index" @click="actionClick(index)" :class="actionSettingIndex == index?'active':'' " >
+                          <a>
+                            {{action.name}}
+                          </a>
+                        </li>
+
 						    			</ul>
 						    		</div>
 						    		<div class="flex-box-item p10">
@@ -1308,7 +1031,7 @@
 						    								<span class="c-ff0000">*</span>动作名称：
 						    							</div>
 						    							<div class="flex-box-item">
-						    								<input class="form-control br0" placeholder="填写动作名称（限制15个字符）" />
+						    								<input class="form-control br0" maxlength="15" placeholder="填写动作名称（限制15个字符）" v-model="actionAddData.name" />
 						    							</div>
 				    								</div>
 				    								<div class="flex-box">
@@ -1316,7 +1039,7 @@
 						    								<span class="c-ff0000">*</span>难度：
 						    							</div>
 						    							<div class="flex-box-item">
-						    								<input class="form-control br0" placeholder="填写难度（限制5个字符）" />
+						    								<input class="form-control br0" placeholder="填写难度（限制5个字符）" maxlength="5" v-model="actionAddData.diff" />
 						    							</div>
 				    								</div>
 				    								<div class="flex-box flex-start">
@@ -1325,8 +1048,10 @@
 						    							</div>
 						    							<div class="flex-box-item">
 						    								<div class="file-box">
-							    								<input class="form-control br0" type="file" />
-						    									<b>＋</b>
+							    								<input class="form-control br0" type="file"  @change="pictureShow($event,0 , actionAddData)"/>
+						    									<!--<b v-if="!hasFile">＋</b>-->
+                                                                <img id="addActionImg0" src="img/addImg.png" width="84px" height="84px" />
+																<!--<img  src="" id="addActionImg" style="width: 75px;height: 75px">-->
 						    								</div>
 						    								<span class="file-prompt">上传实例图片/gif图</span>
 						    							</div>
@@ -1335,10 +1060,10 @@
 				    							<div class="flex-box-item">
 				    								<div class="flex-box flex-start">
 					    								<div class="w100 text-right">
-						    								<span class="c-ff0000">*</span>动作效果原理：
+						    								动作效果原理：
 						    							</div>
 						    							<div class="flex-box-item">
-						    								<textarea class="form-control br0" rows="9"></textarea>
+						    								<textarea class="form-control br0" rows="9" v-model="actionAddData.actionPrinceple"></textarea>
 						    							</div>
 				    								</div>
 				    							</div>
@@ -1346,24 +1071,24 @@
 				    						<div class="flex-box flex-start">
 			    								<div class="w100 text-right"></div>
 		    									<div class="flex-box-item">
-				    								<button class="btn btn-red w60 btn-sm">新增</button>
+				    								<button class="btn btn-red w60 btn-sm" @click="ActionSettingAddAction(0)" >新增</button>
 				    							</div>
 				    						</div>
 						    			</fieldset>
 						    			<div class="p5">
 						    				将选中选项移动到：
-						    				<select class="form-control w140 br0" style="display: inline-block;">
-						    					<option>动作系列1</option>
-						    					<option>动作系列2</option>
-						    					<option>动作系列3</option>
+						    				<select class="form-control w140 br0" style="display: inline-block;" v-model="changeActionSelect">
+                          <option disabled value="">请选择</option>
+                          <option v-for="(action , index) in actions" :key="index" :value="action.id" >{{action.name}}</option>
+
 						    				</select>
-						    				<button class="btn btn-primary w80 remove-item">确定</button>
+						    				<button class="btn btn-primary w80 remove-item" @click="changeParent">确定</button>
 						    			</div>
 						    			<div class="mlr-11">
 								    		<table class="table table-bordered table-style">
 								    			<thead>
 								    				<tr>
-								    					<td class="w35"><input type="checkbox" /></td>
+								    					<td class="w35"><input type="checkbox" name="checkall"  v-model='isok'  v-on:click='chooseAll(0)' /></td>
 								    					<td>序号</td>
 								    					<td>动作名称</td>
 								    					<td>实例图片/gif图</td>
@@ -1373,60 +1098,27 @@
 								    				</tr>
 								    			</thead>
 								    			<tbody>
-								    				<tr>
-								    					<td><input type="checkbox" /></td>
-								    					<td>1</td>
-								    					<td>动作1</td>
-								    					<td><img src="img/addImg.png" width="75px" /></td>
-								    					<td>简单</td>
-								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
-								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
-								    				</tr>
-								    				<tr>
-								    					<td><input type="checkbox" /></td>
-								    					<td>1</td>
-								    					<td>动作1</td>
-								    					<td><img src="img/addImg.png" width="75px" /></td>
-								    					<td>简单</td>
-								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
-								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
-								    				</tr>
-								    				<tr>
-								    					<td><input type="checkbox" /></td>
-								    					<td>1</td>
-								    					<td>动作1</td>
-								    					<td><img src="img/addImg.png" width="75px" /></td>
-								    					<td>简单</td>
-								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
-								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
-								    				</tr>
-								    				<tr>
-								    					<td><input type="checkbox" /></td>
-								    					<td>1</td>
-								    					<td>动作1</td>
-								    					<td><img src="img/addImg.png" width="75px" /></td>
-								    					<td>简单</td>
-								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
-								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
-								    				</tr>
-								    				<tr>
-								    					<td><input type="checkbox" /></td>
-								    					<td>1</td>
-								    					<td>动作1</td>
-								    					<td><img src="img/addImg.png" width="75px" /></td>
-								    					<td>简单</td>
-								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
-								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
-								    				</tr>
-								    				<tr>
-								    					<td><input type="checkbox" /></td>
-								    					<td>1</td>
-								    					<td>动作1</td>
-								    					<td><img src="img/addImg.png" width="75px" /></td>
-								    					<td>简单</td>
-								    					<td class="mw340">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</td>
-								    					<td><button class="btn btn-modify" @click="modifyAction">修改</button><button class="btn btn-order ml10">删除</button></td>
-								    				</tr>
+													<div v-if="actions.length > actionSettingIndex">
+                            <tr v-for="(actionType ,index) in actions[actionSettingIndex].actionList">
+
+                              <td><input type="checkbox" :value="actionType.id" v-model="changeActionIds"/></td>
+                              <td>{{index+1}}</td>
+                              <td>{{actionType.name}}</td>
+                              <td>
+                                <img v-if="!actionType.image" src="img/addImg.png" width="84px" height="84px" />
+                                <img v-if="actionType.image" :src="actionType.image" width="84px" height="84px" />
+                              </td>
+
+                              <td>{{actionType.diff}}</td>
+                              <td class="mw340">{{actionType.actionPrinceple}}</td>
+                              <td>
+                                <button class="btn btn-modify" @click="modifyAction(index,actionType)">修改</button>
+                                <button class="btn btn-order ml10" @click="delAction(index, actionType)">删除</button>
+                              </td>
+
+
+                            </tr>
+													</div>
 								    			</tbody>
 								    		</table>
 						    			</div>
@@ -1446,7 +1138,7 @@
 								       			<span class="c-ff0000">*</span>动作名称：
 								       		</div>
 								       		<div class="flex-box-item">
-								       			<input type="text" class="form-control w300" value="动作" />
+								       			<input type="text" class="form-control w300" v-model="actionSettingData.name"  maxlength="15" />
 								       		</div>
 								       	</div>
 								       	<div class="flex-box">
@@ -1454,7 +1146,7 @@
 								       			<span class="c-ff0000">*</span>难度：
 								       		</div>
 								       		<div class="flex-box-item">
-								       			<input type="text" class="form-control w300" value="动作" />
+								       			<input type="text" class="form-control w300" maxlength="5" v-model="actionSettingData.diff" />
 								       		</div>
 								       	</div>
 								       	<div class="flex-box flex-start">
@@ -1463,9 +1155,10 @@
 								       		</div>
 								       		<div class="flex-box-item">
 			    								<div class="file-box">
-				    								<input class="form-control br0" type="file" />
+				    								<input class="form-control br0" type="file" @change="pictureShow($event , 1 , actionSettingData)" />
 			    									<!--<b>＋</b>-->
-			    									<img src="img/addImg.png" width="84px" />
+			    									<img id="addActionImg1" :src="actionSettingData.image?actionSettingData.image:'img/addImg.png'" width="84px" height="84px" />
+
 			    								</div>
 			    								<span class="file-prompt">上传实例图片/gif图</span>
 								       		</div>
@@ -1475,12 +1168,12 @@
 								       			动作效果原理：
 								       		</div>
 								       		<div class="flex-box-item">
-								       			<textarea class="form-control w380" rows="10">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</textarea>
+								       			<textarea class="form-control w380" rows="10" v-model="actionSettingData.actionPrinceple">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</textarea>
 								       		</div>
 								       	</div>
 								      </div>
 								      <div class="modal-footer">
-								        <button type="button" class="btn btn-red">修改</button>
+								        <button type="button" class="btn btn-red" @click="modifyActionConfirm">修改</button>
 								        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
 								      </div>
 								    </div><!-- /.modal-content -->
@@ -1490,26 +1183,28 @@
 				    		<div role="tabpanel" class="tab-pane tab-pane-style" id="simpleLinkSetting">
 				    			<div class="flex-box flex-stretch">
 						    		<div class="w200 min-height-page-sm">
-						    			<button class="btn btn-red btn-add-action" @click="addAction">新增</button>
+						    			<button class="btn btn-red btn-add-action" @click="addAction(1)">新增</button>
 						    			<ul class="action-list">
-						    				<li class="active">
-						    					<a>动作系列1<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></a>
-						    					<ul class="sub-action-list">
-						    						<li>+新增训练计划</li>
-						    						<li class="active">08单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-						    						<li>09单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-						    						<li>10单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-						    					</ul>
-						    				</li>
-						    				<li><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
+
+                        <li v-for="(action , index) in simpleLinkSettingAction" :key="action" @click="actionEduClick(index,action.id , 1 )" :class="actionEduSettingIndex == index ? 'active' :''" >
+                          <a>{{action.name}}<span class="pull-right c-ffcc00 ml5" @click.stop="deleteItem(index,action.id , 1)">删除</span><span class="pull-right c-ff0000" @click.stop="updateItem(action.id , 1)">修改</span></a>
+                          <ul class="sub-action-list" v-show="actionEduSettingIndex == index">
+                            <li @click.stop="addTrain(action.id , 1)">+新增训练计划</li>
+                            <li  :key="train" @click.stop="subTrainClick(train , 1)" v-for="(train, index) in simpleLinkSettingActionSub" :class="simpleLinkSettingActionSubSelectId == train.id ?'active':''">
+                              {{train.name}}
+                              <span class="pull-right c-ffcc00 ml5" @click.stop="deleteTrain(train.id , 1)">删除</span>
+                              <span class="pull-right c-ff0000" @click.stop="updateTrain(train.id , 1)">修改</span>
+                            </li>
+
+                          </ul>
+                        </li>
+
 						    			</ul>
 						    		</div>
 						    		<div class="flex-box-item">
 						    			<div class="p8">
-						    				<button class="btn btn-grey w60">保存</button>
-						    				<button class="btn btn-red w140 ml5" @click="addActionTypeOneModal">添加动作类型</button>
+						    				<button class="btn btn-grey w60" @click="saveAction(1)">保存</button>
+						    				<button class="btn btn-red w140 ml5" @click="addActionTypeOneModal(1)">添加动作类型</button>
 						    			</div>
 						    			<table class="table table-bordered table-style mlr-1">
 						    				<thead>
@@ -1526,94 +1221,22 @@
 						    					</tr>
 						    				</thead>
 						    				<tbody>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td>一般</td>
-						    						<td><b class="c-0000ff">30</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td>一般</td>
-						    						<td><b class="c-0000ff">30</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-0000ff">30</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
+                          <tr v-for="(action,index) in simpleLinkSettingActionSubTable">
+                            <td>{{index+1}}</td>
+                            <td><img :src="action.image?action.image:'img/addImg.png'" width="85px"></td>
+                            <td><span class="c-ff9900">{{action.seriesname}}</span></td>
+                            <td>{{action.name}}</td>
+                            <td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 1)" size="10" ></b>分钟</td>
+							<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 1)" size="10" ></b></td>
+                            <td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action, 1)" size="10" ></b></td>
+							 <td><b class="c-009900">
+								 <textarea rows="8" cols="15" @change="changeData(action , 1)"  v-model="action.remark" >
+							  </textarea>
+							 </b></td>
+							  <td><button class="btn btn-order delete-action" @click="delEduAction(index,action , 1)">删除</button></td>
+
+                          </tr>
+
 						    				</tbody>
 						    			</table>
 						    		</div>
@@ -1630,29 +1253,20 @@
 								      	<div class="flex-box flex-stretch">
 								      		<div class="w180 plr5">
 								      			<ul class="action-list mt0">
-								    				<li class="active">
-								    					<a>动作系列1<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></a>
-								    					<ul class="sub-action-list">
-								    						<li>+新增训练计划</li>
-								    						<li class="active">08单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-								    						<li>09单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-								    						<li>10单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-								    					</ul>
-								    				</li>
-								    				<li><a>动作系列1</a></li>
-								    				<li><a>动作系列1</a></li>
-								    				<li><a>动作系列1</a></li>
+                              						<li @click="choiceAction(index)" v-for="(action,index) in actions" :class="trainActionIndex == index?'active':''">
+                              							  <a>{{action.name}}</a>
+													</li>
 								    			</ul>
 								      		</div>
 								      		<div class="flex-box-item">
 								      			<div class="p8">
-								      				<button class="btn btn-primary w140">添加选中</button>
+								      				<button class="btn btn-primary w140" @click="trainAddAction(1)">添加选中</button>
 								      			</div>
 								      			<div class=" mlr-1">
 									      			<table class="table table-bordered table-style">
 									      				<thead>
 									      					<tr>
-									      						<td class="w35"><input type="checkbox"></td>
+									      						<td class="w35"><input type="checkbox" v-model='isok' v-on:click='chooseAll(1)'/></td>
 									      						<td>序号</td>
 									      						<td>动作名称</td>
 									      						<td>图片/gif动画</td>
@@ -1661,22 +1275,18 @@
 									      					</tr>
 									      				</thead>
 									      				<tbody>
-									      					<tr>
-									      						<td class="w35"><input type="checkbox"></td>
-									      						<td>1</td>
-									      						<td>动作1</td>
-									      						<td><img src="img/positive.png" width="210px"></td>
-									      						<td>简单</td>
-									      						<td>变得很炫酷</td>
-									      					</tr>
-									      					<tr>
-									      						<td class="w35"><input type="checkbox"></td>
-									      						<td>1</td>
-									      						<td>动作1</td>
-									      						<td><img src="img/positive.png" width="210px"></td>
-									      						<td>简单</td>
-									      						<td>变得很炫酷</td>
-									      					</tr>
+
+                               					  <tr v-for="(action,index) in actions[trainActionIndex].actionList">
+
+													  <td class="w35"><input type="checkbox" :value="action.id"  v-model="trainAddActionIds"></td>
+													  <td>{{index+1}}</td>
+                                   					  <td>{{action.name}}</td>
+
+													  <td><img :src="action.image?action.image:'img/addImg.png'" width="210px"></td>
+													  <!--<td><img :src="http://localhost:8081//files/action/9b289618-ba99-457f-9136-6c1e246b0d45.png" width="210px"></td>-->
+													  <td>{{action.diff}}</td>
+													  <td>{{action.actionPrinceple}}</td>
+												  </tr>
 									      				</tbody>
 									      			</table>
 									      		</div>
@@ -1690,33 +1300,34 @@
 				    		<div role="tabpanel" class="tab-pane tab-pane-style" id="setMealSetting">
 				    			<div class="flex-box flex-stretch">
 						    		<div class="w200 min-height-page-sm">
-						    			<button class="btn btn-red btn-add-action" @click="addAction">新增训练课程系列</button>
+						    			<button class="btn btn-red btn-add-action" @click="addAction(2)">新增训练课程系列</button>
 						    			<ul class="action-list">
-						    				<li class="active">
-						    					<a>动作系列1<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></a>
-						    					<ul class="sub-action-list">
-						    						<li>+新增训练计划</li>
-						    						<li class="active">08单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-						    						<li>09单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-						    						<li>10单车<span class="pull-right c-ffcc00 ml5">删除</span><span class="pull-right c-ff0000">修改</span></li>
-						    					</ul>
-						    				</li>
-						    				<li><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
-						    				<li><a>动作系列1</a></li>
+                        <li v-for="(action , index) in mealLinkSettingAction" :key="action" @click="actionEduClick(index,action.id , 2 )" :class="mealSettingIndex == index ? 'active' :''" >
+                          <a>{{action.name}}<span class="pull-right c-ffcc00 ml5"  @click.stop="deleteItem(index,action.id , 2)">删除</span><span class="pull-right c-ff0000" @click.stop="updateItem(action.id , 2)">修改</span></a>
+                          <ul class="sub-action-list" v-show="mealSettingIndex == index">
+                            <li @click.stop="addTrain(action.id , 2)">+新增训练计划</li>
+                            <li  :key="train" @click.stop="subTrainClick(train , 2)" v-for="(train, index) in mealLinkSettingActionSub" :class="mealLinkSettingActionSubSelectId == train.id ?'active':''">
+                              {{train.name}}
+                              <span class="pull-right c-ffcc00 ml5" @click.stop="deleteTrain(train.id , 2)">删除</span>
+                              <span class="pull-right c-ff0000" @click.stop="updateTrain(train.id , 2)">修改</span>
+                            </li>
+
+                          </ul>
+                        </li>
 						    			</ul>
 						    		</div>
 						    		<div class="flex-box-item">
 						    			<div class="p8">
-						    				<button class="btn btn-grey w60">保存</button>
-						    				<button class="btn btn-red w140 ml5" @click="addActionTypeModal">添加动作类型</button>
+						    				<button class="btn btn-grey w60" @click="saveAction(2)">保存</button>
+						    				<button class="btn btn-red w140 ml5" @click="addActionTypeModal()">添加动作类型</button>
 						    			</div>
+                      <div class="tabWrap">
 						    			<table class="table table-bordered table-style mlr-1">
 						    				<thead>
-						    					<tr>
+												<tr>
 						    						<td>序号</td>
 						    						<td>训练时间</td>
-						    						<td></td>
+						    						<td>图片</td>
 						    						<td>动作类型</td>
 						    						<td>动作名称</td>
 						    						<td>时间（分）</td>
@@ -1727,68 +1338,30 @@
 						    					</tr>
 						    				</thead>
 						    				<tbody>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td>一般</td>
-						    						<td><b class="c-0000ff">30</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
-						    					<tr>
-						    						<td>1</td>
-						    						<td><span class="c-ff0000">2018-06-30 17:29</span></td>
-						    						<td><img src="img/addImg.png" width="85px"></td>
-						    						<td><span class="c-ff9900">腹部肌群</span></td>
-						    						<td>难度增大型</td>
-						    						<td><b class="c-009900">20</b>分钟</td>
-						    						<td><span class="c-ccc">填写强度</span></td>
-						    						<td><b class="c-ccc">填写分钟数</b></td>
-						    						<td></td>
-						    						<td><button class="btn btn-order delete-action">删除</button></td>
-						    					</tr>
+
+                        <tr v-for="(action,index) in mealLinkSettingActionSubTable">
+                          <td>{{index+1}}</td>
+							<td><input :id="'pick'+index" v-model="action.traning_time" @change="changeData(action , 2)"  placeholder="请选择时间"  /></td>
+							<!--<td><span class="c-ff0000">2018-06-30 17:29</span></td>-->
+                          <td><img :src="action.image?action.image:'img/addImg.png'" width="85px"></td>
+							<td><span class="c-ff9900">{{action.seriesname}}</span></td>
+                          <td>{{action.name}}</td>
+                          <td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 2)" size="10"></b>分钟</td>
+							<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 2)" size="10" ></b></td>
+                          <td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action , 2)" size="10" ></b></td>
+							<td><b class="c-009900">
+								 <textarea rows="8" cols="15" @change="changeData(action , 2)"  v-model="action.remark" >
+							  </textarea>
+							</b></td>
+                          <td><button class="btn btn-order delete-action" @click="delEduAction(index,action , 2)">删除</button></td>
+
+                        </tr>
+
+
 						    				</tbody>
 						    			</table>
+                        <div id="pagination_meal" class="pagination"></div>
+                      </div>
 						    		</div>
 						    	</div>
 						    	<!--添加动作类型-->
@@ -1803,57 +1376,22 @@
 								      	<div class="flex-box flex-stretch">
 								      		<div class="w150">
 								      			<ul class="action-tree-list">
-								      				<li>
-								      					<a>肱三头肌</a>
-								      					<ul class="action-tree-child">
-								      						<li>
-								      							<a class="checkbox">
-								      								<label><input type="checkbox" />动作1</label>
-								      							</a>
-								      						</li>
-								      						<li>
-								      							<a class="checkbox">
-								      								<label><input type="checkbox" />动作2</label>
-								      							</a>
-								      						</li>
-								      						<li>
-								      							<a class="checkbox">
-								      								<label><input type="checkbox" />动作3</label>
-								      							</a>
-								      						</li>
-								      					</ul>
-								      				</li>
-								      				<li>
-								      					<a>手臂肌群</a>
-								      					<ul class="action-tree-child">
-								      						<li>
-								      							<a class="checkbox">
-								      								<label><input type="checkbox" />动作1</label>
-								      							</a>
-								      						</li>
-								      						<li>
-								      							<a class="checkbox">
-								      								<label><input type="checkbox" />动作2</label>
-								      							</a>
-								      						</li>
-								      						<li>
-								      							<a class="checkbox">
-								      								<label><input type="checkbox" />动作3</label>
-								      							</a>
-								      						</li>
-								      					</ul>
-								      				</li>
-								      			</ul>
+                                                    <li @click="choiceAction(index)" v-for="(action,index) in actions" :class="trainActionIndex == index?'active':''">
+                                                        <a>{{action.name}}</a>
+
+                                                    </li>
+
+                                                </ul>
 								      		</div>
 								      		<div class="flex-box-item">
 								      			<div class="p8">
-								      				<button class="btn btn-primary w140">添加选中</button>
+								      				<button class="btn btn-primary w140" @click="trainAddAction(2)">添加选中</button>
 								      			</div>
 								      			<div class=" mlr-1">
 									      			<table class="table table-bordered table-style">
 									      				<thead>
 									      					<tr>
-									      						<td class="w35"><input type="checkbox"></td>
+									      						<td class="w35"><input type="checkbox" v-model='isok' v-on:click='chooseAll(1)'/></td>
 									      						<td>序号</td>
 									      						<td>动作名称</td>
 									      						<td>图片/gif动画</td>
@@ -1862,22 +1400,18 @@
 									      					</tr>
 									      				</thead>
 									      				<tbody>
-									      					<tr>
-									      						<td class="w35"><input type="checkbox"></td>
-									      						<td>1</td>
-									      						<td>动作1</td>
-									      						<td><img src="img/positive.png" width="210px"></td>
-									      						<td>简单</td>
-									      						<td>变得很炫酷</td>
-									      					</tr>
-									      					<tr>
-									      						<td class="w35"><input type="checkbox"></td>
-									      						<td>1</td>
-									      						<td>动作1</td>
-									      						<td><img src="img/positive.png" width="210px"></td>
-									      						<td>简单</td>
-									      						<td>变得很炫酷</td>
-									      					</tr>
+                                                        <tr v-for="(action,index) in actions[trainActionIndex].actionList">
+
+
+                                                            <td class="w35"><input type="checkbox" :value="action.id"  v-model="trainAddActionIds"></td>
+                                                            <td>{{index+1}}</td>
+                                                            <td>{{action.name}}</td>
+                                                            <td><img :src="action.image?action.image:'img/addImg.png'" width="210px"></td>
+                                                            <td>{{action.diff}}</td>
+                                                            <td>{{action.actionPrinceple}}</td>
+
+
+                                                        </tr>
 									      				</tbody>
 									      			</table>
 									      		</div>
@@ -1887,7 +1421,7 @@
 								    </div><!-- /.modal-content -->
 								  </div><!-- /.modal-dialog -->
 								</div><!-- /.modal -->
-						    	
+
 				    		</div>
 				    	</div>
 				    </div>
@@ -1898,26 +1432,139 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title">新增动作系列</h4>
+					        <h4 class="modal-title">{{modalTitle}}</h4>
 					      </div>
 					      <div class="modal-body">
-					        <input type="text" class="form-control"  placeholder="新增动作系列（限15个字）"/>
+					        <input type="text" class="form-control" maxlength="15" :placeholder="placeholderTxt" v-model="addActionSeriesName"/>
 					      </div>
 					      <div class="modal-footer">
-					        <button type="button" class="btn btn-primary">确定</button>
-					        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+					        <button type="button" class="btn btn-primary" @click="addActionSeries">确定</button>
+					        <button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelActionSeries">取消</button>
 					      </div>
 					    </div><!-- /.modal-content -->
 					  </div><!-- /.modal-dialog -->
 					</div><!-- /.modal -->
+
+          <!--新增训练计划-->
+          <div class="modal fade modal-style mModal" id="addTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">新增动作系列1</h4>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="form-control" maxlength="15"  placeholder="新增训练计划（限15个字）" v-model="addTrainName"/>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" @click="addTrainConfirm">确定</button>
+                  <button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelTrainAdd">取消</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+					<!--修改课程计划-->
+					<div class="modal fade modal-style mModal" id="updateItemModal" tabindex="-1" role="dialog"  data-backdrop="false">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title">修改训练课程计划</h4>
+								</div>
+								<div class="modal-body">
+									<input type="text" class="form-control" maxlength="15"  placeholder="修改训练课程计划（限15个字）" v-model="updateItemName"/>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary" @click="updateItemConfirm">确定</button>
+									<button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelItemUpate">取消</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
+		<div class="modal fade modal-style mModal" id="deleteItemModal" tabindex="-1" role="dialog"  data-backdrop="false">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">是否确定删除训练课程计划</h4>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" @click="deleteItemConfirm">确定</button>
+						<button type="button" class="btn btn-fff" data-dismiss="modal" @click="canceldeleteItem">取消</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div>
+
+		</div>
+					<div class="modal fade modal-style mModal" id="deleteTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title">是否确定删除训练计划</h4>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary" @click="deleteTrainConfirm">确定</button>
+									<button type="button" class="btn btn-fff" data-dismiss="modal" @click="canceldeleteTrain">取消</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div>
+
+					</div>
+		<div class="modal fade modal-style mModal" id="updateTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">修改训练计划</h4>
+					</div>
+					<div class="modal-body">
+						<input type="text" class="form-control" maxlength="15"  placeholder="修改训练计划（限15个字）" v-model="updateTrainName"/>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" @click="updateTrainConfirm">确定</button>
+						<button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelupdateTrain">取消</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div>
+		</div>
+				</div><!-- /.modal -->
+				<div class="modal fade modal-style mModal" id="saveSuccessModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h5 class="modal-title">保存成功</h5>
+							</div>
+						</div><!-- /.modal-content -->
+					</div>
+
+				</div>
+
+				<div class="modal fade modal-style mModal" id="deleteActionModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">是否确定删除私教课程</h4>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="deleteActionConfirm">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="canceldeleteAction">取消</button>
+							</div>
+						</div>&lt;!&ndash; /.modal-content &ndash;&gt;
+					</div>
+
+				</div>
+
 				</div>
 			</div>
 			<!-- END 主要内容 -->
 		</div>
 		<!-- END 右边容器 -->
-		
+
 		<div class="clearfix"></div>
-		
+
 		<!--<footer>
 			<div class="container-fluid">
 				<p class="copyright">Copyright &copy; 2017-2019xxx版权所有</p>
@@ -1925,308 +1572,29 @@
 		</footer>-->
 	</div>
 	<!-- END 整个页面内容 -->
-	
+	<script src="../js/jquery-3.3.1.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+
+	<script src="../js/jquery.cookie.js"></script>
+	<script src="../js/setCookie.js"></script>
+  	<script src="../js/vue.js"></script>
+	<script src="../js/axios.min.js"></script>
+	<script src="../js/toZhDigit.js"></script>
+	<script src="../js/myPagination.js"></script>
+	<!--<script src="potentialCustomers.js"></script>-->
 	<script type="text/javascript" src="js/post_js.js"></script>
 	<script type="text/javascript" src="js/bootstrap-treeview/bootstrap-treeview.js"></script>
 	<script type="text/javascript" src="js/wangEditor/wangEditor.min.js"></script>
-	<script type="text/javascript">
-		$(function() {
-			new Vue({
-				el:'#wrapper',
-				data:{
-					isAuth:false,
-					isAll:false,
-					storeData:[
-						{
-							value:1,
-							text:'厦门市',
-							selected:false,
-							children:[
-								{
-									value:10000,
-									text:'软件园店',
-									selected:false,
-								},
-								{
-									value:10001,
-									text:'集美店',
-									selected:false,
-								},
-								{
-									value:10002,
-									text:'思明店',
-									selected:false,
-								}
-							]
-						},
-						{
-							value:2,
-							text:'泉州市',
-							selected:false,
-							children:[
-								{
-									value:20000,
-									text:'丰泽区',
-									selected:false,
-								},
-								{
-									value:20001,
-									text:'鲤城区',
-									selected:false,
-								},
-								{
-									value:20002,
-									text:'东海区',
-									selected:false,
-								}
-							]
-						}
-					],
-					courseSeriess : [
-			          {
-			            text: '单车系类',
-			            href: '',
-			            tags: ['3'],
-			            nodes: [
-			              {
-			                text: '+新增课程',
-			                href: '',
-			                tags: ['0'],
-			              },
-			              {
-			                text: '动感单车',
-			                href: '',
-			                tags: ['0']
-			              },
-			              {
-			                text: '丛林穿越',
-			                href: '',
-			                tags: ['0']
-			              }
-			            ]
-			          },
-			          {
-			            text: '单车系类',
-			            href: '',
-			            tags: ['3'],
-			            nodes: [
-			              {
-			                text: '+新增课程',
-			                href: '',
-			                tags: ['0'],
-			              },
-			              {
-			                text: '动感单车',
-			                href: '',
-			                tags: ['0']
-			              },
-			              {
-			                text: '丛林穿越',
-			                href: '',
-			                tags: ['0']
-			              }
-			            ]
-			          }
-			        ],
-			        areaDatas : [
-			          {
-			            text: '软件园店',
-			            href: '',
-			            tags: ['3'],
-			            nodes: [
-			              {
-			                text: '健身房',
-			                href: '',
-			                tags: ['0'],
-			              },
-			              {
-			                text: '健身私教',
-			                href: '',
-			                tags: ['0']
-			              },
-			              {
-			                text: '游泳私教',
-			                href: '',
-			                tags: ['0']
-			              }
-			            ]
-			          },
-			          {
-			            text: '集美店',
-			            href: '',
-			            tags: ['3'],
-			            nodes: [
-			              {
-			                text: '健身房',
-			                href: '',
-			                tags: ['0'],
-			              },
-			              {
-			                text: '健身私教',
-			                href: '',
-			                tags: ['0']
-			              },
-			              {
-			                text: '游泳私教',
-			                href: '',
-			                tags: ['0']
-			              }
-			            ]
-			          }
-			        ],
-			        addPrivate:false,//新增私教课程
-			        addPrivateCourse:false,
-			        deleteStr:'<span class="delete-node">删除</span>',
-			        editor:null
-				},
-				mounted:function(){
-					this.initSelectableTree();
-				},
-				methods:{
-					viewModal:function(){
-						$('#viewModal').modal('show');
-					},
-//					默认课程计划
-					defaultCurriculumPlanModal:function(){
-						$('#defaultCurriculumPlanModal').modal('show');
-					},
-					//新增私教课程
-					addKcc:function(){
-						this.addPrivateCourse=!this.addPrivateCourse;
-						if(this.addPrivateCourse && !this.editor) this.initEdit();
-					},
-					initEdit:function(){
-						var E = window.wangEditor
-					    !this.editor && (this.editor = new E('#eidt-area'));
-					    this.editor.customConfig.uploadImgShowBase64 = true
-					   	this.editor.create()
-					},
-					//新增私教套餐
-					addKc:function(){
-						this.addPrivate = !this.addPrivate;
-					},
-					kcFilterModel:function(){
-						$('#kcFilterModel').modal('show');
-						this.areaTree();
-					},
-					appointModal:function(){
-						$("#appointModal").modal('show')
-					},
-					addActionTypeOneModal:function(){
-						$("#addActionTypeOneModal").modal('show')
-					},
-//					套餐新增
-					addActionTypeModal:function(){
-						$("#addActionTypeModal").modal('show')
-					},
-					modifyAction:function(){
-						$('#modifyActionModal').modal('show')
-					},
-//					新增动作
-					addAction:function(){						
-						$('#addActionModal').modal('show');
-					},
-//					座位设置
-					seatSetting:function(){						
-						$("#settingModal").modal('show')
-					},
-					areaTree:function(){
-						var vm=this;
-//						修改插件527-529行
-			          	$('#area_tree').treeview({
-				            data: vm.areaDatas,
-				            isShowModiyf:false,//是否显示修改
-				            selectedColor:"#2d9bd2",//选择时的颜色
-				            selectedBackColor:"#f0f5f7",//选中时的背景颜色
-				            expandIcon: "glyphicon glyphicon-triangle-right",//收起时的图标
-			          		collapseIcon: "glyphicon glyphicon-triangle-bottom",//展开时的图标
-			          		showBorder: false,//是否显示边框
-			  				backColor:"#FFFFFF",
-				            onNodeSelected: function(event, node) {
-	//			            	在点击选中节点加删除字眼,不要可删除
-	//							(deleteMode && $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.indexOf(vm.deleteStr)===-1?node.text+=vm.deleteStr:node.text}])) || $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.replace(vm.deleteStr,'')}]);
-				            	console.log('节点选中')
-				            },
-				            onNodeUnselected: function (event, node) {
-				            	console.log('节点未选中')
-				            }
-			          	});
-					},
-//					树形图
-					initSelectableTree:function(){
-						var vm=this;
-//						修改插件527-529行
-			          	$('#course_tree').treeview({
-				            data: vm.courseSeriess,
-				            isShowModiyf:true,
-				            selectedColor:"#2d9bd2",//选择时的颜色
-				            selectedBackColor:"#f0f5f7",//选中时的背景颜色
-				            expandIcon: "glyphicon glyphicon-triangle-right",//收起时的图标
-			          		collapseIcon: "glyphicon glyphicon-triangle-bottom",//展开时的图标
-			          		showBorder: false,//是否显示边框
-			  				backColor:"#FFFFFF",
-				            onNodeSelected: function(event, node) {
-	//			            	在点击选中节点加删除字眼,不要可删除
-	//							(deleteMode && $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.indexOf(vm.deleteStr)===-1?node.text+=vm.deleteStr:node.text}])) || $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.replace(vm.deleteStr,'')}]);
-				            	console.log('节点选中')
-				            },
-				            onNodeUnselected: function (event, node) {
-				            	console.log('节点未选中')
-				            }
-			          	});
-			        }
-				},
-				watch:{
-					isAuth:function(val){
-						if(val){
-							for(var i in this.storeData){
-								this.storeData[i].selected=false;
-								var children=this.storeData[i].children;
-								if(children && children.length){
-									for(var j in children){
-										this.storeData[i].children[j].selected=false;
-									}
-								}
-							}
-							this.isAll=false;
-						}
-					},
-					isAll:function(val){
-						if(val){
-							for(var i in this.storeData){
-								this.storeData[i].selected=true;
-								var children=this.storeData[i].children;
-								if(children && children.length){
-									for(var j in children){
-										this.storeData[i].children[j].selected=true;
-									}
-								}
-							}
-						}else{
-							for(var i in this.storeData){
-								this.storeData[i].selected=false;
-								var children=this.storeData[i].children;
-								if(children && children.length){
-									for(var j in children){
-										this.storeData[i].children[j].selected=false;
-									}
-								}
-							}
-						}
-					}
-				}
-			})
-//			修改
-			$treeNode=$('#course_tree');
-			$treeNode.on('click','.modify-tree',function(event){
-				//禁止选中节点
-	        	event.stopPropagation();
-	        	event.stopImmediatePropagation();
-				$('#modifyModal').modal('show');
-			})
-		});
+	<script src="../js/jquery-confirm.js"></script>
+	<script src="../js/extendjQuery.js"></script>
+	<script src="../js/jquery.cookie.js"></script>
+	<script src="../js/loading.js"></script>
+	<script>
+		new Loading();
 	</script>
-	</script>
+	<script src="../js/jquery-confirm.js"></script>
+	<script type="text/javascript" src="personalEducationSetting.js"></script>
+
 </body>
 
 </html>

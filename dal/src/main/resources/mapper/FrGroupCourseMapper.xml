@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrGroupCourseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrGroupCourse">
+        <id column="id" property="id" />
+        <result column="promtion_price" property="promtionPrice" />
+        <result column="info" property="info" />
+        <result column="create_user" property="createUser" />
+        <result column="name" property="name" />
+        <result column="valid_time" property="validTime" />
+        <result column="customer_code" property="customerCode" />
+        <result column="time" property="time" />
+        <result column="can_reserve_num" property="canReserveNum" />
+        <result column="member_price" property="memberPrice" />
+        <result column="class_status" property="classStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="market_price" property="marketPrice" />
+        <result column="update_user" property="updateUser" />
+        <result column="valid_time_type" property="validTimeType" />
+        <result column="is_using" property="isUsing" />
+        <result column="least_class_num" property="leastClassNum" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        promtion_price AS promtionPrice, info, create_user AS createUser, name, valid_time AS validTime, customer_code AS customerCode, time, can_reserve_num AS canReserveNum, member_price AS memberPrice, class_status AS classStatus, id, create_time AS createTime, market_price AS marketPrice, update_user AS updateUser, valid_time_type AS validTimeType, is_using AS isUsing, least_class_num AS leastClassNum, update_time AS updateTime
+    </sql>
+
+</mapper>

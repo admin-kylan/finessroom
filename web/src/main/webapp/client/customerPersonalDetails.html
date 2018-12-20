@@ -129,22 +129,35 @@
                         <td colspan="2" class="lightColor">操作</td>
                     </tr>
                     <tr>
-                        <td><input type="text" value="QQ"></td>
-                        <td><input type="text" v-model="ClientInfo.qq"></td>
+                        <td>QQ</td>
+                        <!--<td v-if="ClientInfo.qq==null">暂无</td>-->
+                        <td v-if="ClientInfo.qq!=null" v-model="ClientInfo.qq">
+                            <input type="text" v-model="ClientInfo.qq"></td>
                         <td colspan="2">
                             <span class="toGreen">修改</span>
                             <span class="dark">删除</span>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <input type="text" value="">
+                        <td>微信</td>
+                        <!--<td v-if="ClientInfo.wechat==null">暂无</td>-->
+                        <td v-if="ClientInfo.wechat!=null">
+                            <input type="text" v-model="ClientInfo.wechat">
                         </td>
-                        <td><input type="text" value=""></td>
                         <td colspan="2">
-                            <span class="toRed" @click="chatAdd($event)">新增</span>
+                            <span class="toGreen">修改</span>
+                            <span class="dark">删除</span>
                         </td>
                     </tr>
+                    <!--<tr>-->
+                        <!--<td>-->
+                            <!--<input type="text" value="">-->
+                        <!--</td>-->
+                        <!--<td><input type="text" value=""></td>-->
+                        <!--<td colspan="2">-->
+                            <!--<span class="toRed" @click="chatAdd($event)">新增</span>-->
+                        <!--</td>-->
+                    <!--</tr>-->
                     <tr>
                         <td class="lightColor">公司名称</td>
                         <td colspan="4" class="dark"><input type="text" v-model="ClientInfo.companyName"></td>
@@ -204,7 +217,7 @@
                         <td class="lightColor">联系方式</td>
                         <td class="lightColor">操作</td>
                     </tr>
-                    <tr v-for="(coach,index) in ClientInfo.coachs">
+                    <tr class="tr1" v-for="(coach,index) in ClientInfo.coachs">
                         <td class="t1" v-bind:data-id="coach.roleId">{{coach.firstName}}</td>
                         <td class="t2">{{coach.rolRoleName}}</td>
                         <td class="t3" v-bind:data-id="coach.personalId">{{coach.phone}}</td>
@@ -222,7 +235,7 @@
                             <option value="1"></option>
                         </select></td>
                         <td>
-                            <span class="toRed" @click="coachAdded($event)">新增</span>
+                            <span class="toRed" @click="coachAdded($event,ClientInfo.coachs.length)">新增</span>
                         </td>
                     </tr>
                     </tbody>

@@ -104,14 +104,14 @@
         <div class="top">体能测试</div>
         <div class="content">
             <div class="left">
-                <div class="title" id="add">
+                <div style="cursor: pointer" class="title" id="add">
                     + 新增体能测试
                 </div>
                 <ul v-for="dateInfo in SaveDateInfo">
                     <li @click="getData(dateInfo.saveDate)">
                         <p>创建人：{{dateInfo.personalName}}</p>
                         <p>创建时间：{{dateInfo.saveDate}}</p>
-                        <span>推荐</span>
+                       <span style="cursor: pointer" @click="show">推荐</span>
                     </li>
 
                 </ul>
@@ -399,51 +399,51 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><input type="checkbox"/></td>
-                            <td>1</td>
-                            <td>增肌</td>
-                            <td>增肌方案</td>
-                            <td>4.8</td>
+                        <tr v-for="(item,index) in ClassInfo">
+                            <td><input type="radio" name="radioClass"/></td>
+                            <td>{{index+1}}</td>
+                            <td>{{item.pname}}</td>
+                            <td>{{item.name}}</td>
+                            <td><input class="inp" type="text" ></td>
                             <td>方案详情</td>
                             <td>数据比较</td>
                         </tr>
-                        <tr>
-                            <td><input type="checkbox"/></td>
-                            <td>2</td>
-                            <td>增肌</td>
-                            <td>增肌方案</td>
-                            <td>4.8</td>
-                            <td>方案详情</td>
-                            <td>数据比较</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"/></td>
-                            <td>3</td>
-                            <td>增肌</td>
-                            <td>增肌方案</td>
-                            <td>4.8</td>
-                            <td>方案详情</td>
-                            <td>数据比较</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"/></td>
-                            <td>4</td>
-                            <td>增肌</td>
-                            <td>增肌方案</td>
-                            <td>4.8</td>
-                            <td>方案详情</td>
-                            <td>数据比较</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"/></td>
-                            <td>5</td>
-                            <td>增肌</td>
-                            <td>增肌方案</td>
-                            <td>4.8</td>
-                            <td>方案详情</td>
-                            <td>数据比较</td>
-                        </tr>
+                        <!--<tr>-->
+                            <!--<td><input type="checkbox"/></td>-->
+                            <!--<td>2</td>-->
+                            <!--<td>增肌</td>-->
+                            <!--<td>增肌方案</td>-->
+                            <!--<td>4.8</td>-->
+                            <!--<td>方案详情</td>-->
+                            <!--<td>数据比较</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td><input type="checkbox"/></td>-->
+                            <!--<td>3</td>-->
+                            <!--<td>增肌</td>-->
+                            <!--<td>增肌方案</td>-->
+                            <!--<td>4.8</td>-->
+                            <!--<td>方案详情</td>-->
+                            <!--<td>数据比较</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td><input type="checkbox"/></td>-->
+                            <!--<td>4</td>-->
+                            <!--<td>增肌</td>-->
+                            <!--<td>增肌方案</td>-->
+                            <!--<td>4.8</td>-->
+                            <!--<td>方案详情</td>-->
+                            <!--<td>数据比较</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td><input type="checkbox"/></td>-->
+                            <!--<td>5</td>-->
+                            <!--<td>增肌</td>-->
+                            <!--<td>增肌方案</td>-->
+                            <!--<td>4.8</td>-->
+                            <!--<td>方案详情</td>-->
+                            <!--<td>数据比较</td>-->
+                        <!--</tr>-->
                         </tbody>
                     </table>
                 </div>

@@ -127,6 +127,8 @@ public  interface CommonUtils {
     //续卡开发方式
     static final Integer CARD_OPENING_0 = 0; //0，直接延续
     static final Integer CARD_OPENING_1 = 1; //1，另行开卡
-
+    //储值退款标记
     static final String STORAGE_PRICE = "all";  //储值退全款
+    //上传的客户图片类型
+    static final Integer PIC_TYPE_1 = 1;  //1、头像
 }

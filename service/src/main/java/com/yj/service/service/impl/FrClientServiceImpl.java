@@ -513,20 +513,18 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
                 clientFlag = false;
             }
         }
-
         //如果客户不存在
         if (clientFlag) {
             // 不插入现有客户的情况下，直接返回；
             if (!isFlag) {
                 return frClient1;
             }
+            Date date = new Date();
             //初始化新的客户数据准备插入
-            frClient1 = new FrClient();
+            frClient1 = frClient;
             frClient1.setId(UUIDUtils.generateGUID());
-            frClient1.setClientName(frClient.getClientName());
-            frClient1.setMobile(frClient.getMobile());
-            frClient1.setCustomerCode(frClient.getCustomerCode());
             frClient1.setStatus(false);
+            frClient1.setApplyTime(date);
             baseMapper.insert(frClient1);
         }
         FrClientPersonal frClientPersonal = null;
@@ -568,5 +566,24 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
                     .where("client_id={0}", frClient1.getId()).and("CustomerCode={0}", frClient1.getCustomerCode()));
         }
         return frClient1;
+    }
+
+
+    /**
+     * 判断是否已经是现有客户了
+     * @param frClient
+     * @return
+     */
+    @Override
+    public List<FrClient> queryByClient(FrClient frClient)throws YJException {
+        if(frClient == null){
+            throw new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        if(StringUtils.isEmpty(frClient.getCustomerCode()) || StringUtils.isEmpty(frClient.getMobile())
+                || StringUtils.isEmpty(frClient.getClientName())){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        List<FrClient> frClientList = baseMapper.queryByClient(frClient);
+        return frClientList;
     }
 }

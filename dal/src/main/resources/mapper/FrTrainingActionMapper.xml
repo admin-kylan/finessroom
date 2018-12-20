@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrTrainingActionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrTrainingAction">
+        <id column="id" property="id" />
+        <result column="action_id" property="actionId" />
+        <result column="training_id" property="trainingId" />
+        <result column="is_using" property="isUsing" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        action_id AS actionId, training_id AS trainingId, is_using AS isUsing, create_time AS createTime, id
+    </sql>
+
+</mapper>

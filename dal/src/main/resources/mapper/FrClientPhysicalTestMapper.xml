@@ -64,4 +64,27 @@
         <include refid="Base_Column_List"></include>
         FROM fr_client_physical_test where client_id=#{cid} AND build_date=#{date} AND result=0
     </select>
+    <select id="getTrainClass" resultType="java.util.Map">
+        SELECT
+        ft.id,
+        ft.name,
+        ft.parent_id parentId,
+        ( SELECT NAME
+        FROM
+        fr_training_series fts
+        WHERE
+        parent_id IS NULL
+        AND is_using = 1
+        AND own_type = 1
+        AND type = 2
+        AND fts.id = ft.parent_id
+        ) pname
+        FROM
+        fr_training_series ft
+        WHERE
+        ft.own_type = 1
+        AND ft.type = 2
+        AND ft.is_using = 1
+        AND ft.parent_id IN ( SELECT id FROM fr_training_series WHERE parent_id IS NULL AND is_using = 1 AND own_type = 1 AND type = 2 )
+    </select>
 </mapper>

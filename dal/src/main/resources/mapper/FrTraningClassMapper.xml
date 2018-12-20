@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrTraningClassMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrTraningClass">
+        <result column="traning_series_id" property="traningSeriesId" />
+        <result column="action_id" property="actionId" />
+        <result column="time" property="time" />
+        <result column="strength" property="strength" />
+        <result column="remark" property="remark" />
+        <result column="count" property="count" />
+        <result column="is_using" property="isUsing" />
+        <result column="type" property="type" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="create_user" property="createUser" />
+        <result column="customer_code" property="customerCode" />
+        <result column="id" property="id" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        traning_series_id AS traningSeriesId, action_id AS actionId, time, strength, remark, count, is_using AS isUsing, type, create_time AS createTime, update_user AS updateUser, create_user AS createUser, customer_code AS customerCode, id, update_time AS updateTime
+    </sql>
+	
+	
+	<!-- 查询训练课程对应的动作集合 -->
+	<select id="frTraningClassList" resultType="com.yj.dal.dto.FrTraningClassListDTO">
+
+		SELECT
+			  c.id,
+			a.image,
+			
+			a.name,
+		  c.[time] as time,
+		  c.strength as strength,
+			c.[count] as count,
+			c.remark as remark,
+			f.name as seriesname
+		FROM
+			fr_action a,
+			fr_traning_class c,
+			fr_training_series s,
+			fr_action_series f
+		WHERE
+			a.id = c.action_id
+		AND c.traning_series_id = s.id
+		and a.series_id=f.id
+		and  c.type  = 1
+		    and c.is_using = 1
+		    and a.is_using = 1
+			and  c.traning_series_id = #{traningSeriesId}
+	
+	</select>
+
+	<select id="frTraningClassList2" resultType="com.yj.dal.dto.FrTraningClassListDTO">
+
+		SELECT
+		c.id,
+		a.image,
+
+		a.name,
+		c.[time] as time,
+		c.strength as strength,
+		c.[count] as count,
+		c.remark as remark,
+		c.traning_time as traning_time,
+		f.name as seriesname
+		FROM
+		fr_action a,
+		fr_traning_class c,
+		fr_training_series s,
+		fr_action_series f
+		WHERE
+		a.id = c.action_id
+		AND c.traning_series_id = s.id
+		and a.series_id=f.id
+		and  c.type  = 2
+		and c.is_using = 1
+		and a.is_using = 1
+		and  c.traning_series_id = #{traningSeriesId}
+
+	</select>
+</mapper>

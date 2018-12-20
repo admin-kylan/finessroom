@@ -83,14 +83,16 @@ public class FrPersonalDetailsServiceImpl extends BaseServiceImpl<FrPersonalDeta
             if (relateList != null) {
                 for (int i = 0; i < relateList.size(); i++) {
                     RoleInfo roleInfo = roleInfoMapper.selectById(relateList.get(i).getRoleId());
-                    PersonnelInfo personnelInfo = personnelInfoMapper.selectById(relateList.get(i).getPersonalId());
-                    CoachDTO coachDTO = new CoachDTO();
-                    coachDTO.setFirstName(roleInfo.getFirstName());
-                    coachDTO.setRolRoleName(roleInfo.getRolRoleName());
-                    coachDTO.setPhone(personnelInfo.getMobile());
-                    coachDTO.setRoleId(roleInfo.getId());
-                    coachDTO.setPersonalId(personnelInfo.getId());
-                    coachDTOList.add(coachDTO);
+                    if(roleInfo.getISTeach()==1){
+                        PersonnelInfo personnelInfo = personnelInfoMapper.selectById(relateList.get(i).getPersonalId());
+                        CoachDTO coachDTO = new CoachDTO();
+                        coachDTO.setFirstName(roleInfo.getFirstName());
+                        coachDTO.setRolRoleName(roleInfo.getRolRoleName());
+                        coachDTO.setPhone(personnelInfo.getMobile());
+                        coachDTO.setRoleId(roleInfo.getId());
+                        coachDTO.setPersonalId(personnelInfo.getId());
+                        coachDTOList.add(coachDTO);
+                    }
                 }
             }
             client.setCoachs(coachDTOList);

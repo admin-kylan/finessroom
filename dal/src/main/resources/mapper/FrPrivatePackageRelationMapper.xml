@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrPrivatePackageRelationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrPrivatePackageRelation">
+        <id column="id" property="id" />
+        <result column="shop_id" property="shopId" />
+        <result column="sdaduim_id" property="sdaduimId" />
+        <result column="package_id" property="packageId" />
+        <result column="cource_id" property="courceId" />
+        <result column="cource_count" property="courceCount" />
+        <result column="day_limit_count" property="dayLimitCount" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="create_user" property="createUser" />
+        <result column="is_using" property="isUsing" />
+        <result column="customer_code" property="customerCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, shop_id AS shopId, sdaduim_id AS sdaduimId, package_id AS packageId, cource_id AS courceId, cource_count AS courceCount, day_limit_count AS dayLimitCount, update_time AS updateTime, create_time AS createTime, update_user AS updateUser, create_user AS createUser, is_using AS isUsing, customer_code AS customerCode
+    </sql>
+
+
+	 <resultMap id="BaseResultMap1" type="com.yj.dal.model.Shop">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="customerCode" />
+        <result column="ShopName" property="shopName" />
+        <result column="CityName" property="cityName" />
+        <result column="ShopTel" property="shopTel" />
+        <result column="ShopAddress" property="shopAddress" />
+        <result column="ProvinceId" property="provinceId" />
+        <result column="ProvinceName" property="provinceName" />
+        <result column="CityId" property="cityId" />
+        <result column="AreaId" property="areaId" />
+        <result column="AreaName" property="areaName" />
+        <result column="PlaceType" property="placeType" />
+        <result column="Status" property="status" />
+        <result column="ShopStatus" property="shopStatus" />
+        <result column="AreaCount" property="areaCount" />
+        <result column="EmployCount" property="employCount" />
+        <result column="SdadiumCount" property="sdadiumCount" />
+        <result column="Money" property="money" />
+        <result column="MerchantId" property="merchantId" />
+        <result column="ManageList" property="manageList" />
+        <result column="OtherProject" property="otherProject" />
+        <result column="ExtendField1" property="extendField1" />
+        <result column="CreateID" property="createID" />
+        <result column="SimpleAddrs" property="simpleAddrs" />
+        <result column="CreateName" property="createName" />
+        <result column="ExtendField2" property="extendField2" />
+        <result column="ExtendField3" property="extendField3" />
+        <result column="CreateTime" property="createTime" />
+        <!--相关场馆-->
+        <collection property="sdaduims" ofType="com.yj.dal.model.Sdaduim">
+            <id column="ID" property="id" />
+	        <result column="CustomerCode" property="CustomerCode" />
+	        <result column="NumId" property="NumId" />
+	        <result column="ShopId" property="ShopId" />
+	        <result column="Name" property="Name" />
+	        <result column="Status" property="Status" />
+	        <result column="IsHand" property="IsHand" />
+	        <result column="Num" property="Num" />
+	        <result column="IsPrivateEducation" property="IsPrivateEducation" />
+	        <result column="IsBackstage" property="IsBackstage" />
+	        <result column="AutomaticEntry" property="AutomaticEntry" />
+	        <result column="Module" property="Module" />
+	        <result column="IsShow" property="IsShow" />
+	        <result column="IsConsume" property="IsConsume" />
+	        <result column="AesEncrypt" property="AesEncrypt" />
+	        <result column="checkFinger" property="checkFinger" />
+	        <result column="UseType" property="UseType" />
+	        <result column="StartTime" property="StartTime" />
+	        <result column="EndTime" property="EndTime" />
+	        <result column="BalanceNum" property="BalanceNum" />
+	        <result column="TotalNum" property="TotalNum" />
+	        <result column="CreateId" property="CreateId" />
+	        <result column="CreateName" property="CreateName" />
+	        <result column="BusinessTypeId" property="BusinessTypeId" />
+	        <result column="ModelCode" property="ModelCode" />
+	        <result column="CreateTime" property="CreateTime" />
+        </collection>
+    </resultMap>
+	
+	
+	<!-- 门店和场馆列表  -->
+	 <select id="getShopList" resultMap="BaseResultMap1">
+	 		SELECT
+				t.*,
+				s.*
+			FROM
+				shop t
+			LEFT JOIN Sdaduim s ON t.ID = s.ShopId
+			WHERE
+				t.CustomerCode = #{maps.CustomerCode}
+			AND r.sdaduim_id = #{maps.sdaduimId}
+	 </select>
+	 
+	 
+	 <!-- 根据场馆ID获取私教列表 -->
+	  <select id="courceList" resultType="com.yj.dal.model.FrPrivateCource">
+	 		SELECT
+				c.private_image AS privateImage,
+				c.class_scheduling AS classScheduling,
+				c.customer_code AS customerCode,
+				c.update_time AS updateTime,
+				c.is_show_desk AS isShowDesk,
+				c.TIME,
+				c.create_time AS createTime,
+				c.valid_time AS validTime,
+				c.name,
+				c.update_user AS updateUser,
+				c.class_info AS classInfo,
+				c.promotion_price AS promotionPrice,
+				c.create_user AS createUser,
+				c.assign_teacher AS assignTeacher,
+				c.market_price AS marketPrice,
+				c.class_scheduling_type AS classSchedulingType,
+				c.valid_time_type AS validTimeType,
+				c.id,
+				c.is_account_spending AS isAccountSpending,
+				c.remain_cource_num AS remainCourceNum,
+				c.member_price AS memberPrice,
+				c.is_using AS isUsing,
+				c.assign_teacher_type AS assignTeacherType
+			FROM
+				fr_private_cource c,
+				fr_private_package_relation r,
+			  Sdaduim t
+			WHERE
+				r.cource_id = c.id
+			AND t.ID = r.sdaduim_id
+			AND c.customer_code = #{maps.code}
+			AND r.sdaduim_id = #{maps.sdaduimId}
+	 </select>
+	 
+	 
+</mapper>

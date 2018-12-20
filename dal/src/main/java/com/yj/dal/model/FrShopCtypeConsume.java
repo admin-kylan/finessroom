@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -47,7 +48,7 @@ public class FrShopCtypeConsume extends Model<FrShopCtypeConsume> {
     @TableField("type_set_state")
     private Integer typeSetState;
     /**
-     * 卡种金额
+     * 卡种金额是否为扣卡消费（0、否；1、是）
      */
     private Boolean kzje;
     /**
@@ -108,10 +109,14 @@ public class FrShopCtypeConsume extends Model<FrShopCtypeConsume> {
     @TableField("mode_num")
     private String modeNum;
 
-
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
+    /* 自定义对象不再数据库中  不在数据库中*/
+    @TableField(exist = false)
+    private List<FrShopCtypeConsumePladdset> frShopCtypeConsumePladdsetList;
+    @TableField(exist = false)
+    private List<FrShopCtypeConsumePlset> frShopCtypeConsumePlsetList;
 
     public String getCardTypeId() {
         return cardTypeId;
@@ -284,5 +289,21 @@ public class FrShopCtypeConsume extends Model<FrShopCtypeConsume> {
                 ", modeNum='" + modeNum + '\'' +
                 ", id='" + id + '\'' +
                 '}';
+    }
+
+    public List<FrShopCtypeConsumePladdset> getFrShopCtypeConsumePladdsetList() {
+        return frShopCtypeConsumePladdsetList;
+    }
+
+    public void setFrShopCtypeConsumePladdsetList(List<FrShopCtypeConsumePladdset> frShopCtypeConsumePladdsetList) {
+        this.frShopCtypeConsumePladdsetList = frShopCtypeConsumePladdsetList;
+    }
+
+    public List<FrShopCtypeConsumePlset> getFrShopCtypeConsumePlsetList() {
+        return frShopCtypeConsumePlsetList;
+    }
+
+    public void setFrShopCtypeConsumePlsetList(List<FrShopCtypeConsumePlset> frShopCtypeConsumePlsetList) {
+        this.frShopCtypeConsumePlsetList = frShopCtypeConsumePlsetList;
     }
 }

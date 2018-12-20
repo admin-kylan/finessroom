@@ -14,126 +14,129 @@
 
 </head>
 <style>
-    .form_box_right_cb ul{
+    .form_box_right_cb ul {
         float: left;
 
     }
 </style>
 <body>
-    <div id="main">
-        <div class="main_top">会员卡设置</div>
-        <div class="main_box">
-            <div class="common">
-                <span class="common_span">添加卡系列</span>
-                <div class="form">
-                    <form action="" id="form">
-                        <div class="form_box">
-                            <div class="form_box_left">可使用门店：</div>
-                            <div class="form_box_right on">
-                                <div> <label>
-                                        <input type="checkbox" id="current" v-on:click="current()">
-                                        <span>连锁店通用</span>
-                                    </label> <span class="form_box_right_red on">选择连锁店通用设置，则创建一家新的门店时，无需重新创建</span></div>
-                                <div class="form_box_right_cb">
-                                    <div v-for="tfer in storeList">
+<div id="main">
+    <div class="main_top">会员卡设置</div>
+    <div class="main_box">
+        <div class="common">
+            <span class="common_span">添加卡系列</span>
+            <div class="form">
+                <form action="" id="form">
+                    <div class="form_box">
+                        <div class="form_box_left">可使用门店：</div>
+                        <div class="form_box_right on">
+                            <div><label>
+                                <input type="checkbox" id="current" v-on:click="current()">
+                                <span>连锁店通用</span>
+                            </label> <span class="form_box_right_red on">选择连锁店通用设置，则创建一家新的门店时，无需重新创建</span></div>
+                            <div class="form_box_right_cb">
+                                <div v-for="tfer in storeList">
 
 
-                                            <li v-for="(tf,index) in tfer">
-                                                <div v-if="index<1">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>{{tf.cityName}}</span>
-                                                    </label>
-                                                </div>
-                                                <ul>
-                                                <label>
-                                                    <input type="checkbox">
-                                                    <span :title="''+tf.id">{{tf.shopName}}</span>
-                                                </label>
-                                                </ul>
-                                            </li>
+                                    <li v-for="(tf,index) in tfer" id="shopCheck">
+                                        <div v-if="index<1">
+                                            <label>
+                                                <input type="checkbox" v-bind:name="tf.cityId"
+                                                       @click="check2(tf.cityId)">
+                                                <span>{{tf.cityName}}</span>
+                                            </label>
+                                        </div>
+                                        <ul>
+                                            <label>
+                                                <input type="checkbox" v-bind:name="tf.cityId+1">
+                                                <span :title="''+tf.id">{{tf.shopName}}</span>
+                                            </label>
+                                        </ul>
+                                    </li>
 
-                                    </div>
                                 </div>
-                                <div><label>
-                                        <input type="checkbox">
-                                        <span>全选</span>
-                                    </label></div>
                             </div>
+                            <div><label>
+                                <input type="checkbox" id="pcheckbox" @click="queryAll">
+                                <span>全选</span>
+                            </label></div>
                         </div>
-                        <div class="form_box">
-                            <div class="form_box_left">卡类别名称：</div>
-                            <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="添加卡类别名称"></div>
+                    </div>
+                    <div class="form_box">
+                        <div class="form_box_left">卡类别名称：</div>
+                        <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="添加卡类别名称">
+                        </div>
 
-                        </div>
-                        <div class="form_box">
-                            <div class="form_box_left">操作人：</div>
-                            <div class="form_box_right"><strong class="form_box_right_reds" style="color: red">Klaus</strong></div>
-                        </div>
-                        <div class="form_box">
-                            <div class="form_box_left">上次操作时间：</div>
-                            <div class="form_box_right">{{times}}</div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="form_box">
+                        <div class="form_box_left">操作人：</div>
+                        <div class="form_box_right"><strong class="form_box_right_reds"
+                                                            style="color: red">Klaus</strong></div>
+                    </div>
+                    <div class="form_box">
+                        <div class="form_box_left">上次操作时间：</div>
+                        <div class="form_box_right">{{times}}</div>
+                    </div>
+                </form>
             </div>
-            <div class="main_sub xinzheng"> <a href="#" class="on" v-on:click="add()">新增</a><a href="#">取消</a></div>
-            <!--<div class="common yuangong">-->
-                <!--<span class="common_span">员工卡设置(系统启用员工卡之后，每创建一个员工就给予生成对应的员工用卡)</span>-->
-                <!--<div class="form">-->
-                    <!--<form action="" id="form2">-->
-                        <!--<div class="form_box">-->
-                            <!--<div class="form_box_left">启用员工卡门店:</div>-->
-                            <!--<div class="form_box_right on">-->
-                                <!--<div class="form_box_right_cb">-->
-                                    <!--<div><label>-->
-                                            <!--<input type="checkbox">-->
-                                            <!--<span>软件园店</span>-->
-                                        <!--</label></div>-->
-                                    <!--<ul>-->
-                                        <!--<li><label>-->
-                                                <!--<input type="checkbox">-->
-                                                <!--<span>软件园店</span>-->
-                                            <!--</label></li>-->
-                                    <!--</ul>-->
-                                    <!--<div><label>-->
-                                            <!--<input type="checkbox">-->
-                                            <!--<span>软件园店</span>-->
-                                        <!--</label></div>-->
-                                    <!--<ul>-->
-                                        <!--<li><label>-->
-                                                <!--<input type="checkbox">-->
-                                                <!--<span>软件园店</span>-->
-                                            <!--</label></li>-->
-                                        <!--<li><label>-->
-                                                <!--<input type="checkbox">-->
-                                                <!--<span>软件园店</span>-->
-                                            <!--</label></li>-->
-                                    <!--</ul>-->
-                                    <!--<div><label>-->
-                                            <!--<input type="checkbox">-->
-                                            <!--<span>软件园店</span>-->
-                                        <!--</label></div>-->
-                                    <!--<ul>-->
-                                        <!--<li><label>-->
-                                                <!--<input type="checkbox">-->
-                                                <!--<span>软件园店</span>-->
-                                            <!--</label></li>-->
-                                    <!--</ul>-->
-                                <!--</div>-->
-                                <!--<div><label>-->
-                                        <!--<input type="checkbox">-->
-                                        <!--<span>全选</span>-->
-                                    <!--</label></div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</form>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="main_sub yuangong"> <a href="#" class="on">保存</a></div>-->
         </div>
+        <div class="main_sub xinzheng"><a href="#" class="on" v-on:click="add()">新增</a><a href="#">取消</a></div>
+        <!--<div class="common yuangong">-->
+        <!--<span class="common_span">员工卡设置(系统启用员工卡之后，每创建一个员工就给予生成对应的员工用卡)</span>-->
+        <!--<div class="form">-->
+        <!--<form action="" id="form2">-->
+        <!--<div class="form_box">-->
+        <!--<div class="form_box_left">启用员工卡门店:</div>-->
+        <!--<div class="form_box_right on">-->
+        <!--<div class="form_box_right_cb">-->
+        <!--<div><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></div>-->
+        <!--<ul>-->
+        <!--<li><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></li>-->
+        <!--</ul>-->
+        <!--<div><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></div>-->
+        <!--<ul>-->
+        <!--<li><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></li>-->
+        <!--<li><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></li>-->
+        <!--</ul>-->
+        <!--<div><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></div>-->
+        <!--<ul>-->
+        <!--<li><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>软件园店</span>-->
+        <!--</label></li>-->
+        <!--</ul>-->
+        <!--</div>-->
+        <!--<div><label>-->
+        <!--<input type="checkbox">-->
+        <!--<span>全选</span>-->
+        <!--</label></div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</form>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="main_sub yuangong"> <a href="#" class="on">保存</a></div>-->
     </div>
-    <div class="maskLayer"></div>
+</div>
+<div class="maskLayer"></div>
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/extendjQuery.js"></script>
@@ -147,25 +150,25 @@
     var main = new Vue({
         el: '#main',
         data: {
-            storeList:[],//门店列表
-            times:'',//上次操作时间
-            updateName:'',//操作人姓名
-            url:'',
-            typeSetState:0,//是否连锁通用
+            storeList: [],//门店列表
+            times: '',//上次操作时间
+            updateName: '',//操作人姓名
+            url: '',
+            typeSetState: 0,//是否连锁通用
         },
-        created:function () {
+        created: function () {
             var that = this;
             var userName = $.cookie('name');
             $(".form_box_right_reds").html(userName);
             that.url = $.stringFormat("{0}/shop/getStoreList", $.cookie("url"));
             Loading.prototype.show();
             $.get(that.url, {
-                type:0,//添加操作
+                    type: 0,//添加操作
                 },
-                function(res) {
-                    if(res.code == 200) {
+                function (res) {
+                    if (res.code == 200) {
                         that.storeList = res.data.data.list;
-                        if(res.data.data.time.createTime){
+                        if (res.data.data.time.createTime) {
                             that.times = that.fmtDate(res.data.data.time.createTime);
                             Loading.prototype.hide();
                         }
@@ -185,20 +188,20 @@
             add: function () {
                 var that = this;
                 var Ids = new Array();
-                $(".form_box_right_cb input:checked").each(function() {
+                $(".form_box_right_cb input:checked").each(function () {
                     //将标签的值放入数组中
                     Ids.push($(this).next().attr("title"));
                 });
-                if(Ids.length <1 && (that.typeSetState == 2||that.typeSetState == 0)){
+                if (Ids.length < 1 && (that.typeSetState == 2 || that.typeSetState == 0)) {
                     alert("可用门店不能为空");
                     return;
                 }
-                if(that.typeSetState == 0&&Ids.length >0){
+                if (that.typeSetState == 0 && Ids.length > 0) {
                     that.typeSetState = 2;
                 }
                 //卡名称
                 var name = $(".form_box_right_inp").val();
-                if(name.length <1 || name == '' || name == null){
+                if (name.length < 1 || name == '' || name == null) {
                     alert("门店名不能为空");
                     return;
                 }
@@ -214,17 +217,17 @@
                 var createUserId = $.cookie("id");
                 var url = $.stringFormat(
                     "{0}/frCardType/addCurrentFrCardType" +
-                    "?cardTypeName="+name+
-                    "&ids="+Ids+"&ty=0&typeSetState="+
-                    that.typeSetState+"&createUserName="+createUserName+
-                    "&CustomerCode="+CustomerCode+"&createUserId="+createUserId, $.cookie("url"));
+                    "?cardTypeName=" + name +
+                    "&ids=" + Ids + "&type=0&typeSetState=" +
+                    that.typeSetState + "&createUserName=" + createUserName +
+                    "&CustomerCode=" + CustomerCode + "&createUserId=" + createUserId, $.cookie("url"));
                 $.ajax({
                     type: "POST",
                     url: url,
 //                    data: {username:name, id:Ids,ty:0},
                     dataType: "json",
-                    success: function(data){
-                        if(data.code == 200) {
+                    success: function (data) {
+                        if (data.code == 200) {
                             alert("添加成功！");
                             window.location.reload();
                             window.parent.rightFrame();
@@ -238,19 +241,19 @@
                 });
 
             },
-            current:function () {
+            current: function () {
                 var that = this;
                 //选中下面门店则不能选中
-                if($("#current").prop("checked")){
-                    $(".form_box_right_cb input").attr("checked", false).attr("disabled","disabled");
+                if ($("#current").prop("checked")) {
+                    $(".form_box_right_cb input").attr("checked", false).attr("disabled", "disabled");
                     that.typeSetState = 1;
-                }else {
-                    $(".form_box_right_cb input").attr("checked",false).attr("disabled",false);
+                } else {
+                    $(".form_box_right_cb input").attr("checked", false).attr("disabled", false);
                     that.typeSetState = 2;
                 }
             },
             //时间戳转指定格式
-            fmtDate:function (inputTime) {
+            fmtDate: function (inputTime) {
                 var date = new Date(inputTime);
                 var y = date.getFullYear();
                 var m = date.getMonth() + 1;
@@ -265,17 +268,29 @@
                 second = second < 10 ? ('0' + second) : second;
                 return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
             },
-
+            //全选,取消
+            queryAll: function () {
+                var thisChecked = $("#pcheckbox").prop('checked');
+                $("#shopCheck input[type='checkbox']").each(function () {
+                    $(this).prop("checked", thisChecked);
+                })
+            },
+            //市级全选,取消
+            check2: function (index) {
+                var thisChecked = $("input[name=" + index + "]").prop('checked');
+                console.log(thisChecked)
+                $("input[name=" + index + '1' + "]").prop("checked", thisChecked);
+            },
         },
     })
     // main.yo();
-//    if(kid=="main"||kid=="mains"){
-//        $('.xinzheng .on').html('修改');
-//    }
-//    if(kid=="mains"){
-//         $('.yuangong').show()
-//    }
-    
+    //    if(kid=="main"||kid=="mains"){
+    //        $('.xinzheng .on').html('修改');
+    //    }
+    //    if(kid=="mains"){
+    //         $('.yuangong').show()
+    //    }
+
 </script>
 
 </html>

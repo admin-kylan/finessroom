@@ -130,6 +130,7 @@
     <sql id="Base_Column_List">
         presale_status AS presaleStatus,source_id AS sourceId,consultant_id AS consultantId,willing_card_type AS willingCardType,client_name AS clientName, english_name AS englishName, mobile, tel, sex, stature, weight, school, major, birthday, speciality, level_id AS levelId, marital_status AS maritalStatus, id_type AS idType, id_no AS idNo, id_address AS idAddress, home_add AS homeAdd, email, native_place AS nativePlace, company_name AS companyName, job_title AS jobTitle, company_address AS companyAddress, business_scope AS businessScope, car_num AS carNum, attention_problem AS attentionProblem, company_tel AS companyTel, income, car_brand AS carBrand, note, reference_name AS referenceName, reference_tel AS referenceTel, consultant_name AS consultantName, consultant_tel AS consultantTel, fwhj_name AS fwhjName, fwhj_tel AS fwhjTel, protect_day AS protectDay, customer_source AS customerSource, apply_time AS applyTime, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, status, CustomerMark, id
     </sql>
+
     <select id="getClient" resultMap="BaseResultMap1" parameterType="java.lang.String">
         SELECT
         cl.*,qq,caution_question,
@@ -350,7 +351,14 @@
         LEFT JOIN (SELECT client_id, COUNT ( 1 ) cardCount FROM fr_card WHERE CustomerCode = #{customerCode} AND
         is_using = 1 GROUP BY client_id ) cac ON cac.client_id = cl.id
         <!-- 关联到访记录 -->
-        LEFT JOIN fr_client_visiting clv ON clv.client_id = cl.id
+        LEFT JOIN (
+        SELECT
+        fcv.client_id,
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.visiting_time in(select max(fcv.visiting_time)from fr_client_visiting fcv group by fcv.client_id )
+        ) clv on clv.client_id = cl.id
         <!-- 查询keyword 手机号码 姓名 会员卡号 -->
         <if test="keyword != null ">
             INNER JOIN (
@@ -2371,4 +2379,26 @@
         fr_client cl
         where  cl.id=#{cid}
     </select>
+
+    <!--查询是否现有客户  现有客户先暂时存放在type，潜在客户先暂时存放在stature-->
+    <select id="queryByClient"  resultType="com.yj.dal.model.FrClient">
+        SELECT
+          (SELECT count(1) FROM  fr_client_personal b where b.client_id = a.id  and b.is_using = 1 ) type,
+          (SELECT count(1) FROM  fr_client_latence_personal b where b.client_id = a.id and b.is_using = 1) stature,
+          a.id,
+          a.client_name AS clientName,
+          a.mobile,
+          a.sex,
+          a.level_id AS levelId,
+          a.email,
+          a.CustomerMark
+        FROM  fr_client a
+        WHERE a.CustomerCode = #{CustomerCode}
+         AND  a.client_name = #{clientName}
+         AND  a.mobile = #{mobile}
+        <if test=" sex !=null" >
+            AND  a.sex = #{sex}
+        </if>
+    </select>
+
 </mapper>

@@ -29,7 +29,7 @@ var right = new Vue({
 			qtZdqy: '',
 			canTransfer: 0,
 			canChangeType: 0,
-			transferFee: '',
+			transferFee: 0,
 			renewCommonPrice: '',
 			renewLevel1Price: '',
 			renewLevel2Price: '',
@@ -51,7 +51,6 @@ var right = new Vue({
 			isUsing: 1,
 			setting: false,
 			changeTransferFee:0,
-
 		},
 		//会员卡类型-门店-场馆-项目关系表（消费门店会员卡权益设置）
 		shopCardConsume: {
@@ -613,15 +612,24 @@ var right = new Vue({
 
 			var that = this;
 			var url = $.stringFormat("{0}/frCategoryItem/setConsume", $.cookie('url'));
-
-			axios.post(url, that.cardConsumeSetDTO)
-				.then(function(res) {
-					var resData = eval(res);
-					$.alert(resData['data']['msg'])
-
-				})
-				.catch(function(error) {
-					$.alert(error)
+            var consume = JSON.stringify(that.cardConsumeSetDTO)
+            $.ajax({
+                url: url,
+                data: consume,
+                type: 'POST',
+                dataType: 'json',
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    alert(res.msg)
+                }
+			// axios.post(url, that.cardConsumeSetDTO)
+			// 	.then(function(res) {
+			// 		var resData = eval(res);
+			// 		$.alert(resData['data']['msg'])
+            //
+			// 	})
+			// 	.catch(function(error) {
+			// 		$.alert(error)
 				});
 
 		},

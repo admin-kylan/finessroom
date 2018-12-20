@@ -67,6 +67,14 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
     private IFrCardOrderDatailService iFrCardOrderDatailService;
     @Resource
     private IFrCardOrderPriceDatailService iFrCardOrderPriceDatailService;
+    @Resource
+    private IFrClientService iFrClientService;
+    @Resource
+    private IFrLevelService iFrLevelService;
+    @Resource
+    private IFrClientPicService iFrClientPicService;
+    @Resource
+    private  IFrShopCardConsumeService iFrShopCardConsumeService;
 
 
 
@@ -530,21 +538,21 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
            if(StringUtils.isEmpty(frCardOrderInfo.getAuthorizingUserId())){
                 return JsonResult.failMessage("授权人ID不能为空");
             }
-            if(CommonUtils.ORDER_INFO_PAY_TYPE_4 == payType){
+           if(CommonUtils.ORDER_INFO_PAY_TYPE_4 == payType){
                 //置换
                 if(StringUtils.isEmpty(frCardOrderInfo.getDisplaceCompany()) || StringUtils.isEmpty(frCardOrderInfo.getDisplaceWay())){
                     return JsonResult.failMessage("置换单位，置换方式需填写");
                 }
-            }
-            // 若赠送或者置换的支付金额未填写的，默认现金支付0
-            if(frCardOrderPayModes.size()<= 0){
+           }
+           // 若赠送或者置换的支付金额未填写的，默认现金支付0
+           if(frCardOrderPayModes.size()<= 0){
                 FrCardOrderPayMode frCardOrderPayMode = new FrCardOrderPayMode();
                 frCardOrderPayMode.setOrderId(frCardOrderInfo.getId());
                 frCardOrderPayMode.setPayPrice(0.0);
                 frCardOrderPayMode.setId(UUIDUtils.generateGUID());
                 frCardOrderPayMode.setOrderType(1);
                 frCardOrderPayMode.setPayMode(4);
-            }
+           }
         }
         frCardOrderInfo.setOrderState(orderState);
         //1表示已启用业绩分配
@@ -698,6 +706,8 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         Double amt = iFrCardOrderDatailService.querySumOrderPrice(frCardOrderDatail1,false);
         frCardOrderDatail.setOrderAmt(rightsNum+amt);
         iFrCardOrderDatailService.insert(frCardOrderDatail);
+        //设置会员卡的使用权益范围；
+        iFrShopCardConsumeService.queryByCardTypeId(cardTypeId,frCard.getId(),frCard.getCustomerCode());
         return JsonResult.success(true);
     }
 
@@ -851,5 +861,82 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         return  serviceL;
     }
 
-
+    /**
+     * 新建现有客户
+     * @param frClient
+     * @param frCard
+     * @param frCardOrderInfo
+     * @param frCardOrderPayModes
+     * @param frCardOrderAllotSetList
+     * @param mapS
+     * @param mapI
+     * @return
+     * @throws YJException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public JsonResult addSaveCustomer(FrClient frClient, FrCard frCard, FrCardOrderInfo frCardOrderInfo,
+                                      List<FrCardOrderPayMode> frCardOrderPayModes, List<FrCardOrderAllotSet> frCardOrderAllotSetList,
+                                      Map<String, String> mapS, Map<String, Integer> mapI) throws YJException {
+        //如果会员信息未空，会员卡，会员卡订单未获取，返回
+        if(frClient == null || frCard == null || frCardOrderInfo == null){
+            throw  new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        //会员卡号，客户ID，会员卡、会员卡种信息，会员外部卡号，操作店铺ID，客户代码 需提供
+        if(StringUtils.isEmpty(frCard.getShopId())|| StringUtils.isEmpty(frCard.getCustomerCode())
+                || StringUtils.isEmpty(frCard.getExternalNo()) || StringUtils.isEmpty(frCard.getCardNo()) || StringUtils.isEmpty(frClient.getClientName())
+                || StringUtils.isEmpty(frClient.getMobile()) || StringUtils.isEmpty(frClient.getConsultantId()) || frClient.getSex() == null){
+            return JsonResult.failMessage("信息设置有误，会员卡，");
+        }
+        //生成协议编号
+        FrCardAgreement frCardAgreement = iFrAgreementService.getAgreement(frCard.getCustomerCode());
+        if(frCardAgreement == null){
+            return  JsonResult.failMessage("订单规则生成有误");
+        }
+        String userURL = "";
+        String shopId = "";
+        if(mapS != null){
+            userURL = mapS.get("userURL");
+            shopId = mapS.get("shopId");
+        }
+        frClient.setCustomerCode(frCard.getCustomerCode());
+        //判断是否现有客户，已经是现有客户了直接返回，
+        List<FrClient> frClientList = iFrClientService.queryByClient(frClient);
+        if(frClientList != null && frClientList.size() >0){
+            for(FrClient frClientL:frClientList){
+                if(frClientL.getType()!= null && frClientL.getType() >0){
+                    return JsonResult.failMessage("该现有客户已存在");
+                }
+            }
+        }
+        FrClient frClient1 = iFrClientService.addClientPersonal(frClient,true,shopId);
+        frCard.setClientId(frClient1.getId());
+        JsonResult json = this.toAddFrCard(frCardAgreement,frCard,frCardOrderInfo,frCardOrderPayModes,frCardOrderAllotSetList,mapS,mapI);
+        FrClient frClient2 = null;
+        //更新为普通会员
+        List<FrLevel> frLevelList = iFrLevelService.selectList(new EntityWrapper<FrLevel>().where("CustomerCode={0}",frCard.getCustomerCode()).and("is_using={0}",1).orderBy("low_integral DESC"));
+        if(frLevelList!=null){
+            for(FrLevel frLevel: frLevelList){
+                if(frCardOrderInfo.getNeedPrice() >= frLevel.getLowMoney()){
+                    frClient2 = new FrClient();
+                    frClient2.setLevelId(frLevel.getId());
+                    break;
+                }
+            }
+        }
+        if(frClient2 != null){
+            iFrClientService.update(frClient2,new EntityWrapper<FrClient>().where("id={0}",frClient1.getId()).and("is_using={0}",1).and("CustomerCode={0}",frClient1.getCustomerCode()));
+        }
+        //如果客户有上传头像，插入头像地址
+        if(!StringUtils.isEmpty(userURL)){
+            FrClientPic frClientPic = new FrClientPic();
+            frClientPic.setId(UUIDUtils.generateGUID());
+            frClientPic.setPicType(CommonUtils.PIC_TYPE_1);
+            frClientPic.setClientId(frClient1.getId());
+            frClientPic.setPicState(true);
+            frClientPic.setPicLink(userURL);
+            iFrClientPicService.insert(frClientPic);
+        }
+        return JsonResult.success(true);
+    }
 }

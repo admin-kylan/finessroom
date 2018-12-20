@@ -134,7 +134,7 @@
 								<a :href="'customerInformation.html?id='+item.id" target="rightFrame">
 									<!--<img :src="../img/addImg.png"  alt="">-->
 									<!--<img src="http://pic.qqtn.com/up/2018-1/15171871903543439.jpg"  alt="">-->
-									<img  :src="avatarUrl(item.picLink)">
+									<img  :src="avatarUrl(item.picLink)" onerror="this.src='../img/addImg.png'">
 									<span>{{item.clientName}}</span>
 								</a>
 							</td>
@@ -143,7 +143,7 @@
 							<td>{{item.cardCount}}</td>
 							<td :class="{tored:item.protectDay<1}">{{item.protectDay}}</td>
 							<td class="toyellow">{{item.mobile}}</td>
-							<td>{{item.birthday.substring(0,10)}}</td>
+							<td>{{item.birthday|formatDate}}</td>
 							<td>{{item.applyTime}}</td>
 							<td>{{item.visitingTime}}</td>
 							<td class="togreen">{{item.fwhjName}}</td>

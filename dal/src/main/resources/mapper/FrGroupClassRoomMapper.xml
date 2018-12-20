@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrGroupClassRoomMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrGroupClassRoom">
+        <id column="id" property="id" />
+        <result column="create_user" property="createUser" />
+        <result column="shop_id" property="shopId" />
+        <result column="is_need_seat" property="isNeedSeat" />
+        <result column="customer_code" property="customerCode" />
+        <result column="area" property="area" />
+        <result column="market_price" property="marketPrice" />
+        <result column="sdaduim_id" property="sdaduimId" />
+        <result column="remark" property="remark" />
+        <result column="contain_num" property="containNum" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="name" property="name" />
+        <result column="is_using" property="isUsing" />
+        <result column="update_time" property="updateTime" />
+        <result column="member_price" property="memberPrice" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_user AS createUser, shop_id AS shopId, is_need_seat AS isNeedSeat, customer_code AS customerCode, area, id, market_price AS marketPrice, sdaduim_id AS sdaduimId, remark, contain_num AS containNum, create_time AS createTime, update_user AS updateUser, name, is_using AS isUsing, update_time AS updateTime, member_price AS memberPrice
+    </sql>
+
+</mapper>

@@ -30,24 +30,24 @@
                         <div class="form_box">
                             <div class="form_box_left">可使用门店：</div>
                             <div class="form_box_right on">
-                                <!--<div> <label>-->
-                                        <!--<input type="checkbox">-->
-                                        <!--<span>连锁店通用</span>-->
-                                    <!--</label> <span class="form_box_right_red on">选择连锁店通用设置，则创建一家新的门店时，无需重新创建</span></div>-->
+                                <div> <label>
+                                        <input type="checkbox">
+                                        <span>连锁店通用</span>
+                                    </label> <span class="form_box_right_red on">选择连锁店通用设置，则创建一家新的门店时，无需重新创建</span></div>
                                 <div class="form_box_right_cb">
                                     <div v-for="tfer in storeList">
 
 
-                                            <li v-for="(tf,index) in tfer">
+                                            <li v-for="(tf,index) in tfer" id="shopCheck">
                                                 <div v-if="index<1">
                                                     <label>
-                                                        <input type="checkbox">
+                                                        <input type="checkbox" v-bind:name="tf.cityId" @click="check2(tf.cityId)">
                                                         <span>{{tf.cityName}}</span>
                                                     </label>
                                                 </div>
                                                 <ul>
                                                 <label>
-                                                    <input type="checkbox">
+                                                    <input type="checkbox" v-bind:name="tf.cityId+1">
                                                     <span :title="''+tf.id">{{tf.shopName}}</span>
                                                 </label>
                                                 </ul>
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
                                 <div><label>
-                                        <input type="checkbox">
+                                    <input type="checkbox"id="pcheckbox" @click="queryAll">
                                         <span>全选</span>
                                     </label></div>
                             </div>
@@ -242,7 +242,20 @@
                 second = second < 10 ? ('0' + second) : second;
                 return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
             },
-
+//全选,取消
+            //全选,取消
+            queryAll: function () {
+                var thisChecked = $("#pcheckbox").prop('checked');
+                $("#shopCheck input[type='checkbox']").each(function () {
+                    $(this).prop("checked", thisChecked);
+                })
+            },
+            //市级全选,取消
+            check2: function (index) {
+                var thisChecked = $("input[name="+index+"]").prop('checked');
+                console.log(thisChecked)
+                $("input[name="+index+'1'+"]").prop("checked",thisChecked);
+            },
         },
     })
     // main.yo();

@@ -1,9 +1,11 @@
 package com.yj.service.service;
 
+import com.yj.common.exception.YJException;
 import com.yj.dal.model.FrShopCtypeConsume;
 import com.yj.service.base.BaseService;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +20,9 @@ public interface IFrShopCtypeConsumeService extends BaseService<FrShopCtypeConsu
 
      //提交   会员卡类型-门店-场馆-项目关系表
      Boolean addShopCtypeConsume(Map<String, Object> map, String cardTypeId) throws JSONException;
+
+
+     List<FrShopCtypeConsume> queryByConsumeId(String cardTypeId,String code)throws YJException;
 
 }
 

@@ -3,6 +3,8 @@ package com.yj.dal.dao;
 import com.yj.dal.model.FrShopCtypeConsume;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 会员卡类型-门店-场馆-项目关系表（消费门店会员卡权益设置） Mapper 接口
@@ -12,5 +14,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2018-09-29
  */
 public interface FrShopCtypeConsumeMapper extends BaseMapper<FrShopCtypeConsume> {
+
+    List<FrShopCtypeConsume> queryByConsumeId(FrShopCtypeConsume frShopCtypeConsume);
 
 }

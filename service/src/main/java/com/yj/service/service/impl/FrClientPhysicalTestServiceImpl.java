@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -107,5 +108,12 @@ public class FrClientPhysicalTestServiceImpl extends BaseServiceImpl<FrClientPhy
             }
         }
         return physicalDates;
+    }
+
+    @Override
+    public List<Map<String,Object>> getTrainClass() throws YJException {
+         List<Map<String,Object>> list= baseMapper.getTrainClass();
+
+        return list;
     }
 }

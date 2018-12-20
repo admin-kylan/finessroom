@@ -10,11 +10,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 会员卡购买前，卡权益时间设置保存
  * </p>
  *
  * @author MP自动生成
- * @since 2018-10-27
+ * @since 2018-12-19
  */
 @TableName("fr_shop_card_consume_plset")
 public class FrShopCardConsumePlset extends Model<FrShopCardConsumePlset> {
@@ -145,15 +145,15 @@ public class FrShopCardConsumePlset extends Model<FrShopCardConsumePlset> {
     @Override
     public String toString() {
         return "FrShopCardConsumePlset{" +
-        ", useSelect=" + useSelect +
-        ", useDays=" + useDays +
-        ", startTimeAm=" + startTimeAm +
-        ", endTimeAm=" + endTimeAm +
-        ", startTimePm=" + startTimePm +
-        ", endTimePm=" + endTimePm +
-        ", CustomerCode=" + CustomerCode +
-        ", cardConsumeId=" + cardConsumeId +
-        ", id=" + id +
-        "}";
+                ", useSelect=" + useSelect +
+                ", useDays=" + useDays +
+                ", startTimeAm=" + startTimeAm +
+                ", endTimeAm=" + endTimeAm +
+                ", startTimePm=" + startTimePm +
+                ", endTimePm=" + endTimePm +
+                ", CustomerCode=" + CustomerCode +
+                ", cardConsumeId=" + cardConsumeId +
+                ", id=" + id +
+                "}";
     }
 }

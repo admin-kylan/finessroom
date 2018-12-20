@@ -1687,7 +1687,8 @@ var customerMembershipCard = new Vue({
                     return $.alert("设置的业绩比例信息有问题，请重新设置")
                 }
                 that.loadData1.cardInfoMap.orderAllotSetList = that.loadData1.orderAllotSetList;
-            }   that.loadData1.cardInfoMap.orderAllotSetSav = that.loadData1.orderAllotSetSav;
+            }
+            that.loadData1.cardInfoMap.orderAllotSetSav = that.loadData1.orderAllotSetSav;
             if (t == 1) {
                 that.newPopup();
             }
@@ -3787,7 +3788,6 @@ var customerMembershipCard = new Vue({
                     }
                 }
             );
-            // that.commonConfirm("realyReturnStorage","","此退款是退全部的储值，是否继续操作？");
         },
         //第一个是确认要调用的方法名称，第二个是取消要调用的方法名称
         commonConfirm:function(methName, methNameTwo,mess){
@@ -3816,40 +3816,23 @@ var customerMembershipCard = new Vue({
                 }
             })
         },
-
-        realyReturnStorage:function(){
+        //业绩分配的删除
+        deleteFamily:function(t){
             var that = this;
-            console.log("realyReturnStorage====================");
-            //避免多次点击
-            if (that.randomNumber) {
-                return $.alert("请勿太快重复点击");
+            if(!t && t != 0){
+                return ;
             }
-            //生成字符串
-            that.randomNumber = Math.random().toString(36).substr(2);
-            var data = {
-                code:that.code,
-                cardId:that.cardId,
+            if(that.loadData1.orderAllotSetListOne == null || that.loadData1.orderAllotSetListOne.length <=0){
+                return ;
             }
-            var url = $.stringFormat('{0}/frCardOrderStorage/addStorageCard', $.cookie('url'));
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: JSON.stringify(data),
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
-                success: function (res) {
-                    if (res.code == '200') {
-                        that.getStorageCardList();
-                        that.loadData6.givePrice = 0;
-                        $("#storagePass").val('');
-                        //初始化数据
-                        that.initPayModel();
-                    } else {
-                        $.alert(res.msg)
-                    }
-                    that.randomNumber = '';
+            var list =  that.loadData1.orderAllotSetListOne;
+            that.loadData1.orderAllotSetListOne = [];
+            for(var i = 0; i< list.length ;i++){
+                if(t != i){
+                    that.loadData1.orderAllotSetListOne.push(list[i]);
                 }
-            });
-        }
+            }
+        },
+
     },
 });

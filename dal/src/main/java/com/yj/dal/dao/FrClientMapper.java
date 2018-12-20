@@ -47,4 +47,6 @@ public interface FrClientMapper extends BaseMapper<FrClient> {
     List<ClientInformationDTO> getClientInformation(Page page, ClientInformationParam params);
 
     Map getClientEssentialInformation(String cid);
+
+    List<FrClient> queryByClient(FrClient frClient);
 }

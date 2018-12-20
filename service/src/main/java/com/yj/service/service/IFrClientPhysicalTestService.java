@@ -8,6 +8,7 @@ import com.yj.service.base.BaseService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,4 +25,6 @@ public interface IFrClientPhysicalTestService extends BaseService<FrClientPhysic
     JsonResult savePhysical(List<FrClientPhysicalTest> frClientPhysicalTests)throws YJException;
 
     List<PhysicalDateDTO> getSaveDate(String cid) throws YJException;
+
+    List<Map<String,Object>> getTrainClass()throws YJException;
 }

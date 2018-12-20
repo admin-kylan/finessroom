@@ -98,13 +98,13 @@
                                         <li v-for="(tf,index) in tfer">
                                             <div v-if="index<1">
                                                 <label>
-                                                    <input type="checkbox">
+                                                    <input type="checkbox" v-bind:name="tf.cityId" @click="check2(tf.cityId)">
                                                     <span>{{tf.cityName}}</span>
                                                 </label>
                                             </div>
                                             <ul>
                                                 <label>
-                                                    <input type="checkbox">
+                                                    <input type="checkbox" v-bind:name="tf.cityId+1">
                                                     <span :title="''+tf.id">{{tf.shopName}}</span>
                                                 </label>
                                             </ul>
@@ -114,8 +114,8 @@
                                 </div>
                                 <div>
                                     <li><label>
-                                            <input type="checkbox">
-                                            <span>全选</span>
+                                            <input type="checkbox"id="pcheckbox" @click="queryAll">
+                                            <span >全选</span>
                                         </label></li>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@
                     alert("卡销售门店不能为空");
                     return;
                 }
-                if(type == '' || type == null || typeof type){
+                if(type == '' || type == null ){
                     alert("卡属性不能为空");
                     return;
                 }
@@ -222,7 +222,7 @@
                 var createUserId = $.cookie("id");
                 var url = $.stringFormat(
                     "{0}/frCardType/addCurrentFrCardType?type=" +type
-                    +"&cardTypeName="+name+"&ids="+ids+"&ty=1&pId="
+                    +"&cardTypeName="+name+"&ids="+ids+"&pId="
                     +pId+"&typeSetState=1&createUserName="+createUserName +
                     "&CustomerCode="+CustomerCode+"&createUserId="+createUserId,$.cookie('url'));
                 $.ajax({
@@ -311,8 +311,18 @@
                 second = second < 10 ? ('0' + second) : second;
                 return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
             },
-
-        },
+            //全选,取消
+            queryAll: function () {
+                var thisChecked = $("#pcheckbox").prop('checked');
+                    $("input[type='checkbox']").prop("checked",thisChecked);
+            },
+            //市级全选,取消
+            check2: function (index) {
+                var thisChecked = $("input[name="+index+"]").prop('checked');
+                console.log(thisChecked)
+                    $("input[name="+index+'1'+"]").prop("checked",thisChecked);
+            },
+        }
     })
     // employee.yo();
     $(function () {

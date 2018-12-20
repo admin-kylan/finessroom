@@ -22,4 +22,6 @@ public interface IPersonnelInfoService extends BaseService<PersonnelInfo> {
     List<PersonnelInfo> getServicePersonnel(Integer userType,String customerCode)throws YJException;
 
     List<PersonnelInfo> getUnallocatedPersonnel(String rid)throws YJException;
+
+    List<PersonnelInfo> getPsersonnelListByShopId(String CustomerCode,String shopId,Integer UserType)throws YJException;
 }

@@ -23,10 +23,10 @@ public interface IFrCardTypeService extends BaseService<FrCardType> {
     JsonResult updateFrCard(FrCardType frCardType);
 
     @Transactional(rollbackFor = Exception.class)
-    JsonResult addFrCardType (FrCardType frCardType, String[] id, Integer ty);
+    JsonResult addFrCardType (FrCardType frCardType, String[] id, Integer type);
 
     @Transactional(rollbackFor = Exception.class)
-    JsonResult addCurrentFrCardType(FrCardType frCardType, String[] id, Integer ty);
+    JsonResult addCurrentFrCardType(FrCardType frCardType, String[] id, Integer type);
 
     JsonResult deleteFrCardType(String id ,String storeId);
 

@@ -121,6 +121,7 @@ var customerPersonalDetails = new Vue({
             var clientId = $.cookie("cid")//取出值
             $.get(url, {"clientId": clientId}, function (res) {
                 that.ClientInfo = res.data;
+                console.log( that.ClientInfo.coachs)
             })
 
         },
@@ -698,7 +699,7 @@ var customerPersonalDetails = new Vue({
                 }
             }, 200)
         },
-        // 聊天新增
+        // 聊天工具新增
         chatAdd: function (event) {
             var el = event.currentTarget;
             var html = '<tr>' +
@@ -713,45 +714,47 @@ var customerPersonalDetails = new Vue({
             //调整左边栏高度
             mainheight();
         },
-        // 确认新增
-        confirmNew: function (event) {
+        // 聊天工具确认新增
+        confirmNew: function (event,index) {
             alert('确认成功');
             var html = '<span class="toGreen">修改</span>' +
                 '<span class="dark">删除</span>';
             $(event).parent().html(html);
         },
         // 教练新增
-        coachAdded: function (event) {
+        coachAdded: function (event,index) {
             const that = this;
+            index;
+            console.log(index)
             const rurl = $.stringFormat('{0}/roleInfo/findAll', $.cookie('url'));
             var el = event.currentTarget;
-            var html = '<tr>' +
-                '<td><select onchange="customerPersonalDetails.RoleChange(this)" name="" id="">'
             $.get(rurl, function (res) {
+                var html = '<tr class="'+"tr1"+'">' +
+                    '<td class="'+"t1"+'"><select onchange="customerPersonalDetails.RoleChange(this,'+index+')" name="" id="">'
                 $.each(res.data, function (i, n) {
-                    html += '<option    value=' + n.id + '>' + n.firstName + '</option>'
+                    html += '<option value=' + n.id + '>' + n.firstName + '</option>'
                 })
+                html += '</select></td>';
 
+                html += '<td class="'+"t2"+'"></td>' +
+                    '<td class="'+"t3"+'"><select name="" id=""><option value="1"></option></select></td>' +
+                    '<td >' +
+                    '<span class="toRed" onclick="customerPersonalDetails.coachConfirmation(this,'+index+')">确认</span>' +
+                    '</td>' +
+                    '</tr>';
+                $('#coachAdded').attr('rowspan', parseInt($('#coachAdded').attr('rowspan')) + 1);
+                $(el).parent().parent().before(html);
             })
-            html += '</select></td>';
 
-            html += '<td><input type="text" value=""></td>' +
-                '<td><select name="" id=""><option value="1">教练</option></select></td>' +
-                '<td>' +
-                '<span class="toRed" onclick="customerPersonalDetails.coachConfirmation(this)">确认</span>' +
-                '</td>' +
-                '</tr>';
-            $('#coachAdded').attr('rowspan', parseInt($('#coachAdded').attr('rowspan')) + 1);
-            $(el).parent().parent().before(html);
             //调整左边栏高度
             mainheight();
         },
         //根据角色修改角色名称
         RoleChange: function (e, index) {
             const that = this;
+            console.log(index)
             const url = $.stringFormat('{0}/roleInfo/getRoleName', $.cookie('url'));
-            var options = $("#role option:selected");
-            var firstName = options.text();
+            var firstName = $(e).find("option:selected").text();
             $.get(url, {"firstName": firstName}, function (res) {
                 var roleName = JSON.stringify(res.data.firstName);
                 var roleid = JSON.stringify(res.data.id);
@@ -763,8 +766,7 @@ var customerPersonalDetails = new Vue({
             })
             //根据角色修改联系方式
             const url2 = $.stringFormat('{0}/personlRole/getPersonlByRole', $.cookie('url'));
-            var options2 = $("#role option:selected");
-            var rid = options2.val();
+            var rid = $(e).find("option:selected").val();
             $.get(url2, {"rid": rid}, function (res) {
                 var html = '<select   name="" id="">';
                 //拿到这个id,去匹配查出来的教练
@@ -794,7 +796,7 @@ var customerPersonalDetails = new Vue({
                 var html = '<span class="toRed" onclick="customerPersonalDetails.coachConfirmation(this,' + index + ')">确认</span>'
                 $(".coach").eq(index).html(html);
                 $.get(url, function (res) {
-                    var html = '<select onchange="customerPersonalDetails.RoleChange(this,' + index + ')"  name="" id="role">';
+                    var html = '<select onchange="customerPersonalDetails.RoleChange(this,' + index + ')"  name="" id="">';
                     //拿到这个id,去匹配查出来的教练
                     var dataiId = $('.t1').eq(index).attr('data-id');
                     $.each(res.data, function (i, n) {
@@ -816,24 +818,39 @@ var customerPersonalDetails = new Vue({
 
         },
 
-
         // 教练确认
         coachConfirmation: function (event, index) {
-            alert('确认成功');
             var that = this;
+            console.log(that.ClientInfo.coachs)
+            alert('确认成功');
+            console.log(  $(".t1").eq(index).find("option:selected").text())
             that.upnum = 0
-            that.ClientInfo.coachs[index].firstName = that.updatename
-            that.ClientInfo.coachs[index].rolRoleName = that.updatename
-            that.ClientInfo.coachs[index].roleId = that.upnameid
-            var html = '<span class="toGreen" onclick="customerPersonalDetails.coachUpdate(' + index + ')">修改</span>' +
-                '<span class="dark">删除</span>';
-            $('.t1').eq(index).html(this.updatename);
-            if (this.updatephone != null) {
-                $('.t3').eq(index).html(that.updatephone);
-            } else {
-                $('.t3').eq(index).html(that.ClientInfo.coachs[index].phone);
+            this.updatename=$(".t1").eq(index).find("option:selected").text()
+            // that.updatephone=$(".t3").eq(index).find("option:selected").text()
+            if(typeof  that.ClientInfo.coachs[index]){
+                //新增确认
+                var client=new Object();
+                client.firstName=this.updatename;
+                client.rolRoleName=$(".t2").eq(index).text();
+                client.phone=$(".t3").eq(index).find("option:selected").text();
+                client.personalId=$(".t3").eq(index).find("option:selected").val();
+                client.roleId=$(".t1").eq(index).find("option:selected").val();
+                that.ClientInfo.coachs.push(client)
+                $('.tr1').eq(index).remove();
+            }else {
+                //修改确认
+            that.ClientInfo.coachs[index].firstName =  this.updatename
+            that.ClientInfo.coachs[index].rolRoleName = $(".t2").eq(index).text()
+            that.ClientInfo.coachs[index].phone = $(".t3").eq(index).find("option:selected").text()
+                var html = '<span class="toGreen" onclick="customerPersonalDetails.coachUpdate(' + index + ')">修改</span>' +
+                    '<span class="dark">删除</span>';
+                $('.t1').eq(index).html(this.updatename);
+                $('.t3').eq(index).html($(".t3").eq(index).find("option:selected").text());
+                console.log(html)
+                $(event).parent().html(html);
+                console.log( $('.t1'))
             }
-            $(event).parent().html(html);
+
         },
         //基础档案保存
         save1: function () {

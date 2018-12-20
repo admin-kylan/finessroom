@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrGroupCourceRelationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrGroupCourceRelation">
+        <id column="id" property="id" />
+        <result column="private_cource_id" property="privateCourceId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="training_series_id" property="trainingSeriesId" />
+        <result column="update_time" property="updateTime" />
+        <result column="customer_code" property="customerCode" />
+        <result column="create_user" property="createUser" />
+        <result column="is_using" property="isUsing" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        private_cource_id AS privateCourceId, create_time AS createTime, update_user AS updateUser, training_series_id AS trainingSeriesId, update_time AS updateTime, customer_code AS customerCode, id, create_user AS createUser, is_using AS isUsing
+    </sql>
+
+</mapper>

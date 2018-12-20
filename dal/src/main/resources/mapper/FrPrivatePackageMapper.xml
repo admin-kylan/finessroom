@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrPrivatePackageMapper">
+
+        <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrPrivatePackage">
+        <id column="id" property="id" />
+        <result column="promtion_price" property="promtionPrice" />
+        <result column="valid_value" property="validValue" />
+        <result column="class_count" property="classCount" />
+        <result column="name" property="name" />
+        <result column="create_user" property="createUser" />
+        <result column="valid_type" property="validType" />
+        <result column="is_using" property="isUsing" />
+        <result column="market_price" property="marketPrice" />
+        <result column="remain_count_notice" property="remainCountNotice" />
+        <result column="class_count_desc" property="classCountDesc" />
+        <result column="update_time" property="updateTime" />
+        <result column="member_price" property="memberPrice" />
+        <result column="is_show_desk" property="isShowDesk" />
+        <result column="customer_code" property="customerCode" />
+        <result column="count" property="count" />
+        <result column="is_account_spending" property="isAccountSpending" />
+        <result column="update_user" property="updateUser" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        promtion_price AS promtionPrice, valid_value AS validValue, class_count AS classCount, name, create_user AS createUser, id, valid_type AS validType, is_using AS isUsing, market_price AS marketPrice, remain_count_notice AS remainCountNotice, class_count_desc AS classCountDesc, update_time AS updateTime, member_price AS memberPrice, is_show_desk AS isShowDesk, customer_code AS customerCode, count, is_account_spending AS isAccountSpending, update_user AS updateUser, create_time AS createTime
+    </sql>
+
+</mapper>

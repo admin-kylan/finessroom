@@ -19,20 +19,134 @@
         <result column="pl_left" property="plLeft" />
         <result column="pl_time" property="plTime" />
         <result column="pl_right" property="plRight" />
-
+        <result column="CustomerCode" property="CustomerCode" />
         <result column="mode_time" property="modeTime" />
         <result column="mode_num" property="modeNum" />
-
-
-        <result column="CustomerCode" property="CustomerCode" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        card_type_id AS cardTypeId, shop_id AS shopId, sdaduim_id AS sdaduimId, item_id AS itemId, type_set_state
-        AS typeSetState, kzje, usage_mode AS usageMode, mode_price AS modePrice, mode_way AS modeWay, mode_discount AS modeDiscount, pl_set AS plSet,
-         pl_left AS plLeft, pl_time AS plTime, pl_right AS plRight, pl_set_id AS plSetId, pl_added_set_id AS plAddedSetId, CustomerCode, id,
-         mode_time AS modeTime,mode_num AS modeNum
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap1" type="com.yj.dal.model.FrShopCtypeConsume">
+        <id column="id" property="id" />
+        <result column="card_type_id" property="cardTypeId" />
+        <result column="shop_id" property="shopId" />
+        <result column="sdaduim_id" property="sdaduimId" />
+        <result column="item_id" property="itemId" />
+        <result column="type_set_state" property="typeSetState" />
+        <result column="kzje" property="kzje" />
+        <result column="usage_mode" property="usageMode" />
+        <result column="mode_price" property="modePrice" />
+        <result column="mode_way" property="modeWay" />
+        <result column="mode_discount" property="modeDiscount" />
+        <result column="pl_set" property="plSet" />
+        <result column="pl_left" property="plLeft" />
+        <result column="pl_time" property="plTime" />
+        <result column="pl_right" property="plRight" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="mode_time" property="modeTime" />
+        <result column="mode_num" property="modeNum" />
+        <!--相关卡种权益设置保存-->
+        <collection property="frShopCtypeConsumePladdsetList" ofType="com.yj.dal.model.FrShopCtypeConsumePladdset">
+            <id column="b_id" property="id" />
+            <result column="b_useLimit" property="useLimit" />
+            <result column="b_useDayStar" property="useDayStar" />
+            <result column="b_useDayEnd" property="useDayEnd" />
+            <result column="b_UseSelect" property="UseSelect" />
+            <result column="b_useTimeStar" property="useTimeStar" />
+            <result column="b_useTimeEnd" property="useTimeEnd" />
+            <result column="b_CustomerCode" property="CustomerCode" />
+            <result column="b_consumeId" property="consumeId" />
+        </collection>
+        <collection property="frShopCtypeConsumePlsetList" ofType="com.yj.dal.model.FrShopCtypeConsumePlset">
+            <id column="c_id" property="id" />
+            <result column="c_useSelect" property="useSelect" />
+            <result column="c_useDays" property="useDays" />
+            <result column="c_startTimeAm" property="startTimeAm" />
+            <result column="c_endTimeAm" property="endTimeAm" />
+            <result column="c_startTimePm" property="startTimePm" />
+            <result column="c_endTimePm" property="endTimePm" />
+            <result column="c_CustomerCode" property="CustomerCode" />
+            <result column="c_consumeId" property="consumeId" />
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List_A">
+        a.card_type_id,
+        a.shop_id,
+        a.sdaduim_id,
+        a.item_id,
+        a.type_set_state,
+        a.kzje,
+        a.usage_mode,
+        a.mode_price,
+        a.mode_way,
+        a.mode_discount,
+        a.pl_set,
+        a.pl_left,
+        a.pl_time,
+        a.pl_right,
+        a.CustomerCode,
+        a.mode_time,
+        a.mode_num,
+        a.id,
     </sql>
+    <sql id="Base_Column_List_B">
+        b.use_limit AS b_useLimit,
+        b.use_day_star AS b_useDayStar,
+        b.use_day_end AS b_useDayEnd,
+        b.UseSelect b_UseSelect,
+        b.use_time_star AS b_useTimeStar,
+        b.use_time_end AS b_useTimeEnd,
+        b.CustomerCode b_CustomerCode,
+        b.consume_id AS b_consumeId,
+        b.id AS b_id,
+    </sql>
+    <sql id="Base_Column_List_C">
+        c.use_select AS c_useSelect,
+        c.use_days AS c_useDays,
+        c.start_time_am AS c_startTimeAm,
+        c.end_time_am AS c_endTimeAm,
+        c.start_time_pm AS c_startTimePm,
+        c.end_time_pm AS c_endTimePm,
+        c.CustomerCode c_CustomerCode,
+        c.consume_id AS c_consumeId,
+        c.id AS c_id
+    </sql>
+
+    <sql id="Base_Column_List">
+        card_type_id AS cardTypeId,
+        shop_id AS shopId,
+        sdaduim_id AS sdaduimId,
+        item_id AS itemId,
+        type_set_state AS typeSetState,
+        kzje,
+        usage_mode AS usageMode,
+        mode_price AS modePrice,
+        mode_way AS modeWay,
+        mode_discount AS modeDiscount,
+        pl_set AS plSet,
+        pl_left AS plLeft,
+        pl_time AS plTime,
+        pl_right AS plRight,
+        CustomerCode,
+        mode_time AS modeTime,
+        mode_num AS modeNum,
+        id
+    </sql>
+
+    <select id="queryByConsumeId" resultMap="BaseResultMap1" >
+        SELECT
+          <include refid="Base_Column_List_A" />
+          <include refid="Base_Column_List_B" />
+          <include refid="Base_Column_List_C" />
+        FROM fr_shop_ctype_consume a
+        LEFT JOIN fr_shop_ctype_consume_pladdset b on  a.id = b.consume_id
+        LEFT JOIN fr_shop_ctype_consume_plset c on  a.id = c.consume_id
+        WHERE a.card_type_id = #{cardTypeId}
+          AND a.CustomerCode = #{CustomerCode}
+          AND b.CustomerCode = #{CustomerCode}
+          AND c.CustomerCode = #{CustomerCode}
+        ORDER BY a.id
+    </select>
+
 
 </mapper>

@@ -98,7 +98,24 @@ public interface IFrCardService extends BaseService<FrCard> {
      */
     String getInv(String serviceLifeS,String start) throws YJException;
 
-
     FrCardOrderPriceDatail getCardDatailAndPrice(FrCardOrderInfo frCardOrderInfo,boolean orderStatus,Integer cardType,Integer orderType)throws YJException;
+
+    /**
+     * 添加续卡订单信息
+     * @param frClient
+     * @param frCard
+     * @param frCardOrderInfo
+     * @param frCardOrderPayModes
+     * @param frCardOrderAllotSetList
+     * @param mapS
+     * @param mapI
+     * @return
+     * @throws YJException
+     */
+    JsonResult addSaveCustomer(FrClient frClient,FrCard frCard, FrCardOrderInfo frCardOrderInfo,
+                               List<FrCardOrderPayMode> frCardOrderPayModes,
+                               List<FrCardOrderAllotSet> frCardOrderAllotSetList,
+                               Map<String,String> mapS,Map<String,Integer> mapI)throws YJException;
+
 }
 

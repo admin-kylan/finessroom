@@ -14,6 +14,7 @@ var newCardCustomers = new Vue({
         accountsMeth:'',            //要调用的结账方法
         randomNumber:'',            //随机生成，防止点击过快
         salespersonList:[],         //销售顾问列表
+        salespersonListTwo:[],      //获取服务顾问列表
         paymentMethodTops:0,        //切换支付方式
         shipCard:{},                 //存放其他页面传过来的数据
         clientId:'',                 //会员ID
@@ -55,6 +56,7 @@ var newCardCustomers = new Vue({
         optionClientList:[],    //获取选择的会员信息
         optionClientCardList:[],  //获取选择的会员信息
         maeketUserList:[],     //销售人员列表
+        maeketUserListTwo:[],     //获取服务人员列表
         payModelMoney:0,        //支付总金额
         payMentMoney:{           //小计金额
             price:0,              //实际应付金额
@@ -183,6 +185,9 @@ var newCardCustomers = new Vue({
                 qtZdqy:0,           //判断赠送权益是否合法
             },
         },
+        loadDatat0:{
+            userURL:'',
+        },
     },
     filters: {
         formatDate: function (time,type,typeT) {
@@ -242,6 +247,15 @@ var newCardCustomers = new Vue({
                 });
             }, 50);
             that.loadName = '新建会员';
+            $('#giveRightsNum').removeAttr("readonly");
+            //获取销售门店列表
+            that.getMarketShopList();
+            //生成订单编号;
+            that.getOrderNo();
+            //获取销售顾问
+            that.getMarketShopPeople($.cookie("shopid"),that,1);
+            //获取服务顾问
+            that.getMarketShopPeople($.cookie("shopid"),that,2);
         },
         loadL1:function(){
             var that = this;
@@ -249,7 +263,7 @@ var newCardCustomers = new Vue({
             that.initLoad1();
             that.getOrderNo();
             that.getCardUser();
-            that.getMarketShopPeople($.cookie("shopid"),that);
+            that.getMarketShopPeople($.cookie("shopid"),that,1);
         },
         loadL2:function(){
             var that = this;
@@ -268,10 +282,12 @@ var newCardCustomers = new Vue({
             that.getMarketShopList();
             //生成订单编号;
             that.getOrderNo();
-            //开卡时间---另行设置
-            that.chackBindTime();
             //获取销售顾问
             that.getSalespersonList();
+            //获取服务顾问
+            that.getSalespersonList(2,'salespersonListTwo');
+            //开卡时间---另行设置
+            that.chackBindTime();
             //获取用户信息
             that.getClientUser();
             if(that.cardId){
@@ -724,8 +740,6 @@ var newCardCustomers = new Vue({
             that.loadData1.authorizingPass = '';
             that.payMentMoney.price = that.cardMap.totalPrice;
             that.loadData1.salesPrice = that.cardMap.salesPrice;
-            console.log("that.loadData1.salesPrice==============================");
-            console.log(that.loadData1.salesPrice);
             $('.section4_box_top label input[name=quan]').eq(t).addClass('on').siblings().removeClass('on');
             $('.section4_box_botton fieldset').eq(t).show().siblings().hide();
             if (t == 4) {
@@ -811,6 +825,9 @@ var newCardCustomers = new Vue({
             that.loadData2.serviceLife =0;
             that.loadData2.haveRightsNum =0;
             that.cardMap.buyRightsNum =0;
+            if(!that.cardMap.cardTypeId){
+                return ;
+            }
             var url = $.stringFormat('{0}/frCardType/getFrCardTypeDetails', $.cookie('url'));
             $.get(url, {
                     id: that.cardMap.cardTypeId,
@@ -820,21 +837,6 @@ var newCardCustomers = new Vue({
                         that.getCardTypeInfo(res.data);
                     } else {
                         alert(res.msg)
-                    }
-                }
-            )
-        },
-        //获取销售人员列表
-        getMarketShopPeople: function (shop_Id, that) {
-            var url = $.stringFormat('{0}/personnelInfo/getMarketUserList', $.cookie('url'));
-            $.get(url, {
-                    shopId: shop_Id,//门店id
-                },
-                function (res) {
-                    if (res.code == '200') {
-                        that.maeketUserList = res.data.data;
-                    } else {
-                        alert(res.msg);
                     }
                 }
             )
@@ -933,13 +935,16 @@ var newCardCustomers = new Vue({
             if(!that.cardMap.shopId){
                 return $.alert("销售门店信息未获取");
             }
+            if(that.LiIndex == 0 ){
+                that.cardMap.personnelId = that.loadData2.clitenUser.consultantId;
+            }
             if(!that.cardMap.personnelId){
                 return $.alert("销售员工未选择");
             }
             if(!that.cardMap.cardNo){
                 return $.alert("会员卡号未获取");
             }
-            if(that.LiIndex != 2){
+            if(that.LiIndex == 1){
                 if(!that.cardMap.agreementNo){
                     return $.alert("协议编号未获取");
                 }
@@ -953,7 +958,19 @@ var newCardCustomers = new Vue({
                 return $.alert("外部卡号未设置");
             }
             if(that.cardMap.allotSetType == 1){
-                return $.alert("业绩分配信息设置有误");
+                // return $.alert("业绩分配信息设置有误");
+                if (!that.loadData1.orderAllotSetSav.allotType) {
+                    return $.alert("销售价格分配比例/金额类型需选择")
+                }
+                if (!that.loadData1.orderAllotSetSav.allotNum) {
+                    return $.alert("销售价格分配比例/金额需填写")
+                }
+                if (!that.loadData1.orderAllotSetSav.saleAllotType) {
+                    return $.alert("业绩分配类型有误，请重新设置")
+                }
+                if (that.loadData1.orderAllotSetList.length <= 0) {
+                    return $.alert("设置的业绩比例信息有问题，请重新设置")
+                }
             }
             if(that.payMentMoney.discountNum > 0 ){
                 if(!that.catcherClientCardId){
@@ -1008,6 +1025,22 @@ var newCardCustomers = new Vue({
             if(that.LiIndex == 2){
                 //续卡结算方法名称
                 that.accountsMeth = 'toContinue';
+            }
+            if(that.LiIndex == 0){
+                //新建现有会员
+                that.accountsMeth = 'saveCustomer';
+                if(!that.loadData2.clitenUser.clientName){
+                    return $.alert("请填写会员名称");
+                }
+                if(!that.loadData2.clitenUser.sex && that.loadData2.clitenUser.sex != 0){
+                    return $.alert("请选择性别");
+                }
+                if(!that.loadData2.clitenUser.mobile){
+                    return $.alert("手机号码需填写");
+                }
+                if(!that.loadData2.clitenUser.consultantId){
+                    return $.alert("销售顾问需选择");
+                }
             }
             if (num == 3 || num == 4) {
                 var str = '请先选择赠送人';
@@ -1226,7 +1259,7 @@ var newCardCustomers = new Vue({
                        that.loadData2.cardDatail = res.data;
                        return that.continueInfo(that.loadData2.cardDatail);
                     } else {
-                        alert(res.msg)
+                        $.alert(res.msg)
                     }
                 }
             );
@@ -1234,6 +1267,7 @@ var newCardCustomers = new Vue({
         //获取销售门店列表
         getMarketShopList: function () {
             var that = this;
+            var shopId = that.cardMap.shopId;
             var url = $.stringFormat('{0}/shop/getMarketShopList', $.cookie('url'));
             $.get(url, {
                     type: 0,//（0为获取上次添加卡类型时间，在这边无意义）
@@ -1280,18 +1314,22 @@ var newCardCustomers = new Vue({
                               }
                            }
                         }
+                        //切换门店卡种信息更新
+                        var obj = {};
+                        that.checkCardType(obj);
                     } else {
-                        alert(res.msg)
+                        $.alert(res.msg)
                     }
                 }
             )
-            that.getMarketShopPeople($.cookie("shopid"),that);
+            that.getMarketShopPeople(that.cardMap.shopId,that,1);
+            that.getMarketShopPeople(that.cardMap.shopId,that,2);
         },
         //选中卡系列
         checkCardType:function(obj){
             var that = this;
-            that.cardMap.cardTypeId = obj.id;
-            that.loadData2.careFlag = obj.cardFlag;
+            that.cardMap.cardTypeId = that.getParemtDate(obj.id,'');
+            that.loadData2.careFlag = that.getParemtDate(obj.cardFlag,'');
             that.loadData1.paremt.payType = 1;
             that.section4BoxTop(0);
             that.getCardUser();
@@ -1335,24 +1373,6 @@ var newCardCustomers = new Vue({
             }
             that.cardMap.totalPrice = that.payMentMoney.price;
             that.checkDiscounts();
-        },
-        // 查询销售顾问列表
-        getSalespersonList: function () {
-            const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getSalespersonList', $.cookie('url'));
-            axios.get(url)
-                .then(function (res) {
-                    var jsonData = eval(res);
-                    if (jsonData['data']['code'] === '200') {
-                        that.salespersonList = jsonData['data']['data'];
-                    } else {
-                        $.alert(jsonData['data']['msg'])
-                    }
-                })
-                .catch(function (error) {
-                    $.alert("请求发生错误！")
-                    console.log(error);
-                });
         },
         //关闭弹窗
         colseX: function (id) {
@@ -1504,7 +1524,6 @@ var newCardCustomers = new Vue({
             that.loadData1.orderAllotSetList = [];
             that.loadData1.allotNumOne = 0;
             that.loadData1.allotNumTwo = 0;
-            that.loadData1.cardInfoMap.allotSetType = 0;
             that.loadData1.orderAllotSetSav.allotType = '';
             that.loadData1.orderAllotSetSav.allotNum = 0;
             that.loadData1.orderAllotSetSav.saleAllotType = 0;
@@ -1536,17 +1555,17 @@ var newCardCustomers = new Vue({
             var allotType = that.loadData1.orderAllotSet.allotType;
             var allotNum = 0;
             if (!allotType) {
-                return alert("销售价格分配比例/金额未选择")
+                return $.alert("销售价格分配比例/金额未选择")
             }
             if (allotType == 1) {
                 if (!that.loadData1.orderAllotSet.allotNumOne) {
-                    return alert("销售业绩比例需填写")
+                    return $.alert("销售业绩比例需填写")
                 }
                 allotNum = that.loadData1.orderAllotSet.allotNumOne;
             }
             if (allotType == 2) {
                 if (!that.loadData1.orderAllotSet.allotNumTwo) {
-                    return alert("销售业绩金额需填写")
+                    return $.alert("销售业绩金额需填写")
                 }
                 allotNum = that.loadData1.orderAllotSet.allotNumTwo;
             }
@@ -1570,7 +1589,7 @@ var newCardCustomers = new Vue({
                     that.loadData1.orderAllotSetList.push(val);
                 }
             }
-            that.loadData1.cardInfoMap.allotSetType = 1;
+            that.cardMap.allotSetType = 1;
             that.newCustomers_maskLayer_X();
         },
         //打开弹窗
@@ -1715,6 +1734,297 @@ var newCardCustomers = new Vue({
                         that.toChildSub(true,"提交成功",that.LiIndex);
                     } else {
                         alert(res.msg)
+                    }
+                    that.randomNumber = '';
+                }
+            });
+        },
+        //选择图片弹窗
+        pictureSelected: function () {
+            var that = this;
+            $('#file-fr').click();
+        },
+        //显示图片
+        pictureShow: function (e) {
+            var that = this;
+            var file = e.srcElement.files.item(0);
+            var num = 'price1'
+            // 看支持不支持FileReader
+            if (!file || !window.FileReader) return;
+            if (/^image/.test(file.type)) {
+                // 创建一个reader
+                var reader = new FileReader();
+                // 将图片将转成 base64 格式
+                reader.readAsDataURL(file);
+                // 读取成功后的回调
+                reader.onloadend = function () {
+                    $("#" + num).attr('src', this.result);
+                    that.loadDatat0.userURL = this.result;
+                }
+            }
+        },
+        //根据手机号获取会员信息
+        getClientList: function (mark) {
+            var that = this;
+            if (!that.givePhone) {
+                return;
+            }
+            that.ticketPrice.tickMark = mark;
+            var isFlag = isPoneAvailable(that.givePhone);
+            if (!isFlag) {
+                that.givePhone = '';
+                return $.alert("请输入正确的手机号");
+            }
+            var url = $.stringFormat("{0}/frClient/getClientList", $.cookie('url'));
+            $.get(url, {
+                    mobile: that.givePhone,
+                    CustomerCode: $.cookie("code"),
+                },
+                function (res) {
+                    if (res.code == '200') {
+                        console.log("获取客户信息==========================================");
+                        console.log(res);
+                        that.optionClientList = res.data;
+                        if(that.optionClientList.length > 0){
+                            $("#clientList").show();
+                        }
+                    } else {
+                        $.alert(res.msg)
+                    }
+                }
+            )
+        },
+        // 上传图片
+        uploadAvatar: function () {
+            const that = this;
+            var isSuccess = false;
+            var f = that.$refs.avatar;
+            //判断是否有图片
+            if (!f) {
+                return $.alert("请选择图片");
+            }
+            //判断图片大小是否超过5MB
+            if (f.length > 5242880) {
+                return $.alert("图片大小不得大于5MB");
+            }
+            Loading.prototype.show();
+            var param = new FormData();
+            param.append('file', f.files[0]); //通过append向form对象添加数据
+            param.append('childPath', 'avatar/'); //通过append向form对象添加数据
+            const url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                cache:false,
+                success: function(res){
+                    if(res.code=='200'){
+                        that.loadDatat0.userURL = res.data.imgUrl;
+                        return $.alert(res.data.msg);
+                    }else {
+                        $.alert(res.msg)
+                    }
+                    Loading.prototype.hide();
+                    that.randomNumberAdd = '';
+                }
+            });
+            return isSuccess;
+        },
+        //检索数据
+        getUserDatat:function (num,str,t) {
+            var that = this;
+            var mess = '';
+            var isFlag = false;
+            //检索手机
+            if(t == 1){
+                isFlag = isPoneAvailable(num);
+                mess = "请输入正确的手机号";
+            }
+            //检索电话号码
+            if(t == 2){
+               isFlag = isTelAvailable(num);
+                mess = "请输入正确的电话";
+            }
+            //检索电话号码
+            if(t == 3){
+                var isFlag = checkNum(num);
+                mess = "只能输入纯数字";
+            }
+            //检索电话号码
+            if(t == 3){
+                var isFlag = isTelAvailable(num);
+                mess = "请输入正确的身份证号";
+            }
+            if (!isFlag) {
+                that.loadData2.clitenUser[str] = '';
+                return $.alert(mess);
+            }
+        },
+        // 查询销售顾问列表
+        getSalespersonList: function (type,str) {
+            var that = this;
+            if(!type){
+               type = 1;
+            }
+            if(!str){
+                str = 'salespersonList';
+            }
+            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', $.cookie('url'));
+            var data ={
+                customerCode:that.code,
+                userType:type,
+            }
+            $.get(url,data,function(res){
+                if (res.code == '200') {
+                    that[str] = res.data;
+                } else {
+                    $.alert(res.msg);
+                }
+            });
+        },
+        //获取销售人员列表
+        getMarketShopPeople: function (shop_Id, that,type) {
+            //默认获取销售人员列表
+            var str = 'maeketUserList';
+            if(!type){
+                type = 1;
+            }
+            if(type == 2){
+                str = 'maeketUserListTwo';
+            }
+            var url = $.stringFormat('{0}/personnelInfo/getPsersonnelListByShopId', $.cookie('url'));
+            $.get(url, {
+                    shopId: shop_Id,//门店id
+                    CustomerCode:that.code,
+                    UserType:type,
+                },
+                function (res) {
+                    if (res.code == '200') {
+                        that[str] = res.data;
+                    } else {
+                        $.alert(res.msg);
+                    }
+                }
+            )
+        },
+        //业绩分配的删除
+        deleteFamily:function(t){
+            var that = this;
+            if(!t && t != 0){
+                return ;
+            }
+            if(that.loadData1.orderAllotSetListOne == null || that.loadData1.orderAllotSetListOne.length <=0){
+                return ;
+            }
+            var list =  that.loadData1.orderAllotSetListOne;
+            that.loadData1.orderAllotSetListOne = [];
+            for(var i = 0; i< list.length ;i++){
+                if(t != i){
+                    that.loadData1.orderAllotSetListOne.push(list[i]);
+                }
+            }
+        },
+        //新建现有会员--- 保存
+        saveCustomer:function () {
+            var that = this;
+            var type = that.discount.fullType;
+            var discountFull = 0;
+            var discountReduce = 0
+            if (type == 0) {
+                discountFull = that.discount.discountFullTwo;
+                discountReduce = that.discount.discountReduceTwo;
+            }
+            if (type == 1) {
+                discountFull = that.discount.discountFullOne;
+                discountReduce = that.discount.discountReduceOne;
+            }
+            if (that.randomNumber) {
+                return alert("请勿太快重复点击");
+            }
+            //生成字符串
+            that.randomNumber = Math.random().toString(36).substr(2);
+            // 支付
+            var payModel = that.payModel;
+            var client = that.loadData2.clitenUser;
+            // 分期
+            var orderSplitId = that.loadData1.splitSet.cardTypeSplitSetId;
+            //业绩分配
+            var orderAllotSetList = that.loadData1.orderAllotSetList;
+            //业绩分配
+            var orderAllotSet = that.loadData1.orderAllotSetSav;
+            //获取上传的头像信息
+            var price1 =  that.getParemtDate(that.loadDatat0.userURL,'');
+            var cardMap = {
+                id:that.cardId,           //会员Id
+                cardNo:that.cardMap.cardNo,           //会员卡号
+                clientId:that.clientId,               //客户ID
+                CustomerCode:that.code,               //客户代码
+                shopId:that.cardMap.shopId,           //店铺ID
+                cardNumId:that.cardMap.cardNumId,    //会员卡号规则ID
+                externalNo:that.cardMap.externalNo,  //外部卡号
+                bindTime:that.cardMap.bindTime,      //开卡时间
+                cardTypeId:that.cardMap.cardTypeId,  //选中的会员卡类型
+                note:that.cardMap.note,               //备注
+            };
+            var cardInfoMap ={
+                cardId:that.cardId, //会员卡ID
+                cardTypeId:that.cardMap.cardTypeId,//会员卡类型ID
+                orderNo:that.cardMap.orderNo,//订单编号
+                clientId:that.clientId,//客户ID
+                payType:that.loadData1.paremt.payType,//付款方式
+                consumeType:that.loadData1.paremt.consumeType,//消费方式
+                totalPrice:that.payMentMoney.price,//总价
+                discount:that.discount.num,//优惠折扣
+                changeNum:that.discount.changeNum,//整单去零
+                fullType:that.discount.fullType,//满减优惠类型
+                discountFull:discountFull,//满
+                discountReduce:discountReduce,//减
+                discountPrice:that.payMentMoney.discount,//折扣/优惠
+                discountNum:that.payMentMoney.discountNum,//抵扣金额
+                needPrice:that.payMentMoney.needPrice,//应付金额
+                noPrice:that.payMentMoney.noPrice,//未付金额
+                retChange:that.payMentMoney.retChange,//找零
+                shopId:$.cookie("shopid"),//基础表门店ID
+                personnelId:that.cardMap.personnelId,//人员（员工）ID
+                type:2,//订单类型（1、新购；2、续卡;3、转卡；4、卡升级）
+                CustomerCode:that.code,//客户代码
+                buyRightsNum:that.cardMap.buyRightsNum,//购买权益
+                giveRightsNum:that.cardMap.giveRightsNum,//赠送权益
+                allotSetType:that.cardMap.allotSetType,//业绩分配设置（0、无业绩分配；1、有业绩分配）
+                depositTime:that.cardMap.depositTime,//补余期限
+                invoiceStatus:that.cardMap.invoiceStatus,//是否购置发票（0：否，1：是）
+                authorizingUserId:that.loadData1.paremt.authorizingUserId,//授权人ID
+                displaceCompany:that.loadData1.paremt.displaceCompany,//置换单位
+                displaceWay:that.loadData1.paremt.displaceWay,//置换方式
+                giveClientCardId:that.catcherClientCardId,//抵扣人的会员卡ID
+            }
+            var data = {
+                client:JSON.stringify(client),
+                payModel: JSON.stringify(payModel),
+                cardMap: JSON.stringify(cardMap),
+                cardInfoMap: JSON.stringify(cardInfoMap),
+                orderSplitId: orderSplitId,
+                orderAllotSetList: JSON.stringify(orderAllotSetList),
+                orderAllotSet: JSON.stringify(orderAllotSet),
+                shopId:$.cookie("shopid"),
+                userURL: price1,
+            }
+            var url = $.stringFormat('{0}/frCard/addSaveCustomer', $.cookie('url'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (res) {
+                    if (res.code == '200') {
+                        $.alert("添加成功");
+                        that.initPayModel();
+                    } else {
+                        $.alert(res.msg)
                     }
                     that.randomNumber = '';
                 }

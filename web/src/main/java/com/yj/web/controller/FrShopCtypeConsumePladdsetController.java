@@ -81,12 +81,19 @@ public class FrShopCtypeConsumePladdsetController {
         Boolean rows=false;
         for (int i = 0; i <list.size() ; i++) {
             FrShopCtypeConsumePlset plset=new FrShopCtypeConsumePlset();
+            str = list.get(i).getAM().split("至");
+            str2 = list.get(i).getPM().split("至");
+            if (str.length<=1 ){
+                continue;
+            }  if (str2.length<=1){
+                continue;
+            }
                 plset.setUseDays(list.get(i).getUseDays());
                 plset.setConsumeId(list.get(i).getConsumeId());
-                str = list.get(i).getAM().split("至");
+
                 plset.setStartTimeAm(str[0]);
                 plset.setEndTimeAm(str[1]);
-                str2 = list.get(i).getPM().split("至");
+
                 plset.setStartTimePm(str2[0]);
                 plset.setEndTimePm(str2[1]);
              plset.setUseSelect(list.get(i).getUseSelect());

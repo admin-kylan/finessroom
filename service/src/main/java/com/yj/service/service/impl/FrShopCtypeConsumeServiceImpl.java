@@ -3,6 +3,9 @@ package com.yj.service.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.SqlHelper;
+import com.yj.common.exception.YJException;
+import com.yj.common.exception.YJExceptionEnum;
+import com.yj.common.util.StringUtils;
 import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dto.CategoryItemDTO;
 import com.yj.dal.model.FrCategoryItem;
@@ -92,5 +95,17 @@ public class FrShopCtypeConsumeServiceImpl extends BaseServiceImpl<FrShopCtypeCo
             }
         }
         return SqlHelper.retBool(successCount);
+    }
+
+
+    @Override
+    public List<FrShopCtypeConsume> queryByConsumeId(String cardTypeId, String code) throws YJException {
+        if(StringUtils.isEmpty(cardTypeId) || StringUtils.isEmpty(code)){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        FrShopCtypeConsume frShopCtypeConsume = new FrShopCtypeConsume();
+        frShopCtypeConsume.setCardTypeId(cardTypeId);
+        frShopCtypeConsume.setCustomerCode(code);
+        return baseMapper.queryByConsumeId(frShopCtypeConsume);
     }
 }

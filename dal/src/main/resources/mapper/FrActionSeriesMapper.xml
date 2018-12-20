@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrActionSeriesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrActionSeries">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="name" property="name" />
+        <result column="is_using" property="isUsing" />
+        <result column="update_time" property="updateTime" />
+        <result column="customer_code" property="customerCode" />
+        <result column="create_user" property="createUser" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time AS createTime, update_user AS updateUser, name, is_using AS isUsing, update_time AS updateTime, id, customer_code AS customerCode, create_user AS createUser, note
+    </sql>
+	
+	
+	
+	<select id="getByList" resultMap="BaseResultMap">
+		select t.* from fr_action_series t;
+	</select>
+</mapper>

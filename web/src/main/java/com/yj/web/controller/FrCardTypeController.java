@@ -35,35 +35,35 @@ public class FrCardTypeController {
      * 加入卡系列、卡种
      * @param frCardType
      * @param ids 关联门店id
-     * @param ty  0为卡系列，1为卡种
+     * @param type  0为卡系列，1为卡种
      * @return
      */
     @PostMapping("/addFrCardType")
-    public JsonResult addFrCardType(HttpServletRequest request,FrCardType frCardType, String[] ids,@RequestParam Integer ty) throws YJException {
+    public JsonResult addFrCardType(HttpServletRequest request,FrCardType frCardType, String[] ids,@RequestParam Integer type) throws YJException {
         String code = CookieUtils.getCookieValue(request, "code",true);
         frCardType.setCustomerCode(code);
         if(frCardType == null){
             return JsonResult.failMessage("参数错误");
         }
-        return JsonResult.success(frCardTypeService.addFrCardType(frCardType,ids,ty));
+        return JsonResult.success(frCardTypeService.addFrCardType(frCardType,ids,type));
     }
 
     /**
      * 通用门店添加卡系列或卡种
      * @param frCardType
      * @param ids
-     * @param ty
+     * @param type
      * @return
      * @throws YJException
      */
     @PostMapping("/addCurrentFrCardType")
-    public JsonResult addCurrentFrCardType(HttpServletRequest request,FrCardType frCardType, String[] ids,@RequestParam Integer ty) throws YJException {
+    public JsonResult addCurrentFrCardType(HttpServletRequest request,FrCardType frCardType, String[] ids,@RequestParam Integer type) throws YJException {
         String code = CookieUtils.getCookieValue(request, "code",true);
         frCardType.setCustomerCode(code);
         if(frCardType == null){
             return JsonResult.failMessage("参数错误");
         }
-        return JsonResult.success(frCardTypeService.addCurrentFrCardType(frCardType,ids,ty));
+        return JsonResult.success(frCardTypeService.addCurrentFrCardType(frCardType,ids,type));
 
     }
 

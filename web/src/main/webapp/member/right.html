@@ -14,7 +14,6 @@
 	<link rel="stylesheet" href="../css/skin/jedate.css">
 	<link rel="stylesheet" href="../css/right.css">
 	<script src="../js/vue.js"></script>
-
 </head>
 
 <body>
@@ -29,7 +28,13 @@
 					<form action="#" id="common-form" method="post">
 						<div class="form_top">
 							<div>卡名称：<strong id="years">{{cardTypeSet.cardTypeName}}</strong></div>
-							<div>卡性质：<strong id="time">{{cardTypeSet.cardTypeName}}</strong></div>
+							<div v-if="cardTypeSet.type==1">卡性质：<strong >时间卡</strong></div>
+							<div v-if="cardTypeSet.type==2">卡性质：<strong >小时卡</strong></div>
+							<div v-if="cardTypeSet.type==3">卡性质：<strong >次卡</strong></div>
+							<div v-if="cardTypeSet.type==4">卡性质：<strong >储值卡</strong></div>
+							<div v-if="cardTypeSet.type==5">卡性质：<strong >充值卡</strong></div>
+							<div v-if="cardTypeSet.type==6">卡性质：<strong >折扣卡</strong></div>
+
 						</div>
 						<div class="common">
 							<span class="common_span">会员卡价格设置</span>
@@ -198,6 +203,9 @@
 											<input type="radio" name="canTransfer" value="0" v-model="cardTypeSet.canTransfer">
 											<span>可转让</span>
 										</label>
+										<span>转让时余额需扣除费用：</span>
+										<span><input type="text" name="changeTransferFee" value="0" v-model="cardTypeSet.changeTransferFee"></span>
+										<span>元，设置为（0或者空时，前台可以自行设置）</span>
 										<label>
 											<input type="radio" name="canTransfer" value="1" v-model="cardTypeSet.canTransfer">
 											<span>不可转让</span>
@@ -209,8 +217,8 @@
 											<input type="radio" name="canChangeType" value="1" v-model="cardTypeSet.canChangeType">
 											<span>可转让</span>
 										</label>
-										<span>转让时余额需扣除费用：</span>
-										<span><input type="text" name="transferFee" value="0" :value="cardTypeSet.transferFee"></span>
+										<span>转卡时余额需扣除费用：</span>
+										<span><input type="text" name="transferFee" value="0" v-model="cardTypeSet.transferFee"></span>
 										<span>元，设置为（0或者空时，前台可以自行设置）</span>
 										<label>
 											<input type="radio" name="canChangeType" value="0" v-model="cardTypeSet.canChangeType">
@@ -222,7 +230,7 @@
 										<span><input type="text" name="renewCommonPrice" value="0.00" v-model="cardTypeSet.renewCommonPrice"></span>
 										<span>元</span>
 										<label>
-											<input type="checkbox" class="special_checkbox" v-on:click="special_checkbox()">
+											<input type="checkbox" class="special_checkbox" @click="special_checkbox()">
 											<span>特殊续卡价格</span>
 										</label>
 										<div class="special">

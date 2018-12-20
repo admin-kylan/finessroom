@@ -2,8 +2,10 @@ package com.yj.service.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
+import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
+import com.yj.common.util.StringUtils;
 import com.yj.dal.dao.PersonlRoleMapper;
 import com.yj.dal.dao.RoleInfoMapper;
 import com.yj.dal.model.PersonnelInfo;
@@ -19,10 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -96,4 +95,17 @@ public class PersonnelInfoServiceImpl extends BaseServiceImpl<PersonnelInfoMappe
         return personnelInfos;
     }
 
+
+    @Override
+    public List<PersonnelInfo> getPsersonnelListByShopId(String CustomerCode, String shopId, Integer UserType) throws YJException {
+        if(UserType == null || StringUtils.isEmpty(CustomerCode) || StringUtils.isEmpty(shopId)){
+            throw new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("CustomerCode",CustomerCode);
+        map.put("UserType",UserType);
+        map.put("shopId",shopId);
+        List<PersonnelInfo> personnelInfos = baseMapper.getPsersonnelListByShopId(map);
+        return personnelInfos;
+    }
 }
