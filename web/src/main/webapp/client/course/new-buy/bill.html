@@ -9,16 +9,17 @@
                 <fieldset class="section2">
                     <legend>消费人员信息</legend>
                     <div>
-                        <span>会员姓名：<strong>吴改 </strong></span>
-                        <span>手机号码：<strong>13645945925 </strong></span>
-                        <span>性别：<strong>男 </strong></span>
+                        <span>会员姓名：<strong v-text="formData.userInfo.data.clientName"></strong></span>
+                        <span>手机号码：<strong v-text="formData.userInfo.data.mobile"></strong></span>
+                        <span>性别：<strong v-text="formData.userInfo.data.sex == 1 ? '女' : '男'"></strong></span>
                     </div>
                 </fieldset>
                 <fieldset class="section3">
                     <legend>产品信息</legend>
                     <div class="section3_box">
                         <div class="section3_box_top">
-                            <span>订单编号：<strong>201808252038665 </strong> </span> <span>创建时间：2018-08-25 20:29</span>
+                            <span>订单编号：<strong v-text="formData.orderInfo.orderNo"> </strong> </span>
+                            <span>创建时间：</span><span v-text="formData.orderInfo.createDate"></span>
                         </div>
                         <div class="section3_box_botton">
                             <div class="section3_box_botton_left">
@@ -48,67 +49,100 @@
                     <div class="section4_box">
                         <div class="section4_box_top">
                             <div>付款类型：
-                                <label click="section4BoxTop(0)"><input type="radio" name="quan">全款</label>
-                                <label click="section4BoxTop(1)"><input type="radio" name="quan">定金</label>
-                                <label click="section4BoxTop(2)"><input type="radio" name="quan">赠送</label>
-                                <label click="section4BoxTop(3)"><input type="radio" name="quan">置换</label>
-                                <label click="section4BoxTop(4)"><input type="radio" name="quan">分期付款</label>
+                                <label @click="formData.payType.index = 0;reviewType = ''"><input type="radio"
+                                                                                                  name="quan">全款</label>
+                                <label @click="formData.payType.index = 1;reviewType = ''"><input type="radio"
+                                                                                                  name="quan">定金</label>
+                                <label @click="formData.payType.index = 2;reviewType = 'gift'"><input type="radio"
+                                                                                                      name="quan">赠送</label>
+                                <label @click="formData.payType.index = 3;reviewType = 'replacement'"><input
+                                        type="radio" name="quan">置换</label>
+                                <label @click="formData.payType.index = 4"><input type="radio" name="quan" disabled>分期付款</label>
                             </div>
                         </div>
                         <div class="section4_box_botton">
-                            <fieldset>
+                            <fieldset v-show="formData.payType.index === 0">
                                 <div style="line-height: 50px !important">
                                     选择全款，请填写对应的支付方式，以及对应支付金额，完成结账！
                                 </div>
                             </fieldset>
-                            <fieldset>
+                            <fieldset v-show="formData.payType.index === 1">
                                 <div>
-                                    <label><input type="radio" name="tian">3天</label>
-                                    <label><input type="radio" name="tian">5天</label>
-                                    <label><input type="radio" name="tian">7天</label>
-                                    <label><input type="radio" name="tian">15天</label>
-                                    <label><input type="radio" name="tian">30天</label>
-                                    <label><input type="radio" name="tian">90天</label>
-                                    <label><input type="radio" name="tian">180天</label>
-                                    <label>其他<input type="text" name="tian">元</label>
+                                    <label>补余期限：</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="3">3天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="5">5天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="7">7天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="15">15天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="30">30天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="90">90天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="180">180天</label>
+                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
+                                                  value="other">180天</label>
+                                    <label>
+                                        <span>其他</span>
+                                        <input type="text" name="tian" style="float: none;"
+                                               v-model="formData.payType.front.money"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"/>
+                                        <span style="float: right;">元</span>
+                                    </label>
                                 </div>
                             </fieldset>
-                            <fieldset class="fieldset3">
+                            <fieldset class="fieldset3" v-show="formData.payType.index === 2">
                                 <div>
                                     赠送人：
-                                    <select name="1" >
-                                        <option value="1">Klaus</option>
-                                        <option value="1">Klaus</option>
-                                        <option value="1">Klaus</option>
+                                    <select name="1" v-model="formData.gift.chooseUserId">
+                                        <option value="">无</option>
+                                        <option v-for='(item,index) in formData.gift.presenter' :value="item.id">
+                                            {{item.relName}}
+                                        </option>
                                     </select>
                                     输入授权（密码/指纹/指静脉）：
-                                    <input type="text" style="float:initial">
+                                    <input type="text" style="float:initial" v-model="formData.gift.fingerprint"
+                                           @blur="verifyUser">
+                                    <span v-text="formData.gift.msg" :class="formData.gift.class"></span>
                                 </div>
                             </fieldset>
-                            <fieldset>
+                            <fieldset v-show="formData.payType.index === 3">
                                 <div>
                                     <div>
-                                        <span> 置换单位名称：</span><input type="text"> <span>置换方式：</span><input type="text">
+                                        <span> 置换单位名称：</span>
+                                        <input type="text" v-model="formData.replacement.unit">
+                                        <span>置换方式：</span>
+                                        <input type="text" v-model="formData.replacement.way">
                                     </div>
                                     <div>
                                         <span>审核人：</span>
-                                        <select name="1" id="">
-                                            <option value="1">Klaus</option>
-                                            <option value="1">Klaus</option>
-                                            <option value="1">Klaus</option>
+                                        <select name="1" v-model="formData.replacement.chooseUserId">
+                                            <option value="">无</option>
+                                            <option v-for='(item,index) in formData.replacement.presenter'
+                                                    :value="item.id">
+                                                {{item.relName}}
+                                            </option>
                                         </select>
                                         <span>输入授权（密码/指纹/指静脉）：</span>
-                                        <input type="text">
+                                        <input type="text" v-model="formData.replacement.fingerprint"
+                                               @blur="verifyUser">
+
+                                        <span v-text="formData.replacement.msg"
+                                              :class="formData.replacement.class"></span>
                                     </div>
 
 
                                 </div>
                             </fieldset>
-                            <fieldset>
+                            <fieldset v-show="formData.payType.index === 4">
                                 <div class="maskLayerAlert">
                                     <div class="maskLayerAlert_box">
                                         <div class="table_hide">
-                                            <table class="table table-bordered text-center table-hover" style="margin-bottom: 0;">
+                                            <table class="table table-bordered text-center table-hover"
+                                                   style="margin-bottom: 0;">
                                                 <thead>
                                                 <tr>
                                                     <th>购卡价格</th>
@@ -138,7 +172,10 @@
                                             </table>
                                         </div>
                                         <div class="maskLayerAlert_box_alert" style="display: none;">
-                                            <div class="maskLayerAlert_box_alert_a">分期详情<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a></div>
+                                            <div class="maskLayerAlert_box_alert_a">分期详情<a href="#"
+                                                                                           class="setting_hide_a"
+                                                                                           onclick="settingOut_a()">X</a>
+                                            </div>
                                             <div>
                                                 <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
                                                 <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
@@ -146,7 +183,10 @@
                                             </div>
                                         </div>
                                         <div class="maskLayerAlert_box_alert2" style="display: none;">
-                                            <div class="maskLayerAlert_box_alert_a">选择分期类型<a href="#" class="setting_hide_a" onclick="settingOut_a2()">X</a></div>
+                                            <div class="maskLayerAlert_box_alert_a">选择分期类型<a href="#"
+                                                                                             class="setting_hide_a"
+                                                                                             onclick="settingOut_a2()">X</a>
+                                            </div>
                                             <div>
                                                 <div class="maskLayerAlert">
                                                     <div class="maskLayerAlert_box">
@@ -173,7 +213,8 @@
                                                                     <td>3</td>
                                                                     <td>金额</td>
                                                                     <td>大多数</td>
-                                                                    <td><a href="javascript:;" onclick="setting_a()">分期详情</a></td>
+                                                                    <td><a href="javascript:;" onclick="setting_a()">分期详情</a>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><label><input type="checkbox"></label></td>
@@ -200,7 +241,10 @@
                                                             <a href="javascript:;" class="btn btn-default">确定</a>
                                                         </div>
                                                         <div class="maskLayerAlert_box_alert" style="display: none;">
-                                                            <div class="maskLayerAlert_box_alert_a">分期详情<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a></div>
+                                                            <div class="maskLayerAlert_box_alert_a">分期详情<a href="#"
+                                                                                                           class="setting_hide_a"
+                                                                                                           onclick="settingOut_a()">X</a>
+                                                            </div>
                                                             <div>
                                                                 <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
                                                                 <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
@@ -235,15 +279,18 @@
                         <ul>
                             <li :class='{on: index == 0}' @click="index = 0">会员消费</li>
                             <li :class='{on: index == 1}' @click="index = 1">普通消费</li>
-                            <li :class='{on: index == 2}' @click="index = 2">员工领用</li>
-                            <li :class='{on: index == 3}' @click="index = 3">协议单位</li>
+                            <li style="cursor: not-allowed;">员工领用</li>
+                            <li style="cursor: not-allowed;">协议单位</li>
                         </ul>
                     </div>
                     <div class="payment_method_left pull-left">
                         <ul>
                             <li class="on li1" v-if="index==0">
                                 <div class="col-md7">
-                                    <div class="col_md7_top">卡号/手机号码：<input type="text" name="" id=""> <a href="#" class="btn btn-success">搜索</a></div>
+                                    <div class="col_md7_top">卡号/手机号码：
+                                        <input type="text" v-model="member.num" oninput="value=value.replace(/[^\d]+/g,'')">
+                                        <a href="javascript:;" class="btn btn-success" @click="searchByTelAndNo">搜索</a>
+                                    </div>
                                     <div class="col_md7_botton">
                                         <table class="table table-bordered text-center table-hover">
                                             <thead>
@@ -349,17 +396,19 @@
                                     <div>
                                         <div>会员卡号：<strong> 201807241100652 </strong></div>
                                         <div>会员名称：<strong>2年卡</strong></div>
-                                        <div>卡中储值金额：<span>500.00 </span> </div>
+                                        <div>卡中储值金额：<span>500.00 </span></div>
                                         <div>扣储值金额：<input type="text"></div>
                                         <div>充值卡剩余金额：<span>0.00</span></div>
-                                        <div>扣卡中金额：<input type="text"> </div>
-                                        <div>输入凭证：<input type="text"> </div>
+                                        <div>扣卡中金额：<input type="text"></div>
+                                        <div>输入凭证：<input type="text"></div>
                                     </div>
                                 </div>
                             </li>
                             <li class="on li2" v-if="index==1">
                                 <div class="col-md7">
-                                    <div class="col_md7_top">手机号码：<input type="text" name="" id=""> <a href="#" class="btn btn-success">搜索</a></div>
+                                    <div class="col_md7_top">手机号码：<input type="text" name="" id=""> <a href="#"
+                                                                                                       class="btn btn-success">搜索</a>
+                                    </div>
                                     <div class="col_md7_botton">
                                         <table class="table table-bordered text-center table-hover">
                                             <thead>
@@ -439,72 +488,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="on li3" v-if="index==2">
-                                <div class="col-md12">
-                                    <fieldset>
-                                        <legend>人员选择</legend>
-                                        <div>
-                                            <div class="col-md3">
-                                                <select name="1" id="">
-                                                    <option value="1">选择门店</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md3">
-                                                <select name="1" id="">
-                                                    <option value="1">选择部门</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md3">
-                                                <select name="1" id="">
-                                                    <option value="1">选择人员</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                    </fieldset>
-                                    <div>
-                                        输入授权人凭证：<input type="text">
-                                    </div>
-                                    <div>
-                                        <a href="#" class="btn">领用</a>
-                                        <a href="#" class="btn">借用</a>
-                                        <a href="#" class="btn">归还</a>
-                                        <a href="#" class="btn">消耗</a>
-                                        <a href="#" class="btn">废弃</a>
-                                    </div>
-
-                                </div>
-                            </li>
-                            <li class="on li4" v-if="index==3">
-                                <div class="col-md7">
-                                    <div>
-                                        <input type="text" placeholder="手机号码/协议号/部门/公司名称">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="公司名称">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="部门名称">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="手机号码">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="使用人">
-
-                                    </div>
-                                </div>
-                                <div class="col-md5">
-                                    <div>
-                                        企业扣费：<input type="text">
-
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                     <div class="payment_method_box pull-left">
@@ -523,13 +506,13 @@
                                 </div>
                                 <div class="section2_boxs1_botton">
                                     <div>金额</div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
+                                    <div><span>￥</span><input type="text"></div>
                                 </div>
                             </div>
                         </fieldset>
@@ -538,11 +521,11 @@
                         <fieldset>
                             <legend style="color:#FF9900">折扣优惠</legend>
                             <div>
-                                <div><label><input type="checkbox"><span>整单打折</span></label> </div>
+                                <div><label><input type="checkbox"><span>整单打折</span></label></div>
                                 <div>
                                     <ul>
                                         <li><span>优惠折扣：</span> <input type="text"></li>
-                                        <li> <span>整单去零：</span> <input type="text"></li>
+                                        <li><span>整单去零：</span> <input type="text"></li>
                                     </ul>
                                 </div>
                                 <div><label><input type="checkbox"><span>满额优惠</span></label></div>
@@ -561,7 +544,7 @@
                             <div class="rows">
                                 <div>
                                     <div class="col-md-6">小计：</div>
-                                    <div class="col-md-6"> ￥<strong>6000.00</strong> </div>
+                                    <div class="col-md-6"> ￥<strong>6000.00</strong></div>
                                 </div>
                                 <div>
                                     <div class="col-md-6">折扣/优惠：</div>
@@ -569,7 +552,7 @@
                                 </div>
                                 <div>
                                     <div class="col-md-6">抵扣金额：</div>
-                                    <div class="col-md-6">￥<strong>0.00</strong> </div>
+                                    <div class="col-md-6">￥<strong>0.00</strong></div>
                                 </div>
                                 <div>
                                     <div class="col-md-6">应付金额：</div>
@@ -577,7 +560,7 @@
                                 </div>
                                 <div>
                                     <div class="col-md-6">未付金额：￥0.00</div>
-                                    <div class="col-md-6">找零：<strong><span class="tored">￥0.00</span></strong> </div>
+                                    <div class="col-md-6">找零：<strong><span class="tored">￥0.00</span></strong></div>
                                 </div>
                                 <div style=" border-bottom: none">
                                     <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂账</a></div>
@@ -603,6 +586,37 @@
             </div>
         </div>
     </div>
+
+    <!--表格1-->
+    <div class="newCustomers_maskLayer performance" style="display:block;" id="clientList">
+        <div class="newCustomers_maskLayer_box">
+            <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span><a href="#" class="newCustomers_maskLayer_X" @click="colseX('clientList')">X</a>
+            </div>
+            <div class="KHGL-table-box">
+                <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>标识</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>创建时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in optionClientList">
+                        <td><span class="col-green" :value="item.id" @click="catcherClientList(item)">选择</span></td>
+                        <td><span class="col-red">{{item.CustomerMark}}</span></td>
+                        <td>{{item.clientName}}</td>
+                        <td v-for="sexs in parameterList.sexList" v-if="sexs.vue == item.sex">{{sexs.lav}}</td>
+                        <td>{{item.applyTime|formatDate(true)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 表格1 -->
 </div>
 
 <!-- 结账 -->
@@ -612,22 +626,138 @@
     var billVue = new Vue({
         el: '#customer-new-buy-project-bill-body',
         data: {
+            billStatus: '',//判断是课程还是套餐
             index: 0, // tab的index
-            //isShow:
+            reviewType: '', //审核类型
+            formData: {//页面表单的数据
+                orderInfo: {//订单信息
+                    orderNo: '', //订单编号
+                    createDate: '',
+                },
+                userInfo: { //用户信息
+                    userId: $.cookie('cid'), //用户ID
+                    data: {}, //存放用户的信息
+
+                },
+                payType: {//付款类型
+                    index: '', //结账付款类型的序号
+                    front: {//选择定金
+                        date: '', //选择时间
+                        money: '', //金额
+                    },
+                },
+                gift: {//赠送
+                    chooseUserId: '', //选择人Id
+                    presenter: headVue.marketUserList, //赠送人列表
+                    fingerprint: '', //指纹密码
+                    msg: '', //验证信息
+                    class: '', //验证的class
+                },
+                replacement: {//置换
+                    chooseUserId: '', //选择人Id
+                    unit: '', //置换单位名称
+                    way: '', //置换方式
+                    presenter: headVue.marketUserList, //赠送人列表
+                    fingerprint: '', //指纹密码
+                    msg: '', //验证信息
+                    class: '', //验证的class
+                }
+
+
+            },
+            member: {//会员消费
+                num: '', //电话，卡号
+            },
         },
         computed: {},
         watch: {
-
-
+            'formData.gift.chooseUserId'(val){ //增送下拉框触发
+                this.verifyUser();
+            },
+            'formData.replacement.chooseUserId'(val){//置换下拉框触发
+                this.verifyUser();
+            }
         },
         created: function () {
-            console.log(projectVue)
+            //初始化加载用户信息
+            this.load(); //初始化加载用户信息
+            this.billStatus = newBuyVue.billStatus; //加载状态项
         },
         methods: {
+            //初始化加载
+            load(){
+                //订单编号
+                axiosGetFetch(COURSE_URL.getOrderNo, (response) => {
+                    if (response.code === '200') {
+                        let date = new Date();
+                        //时间，小时前面不够补 '0'
+                        this.formData.orderInfo.createDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() +
+                            " " + (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" + date.getMinutes();
+                        this.formData.orderInfo.orderNo = response.data;
+                    }
+                });
+                //用户信息
+                axiosGetParams(COURSE_URL.fetchUserInfo, {id: this.formData.userInfo.userId}, (response) => {
+                    if (response.code === '200') {
+                        this.formData.userInfo.data = response.data;
+                    }
+                });
+            },
+            //物理删除的方式删除该弹窗的全部html
             deleteBillHtml(){
-                $('#customer-new-buy-project-bill-body').remove(); //物理删除的方式删除html
-            }
+                $('#customer-new-buy-project-bill-body').remove();
+            },
+            //员工的验证
+            verifyUser(){
+                let param = {}; //参数传递
+                //判断当前选择的是赠送还是置换
+                if (!this.reviewType) {
+                    this.showPrompt('', '');//不做校样
+                    return false; //说明没有选择到制定的赠送或者置换
+                }
+                if (this.reviewType === "gift") { //赠送类型
+                    if (!this.formData.gift.chooseUserId || !this.formData.gift.fingerprint) { //必须都有存在
+                        this.showPrompt('', '');//不做校样
+                        return false;
+                    }
+                    param.PassWord = this.formData.gift.fingerprint;
+                    param.id = this.formData.gift.chooseUserId;
+                }
+                //判断是否选择人员
+                if (this.reviewType === "replacement") { //赠送类型
+                    if (!this.formData.replacement.chooseUserId || !this.formData.replacement.fingerprint) { //必须都有存在
+                        this.showPrompt('', '');//不做校样
+                        return false;
+                    }
+                    param.PassWord = this.formData.gift.fingerprint;
+                    param.id = this.formData.gift.chooseUserId;
+                }
+                //  console.log('执行验证操作')
+                param.customerCode = $.cookie('code');
+                param.ShopId = $.cookie('shopid');
+                //开始验证 verifyPersonInfo
+                axiosPostParams(COURSE_URL.verifyPersonInfo, param, (response) => {
+                    if (response.code === '200') {
+                        this.showPrompt(response.data, 'verify-success')
+                    } else {
+                        this.showPrompt(response.msg, 'verify-error')
+                    }
 
+                });
+            },
+            //提示框归类
+            showPrompt(msg, className){
+                if (this.reviewType === "gift") {
+                    this.formData.gift.msg = msg;
+                    this.formData.gift.class = className;
+                }
+                if (this.reviewType === "replacement") {
+                    this.formData.replacement.msg = msg;
+                    this.formData.replacement.class = className;
+                }
+            },
+            //根据卡号，电话号码查询
+            searchByTelAndNo(){}
         }
     });
 
@@ -635,7 +765,27 @@
 
 <style>
     #customer-new-buy-project-bill-body .section4_box_top input[type="radio"] {
-        top:0px;
+        top: 0px;
         margin-left: 1px;
     }
+
+    #customer-new-buy-project-bill-body .section4_box_botton input[type="radio"] {
+        top: 0px;
+        margin-left: 1px;
+    }
+
+    #customer-new-buy-project-bill-body .section4_box_botton fieldset {
+        display: block;
+    }
+
+    #customer-new-buy-project-bill-body .section4_box_botton .verify-error {
+        color: red;
+        text-align: left !important;
+    }
+
+    #customer-new-buy-project-bill-body .section4_box_botton .verify-success {
+        color: green;
+        text-align: left !important;;
+    }
+
 </style>

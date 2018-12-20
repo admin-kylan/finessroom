@@ -17,12 +17,13 @@
 
 </li>
 <script type="text/javascript">
-    new Vue({
+    var newBuyVue = new Vue({
         el: '#course-new-buy-li',
         data: {
             index: -1,
             html: '', //页面不同体的html
             headHtml: './course/new-buy/head.html', //页面头部html
+            billStatus: '', //用来显示结算的状态
         },
         computed: {},
         watch: {

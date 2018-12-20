@@ -56,7 +56,7 @@
             </label>
         </p>
         <p class="line">
-            <input type="button" value="去结账" class="check" @click="bill"/>
+            <input type="button" value="去结账" class="check" @click="billFull"/>
         </p>
     </div>
 
@@ -120,7 +120,7 @@
     <!-- 选择业绩分配弹窗 -->
 
     <!-- 结账 -->
-    <div id="customer-new-buy-project-bill">
+    <div id="customer-new-buy-project-bill" v-show="bill.isShow">
 
     </div>
     <!-- 结账 -->
@@ -146,6 +146,9 @@
             },
             product: { //选择项目项
                 isShow: false,
+            },
+            bill: {//结账数据
+                isShow: true, //显示
             }
 
         },
@@ -210,8 +213,13 @@
             this.formData.endDate = this.formData.beginDate;
 
         },
+        mounted(){ //初始化
+            //test
+            this.billFull();
+        },
         methods: {
-            bill(){//结账
+            billFull(){//结账
+                Vue.set(newBuyVue,'billStatus', 'project')
                 $('#customer-new-buy-project-bill').load(this.billHtml); //显示结账
             }
         }

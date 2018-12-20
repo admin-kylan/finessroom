@@ -77,7 +77,7 @@
             </label>
         </div>
         <p class="line">
-            <input type="submit" value="去结账" class="check"  />
+            <input type="submit" value="去结账" class="check" @click="billFull"/>
         </p>
     </div>
     <!-- 选择项目弹窗 -->
@@ -229,9 +229,9 @@
             this.formData.endDate = this.formData.beginDate;
         },
         methods: {
-            bill(){//结账
+            billFull(){//结账
+                Vue.set(newBuyVue,'billStatus', 'package')
                 $('#customer-new-buy-project-bill').load(this.billHtml)
-                console.log('45454')
             }
 
         }
