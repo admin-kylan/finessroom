@@ -20,4 +20,5 @@ public interface FrCardOrderStorageMapper extends BaseMapper<FrCardOrderStorage>
 
     List<FrCardOrderStorage> queryStorgeList(Map<String,Object> map);
 
+    Map<String,Double> getCardStoragePrice(FrCardOrderStorage frCardOrderStorage);
 }

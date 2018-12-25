@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -42,6 +43,16 @@ public class FrTrainingSeries extends Model<FrTrainingSeries> {
     private Integer isUsing;
     @TableId(value = "id", type = IdType.UUID)
     private String id;
+    @TableField(exist = false)
+    private List<FrTrainingSeries> frTrainingSeries;
+
+    public List<FrTrainingSeries> getFrTrainingSeries() {
+        return frTrainingSeries;
+    }
+
+    public void setFrTrainingSeries(List<FrTrainingSeries> frTrainingSeries) {
+        this.frTrainingSeries = frTrainingSeries;
+    }
 
     public Integer getOwnType() {
         return ownType;

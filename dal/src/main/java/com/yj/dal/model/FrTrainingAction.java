@@ -25,8 +25,8 @@ public class FrTrainingAction extends Model<FrTrainingAction> {
     /**
      * 动作ID
      */
-    @TableField("action_id")
-    private String actionId;
+    @TableField("class_id")
+    private String classId;
     /**
      * 训练计划ID
      */
@@ -46,12 +46,12 @@ public class FrTrainingAction extends Model<FrTrainingAction> {
     private String id;
 
 
-    public String getActionId() {
-        return actionId;
+    public String getClassId() {
+        return classId;
     }
 
-    public void setActionId(String actionId) {
-        this.actionId = actionId;
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 
     public String getTrainingId() {
@@ -94,7 +94,7 @@ public class FrTrainingAction extends Model<FrTrainingAction> {
     @Override
     public String toString() {
         return "FrTrainingAction{" +
-        ", actionId=" + actionId +
+        ", actionId=" +
         ", trainingId=" + trainingId +
         ", isUsing=" + isUsing +
         ", createTime=" + createTime +

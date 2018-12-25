@@ -4,30 +4,30 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yj.dal.model.FrTraningClass">
-        <result column="traning_series_id" property="traningSeriesId" />
-        <result column="action_id" property="actionId" />
-        <result column="time" property="time" />
-        <result column="strength" property="strength" />
-        <result column="remark" property="remark" />
-        <result column="count" property="count" />
-        <result column="is_using" property="isUsing" />
-        <result column="type" property="type" />
-        <result column="create_time" property="createTime" />
-        <result column="update_user" property="updateUser" />
-        <result column="create_user" property="createUser" />
-        <result column="customer_code" property="customerCode" />
-        <result column="id" property="id" />
-        <result column="update_time" property="updateTime" />
+        <result column="traning_series_id" property="traningSeriesId"/>
+        <result column="action_id" property="actionId"/>
+        <result column="time" property="time"/>
+        <result column="strength" property="strength"/>
+        <result column="remark" property="remark"/>
+        <result column="count" property="count"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="type" property="type"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="create_user" property="createUser"/>
+        <result column="customer_code" property="customerCode"/>
+        <result column="id" property="id"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         traning_series_id AS traningSeriesId, action_id AS actionId, time, strength, remark, count, is_using AS isUsing, type, create_time AS createTime, update_user AS updateUser, create_user AS createUser, customer_code AS customerCode, id, update_time AS updateTime
     </sql>
-	
-	
-	<!-- 查询训练课程对应的动作集合 -->
-	<select id="frTraningClassList" resultType="com.yj.dal.dto.FrTraningClassListDTO">
+
+
+    <!-- 查询训练课程对应的动作集合 -->
+    <select id="frTraningClassList" resultType="com.yj.dal.dto.FrTraningClassListDTO">
 
 		SELECT
 			  c.id,
@@ -55,7 +55,7 @@
 	
 	</select>
 
-	<select id="frTraningClassList2" resultType="com.yj.dal.dto.FrTraningClassListDTO">
+    <select id="frTraningClassList2" resultType="com.yj.dal.dto.FrTraningClassListDTO">
 
 		SELECT
 		c.id,
@@ -82,5 +82,54 @@
 		and a.is_using = 1
 		and  c.traning_series_id = #{traningSeriesId}
 
+	</select>
+
+
+    <select id="getPlan" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+	frc.time,
+	frc.strength,
+	frc.count,
+	frc.remark,
+	frc.id,
+	frc.traning_time traningTime,
+	( SELECT name FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 ) name,
+	(
+SELECT name
+FROM
+	fr_action_series fas
+WHERE
+	fas.id = ( SELECT fa.series_id FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 )
+	) sname
+FROM
+	fr_traning_class frc
+WHERE
+	frc.traning_series_id = #{id}
+	AND type = ${type}
+	AND own_type = 1
+	AND is_using =1
+	</select>
+
+    <select id="getPlanById" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+	frc.time,
+	frc.strength,
+	frc.count,
+	frc.remark,
+	frc.id,
+		( SELECT image FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 ) image,
+	( SELECT name FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 ) name,
+	(
+SELECT name
+FROM
+	fr_action_series fas
+WHERE
+	fas.id = ( SELECT fa.series_id FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 )
+	) sname
+FROM
+	fr_traning_class frc
+WHERE
+	frc.id = #{id}
+	AND is_using =1
 	</select>
 </mapper>

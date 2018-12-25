@@ -179,6 +179,7 @@ li{list-style: none;}
 .modal-style .modal-header{padding: 8px;border-bottom-width: 0;background-color: #0099ff;color: #fff;}
 .modal-style .modal-dialog{margin-top: 105px;width: 695px;}
 .modal-style .modal-header .close{font-weight: bold;color: #333;opacity: 1;text-shadow: none;}
+.modal-style .modal-header .close>span{font-size: 21px;}
 .modal-style .modal-content{border-radius: 0;box-shadow: 5px 5px 5px rgba(0,0,0,.3);border: 1px solid #e4e4e4;}
 .modal-style .modal-footer{text-align: left;border-top-width: 0;}
 .modal-style .fieldset-content>.flex-box{margin-bottom: 10px;}

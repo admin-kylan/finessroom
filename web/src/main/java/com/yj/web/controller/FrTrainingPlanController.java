@@ -8,18 +8,15 @@ import com.yj.common.result.JsonResult;
 import com.yj.common.util.PageUtils;
 import com.yj.common.util.Query;
 import com.yj.dal.dao.FrActionMapper;
-import com.yj.dal.model.FrAction;
-import com.yj.dal.model.FrClient;
-import com.yj.dal.model.FrTrainingAction;
-import com.yj.dal.model.FrTrainingPlan;
+import com.yj.dal.dao.FrTraningClassMapper;
+import com.yj.dal.model.*;
+import com.yj.dal.param.AddProjectParam;
 import com.yj.service.service.IFrActionService;
 import com.yj.service.service.IFrTrainingActionService;
 import com.yj.service.service.IFrTrainingPlanService;
+import com.yj.service.service.IFrTrainingSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +44,12 @@ public class FrTrainingPlanController {
     @Autowired
     FrActionMapper frActionMapper;
 
+    @Autowired
+    IFrTrainingSeriesService trainingSeriesService;
+
+    @Autowired
+    FrTraningClassMapper frTraningClassMapper;
+
     @GetMapping("/getTrainingPlanList")
     public JsonResult getTrainingPlanList(String cid, String currPage) throws YJException {
         Map<String, Object> map = new HashMap<>();
@@ -71,7 +74,7 @@ public class FrTrainingPlanController {
             List<Map<String, Object>> frActions = new ArrayList<>();
             for (FrTrainingAction frTrainingAction : frTrainingActions) {
                 Map<String, Object> frAction = frActionMapper.getAction(
-                        frTrainingAction.getActionId()
+                        frTrainingAction.getClassId()
                 );
                 System.out.println(frAction);
                 if (frAction != null) {
@@ -84,6 +87,36 @@ public class FrTrainingPlanController {
         page.setRecords(frTrainingPlans);
 
         return JsonResult.success(new PageUtils(page));
+    }
+
+    @GetMapping("/getCourse")
+    public JsonResult getCourse(String type) throws YJException {
+        List<FrTrainingSeries> frTrainingSeries = trainingSeriesService.getCourse(type);
+        return JsonResult.success(frTrainingSeries);
+    }
+
+    @GetMapping("/getPlanById")
+    public JsonResult getPlanById(String[] ids) throws YJException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (String id : ids) {
+            Map<String, Object> plan = frTraningClassMapper.getPlanById(id);
+            if (plan != null) {
+                list.add(plan);
+            }
+        }
+        return JsonResult.success(list);
+    }
+
+    @PostMapping("/saveProject")
+    public JsonResult saveProject(@RequestBody AddProjectParam params)throws YJException {
+
+        return service.saveProject(params);
+    }
+
+    @PostMapping("/updateProject")
+    public JsonResult updateProject(@RequestBody AddProjectParam params)throws YJException {
+
+        return service.updateProject(params);
     }
 
 }

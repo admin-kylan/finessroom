@@ -296,7 +296,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
-     *  * 指定日期加上获取减去指定天数后的日期
+     *  指定日期加上获取减去指定天数后的日期
      * @param startDay 指定日期
      * @param count    天数
      * @param isFlag   判断加减 true减   false 加
@@ -482,5 +482,26 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         long between_days = (time2 - time1) / (1000 * 3600 * 24);
         return Integer.parseInt(String.valueOf(between_days));
     }
+
+
+    /**
+     * 比较两个日期之间的大小
+     *
+     * @param d1
+     * @param d2
+     * @return 前者大于后者返回true 反之false
+     */
+    public static boolean compareDate(Date d1, Date d2) {
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        c1.setTime(d1);
+        c2.setTime(d2);
+        int result = c1.compareTo(c2);
+        if (result >= 0)
+            return true;
+        else
+            return false;
+    }
+
 
 }

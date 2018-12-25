@@ -34,5 +34,11 @@ public interface FrCardMapper extends BaseMapper<FrCard> {
 
     Map<String,Object> queryCollectionOriginalSet(FrCard frCard);
 
-    Integer queryNumCard(Map<String,Object> map1);
+    Map<String,Object> queryNumCard(Map<String,Object> map1);
+
+    List<Map<String,Object>> queryClientCardList(Map<String,Object> map);
+
+    List<Map<String,Object>> queryUserCardInfoList(Page<FrCard> page,FrCard frCard);
+
+    List<Map<String,Object>> queryUserCardInfoList(FrCard frCard);
 }

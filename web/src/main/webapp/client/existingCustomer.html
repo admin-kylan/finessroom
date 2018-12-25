@@ -5,23 +5,31 @@
 	<meta charset="UTF-8">
 	<title>现有客户</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css" />
-	<link rel="stylesheet" href="../css/jquery-confirm.css" />--销售顾问/教练--
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />
 	<link rel="stylesheet" href="../css/reset.css" />
 	<link rel="stylesheet" href="../css/base.css" />
 	<link rel="stylesheet" href="../css/skin/jedate.css" />
 	<link rel="stylesheet" href="../css/combobox.css" />
 	<link rel="stylesheet" href="../css/existingCustomer.css" />
 	<link rel="stylesheet" href="../css/myPagination.css" />
-
+	<style>
+		.nowClient {
+			padding-left: 1%;
+			padding-bottom: 1%;
+			margin-bottom: 20px;
+			font-size: 12px;
+			border-bottom: 1px solid #e5e5e5;
+		}
+	</style>
 </head>
 
 <body>
 	<div id="c_rig2" >
 		<div class="follow">
+			<legend class="nowClient">现有客户</legend>
 			<fieldset class="c_rig2Head">
-				<legend>筛选</legend>
 				<div class="screening">
-					筛选条件：
+					会员筛选条件：
 					<select name="" v-model="level.selected">
 						<option value="">--会员等级--</option>
 						<option v-for="item in level.list" :value="item.id">{{item.levelName}}</option>

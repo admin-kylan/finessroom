@@ -35,4 +35,6 @@ public interface FrCardOrderInfoMapper extends BaseMapper<FrCardOrderInfo> {
      * @return
      */
     List<FrCardOrderInfo> queryBrackInfoList(Map<String,Object> map);
+
+    Map<String, Object> getCardInfoByCardId(FrCardOrderInfo frCardOrderInfo);
 }

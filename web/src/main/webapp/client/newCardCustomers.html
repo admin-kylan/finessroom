@@ -476,13 +476,13 @@
                 </fieldset>
             </div>
         </div>
-        <div class="newTab"  v-if="LiIndex==1">
+        <div class="newTab"  v-if="LiIndex==1 || LiIndex==3 || LiIndex==4">
             <div class="newCustomers_maskLayer_box_top">
                 <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="closeCustomer">X</a>
             </div>
         </div>
         <div class="customerMembershipCard LiIndexOffer">
-            <fieldset class="customerMembershipCard LiIndexOffer1 section666" v-if="LiIndex==1">
+            <fieldset class="customerMembershipCard LiIndexOffer1 section666" v-if="LiIndex==1 || LiIndex==3 || LiIndex==4">
                 <legend class="col-red">消费人员信息</legend>
                 <div id="user">
                     <span>会员姓名：<strong>{{clientUserName}}</strong></span>
@@ -499,23 +499,54 @@
                     </div>
                     <div class="section3_box_botton">
                         <div class="section3_box_botton_left">
-                            <img :src="clientURL" >
+                            <img :src="clientURL" style="width: 150px">
                         </div>
-                        <div class="section3_box_botton_rigth">
+                        <div class="section3_box_botton_rigth load1" >
                             <div>
-                                <strong></strong>
-                                <span>单价：<strong>{{loadData1.salesPrice}}</strong></span>
-                                <span>可用权益：<strong></strong></span>
-                                <span>总价：<strong>{{payMentMoney.price}}</strong></span>
+                                <strong style="width:200px;"></strong>
+                                <span style="margin-left: 100px;">单价：<strong style="color: red;">￥{{loadData1.salesPrice}}</strong></span>
+                                <span style="margin-left: -15%;">可用权益：<strong style="color: red;"></strong></span>
+                                <span>总价：<strong style="color: red;">￥{{payMentMoney.price}}</strong></span>
                             </div>
                             <div>
-                                <span>有效期：<strong></strong>（自开卡日期开始计算）</span>
+                                <span>有效期：<strong></strong>（<i style="color: red">自开卡日期开始计算</i>）</span>
                                 <span>购买权益：<strong></strong></span>
                             </div>
                             <div>
+                                <span></span>
                                 <span>赠送权益：<strong>{{cardMap.giveRightsNum}}</strong></span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="customerMembershipCard LiIndexOffer1 newCustomers_maskLayer_box_shen cus666" v-if="LiIndex==3 || LiIndex==4 ">
+                <legend>产品信息</legend>
+                <div class="section3_box">
+                    <div class="section3_box_top">
+                        <span>订单编号：<strong>201808252038665 </strong> </span> <span>创建时间：2018-08-25 20:29</span>
+                    </div>
+                    <div class="section3_box_botton">
+                        <div class="section3_box_botton_left">
+                            <img src="../img/u601.png" alt="">
+                        </div>
+                        <div class="section3_box_botton_rigth">
+                            <div>
+                                <strong>健身私教一对一</strong>
+                                <span>单价：<strong style="color: red;">￥1200.00</strong></span>
+                                <span style="margin-left: 7px;">可用数量：<strong style="color: red;">365</strong></span>
+                                <span>总价：<strong style="color: red;">￥6000.00</strong></span>
+                            </div>
+                            <div>
+                                <span>有效期：2018-08-25~2019-08-25</span>
+                                <span>购买数量：365</span>
+                            </div>
+                            <div>
+                                <span></span>
+                                <span style="margin-left: 215px;">赠送数量：0</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </fieldset>
@@ -1214,7 +1245,8 @@
                                     <strong class="XFFS-gray-btn">挂账</strong>
                                     <strong class="XFFS-gray-btn">挂单</strong>
                                 </div>
-                                <strong class="XFFS-green-btn" @click="settlement">转账</strong>
+                                <strong class="XFFS-green-btn" @click="settlement" v-if="LiIndex==0 || LiIndex==1 || LiIndex==2">转账</strong>
+                                <strong class="XFFS-green-btn"  v-if="LiIndex==3 || LiIndex==4">转账</strong>
                                 <label>
                                     <input type="checkbox" v-model="cardMap.invoiceStatus" value="1"><span>购置发票</span>
                                 </label>
@@ -1354,7 +1386,7 @@
                             <td class='col-red'>{{item.cardTypeName}}</td>
                             <td>{{item.bindTime}}</td>
                             <td>{{item.invalidTime|formatDate}}</td>
-                            <td>{{item.orderRightsNum}}</td>
+                            <td>{{item.orderNum}}</td>
                             <td>{{item.orderPrice}}</td>
                             <td>{{item.a_status}}</td>
                         </tr>

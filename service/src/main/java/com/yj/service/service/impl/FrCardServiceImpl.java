@@ -13,7 +13,6 @@ import com.yj.dal.dao.FrCardMapper;
 import com.yj.dal.param.NumParam;
 import com.yj.service.service.*;
 import com.yj.service.base.BaseServiceImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -75,8 +74,8 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
     private IFrClientPicService iFrClientPicService;
     @Resource
     private  IFrShopCardConsumeService iFrShopCardConsumeService;
-
-
+    @Resource
+    private  IFrCardOrderStopService iFrCardOrderStopService;
 
 
     //@Resource
@@ -280,29 +279,45 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         if(StringUtils.isEmpty(pageUtil.getCode()) || StringUtils.isEmpty(pageUtil.getClientId())){
             throw  new YJException(YJExceptionEnum.PARAM_ERROR);
         }
-        FrCard frCard = new FrCard();
-        frCard.setCustomerCode(pageUtil.getCode());
-        frCard.setClientId(pageUtil.getClientId());
-        frCard.setUsing(true);
+        FrCard frCard = pageUtil.getCondition();
+        if(frCard == null){
+            frCard = new FrCard();
+            frCard.setCustomerCode(pageUtil.getCode());
+            frCard.setClientId(pageUtil.getClientId());
+            frCard.setUsing(true);
+        }
         if(pageUtil.getType() != null ){
             frCard.setStatus(pageUtil.getType());
         }
-        List<FrCard> list = new ArrayList<>();
-        Map<String , Object> map1 = new HashMap<>();
-        Integer beOverdue = getNumCard(frCard.getClientId(),frCard.getCustomerCode(),31,true);
-        if(beOverdue == null){
-            beOverdue = 0;
+        List< Map<String,Object>> list = new ArrayList<>();
+        Map<String,Object> map1 = this.getNumCard(frCard.getClientId(),frCard.getCustomerCode(),31,false);
+        if(map1 == null){
+            map1 = new HashMap<>();
         }
-        map1.put("beOverdue",beOverdue);
         if(map != null ){
-            Page page = new Query<FrClient>(map).getPage();
+            Page page = new Query<FrCard>(map).getPage();
             //查询该会员卡列表总数据
-            list = baseMapper.queryUserCardList(page,frCard);
+//            list = baseMapper.queryUserCardList(page,frCard);
+            list = baseMapper.queryUserCardInfoList(page,frCard);
+            if(list != null && list.size() >0){
+                for(Map<String,Object> carMap:list){
+                    if(carMap != null){
+                        iFrCardOrderInfoService.getOrderNumInfo(carMap);
+                    }
+                }
+            }
             page.setRecords(list);
             map1.put("list",new PageUtils(page));
            return JsonResult.success(map1);
         }
-        list = baseMapper.queryUserCardList(frCard);
+        list = baseMapper.queryUserCardInfoList(frCard);
+        if(list != null && list.size() >0){
+            for(Map<String,Object> carMap:list){
+                if(carMap != null){
+                    iFrCardOrderInfoService.getOrderNumInfo(carMap);
+                }
+            }
+        }
         map1.put("list",list);
         return JsonResult.success(list);
     }
@@ -404,27 +419,14 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
                                   Map<String, String> mapS, Map<String, Integer> mapI) throws YJException {
         String orderSplitId = "",messFlag = "";
         Integer infoType = null;
-        //续卡  --开卡方式，是否更换卡
-        Integer cardOpening = null,replacementCard = null;
-        //开卡时间
-        String bindTime = "";
         if(mapS != null){
             //分期ID
             orderSplitId = mapS.get("orderSplitId");
             messFlag = mapS.get("messFlag");
-            bindTime = mapS.get("bindTime");
         }
         if(mapI != null){
             //操作的订单类型
             infoType = mapI.get("infoType");
-            mapS.put("oldCardId",frCard.getId());
-            //续卡初始化参数
-            if(CommonUtils.CARD_SUPPLY_RECORD_TYPE_2 == infoType){
-                cardOpening = mapI.get("cardOpening");
-                replacementCard = mapI.get("replacementCard");
-                //续卡状态，先保存旧卡号ID
-//                mapS.put("oldCardId",frCard.getId());
-            }
         }
         //如果协议规则，会员卡，会员卡订单未获取，返回
         if(frCardAgreement == null || frCard == null || frCardOrderInfo == null){
@@ -615,11 +617,9 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
                 frCard.setInvalidTime(serviceLisfe);
             }
         }
-        //续卡的话，--直接延续重置开卡时间
+        //续卡的话，--------会员卡状态固定未开卡
         if(CommonUtils.CARD_SUPPLY_RECORD_TYPE_2 == infoType){
-            if(StringUtils.isEmpty(bindTime)){
-                frCard.setBindTime(bindTime);
-            }
+            frCard.setStatus(CommonUtils.CARD_STATUS_4);
         }
         //如果协议编号ID为空就，检索协议编号
         if(StringUtils.isEmpty(frCardAgreement.getAgreementId())){
@@ -818,20 +818,19 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
      * @param CustomerCode
      * @return
      */
-    public Integer getNumCard(String clientId,String CustomerCode,Integer num,boolean isFlag){
-        //获取当前时间的前一个月
+    public Map<String,Object> getNumCard(String clientId,String CustomerCode,Integer num,boolean isFlag){
+//        获取当前时间+1个月后的时间
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String endTime = new StringBuffer(sdf.format(date)).append(" 23:59:59").toString();
-        String startTime = DateUtil.getBeforeDay(endTime,num,isFlag);
-
+        String startTime = new StringBuffer(sdf.format(date)).append(" 23:59:59").toString();
+        String endTime = DateUtil.getBeforeDay(startTime,num,isFlag);
         Map<String,Object> map1 = new HashMap<>();
         map1.put("endTime",endTime);
         map1.put("startTime",startTime);
         map1.put("clientId",clientId);
         map1.put("CustomerCode",CustomerCode);
-        Integer numCard = baseMapper.queryNumCard(map1);
-        return numCard;
+        Map<String,Object> countCard = baseMapper.queryNumCard(map1);
+        return countCard;
     }
 
 //===================================== 新添的以上未修改
@@ -938,5 +937,131 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             iFrClientPicService.insert(frClientPic);
         }
         return JsonResult.success(true);
+    }
+
+    @Override
+    public List<Map<String,Object>>  getClientCardList(String client, String code) throws YJException {
+        if(StringUtils.isEmpty(client) || StringUtils.isEmpty(code)){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("clientId",client);
+        map.put("CustomerCode",code);
+        List<Map<String,Object>> list = baseMapper.queryClientCardList(map);
+        if(list != null && list.size() >0){
+            for(Map<String,Object> map1 :list){
+                //设置使用范围，拼接字符串
+                Integer num = NumberUtilsTwo.getIntNum("countSd",map1);
+                boolean flag = true;
+                if( num != 1){
+                    map1.put("sdaduName","");
+                    flag = false;
+                }
+                if(flag){
+                    StringBuffer sdaduName = new StringBuffer(StringUtils.getStringObject("sdaduName",map1));
+                    if(!StringUtils.toIsEmpty(sdaduName.toString())){
+                        String shopName = StringUtils.getStringObject("shopName",map1);
+                        if(!StringUtils.toIsEmpty(shopName)){
+                            sdaduName.append("(").append(StringUtils.getStringObject("shopName",map1)).append(")");
+                        }
+                    }
+                    map1.put("sdaduName",sdaduName.toString());
+                }
+                //设置会员卡状态  --- 不是历史卡
+                Integer cardStat = NumberUtilsTwo.getIntNum("status",map1);
+                Integer type = CommonUtils.CARD_STATUS_0; //正常卡
+                //不是历史卡，不是冻结，停卡，待补余状态的卡  重新判断下卡状态
+                if(cardStat != CommonUtils.CARD_STATUS_6 && cardStat != CommonUtils.CARD_STATUS_5
+                        && cardStat != CommonUtils.CARD_STATUS_2  &&  cardStat != CommonUtils.CARD_STATUS_1){
+                    //开卡状态判断此会员卡是否过期？
+                    //根据开卡时间判断是否开卡
+                    String bindTime = StringUtils.getStringObject("bindTime",map1);
+                    if(StringUtils.toIsEmpty(bindTime)){
+                        cardStat = CommonUtils.CARD_STATUS_4;
+                        map1.put("status",cardStat);
+                        continue;
+                    }
+                    Date bindDate = DateUtils.getDataforString(bindTime,"yyyy-MM-dd HH:mm:ss");
+                    Date nowDa = new Date();
+                    //时间越大越靠后
+                    boolean isFlag = DateUtil.compareDate(bindDate,nowDa);
+                    //开卡时间大约现在时间，未开卡
+                    if(isFlag){
+                        cardStat = CommonUtils.CARD_STATUS_4;
+                        map1.put("status",cardStat);
+                        continue;
+                    }
+                    //失效时间
+                    String invalidTime = StringUtils.getStringObject("invalidTime",map1);
+                    Date endData = DateUtils.getDataforString(invalidTime,"yyyy-MM-dd HH:mm:ss");
+                    isFlag = DateUtil.compareDate(nowDa,endData);
+                    //现在时间大于结束时间，过期
+                    if(isFlag){
+                        cardStat = CommonUtils.CARD_STATUS_3;
+                        map1.put("status",cardStat);
+                        continue;
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 获取初始化时间卡的剩余权益
+     * @param type
+     * @param bindTime
+     * @param haveNum
+     * @return
+     */
+    @Override
+    public Double getHaveNumByType(Integer type, String bindTime,Double haveNum)throws YJException{
+        //初始化剩余权益
+        Double orderHaveNum = haveNum ;
+        if(CommonUtils.CARD_TYPE_1 == type){
+            //已开卡的时间卡才需要重新计算剩余权益
+            if(!StringUtils.toIsEmpty(bindTime)){
+                Date bindDate = DateUtils.getDataforString(bindTime,"yyyy-MM-dd HH:mm:ss");
+                Date nowDa = new Date();
+                boolean isFlag = DateUtil.compareDate(nowDa,bindDate);
+                // 现在时间大于开卡时间，开卡了
+                if(isFlag){
+                    String now = DateUtil.dateToString(new Date(),"yyyy-MM-dd");
+                    Integer  nowTime = DateUtil.daysBetweenT(bindTime,now);
+                    //获取会员卡剩余权益 - 已经使用的权益；
+                    orderHaveNum = orderHaveNum - nowTime;
+                    if(orderHaveNum < 0){
+                        orderHaveNum = 0.0;
+                    }
+                }
+            }
+        }
+        return orderHaveNum;
+    }
+
+    /**
+     * 会员卡状态的定时任务
+     * @throws YJException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateCardTime() throws YJException {
+        //根据开始停卡时间，-- 停卡状态是正常的 更新为停卡----会员卡停卡
+        //根据预计终止时间------停卡状态未停卡中的 --更新未终止，会员卡正常
+        iFrCardOrderStopService.updateCardStop();
+
+        //根据会员卡支付方式为定金，不是结款状态 --- 开卡时间加上补余期限，判断是否小于今天，是待补余状态
+        //根据会员卡支付方式为分期付款方式--未结款---支付期限小于今天的，待补余
+        //查询续卡的开卡时间是今天的，之前的会员卡更新为历史卡，新会员卡开卡，如果过是更换新卡，卡号注意变更
+        // 转移旧卡的剩余储值金额
+
+        //根据会员卡的失效时间，跟新会员卡的过期
+
+        //把会员卡开卡时间小于现在的未开卡的会员卡开卡
+        FrCard frCard = new FrCard();
+        frCard.setStatus(CommonUtils.CARD_STATUS_0);
+        Date date = new Date();
+        this.update(frCard,new EntityWrapper<FrCard>().where("is_using={0}",1).and("status={0}",CommonUtils.CARD_STATUS_4).and("bind_time <= {0}",date));
+
     }
 }

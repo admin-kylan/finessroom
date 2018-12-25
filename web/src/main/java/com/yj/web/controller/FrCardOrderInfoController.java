@@ -98,12 +98,29 @@ public class FrCardOrderInfoController {
      */
     @GetMapping("queryCardAndType")
     public JsonResult queryCardAndType(@RequestParam("cardId")String cardId, @RequestParam("code")String code,
-                                       @RequestParam("clientId")String clientId,HttpServletRequest request)throws YJException{
+                                        @RequestParam("clientId")String clientId,HttpServletRequest request)throws YJException{
         FrCardOrderInfo frCardOrderInfo = new FrCardOrderInfo();
         frCardOrderInfo.setClientId(clientId);
         frCardOrderInfo.setCardId(cardId);
         frCardOrderInfo.setCustomerCode(code);
         return JsonResult.success(frCardOrderInfoService.queryCardAndType(frCardOrderInfo));
     }
+
+    /**
+     * 根据会员卡号获取，会员订单信息  - APP
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getCardInfoByCardId")
+    public JsonResult getCardInfoByCardId(@RequestParam("cardId")String cardId, @RequestParam("code")String code,
+                                          @RequestParam("clientId")String clientId,HttpServletRequest request)throws  YJException{
+        FrCardOrderInfo frCardOrderInfo = new FrCardOrderInfo();
+        frCardOrderInfo.setClientId(clientId);
+        frCardOrderInfo.setCardId(cardId);
+        frCardOrderInfo.setCustomerCode(code);
+        return JsonResult.success(frCardOrderInfoService.getCardInfoByCardId(frCardOrderInfo));
+    }
+
+
 }
 

@@ -91,6 +91,26 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return arr[0]+"年 "+arr[1]+"月 "+arr[2].substring(0,2)+"日";
     }
 
+    /**
+     * 获取集合里的字符串
+     * @param key
+     * @param map
+     * @return
+     */
+    public static String getStringObject(String key,Map<String,Object> map){
+        String mess = "";
+        if(map != null){
+            Object str = map.get(key);
+            if(str != null){
+                mess = str.toString();
+            }
+        }
+        return  mess;
+    }
+
+    public static boolean toIsEmpty(String str){
+        return org.apache.commons.lang3.StringUtils.isEmpty(str);
+    }
 
 
 

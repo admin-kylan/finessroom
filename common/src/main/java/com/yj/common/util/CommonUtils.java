@@ -16,6 +16,7 @@ public  interface CommonUtils {
     static final Integer ORDER_TYPE_6 = 6;  //复核通过退款
     static final Integer ORDER_TYPE_7 = 7;  //审核通过转让
     static final Integer ORDER_TYPE_8 = 8;  //复核通过转让
+    static final Integer ORDER_TYPE_9 = 9;  //储值退全款
 
 //  审核状态 （0，待审核1，已审核，2，审核不通过）
     static final Integer ORDER_STATUS_0 = 0;  //待审核
@@ -131,4 +132,11 @@ public  interface CommonUtils {
     static final String STORAGE_PRICE = "all";  //储值退全款
     //上传的客户图片类型
     static final Integer PIC_TYPE_1 = 1;  //1、头像
+    //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+    static final Integer CARD_TYPE_1 = 1; //时间卡
+    static final Integer CARD_TYPE_2 = 2; //小时卡
+    static final Integer CARD_TYPE_3 = 3; //次卡
+    static final Integer CARD_TYPE_4 = 4; //储值卡
+    static final Integer CARD_TYPE_5 = 5; //充值卡
+    static final Integer CARD_TYPE_6 = 6; //折扣卡
 }

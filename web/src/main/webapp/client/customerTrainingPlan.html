@@ -26,34 +26,34 @@
                     <p class="line1">
                         <label>
                             <span>私教项目：</span>
-                            <input type="text"/>
+                            <input type="text" v-model="param.project"/>
                         </label>
                     </p>
                     <p class="line2">
                         <label>
                             <span>训练日期：</span>
-                            <input type="date"/>
+                            <input type="date" v-model="param.trainDate"/>
                         </label>
                         <label>
                             <span>训练时间：</span>
-                            <input type="time"/> ~
-                            <input type="time"/>
+                            <input type="time" v-model="param.trainStartDate"/> ~
+                            <input type="time" v-model="param.trainEndDate"/>
                         </label>
                     </p>
                     <p class="line3">
                         <label>
                             <span>课程详情：</span>
-                            <span class="toBlue" id="addClass">添加课程</span>
+                            <span class="toBlue" @click="addClass">添加课程</span>
                         </label>
                     </p>
                     <p class="line4">
                         <label>
                             <span>改进方案：</span>
-                            <textarea name="" rows="" cols=""></textarea>
+                            <textarea name="" rows="" cols="" v-model="param.improvementPlan"></textarea>
                         </label>
                     </p>
                     <p class="line5">
-                        <input type="submit" value="添加"/>
+                        <input type="submit" value="添加" @click="add"/>
                     </p>
                 </form>
             </fieldset>
@@ -75,19 +75,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item,index) in customerTable.list">
+                <tr v-for="(item,index) in customerTable.list" class="updateTr">
                     <td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
-                    <td>{{item.project}}</td>
-                    <td>{{item.trainDate}}</td>
-                    <td>{{item.trainStartDate}}</td>
-                    <td>{{item.trainEndDate}}</td>
-                    <td @click="course(item.frActions)">课程详情</td>
-                    <td>{{item.actualDate}}</td>
-                    <td>{{item.actualStartDate}}</td>
-                    <td>{{item.actualEndDate}}</td>
-                    <td>{{item.memberFeel}}</td>
-                    <td>{{item.coachSummary}}</td>
-                    <td><span>修改</span><span>删除</span></td>
+                    <td><input style="border:none" type="text" :value="item.project"/></td>
+                    <td><input style="border:none"  type="date" :value="formatDate(item.trainDate)"/></td>
+                    <td><input style="border:none"  type="time" :value="formatSeconds(item.trainStartDate)"/></td>
+                    <td><input style="border:none"  type="time" :value="formatSeconds(item.trainEndDate)"/></td>
+                    <td @click="course(item.frActions,index)">课程详情</td>
+                    <td><input style="border:none"  type="date" :value="formatDate(item.actualDate)"/></td>
+                    <td><input style="border:none"  type="time" :value="formatSeconds(item.actualStartDate)"/></td>
+                    <td><input style="border:none"  type="time" :value="formatSeconds(item.actualEndDate)"/></td>
+                    <td><input style="border:none" type="text" :value="item.memberFeel"/></td>
+                    <td><input style="border:none" type="text" :value="item.coachSummary"/></td>
+                    <input type="hidden" :value="item.id"/>
+                    <td><span @click="update(item.frActions,index)">修改</span><span>删除</span></td>
                 </tr>
                 <!--<tr>-->
                 <!--<td>2</td>-->
@@ -171,14 +172,15 @@
                     </thead>
                     <tbody>
                     <tr v-for="(item,index) in ActionInfo">
+                        <input type="hidden" :value="item.id">
                         <td>{{item.name}}</td>
-                        <td>二头肌杠铃举</td>
-                        <td><img src="../img/u2871.png" alt="" class="img-responsive"></td>
-                        <td>简单</td>
-                        <td>10</td>
-                        <td>5</td>
-                        <td>30</td>
-                        <td>注意节奏</td>
+                        <td>{{item.sname}}</td>
+                        <td><img :src="item.image" alt="" class="img-responsive"></td>
+                        <td>{{item.diff}}</td>
+                        <td>{{item.time}}</td>
+                        <td>{{item.strength}}</td>
+                        <td>{{item.count}}</td>
+                        <td>{{item.remark}}</td>
                         <td>
                             <span class="toBlue">修改</span>
                             <span class="noBg">删除</span>
@@ -205,41 +207,42 @@
                     <div class="content">
                         <div class="lef">
                             <ul class="ulUp">
-                                <li class="sup">
-                                    <input type="checkbox"/>动感单车
+                                <div v-for="(item,index) in PlanInfo">
+                                <li class="sup" style="cursor: default">
+                                    <input type="checkbox"/>{{item.name}}
                                 </li>
                                 <li class="sub">
                                     <ul class="ulDown">
-                                        <li><input type="checkbox"/>动感单车1</li>
-                                        <li><input type="checkbox"/>动感单车2</li>
-                                        <li><input type="checkbox"/>动感单车3</li>
+                                        <li style="cursor: pointer" v-for="list in item.frTrainingSeries"><input type="checkbox" />
+                                            <span  @click="getContentInfo(list.id)" >{{list.name}}</span></li>
                                     </ul>
                                 </li>
-                                <li class="sup">
-                                    <input type="checkbox"/>动感单车
-                                </li>
-                                <li class="sub">
-                                    <ul class="ulDown">
-                                        <li><input type="checkbox"/>动感单车1</li>
-                                        <li><input type="checkbox"/>动感单车2</li>
-                                        <li><input type="checkbox"/>动感单车3</li>
-                                    </ul>
-                                </li>
-                                <li class="sup">
-                                    <input type="checkbox"/>动感单车
-                                </li>
-                                <li class="sub">
-                                    <ul class="ulDown">
-                                        <li><input type="checkbox"/>动感单车1</li>
-                                        <li><input type="checkbox"/>动感单车2</li>
-                                        <li><input type="checkbox"/>动感单车3</li>
-                                    </ul>
-                                </li>
+                                </div>
+                                <!--<li class="sup">-->
+                                    <!--<input type="checkbox"/>动感单车-->
+                                <!--</li>-->
+                                <!--<li class="sub">-->
+                                    <!--<ul class="ulDown">-->
+                                        <!--<li><input type="checkbox"/>动感单车1</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车2</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车3</li>-->
+                                    <!--</ul>-->
+                                <!--</li>-->
+                                <!--<li class="sup">-->
+                                    <!--<input type="checkbox"/>动感单车-->
+                                <!--</li>-->
+                                <!--<li class="sub">-->
+                                    <!--<ul class="ulDown">-->
+                                        <!--<li><input type="checkbox"/>动感单车1</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车2</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车3</li>-->
+                                    <!--</ul>-->
+                                <!--</li>-->
                             </ul>
                         </div>
                         <div class="rig">
                             <p>
-                                <span>导入训练计划</span>
+                                <span @click="addPlan">导入训练计划</span>
                             </p>
                             <table border="1" bordercolor="#ccc">
                                 <thead>
@@ -255,66 +258,66 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>1</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
+                                <tr v-for="(item,index) in ContentInfo">
+                                    <td><input type="checkbox" v-model="ids" :value="item.id"/></td>
+                                    <td>{{index+1}}</td>
+                                    <td>{{item.sname}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.time}}</td>
+                                    <td>{{item.strength}}</td>
+                                    <td>{{item.count}}</td>
+                                    <td>{{item.remark}}</td>
                                 </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>2</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>3</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>4</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>5</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>6</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>2</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>3</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>4</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>6</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
                                 </tbody>
                             </table>
                         </div>
@@ -326,47 +329,49 @@
                     <div class="content">
                         <div class="lef">
                             <ul class="ulUp">
-                                <li class="sup">
-                                    <input type="checkbox"/>动感单车
-                                </li>
-                                <li class="sub">
-                                    <ul class="ulDown">
-                                        <li><input type="checkbox"/>动感单车1</li>
-                                        <li><input type="checkbox"/>动感单车2</li>
-                                        <li><input type="checkbox"/>动感单车3</li>
-                                    </ul>
-                                </li>
-                                <li class="sup">
-                                    <input type="checkbox"/>动感单车
-                                </li>
-                                <li class="sub">
-                                    <ul class="ulDown">
-                                        <li><input type="checkbox"/>动感单车1</li>
-                                        <li><input type="checkbox"/>动感单车2</li>
-                                        <li><input type="checkbox"/>动感单车3</li>
-                                    </ul>
-                                </li>
-                                <li class="sup">
-                                    <input type="checkbox"/>动感单车
-                                </li>
-                                <li class="sub">
-                                    <ul class="ulDown">
-                                        <li><input type="checkbox"/>动感单车1</li>
-                                        <li><input type="checkbox"/>动感单车2</li>
-                                        <li><input type="checkbox"/>动感单车3</li>
-                                    </ul>
-                                </li>
+                                <div v-for="(item,index) in SetMealInfo">
+                                    <li class="sup" style="cursor: default">
+                                        <input type="checkbox"/>{{item.name}}
+                                    </li>
+                                    <li class="sub">
+                                        <ul class="ulDown">
+                                            <li style="cursor: pointer" v-for="list in item.frTrainingSeries"><input type="checkbox" />
+                                                <span  @click="getSetMealContentInfo(list.id)" >{{list.name}}</span></li>
+                                        </ul>
+                                    </li>
+                                </div>
+                                <!--<li class="sup">-->
+                                    <!--<input type="checkbox"/>动感单车-->
+                                <!--</li>-->
+                                <!--<li class="sub">-->
+                                    <!--<ul class="ulDown">-->
+                                        <!--<li><input type="checkbox"/>动感单车1</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车2</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车3</li>-->
+                                    <!--</ul>-->
+                                <!--</li>-->
+                                <!--<li class="sup">-->
+                                    <!--<input type="checkbox"/>动感单车-->
+                                <!--</li>-->
+                                <!--<li class="sub">-->
+                                    <!--<ul class="ulDown">-->
+                                        <!--<li><input type="checkbox"/>动感单车1</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车2</li>-->
+                                        <!--<li><input type="checkbox"/>动感单车3</li>-->
+                                    <!--</ul>-->
+                                <!--</li>-->
                             </ul>
                         </div>
                         <div class="rig">
                             <p>
-                                <span>导入训练计划</span>
+                                <span>导入训练计划套餐</span>
                             </p>
                             <table border="1" bordercolor="#ccc">
                                 <thead>
                                 <tr>
                                     <td><input type="checkbox"/></td>
                                     <td>序号</td>
+                                    <td>训练时间</td>
                                     <td>课程类型</td>
                                     <td>内容类型</td>
                                     <td>时间（分）</td>
@@ -376,66 +381,67 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr v-for="(item,index) in SetMealContentInfo">
                                     <td><input type="checkbox"/></td>
-                                    <td>1</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
+                                    <td>{{index+1}}</td>
+                                    <td>{{item.traningTime}}</td>
+                                    <td>{{item.sname}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.time}}</td>
+                                    <td>{{item.strength}}</td>
+                                    <td>{{item.count}}</td>
+                                    <td>{{item.remark}}</td>
                                 </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>2</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>3</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>4</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>5</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>6</td>
-                                    <td>脚部肌群</td>
-                                    <td>45°倒登机</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                    <td></td>
-                                </tr>
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>2</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>3</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>4</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td><input type="checkbox"/></td>-->
+                                    <!--<td>6</td>-->
+                                    <!--<td>脚部肌群</td>-->
+                                    <!--<td>45°倒登机</td>-->
+                                    <!--<td>10</td>-->
+                                    <!--<td>5</td>-->
+                                    <!--<td>30</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
                                 </tbody>
                             </table>
                         </div>

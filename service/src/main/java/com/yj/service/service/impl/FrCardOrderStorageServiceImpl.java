@@ -53,13 +53,23 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
                 || StringUtils.isEmpty(frCardOrderStorage.getClientId())){
             return  JsonResult.failMessage("会员卡ID，客户代码，客户Id不能为空");
         }
+        Double orderPrice = 0.0,storePrice = 0.0,ticketPrice = 0.0,givePrice = 0.0;
         //统计剩余的储值金额
-        Double orderPrice = this.getOrderPrice(frCardOrderStorage);
+        Map<String,Double> allStroePrice =  this.getCardStoragePrice(frCardOrderStorage);
+        if(allStroePrice != null){
+            orderPrice = NumberUtilsTwo.getDoubleNum("orderPrice",allStroePrice);
+            storePrice = NumberUtilsTwo.getDoubleNum("storePrice",allStroePrice);
+            ticketPrice = NumberUtilsTwo.getDoubleNum("ticketPrice",allStroePrice);
+            givePrice = NumberUtilsTwo.getDoubleNum("givePrice",allStroePrice);
+        }
         //获取储值列表
         List<Map<String,Object>> list = baseMapper.queryStorageCardLis(frCardOrderStorage);
         Map<String,Object> map = new HashMap<>();
         map.put("list",list);
         map.put("orderPrice",orderPrice);
+        map.put("storePrice",storePrice);
+        map.put("ticketPrice",ticketPrice);
+        map.put("givePrice",givePrice);
         return JsonResult.success(map);
     }
 
@@ -232,7 +242,8 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
             }
         }
         //是退款冲销
-        if(CommonUtils.ORDER_TYPE_3 == storageStatus || CommonUtils.ORDER_TYPE_5 == storageStatus || CommonUtils.ORDER_TYPE_6 == storageStatus){
+        if(CommonUtils.ORDER_TYPE_3 == storageStatus || CommonUtils.ORDER_TYPE_5 == storageStatus
+                || CommonUtils.ORDER_TYPE_6 == storageStatus || CommonUtils.ORDER_TYPE_9 == storageStatus ){
             if( CommonUtils.ORDER_TYPE_5 == storageStatus){
                 status = CommonUtils.ORDER_STATUS_1;
             }
@@ -241,6 +252,11 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
                 auditStatus = CommonUtils.AUDIT_ORDER_STATUS_1;
             }
             storageStatusT  = CommonUtils.ORDER_TYPE_1;
+            if( CommonUtils.ORDER_TYPE_9 == storageStatus){
+                status = CommonUtils.ORDER_STATUS_1;
+                auditStatus = CommonUtils.AUDIT_ORDER_STATUS_1;
+                storageStatusT  = CommonUtils.ORDER_TYPE_2;
+            }
             orderStatusPric = false;
         }
         toUpdate = this.getCleanOrderStorage(isFlag,orderStatusPric,storageStatusT,frCardOrderDatail,frCardOrderStorage,status,auditStatus);
@@ -493,6 +509,21 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
             orderPrice = 0.0;
         }
         return  orderPrice;
+    }
+
+    /**
+     * 统计储值金额数据，及获取剩余储值金额
+     * @return
+     */
+    public Map<String,Double> getCardStoragePrice(FrCardOrderStorage frCardOrderStorage)throws YJException{
+        if(frCardOrderStorage == null){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        if(StringUtils.toIsEmpty(frCardOrderStorage.getCustomerCode()) || StringUtils.toIsEmpty(frCardOrderStorage.getCardId())
+                || StringUtils.toIsEmpty(frCardOrderStorage.getClientId())){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        return  baseMapper.getCardStoragePrice(frCardOrderStorage);
     }
 
     /**
@@ -789,7 +820,7 @@ public class FrCardOrderStorageServiceImpl extends BaseServiceImpl<FrCardOrderSt
         frCardOrderStorage.setOrderNo(orderNo);
         frCardOrderStorage.setSurplusPrice(havePrice);
         //操作此退款的只能是审核复核通过的订单
-        frCardOrderStorage.setStorageStatus(CommonUtils.ORDER_TYPE_6);
+        frCardOrderStorage.setStorageStatus(CommonUtils.ORDER_TYPE_9);
         frCardOrderStorage.setTotalPrice(allPrice);
         frCardOrderStorage.setStorePrice(allPrice);
         frCardOrderStorage.setStatus(CommonUtils.ORDER_STATUS_0);

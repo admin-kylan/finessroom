@@ -125,17 +125,7 @@ public class FrCardController {
      */
     @GetMapping("/queryUserCardList")
     public JsonResult queryUserCardList(PageUtil<FrCard> pageUtil,HttpServletRequest request) throws YJException{
-        if(StringUtils.isEmpty(pageUtil.getClientId())){
-            throw new YJException(YJExceptionEnum.CLIENTID_NOT_FOUND);
-        }
-        String code = pageUtil.getCode();
-        if(StringUtils.isEmpty(code)){
-            code = CookieUtils.getCookieValue(request, "code", true);
-        }
-        if(StringUtils.isEmpty(code)){
-            throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
-        }
-        pageUtil.setCode(code);
+        this.toVerificationPage(pageUtil,request);
         return service.queryUserCardList(pageUtil);
     }
 
@@ -199,18 +189,15 @@ public class FrCardController {
 
 
     @PostMapping("queryByFrCardList")
-    public JsonResult queryByFrCardList(FrCard frCard,HttpServletRequest request)throws YJException{
-        if(frCard == null){
-            throw  new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
-        }
-        if(StringUtils.isEmpty(frCard.getClientId())){
-            throw  new YJException(YJExceptionEnum.CLIENTID_NOT_FOUND);
-        }
-        if(frCard.getUsing() == null ){
-            frCard.setUsing(true);
-        }
-        frCard.setCustomerCode(this.getFlageParemt(frCard.getCustomerCode(),request));
-        return service.queryByFrCardList(frCard);
+    public JsonResult queryByFrCardList(PageUtil<FrCard> pageUtil,HttpServletRequest request)throws YJException{
+        this.toVerificationPage(pageUtil,request);
+        FrCard frCard  = new FrCard();
+        frCard.setCustomerCode(pageUtil.getCode());
+        frCard.setClientId(pageUtil.getClientId());
+        frCard.setUsing(true);
+        //随机定义的一个变量
+        frCard.setStatus(100);
+        return service.queryUserCardList(pageUtil);
     }
 
 
@@ -367,5 +354,38 @@ public class FrCardController {
         return  service.addSaveCustomer(frClient,frCard,frCardOrderInfo,frCardOrderPayModes,frCardOrderAllotSetList,mapS,mapI);
     }
 
+
+    /**
+     * 根据用户获取所有会员卡信息，App
+     * @param clientId
+     * @param code
+     * @param request
+     * @return
+     */
+    @GetMapping("/getClientCardList")
+    public JsonResult getClientCardList(@RequestParam("clientId")String clientId,@RequestParam("code")String code,HttpServletRequest request)throws YJException{
+        return JsonResult.success(service.getClientCardList(clientId,code));
+    }
+
+
+    /**
+     * 验证数据
+     * @param pageUtil
+     * @param request
+     * @throws YJException
+     */
+    public void toVerificationPage(PageUtil<FrCard> pageUtil,HttpServletRequest request)throws YJException{
+        if(StringUtils.isEmpty(pageUtil.getClientId())){
+            throw new YJException(YJExceptionEnum.CLIENTID_NOT_FOUND);
+        }
+        String code = pageUtil.getCode();
+        if(StringUtils.isEmpty(code)){
+            code = CookieUtils.getCookieValue(request, "code", true);
+        }
+        if(StringUtils.isEmpty(code)){
+            throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
+        }
+        pageUtil.setCode(code);
+    }
 }
 

@@ -311,11 +311,35 @@ const ecapp = new Vue({
             }
 
             
-        }
+        },
+        // initAppText:function(){
+        //     var clientId = "5fdfe5c3e3a1537";
+        //     var code = "003";
+        //     var cardId = "7d02bf6d2df47915";
+        //     var data = {
+        //         clientId: clientId,
+        //         code: code,
+        //         cardId:cardId,
+        //     }
+        //     var mess = '/frCardOrderInfo/getCardInfoByCardId';
+        //     var url = $.stringFormat('{0}'+mess,$.cookie('url'));
+        //
+        //     console.log(url+'?clientId='+clientId+'&code='+code+'&cardId='+cardId);
+        //     console.log(data);
+        //     $.get(url,data,function(res){
+        //         if(res.code=='200'){
+        //             console.log("测试App接口数据=================start");
+        //             console.log(res);
+        //             console.log("测试App接口数据=================end");
+        //         }else {
+        //             alert(res.msg)
+        //         }
+        //
+        //     }) ;
+        // }
 
     }
 })
-
 
 // 初始化加载中插件
 Loading.prototype.init();
@@ -325,6 +349,9 @@ ecapp.initlevels();
 ecapp.initExistenceStat();
 //初始化现有客户列表
 ecapp.initExistenceList({page:ecapp.$data.existence.currPage,limit:ecapp.$data.existence.pageSize});
+
+//测试App接口
+// ecapp.initAppText();
 
 
 //初始化:开始日期

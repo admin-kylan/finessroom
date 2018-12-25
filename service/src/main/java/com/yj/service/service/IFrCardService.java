@@ -117,5 +117,22 @@ public interface IFrCardService extends BaseService<FrCard> {
                                List<FrCardOrderAllotSet> frCardOrderAllotSetList,
                                Map<String,String> mapS,Map<String,Integer> mapI)throws YJException;
 
+    List<Map<String,Object>> getClientCardList(String client,String code)throws YJException;
+
+
+    /**
+     * 计算时间卡的剩余权益
+     * @param type  会员卡类型
+     * @param bindTime   会员卡开卡时间
+     * @param haveNum    会员卡剩余权益
+     * @return
+     */
+    Double getHaveNumByType(Integer type, String bindTime,Double haveNum)throws YJException;
+
+    /**
+     * 更新会员卡状态的定时任务
+     * @throws YJException
+     */
+    void updateCardTime()throws YJException;
 }
 

@@ -29,7 +29,23 @@
 	</select>
 
     <select id="getAction" resultType="java.util.Map" parameterType="java.lang.String">
-        select *,(select name from fr_action_series fas where fas.id=fa.series_id)sname
-         from fr_action fa where id=#{aid}
+            SELECT
+            fa.name,
+            fa.diff,
+            fa.image,
+            ftc.time,
+            ftc.strength,
+            ftc.count,
+            ftc.remark,
+            ftc.id,
+            ( SELECT name FROM fr_action_series fas WHERE fas.id = fa.series_id ) sname
+        FROM
+            fr_action fa
+            JOIN fr_traning_class ftc ON ftc.action_id = fa.id
+            AND ftc.id = #{cid}
+            AND ftc.own_type = 1
+            AND ftc.is_using = 1
+        WHERE
+            fa.is_using =1
     </select>
 </mapper>

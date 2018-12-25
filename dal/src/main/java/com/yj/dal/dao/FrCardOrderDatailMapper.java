@@ -31,5 +31,5 @@ public interface FrCardOrderDatailMapper extends BaseMapper<FrCardOrderDatail> {
 
     FrCardOrderDatail queryTopOne(FrCardOrderDatail frCardOrderDatail);
 
-    Map<String,Double> getAmtByCardId(FrCardOrderDatail frCardOrderDatail);
+    Map<String,Object> getAmtByCardId(FrCardOrderDatail frCardOrderDatail);
 }

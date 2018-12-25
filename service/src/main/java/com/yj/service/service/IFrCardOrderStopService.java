@@ -27,4 +27,10 @@ public interface IFrCardOrderStopService extends BaseService<FrCardOrderStop> {
     JsonResult toUpdateStopType(FrCardOrderStop frCardOrderStop,String shopId)throws YJException;
 
     JsonResult toStopTerminationOK (FrCardOrderStop frCardOrderStop,String shopId)throws YJException;
+
+    /**
+     * 更新停卡状态---定时任务
+     * @throws YJException
+     */
+    void updateCardStop()throws YJException;
 }

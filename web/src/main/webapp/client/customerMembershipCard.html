@@ -8,6 +8,7 @@
     <!-- <link rel="stylesheet" href="../css/base.css" /> -->
     <link rel="stylesheet" href="../css/skin/jedate.css"/>
     <link rel="stylesheet" href="../css/combobox.css"/>
+    <link rel="stylesheet" href="../gym/css/common.css"/>
     <link rel="stylesheet" href="../css/newCustomers.css"/>
     <link rel="stylesheet" href="../css/myPagination.css"/>
     <link rel="stylesheet" href="../css/customerMembershipCard.css"/>
@@ -46,11 +47,11 @@
                             <div class="tabW_top_left2">
                                 <strong>会员卡信息</strong>
                                         会员卡数量: <span>{{loadData0.count}}</span>
-                                正常会员卡:<span>0</span>
+                                正常会员卡:<span>{{loadData0.normalCard}}</span>
                                 即将过期会员卡:<span>{{loadData0.beOverdue}}</span>
-                                未开卡会员卡: <span>0</span>
-                                停卡会员卡:<span>0</span>
-                                历史会员卡:<span>0</span>
+                                未开卡会员卡: <span>{{loadData0.unOpenedCard}}</span>
+                                停卡会员卡:<span>{{loadData0.stopCard}}</span>
+                                历史会员卡:<span>{{loadData0.historyCard}}</span>
                             </div>
                             <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
                                 <thead>
@@ -83,26 +84,27 @@
                                     <td class="toblue"><a href="javascript:;" @click="carddetails(item)" class="toblue">{{item.cardTypeName}}</a></td>
                                     <td class="toceng">{{item.cardNo}}</td>
                                     <td>{{item.externalNo}}</td>
-                                    <td><strong>{{item.b_needPrice}}</strong></td>
+                                    <td><strong>{{item.needPrice}}</strong></td>
                                     <td>
                                         <strong v-if="item.status == 6">0.00</strong>
-                                        <strong v-else>{{((item.b_needPrice/(item.b_buyRightsNum+item.b_giveRightsNum))*item.orderRightsNum).toFixed(2)}}</strong>
+                                        <strong v-else>{{item.cardHavePrice|toManey}}</strong>
                                     </td>
                                     <td class="tored">
                                         <strong v-if="item.status == 6">0</strong>
-                                        <strong v-else>{{item.orderRightsNum}}</strong>
+                                        <strong v-else>{{item.orderNum}}</strong>
                                     </td>
                                     <td>{{item.createTime|formatDate}}</td>
                                     <td> {{item.bindTime}}</td>
                                     <td> {{item.bindTime== null? '':item.invalidTime}}</td>
                                     <td><strong>{{item.saleName}}</strong></td>
                                     <td class="togreen">
-                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status">{{items.lav}}</span>
+                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status" @click="openCard(item)">{{items.lav}}</span>
                                     </td>
                                     <td class="toshallow" >
-                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.b_status">{{items.lav}}</span>
+                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.InfoStatus">{{items.lav}}</span>
                                     </td>
-                                    <td class="toblue"><span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.b_auditStatus">{{items.lav}}</span>
+                                    <td class="toblue">
+                                        <span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.auditStatus">{{items.lav}}</span>
                                     </td>
                                     <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
                                     <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
@@ -464,7 +466,7 @@
 										<option>请选择</option>
                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
                                                 :cardNo="item.cardNo" :status="item.a_status" :orderState="item.orderState">
-											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                          </option>
 									</select>
 								</span>
@@ -530,7 +532,10 @@
                                     <tr v-for="(item,index) in loadData2.continuedCardList" :value="item.id">
                                         <td>{{index+1}}</td>
                                         <td>{{item.createTime|formatDate(item.createTime,true)}}</td>
-                                        <td>{{item.cardOpening}}</td>
+                                        <td>
+                                            <span v-for="opening in parameterList.cardOpening" v-if="opening.vue == item.cardOpening">{{opening.lav}}</span>
+                                            <!--{{item.cardOpening}}-->
+                                        </td>
                                         <td>{{item.cardFlag}}</td>
                                         <td class="tored">{{item.cardName}}</td>
                                         <td>{{item.supplyRemarks}}</td>
@@ -565,8 +570,8 @@
                                        	<option>请选择</option>
                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo"
                                                 :status="item.a_status" :orderState="item.orderState" :type="item.type" :shopName="item.shopName"
-                                                :orderRightsNum = "item.orderRightsNum" >
-											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+                                                :orderRightsNum = "item.orderNum" >
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                          </option>
                                     </select>
                                 </span>
@@ -808,7 +813,7 @@
                                         <option>请选择</option>
                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
                                                 :cardNo="item.cardNo" :status="item.a_status">
-											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                         </option>
                                     </select>
                                 </span>
@@ -1113,7 +1118,7 @@
 											<option>请选择</option>
 											<option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
                                                     :cardNo="item.cardNo" :status="item.a_status">
-											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                          </option>
 									   </select>
 									</span>
@@ -1253,7 +1258,7 @@
                                      <select name="1" id="storageCard" @change="getStorageCardList">
                                          <option>请选择</option>
                                          <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">
-											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                          </option>
 								    </select>
                                 </span>
@@ -1396,9 +1401,9 @@
                                         </div>
                                         <div class="StopCard_footer">
                                             <div class="transferCard_footer_top">
-                                                <span>储值金额：<strong>50.00</strong>元 </span>
-                                                <span>票券抵扣：<strong>50.00</strong>元 </span>
-                                                <span>赠送金额：<strong>50.00</strong>元 </span>
+                                                <span>储值金额：<strong>{{loadData6.countPrice.storePrice|toManey}}</strong>元 </span>
+                                                <span>票券抵扣：<strong>{{loadData6.countPrice.ticketPrice|toManey}}</strong>元 </span>
+                                                <span>赠送金额：<strong>{{loadData6.countPrice.givePrice|toManey}}</strong>元 </span>
                                                 <input type="button" value="储值退款" @click="getReturnStorage" >
                                             </div>
                                             <table class="table table-hover table-bordered">
@@ -1525,7 +1530,7 @@
                                            <option>请选择</option>
                                            <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
                                                    :cardNo="item.cardNo" :status="item.a_status">
-											    归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；</option>
+											    归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；</option>
 									   </select>
 								</span>
                             </div>
@@ -1664,7 +1669,7 @@
 									<span>选择会员卡：</span>
 									   <select name="1" id="complementCard" @change="getComplementCardList">
 											 <option>请选择</option>
-                                             <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；</option>
+                                             <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；</option>
 									   </select>
 								</span>
                             </div>
@@ -1923,7 +1928,7 @@
                                     <select name="1" id="cardtTransfer" @change="getTransferCardList">
                                         <option>请选择</option>
                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">
-											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                          </option>
                                     </select>
                                 </span>
@@ -2093,7 +2098,7 @@
 														<select name="1" id="blackCard" @change="getBlackCardOne">
                                                             <option>请选择</option>
                                                             <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId" :cardNo="item.cardNo" :status="item.a_status">
-										                      	归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderRightsNum}}；卡状态：{{item.a_status}}；
+										                      	归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
                                                             </option>
 									                    </select>
 													</span>
@@ -2358,7 +2363,7 @@
                                 <td class='col-red'>{{item.cardTypeName}}</td>
                                 <td>{{item.bindTime}}</td>
                                 <td>{{item.invalidTime|formatDate}}</td>
-                                <td>{{item.orderRightsNum}}</td>
+                                <td>{{item.orderNum}}</td>
                                 <td>{{item.orderPrice}}</td>
                                 <td>{{item.a_status}}</td>
                             </tr>
@@ -2371,7 +2376,168 @@
         </div>
     </div>
 </div>
-
+<!--2年卡·开卡-->
+<div class="modal fade modal-style year2-modal" tabindex="-1" id="modal4" role="dialog" data-backdrop="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #fff;">&times;</span></button>
+        <h4 class="modal-title">2年卡·开卡</h4>
+      </div>
+      <div class="modal-body">
+      		<fieldset class="fieldset-info" style="border-color: #090;">
+				<legend style="color: #000;">权益设置</legend>
+				<div class="fieldset-content" style="padding-right: 20px;">
+					<div class="row">
+						<div class="col-sm-6">
+							<span class="red">*</span>开卡时间
+							<input class="form-control date-form-control jeinput" id="datetimepicker1" placeholder="年\月\日" readonly />
+						</div>
+						<div class="col-sm-6">
+							<span class="red">*</span>失效时间
+							<input class="form-control date-form-control jeinput" id="datetimepicker2" placeholder="年\月\日" readonly />
+						</div>
+					</div>
+					<p class="fieldset-p">可停卡次数：5次，每次时长：5天</p>
+					<p class="fieldset-p mb10">服务角色选择：</p>
+					<div class="row1 clearfix">
+						<div class="col-sm-6 p0">
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 p0">
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+							<div class="flex-box">
+								<div class="w100 text-center">销售人员</div>
+								<div class="flex-box-item">
+									<select class="form-control">
+										<option selected="selected" disabled="disabled">请选择销售人员</option>
+										<option>销售人员1</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<div class="flex-box flex-start">
+				<div>上传图片：</div>
+				<div class="flex-box-item">
+					<ul class="upload-list clearfix">
+						<li>
+							<img src="../img/u2871.png" />
+						</li>
+						<li>
+							<img src="../gym/img/addImg.png"/>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<p class="fieldset-p">操作人：<strong>sddfsd</strong></p>
+      </div>
+  	  <div class="modal-footer">
+        <button type="button" class="btn btn-primary">开卡</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->	
 <div class="TKYY-modal">
     <h5 class="TKYY-title">停卡原因</h5>
     <div class="TKYY-con">
@@ -2394,8 +2560,23 @@
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/jquery-confirm.js"></script>
 <script src="customerMembershipCard.js"></script>
+<link type="text/css" rel="stylesheet" href="../css/lq.datetimepick.css" />
+<script src="../js/selectUi.js"></script>
+<script src="../js/lq.datetimepick.js"></script>
 
 <script>
+    // $('.year2-modal').modal('show');
+    // $("#datetimepicker1,#datetimepicker2").on("click",function(e){
+    //     e.stopPropagation();
+    //     $(this).lqdatetimepicker({
+    //         css : 'datetime-day',
+    //         dateType : 'D',
+    //         selectback : function(){
+    //
+    //         }
+    //     });
+    // })
+
     Loading.prototype.init();
     customerMembershipCard.init();
     $('body').on('click', '.showAllTable-btn', function () {

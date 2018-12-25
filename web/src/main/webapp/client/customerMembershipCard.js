@@ -236,16 +236,20 @@ var customerMembershipCard = new Vue({
                 {"vue":6,"lav":"已退款","cla":"toyin"},
                 {"vue":7,"lav":"已转让","cla":"toyin"},
                 {"vue":8,"lav":"已转让","cla":"toyin"},
+                {"vue":9,"lav":"退全款","cla":"toyin"},
             ],
             sexList:[
                 {"vue":0,"lav":"男"},
                 {"vue":1,"lav":"女"},
             ],
+            cardOpening:[
+                {"vue":false,"lav":"直接延续"},
+                {"vue":true,"lav":"另行开卡"},
+            ],
         },
 //      后期可动态从字典表获取赋值参数--end
         loadData0:{
             cardList:[],            //会员卡列表
-            count:'',        //会员卡数量
             cardFlag:'',     //卡系列
             cardTypeName:'', //卡系列名称
             status:'',        //卡状态
@@ -269,6 +273,12 @@ var customerMembershipCard = new Vue({
             userPhone:'',       //使用者联系方式
             userPasswd:'',      //使用密码
             note:'',             //备注
+            count:'',            //会员卡数量
+            beOverdue:0,        //即将过期会员卡
+            normalCard:0,       //正常会员卡
+            unOpenedCard:0,     //未开卡会员卡
+            stopCard:0,         //停卡会员卡
+            historyCard:0,      //历史会员卡
         },
         loadData1:{
             shopList:[],//销售门店列表
@@ -416,6 +426,11 @@ var customerMembershipCard = new Vue({
                 givePhone:'',//转让人手机
                 giveUserId:'',//转让人客户id
                 giveCardId:'',//转让人的会员卡ID
+            },
+            countPrice:{    //存放查询出来的统计数据
+                storePrice:0,   //储值总金额
+                ticketPrice:0,  //票卷抵扣总金额
+                givePrice:0,    //赠送的总金额
             },
         },
         loadData7:{
@@ -582,6 +597,16 @@ var customerMembershipCard = new Vue({
             //获取会员卡信息列表----根据clientId
             var that = this;
             that.getCardUserList(1, 10, that.clientId);
+            // 初始化: 初始化绑定时间
+            setTimeout(function () {
+                jeDate('.jeinput', {
+                    format: "YYYY-MM-DD hh:mm:ss",
+                    minDate: getNowTime(),
+                    donefun: function (obj) {
+                        that.loadData1.cardInfoMap.bindTime = obj.val;
+                    }
+                });
+            }, 50);
         },
         //新购
         Load1: function () {
@@ -595,7 +620,7 @@ var customerMembershipCard = new Vue({
                        that.loadData1.cardInfoMap.bindTime = obj.val;
                     }
                 });
-            }, 50)
+            }, 50);
             $('#NewPurchase').show().siblings().hide();
             that.initLoad1();
             that.getMarketShopList();
@@ -630,6 +655,7 @@ var customerMembershipCard = new Vue({
         // 储值
         Load6: function () {
             var that = this;
+            that.initGetClient();
             that.initGetOptionsCard();
         },
         // 子卡
@@ -649,6 +675,7 @@ var customerMembershipCard = new Vue({
         // 转让
         Load9: function () {
             var that = this;
+            that.initGetClient();
             that.initGetOptionsCard();
             that.getMarketShopPeople($.cookie("shopid"), that);
         },
@@ -659,6 +686,12 @@ var customerMembershipCard = new Vue({
             that.getBlackCardList();
         },
 // ======================================
+        initGetClient:function(){
+          var that = this;
+          that.clientUserName = window.parent.document.getElementById("clientUserName").innerText;
+          that.clientPhone = window.parent.document.getElementById("clientPhone").innerText;
+          that.clientSet = window.parent.document.getElementById("clientSet").innerText;
+        },
         //初始化选择会员卡
         initGetOptionsCard: function () {
             var that = this;
@@ -1101,15 +1134,16 @@ var customerMembershipCard = new Vue({
             }
             var url = $.stringFormat('{0}/frCard/queryByFrCardList', $.cookie('url'));
             $.post(url, {
-                    clientId: that.catcherClientId,
-                    CustomerCode: that.code,
-                    isUsing: true
+                    page: -1,
+                    rows: -1,
+                    clientId: that.clientId,
+                    code: that.code,
                 },
                 function (res) {
                     if (res.code == '200') {
                         console.log("获取客户会员卡信息==========================================");
                         console.log(res);
-                        that.optionClientCardList = res.data;
+                        that.optionClientCardList =  res.data;
                         if(that.optionClientCardList.length > 0){
                             $("#clientCardList").show();
                         }
@@ -1212,7 +1246,12 @@ var customerMembershipCard = new Vue({
                             that.PaginationName = "getCardUserList";
                             that.getPaginationPage(cardList);
                         }
+                        that.loadData0.count = that.getParemtDate(res.data.cardAll, 0);
                         that.loadData0.beOverdue = that.getParemtDate(res.data.beOverdue, 0);
+                        that.loadData0.normalCard = that.getParemtDate(res.data.normalCard, 0);
+                        that.loadData0.unOpenedCard = that.getParemtDate(res.data.unOpenedCard, 0);
+                        that.loadData0.stopCard = that.getParemtDate(res.data.stopCard, 0);
+                        that.loadData0.historyCard = that.getParemtDate(res.data.historyCard, 0);
                     } else {
                         $.alert(res.msg)
                     }
@@ -1394,13 +1433,16 @@ var customerMembershipCard = new Vue({
             var that = this;
             var url = $.stringFormat('{0}/frCard/queryByFrCardList', $.cookie('url'));
             $.post(url, {
+                    page: -1,
+                    rows: -1,
                     clientId: that.clientId,
-                    CustomerCode: that.code,
-                    isUsing: true
+                    code: that.code,
                 },
                 function (res) {
                     if (res.code == '200') {
-                        that.optionCardLis = res.data;
+                        console.log("获取会员卡选择信息列表================================================");
+                        console.log(res);
+                        that.optionCardLis = res.data
                     } else {
                         $.alert(res.msg)
                     }
@@ -2471,8 +2513,10 @@ var customerMembershipCard = new Vue({
             }, function (res) {
                 if (res.code == '200') {
                     console.log(res);
-                    var orderPrice = res.data.orderPrice;
-                    that.loadData6.orderPrice = that.getParemtDate(orderPrice, 0);
+                    that.loadData6.orderPrice = that.getParemtDate( res.data.orderPrice, 0);
+                    that.loadData6.countPrice.storePrice = that.getParemtDate( res.data.storePrice, 0);
+                    that.loadData6.countPrice.ticketPrice = that.getParemtDate( res.data.ticketPrice, 0);
+                    that.loadData6.countPrice.givePrice = that.getParemtDate( res.data.givePrice, 0);
                     that.loadData6.storageCardList = res.data.list;
                 } else {
                     $.alert(res.msg);
@@ -3759,6 +3803,7 @@ var customerMembershipCard = new Vue({
             });
 
         },
+        //获取可退的全部储值金额
         getReturnStorage:function(){
             var that = this;
             if(!that.cardId){
@@ -3833,6 +3878,12 @@ var customerMembershipCard = new Vue({
                 }
             }
         },
-
+        //开卡弹窗
+        openCard:function(obj){
+            if(!obj){return ;}
+            var status = obj.status;
+            if(status != 4){ return ;}
+            $('.year2-modal').modal('show');
+        },
     },
 });

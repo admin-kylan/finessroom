@@ -15,5 +15,5 @@ import java.util.Map;
  */
 public interface FrActionMapper extends BaseMapper<FrAction> {
 
-    Map<String,Object> getAction(String aid);
+    Map<String,Object> getAction(String cid);
 }

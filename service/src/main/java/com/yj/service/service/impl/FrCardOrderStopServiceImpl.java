@@ -544,4 +544,13 @@ public class FrCardOrderStopServiceImpl extends BaseServiceImpl<FrCardOrderStopM
                 .and("card_id={0}",frCardOrderStop1.getCardId()).and("client_id={0}",frCardOrderStop1.getClientId()));
         return JsonResult.success(true);
     }
+
+    //根据开始停卡时间，-- 停卡状态是正常的 更新为停卡----会员卡停卡
+    //根据预计终止时间------停卡状态未停卡中的 --更新未终止，会员卡正常
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateCardStop() throws YJException {
+        //查询开始时间小于现在的，停卡状态
+
+    }
 }

@@ -234,7 +234,16 @@
             let date = new Date();
             this.formData.beginDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             this.formData.endDate = this.formData.beginDate;
-
+            //获取会员卡的列表，计算日期
+            //queryByFrCardList
+//            axiosPostParams(COURSE_URL.queryByFrCardList, param, (response) => {
+//                if (response.code === '200') {
+//                    this.showPrompt(response.data, 'verify-success')
+//                } else {
+//                    this.showPrompt(response.msg, 'verify-error')
+//                }
+//
+//            });
         },
         mounted(){ //初始化
             //test

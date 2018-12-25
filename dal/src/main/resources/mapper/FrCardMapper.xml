@@ -106,10 +106,10 @@
         <if test="clientId != null and clientId != '' ">
             AND a.client_id = #{clientId}
         </if>
-        <if test="status != null and status != ''">
+        <if test="status != null and status != '' and status != 100">
             AND  a.status = #{status}
         </if>
-        <if test="isUsing==true">
+        <if test="isUsing == true">
             AND  a.is_using = 1
         </if>
     </sql>
@@ -265,13 +265,92 @@
         ORDER BY  a.update_time DESC
     </select>
 
-    <select id="queryNumCard" resultType="java.lang.Integer">
-        SELECT COUNT(1)
-        FROM fr_card a
-        WHERE a.is_using = 1
-        AND  a.status != 4   AND  a.status != 6   AND  a.status != 3
-        AND  a.CustomerCode = #{CustomerCode}
-        AND  a.client_id = #{clientId}
-        AND  a.invalid_time between #{startTime} and #{endTime}
+    <select id="queryNumCard" resultType="java.util.Map">
+        SELECT TOP 1
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id AND a.status != 6)cardAll,
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id
+              AND a.status != 6 AND a.status != 3 AND a.invalid_time between #{startTime} and #{endTime})beOverdue,
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id AND a.status = 0 )normalCard,
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id  AND a.status = 4 )unOpenedCard,
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id AND a.status = 1 )stopCard,
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id  AND a.status = 6 ) historyCard
+        FROM fr_card b
+        WHERE b.is_using = 1
+         AND  b.CustomerCode = #{CustomerCode}
+         AND  b.client_id = #{clientId}
     </select>
+
+
+    <select id="queryClientCardList" resultType="java.util.Map">
+        SELECT
+        (SELECT b.card_type_name  FROM  fr_card_original_set b WHERE b.id = a.original_id AND b.CustomerCode = a.CustomerCode) cardTypeName,
+        (SELECT c.card_type_name  FROM fr_card_type c WHERE c.id = (SELECT b.card_type_id  FROM  fr_card_original_set b WHERE b.id = a.original_id AND b.CustomerCode = a.CustomerCode)) cardTypeFlag,
+        (SELECT b.card_type_id  FROM  fr_card_original_set b WHERE b.id = a.original_id AND b.CustomerCode = a.CustomerCode) cardTypeFlagId,
+        (SELECT  COUNT(DISTINCT c.sdaduim_id) FROM fr_shop_card_consume c WHERE c.card_id = a.id and c.shop_id = a.shop_id and c.CustomerCode = a.CustomerCode) countSd,
+        (SELECT s.name FROM Sdaduim s WHERE s.ShopId = a.shop_id AND s.id = (SELECT TOP 1 c.sdaduim_id from fr_shop_card_consume c where c.card_id = a.id and c.shop_id = a.shop_id and c.CustomerCode = a.CustomerCode)) sdaduName,
+        (SELECT s.ShopName FROM Shop s WHERE s.ID = a.shop_id) shopName,
+        a.card_no AS cardNo,
+        a.shop_id AS shopId,
+        a.id AS id,
+        a.client_id AS clientId,
+        a.CustomerCode AS CustomerCode,
+        a.shop_id AS shopId,
+        a.card_type_id AS cardTypeId,
+        a.type AS type,
+        a.bind_time AS bindTime,
+        a.invalid_time AS invalidTime,
+        a.status AS status,
+        a.external_no AS externalNo,
+        a.have_rights_num AS haveRightsNum,
+        a.note
+        FROM  fr_card a
+        WHERE a.is_using = 1
+        AND a.status != 6
+        AND a.client_id = #{clientId}
+        AND a.CustomerCode = #{CustomerCode}
+    </select>
+
+
+    <!--查询指定会员会员卡的数据（新）-->
+    <select id="queryUserCardInfoList" resultType="java.util.Map">
+        SELECT
+        (SELECT s.ShopName FROM  Shop s WHERE s.id = a.shop_id) shopName,
+        (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = a.card_type_id) cardTypeName,
+        (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = (SELECT c.p_id FROM fr_card_type c WHERE c.id = a.card_type_id)) cardFlag,
+        (SELECT b.need_price FROM fr_card_order_info b WHERE b.card_id = a.id) needPrice,
+        (SELECT b.buy_rights_num FROM fr_card_order_info b WHERE b.card_id = a.id) buyRightsNum,
+        (SELECT b.give_rights_num FROM fr_card_order_info b WHERE b.card_id = a.id) giveRightsNum,
+        (SELECT b.status FROM fr_card_order_info b WHERE b.card_id = a.id) InfoStatus,
+        (SELECT b.audit_status FROM fr_card_order_info b WHERE b.card_id = a.id)auditStatus,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE p.id = (SELECT b.personnel_id FROM fr_card_order_info b WHERE b.card_id = a.id)) saleName,
+        (SELECT t.agreement_no FROM fr_card_agreement t WHERE  t.card_id = a.id) agreementNo,
+        (SELECT t.service_life FROM fr_card_type t WHERE t.id = a.card_type_id) seviceLife,
+        (SELECT t.used_num FROM fr_card_original_set t WHERE t.card_id = a.id) userdNum,
+        (SELECT p.client_name FROM fr_client p WHERE p.id = a.client_id) clientName,
+        (SELECT p.mobile FROM fr_client p WHERE p.id = a.client_id) mobile,
+        ( CASE
+        WHEN a.status =0 THEN '正常'
+        WHEN a.status =1  THEN '停卡'
+        WHEN a.status =2  THEN '冻结'
+        WHEN a.status =3 THEN '已过期'
+        WHEN a.status =4 THEN '未开卡'
+        WHEN a.status =5 THEN '待补余'
+        WHEN a.status =6 THEN '历史'
+        ELSE '未设置'
+        END) a_status,
+        (SELECT SUM(c.order_price) FROM fr_card_order_datail c WHERE c.client_id = a.client_id  AND c.is_using = 1
+        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2)orderPrice,
+        (SELECT SUM(c.order_rights_num) FROM fr_card_order_datail c  WHERE c.client_id = a.client_id  AND c.is_using = 1
+        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1)orderNum,
+        <include refid="Base_Column_List_Frcard"/>
+        FROM fr_card a
+        WHERE a.CustomerCode = #{CustomerCode}
+        <include refid="query_where_sql"/>
+        <if test="status == 100">
+            AND  a.status != 6
+        </if>
+        ORDER BY  a.update_time DESC
+    </select>
+
+
 </mapper>

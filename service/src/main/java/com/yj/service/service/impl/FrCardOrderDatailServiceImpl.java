@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.SqlHelper;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.util.CommonUtils;
+import com.yj.common.util.NumberUtilsTwo;
 import com.yj.common.util.StringUtils;
 import com.yj.common.util.UUIDUtils;
 import com.yj.dal.model.FrCardOrderDatail;
@@ -11,9 +12,13 @@ import com.yj.dal.dao.FrCardOrderDatailMapper;
 import com.yj.dal.model.FrCardOrderPriceDatail;
 import com.yj.service.service.IFrCardOrderDatailService;
 import com.yj.service.base.BaseServiceImpl;
+import com.yj.service.service.IFrCardService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -28,6 +33,8 @@ import java.util.Map;
 @Service
 public class FrCardOrderDatailServiceImpl extends BaseServiceImpl<FrCardOrderDatailMapper, FrCardOrderDatail> implements IFrCardOrderDatailService {
 
+    @Resource
+    private IFrCardService iFrCardService;
 
     @Override
     public Double querySumOrderPrice(FrCardOrderDatail frCardOrderDatail,boolean isFlage) throws YJException {
@@ -152,7 +159,16 @@ public class FrCardOrderDatailServiceImpl extends BaseServiceImpl<FrCardOrderDat
         frCardOrderDatail1.setCustomerCode(frCardOrderDatail.getCustomerCode());
         frCardOrderDatail1.setClientId(frCardOrderDatail.getClientId());
         frCardOrderDatail1.setCardId(frCardOrderDatail.getCardId());
-        Map<String,Double> amtByCard  = baseMapper.getAmtByCardId(frCardOrderDatail1);
+        Map<String,Object> orderCard  = baseMapper.getAmtByCardId(frCardOrderDatail1);
+        String bindTime = StringUtils.getStringObject("bindTime",orderCard);
+        Integer cardType = NumberUtilsTwo.getIntNum("cardType",orderCard);
+        //剩余权益 ------ 根据会员卡类型，初始化剩余权益
+        Double orderRightsNum = NumberUtilsTwo.getDouNum("orderRightsNum",orderCard);
+        orderRightsNum = iFrCardService.getHaveNumByType(cardType,bindTime,orderRightsNum);
+
+        Map<String,Double> amtByCard = new HashMap<>();
+        amtByCard.put("orderRightsNum",orderRightsNum);
+        amtByCard.put("orderPrice",NumberUtilsTwo.getDouNum("orderPrice",orderCard));
         return amtByCard;
     }
 

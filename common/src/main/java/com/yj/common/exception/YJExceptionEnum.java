@@ -53,6 +53,7 @@ public enum  YJExceptionEnum implements ServiceExceptionEnum  {
     PAY_TYPE_NOT_EXISTED(500, "支付类型未设置"),
     PAY_PRICE_EXISTED(500, "支付金额有误"),
     CARD_INFO_EXISTED(500, "会员卡订单信息获取有误"),
+    CARD_INFO_STATUS_EXISTED(500, "此会员卡的购卡订单信息未经审核，请联系财务审核"),
     BLACE_PRICE_EXISTED(500,"退款金额有变动，请重新核对后操作"),
 
     PROTOCOLNO_NOT_EXISTED(500, "协议号不存在"),

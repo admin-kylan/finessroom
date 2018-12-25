@@ -13,4 +13,5 @@ const COURSE_URL = {
     verifyPersonInfo: 'personnelInfo/getVerification', //用户授权验证
     getClientListByMobile: 'frClient/getClientList', // 通过号码查询用户信息
     getCardListByMobile: 'frCard/queryByFrCardList', // 通过客户，查询会员卡
+    queryByFrCardList: 'frCard/queryByFrCardList', // 通过客户，查询会员卡
 };

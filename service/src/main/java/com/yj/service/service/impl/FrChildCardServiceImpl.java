@@ -225,17 +225,19 @@ public class FrChildCardServiceImpl extends BaseServiceImpl<FrChildCardMapper, F
         frChildCard1.setCustomerCode(frChildCard.getCustomerCode());
         frChildCard1.setParentCardId(frChildCard.getParentCardId());
         List<Map<String, Object>> maps = baseMapper.queryChildCardAmt(frChildCard1);
-        Double shareNum = 0.0;
-        Double orderPrice = 0.0;
-        Double orderRightsNum = 0.0;
+        Double shareNum = 0.0 ,orderPrice = 0.0,orderRightsNum = 0.0;
         Map<String,Double>  m = new HashMap<>();
         if(maps != null && maps.size()>0){
             for(Map<String, Object> map : maps){
                 Double shar = NumberUtilsTwo.getDouNum("shareNum",map);
                 Double order = NumberUtilsTwo.getDouNum("orderPrice",map);
-                Double orderRights =  NumberUtilsTwo.getDouNum("orderRightsNum",map);
                 shareNum += shar;
                 orderPrice += order;
+                //初始化子卡的剩余权益
+                Integer type =  NumberUtilsTwo.getIntNum("type",map);
+                String creatTime = StringUtils.getStringObject("createTime",map);
+                Double orderRights =  NumberUtilsTwo.getDouNum("orderRightsNum",map);
+                orderRights = iFrCardService.getHaveNumByType(type,creatTime,orderRights);
                 orderRightsNum += orderRights;
             }
         }

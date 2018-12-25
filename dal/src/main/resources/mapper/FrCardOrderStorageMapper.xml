@@ -129,4 +129,22 @@
     </select>
 
 
+    <select id="getCardStoragePrice" resultType="java.util.Map">
+        SELECT
+            (SELECT TOP 1 (b.order_amt) FROM fr_card_order_datail b
+                  WHERE  b.is_using = 1  AND b.status != 2  AND b.audit_status != 2 AND b.type = 2
+                     AND b.CustomerCode = #{CustomerCode}
+                     AND b.client_id = #{clientId}
+                     AND b.card_id = #{cardId}
+               ORDER BY b.create_time DESC ) orderPrice,
+            SUM(a.store_price) storePrice,
+            SUM(a.ticket_price) ticketPrice,
+            SUM(a.give_price) givePrice
+        FROM fr_card_order_storage a
+        WHERE a.is_using = 1
+           AND a.storage_status = 1
+           AND a.CustomerCode = #{CustomerCode}
+           AND a.client_id = #{clientId}
+           AND a.card_id = #{cardId}
+    </select>
 </mapper>

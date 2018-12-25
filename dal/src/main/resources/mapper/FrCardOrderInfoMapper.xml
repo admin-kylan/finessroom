@@ -242,18 +242,60 @@
              a.need_price AS needPrice,
              a.no_price AS noPrice,
              a.buy_rights_num AS buyRightsNum,
-             a.give_rights_num AS giveRightsNum
+             a.give_rights_num AS giveRightsNum,
+             a.audit_status AS auditStatus,
+             a.status AS  status
          FROM fr_card_order_info a
          WHERE a.CustomerCode = #{CustomerCode}
           AND  a.client_id = #{clientId}
-          AND  a.status = #{status}
-          AND  a.audit_status = #{auditStatus}
           AND  a.is_using = #{isUsing}
-          AND (
-            <foreach collection="cardIdList" item="cardId" index="i" open="" close="" separator="or">
-                a.card_id = #{cardId}
-            </foreach>
-            )
+          <if test=" status != null and status != ''">
+            AND  a.status = #{status}
+          </if>
+          <if test=" auditStatus != null and auditStatus != ''">
+            AND a.audit_status = #{auditStatus}
+          </if>
+          <if test=" cardIdList == null and cardId != null and cardId != ''">
+            AND  a.card_id = #{cardId}
+          </if>
+          <if test="cardIdList != null and cardIdList.size >0" >
+              AND (
+              <foreach collection="cardIdList" item="cardId" index="i" open="" close="" separator="or">
+                  a.card_id = #{cardId}
+              </foreach>
+              )
+          </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+
+
+    <!--获取指定的会员卡信息-->
+    <select id="getCardInfoByCardId" resultType="java.util.Map">
+        SELECT
+          (SELECT TOP 1 (b.order_amt) order_price  FROM fr_card_order_datail b WHERE a.CustomerCode = b.CustomerCode
+                 AND a.client_id = b.client_id AND b.type = '1' AND b.is_using = 1  AND b.status != 2 AND b.audit_status != 2
+                  ORDER BY a.create_time DESC )orderNum,
+          (SELECT TOP 1 (b.order_amt) order_price  FROM fr_card_order_datail b WHERE a.CustomerCode = b.CustomerCode
+                  AND a.client_id = b.client_id AND b.type = '2' AND b.is_using = 1  AND b.status != 2 AND b.audit_status != 2
+                  ORDER BY a.create_time DESC )orderPrice,
+          (SELECT b.bind_time  FROM fr_card b WHERE b.id = a.card_id) bindTime,
+          (SELECT b.invalid_time  FROM fr_card b WHERE b.id = a.card_id) invalidTime,
+          (SELECT b.status  FROM fr_card b WHERE b.id = a.card_id) cardStatus,
+          (SELECT b.type  FROM fr_card b WHERE b.id = a.card_id) type,
+          (SELECT b.note  FROM fr_card b WHERE b.id = a.card_id) note,
+           a.id,
+           a.card_id AS cardId,
+           a.buy_rights_num AS buyRightsNum,
+           a.give_rights_num AS giveRightsNum,
+           a.need_price AS needPrice,
+           a.create_time AS createTime,
+           a.status AS status,
+           a.audit_status AS auditStatus
+        FROM  fr_card_order_info a
+        WHERE a.card_id = #{cardId}
+        AND a.CustomerCode = #{CustomerCode}
+        AND a.client_id = #{clientId}
         ORDER BY a.create_time DESC
     </select>
 

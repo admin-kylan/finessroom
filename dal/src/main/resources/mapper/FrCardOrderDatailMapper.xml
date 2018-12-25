@@ -156,7 +156,9 @@
               AND b.is_using = a.is_using
               AND b.status != 2
               AND b.audit_status != 2
-              ORDER BY b.create_time DESC) orderPrice
+              ORDER BY b.create_time DESC) orderPrice,
+            (SELECT b.bind_time FROM fr_card b WHERE b.id = a.card_id) bindTime,
+            a.card_type AS cardType
         FROM fr_card_order_datail a
         WHERE a.CustomerCode = #{CustomerCode}
         AND a.card_id = #{cardId}

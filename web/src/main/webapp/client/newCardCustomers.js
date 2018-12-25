@@ -10,7 +10,7 @@ var newCardCustomers = new Vue({
     el: '#newCardCustomers',
     data: {
         loadName :'续卡操作',
-        LiIndex: 0,                  // 0，新建现有客户，1 新购，2，续卡
+        LiIndex: 0,                  // 0，新建现有客户，1 新购，2，续卡 , 3,新购项目课程 4，新购套餐疗程
         accountsMeth:'',            //要调用的结账方法
         randomNumber:'',            //随机生成，防止点击过快
         salespersonList:[],         //销售顾问列表
@@ -235,6 +235,7 @@ var newCardCustomers = new Vue({
     methods: {
         init: function (t) {
         },
+        //新增现有客户
         loadL0:function(){
             var that = this;
             setTimeout(function () {
@@ -257,6 +258,7 @@ var newCardCustomers = new Vue({
             //获取服务顾问
             that.getMarketShopPeople($.cookie("shopid"),that,2);
         },
+        //会员卡新购
         loadL1:function(){
             var that = this;
             that.getInit();
@@ -265,6 +267,7 @@ var newCardCustomers = new Vue({
             that.getCardUser();
             that.getMarketShopPeople($.cookie("shopid"),that,1);
         },
+        //会员卡续卡
         loadL2:function(){
             var that = this;
             setTimeout(function () {
@@ -295,6 +298,19 @@ var newCardCustomers = new Vue({
                 that.getCardInfo();
             };
         },
+        //新购项目课程
+        loadL3:function(){
+            var that = this;
+            that.getInit();
+            that.getMarketShopPeople($.cookie("shopid"),that,1);
+        },
+        //新购项套餐疗程
+        loadL4:function(){
+            var that = this;
+            that.getInit();
+            that.getMarketShopPeople($.cookie("shopid"),that,1);
+        },
+        //新购初始化用户信息
         getInit:function(){
            var that = this;
            that.clientUserName = window.parent.document.getElementById("clientUserName").innerText;    //客户姓名
@@ -893,9 +909,10 @@ var newCardCustomers = new Vue({
             }
             var url = $.stringFormat('{0}/frCard/queryByFrCardList', $.cookie('url'));
             $.post(url, {
-                    clientId: that.catcherClientId,
-                    CustomerCode: that.code,
-                    isUsing: true
+                    page: -1,
+                    rows: -1,
+                    clientId: that.clientId,
+                    code: that.code,
                 },
                 function (res) {
                     if (res.code == '200') {
@@ -912,7 +929,6 @@ var newCardCustomers = new Vue({
         },
         //获取选中的会员卡信息
         catcheCardId: function (obj) {
-            debugger
             var that = this;
             if (!obj) {
                 return;

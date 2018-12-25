@@ -74,7 +74,7 @@ public class FrCardOrderStorage extends Model<FrCardOrderStorage> {
     /**
      * 储值状态（0：待付款 1：已付款，2：已冲销 ，3：已退款 、
      *           4：已转让、5 ：审核通过退款、6：复核通过退款、
-     *           7：审核通过转让、8：复核通过转让）
+     *           7：审核通过转让、8：复核通过转让、9：储值退全款）
      */
     @TableField("storage_status")
     private Integer storageStatus;

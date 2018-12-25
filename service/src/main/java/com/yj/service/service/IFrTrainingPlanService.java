@@ -1,6 +1,9 @@
 package com.yj.service.service;
 
+import com.yj.common.exception.YJException;
+import com.yj.common.result.JsonResult;
 import com.yj.dal.model.FrTrainingPlan;
+import com.yj.dal.param.AddProjectParam;
 import com.yj.service.base.BaseService;
 
 import java.util.List;
@@ -15,4 +18,7 @@ import java.util.List;
  */
 public interface IFrTrainingPlanService extends BaseService<FrTrainingPlan> {
 
+    JsonResult saveProject(AddProjectParam params)throws YJException;
+
+    JsonResult updateProject(AddProjectParam params)throws YJException;
 }

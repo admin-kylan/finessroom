@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="../css/bootstrap.min.css" />
 	<link rel="stylesheet" href="../css/reset.css" />
 	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../gym/css/common.css" />
 	<link rel="stylesheet" href="../css/skin/jedate.css" />
 	<link rel="stylesheet" href="../css/admissionManagement.css" />
 	<link rel="stylesheet" href="../css/combobox.css" />
@@ -491,6 +492,190 @@
 							</table>
 						</div>
 					</div>
+					
+					<!--选择对应项目弹窗-->
+					<div class="modal fade modal-style xm-modal" tabindex="-1" id="modal1" role="dialog" data-backdrop="false">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					      	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+					        <h4 class="modal-title">选择对应项目</h4>
+					      </div>
+					      <div class="modal-body">
+					      	<div class="flex-box flex-start">
+					      		<div class="flex-box-item" style="padding-right: 10px;">
+					      			<table class="table table-striped table-style dyxm-table">
+										<thead>
+											<tr>
+												<td width="50px">序号</td>
+												<td width="100px">会员姓名</td>
+												<td width="150px">会员卡号</td>
+												<td>会员卡名称</td>
+											</tr>
+										</thead>
+									</table>	
+					      			<div class="one-member">
+						      			<table class="table table-striped table-style dyxm-table">
+											<tbody>
+												<tr>
+													<td width="50px">1</td>
+													<td width="100px">吴改</td>
+													<td width="150px">12141242</td>
+													<td>健身卡一年</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="flex-box flex-start">
+											<div class="w50">项目</div>
+											<div class="flex-box-item">
+												<div class="selectXM-item">
+													<span class="selectXM">选择</span>
+													<span class="selectXM-name">项目：增肌</span>
+												</div>
+												<div class="selectXM-item">
+													<span class="selectXM">选择</span>
+													<span class="selectXM-name">项目：增肌1</span>
+												</div>
+												<div class="selectXM-item">
+													<span class="selectXM">选择</span>
+													<span class="selectXM-name">项目：增肌2</span>
+												</div>
+											</div>
+										</div>
+					      			</div>
+					      			<div class="one-member">	
+						      			<table class="table table-striped table-style dyxm-table">
+											<tbody>
+												<tr>
+													<td width="50px">2</td>
+													<td width="100px">吴改2</td>
+													<td width="150px">12141242</td>
+													<td>健身卡一年</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="flex-box flex-start">
+											<div class="w50">项目</div>
+											<div class="flex-box-item">
+												<div class="selectXM-item">
+													<span class="selectXM">选择</span>
+													<span class="selectXM-name">项目：增肌</span>
+												</div>
+												<div class="selectXM-item">
+													<span class="selectXM">选择</span>
+													<span class="selectXM-name">项目：增肌1</span>
+												</div>
+												<div class="selectXM-item">
+													<span class="selectXM">选择</span>
+													<span class="selectXM-name">项目：增肌2</span>
+												</div>
+											</div>
+										</div>
+					      			</div>
+					      		</div>
+					      		<div class="w200">
+					      			<table class="table table-striped table-style dyxm-table">
+										<thead>
+											<tr>
+												<td style="text-align: left;padding-left: 15px!important;">手牌输入</td>
+											</tr>
+										</thead>
+									</table>
+									<input class="form-control" placeholder="输入手牌"/>
+					      		</div>
+					      	</div>
+					      </div>
+				      	<div class="modal-footer" style="border-top-width: 1px;padding: 5px;">
+					        <button type="button" class="btn btn-primary">保存</button>
+					      </div>
+					    </div><!-- /.modal-content -->
+					  </div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->	
+					
+					<!--票券使用信息-->
+					<div class="modal fade modal-style pq-modal y-pq-modal" tabindex="-1" id="modal2" role="dialog" data-backdrop="false">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title">票券使用信息</h4>
+					      </div>
+					      <div class="modal-body">
+					      		<div class="flex-box">
+					      			<div class="w100">使用手手机号码</div>
+					      			<div class="flex-box-item">12312312312</div>
+					      		</div>
+					      		<div class="flex-box">
+					      			<div class="w100">会员姓名</div>
+					      			<div class="flex-box-item">吴改</div>
+					      		</div>
+					      		<div class="flex-box">
+					      			<div class="w100">需补差价</div>
+					      			<div class="flex-box-item">0.00</div>
+					      		</div>
+					      </div>
+				      	  <div class="modal-footer" style="border-top-width: 1px;padding: 5px;">
+					        <button type="button" class="btn btn-primary">保存</button>
+					      </div>
+					    </div><!-- /.modal-content -->
+					  </div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->	
+					<!--票券使用信息-->
+					<div class="modal fade modal-style pq-modal no-pq-modal" tabindex="-1" id="modal3" role="dialog" data-backdrop="false">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title">票券使用信息</h4>
+					      </div>
+					      <div class="modal-body">
+					      		<div class="flex-box">
+					      			<div class="w100">使用手手机号码</div>
+					      			<div class="flex-box-item">
+					      				<input type="text" class="form-control" style="margin-right: 10px;padding:5px 8px;" />
+					      			</div>
+					      		</div>
+					      		<div class="flex-box">
+					      			<div class="w100">会员姓名</div>
+					      			<div class="flex-box-item">--</div>
+					      		</div>
+					      		<div class="flex-box">
+					      			<div class="w100">需补差价</div>
+					      			<div class="flex-box-item">0.00</div>
+					      		</div>
+					      </div>
+				      	  <div class="modal-footer" style="border-top-width: 1px;padding: 5px;">
+					        <button type="button" class="btn btn-primary">保存</button>
+					      </div>
+					    </div><!-- /.modal-content -->
+					  </div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->	
+					<!--输入会员凭证-->
+					<div class="modal fade modal-style pq-modal pj-modal" tabindex="-1" id="modal4" role="dialog" data-backdrop="false">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title">输入会员凭证</h4>
+					      </div>
+					      <div class="modal-body">
+					      		<div class="flex-box">
+					      			<div class="w60">手机号码</div>
+					      			<div class="flex-box-item">12312312312</div>
+					      		</div>
+					      		<div class="flex-box">
+					      			<div class="w60">输入凭证</div>
+					      			<div class="flex-box-item">
+					      				<input type="text" class="form-control" style="margin-right: 10px;padding:5px 8px;" />
+					      			</div>
+					      		</div>
+					      </div>
+				      	  <div class="modal-footer" style="border-top-width: 1px;padding: 5px;">
+					        <button type="button" class="btn btn-primary">保存</button>
+					      </div>
+					    </div><!-- /.modal-content -->
+					  </div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->	
 				</div>
 			</div>
 		</div>
@@ -503,7 +688,15 @@
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/common.js"></script>
 	<script type="text/javascript">
+//		选择对应项目
+//		$('.xm-modal').modal('show')
+//		$('.y-pq-modal').modal('show')
+//		$('.no-pq-modal').modal('show')
+//		$('.pj-modal').modal('show')
 		//修复高度
+		$('body').on('click','.close',function(){
+			$(this).parents('.modal').hide();
+		})
 		function mainheight() {
 			var mainheight = $(window).height() - 50;
 			$('.cWrap').height(mainheight);

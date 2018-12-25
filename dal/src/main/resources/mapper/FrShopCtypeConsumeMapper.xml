@@ -139,12 +139,10 @@
           <include refid="Base_Column_List_B" />
           <include refid="Base_Column_List_C" />
         FROM fr_shop_ctype_consume a
-        LEFT JOIN fr_shop_ctype_consume_pladdset b on  a.id = b.consume_id
-        LEFT JOIN fr_shop_ctype_consume_plset c on  a.id = c.consume_id
+        LEFT JOIN fr_shop_ctype_consume_pladdset b on  a.id = b.consume_id  AND b.CustomerCode = a.CustomerCode
+        LEFT JOIN fr_shop_ctype_consume_plset c on  a.id = c.consume_id   AND c.CustomerCode = a.CustomerCode
         WHERE a.card_type_id = #{cardTypeId}
           AND a.CustomerCode = #{CustomerCode}
-          AND b.CustomerCode = #{CustomerCode}
-          AND c.CustomerCode = #{CustomerCode}
         ORDER BY a.id
     </select>
 

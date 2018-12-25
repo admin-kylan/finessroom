@@ -35,4 +35,14 @@ public interface IFrCardOrderInfoService extends BaseService<FrCardOrderInfo> {
     Map<String,Object> getBlackCardData(FrCardOrderInfo frCardOrderInfo)throws YJException;
 
     Map<String,Object> queryCardAndType(FrCardOrderInfo frCardOrderInfo)throws YJException;
+
+    Map<String, Object> getCardInfoByCardId(FrCardOrderInfo frCardOrderInfo)throws YJException;
+
+    /**
+     * 根据订单信息初始化客户的剩余金额，剩余权益
+     * @param map
+     * @throws YJException
+     */
+    void getOrderNumInfo(Map<String, Object> map )throws YJException;
+
 }
