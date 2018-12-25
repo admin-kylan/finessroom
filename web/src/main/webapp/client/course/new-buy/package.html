@@ -1,16 +1,16 @@
 <div id="course-new-buy-package-body">
     <div class="boxChoose on" style=" border-top: 0;">
         <p class="line">
-            <label >
+            <label>
                 <span>选择购买的套餐：</span>
                 <input type="text" placeholder="选择购买项目/商品" readonly="readonly" v-model="formData.project"/>
                 <span class="project" @click="product.isShow = true">选择项目</span>
             </label>
-            <label >
+            <label>
                 <span>售价：</span>
                 <input type="text" placeholder="单价由套餐自动带出" readonly="readonly" v-model="formData.projectPrice"/>
             </label>
-            <label >
+            <label>
                 <span>可用消费最多数量：</span>
                 <input type="text" placeholder="最多数量" oninput="value=value.replace(/[^\d]+/g,'')"
                        v-model="formData.salesNum"/>
@@ -18,7 +18,7 @@
             </label>
         </p>
         <p class="line">
-            <label >
+            <label>
                 <span>选择有效期：</span>
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="1"/>1个月
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="3"/>3个月
@@ -45,7 +45,7 @@
             </label>
         </p>
         <div class="line">
-            <label >
+            <label>
                 <span>套餐产品详情：<span class="red">(可消费项目)</span></span>
                 <table border="1" bordercolor="#ccc">
                     <thead>
@@ -58,19 +58,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>软件园店</td>
-                        <td>私教教学</td>
-                        <td>私教一对一</td>
-                        <td>30</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>软件园店</td>
-                        <td>私教教学</td>
-                        <td>私教一对一</td>
-                        <td>30</td>
-                        <td>1</td>
+
+                    <tr v-for='(item,index) in packageProduct.data'>
+                        <td v-text="item.shop"></td>
+                        <td v-text="item.sdadium"></td>
+                        <td v-text="item.project"></td>
+                        <td v-text="item.num"></td>
+                        <td v-text="item.limitNum"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -116,21 +110,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td class="tored">选择</td>
-                        <td>软件园店</td>
-                        <td>年卡</td>
-                        <td>一年卡</td>
-                        <td>60.00</td>
-                        <td>50.00</td>
-                    </tr>
-                    <tr>
-                        <td class="tored">选择</td>
-                        <td>软件园店</td>
-                        <td>年卡</td>
-                        <td>一年卡</td>
-                        <td>60.00</td>
-                        <td>50.00</td>
+                    <tr v-for='(item,index) in product.data'>
+                        <td class="tored" @click="checkProject(item)">选择</td>
+                        <td v-text="item.shop"></td>
+                        <td v-text="item.sdadium"></td>
+                        <td v-text="item.project"></td>
+                        <td>{{item.price| toManey}}</td>
+                        <td>{{item.sale| toManey}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -148,7 +134,7 @@
 
 
 <script>
-    new Vue({
+    var packageVue = new Vue({
         el: '#course-new-buy-package-body',
         data: {
             billHtml: './course/new-buy/bill.html', //结算的html
@@ -157,7 +143,8 @@
                 giftNum: "", //赠送数量
                 useNum: "", //可用数量
                 customize: '', //选择自定义
-                validityPeriod: 0, //项目有效期 //按天数来算
+                cardDate: '', //与会员卡同期
+                validityPeriod: '1', //项目有效期 //按天数来算
                 beginDate: '', //开始时间
                 endDate: '', //失效时间 = 结束时间
                 project: '', //项目名称
@@ -167,12 +154,55 @@
             },
             product: { //选择项目项
                 isShow: false,
-            }
+                data: [
+                    {
+                        shop: '1',
+                        shopId: '1',
+                        sdadium: '1',
+                        sdadiumId: '1',
+                        project: '1',
+                        projectId: '1',
+                        price: '1',
+                        sale: '1'
+                    }
+                ],
+            },
+            packageProduct: { //套餐产品的列表数据
+                data: [
+                    {
+                        shop: '1',
+                        shopId: '1',
+                        sdadium: '1',
+                        sdadiumId: '1',
+                        project: '1', //项目产品
+                        projectId: '1',
+                        num: '1', //指定数量
+                        limitNum: '1' //每天限用数量
+                    }
+                ]
+            },
+            selectData: {}, //选择项目的对象
         },
         computed: {},
+        filters: {
+            formatDate: function (time, type, typeT) {
+                if (!time) {
+                    return '';
+                }
+                var _time = timeFormatDate(time, type, typeT);
+                return _time;
+            },
+            toManey: function (val) {
+                if (!val || 'undefined' == typeof(val)) {
+                    return parseFloat(0).toFixed(2);
+                    ;
+                }
+                return parseFloat(val).toFixed(2);
+            }
+        },
         watch: {
             'formData.beginDate'(value){ //开始时间改变触发失效时间
-                if(!value){
+                if (!value) {
                     return false;
                 }
                 let date = new Date(value);
@@ -220,6 +250,18 @@
                     this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
                 }
 
+            },
+            'formData.salesNum'(val, oldVal){ //销售最多数量
+                console.log(val)
+                let array = this.packageProduct.data,totalNum = 0;
+                $.each(array, (i, d) => {
+                    totalNum += parseInt(d.num);
+                });
+                console.log(totalNum)
+                console.log(parseInt(val) > totalNum)
+                if(parseInt(val) > totalNum){
+                    this.formData.salesNum = oldVal;
+                }
             }
             //
         },
@@ -228,10 +270,38 @@
             this.formData.beginDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             this.formData.endDate = this.formData.beginDate;
         },
+        mounted(){ //初始化
+            //test
+            //this.billFull();
+        },
         methods: {
             billFull(){//结账
-                Vue.set(newBuyVue,'billStatus', 'package')
+//                let saleId = headVue.marketUserId,
+//                    salesNum = this.formData.salesNum;
+//                //结账前判断验证
+//                if(!this.formData.projectId){
+//                    alert("请选择项目");
+//                    return false;
+//                }
+//                //判断销售ID  performance.saleId
+//                if(!saleId){
+//                    alert("请选择销售人员");
+//                    return false;
+//                }
+//                if(!salesNum || salesNum === '0'){
+//                    alert("请输入消费最多数量");
+//                    return false;
+//                }
+
+                Vue.set(newBuyVue, 'billStatus', 'package')
                 $('#customer-new-buy-project-bill').load(this.billHtml)
+            },
+            checkProject(item){//选择项目
+                this.product.isShow = false; //隐藏
+                this.formData.project = item.project;
+                this.formData.projectId = item.projectId;
+                this.formData.projectPrice = item.sale;
+                this.selectData = item;
             }
 
         }

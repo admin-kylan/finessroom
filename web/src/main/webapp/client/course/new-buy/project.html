@@ -96,22 +96,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td class="tored">选择</td>
-                        <td>软件园店</td>
-                        <td>年卡</td>
-                        <td>一年卡</td>
-                        <td>60.00</td>
-                        <td>50.00</td>
+                    <tr v-for='(item,index) in product.data'>
+                        <td class="tored" @click="checkProject(item)">选择</td>
+                        <td v-text="item.shop"></td>
+                        <td v-text="item.sdadium"></td>
+                        <td v-text="item.project"></td>
+                        <td>{{item.price| toManey}}</td>
+                        <td>{{item.sale| toManey}}</td>
                     </tr>
-                    <tr>
-                        <td class="tored">选择</td>
-                        <td>软件园店</td>
-                        <td>年卡</td>
-                        <td>一年卡</td>
-                        <td>60.00</td>
-                        <td>50.00</td>
-                    </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -133,11 +126,12 @@
         data: {
             billHtml: './course/new-buy/bill.html', //结算的html
             formData: { //所有数据写在from表单中
-                buyNum: "", //购买数量
-                giftNum: "", //赠送数量
+                buyNum: "30", //购买数量
+                giftNum: "2", //赠送数量
                 useNum: "", //可用数量
                 customize: '', //选择自定义
-                validityPeriod: 0, //项目有效期 //按天数来算
+                cardDate: '', //与会员卡同期
+                validityPeriod: '1', //项目有效期 //按天数来算
                 beginDate: '', //开始时间
                 endDate: '', //失效时间 = 结束时间
                 project: '', //项目名称
@@ -146,17 +140,46 @@
             },
             product: { //选择项目项
                 isShow: false,
+                data: [
+                    {
+                        shop: '1',
+                        shopId: '1',
+                        sdadium: '1',
+                        sdadiumId: '1',
+                        project: '1',
+                        projectId: '1',
+                        price: '1',
+                        sale: '1'
+                    }
+                ],
             },
             bill: {//结账数据
                 isShow: true, //显示
-            }
+            },
+            selectData: {}, //选择项目的对象
 
+        },
+        filters: {
+            formatDate: function (time, type, typeT) {
+                if (!time) {
+                    return '';
+                }
+                var _time = timeFormatDate(time, type, typeT);
+                return _time;
+            },
+            toManey: function (val) {
+                if (!val || 'undefined' == typeof(val)) {
+                    return parseFloat(0).toFixed(2);
+                    ;
+                }
+                return parseFloat(val).toFixed(2);
+            }
         },
         computed: {},
         watch: {
             'formData.beginDate'(value, oldValue){ //开始时间改变触发失效时间
 
-                if(!value){
+                if (!value) {
                     return false;
                 }
                 let date = new Date(value);
@@ -215,12 +238,36 @@
         },
         mounted(){ //初始化
             //test
-            this.billFull();
+           // this.billFull();
         },
         methods: {
             billFull(){//结账
-                Vue.set(newBuyVue,'billStatus', 'project')
+                let saleId = headVue.marketUserId;
+
+//                //结账前判断验证
+//                if(!this.formData.projectId){
+//                    alert("请选择项目");
+//                    return false;
+//                }
+//                //判断销售ID  performance.saleId
+//                if(!saleId){
+//                    alert("请选择销售人员");
+//                    return false;
+//                }
+//                if(!this.formData.buyNum){
+//                    alert("请输入购买数量");
+//                    return false;
+//                }
+
+                Vue.set(newBuyVue, 'billStatus', 'project')
                 $('#customer-new-buy-project-bill').load(this.billHtml); //显示结账
+            },
+            checkProject(item){//选择项目
+                this.product.isShow = false; //隐藏
+                this.formData.project = item.project;
+                this.formData.projectId = item.projectId;
+                this.formData.projectPrice = item.sale;
+                this.selectData = item;
             }
         }
     });

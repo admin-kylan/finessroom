@@ -11,4 +11,6 @@ const COURSE_URL = {
     fetchUserInfo: 'frClient/getClient', //获取用户信息，根据用户Id
     getOrderNo: 'frCardOrderInfo/getOrderNo', //获取订单编号
     verifyPersonInfo: 'personnelInfo/getVerification', //用户授权验证
+    getClientListByMobile: 'frClient/getClientList', // 通过号码查询用户信息
+    getCardListByMobile: 'frCard/queryByFrCardList', // 通过客户，查询会员卡
 };

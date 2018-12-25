@@ -912,6 +912,7 @@ var newCardCustomers = new Vue({
         },
         //获取选中的会员卡信息
         catcheCardId: function (obj) {
+            debugger
             var that = this;
             if (!obj) {
                 return;
