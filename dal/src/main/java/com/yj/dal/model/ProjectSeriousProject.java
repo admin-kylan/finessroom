@@ -107,6 +107,7 @@ public class ProjectSeriousProject extends Model<ProjectSeriousProject> {
         return this.id;
     }
 
+    
     @Override
     public String toString() {
         return "ProjectSeriousProject{" +
