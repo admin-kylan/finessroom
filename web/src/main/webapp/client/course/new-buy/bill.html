@@ -105,7 +105,7 @@
                                         <input type="text" name="tian" style="float: none;"
                                                v-model="formData.payType.front.money"
                                                oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"/>
-                                        <span style="float: right;">元</span>
+                                        <span style="float: right;">天</span>
                                     </label>
                                 </div>
                             </fieldset>
@@ -914,7 +914,7 @@
                     courseId: packageVue.selectData.courseId, //课程id
                     courseSeriesId: packageVue.selectData.courseSeriesId, //课程系列id
                     validityPeriod: packageVue.formData.validityPeriodTime, //有效期
-                    cardId: packageVue.formData.cardId, //卡号
+                    cardId: packageVue.formData.validityPeriod == 'all'? packageVue.formData.cardId: '', //卡号
 
 
                 };
@@ -936,11 +936,13 @@
                     courseId: projectVue.selectData.courseId, //课程id
                     courseSeriesId: projectVue.selectData.courseSeriesId, //课程系列id
                     validityPeriod: projectVue.formData.validityPeriodTime, //有效期
-                    cardId: projectVue.formData.cardId, //卡号
+                    cardId: projectVue.formData.validityPeriod == 'all'? projectVue.formData.cardId: '', //卡号
 
                 }
+              
 
             }
+
 
             //总价/小计的金额
             this.member.payMoney.totalPrice = this.formData.orderInfo.data.totalPrice ? this.formData.orderInfo.data.totalPrice : 0;
@@ -1099,6 +1101,7 @@
             },
             //结账按钮
             save(){
+
                 let param = {};
                 let projectOrder = { //项目订单表
                     CustomerCode: $.cookie('code'),
@@ -1121,7 +1124,7 @@
                     full = this.member.rebate.single.full;
                     less = this.member.rebate.single.less;
                 }
-                if (index === 0) {
+                if (this.index === 0) {
                     consumeState = '1';
                 }
                 let sysConsumeOrder = {//消费结账单表
@@ -1150,7 +1153,7 @@
                     SalesName: headVue.performance.saleName, //销售员名字
 
                 };
-                let saleType = headVue.sdaduimTypeResult.type == 'teach' ? 0 : 1;
+                let saleType = headVue.sdaduimTypeResult.type == 'teach' ? headVue.sdaduimTypeResult.salesTypeId : '';
                 let isTimeOut = (new Date(this.formData.orderInfo.data.beginDate) - new Date()) > 0 ? 4 : 0; //计算过期状态
                 let addProject = { //会员增购项目表
                     CustomerCode: $.cookie('code'),
@@ -1171,6 +1174,8 @@
                     ConsumeType: consumeState, //消费类型  0 普通消费 1 会员消费 2 员工消费  3 挂账 4 挂单
                     State: isTimeOut, //状态 0 正常 1欠款 2 过期 3 历史 4 未开始
                 };
+
+                //--------------------
                 let cardOrderPayModeList = []; //订单表
                 for (let key in this.member.payType) {
                     let cardOrderPayMode = {},
@@ -1204,10 +1209,10 @@
                     }
                     if (parseFloat(price) > 0) {
                         cardOrderPayMode = {
-                            order_id: '', //订单ID
-                            order_type: 1, //订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡 ，9、转让）
-                            pay_mode: model, // 支付方式（1、支付宝；2、刷卡；3、微信；4、现金；5、转账；6、花呗；7、其他）
-                            pay_price: parseFloat(price), //支付金额
+                            orderId: '', //订单ID
+                            orderType: 1, //订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡 ，9、转让）
+                            payMode: model, // 支付方式（1、支付宝；2、刷卡；3、微信；4、现金；5、转账；6、花呗；7、其他）
+                            payPrice: parseFloat(price), //支付金额
                             type: type, //支付状态（0：支出 1：收入）（备用）
                         }
                         cardOrderPayModeList.push(cardOrderPayMode);
@@ -1221,17 +1226,17 @@
                 //-------------------------------
                 //编号表
                 let fr_card_agreement = {
-                    agreement_id: headVue.agreementId, //协议规则ID
-                    card_id: this.formData.orderInfo.data.cardId,//会员卡ID
-                    agreement_no: headVue.agreementData,//协议号
-                    is_using: '1',//是否启用(0：不启用 1：启用）默认1
+                    agreementId: headVue.agreementId, //协议规则ID
+                    cardId: this.formData.orderInfo.data.cardId,//会员卡ID
+                    agreementNo: headVue.agreementData,//协议号
+                    isUsing: '1',//是否启用(0：不启用 1：启用）默认1
                     CustomerCode: $.cookie('code'),
-                    project_id: this.formData.orderInfo.data.projectId,//项目/课程 ID
+                    projectId: this.formData.orderInfo.data.projectId,//项目/课程 ID
                 };
 
                 //-------------------------------
                 //会员卡订单交易明细
-                let fr_card_order_datail_list = {};
+                let fr_card_order_datail_list = [];
                 //储值、权益信息
                 let fr_card_order_datail_member_chuzhi = {};
                 let fr_card_order_datail_member_quanyi = {};
@@ -1239,90 +1244,263 @@
                 let fr_card_order_datail_genel_quanyi = {};
                 if (this.member.cardInfo.userPassStatus == true && parseFloat(this.member.cardInfo.inputMoney) > 0) {
                     fr_card_order_datail_member_chuzhi = {
-                        card_id: this.formData.orderInfo.data.cardId, //会员卡ID
-                        client_id: $.cookie('cid'), //客户ID
-                        card_type: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
-                        order_status: '1', //支付状态（0：支出 1：收入）
-                        order_price: parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）
-                        order_rights_num: 0, //权益 注意正负
-                        shop_id: headVue.shopId, //基础表门店ID
-                        personnel_id: $.cookie('cid'), //操作员工id
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '1', //支付状态（0：支出 1：收入）
+                        orderPrice: parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）
+                        orderRights_num: 0, //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
                         flag: '储值', //消费内容
                         type: 2, //支付类型（1:权益 2:储值 3:其他消费）
                         CustomerCode: $.cookie('code'),
                         status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
-                        audit_status: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
-                        order_type: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
-                        order_amt: 0, //剩余权益\剩余储值金额
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderAmt: 0, //剩余权益\剩余储值金额
                     };
                     fr_card_order_datail_member_chuzhi_less = {
-                        card_id: this.formData.orderInfo.data.cardId, //会员卡ID
-                        client_id: $.cookie('cid'), //客户ID
-                        card_type: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
-                        order_status: '0', //支付状态（0：支出 1：收入）
-                        order_price: -parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）
-                        order_rights_num: 0, //权益 注意正负
-                        shop_id: headVue.shopId, //基础表门店ID
-                        personnel_id: $.cookie('cid'), //操作员工id
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '0', //支付状态（0：支出 1：收入）
+                        orderPrice: -parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: 0, //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
                         flag: '储值', //消费内容
                         type: 2, //支付类型（1:权益 2:储值 3:其他消费）
                         CustomerCode: $.cookie('code'),
                         status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
-                        audit_status: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
-                        order_type: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
-                        order_amt: parseFloat(this.member.cardInfo.storageOrderPrice) - parseFloat(this.member.cardInfo.inputMoney), //剩余权益\剩余储值金额
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderAmt: parseFloat(this.member.cardInfo.storageOrderPrice) - parseFloat(this.member.cardInfo.inputMoney), //剩余权益\剩余储值金额
                     }
+                    fr_card_order_datail_list.push(fr_card_order_datail_member_chuzhi)
+                    fr_card_order_datail_list.push(fr_card_order_datail_member_chuzhi_less)
                 }
 
                 if(parseFloat(this.member.cardInfo.totalPrice) > 0){
                     fr_card_order_datail_member_quanyi = {
-                        card_id: this.formData.orderInfo.data.cardId, //会员卡ID
-                        client_id: $.cookie('cid'), //客户ID
-                        card_type: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
-                        order_status: '1', //支付状态（0：支出 1：收入）
-                        order_price: 0,//金额（注意正负 支出就是  -0.00）
-                        order_rights_num: parseFloat(this.member.cardInfo.totalPrice), //权益 注意正负
-                        shop_id: headVue.shopId, //基础表门店ID
-                        personnel_id: $.cookie('cid'), //操作员工id
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '1', //支付状态（0：支出 1：收入）
+                        orderPrice: 0,//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: parseFloat(this.member.cardInfo.totalPrice), //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
                         flag: '权益', //消费内容
                         type: 1, //支付类型（1:权益 2:储值 3:其他消费）
                         CustomerCode: $.cookie('code'),
                         status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
-                        audit_status: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
-                        order_type: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
-                        order_amt: 0, //剩余权益\剩余储值金额
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderAmt: 0, //剩余权益\剩余储值金额
                     };
+                    fr_card_order_datail_list.push(fr_card_order_datail_member_quanyi)
                 }
 
                 if (parseFloat(this.member.generalCardInfo.inputMoney) > 0) {
                     fr_card_order_datail_genel_quanyi = {
-                        card_id: this.formData.orderInfo.data.cardId, //会员卡ID
-                        client_id: $.cookie('cid'), //客户ID
-                        card_type: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
-                        order_status: '1', //支付状态（0：支出 1：收入）
-                        order_price: 0,//金额（注意正负 支出就是  -0.00）
-                        order_rights_num: parseFloat(this.member.generalCardInfo.inputMoney), //权益 注意正负
-                        shop_id: headVue.shopId, //基础表门店ID
-                        personnel_id: $.cookie('cid'), //操作员工id
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '1', //支付状态（0：支出 1：收入）
+                        orderPrice: 0,//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: parseFloat(this.member.generalCardInfo.inputMoney), //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
                         flag: '权益', //消费内容
                         type: 1, //支付类型（1:权益 2:储值 3:其他消费）
                         CustomerCode: $.cookie('code'),
                         status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
-                        audit_status: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
-                        order_type: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
-                        order_amt: 0, //剩余权益\剩余储值金额
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderAmt: 0, //剩余权益\剩余储值金额
                     };
+                    fr_card_order_datail_list.push(fr_card_order_datail_genel_quanyi)
                 }
 
+
+
+
+
                 //--------------------------------
+                let fr_card_order_price_datail_list = [];
                 //资金交易明细
-                let fr_card_order_price_datail = {
-                    card_id: this.formData.orderInfo.data.cardId, //会员卡ID
-                    client_id: $.cookie('cid'), //客户ID
-                    card_type: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
-                    
+                let fr_card_order_price_datail_member_chuzhi = {};
+                let fr_card_order_price_datail_member_quanyi = {};
+                let fr_card_order_price_datail_member_chuzhi_less = {};
+                let fr_card_order_price_datail_genel_quanyi = {};
+                if (this.member.cardInfo.userPassStatus == true && parseFloat(this.member.cardInfo.inputMoney) > 0) {
+                    fr_card_order_price_datail_member_chuzhi = {
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '1', //支付状态（0：支出 1：收入）
+                        orderPrice: parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: 0, //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
+                        flag: '储值', //消费内容
+                        type: 2, //支付类型（1:权益 2:储值 3:其他消费）
+                        CustomerCode: $.cookie('code'),
+                        status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderId: '', //订单ID
+                    };
+                    fr_card_order_price_datail_member_chuzhi_less = {
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '0', //支付状态（0：支出 1：收入）
+                        orderPrice: -parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: 0, //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
+                        flag: '储值', //消费内容
+                        type: 2, //支付类型（1:权益 2:储值 3:其他消费）
+                        CustomerCode: $.cookie('code'),
+                        status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderId: '', //订单ID
+                    }
+                    fr_card_order_price_datail_list.push(fr_card_order_price_datail_member_chuzhi)
+                    fr_card_order_price_datail_list.push(fr_card_order_price_datail_member_chuzhi_less)
+                }
+
+                if(parseFloat(this.member.cardInfo.totalPrice) > 0){
+                    fr_card_order_price_datail_member_quanyi = {
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '1', //支付状态（0：支出 1：收入）
+                        orderPrice: 0,//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: parseFloat(this.member.cardInfo.totalPrice), //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
+                        flag: '权益', //消费内容
+                        type: 1, //支付类型（1:权益 2:储值 3:其他消费）
+                        CustomerCode: $.cookie('code'),
+                        status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderId: '', //订单ID
+                    };
+                    fr_card_order_price_datail_list.push(fr_card_order_price_datail_member_quanyi)
+                }
+
+                if (parseFloat(this.member.generalCardInfo.inputMoney) > 0) {
+                    fr_card_order_price_datail_genel_quanyi = {
+                        cardId: this.formData.orderInfo.data.cardId, //会员卡ID
+                        clientId: $.cookie('cid'), //客户ID
+                        cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+                        orderStatus: '1', //支付状态（0：支出 1：收入）
+                        orderPrice: 0,//金额（注意正负 支出就是  -0.00）
+                        orderRightsNum: parseFloat(this.member.generalCardInfo.inputMoney), //权益 注意正负
+                        shopId: headVue.shopId, //基础表门店ID
+                        personnelId: $.cookie('cid'), //操作员工id
+                        flag: '权益', //消费内容
+                        type: 1, //支付类型（1:权益 2:储值 3:其他消费）
+                        CustomerCode: $.cookie('code'),
+                        status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+                        auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                        orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+                        orderId: '', //订单ID
+                    };
+                    fr_card_order_price_datail_list.push(fr_card_order_price_datail_genel_quanyi)
+                }
+
+
+
+
+
+                //--------------------------------
+                let salesType = headVue.performance.salesType;
+                let num = 0,
+                    allotType = 0;
+                if(salesType === "rate"){
+                    num = headVue.performance.salesValueSales;
+                    allotType = 1;
+                }
+                if(salesType === "num"){
+                    num = headVue.performance.salesType;
+                    allotType = 2;
+                }
+                //业绩分配
+                let fr_card_order_allot_set_list = [];
+                let allotList = headVue.performance.list;
+                $.each(allotList, (i,d) =>{
+                    let fr_card_order_allot_set = {
+
+                        orderId: '', //订单ID
+                        orderType: 1,//订单类型（1、新购；6、补余）
+                        allotNum: num, //分配数额（百分百或者实际金额，根据分配类型判断）
+                        saleAllotType: allotType, //销售业绩分配类型（0、无业绩分配；1、按比例分配；2、按金额分配）
+                        personnelId: $.cookie('cid'), //操作员工id
+                        saleAllotNum: d.num, //员工分配数额（百分百或者实际金额，根据分配类型判断）
+                        flag: '业绩分配比例', //备用
+                        CustomerCode: $.cookie('code'),
+                        createUserId: $.cookie('cid'),//创建人ID
+                        allotType: d.allotType, //业绩分配类型（以实际销售价格的多少为销售业绩）（1、分配百分百；2、分配金额）
+                    };
+                    fr_card_order_allot_set_list.push(fr_card_order_allot_set)
+                });
+
+                //-----------------------------
+                //fr_client_personnel_relate
+                let fr_client_personnel_relate = [];
+
+                let fr_client_personnel_relate1 = {
+                    clientId: $.cookie('cid'), //客户ID
+                    shopId: headVue.shopId, //基础表门店ID
+                    personalId: headVue.sdaduimTypeResult.coachId, //人员信息Id（教练ID）
+                    flag: '教练', //人员信息Id（教练ID）
+                    type: '0', //是否为认领人 0: 否 1:是 默认0
+                    CustomerCode: $.cookie('code'),
+                    roleId: headVue.sdaduimTypeResult.coachRoleId, //人员信息Id（教练ID）
+                    time: new Date(), //认领时间
+                    userType : 1, //0 客户角色   1 增购项目时添加的角色
+                    otherTableId: '', //绑定表ID
                 };
 
+                let fr_client_personnel_relate2 = {
+                    clientId: $.cookie('cid'), //客户ID
+                    shopId: headVue.shopId, //基础表门店ID
+                    personalId: headVue.sdaduimTypeResult.assistantId, //人员信息Id（教练ID）
+                    flag: '助理教练', //人员信息Id（教练ID）
+                    type: '0', //是否为认领人 0: 否 1:是 默认0
+                    CustomerCode: $.cookie('code'),
+                    roleId: headVue.sdaduimTypeResult.assistantRoleId, //人员信息Id（教练ID）
+                    time: new Date(), //认领时间
+                    userType : 1, //0 客户角色   1 增购项目时添加的角色
+                    otherTableId: '', //绑定表ID
+                };
+                fr_client_personnel_relate.push(fr_client_personnel_relate1)
+                fr_client_personnel_relate.push(fr_client_personnel_relate2)
+//                fr_client_personnel_relate.coach = fr_client_personnel_relate1;
+//                fr_client_personnel_relate.assistant = fr_client_personnel_relate2;
+
+
+
+                //包装封装
+
+                param.projectOrder = projectOrder;
+                param.sysConsumeOrder = sysConsumeOrder;
+                param.addProject = addProject;
+                param.addProject = addProject;
+                param.cardOrderPayModeData = cardOrderPayModeData;
+                param.cardAgreement = fr_card_agreement;
+                param.cardOrderDatailList = fr_card_order_datail_list;
+                param.cardOrderPriceDatailList = fr_card_order_price_datail_list;
+                param.cardOrderAllotSetList = fr_card_order_allot_set_list;
+                param.clientPersonnelRelate = fr_client_personnel_relate;
+                console.log(param)
+                console.log(JSON.stringify(param))
 //                jqueryPostParams(COURSE_URL.addSaveCustomer, param, (response) => {
 //                    console.log(response)
 //                })

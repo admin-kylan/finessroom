@@ -43,7 +43,9 @@
         SELECT
             pi.CustomerCode c_CustomerCode,
             pi.RelName c_RelName,
+            r.Id ExtendField1,
             pi.*
+
         FROM
             PersonnelInfo pi
             LEFT JOIN PersonlRole pr ON pi.ID = pr.PersonnelInfoId

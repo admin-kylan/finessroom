@@ -49,8 +49,8 @@
                     <label>
                         <span>销售类型</span>
                         <select v-model="sdaduimTypeResult.salesTypeId">
-                            <option v-for='(item,index) in sdaduimTypeResult.salesType' :value="item">
-                                {{item}}
+                            <option v-for='(item,index) in sdaduimTypeResult.salesType' :value="item.type">
+                                {{item.name}}
                             </option>
                         </select>
                     </label>
@@ -176,8 +176,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 <script>
    var headVue = new Vue({
@@ -216,8 +214,14 @@
                     type: 'teach', //类型
                     id: COURSE_CONSTANT.sdaduimTypeTeachId, //默认id
                     status: false, //默认不现实
-                    selectTitle: 'POS/销售人员：', //选择的头部类型
-                    salesType: ["POS销售","新会员购买","续课","场地开课","BR销售","横推销售","跟进销售"], //销售类型，写死数据
+                    selectTitle: 'POS/销售人员：', //选择的头部类型\//0 POS销售 1 新会员购买 2 续课 3 场地开课
+                    //'POS销售',"新会员购买","续课","场地开课","BR销售","横推销售","跟进销售"
+                    salesType: [
+                        {name: "POS销售", type: 0},
+                        {name: "新会员购买", type: 1},
+                        {name: "续课", type: 2},
+                        {name: "场地开课", type: 3},
+                        ], //销售类型，写死数据
                     coach: [], //教练数组
                     assistant: [], //助教数组
                     coachId: '', //教练Id
@@ -256,6 +260,8 @@
                 assistant: [], //助教数组
                 coachId: '', //教练Id
                 assistantId: '', //助教Id
+                coachRoleId: '', //教练角色Id
+                assistantRoleId: '', //助教角色Id
                 salesType: '', //销售类型
             }, //选择场馆的结果展现
 
@@ -287,14 +293,16 @@
                     let userType = 3;// 技师
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
                         if (response.code === '200') {
-
                             this.sdaduimTypeResult.coach = response.data;
+                            //ExtendField1
+                            this.sdaduimTypeResult.coachRoleId= this.sdaduimTypeResult.coach[0]['ExtendField1'];
                         }
                     });
                     userType = 4;// 助教
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
                         if (response.code === '200') {
                             this.sdaduimTypeResult.assistant = response.data;
+                            this.sdaduimTypeResult.assistantRoleId= response.data[0]['ExtendField1'];
                         }
                     })
                 }
@@ -304,12 +312,14 @@
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
                         if (response.code === '200') {
                             this.sdaduimTypeResult.coach = response.data;
+                            this.sdaduimTypeResult.coachRoleId= response.data[0]['ExtendField1'];
                         }
                     });
                     userType = 4;
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
                         if (response.code === '200') {
                             this.sdaduimTypeResult.assistant = response.data;
+                            this.sdaduimTypeResult.assistantRoleId= response.data[0]['ExtendField1'];
                         }
                     })
                 }
@@ -358,7 +368,6 @@
                 }
                 axiosGetParams(COURSE_URL.checkAgreement, {agreement: this.agreementData}, (response) => {
                     if (response.code === '200') {
-                        this.agreementId = response.data.agreementId;
                         this.agreementError.style = "ag-success";
                         this.agreementError.msg = "协议号符合规则";
                     } else {
@@ -377,6 +386,8 @@
                         this.agreementError.msg = "协议号符合规则";
                         this.agreementError.style = "ag-success";
                     } else {
+                        this.agreementData = '';
+                        this.agreementId = '';
                         this.agreementError.msg = response.msg;
                         this.agreementError.style = "ag-error";
                     }
@@ -444,6 +455,7 @@
                 obj.saleId = this.performance.saleId;
                 obj.saleName = this.performance.saleName;
                 obj.num = this.performance.result == "" ? 0 : this.performance.result;
+                obj.allotType = this.performance.distributionType == 'rate' ? '1' : '0'
                 //加入数组之前判断数据是否已经存在
                 let index = this.performance.list.findIndex((item) => {
                     return item.saleId === obj.saleId
@@ -481,3 +493,9 @@
     });
 
 </script>
+
+<style>
+    #performance  input[type=radio]{
+        height: 14px!important;
+    }
+</style>

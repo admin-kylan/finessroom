@@ -28,8 +28,8 @@
             </label>
         </p>
         <p class="line">
-            <label>
-                <span>选择有效期：</span>
+            <label for="project_label_id">
+                <span id="project_label_id">选择有效期：</span>
                 <!--<input type="radio" name="month" v-model="formData.validityPeriod"/>12个月-->
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="1"/>1个月
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="3"/>3个月
@@ -153,8 +153,8 @@
                         projectId: '1',
                         price: '1',
                         sale: '1',
-                        courseId: '', //课程id
-                        courseSeriesId: '', //课程系列id
+                        courseId: '1', //课程id
+                        courseSeriesId: '1', //课程系列id
                     }
                 ],
             },
@@ -210,7 +210,7 @@
             },
             'formData.validityPeriod'(val){ //选择有效期时间
                 let date = new Date(this.formData.beginDate);
-                this.formData.cardId = '';
+               // this.formData.cardId = '';
                 //这里判断val 的值
                 if (val == "all") {
                     //会员卡同期
@@ -285,6 +285,7 @@
                     }
                     this.formData.cardId = cardId; //设置卡片ID 否则-1
                     this.formData.time = time; //与会员卡同期的时间
+
                 }
             )
         },

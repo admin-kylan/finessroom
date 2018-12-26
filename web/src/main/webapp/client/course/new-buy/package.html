@@ -18,8 +18,8 @@
             </label>
         </p>
         <p class="line">
-            <label>
-                <span>选择有效期：</span>
+            <label for="project_label_id1">
+                <span id="project_label_id1">选择有效期：</span>
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="1"/>1个月
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="3"/>3个月
                 <input type="radio" name="month" v-model="formData.validityPeriod" value="6"/>6个月
@@ -232,7 +232,7 @@
             },
             'formData.validityPeriod'(val){ //选择有效期时间
                 let date = new Date(this.formData.beginDate);
-                this.formData.cardId = '';
+               // this.formData.cardId = '';
                 //这里判断val 的值
                 if (val == "all") {
                     //会员卡同期

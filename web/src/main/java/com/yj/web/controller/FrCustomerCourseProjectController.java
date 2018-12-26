@@ -59,6 +59,7 @@ public class FrCustomerCourseProjectController {
         if (map == null) {
             throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
+        frCustomerCourseProjectService.addSaveCustomer(map);
         JsonResult jsonResult = null;
         return jsonResult;
 
