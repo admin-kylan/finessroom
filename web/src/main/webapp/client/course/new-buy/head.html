@@ -36,7 +36,7 @@
             <template v-show="sdaduimTypeResult.status">
                 <label>
                     <span v-text="sdaduimTypeResult.selectTitle"></span>
-                    <select name="" v-model="marketUserId">
+                    <select name="" v-model="performance.saleId">
                         <!--<option value="" selected="">Nicolas Klaus</option>-->
                         <option v-for='(item,index) in marketUserList' :value="item.id">
                             {{item.relName}}
@@ -192,6 +192,7 @@
             agreementData: '', //协议号
             code: '', //客户代码
             currentDate: '', //用当前时间计算购买日期
+            agreementId: '', //协议规则ID
             marketUserList: [], //销售人员list
             marketUserId: "", //销售人员ID
             sdaduimArrayList: [], //场馆数组对象
@@ -283,14 +284,14 @@
                 };
                 //
                 if(this.sdaduimTypeResult.type == "teach"){
-                    let userType = 3,array = [];
+                    let userType = 3;// 技师
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
                         if (response.code === '200') {
 
                             this.sdaduimTypeResult.coach = response.data;
                         }
                     });
-                    userType = 4;
+                    userType = 4;// 助教
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
                         if (response.code === '200') {
                             this.sdaduimTypeResult.assistant = response.data;
@@ -357,6 +358,7 @@
                 }
                 axiosGetParams(COURSE_URL.checkAgreement, {agreement: this.agreementData}, (response) => {
                     if (response.code === '200') {
+                        this.agreementId = response.data.agreementId;
                         this.agreementError.style = "ag-success";
                         this.agreementError.msg = "协议号符合规则";
                     } else {
@@ -370,7 +372,8 @@
             addCardAgreement(){
                 axiosGetParams(COURSE_URL.addAgreement, {code: this.code}, (response) => {
                     if (response.code === '200') {
-                        this.agreementData = response.data.agreement
+                        this.agreementData = response.data.agreement;
+                        this.agreementId = response.data.agreementId;
                         this.agreementError.msg = "协议号符合规则";
                         this.agreementError.style = "ag-success";
                     } else {

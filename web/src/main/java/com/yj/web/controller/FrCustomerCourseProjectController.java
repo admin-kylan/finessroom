@@ -1,16 +1,17 @@
 package com.yj.web.controller;
 
+import com.yj.common.exception.YJException;
+import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
 import com.yj.dal.model.PersonnelInfo;
 import com.yj.service.service.impl.FrCustomerCourseProjectServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * by Kylan
@@ -32,15 +33,34 @@ public class FrCustomerCourseProjectController {
 
     /**
      * 根据businessTypeId 查询技师
+     *
      * @param request
      * @param businessTypeId
      * @return
      */
-    @GetMapping("/getMarketUserList")
-    public JsonResult getTechnicianBySdaduimId(HttpServletRequest request, String businessTypeId, String userType){
+    @GetMapping("getMarketUserList")
+    public JsonResult getTechnicianBySdaduimId(HttpServletRequest request, String businessTypeId, String userType) {
         String code = CookieUtils.getCookieValue(request, "code", true);
-        List<PersonnelInfo> personnelInfos =  frCustomerCourseProjectService.getTechnicianBySdaduimId(userType, businessTypeId, code);
+        List<PersonnelInfo> personnelInfos = frCustomerCourseProjectService.getTechnicianBySdaduimId(userType, businessTypeId, code);
         return JsonResult.success(personnelInfos);
+
+    }
+
+    /**
+     * 新建项目
+     *
+     * @param map
+     * @param request
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("addSaveCustomer")
+    public JsonResult addSaveCustomer(@RequestBody Map<String, String> map, HttpServletRequest request) throws YJException {
+        if (map == null) {
+            throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
+        }
+        JsonResult jsonResult = null;
+        return jsonResult;
 
     }
 }

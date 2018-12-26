@@ -151,6 +151,8 @@
                 projectId: '', //项目Id
                 projectPrice: '', //项目单价
                 salesNum: '', //销售最多数量
+                time: '', //同期失效时间
+                cardId: '', //会员卡
             },
             product: { //选择项目项
                 isShow: false,
@@ -163,11 +165,13 @@
                         project: '1',
                         projectId: '1',
                         price: '1',
-                        sale: '1'
+                        sale: '1',
+                        courseId: '1', //课程id
+                        courseSeriesId: '1', //课程系列id
                     }
                 ],
             },
-            packageProduct: { //套餐产品的列表数据
+            packageProduct: { //套餐产品的列表数据 套餐产品详情
                 data: [
                     {
                         shop: '1',
@@ -207,9 +211,11 @@
                 }
                 let date = new Date(value);
                 let validity = this.formData.validityPeriod; //有效期选择的项
+                this.formData.cardId = '';
                 //这里判断val 的值
                 if (validity == "all") {
                     //会员卡同期
+                    this.formData.endDate = this.formData.time.split(' ')[0];
                     return false;
                 }
                 if (validity == "other") {
@@ -220,15 +226,24 @@
                     validity = parseInt(validity) || 0;
                 }
 
-                date.setMonth(date.getMonth() + parseInt(validity))
+                date.setMonth(date.getMonth() + parseInt(validity));
                 this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
             },
             'formData.validityPeriod'(val){ //选择有效期时间
                 let date = new Date(this.formData.beginDate);
+                this.formData.cardId = '';
                 //这里判断val 的值
                 if (val == "all") {
                     //会员卡同期
+                    this.formData.endDate = this.formData.time.split(' ')[0];
+                    if(this.formData.endDate == ""){
+                        this.formData.validityPeriodTime = 0;
+                        return false;
+                    }
+                    let now = new Date();
+                    let endDate = new Date(this.formData.endDate);
+                    this.formData.validityPeriodTime = Math.ceil((endDate - now)/ (1000*60*60*24*30));// 计算出来，月份
                     return false;
                 }
                 if (val == "other") {
@@ -237,6 +252,9 @@
                         val = 0;
                     }
                 }
+
+                //设置有效期时间月数，保存数据库
+                this.formData.validityPeriodTime = val;
                 date.setMonth(date.getMonth() + parseInt(val))
                 this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             },
@@ -248,17 +266,15 @@
                     let date = new Date(this.formData.beginDate);
                     date.setMonth(date.getMonth() + parseInt(val))
                     this.formData.endDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                    this.formData.validityPeriodTime = val;
                 }
 
             },
             'formData.salesNum'(val, oldVal){ //销售最多数量
-                console.log(val)
                 let array = this.packageProduct.data,totalNum = 0;
                 $.each(array, (i, d) => {
                     totalNum += parseInt(d.num);
                 });
-                console.log(totalNum)
-                console.log(parseInt(val) > totalNum)
                 if(parseInt(val) > totalNum){
                     this.formData.salesNum = oldVal;
                 }
@@ -269,6 +285,38 @@
             let date = new Date();
             this.formData.beginDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             this.formData.endDate = this.formData.beginDate;
+            //获取会员卡的列表，计算日期
+            //queryByFrCardList
+            let param = {
+                page: -1,
+                rows: -1,
+                clientId: $.cookie('cid'),
+                code: $.cookie('code'),
+            };
+            jqueryPostParams(COURSE_URL.queryByFrCardList, param,
+                (res) => {
+                    let cardId = '-1',time = '';
+                    if (res.code == '200') {
+                        let now = new Date();
+                        let data = res.data;
+                        let m = 0;
+                        $.each(data, (i, d) => {
+                            if (d.status == 0) {
+                                let invalidTime = d['invalidTime'];
+                                let theDate = new Date(invalidTime);
+                                let b = theDate - now;
+                                if (b > 0 && b > m) {
+                                    m = b;
+                                    time = invalidTime;
+                                    cardId = d['cardNo']
+                                }
+                            }
+                        });
+                    }
+                    this.formData.cardId = cardId; //设置卡片ID 否则-1
+                    this.formData.time = time; //与会员卡同期的时间
+                }
+            )
         },
         mounted(){ //初始化
             //test

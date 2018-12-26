@@ -70,3 +70,33 @@ function axiosPostParams(url, params, success, error) {
         });
 }
 
+/**
+ * axios post 传参数 回调
+ * @param url
+ * @param params
+ * @param success
+ * @param error
+ */
+function jqueryPostParams(url, params, success, error) {
+    var p = {};
+    if (params) {
+        p = params;
+    }
+    $.ajax({
+        type: "post",
+        url: baseUrl + url,
+        data: p,
+        success: (response) => {
+            if (success) {
+                success(response);
+            }
+
+        },
+        error: (response) =>{
+            if (error) {
+                error(response);
+            }
+        }
+    });
+}
+
