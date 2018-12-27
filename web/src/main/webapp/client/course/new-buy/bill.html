@@ -299,7 +299,7 @@
                                     <div>现金</div>
                                     <div>转账</div>
                                     <div>花呗</div>
-                                    <!--<div>其他支付</div>-->
+                                    <div>其他支付</div>
                                 </div>
                                 <div class="section2_boxs1_botton">
                                     <div>金额</div>
@@ -535,6 +535,7 @@
             </div>
         </div>
     </div>
+    {{formData.replacement.chooseUserId}}-----
     <!-- end 选择储值会员卡 -->
 </div>
 
@@ -566,6 +567,7 @@
                     front: {//选择定金
                         date: '', //选择时间
                         time: '', //金额
+                        selectTime: '', //选择的时间
                     },
                 },
                 gift: {//赠送
@@ -899,8 +901,13 @@
             },
             'formData.payType.front.date'(val){
                 if(val !== 'other'){
-                    this.formData.payType.front.time = val;
+                    this.formData.payType.front.selectTime = val;
+                }else{
+                    this.formData.payType.front.selectTime = '0';
                 }
+            },
+            'formData.payType.front.time'(val){
+                this.formData.payType.front.selectTime = val;
             }
         },
         created: function () {
@@ -1110,6 +1117,7 @@
             },
             //结账按钮
             save(){
+                //严重判断
 
                 let param = {};
                 let full = '', less = '', consumeState = '0';//满减
@@ -1136,6 +1144,7 @@
                     num = headVue.performance.salesType;
                     allotType = 2;
                 }
+
                 let projectOrder = { //项目订单表
                     CustomerCode: $.cookie('code'),
                     OrderNumber: this.formData.orderInfo.orderNo,
@@ -1143,8 +1152,9 @@
                     OrderType: 0, //0新购
                     Price: this.formData.orderInfo.data.price, //售价
                     BuyCount: this.formData.orderInfo.data.buyNum, //购买数量
-                    SendCount: this.formData.orderInfo.data.giftNum, //赠送数量
+                    SendCount: this.formData.orderInfo.data.giftNum?this.formData.orderInfo.data.giftNum:0, //赠送数量
                     AllCount: parseInt(this.formData.orderInfo.data.buyNum) + parseInt(this.formData.orderInfo.data.giftNum), //总数量
+                    PayStatus: this.member.payType.payStatus,// 付款状态0-未付款 1-已付款 2-退款中 3-已退款
                     SalesId: headVue.performance.saleId, //销售员ID
                     SalesName: headVue.performance.saleName, //销售员名字
                     PayType: parseInt(this.formData.payType.index), //付款方式（1、全款；2、定金；3、赠送；4、置换；5、分期付款）
@@ -1174,7 +1184,7 @@
                     AuditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
                     StatusUserId: this.formData.replacement.chooseUserId,//审核人员ID
                     AuditUserId: this.formData.replacement.chooseUserId,//复审核人员ID
-                    DeposiTime: this.formData.payType.front.time,//复审核人员ID
+                    DeposiTime: this.formData.payType.front.selectTime,//复审核人员ID
                     InvoiceStatus: this.InvoiceStatus == true ? 1 : 0, //是否购置税发票设置
                     AllotType: allotType, //业绩分配类型（以实际销售价格的多少为销售业绩）（0、无业绩分配；1、分配百分百；2、分配金额）
                     AllotNum: num, //分配数额（百分百或者实际金额，根据分配类型判断）
@@ -1203,6 +1213,8 @@
                     RemainMoney: this.member.payMoney.retChange,// 找零
                     ConsumeState: consumeState,// 消费状态 0普通消费 1 会员消费 2员工消费 3 挂账 4挂单
                     MemberCardId: this.member.cardInfo.cardId,// 会员卡ID
+//                    AgreeId: this.member.cardInfo.cardId,// 协议单位ID
+//                    AgreeMoney: this.member.cardInfo.AgreeMoney,// 协议单位ID
                     PayState: this.member.payType.payStatus,// 付款状态0-未付款 1-已付款 2-退款中 3-已退款
                     IfOffset: 0,// 是否冲销 0 否 1 是
                     SalesId: headVue.performance.saleId, //销售员ID
@@ -1215,7 +1227,7 @@
                     CustomerCode: $.cookie('code'),
                     ContractNumber: headVue.agreementData, //合同编号
                     UseDay: headVue.currentDate, //日期
-                    SaleType: saleType, //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+                    SaleType: saleType?saleType:1, //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
                     ShopId: headVue.shopId, //门店
                     SdadiumId: headVue.sdaduimId, //场馆
                     CardId: this.formData.orderInfo.data.cardId,//卡号id
@@ -1223,8 +1235,8 @@
                     CourseSeriousId: this.formData.orderInfo.data.courseSeriesId, //课程系列ID
                     CourseId: this.formData.orderInfo.data.courseId, //课程ID
                     Useful: this.formData.orderInfo.data.validityPeriod, //有效期
-                    StartTime: this.formData.orderInfo.data.beginDate, //开始时间
-                    EndTime: this.formData.orderInfo.data.endDate, //结束时间
+                    StartTime: new Date(this.formData.orderInfo.data.beginDate), //开始时间
+                    EndTime: new Date(this.formData.orderInfo.data.endDate), //结束时间
                     SaleId: headVue.performance.saleId, //销售员ID
                     SaleName: headVue.performance.saleName, //销售员名字
                     ConsumeType: consumeState, //消费类型  0 普通消费 1 会员消费 2 员工消费  3 挂账 4 挂单
@@ -1548,7 +1560,6 @@
 
                 param.projectOrder = projectOrder;
                 param.sysConsumeOrder = sysConsumeOrder;
-                param.addProject = addProject;
                 param.addProject = addProject;
                 param.cardOrderPayModeData = cardOrderPayModeList;
                 param.cardAgreement = fr_card_agreement;

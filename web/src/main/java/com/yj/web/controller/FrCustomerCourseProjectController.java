@@ -60,7 +60,10 @@ public class FrCustomerCourseProjectController {
         if (map == null) {
             throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
-
+        String id = CookieUtils.getCookieValue(request, "id", true);
+        String name = CookieUtils.getCookieValue(request, "name", true);
+        map.put("createUserId", id);
+        map.put("createUserName", name);
         JsonResult jsonResult = null;
         frCustomerCourseProjectService.addSaveCustomer(map);
         return JsonResult.success(map);

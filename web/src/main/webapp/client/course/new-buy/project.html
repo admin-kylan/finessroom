@@ -295,21 +295,27 @@
         methods: {
             billFull(){//结账
                 let saleId = headVue.marketUserId;
+                if(!headVue.agreementId){
+                    alert("请输入协议编号");
+                    return false;
+                }
+                //判断销售ID  performance.saleId
+                if(!saleId){
+                    alert("请选择销售人员");
+                    return false;
+                }
+                //结账前判断验证
+                if(!this.formData.projectId){
+                    alert("请选择项目");
+                    return false;
+                }
 
-//                //结账前判断验证
-//                if(!this.formData.projectId){
-//                    alert("请选择项目");
-//                    return false;
-//                }
-//                //判断销售ID  performance.saleId
-//                if(!saleId){
-//                    alert("请选择销售人员");
-//                    return false;
-//                }
-//                if(!this.formData.buyNum){
-//                    alert("请输入购买数量");
-//                    return false;
-//                }
+                if(!this.formData.buyNum){
+                    alert("请输入购买数量");
+                    return false;
+                }
+
+
 
                 Vue.set(newBuyVue, 'billStatus', 'project')
                 $('#customer-new-buy-project-bill').load(this.billHtml); //显示结账
