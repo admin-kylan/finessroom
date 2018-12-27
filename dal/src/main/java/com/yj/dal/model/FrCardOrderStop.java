@@ -47,7 +47,7 @@ public class FrCardOrderStop extends Model<FrCardOrderStop> {
     @TableField("personnel_id")
     private String personnelId;
     /**
-     * 实际停卡时间
+     * 实际停卡结束时间
      */
     @TableField("end_time")
     private Date endTime;

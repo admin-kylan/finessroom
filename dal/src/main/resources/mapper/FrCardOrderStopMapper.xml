@@ -104,4 +104,21 @@
         ORDER BY a.create_time DESC
     </select>
 
+    <select id="queryStopTimeList" resultType="com.yj.dal.model.FrCardOrderStop">
+        SELECT
+         <include refid="Base_Column_List" />
+        FROM fr_card_order_stop a
+        WHERE a.price_status !=2
+        AND a.is_using = 1
+        AND a.type =1
+        AND ((a.stop_status = 0  and a.start_time &lt; #{nowTime}) or (a.stop_status = 1 and a.est_end_time &lt; #{nowTime}))
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="toUpdateTimeCard" resultType="java.lang.Integer">
+        UPDATE fr_card_order_stop
+        set stop_status = #{stopStatus}
+        WHERE  id = #{id} and CustomerCode = #{CustomerCode}
+    </select>
+
 </mapper>

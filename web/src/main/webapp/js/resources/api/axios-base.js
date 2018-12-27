@@ -100,3 +100,36 @@ function jqueryPostParams(url, params, success, error) {
     });
 }
 
+
+/**
+ * axios post 传参数 回调
+ * @param url
+ * @param params
+ * @param success
+ * @param error
+ */
+function ajaxPostJsonParams(url, params, success, error) {
+    var p = {};
+    if (params) {
+        p = params;
+    }
+    $.ajax({
+        type: "post",
+        url: baseUrl + url,
+        data: p,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: (response) => {
+            if (success) {
+                success(response);
+            }
+
+        },
+        error: (response) =>{
+            if (error) {
+                error(response);
+            }
+        }
+    });
+}
+

@@ -81,5 +81,4 @@ public class FrCardOriginalSetServiceImpl extends BaseServiceImpl<FrCardOriginal
         }
     }
 
-
 }

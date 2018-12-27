@@ -25,20 +25,27 @@ public class schedulerService {
     private IFrCardService iFrCardService;
 
 
-//    //每隔2秒执行一次
-//    @Scheduled(fixedRate = 2000)
-//    public void testTasks() {
-//        System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-//    }
+    //每隔2秒执行一次
+    @Scheduled( cron =  "0 0/60 * * * ?")
+    public void testTasks() {
+        log.info("每隔1小时执行一次会员卡停卡，补余信息更新：" + dateFormat.format(new Date()));
+        try{
+            iFrCardService.toUpdateCardStop();
+        }catch (Exception e){
+            log.info("定时任务执行时间异常：" +e);
+        }
+    }
 
     //每天凌晨01分的时候执行-----------开卡
     @Scheduled(cron = "0 01 00 ? * *")
     public void updateOpenCard() {
         log.info("定时任务执行时间：" + dateFormat.format(new Date()));
         try{
-//            iFrCardService.updateCardTime();
+            iFrCardService.updateCardTime();
         }catch (Exception e){
             log.info("定时任务执行时间异常：" +e);
         }
     }
+
+
 }

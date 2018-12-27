@@ -76,6 +76,9 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
     private  IFrShopCardConsumeService iFrShopCardConsumeService;
     @Resource
     private  IFrCardOrderStopService iFrCardOrderStopService;
+    @Resource
+    private  IFrCardSupplyRecordService iFrCardSupplyRecordService;
+
 
 
     //@Resource
@@ -297,29 +300,27 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         if(map != null ){
             Page page = new Query<FrCard>(map).getPage();
             //查询该会员卡列表总数据
-//            list = baseMapper.queryUserCardList(page,frCard);
             list = baseMapper.queryUserCardInfoList(page,frCard);
-            if(list != null && list.size() >0){
-                for(Map<String,Object> carMap:list){
-                    if(carMap != null){
-                        iFrCardOrderInfoService.getOrderNumInfo(carMap);
-                    }
-                }
-            }
+            this.getCardUserList(list);
             page.setRecords(list);
             map1.put("list",new PageUtils(page));
            return JsonResult.success(map1);
         }
         list = baseMapper.queryUserCardInfoList(frCard);
+        this.getCardUserList(list);
+        map1.put("list",list);
+        return JsonResult.success(list);
+    }
+
+    public void  getCardUserList(List< Map<String,Object>> list)throws YJException{
         if(list != null && list.size() >0){
             for(Map<String,Object> carMap:list){
                 if(carMap != null){
                     iFrCardOrderInfoService.getOrderNumInfo(carMap);
+                    this.getCardByStatus(carMap);
                 }
             }
         }
-        map1.put("list",list);
-        return JsonResult.success(list);
     }
 
     /**
@@ -967,41 +968,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
                     }
                     map1.put("sdaduName",sdaduName.toString());
                 }
-                //设置会员卡状态  --- 不是历史卡
-                Integer cardStat = NumberUtilsTwo.getIntNum("status",map1);
-                Integer type = CommonUtils.CARD_STATUS_0; //正常卡
-                //不是历史卡，不是冻结，停卡，待补余状态的卡  重新判断下卡状态
-                if(cardStat != CommonUtils.CARD_STATUS_6 && cardStat != CommonUtils.CARD_STATUS_5
-                        && cardStat != CommonUtils.CARD_STATUS_2  &&  cardStat != CommonUtils.CARD_STATUS_1){
-                    //开卡状态判断此会员卡是否过期？
-                    //根据开卡时间判断是否开卡
-                    String bindTime = StringUtils.getStringObject("bindTime",map1);
-                    if(StringUtils.toIsEmpty(bindTime)){
-                        cardStat = CommonUtils.CARD_STATUS_4;
-                        map1.put("status",cardStat);
-                        continue;
-                    }
-                    Date bindDate = DateUtils.getDataforString(bindTime,"yyyy-MM-dd HH:mm:ss");
-                    Date nowDa = new Date();
-                    //时间越大越靠后
-                    boolean isFlag = DateUtil.compareDate(bindDate,nowDa);
-                    //开卡时间大约现在时间，未开卡
-                    if(isFlag){
-                        cardStat = CommonUtils.CARD_STATUS_4;
-                        map1.put("status",cardStat);
-                        continue;
-                    }
-                    //失效时间
-                    String invalidTime = StringUtils.getStringObject("invalidTime",map1);
-                    Date endData = DateUtils.getDataforString(invalidTime,"yyyy-MM-dd HH:mm:ss");
-                    isFlag = DateUtil.compareDate(nowDa,endData);
-                    //现在时间大于结束时间，过期
-                    if(isFlag){
-                        cardStat = CommonUtils.CARD_STATUS_3;
-                        map1.put("status",cardStat);
-                        continue;
-                    }
-                }
+                this.getCardByStatus(map1);
             }
         }
         return list;
@@ -1039,6 +1006,47 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         return orderHaveNum;
     }
 
+
+    public boolean getCardByStatus (Map<String, Object> map)throws YJException{
+        //设置会员卡状态  --- 不是历史卡
+        Integer cardStat = NumberUtilsTwo.getIntNum("status",map);
+        Integer type = CommonUtils.CARD_STATUS_0; //正常卡
+        //不是历史卡，不是冻结，停卡，待补余状态的卡  重新判断下卡状态
+        if(cardStat == CommonUtils.CARD_STATUS_0 || cardStat == CommonUtils.CARD_STATUS_4){
+            //开卡状态判断此会员卡是否过期？
+            //根据开卡时间判断是否开卡
+            String bindTime = StringUtils.getStringObject("bindTime",map);
+            if(StringUtils.toIsEmpty(bindTime)){
+                cardStat = CommonUtils.CARD_STATUS_4;
+                map.put("status",cardStat);
+                return false;
+            }
+            Date bindDate = DateUtils.getDataforString(bindTime,"yyyy-MM-dd HH:mm:ss");
+            Date nowDa = new Date();
+            //时间越大越靠后
+            boolean isFlag = DateUtil.compareDate(bindDate,nowDa);
+            //开卡时间大约现在时间，未开卡
+            if(isFlag){
+                cardStat = CommonUtils.CARD_STATUS_4;
+                map.put("status",cardStat);
+                return  false;
+            }
+            //失效时间
+            String invalidTime = StringUtils.getStringObject("invalidTime",map);
+            Date endData = DateUtils.getDataforString(invalidTime,"yyyy-MM-dd HH:mm:ss");
+            isFlag = DateUtil.compareDate(nowDa,endData);
+            //现在时间大于结束时间，过期
+            if(isFlag){
+                cardStat = CommonUtils.CARD_STATUS_3;
+                map.put("status",cardStat);
+                //此方法可以之后优化
+                this.toUpdateCardTime();
+                return  false;
+            }
+        }
+        return  true;
+    }
+
     /**
      * 会员卡状态的定时任务
      * @throws YJException
@@ -1046,22 +1054,48 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateCardTime() throws YJException {
-        //根据开始停卡时间，-- 停卡状态是正常的 更新为停卡----会员卡停卡
-        //根据预计终止时间------停卡状态未停卡中的 --更新未终止，会员卡正常
-        iFrCardOrderStopService.updateCardStop();
+        this.toUpdateCardStop();
+        this.toUpdateCardTime();
+    }
 
-        //根据会员卡支付方式为定金，不是结款状态 --- 开卡时间加上补余期限，判断是否小于今天，是待补余状态
-        //根据会员卡支付方式为分期付款方式--未结款---支付期限小于今天的，待补余
-        //查询续卡的开卡时间是今天的，之前的会员卡更新为历史卡，新会员卡开卡，如果过是更换新卡，卡号注意变更
-        // 转移旧卡的剩余储值金额
 
-        //根据会员卡的失效时间，跟新会员卡的过期
-
-        //把会员卡开卡时间小于现在的未开卡的会员卡开卡
-        FrCard frCard = new FrCard();
-        frCard.setStatus(CommonUtils.CARD_STATUS_0);
+    @Transactional(rollbackFor = Exception.class)
+    public void toUpdateCardTime()throws YJException {
         Date date = new Date();
-        this.update(frCard,new EntityWrapper<FrCard>().where("is_using={0}",1).and("status={0}",CommonUtils.CARD_STATUS_4).and("bind_time <= {0}",date));
+        //根据续卡订单更新会员卡信息
+        iFrCardSupplyRecordService.updateSupplyRecordTime();
+        //根据会员卡的失效时间，跟新会员卡的过期
+        FrCard frCard = new FrCard();
+        frCard.setStatus(CommonUtils.CARD_STATUS_3);
+        this.update(frCard,new EntityWrapper<FrCard>().where("is_using={0}",1).and("status={0}",CommonUtils.CARD_STATUS_0).and("invalid_time <= {0}",date).and("invalid_time is not null").and("invalid_time != ''"));
+        //把会员卡开卡时间小于现在的未开卡的会员卡开卡
+        frCard = new FrCard();
+        frCard.setStatus(CommonUtils.CARD_STATUS_0);
+        this.update(frCard,new EntityWrapper<FrCard>().where("is_using={0}",1).and("status={0}",CommonUtils.CARD_STATUS_4).and("bind_time <= {0}",date).and("bind_time is not null").and("bind_time != ''"));
+    }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void toUpdateCardStop()throws YJException{
+        Date date = new Date();
+        //更新停卡--终止停卡状态
+        iFrCardOrderStopService.updateCardStop();
+        //更新需要补余的会员卡，判断补余期限是否到了，
+        Map<String,Object> map = new HashMap<>();
+        map.put("nowTime",date);
+        map.put("status",CommonUtils.CARD_STATUS_5);
+        baseMapper.toUpdateComplement(map);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void toUpdateStopTime(List<String> stopCardList,Integer status) throws YJException {
+        if(stopCardList == null || stopCardList.size() <= 0){
+            return;
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("stopCardList",stopCardList);
+        map.put("status",status);
+        baseMapper.toUpdateStopTime(map);
     }
 }

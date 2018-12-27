@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ProjectSeriousProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.ProjectSeriousProject">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="ProjectSeriousInfoId" property="ProjectSeriousInfoId" />
+        <result column="ShopId" property="ShopId" />
+        <result column="SdadiumId" property="SdadiumId" />
+        <result column="ProjectSetId" property="ProjectSetId" />
+        <result column="ReferCount" property="ReferCount" />
+        <result column="DayCount" property="DayCount" />
+        <result column="CreateTime" property="CreateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ProjectSeriousInfoId, ShopId, SdadiumId, ProjectSetId, ReferCount, DayCount, CreateTime, ID
+    </sql>
+
+</mapper>

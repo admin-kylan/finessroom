@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 会员卡补卡记录 服务类
+ * 会员卡补卡 、续卡、转卡、卡升级记录 前端控制器
  * </p>
  *
  * @author MP自动生成
@@ -75,4 +75,9 @@ public interface IFrCardSupplyRecordService extends BaseService<FrCardSupplyReco
     * @return
     */
    List<String> getCardIdList(String cardId,Integer type);
+
+   /**
+    * 根据续卡信息判断是否开卡
+    */
+   void updateSupplyRecordTime()throws YJException ;
 }

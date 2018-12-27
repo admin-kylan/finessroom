@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-10-24
+ * @since 2018-12-26
  */
 @TableName("fr_card_agreement")
 public class FrCardAgreement extends Model<FrCardAgreement> {
@@ -46,6 +46,11 @@ public class FrCardAgreement extends Model<FrCardAgreement> {
      */
     @TableField(fill = FieldFill.INSERT)
     private String CustomerCode;
+    /**
+     * 项目/课程 ID
+     */
+    @TableField("project_id")
+    private String projectId;
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -90,6 +95,14 @@ public class FrCardAgreement extends Model<FrCardAgreement> {
         this.CustomerCode = CustomerCode;
     }
 
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
     public String getId() {
         return id;
     }
@@ -106,12 +119,13 @@ public class FrCardAgreement extends Model<FrCardAgreement> {
     @Override
     public String toString() {
         return "FrCardAgreement{" +
-        ", agreementId=" + agreementId +
-        ", cardId=" + cardId +
-        ", agreementNo=" + agreementNo +
-        ", isUsing=" + isUsing +
-        ", CustomerCode=" + CustomerCode +
-        ", id=" + id +
-        "}";
+                ", agreementId=" + agreementId +
+                ", cardId=" + cardId +
+                ", agreementNo=" + agreementNo +
+                ", isUsing=" + isUsing +
+                ", CustomerCode=" + CustomerCode +
+                ", projectId=" + projectId +
+                ", id=" + id +
+                "}";
     }
 }

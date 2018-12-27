@@ -1,9 +1,11 @@
 package com.yj.service.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.yj.common.result.JsonResult;
 import com.yj.dal.dao.*;
-import com.yj.dal.model.FrCardAgreement;
-import com.yj.dal.model.PersonnelInfo;
+import com.yj.dal.model.*;
 import com.yj.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,28 +26,15 @@ public class FrCustomerCourseProjectServiceImpl {
     @Autowired
     private FrCustomerCourseProjectMapper frCustomerCourseProjectMapper;
 
-    @Resource
-    private FrShopCardTypeRelateMapper shopCardTypeRelateMapper;
-    @Resource
-    private FrCardTypeMapper frCardTypeMapper; //卡类型关联表
-    @Resource
-    private PersonnelInfoMapper personnelInfoMapper;
+
     @Resource
     private IFrAgreementService iFrAgreementService;
-    @Resource
-    private IFrCardNumService iFrCardNumService;
-    @Resource
-    private IFrCardOrderInfoService iFrCardOrderInfoService;
+
     @Resource
     private IFrCardOrderPayModeService iFrCardOrderPayModeService;
     @Resource
     private FrCardAgreementMapper frCardAgreementMapper;
-    @Resource
-    private IFrCardOriginalSetService iFrCardOriginalSetService;
-    @Resource
-    private IFrCardOrderSplitSetService iFrCardOrderSplitSetService;
-    @Resource
-    private IFrCardOrderSplitSetDdService iFrCardOrderSplitSetDdService;
+
     @Resource
     private IFrCardOrderAllotSetService iFrCardOrderAllotSetService;
     @Resource
@@ -53,15 +42,7 @@ public class FrCustomerCourseProjectServiceImpl {
     @Resource
     private IFrCardOrderPriceDatailService iFrCardOrderPriceDatailService;
     @Resource
-    private IFrClientService iFrClientService;
-    @Resource
-    private IFrLevelService iFrLevelService;
-    @Resource
-    private IFrClientPicService iFrClientPicService;
-    @Resource
-    private IFrShopCardConsumeService iFrShopCardConsumeService;
-    @Resource
-    private IFrCardOrderStopService iFrCardOrderStopService;
+    private ProjectOrderMapper projectOrder;
 
     /**
      * 根据场馆ID查询 并且 userType 是动态的，选择教练还是助教
@@ -77,7 +58,38 @@ public class FrCustomerCourseProjectServiceImpl {
 
 
     public void addSaveCustomer(Map map) {
-        FrCardAgreement frCardAgreement = (FrCardAgreement) map.get("frCardAgreement");
+        //json 转成实体
+        ProjectOrder projectOrder = JSONObject.toJavaObject((JSON) map.get("projctOrder"), ProjectOrder.class);
+        SysConsumeOrder sysConsumeOrder = JSONObject.toJavaObject((JSON) map.get("sysConsumeOrder"), SysConsumeOrder.class);
+        AddProject addProject = JSONObject.toJavaObject((JSON) map.get("addProject"), AddProject.class);
+        FrCardAgreement frCardAgreement = JSONObject.toJavaObject((JSON) map.get("cardAgreement"), FrCardAgreement.class);
+
+        JSONArray cardOrderPayModeData = (JSONArray) map.get("cardOrderPayModeData");
+        JSONArray cardOrderDetailList = (JSONArray) map.get("cardOrderDetailList");
+        JSONArray cardOrderPriceDetailList = (JSONArray) map.get("cardOrderPriceDetailList");
+        JSONArray cardOrderAllotSetList = (JSONArray) map.get("cardOrderAllotSetList");
+        JSONArray clientPersonnelRelate = (JSONArray) map.get("clientPersonnelRelate");
+
+        //保存数据库
+
+        for(Object object: cardOrderPayModeData){
+            FrCardOrderPayMode frCardOrderPayMode = (FrCardOrderPayMode) object;
+
+        }
+        for(Object object: cardOrderDetailList){
+            FrCardOrderDatail frCardOrderDatail = (FrCardOrderDatail) object;
+        }
+
+        for(Object object: cardOrderPriceDetailList){
+            FrCardOrderPriceDatail frCardOrderPriceDatail = (FrCardOrderPriceDatail) object;
+        }
+        for(Object object: cardOrderAllotSetList){
+            FrCardOrderAllotSet frCardOrderAllotSet = (FrCardOrderAllotSet) object;
+        }
+        for(Object object: clientPersonnelRelate){
+            FrClientPersonnelRelate relate = (FrClientPersonnelRelate) object;
+        }
+
 
 
     }

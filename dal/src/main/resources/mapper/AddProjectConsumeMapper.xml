@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.AddProjectConsumeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.AddProjectConsume">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="OpenId" property="OpenId" />
+        <result column="SysConsumeOrderId" property="SysConsumeOrderId" />
+        <result column="MemberCardId" property="MemberCardId" />
+        <result column="AddProjectId" property="AddProjectId" />
+        <result column="AddProjectName" property="AddProjectName" />
+        <result column="ShopId" property="ShopId" />
+        <result column="SdaduimId" property="SdaduimId" />
+        <result column="Unit" property="Unit" />
+        <result column="StartTime" property="StartTime" />
+        <result column="EndTime" property="EndTime" />
+        <result column="IfOffset" property="IfOffset" />
+        <result column="SalesId" property="SalesId" />
+        <result column="SalesName" property="SalesName" />
+        <result column="ServiceId" property="ServiceId" />
+        <result column="ServiceName" property="ServiceName" />
+        <result column="CreateTime" property="CreateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, OpenId, SysConsumeOrderId, MemberCardId, AddProjectId, AddProjectName, ShopId, SdaduimId, Unit, StartTime, EndTime, IfOffset, SalesId, SalesName, ServiceId, ServiceName, CreateTime
+    </sql>
+
+</mapper>

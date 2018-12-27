@@ -1,9 +1,18 @@
 package com.yj.web.controller;
 
 
+import com.yj.common.exception.YJException;
+import com.yj.common.result.JsonResult;
+import com.yj.dal.model.FrCardOriginalSet;
+import com.yj.service.service.IFrCardOriginalSetService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -16,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/frCardOriginalSet")
 public class FrCardOriginalSetController {
+
+    @Resource
+    private IFrCardOriginalSetService service;
 
 }
 

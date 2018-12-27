@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.AddProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.AddProject">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="ContractNumber" property="ContractNumber" />
+        <result column="UseDay" property="UseDay" />
+        <result column="SaleType" property="SaleType" />
+        <result column="ShopId" property="ShopId" />
+        <result column="SdadiumId" property="SdadiumId" />
+        <result column="CardId" property="CardId" />
+        <result column="ProjectId" property="ProjectId" />
+        <result column="CourseSeriousId" property="CourseSeriousId" />
+        <result column="CourseId" property="CourseId" />
+        <result column="Useful" property="Useful" />
+        <result column="StartTime" property="StartTime" />
+        <result column="EndTime" property="EndTime" />
+        <result column="SaleId" property="SaleId" />
+        <result column="SaleName" property="SaleName" />
+        <result column="ConsumeType" property="ConsumeType" />
+        <result column="State" property="State" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, ContractNumber, UseDay, SaleType, ShopId, SdadiumId, CardId, ProjectId, CourseSeriousId, CourseId, Useful, StartTime, EndTime, SaleId, SaleName, ConsumeType, State
+    </sql>
+
+</mapper>

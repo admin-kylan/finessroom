@@ -41,4 +41,8 @@ public interface FrCardMapper extends BaseMapper<FrCard> {
     List<Map<String,Object>> queryUserCardInfoList(Page<FrCard> page,FrCard frCard);
 
     List<Map<String,Object>> queryUserCardInfoList(FrCard frCard);
+
+    Integer toUpdateStopTime(Map<String,Object> map);
+
+    Integer toUpdateComplement(Map<String,Object> map);
 }

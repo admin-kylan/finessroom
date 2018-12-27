@@ -33,4 +33,5 @@ public interface IFrCardOrderComplementService extends BaseService<FrCardOrderCo
      * @throws YJException
      */
     Double getComplementAllMoney (FrCardOrderComplement frCardOrderComplement)throws YJException;
+
 }

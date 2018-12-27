@@ -10,11 +10,13 @@
         <result column="agreement_no" property="agreementNo" />
         <result column="is_using" property="isUsing" />
         <result column="CustomerCode" property="CustomerCode" />
+        <result column="project_id" property="projectId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        agreement_id AS agreementId, card_id AS cardId, agreement_no AS agreementNo, is_using AS isUsing, CustomerCode, id
+        agreement_id AS agreementId, card_id AS cardId, agreement_no AS agreementNo, is_using AS isUsing, CustomerCode, project_id AS projectId, id
     </sql>
+
 
 </mapper>

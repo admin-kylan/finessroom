@@ -63,25 +63,29 @@
                     <div class="section4_box">
                         <div class="section4_box_top">
                             <div>付款类型：
-                                <label @click="formData.payType.index = 0;reviewType = ''">
-                                    <input type="radio" name="quan">全款</label>
-                                <label @click="formData.payType.index = 1;reviewType = ''">
-                                    <input type="radio" name="quan">定金</label>
-                                <label @click="formData.payType.index = 2;reviewType = 'gift'">
-                                    <input type="radio" name="quan">赠送</label>
-                                <label @click="formData.payType.index = 3;reviewType = 'replacement'">
-                                    <input type="radio" name="quan">置换</label>
+                                <label>
+                                    <input type="radio" name="quan" v-model="formData.payType.index"
+                                           value="1" @click="reviewType = ''">全款</label>
+                                <label>
+                                    <input type="radio" name="quan" v-model="formData.payType.index"
+                                           value="2" @click="reviewType = ''">定金</label>
+                                <label>
+                                    <input type="radio" name="quan" v-model="formData.payType.index"
+                                           value="3" @click="reviewType = 'gift'">赠送</label>
+                                <label>
+                                    <input type="radio" name="quan" v-model="formData.payType.index"
+                                           value="4" @click="reviewType = 'replacement'">置换</label>
                                 <label>
                                     <input type="radio" name="quan" disabled>分期付款</label>
                             </div>
                         </div>
                         <div class="section4_box_botton">
-                            <fieldset v-show="formData.payType.index === 0">
+                            <fieldset v-show="formData.payType.index === '1'">
                                 <div style="line-height: 50px !important">
                                     选择全款，请填写对应的支付方式，以及对应支付金额，完成结账！
                                 </div>
                             </fieldset>
-                            <fieldset v-show="formData.payType.index === 1">
+                            <fieldset v-show="formData.payType.index === '2'">
                                 <div>
                                     <label>补余期限：</label>
                                     <label><input type="radio" name="tian" v-model="formData.payType.front.date"
@@ -98,18 +102,18 @@
                                                   value="90">90天</label>
                                     <label><input type="radio" name="tian" v-model="formData.payType.front.date"
                                                   value="180">180天</label>
-                                    <label><input type="radio" name="tian" v-model="formData.payType.front.date"
-                                                  value="other">180天</label>
                                     <label>
+                                        <input type="radio" name="tian" v-model="formData.payType.front.date"
+                                               value="other">
                                         <span>其他</span>
                                         <input type="text" name="tian" style="float: none;"
-                                               v-model="formData.payType.front.money"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"/>
+                                               v-model="formData.payType.front.time"
+                                               oninput="value=value.replace(/[^\d]+/g,'')"/>
                                         <span style="float: right;">天</span>
                                     </label>
                                 </div>
                             </fieldset>
-                            <fieldset class="fieldset3" v-show="formData.payType.index === 2">
+                            <fieldset class="fieldset3" v-show="formData.payType.index === '3'">
                                 <div>
                                     赠送人：
                                     <select name="1" v-model="formData.gift.chooseUserId">
@@ -124,7 +128,7 @@
                                     <span v-text="formData.gift.msg" :class="formData.gift.class"></span>
                                 </div>
                             </fieldset>
-                            <fieldset v-show="formData.payType.index === 3">
+                            <fieldset v-show="formData.payType.index === '4'">
                                 <div>
                                     <div>
                                         <span> 置换单位名称：</span>
@@ -323,10 +327,10 @@
                                         <input type="text" v-model="member.payType.p6" placeholder="0.00"
                                                oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
                                     </div>
-                                    <!--<div><span>￥</span>-->
-                                    <!--<input type="text" v-model="member.payType.p7" placeholder="0.00"-->
-                                    <!--oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">-->
-                                    <!--</div>-->
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="member.payType.p7" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -444,7 +448,7 @@
                                 <div style=" border-bottom: none">
                                     <div class="col-md-12">
                                         <label>
-                                            <input type="checkbox">
+                                            <input type="checkbox" v-model="InvoiceStatus">
                                             <span>购置发票</span>
                                         </label>
                                     </div>
@@ -522,7 +526,7 @@
                         <td class='col-red'>{{item.cardTypeName}}</td>
                         <td>{{item.bindTime | formatDate}}</td>
                         <td>{{item.invalidTime|formatDate}}</td>
-                        <td>{{item.orderRightsNum}}</td>
+                        <td>{{item.orderNum}}</td>
                         <td>{{item.orderPrice}}</td>
                         <td>{{item.a_status}}</td>
                     </tr>
@@ -544,6 +548,7 @@
             billStatus: '',//判断是课程还是套餐
             index: 0, // tab的index
             reviewType: '', //审核类型
+            InvoiceStatus: '', //购置税发票
             formData: {//页面表单的数据
                 orderInfo: {//订单信息
                     orderNo: '', //订单编号
@@ -557,10 +562,10 @@
 
                 },
                 payType: {//付款类型
-                    index: '', //结账付款类型的序号
+                    index: '1', //结账付款类型的序号
                     front: {//选择定金
                         date: '', //选择时间
-                        money: '', //金额
+                        time: '', //金额
                     },
                 },
                 gift: {//赠送
@@ -891,6 +896,11 @@
                     this.member.payMoney.noPrice = end;
                     this.member.payMoney.retChange = 0;
                 }
+            },
+            'formData.payType.front.date'(val){
+                if(val !== 'other'){
+                    this.formData.payType.front.time = val;
+                }
             }
         },
         created: function () {
@@ -939,7 +949,7 @@
                     cardId: projectVue.formData.validityPeriod == 'all'? projectVue.formData.cardId: '', //卡号
 
                 }
-              
+
 
             }
 
@@ -1048,19 +1058,18 @@
             //选择客户，查询会员卡
             catcherClientList(item){
                 let param = {
+                    page: -1,
+                    rows: -1,
                     clientId: item.id,
                     CustomerCode: $.cookie('code'),
-                    isUsing: true
                 };
                 //设置会员卡名称
                 this.member.cardInfo.cardUserName = item.clientName;
-                $.post($.cookie('url') + COURSE_URL.getCardListByMobile, param,
-                    (res) => {
-                        if (res.code == '200') {
-                            this.member.memberCard.optionClientCardList = res.data;
-                        }
+                jqueryPostParams(COURSE_URL.getCardListByMobile, param, (res) =>{
+                    if (res.code == '200') {
+                        this.member.memberCard.optionClientCardList = res.data;
                     }
-                );
+                });
                 //显示选择后的弹窗
                 this.member.memberCard.isShow = true;
             },
@@ -1103,19 +1112,7 @@
             save(){
 
                 let param = {};
-                let projectOrder = { //项目订单表
-                    CustomerCode: $.cookie('code'),
-                    OrderNumber: this.formData.orderInfo.orderNo,
-                    ObjectId: this.formData.orderInfo.data.projectId, //对象ID
-                    OrderType: 0, //0新购
-                    Price: this.formData.orderInfo.data.price, //售价
-                    BuyCount: this.formData.orderInfo.data.buyNum, //购买数量
-                    SendCount: this.formData.orderInfo.data.giftNum, //赠送数量
-                    AllCount: parseInt(this.formData.orderInfo.data.buyNum) + parseInt(this.formData.orderInfo.data.giftNum), //总数量
-                    SalesId: headVue.performance.saleId, //销售员ID
-                    SalesName: headVue.performance.saleName, //销售员名字
-                };
-                let full = '', less = '', consumeState = '0';
+                let full = '', less = '', consumeState = '0';//满减
                 if (this.member.rebate.type + "" === '1') {
                     full = this.member.rebate.repeat.full;
                     less = this.member.rebate.repeat.less;
@@ -1127,6 +1124,65 @@
                 if (this.index === 0) {
                     consumeState = '1';
                 }
+                //--
+                let salesType = headVue.performance.salesType;//业绩分配类型
+                let num = 0,//分配数额
+                    allotType = '';
+                if(salesType === "rate"){
+                    num = headVue.performance.salesValueSales;
+                    allotType = 1;
+                }
+                if(salesType === "num"){
+                    num = headVue.performance.salesType;
+                    allotType = 2;
+                }
+                let projectOrder = { //项目订单表
+                    CustomerCode: $.cookie('code'),
+                    OrderNumber: this.formData.orderInfo.orderNo,
+                    ObjectId: this.formData.orderInfo.data.projectId, //对象ID
+                    OrderType: 0, //0新购
+                    Price: this.formData.orderInfo.data.price, //售价
+                    BuyCount: this.formData.orderInfo.data.buyNum, //购买数量
+                    SendCount: this.formData.orderInfo.data.giftNum, //赠送数量
+                    AllCount: parseInt(this.formData.orderInfo.data.buyNum) + parseInt(this.formData.orderInfo.data.giftNum), //总数量
+                    SalesId: headVue.performance.saleId, //销售员ID
+                    SalesName: headVue.performance.saleName, //销售员名字
+                    PayType: parseInt(this.formData.payType.index), //付款方式（1、全款；2、定金；3、赠送；4、置换；5、分期付款）
+                    ConsumeType: parseInt(this.formData.payType.index) === 0 ? 1 : 2, //消费方式（1、会员消费；2、普通消费；3、员工领用；4、协议单位；）
+                    TotalPrice: parseFloat(this.member.payMoney.totalPrice?this.member.payMoney.totalPrice:0), //总价
+                    AlipayPrice: parseFloat(this.member.payType.p1?this.member.payType.p1:0), //
+                    PayCardPrice: parseFloat(this.member.payType.p2?this.member.payType.p2:0), //
+                    WechatPrice: parseFloat(this.member.payType.p3?this.member.payType.p3:0), //
+                    CashPrice: parseFloat(this.member.payType.p4?this.member.payType.p4:0), //
+                    AccountsPrice: parseFloat(this.member.payType.p5?this.member.payType.p5:0), //
+                    FlowerPrice: parseFloat(this.member.payType.p6?this.member.payType.p6:0), //
+                    OtherPrice: parseFloat(this.member.payType.p7?this.member.payType.p7:0), //
+                    Discount: parseFloat(this.member.rebate.offer?this.member.rebate.offer:0), //优惠折扣
+                    ChangeNum: parseFloat(this.member.rebate.integer?this.member.rebate.integer:0), //整单去零
+                    FullType: this.member.rebate.type, //满减优惠类型（0、一次；1、可重复）
+                    DiscountFull: full, //满
+                    DiscountReduce: less, //减
+                    DiscountPrice: parseFloat(this.member.payMoney.discount?this.member.payMoney.discount:0),//折扣/优惠
+                    DiscountNum: parseFloat(this.member.payMoney.discountMoney?this.member.payMoney.discountMoney:0),//抵扣金额
+                    NeedPrice: parseFloat(this.member.payMoney.price?this.member.payMoney.price:0),//应付金额
+                    NoPrice: parseFloat(this.member.payMoney.noPrice?this.member.payMoney.noPrice:0),//未付金额
+                    RetChange: parseFloat(this.member.payMoney.retChange?this.member.payMoney.retChange:0),//找零
+                    ShopId: headVue.shopId,//基础表门店ID
+                    PersonnelId: $.cookie('cid'),//人员（员工）ID
+                    Flag: '',//备用
+                    Status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+                    AuditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+                    StatusUserId: this.formData.replacement.chooseUserId,//审核人员ID
+                    AuditUserId: this.formData.replacement.chooseUserId,//复审核人员ID
+                    DeposiTime: this.formData.payType.front.time,//复审核人员ID
+                    InvoiceStatus: this.InvoiceStatus == true ? 1 : 0, //是否购置税发票设置
+                    AllotType: allotType, //业绩分配类型（以实际销售价格的多少为销售业绩）（0、无业绩分配；1、分配百分百；2、分配金额）
+                    AllotNum: num, //分配数额（百分百或者实际金额，根据分配类型判断）
+
+                };
+
+
+
                 let sysConsumeOrder = {//消费结账单表
                     CustomerCode: $.cookie('code'),
                     CustomerId: this.formData.userInfo.data.id, //客户id
@@ -1218,9 +1274,9 @@
                         cardOrderPayModeList.push(cardOrderPayMode);
                     }
                 }
-                let cardOrderPayModeData = {//订单表
-                    list: cardOrderPayModeList, //数组保存
-                };
+//                let cardOrderPayModeData = {//订单表
+//                    list: cardOrderPayModeList, //数组保存
+//                };
 
 
                 //-------------------------------
@@ -1420,17 +1476,7 @@
 
 
                 //--------------------------------
-                let salesType = headVue.performance.salesType;
-                let num = 0,
-                    allotType = 0;
-                if(salesType === "rate"){
-                    num = headVue.performance.salesValueSales;
-                    allotType = 1;
-                }
-                if(salesType === "num"){
-                    num = headVue.performance.salesType;
-                    allotType = 2;
-                }
+
                 //业绩分配
                 let fr_card_order_allot_set_list = [];
                 let allotList = headVue.performance.list;
@@ -1489,21 +1535,33 @@
 
                 //包装封装
 
+//                param.projectOrder = JSON.stringify(projectOrder);
+//                param.sysConsumeOrder = JSON.stringify(sysConsumeOrder);
+//                param.addProject = JSON.stringify(addProject);
+//                param.addProject = JSON.stringify(addProject);
+//                param.cardOrderPayModeData = JSON.stringify(cardOrderPayModeData);
+//                param.cardAgreement = JSON.stringify(fr_card_agreement);
+//                param.cardOrderDatailList = JSON.stringify(fr_card_order_datail_list);
+//                param.cardOrderPriceDatailList = JSON.stringify(fr_card_order_price_datail_list);
+//                param.cardOrderAllotSetList = JSON.stringify(fr_card_order_allot_set_list);
+//                param.clientPersonnelRelate = JSON.stringify(fr_client_personnel_relate);
+
                 param.projectOrder = projectOrder;
                 param.sysConsumeOrder = sysConsumeOrder;
                 param.addProject = addProject;
                 param.addProject = addProject;
-                param.cardOrderPayModeData = cardOrderPayModeData;
+                param.cardOrderPayModeData = cardOrderPayModeList;
                 param.cardAgreement = fr_card_agreement;
-                param.cardOrderDatailList = fr_card_order_datail_list;
-                param.cardOrderPriceDatailList = fr_card_order_price_datail_list;
+                param.cardOrderDetailList = fr_card_order_datail_list;
+                param.cardOrderPriceDetailList = fr_card_order_price_datail_list;
                 param.cardOrderAllotSetList = fr_card_order_allot_set_list;
                 param.clientPersonnelRelate = fr_client_personnel_relate;
                 console.log(param)
                 console.log(JSON.stringify(param))
-//                jqueryPostParams(COURSE_URL.addSaveCustomer, param, (response) => {
-//                    console.log(response)
-//                })
+
+                ajaxPostJsonParams(COURSE_URL.addSaveCustomer, JSON.stringify(param), (response) => {
+                    console.log(response)
+                })
             }
         }
     });

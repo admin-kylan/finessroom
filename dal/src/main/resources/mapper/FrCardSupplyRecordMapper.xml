@@ -158,5 +158,49 @@
         SELECT * FROM cte
    </select>
 
+    <select id="updateSupplyRecordTime" resultType="com.yj.dal.model.FrCardSupplyRecord">
+        SELECT
+           b.type,
+           b.card_num_id AS orderInfoId,
+           a.ori_card_id AS oriCardId,
+           a.new_card_id AS newCardId,
+           a.personnel_id AS personnelId,
+           a.pay_price AS payPrice,
+           a.supply_remarks AS supplyRemarks,
+           a.flag,
+           a.is_using AS isUsing,
+           a.create_time AS createTime,
+           a.update_time AS updateTime,
+           a.create_user_name AS createUserName,
+           a.update_user_name AS updateUserName,
+           a.CustomerCode,
+           a.create_user_id AS createUserId,
+           a.update_user_id AS updateUserId,
+           a.external_no AS externalNo,
+           a.client_id AS clientId,
+           a.status,
+           a.audit_status AS auditStatus,
+           a.status_user_id AS statusUserId,
+           a.audit_user_id AS auditUserId,
+           a.ori_card_no AS oriCardNo,
+           a.new_card_no AS newCardNo,
+           a.card_name AS cardName,
+           a.card_flag AS cardFlag,
+           a.invalid_time AS invalidTime,
+           a.card_opening AS cardOpening,
+           a.replacement_card AS replacementCard,
+           a.order_state AS orderState,
+           a.bind_time AS bindTime,
+           a.new_card_num_id AS newCardNumId,
+           a.id
+        FROM fr_card_supply_record a
+        LEFT JOIN fr_card b  on  a.ori_card_id = b.id
+        WHERE a.is_using = 1 and a.type = 2
+        and a.order_state != 2  and a.status != 2 and a.audit_status != 2 and a.card_opening = 0
+        and b.status = 0
+        and a.bind_time = b.invalid_time
+        and b.invalid_time &lt;= #{nowTime}
+    </select>
+
 
 </mapper>

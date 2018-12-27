@@ -134,5 +134,13 @@ public interface IFrCardService extends BaseService<FrCard> {
      * @throws YJException
      */
     void updateCardTime()throws YJException;
+
+    /**
+     * 根据指定的会员卡ID批量更新
+     * @param stopCardList
+     */
+    void toUpdateStopTime(List<String> stopCardList,Integer status)throws YJException;
+
+    void toUpdateCardStop()throws YJException;
 }
 

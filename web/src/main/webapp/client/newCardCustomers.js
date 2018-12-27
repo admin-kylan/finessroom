@@ -907,11 +907,11 @@ var newCardCustomers = new Vue({
                 that.ticketPrice.cardNo = '此会员的会员卡信息未选择';
                 that.ticketPrice.cardUserName = obj.clientName;
             }
-            var url = $.stringFormat('{0}/frCard/queryByFrCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/queryByFrCardListByStatus', $.cookie('url'));
             $.post(url, {
                     page: -1,
                     rows: -1,
-                    clientId: that.clientId,
+                    clientId: id,
                     code: that.code,
                 },
                 function (res) {
@@ -1027,6 +1027,8 @@ var newCardCustomers = new Vue({
                 if (!that.loadData1.paremt.depositTime) {
                     return  $.alert("定金，请选择补余期限");
                 }
+                that.cardMap.depositTime = that.loadData1.paremt.depositTime;
+
                 if (that.loadData1.paremt.depositTime == '其他') {
                     if (!that.loadData1.depositTime) {
                         return $.alert("其他，请填写补余期限");

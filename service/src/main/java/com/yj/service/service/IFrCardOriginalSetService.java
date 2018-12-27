@@ -28,6 +28,6 @@ public interface IFrCardOriginalSetService extends BaseService<FrCardOriginalSet
      * @param frCardOriginalSet
      * @param frCardType
      */
-    public void initFrCardOrgiginalSet( FrCardOriginalSet frCardOriginalSet,FrCardType frCardType);
+     void initFrCardOrgiginalSet( FrCardOriginalSet frCardOriginalSet,FrCardType frCardType);
 
 }

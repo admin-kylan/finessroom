@@ -366,6 +366,11 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
         return  map;
     }
 
+    /**
+     * 根据订单信息初始化客户的剩余金额，剩余权益
+     * @param map
+     * @throws YJException
+     */
     @Override
     public void getOrderNumInfo(Map<String, Object> map )throws YJException{
         Integer type = NumberUtilsTwo.getIntNum("type",map);

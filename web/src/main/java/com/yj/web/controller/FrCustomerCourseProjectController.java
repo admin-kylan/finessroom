@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +60,10 @@ public class FrCustomerCourseProjectController {
         if (map == null) {
             throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
-        frCustomerCourseProjectService.addSaveCustomer(map);
+
         JsonResult jsonResult = null;
-        return jsonResult;
+        frCustomerCourseProjectService.addSaveCustomer(map);
+        return JsonResult.success(map);
 
     }
 }

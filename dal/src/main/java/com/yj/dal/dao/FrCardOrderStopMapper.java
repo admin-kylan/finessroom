@@ -19,4 +19,8 @@ public interface FrCardOrderStopMapper extends BaseMapper<FrCardOrderStop> {
 
     List<Map<String,Object>> getStopCardListByType(FrCardOrderStop frCardOrderStop);
 
+
+    List<FrCardOrderStop> queryStopTimeList(String nowTime);
+
+    Integer toUpdateTimeCard(FrCardOrderStop frCardOrderStop);
 }

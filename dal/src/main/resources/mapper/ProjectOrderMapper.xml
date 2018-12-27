@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ProjectOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.ProjectOrder">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="OrderNumber" property="OrderNumber" />
+        <result column="ObjectId" property="ObjectId" />
+        <result column="OrderType" property="OrderType" />
+        <result column="Price" property="Price" />
+        <result column="BuyCount" property="BuyCount" />
+        <result column="SendCount" property="SendCount" />
+        <result column="AllCount" property="AllCount" />
+        <result column="PayStatus" property="PayStatus" />
+        <result column="SalesId" property="SalesId" />
+        <result column="SalesName" property="SalesName" />
+        <result column="PayType" property="PayType" />
+        <result column="ConsumeType" property="ConsumeType" />
+        <result column="TotalPrice" property="TotalPrice" />
+        <result column="AlipayPrice" property="AlipayPrice" />
+        <result column="PayCardPrice" property="PayCardPrice" />
+        <result column="WechatPrice" property="WechatPrice" />
+        <result column="CashPrice" property="CashPrice" />
+        <result column="AccountsPrice" property="AccountsPrice" />
+        <result column="FlowerPrice" property="FlowerPrice" />
+        <result column="OtherPrice" property="OtherPrice" />
+        <result column="Discount" property="Discount" />
+        <result column="ChangeNum" property="ChangeNum" />
+        <result column="FullType" property="FullType" />
+        <result column="DiscountFull" property="DiscountFull" />
+        <result column="DiscountReduce" property="DiscountReduce" />
+        <result column="DiscountPrice" property="DiscountPrice" />
+        <result column="DiscountNum" property="DiscountNum" />
+        <result column="NeedPrice" property="NeedPrice" />
+        <result column="NoPrice" property="NoPrice" />
+        <result column="RetChange" property="RetChange" />
+        <result column="ShopId" property="ShopId" />
+        <result column="PersonnelId" property="PersonnelId" />
+        <result column="Flag" property="Flag" />
+        <result column="Type" property="Type" />
+        <result column="CreateTime" property="CreateTime" />
+        <result column="UpdateTime" property="UpdateTime" />
+        <result column="CreateUserName" property="CreateUserName" />
+        <result column="UpdateUserName" property="UpdateUserName" />
+        <result column="CreateUserId" property="CreateUserId" />
+        <result column="UpdateUserId" property="UpdateUserId" />
+        <result column="Status" property="Status" />
+        <result column="AuditStatus" property="AuditStatus" />
+        <result column="StatusUserId" property="StatusUserId" />
+        <result column="AuditUserId" property="AuditUserId" />
+        <result column="DeposiTime" property="DeposiTime" />
+        <result column="InvoiceStatus" property="InvoiceStatus" />
+        <result column="AllotType" property="AllotType" />
+        <result column="AllotNum" property="AllotNum" />
+        <result column="SaleAllotType" property="SaleAllotType" />
+        <result column="SaleAllotNum" property="SaleAllotNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, OrderNumber, ObjectId, OrderType, Price, BuyCount, SendCount, AllCount, PayStatus, SalesId, SalesName, PayType, ConsumeType, TotalPrice, AlipayPrice, PayCardPrice, WechatPrice, CashPrice, AccountsPrice, FlowerPrice, OtherPrice, Discount, ChangeNum, FullType, DiscountFull, DiscountReduce, DiscountPrice, DiscountNum, NeedPrice, NoPrice, RetChange, ShopId, PersonnelId, Flag, Type, CreateTime, UpdateTime, CreateUserName, UpdateUserName, CreateUserId, UpdateUserId, Status, AuditStatus, StatusUserId, AuditUserId, DeposiTime, InvoiceStatus, AllotType, AllotNum, SaleAllotType, SaleAllotNum
+    </sql>
+
+</mapper>

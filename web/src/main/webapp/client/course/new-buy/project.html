@@ -263,8 +263,7 @@
                 clientId: $.cookie('cid'),
                 code: $.cookie('code'),
             };
-            jqueryPostParams(COURSE_URL.queryByFrCardList, param,
-                (res) => {
+            jqueryPostParams(COURSE_URL.queryByFrCardList, param, (res) => {
                     let cardId = '-1',time = '';
                     if (res.code == '200') {
                         let now = new Date();

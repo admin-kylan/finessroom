@@ -35,4 +35,7 @@ public interface FrCardSupplyRecordMapper extends BaseMapper<FrCardSupplyRecord>
      */
     List<FrCardSupplyRecord> quereySupplyList(FrCardSupplyRecord frCardSupplyRecord);
 
+
+    List<FrCardSupplyRecord> updateSupplyRecordTime( Map<String,Object> map);
+
 }

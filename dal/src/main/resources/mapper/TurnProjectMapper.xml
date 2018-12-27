@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.TurnProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.TurnProject">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="OldCardId" property="OldCardId" />
+        <result column="NewCardId" property="NewCardId" />
+        <result column="AddProjectId" property="AddProjectId" />
+        <result column="CreateTime" property="CreateTime" />
+        <result column="CreateId" property="CreateId" />
+        <result column="CreateName" property="CreateName" />
+        <result column="PayType" property="PayType" />
+        <result column="PayMoney" property="PayMoney" />
+        <result column="Fee" property="Fee" />
+        <result column="PerShopId" property="PerShopId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, OldCardId, NewCardId, AddProjectId, CreateTime, CreateId, CreateName, PayType, PayMoney, Fee, PerShopId
+    </sql>
+
+</mapper>

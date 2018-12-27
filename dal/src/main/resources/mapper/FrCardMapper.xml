@@ -106,7 +106,7 @@
         <if test="clientId != null and clientId != '' ">
             AND a.client_id = #{clientId}
         </if>
-        <if test="status != null and status != '' and status != 100">
+        <if test="status != null and status != 100">
             AND  a.status = #{status}
         </if>
         <if test="isUsing == true">
@@ -326,6 +326,8 @@
         (SELECT t.agreement_no FROM fr_card_agreement t WHERE  t.card_id = a.id) agreementNo,
         (SELECT t.service_life FROM fr_card_type t WHERE t.id = a.card_type_id) seviceLife,
         (SELECT t.used_num FROM fr_card_original_set t WHERE t.card_id = a.id) userdNum,
+        (SELECT t.stop_num FROM fr_card_original_set t WHERE t.card_id = a.id) stopNum,
+        (SELECT t.stop_days FROM fr_card_original_set t WHERE t.card_id = a.id) stopDays,
         (SELECT p.client_name FROM fr_client p WHERE p.id = a.client_id) clientName,
         (SELECT p.mobile FROM fr_client p WHERE p.id = a.client_id) mobile,
         ( CASE
@@ -351,6 +353,100 @@
         </if>
         ORDER BY  a.update_time DESC
     </select>
+
+
+    <sql id="Base_Column_List_Update">
+        <trim prefix="set" suffixOverrides=",">
+            <if test="cardNo!= null and cardNo != '' " >
+                card_no = #{cardNo},
+            </if>
+            <if test="clientId!= null and clientId != '' " >
+                client_id = #{clientId},
+            </if>
+            <if test="shopId!= null and shopId != '' " >
+                shop_id = #{shopId},
+            </if>
+            <if test="cardTypeId!= null and cardTypeId != '' " >
+                card_type_id = #{cardTypeId},
+            </if>
+            <if test="status!= null " >
+                status = #{status},
+            </if>
+            <if test="invalidTime!= null and invalidTime != '' " >
+                invalid_time = #{invalidTime},
+            </if>
+            <if test="bindTime!= null and bindTime != '' " >
+                bind_time = #{bindTime},
+            </if>
+            <if test="flag!= null and flag != '' " >
+                flag = #{flag},
+            </if>
+            <if test="type!= null and type > 0" >
+                type = #{type},
+            </if>
+            <if test="isUsing!= null" >
+                is_using = #{isUsing},
+            </if>
+            <if test="updateTime!= null and updateTime != '' " >
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUserName!= null and updateUserName != '' " >
+                update_user_name = #{updateUserName},
+            </if>
+            <if test="updateUserId!= null and updateUserId != '' " >
+                update_user_id = #{updateUserId},
+            </if>
+            <if test="cardNumId!= null and cardNumId != '' " >
+                card_num_id = #{cardNumId},
+            </if>
+            <if test="haveRightsNum!= null" >
+                have_rights_num = #{haveRightsNum},
+            </if>
+            <if test="externalNo!= null and externalNo != ''" >
+                external_no = #{externalNo},
+            </if>
+            <if test="originalId!= null and originalId != ''" >
+                original_id = #{originalId},
+            </if>
+            <if test="note!= null and note != ''" >
+                note = #{note},
+            </if>
+        </trim>
+    </sql>
+
+    <select id="toUpdateStopTime" resultType="java.lang.Integer">
+        UPDATE fr_card
+           <include refid="Base_Column_List_Update" />
+           <where>
+              <if test="stopCardList != null and stopCardList.size >0" >
+                  AND (
+                  <foreach collection="stopCardList" item="cardId" index="i" open="" close="" separator="or">
+                      id = #{cardId}
+                  </foreach>
+                  )
+              </if>
+          </where>
+    </select>
+
+
+    <!--根据指定时间更新补余状态-->
+    <select id="toUpdateComplement" resultType="java.lang.Integer">
+        UPDATE fr_card
+        <include refid="Base_Column_List_Update" />
+        WHERE id IN
+        (SELECT  d.id  FROM fr_card d
+         LEFT JOIN fr_card_order_info  a  ON  d.id = a.card_id AND d.client_id = a.client_id
+         WHERE  d.is_using = 1
+         AND (d.status = 0 or d.status = 4 )
+         AND  a.is_using = 1  AND a.status != 2  AND a.order_state != 3  AND a.order_state != 4  AND a.order_state != 5
+         AND (a.pay_type = 2  AND (d.create_time+convert(int, ISNULL(a.deposit_time, 0))) &lt; #{nowTime})
+         OR  (a.pay_type = 5  AND (SELECT TOP 1 c.split_date
+                                    FROM fr_card_order_split_set_dd c WHERE c.status = 0
+                                    AND c.split_set_id =
+                                         (SELECT b.id FROM fr_card_order_split_set b
+                                          WHERE b.order_id = a.id) ORDER BY c.split_order) &lt; #{nowTime}))
+    </select>
+
 
 
 </mapper>

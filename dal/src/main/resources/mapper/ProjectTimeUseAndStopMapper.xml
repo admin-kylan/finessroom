@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ProjectTimeUseAndStopMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.ProjectTimeUseAndStop">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="ProjectInfoId" property="ProjectInfoId" />
+        <result column="UseLimit" property="UseLimit" />
+        <result column="UseDate" property="UseDate" />
+        <result column="UseDayStar" property="UseDayStar" />
+        <result column="UseDayEnd" property="UseDayEnd" />
+        <result column="UseTimeStar" property="UseTimeStar" />
+        <result column="UseTimeEnd" property="UseTimeEnd" />
+        <result column="UseSelect" property="UseSelect" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, ProjectInfoId, UseLimit, UseDate, UseDayStar, UseDayEnd, UseTimeStar, UseTimeEnd, UseSelect
+    </sql>
+
+</mapper>

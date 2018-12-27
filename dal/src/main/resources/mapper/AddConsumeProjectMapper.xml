@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.AddConsumeProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.AddConsumeProject">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="ProjectSeriousProjectId" property="ProjectSeriousProjectId" />
+        <result column="AddProjectId" property="AddProjectId" />
+        <result column="ShopId" property="ShopId" />
+        <result column="SdadiumId" property="SdadiumId" />
+        <result column="ProjectId" property="ProjectId" />
+        <result column="ReferCount" property="ReferCount" />
+        <result column="EveryDayCount" property="EveryDayCount" />
+        <result column="StartTime" property="StartTime" />
+        <result column="EndTime" property="EndTime" />
+        <result column="CreateTime" property="CreateTime" />
+        <result column="State" property="State" />
+        <result column="SurplusCount" property="SurplusCount" />
+        <result column="ExpenseCount" property="ExpenseCount" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, ProjectSeriousProjectId, AddProjectId, ShopId, SdadiumId, ProjectId, ReferCount, EveryDayCount, StartTime, EndTime, CreateTime, State, SurplusCount, ExpenseCount
+    </sql>
+
+</mapper>

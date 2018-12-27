@@ -1,5 +1,6 @@
 package com.yj.web.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
@@ -197,6 +198,21 @@ public class FrCardController {
         frCard.setUsing(true);
         //随机定义的一个变量
         frCard.setStatus(100);
+        pageUtil.setCondition(frCard);
+        return service.queryUserCardList(pageUtil);
+    }
+
+
+    @PostMapping("queryByFrCardListByStatus")
+    public JsonResult queryByFrCardListByStatus(PageUtil<FrCard> pageUtil,HttpServletRequest request)throws YJException{
+        this.toVerificationPage(pageUtil,request);
+        FrCard frCard  = new FrCard();
+        frCard.setCustomerCode(pageUtil.getCode());
+        frCard.setClientId(pageUtil.getClientId());
+        frCard.setUsing(true);
+        //随机定义的一个变量
+        frCard.setStatus(CommonUtils.CARD_STATUS_0);
+        pageUtil.setCondition(frCard);
         return service.queryUserCardList(pageUtil);
     }
 
@@ -387,5 +403,14 @@ public class FrCardController {
         }
         pageUtil.setCode(code);
     }
+
+//    /**
+//     * 测定时任务是否失效
+//     * @throws YJException
+//     */
+//    @GetMapping("/testTime")
+//    public void testTime()throws YJException{
+//          service.updateCardTime();
+//    }
 }
 

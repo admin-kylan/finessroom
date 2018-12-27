@@ -550,7 +550,95 @@ public class FrCardOrderStopServiceImpl extends BaseServiceImpl<FrCardOrderStopM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateCardStop() throws YJException {
-        //查询开始时间小于现在的，停卡状态
-
+       //根据条件先查询出所有复核条件的数据
+        Date date = new Date();
+        String nowTime = DateUtil.dateToString(date,DateUtil.NORMAL_FORM);
+        List<FrCardOrderStop> frCardOrderStopList = baseMapper.queryStopTimeList(nowTime);
+       //存放要跟新为停卡的会员卡
+        List<String> stopCardList = new ArrayList<>();
+       //存放要跟新为正常卡的会员卡
+        List<String> openCardList = new ArrayList<>();
+        //存放要跟新的停卡记录
+        List<FrCardOrderStop> updateFrCardOrderStop = new ArrayList<>();
+        if(frCardOrderStopList != null  &&  frCardOrderStopList.size() > 0){
+            //表示有可能有数据需要更新
+            for(FrCardOrderStop frCardOrderStop:frCardOrderStopList){
+                FrCardOrderStop frCardOrderStop1 = this.getStopTimeList(frCardOrderStop,date);
+                if(frCardOrderStop1 !=  null){
+                    updateFrCardOrderStop.add(frCardOrderStop1);
+                    if(CommonUtils.STOP_STATUS_1 == frCardOrderStop1.getStopStatus()){
+                        stopCardList.add(frCardOrderStop1.getCardId());
+                    }
+                    if(CommonUtils.STOP_STATUS_2 == frCardOrderStop1.getStopStatus() ||
+                            CommonUtils.STOP_STATUS_3 == frCardOrderStop1.getStopStatus() ||
+                            CommonUtils.STOP_STATUS_4 == frCardOrderStop1.getStopStatus()){
+                        openCardList.add(frCardOrderStop1.getCardId());
+                    }
+                }
+            }
+        }
+        //准备更新会员卡停卡数据
+        if( stopCardList != null && stopCardList.size()>0){
+            iFrCardService.toUpdateStopTime(stopCardList,CommonUtils.CARD_STATUS_1);
+        }
+        //准备更新会员卡为正常卡
+        if( openCardList != null && openCardList.size()>0){
+            iFrCardService.toUpdateStopTime(openCardList,CommonUtils.CARD_STATUS_0);
+        }
+        //更新停卡数据
+        if( updateFrCardOrderStop != null && updateFrCardOrderStop.size()>0){
+            for(FrCardOrderStop frCardOrderStop:updateFrCardOrderStop){
+                if(frCardOrderStop != null && !StringUtils.isEmpty(frCardOrderStop.getId())){
+                    baseMapper.toUpdateTimeCard(frCardOrderStop);
+                }
+            }
+        }
     }
+
+
+    public FrCardOrderStop getStopTimeList(FrCardOrderStop frCardOrderStop,Date date){
+        FrCardOrderStop stop = null;
+        if(frCardOrderStop == null){
+            return  stop;
+        }
+        stop = new FrCardOrderStop();
+        //正常
+        if(CommonUtils.STOP_STATUS_0 == frCardOrderStop.getStopStatus()){
+            //判断开始停卡时间是否小于现在
+            if(!StringUtils.isEmpty(frCardOrderStop.getStartTime().toString())){
+                boolean isFlage = DateUtil.compareDate(date,frCardOrderStop.getStartTime());
+                if(isFlage){
+                    stop.setStopStatus(CommonUtils.STOP_STATUS_1);
+                }
+            }
+        }
+        //停卡
+        if(CommonUtils.STOP_STATUS_1 == frCardOrderStop.getStopStatus()){
+            //系统更新根据预计时间，不用修改失效时间
+            //判断预计停止结束时间是否小于现在
+            if(!StringUtils.isEmpty(frCardOrderStop.getEstEndTime().toString())){
+                boolean isFlage = DateUtil.compareDate(date,frCardOrderStop.getEstEndTime());
+                if(isFlage){
+                    //判断终止状态
+                    Integer stopStatus = CommonUtils.STOP_STATUS_2;
+                    if(CommonUtils.ORDER_STATUS_1 == frCardOrderStop.getStatus()){
+                        stopStatus = CommonUtils.STOP_STATUS_3;
+                    }
+                    if(CommonUtils.AUDIT_ORDER_STATUS_1 == frCardOrderStop.getStatus()){
+                        stopStatus = CommonUtils.STOP_STATUS_4;
+                    }
+                    stop.setStopStatus(stopStatus);
+                    stop.setStopTime(frCardOrderStop.getEstStopTime());
+                    stop.setEndTime(date);
+                    //先用-1表示是系统自动更新的
+                    stop.setStopUserId("-1");
+                }
+            }
+        }
+        stop.setId(frCardOrderStop.getId());
+        stop.setCardId(frCardOrderStop.getCardId());
+        stop.setCustomerCode(frCardOrderStop.getCustomerCode());
+        return stop;
+    }
+
 }

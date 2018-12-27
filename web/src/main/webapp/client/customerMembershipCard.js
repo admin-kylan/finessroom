@@ -246,6 +246,23 @@ var customerMembershipCard = new Vue({
                 {"vue":false,"lav":"直接延续"},
                 {"vue":true,"lav":"另行开卡"},
             ],
+            clientUserStaff:[
+                {"staffList": [
+                    {"name":"销售人员","defMess":"请选择销售人员","vtype":1,"vModel":"loadData0.clientStaffList.type1"},
+                    {"name":"游泳教练","defMess":"请选择游泳教练","vtype":2,"vModel":"loadData0.clientStaffList.type2"},
+                    {"name":"私教教练","defMess":"请选择私教教练","vtype":3,"vModel":"loadData0.clientStaffList.type3"},
+                    {"name":"团教助教","defMess":"请选择团教助教","vtype":4,"vModel":"loadData0.clientStaffList.type4"},
+                    {"name":"美容销售","defMess":"请选择美容销售","vtype":5,"vModel":"loadData0.clientStaffList.type5"},
+                    {"name":"美甲师","defMess":"请选择美甲师","vtype":6,"vModel":"loadData0.clientStaffList.type6"}]},
+                {"staffList":[
+                     {"name":"健身教练","defMess":"请选择健身教练","vtype":1,"vModel":"loadData0.clientStaffList.type1"},
+                     {"name":"服务会籍","defMess":"请选择服务会籍","vtype":2,"vModel":"loadData0.clientStaffList.type2"},
+                     {"name":"团教教练","defMess":"请选择团教教练","vtype":3,"vModel":"loadData0.clientStaffList.type3"},
+                     {"name":"美容师","defMess":"请选择美容师","vtype":4,"vModel":"loadData0.clientStaffList.type4"},
+                     {"name":"美容顾问","defMess":"请选择美容顾问","vtype":5,"vModel":"loadData0.clientStaffList.type5"},
+                     {"name":"美发师","defMess":"请选择美发师","vtype":6,"vModel":"loadData0.clientStaffList.type6"}]},
+            ],
+
         },
 //      后期可动态从字典表获取赋值参数--end
         loadData0:{
@@ -279,6 +296,9 @@ var customerMembershipCard = new Vue({
             unOpenedCard:0,     //未开卡会员卡
             stopCard:0,         //停卡会员卡
             historyCard:0,      //历史会员卡
+            stopNum:0,           //可停卡次数
+            stopDays:0,          //每次时长
+            clientStaffList:{},
         },
         loadData1:{
             shopList:[],//销售门店列表
@@ -597,16 +617,6 @@ var customerMembershipCard = new Vue({
             //获取会员卡信息列表----根据clientId
             var that = this;
             that.getCardUserList(1, 10, that.clientId);
-            // 初始化: 初始化绑定时间
-            setTimeout(function () {
-                jeDate('.jeinput', {
-                    format: "YYYY-MM-DD hh:mm:ss",
-                    minDate: getNowTime(),
-                    donefun: function (obj) {
-                        that.loadData1.cardInfoMap.bindTime = obj.val;
-                    }
-                });
-            }, 50);
         },
         //新购
         Load1: function () {
@@ -1132,11 +1142,11 @@ var customerMembershipCard = new Vue({
                 that.ticketPrice.cardNo = '此会员的会员卡信息未选择';
                 that.ticketPrice.cardUserName = obj.clientName;
             }
-            var url = $.stringFormat('{0}/frCard/queryByFrCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/queryByFrCardListByStatus', $.cookie('url'));
             $.post(url, {
                     page: -1,
                     rows: -1,
-                    clientId: that.clientId,
+                    clientId: id,
                     code: that.code,
                 },
                 function (res) {
@@ -1274,14 +1284,14 @@ var customerMembershipCard = new Vue({
             that.loadData0.cardTypeName = dataOne.cardTypeName;
             that.loadData0.status = dataOne.status;
             that.loadData0.agreementNo = dataOne.agreementNo;
-            that.loadData0.b_needPrice = dataOne.b_needPrice;
-            that.loadData0.balance = (dataOne.b_needPrice / (dataOne.b_buyRightsNum + dataOne.b_giveRightsNum)) * dataOne.haveRightsNum;
-            that.loadData0.availableNum = dataOne.b_buyRightsNum + dataOne.b_giveRightsNum;
-            // that.loadData0.storageValue = obj.storageValue; 储值金额（等储值表出来后关联）
-            that.loadData0.b_buyRightsNum = dataOne.b_buyRightsNum;
-            that.loadData0.b_giveRightsNum = dataOne.b_giveRightsNum;
-            that.loadData0.alreadyUsedNum = dataOne.b_buyRightsNum + dataOne.b_giveRightsNum - dataOne.haveRightsNum;
-            that.loadData0.haveRightsNum = dataOne.haveRightsNum;
+            that.loadData0.b_needPrice = dataOne.needPrice;
+            that.loadData0.balance =  dataOne.cardHavePrice;
+            that.loadData0.storageValue = dataOne.orderPrice;
+            that.loadData0.orderRightsNum = dataOne.orderNum;
+            that.loadData0.b_buyRightsNum = dataOne.buyRightsNum;
+            that.loadData0.b_giveRightsNum = dataOne.giveRightsNum;
+            that.loadData0.availableNum = dataOne.haveRightsNum;
+            that.loadData0.alreadyUsedNum = parseFloat(that.getParemtDate(dataOne.haveRightsNum,0)) - parseFloat(that.getParemtDate(dataOne.orderNum,0)) ;
             that.loadData0.bindTime = dataOne.bindTime;
             if (dataOne.bindTime) {
                 that.loadData0.invalidTime = timeFormatDate(obj.invalidTime);
@@ -1290,8 +1300,8 @@ var customerMembershipCard = new Vue({
                 $("#loadInvali").attr("disabled", "disabled");
                 $("#loadFlag").attr("disabled", "disabled");
             }
-            that.loadData0.b_status = dataOne.b_status;
-            that.loadData0.b_auditStatus = dataOne.b_auditStatus;
+            that.loadData0.b_status = dataOne.InfoStatus;
+            that.loadData0.b_auditStatus = dataOne.auditStatus;
             that.loadData0.flag = dataOne.flag;
             $('#MembershipCardDetails').show();
             that.getCardLimitList();
@@ -3801,7 +3811,6 @@ var customerMembershipCard = new Vue({
                     $.alert(res.msg)
                 }
             });
-
         },
         //获取可退的全部储值金额
         getReturnStorage:function(){
@@ -3883,6 +3892,11 @@ var customerMembershipCard = new Vue({
             if(!obj){return ;}
             var status = obj.status;
             if(status != 4){ return ;}
+            var that = this;
+            var stopNum = that.getParemtDate(obj.stopNum,0);
+            var stopDays = that.getParemtDate(obj.stopDays,0);
+            that.loadData0.stopNum = stopNum;
+            that.loadData0.stopDays = stopDays;
             $('.year2-modal').modal('show');
         },
     },

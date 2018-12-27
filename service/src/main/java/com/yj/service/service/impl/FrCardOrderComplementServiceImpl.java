@@ -431,4 +431,5 @@ public class FrCardOrderComplementServiceImpl extends BaseServiceImpl<FrCardOrde
         Double complementAllMoney = baseMapper.getComplementAllMoney(frCardOrderComplement);
         return complementAllMoney;
     }
+
 }

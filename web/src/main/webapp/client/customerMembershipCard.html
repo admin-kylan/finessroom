@@ -2373,171 +2373,71 @@
                 </div>
             </div>
             <!--表格2-->
+            <!--2年卡·开卡-->
+            <div class="modal fade modal-style year2-modal" tabindex="-1" id="modal4" role="dialog" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #fff;">&times;</span></button>
+                            <h4 class="modal-title">2年卡·开卡</h4>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset class="fieldset-info" style="border-color: #090;">
+                                <legend style="color: #000;">权益设置</legend>
+                                <div class="fieldset-content" style="padding-right: 20px;">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <span class="red">*</span>开卡时间
+                                            <input class="form-control date-form-control" id="datetimepicker1" placeholder="年\月\日" readonly />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="red">*</span>失效时间
+                                            <input class="form-control date-form-control" id="datetimepicker2" placeholder="年\月\日" readonly disabled />
+                                        </div>
+                                    </div>
+                                    <p class="fieldset-p">可停卡次数：{{loadData0.stopNum}}次，每次时长：{{loadData0.stopDays}}天</p>
+                                    <p class="fieldset-p mb10">服务角色选择：</p>
+                                    <div class="row1 clearfix">
+                                        <div class="col-sm-6 p0" v-for="item in parameterList.clientUserStaff">
+                                            <div class="flex-box" v-for="staff in item.staffList">
+                                                <div class="w100 text-center">{{staff.name}}</div>
+                                                <div class="flex-box-item">
+                                                    <select class="form-control" :v-model="staff.vModel">
+                                                        <option selected="selected" disabled="disabled">{{staff.defMess}}</option>
+                                                        <option>销售人员1</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="flex-box flex-start">
+                                <div>上传图片：</div>
+                                <div class="flex-box-item">
+                                    <ul class="upload-list clearfix">
+                                        <li>
+                                            <img src="../img/u2871.png" />
+                                        </li>
+                                        <li>
+                                            <img src="../gym/img/addImg.png"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="fieldset-p">操作人：<strong>sddfsd</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">开卡</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
     </div>
 </div>
-<!--2年卡·开卡-->
-<div class="modal fade modal-style year2-modal" tabindex="-1" id="modal4" role="dialog" data-backdrop="false">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #fff;">&times;</span></button>
-        <h4 class="modal-title">2年卡·开卡</h4>
-      </div>
-      <div class="modal-body">
-      		<fieldset class="fieldset-info" style="border-color: #090;">
-				<legend style="color: #000;">权益设置</legend>
-				<div class="fieldset-content" style="padding-right: 20px;">
-					<div class="row">
-						<div class="col-sm-6">
-							<span class="red">*</span>开卡时间
-							<input class="form-control date-form-control jeinput" id="datetimepicker1" placeholder="年\月\日" readonly />
-						</div>
-						<div class="col-sm-6">
-							<span class="red">*</span>失效时间
-							<input class="form-control date-form-control jeinput" id="datetimepicker2" placeholder="年\月\日" readonly />
-						</div>
-					</div>
-					<p class="fieldset-p">可停卡次数：5次，每次时长：5天</p>
-					<p class="fieldset-p mb10">服务角色选择：</p>
-					<div class="row1 clearfix">
-						<div class="col-sm-6 p0">
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 p0">
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-							<div class="flex-box">
-								<div class="w100 text-center">销售人员</div>
-								<div class="flex-box-item">
-									<select class="form-control">
-										<option selected="selected" disabled="disabled">请选择销售人员</option>
-										<option>销售人员1</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</fieldset>
-			<div class="flex-box flex-start">
-				<div>上传图片：</div>
-				<div class="flex-box-item">
-					<ul class="upload-list clearfix">
-						<li>
-							<img src="../img/u2871.png" />
-						</li>
-						<li>
-							<img src="../gym/img/addImg.png"/>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<p class="fieldset-p">操作人：<strong>sddfsd</strong></p>
-      </div>
-  	  <div class="modal-footer">
-        <button type="button" class="btn btn-primary">开卡</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->	
+
 <div class="TKYY-modal">
     <h5 class="TKYY-title">停卡原因</h5>
     <div class="TKYY-con">
@@ -2566,16 +2466,16 @@
 
 <script>
     // $('.year2-modal').modal('show');
-    // $("#datetimepicker1,#datetimepicker2").on("click",function(e){
-    //     e.stopPropagation();
-    //     $(this).lqdatetimepicker({
-    //         css : 'datetime-day',
-    //         dateType : 'D',
-    //         selectback : function(){
-    //
-    //         }
-    //     });
-    // })
+    $("#datetimepicker1,#datetimepicker2").on("click",function(e){
+        e.stopPropagation();
+        $(this).lqdatetimepicker({
+            css : 'datetime-day',
+            dateType : 'D',
+            selectback : function(){
+
+            }
+        });
+    })
 
     Loading.prototype.init();
     customerMembershipCard.init();
