@@ -535,7 +535,6 @@
             </div>
         </div>
     </div>
-    {{formData.replacement.chooseUserId}}-----
     <!-- end 选择储值会员卡 -->
 </div>
 
@@ -1129,6 +1128,8 @@
                     full = this.member.rebate.single.full;
                     less = this.member.rebate.single.less;
                 }
+                full = full ? full :0;
+                less = less ? less :0;
                 if (this.index === 0) {
                     consumeState = '1';
                 }
@@ -1144,12 +1145,17 @@
                     num = headVue.performance.salesType;
                     allotType = 2;
                 }
+                //套餐/项目
+                let OrderType = 1;
+                if(this.billStatus === "project"){
+                    OrderType = 2;
+                }
 
                 let projectOrder = { //项目订单表
                     CustomerCode: $.cookie('code'),
                     OrderNumber: this.formData.orderInfo.orderNo,
                     ObjectId: this.formData.orderInfo.data.projectId, //对象ID
-                    OrderType: 0, //0新购
+                    OrderType: OrderType, //0-增购 1-增购消费 2-增购套餐
                     Price: this.formData.orderInfo.data.price, //售价
                     BuyCount: this.formData.orderInfo.data.buyNum, //购买数量
                     SendCount: this.formData.orderInfo.data.giftNum?this.formData.orderInfo.data.giftNum:0, //赠送数量
@@ -1512,7 +1518,14 @@
                 //-----------------------------
                 //fr_client_personnel_relate
                 let fr_client_personnel_relate = [];
-
+                let fr_client_personnel_personal_type_coach = '';
+                let fr_client_personnel_personal_type_coach1 = '';
+                //判断是健身教练，还是美容师教练等
+                if(headVue.sdaduimTypeResult.id === COURSE_CONSTANT.sdaduimTypeTeachId){
+                    fr_client_personnel_personal_type_coach = 9;
+                    fr_client_personnel_personal_type_coach1 = 9;
+                }
+               // let personalType = '';
                 let fr_client_personnel_relate1 = {
                     clientId: $.cookie('cid'), //客户ID
                     shopId: headVue.shopId, //基础表门店ID
@@ -1524,6 +1537,7 @@
                     time: new Date(), //认领时间
                     userType : 1, //0 客户角色   1 增购项目时添加的角色
                     otherTableId: '', //绑定表ID
+                    personal_type: '',//人员类型 1、销售 2、游泳教练、3、私教教练 4、团教助教 5、美容销售  6、美甲师 7、健身教练 8、服务会籍  9、团教教练  10、美容师   11、美容顾问  12、美发师
                 };
 
                 let fr_client_personnel_relate2 = {
@@ -1537,6 +1551,7 @@
                     time: new Date(), //认领时间
                     userType : 1, //0 客户角色   1 增购项目时添加的角色
                     otherTableId: '', //绑定表ID
+                    personal_type: '',//人员类型 1、销售 2、游泳教练、3、私教教练 4、团教助教 5、美容销售  6、美甲师 7、健身教练 8、服务会籍  9、团教教练  10、美容师   11、美容顾问  12、美发师
                 };
                 fr_client_personnel_relate.push(fr_client_personnel_relate1)
                 fr_client_personnel_relate.push(fr_client_personnel_relate2)

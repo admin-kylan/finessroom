@@ -1,7 +1,6 @@
 var customerTrainingPlan = new Vue({
     el: '#customerTrainingPlan',
     data: {
-
         //训练计划列表
         customerTable: {
             list: [],
@@ -19,20 +18,22 @@ var customerTrainingPlan = new Vue({
             cid: '',
             classIds: [],
         },
-
+        //控制弹窗临时变量
         temp: null,
         temp2: null,
         temp3: null,
+        //导入训练计划ID
         ids: [],
         ActionInfo: [],
         PlanInfo: [],
         ContentInfo: [],
         SetMealInfo: [],
         SetMealContentInfo: [],
+        tempInfo: [],
+        tempInfo2:[],
     },
     crated: function () {
     },
-    filters: {},
     methods: {
         init: function (t) {
             const that = this;
@@ -41,8 +42,6 @@ var customerTrainingPlan = new Vue({
             that.findSetMeal();
         },
         mounted: function () {
-
-
         },
         /**
          * 分页查询可认领客户列表
@@ -60,6 +59,7 @@ var customerTrainingPlan = new Vue({
                 $.get(url, params, function (res) {
                     if (res.code === '200') {
                         that.customerTable = res.data;
+
                         new myPagination({
                             id: 'pagination',
                             curPage: that.customerTable.currPage, //初始页码
@@ -85,7 +85,21 @@ var customerTrainingPlan = new Vue({
             })
 
         },
+        //课程详情中 点击导入
+        open: function (index) {
+            var that = this;
+            console.log(index)
+            //取消选中
+            that.ids = [];
+            that.ContentInfo = []
 
+            $(":checkbox").prop('checked', false)
+            if (index == 1) {
+                $('.box1').show();
+            } else {
+                $('.box2').show();
+            }
+        },
         //查询训练计划
         findTrainingPlan: function () {
             var that = this;
@@ -96,17 +110,16 @@ var customerTrainingPlan = new Vue({
             });
 
         },
-        //点击训练计划
+        //添加训练计划中 点击训练计划
         getContentInfo: function (id) {
             var that = this;
             var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
             $.get(url, {"id": id, "type": 1}, function (res) {
                 that.ContentInfo = res.data;
-                console.log(that.ContentInfo)
             });
 
         },
-        //查询训练套餐
+        //添加训练计划中  查询训练套餐
         findSetMeal: function () {
             var that = this;
             var url = $.stringFormat('{0}/frTrainingPlan/getCourse', $.cookie('url'));
@@ -126,19 +139,21 @@ var customerTrainingPlan = new Vue({
             });
 
         },
-        //添加课程弹窗
+        //添加课程 弹窗
         addClass: function () {
             var that = this;
+            that.ids == []
             if (that.temp3 != 1) {
                 that.ActionInfo = [];
                 that.temp = null;
             }
+
             $('.box').show();
         },
-        //课程详情弹窗
+        //课程详情 弹窗
         course: function (list, index) {
             var that = this;
-
+            that.ids == []
             if (that.temp == 2 && that.temp2 == index) {
             } else {
                 that.ActionInfo = list;
@@ -150,45 +165,72 @@ var customerTrainingPlan = new Vue({
             that.temp2 = index;
             that.temp = 2;
             $('.box').show();
+            console.log(that.ActionInfo)
             that.temp3 == null;
         },
-        //导入训练计划
-        addPlan: function () {
+        //导入 type=1 训练计划 type=2 训练计划套餐
+        addPlan: function (type) {
             var that = this;
             var url = $.stringFormat('{0}/frTrainingPlan/getPlanById', $.cookie('url'));
             if (that.ids == '' || that.ids == [] || that.ids == null || typeof(that.ids) == 'undefined') {
-                alert("未选择训练计划");
+                if (type == 1) {
+                    alert("未选择训练计划");
+                } else {
+                    alert("未选择训练计划套餐");
+                }
                 return;
             }
             var ids = JSON.stringify(that.ids).replace("[", "").replace("]", "").replace(/\"/g, "");
             $.get(url, {"ids": ids}, function (res) {
-                console.log(that.ActionInfo.length)
-                if (that.ActionInfo.length != 0) {
-                    that.ActionInfo.push.apply(that.ActionInfo,res.data);
-                    $('.box1').hide();
-                } else {
-                    that.ActionInfo = res.data;
-                    if (res.code === "200") {
+                if (res.code === "200") {
+                    if (that.ActionInfo.length != 0) {
+                        that.ActionInfo.push.apply(that.ActionInfo, res.data);
+                    } else {
+                        that.ActionInfo = res.data;
+
+                    }
+                    console.log(that.ActionInfo)
+                    that.temp3 = 1;
+                    if (type == 1) {
                         $('.box1').hide();
-                        that.temp3 = 1;
+                    } else {
+                        $('.box2').hide();
                     }
                 }
+
             })
         },
-        //添加
+
+        //添加训练计划
         add: function () {
             var that = this;
-            console.log(that.ActionInfo)
+            if (that.param.project == '') {
+                alert("私教名称不能为空")
+                return;
+            } else if (that.param.improvementPlan == '') {
+                alert("改进方案不能为空")
+                return;
+            } else if (that.param.trainDate == '') {
+                alert("训练日期不能为空")
+                return;
+            } else if (that.param.trainStartDate == '') {
+                alert("训练开始时间不能为空")
+                return;
+            } else if (that.param.trainEndDate == '') {
+                alert("训练结束时间不能为空")
+                return;
+            }
+            console.log(that.param)
             that.param.cid = $.cookie("cid");
             $.each(that.ActionInfo, function (i, n) {
                 that.param.classIds.push(n.id)
             })
-            console.log(that.param)
             var url = $.stringFormat('{0}/frTrainingPlan/saveProject', $.cookie('url'));
             axios.post(url, that.param).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
                     alert("添加成功")
+                    location.reload();
                 } else {
                     $.alert(resData['data']['msg']);
                 }
@@ -198,34 +240,36 @@ var customerTrainingPlan = new Vue({
                 });
 
         },
-        //修改
-        update: function (list,index) {
+        //修改训练计划
+        update: function (list, index) {
             var that = this;
             var update = $('.updateTr').eq(index).find("input")
+
+            if (list == '' || list == null) {
+                list = that.ActionInfo;
+            }
+            console.log(list)
             var updateParam = {
                 project: update[0].value,
                 trainDate: update[1].value,
                 trainStartDate: update[2].value,
                 trainEndDate: update[3].value,
                 cid: $.cookie("cid"),
-                classIds: [],
-                id:update[9].value,
+                actionInfo: list,
                 actualStartDate: update[5].value,
                 actualEndDate: update[6].value,
                 actualDate: update[4].value,
                 memberFeel: update[7].value,
                 coachSummary: update[8].value,
+                fid: update[9].value,
             }
-            console.log(list)
-            $.each(list, function (i, n) {
-                updateParam.classIds.push(n.id)
-            })
             console.log(updateParam)
             var url = $.stringFormat('{0}/frTrainingPlan/updateProject', $.cookie('url'));
             axios.post(url, updateParam).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
-                    alert("添加成功")
+                    alert("修改成功")
+                    location.reload();
                 } else {
                     $.alert(resData['data']['msg']);
                 }
@@ -233,6 +277,205 @@ var customerTrainingPlan = new Vue({
                 .catch(function (error) {
                     $.alert(error);
                 });
+
+        },
+        //训练计划删除
+        del: function (id) {
+            var that = this;
+            console.log(id)
+            var flag = confirm("确定删除吗?");
+            if (flag) {
+                var url = $.stringFormat('{0}/frTrainingPlan/delPlan', $.cookie('url'));
+                $.get(url, {"id": id}, function (res) {
+                    if (res.code == "200") {
+                        alert("删除成功")
+                        location.reload();
+                    } else {
+                        alert("删除失败")
+                    }
+                })
+            }
+        },
+        //动作修改
+        updateAction: function (index) {
+            var that = this;
+            var update = $('.action').eq(index).find("input")
+            var param = {
+                name: update[1].value,
+                diff: update[4].value,
+                image: update[3].value,
+                time: update[5].value,
+                strength: update[6].value,
+                count: update[7].value,
+                remark: update[8].value,
+                sname: update[2].value,
+                id: update[0].value,
+
+            }
+            $.each(that.customerTable.list, function (i, n) {
+                $.each(n.frPlanClasses, function (j, k) {
+                    if (k.id == param.id) {
+                        that.customerTable.list[i].frPlanClasses[j] = param;
+                    }
+                })
+            })
+            var url = $.stringFormat('{0}/frPlanClass/updateAction', $.cookie('url'));
+            axios.post(url, param).then(function (res) {
+                let resData = eval(res);
+                if (resData['data']['code'] === '200') {
+                    alert("修改成功")
+                } else {
+                    $.alert(resData['data']['msg']);
+                }
+            })
+                .catch(function (error) {
+                    $.alert(error);
+                });
+        },
+        //动作删除
+        delAction: function (index) {
+            var that = this;
+            var flag = confirm("确定删除吗?");
+            if (flag) {
+                var tid = $('.action').eq(index).find("input")[9].value
+                var id = $('.action').eq(index).find("input")[0].value
+                var url = $.stringFormat('{0}/frPlanClass/delAction', $.cookie('url'));
+                $.each(that.ActionInfo, function (i, n) {
+                    if (n.id = id) {
+                        that.ActionInfo.splice(i, 1)
+                        return false;
+                    }
+                })
+                if (tid != "" && tid != null) {
+                    $.get(url, {"id": id, "tid": tid}, function (res) {
+                        console.log(id)
+                        if (res.code == "200") {
+                            alert("删除成功")
+
+                        } else {
+                            alert("删除失败")
+                        }
+                    });
+                } else {
+                    alert("删除成功")
+                }
+
+            } else {
+                return;
+            }
+
+        },
+        //全选
+        checkAll: function (type, id, index,event) {
+            var that = this;
+            if (type == 1) {
+                var thisChecked = $("#checkPlan").prop('checked');
+                $("#planBody input[type='checkbox']").each(function () {
+                    if (thisChecked) {
+                        $(this).prop("checked", thisChecked);
+                        that.ids.push($(this).val())
+                    } else {
+                        that.ids = [];
+                        $(this).prop("checked", thisChecked);
+                    }
+
+                })
+            } else if (type == 2) {
+                var thisChecked = $("#checkSetMeal").prop('checked');
+                $("#setMealBody input[type='checkbox']").each(function () {
+                    if (thisChecked) {
+                        $(this).prop("checked", thisChecked);
+                        that.ids.push($(this).val())
+                    } else {
+                        that.ids = [];
+                        $(this).prop("checked", thisChecked);
+                    }
+
+                })
+            } else if (type == 3) {
+                var thisChecked = $(".planParent").eq(index).prop('checked');
+
+                if (thisChecked) {
+                    var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+                    $.get(url, {"id": id, "type": 1}, function (res) {
+                        that.tempInfo = res.data;
+                        $(that.tempInfo).each(function (i, n) {
+                            that.ids.push(n.id)
+                        })
+                    });
+                } else {
+                    $(that.tempInfo).each(function (i, n) {
+                        $(that.ids).each(function (j, k) {
+                            if (n.id == k) {
+                                that.ids.splice(j, 1)
+                                j--;
+                            }
+                        })
+                    })
+                }
+            } else if (type == 4) {
+                var thisChecked = $(".setMealParent").eq(index).prop('checked');
+                if (thisChecked) {
+                    var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+                    $.get(url, {"id": id, "type": 2}, function (res) {
+                        that.tempInfo = res.data;
+                        $(that.tempInfo).each(function (i, n) {
+                            that.ids.push(n.id)
+                        })
+                    });
+                } else {
+                    $(that.tempInfo).each(function (i, n) {
+                        $(that.ids).each(function (j, k) {
+                            if (n.id == k) {
+                                that.ids.splice(j, 1)
+                                j--;
+                            }
+                        })
+                    })
+                }
+            } else if (type == 5) {
+                var thisChecked = $(".checkboxParent").eq(index).prop('checked');
+                var  el=$(event.currentTarget).parent().next();
+                $(el).find("input").each(function () {
+                    if (thisChecked) {
+                        $(this).prop("checked", thisChecked);
+                    } else {
+                        $(this).prop("checked", thisChecked);
+                    }
+
+                })
+               $(id).each(function (i,n) {
+                   if (thisChecked) {
+                       var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+                       $.get(url, {"id": n.id, "type": 1}, function (res) {
+                           that.tempInfo = res.data;
+                           $(that.tempInfo).each(function (j, k) {
+                               that.ids.push(k.id)
+
+                           })
+                           if (that.tempInfo.length != 0) {
+                               that.tempInfo2.push.apply(that.tempInfo2, res.data);
+                           } else {
+                               that.tempInfo2 = res.data;
+                           }
+                       });
+                   } else {
+                        console.log(that.tempInfo2)
+                       $(that.tempInfo2).each(function (q, w) {
+                           $(that.ids).each(function (j, k) {
+                               if (w.id == k) {
+                                   that.ids.splice(j, 1)
+                                   j--;
+                               }
+                           })
+                       })
+
+                   }
+               })
+
+            } else if (type == 6) {
+
+            }
 
         },
         //毫秒转为时分秒

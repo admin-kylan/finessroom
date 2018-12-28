@@ -132,6 +132,7 @@ public  interface CommonUtils {
     static final String STORAGE_PRICE = "all";  //储值退全款
     //上传的客户图片类型
     static final Integer PIC_TYPE_1 = 1;  //1、头像
+    static final Integer PIC_TYPE_2 = 2;  //2、图片
     //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
     static final Integer CARD_TYPE_1 = 1; //时间卡
     static final Integer CARD_TYPE_2 = 2; //小时卡

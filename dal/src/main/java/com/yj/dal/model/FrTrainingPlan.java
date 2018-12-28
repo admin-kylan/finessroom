@@ -121,14 +121,14 @@ public class FrTrainingPlan extends Model<FrTrainingPlan> {
     @TableId(value = "id", type = IdType.UUID)
     private String id;
     @TableField(exist = false)
-    private List<Map<String,Object>> frActions;
+    private List<FrPlanClass> frPlanClasses;
 
-    public List<Map<String, Object>> getFrActions() {
-        return frActions;
+    public List<FrPlanClass> getFrPlanClasses() {
+        return frPlanClasses;
     }
 
-    public void setFrActions(List<Map<String, Object>> frActions) {
-        this.frActions = frActions;
+    public void setFrPlanClasses(List<FrPlanClass> frPlanClasses) {
+        this.frPlanClasses = frPlanClasses;
     }
 
     public String getProject() {

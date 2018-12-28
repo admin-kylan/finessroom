@@ -38,7 +38,7 @@
             ftc.count,
             ftc.remark,
             ftc.id,
-            ( SELECT name FROM fr_action_series fas WHERE fas.id = fa.series_id ) sname
+            ( SELECT name FROM fr_action_series fas WHERE fas.id = fa.series_id and fas.is_using=1) sname
         FROM
             fr_action fa
             JOIN fr_traning_class ftc ON ftc.action_id = fa.id

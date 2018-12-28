@@ -16,7 +16,10 @@ import java.util.Map;
  * @since 2018-10-09
  */
 public interface PersonnelInfoMapper extends BaseMapper<PersonnelInfo> {
+
     List<PersonnelInfo> getMarketUserList(@Param("shopId") String shopId,@Param("code") String code);
 
     List<PersonnelInfo> getPsersonnelListByShopId(Map<String,Object> map);
+
+    List<Map<String,Object>> getPersonnelByShopId(Map<String,Object> map);
 }

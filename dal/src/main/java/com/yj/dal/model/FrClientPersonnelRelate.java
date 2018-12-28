@@ -15,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-10-31
+ * @since 2018-12-28
  */
 @TableName("fr_client_personnel_relate")
 public class FrClientPersonnelRelate extends Model<FrClientPersonnelRelate> {
@@ -42,7 +42,7 @@ public class FrClientPersonnelRelate extends Model<FrClientPersonnelRelate> {
      */
     private String flag;
     /**
-     * 类型(1、认领人；2、教练；)
+     * 是否为认领人 0: 否 1:是 默认0
      */
     private Integer type;
     /**
@@ -90,6 +90,25 @@ public class FrClientPersonnelRelate extends Model<FrClientPersonnelRelate> {
      */
     @TableField("role_id")
     private String roleId;
+    /**
+     * 认领时间
+     */
+    private Date time;
+    /**
+     * 0 客户角色   1 增购项目时添加的角色
+     */
+    @TableField("user_type ")
+    private Integer userType ;
+    /**
+     * 绑定表ID
+     */
+    @TableField("other_table_id")
+    private String otherTableId;
+    /**
+     * 人员类型 1、销售 2、游泳教练、3、私教教练 4、团教助教 5、美容销售  6、美甲师 7、健身教练 8、服务会籍  9、团教教练  10、美容师   11、美容顾问  12、美发师
+     */
+    @TableField("personal_type")
+    private Integer personalType;
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -206,6 +225,38 @@ public class FrClientPersonnelRelate extends Model<FrClientPersonnelRelate> {
         this.roleId = roleId;
     }
 
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public Integer getUserType () {
+        return userType ;
+    }
+
+    public void setUserType (Integer userType ) {
+        this.userType  = userType ;
+    }
+
+    public String getOtherTableId() {
+        return otherTableId;
+    }
+
+    public void setOtherTableId(String otherTableId) {
+        this.otherTableId = otherTableId;
+    }
+
+    public Integer getPersonalType() {
+        return personalType;
+    }
+
+    public void setPersonalType(Integer personalType) {
+        this.personalType = personalType;
+    }
+
     public String getId() {
         return id;
     }
@@ -222,21 +273,25 @@ public class FrClientPersonnelRelate extends Model<FrClientPersonnelRelate> {
     @Override
     public String toString() {
         return "FrClientPersonnelRelate{" +
-        ", clientId=" + clientId +
-        ", shopId=" + shopId +
-        ", personalId=" + personalId +
-        ", flag=" + flag +
-        ", type=" + type +
-        ", isUsing=" + isUsing +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        ", createUserName=" + createUserName +
-        ", updateUserName=" + updateUserName +
-        ", CustomerCode=" + CustomerCode +
-        ", createUserId=" + createUserId +
-        ", updateUserId=" + updateUserId +
-        ", roleId=" + roleId +
-        ", id=" + id +
-        "}";
+                ", clientId=" + clientId +
+                ", shopId=" + shopId +
+                ", personalId=" + personalId +
+                ", flag=" + flag +
+                ", type=" + type +
+                ", isUsing=" + isUsing +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", createUserName=" + createUserName +
+                ", updateUserName=" + updateUserName +
+                ", CustomerCode=" + CustomerCode +
+                ", createUserId=" + createUserId +
+                ", updateUserId=" + updateUserId +
+                ", roleId=" + roleId +
+                ", time=" + time +
+                ", userType =" + userType  +
+                ", otherTableId=" + otherTableId +
+                ", personalType=" + personalType +
+                ", id=" + id +
+                "}";
     }
 }

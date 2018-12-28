@@ -108,4 +108,23 @@ public class PersonnelInfoServiceImpl extends BaseServiceImpl<PersonnelInfoMappe
         List<PersonnelInfo> personnelInfos = baseMapper.getPsersonnelListByShopId(map);
         return personnelInfos;
     }
+
+    @Override
+    public List<Map<String, Object>> getPersonnelByShopId(String CustomerCode, String shopId) throws YJException {
+        if(StringUtils.isEmpty(CustomerCode) || StringUtils.isEmpty(shopId)){
+            throw new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("CustomerCode",CustomerCode);
+        map.put("shopId",shopId);
+        List<String> list = new ArrayList<>();
+        // 健身游泳的行业类别
+        list.add("134d3d485168f5er");
+        // 美容彩妆的行业类别
+        list.add("334d3d485168f5er");
+        // 通过用行业---销售
+        list.add("034d3d485168f5er");
+        map.put("businessTypeList",list);
+        return baseMapper.getPersonnelByShopId(map);
+    }
 }

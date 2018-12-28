@@ -11,10 +11,7 @@ import com.yj.dal.dao.FrActionMapper;
 import com.yj.dal.dao.FrTraningClassMapper;
 import com.yj.dal.model.*;
 import com.yj.dal.param.AddProjectParam;
-import com.yj.service.service.IFrActionService;
-import com.yj.service.service.IFrTrainingActionService;
-import com.yj.service.service.IFrTrainingPlanService;
-import com.yj.service.service.IFrTrainingSeriesService;
+import com.yj.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,56 +36,40 @@ public class FrTrainingPlanController {
     IFrTrainingPlanService service;
 
     @Autowired
-    IFrTrainingActionService trainingActionService;
-
-    @Autowired
-    FrActionMapper frActionMapper;
-
-    @Autowired
     IFrTrainingSeriesService trainingSeriesService;
 
     @Autowired
     FrTraningClassMapper frTraningClassMapper;
 
+    @Autowired
+    IFrPlanClassService frPlanClassService;
+
+    /**
+     * 查询训练计划
+     *
+     * @param cid
+     * @param currPage
+     * @return
+     * @throws YJException
+     */
     @GetMapping("/getTrainingPlanList")
     public JsonResult getTrainingPlanList(String cid, String currPage) throws YJException {
-        Map<String, Object> map = new HashMap<>();
-        if (currPage == null) {
-            currPage = "1";
+        PageUtils planList = service.getTrainingPlanList(cid, currPage);
+        if (planList != null) {
+            return JsonResult.success(planList);
+        } else {
+            return JsonResult.fail();
         }
-        map.put("page", currPage);
-        map.put("limit", "10");
-        Page page = new Query<FrTrainingPlan>(map).getPage();
-        page = service.selectPage(page,
-                new EntityWrapper<FrTrainingPlan>()
-                        .where("is_using = 1 and client_id={0}", cid));
-        List<FrTrainingPlan> frTrainingPlans = page.getRecords();
-        if (frTrainingPlans.size() <= 0) {
-            return JsonResult.failMessage("数据有误");
-        }
-        for (FrTrainingPlan frTrainingPlan : frTrainingPlans) {
-            List<FrTrainingAction> frTrainingActions = trainingActionService.selectList(
-                    new EntityWrapper<FrTrainingAction>()
-                            .where("is_using = 1 and training_id={0}", frTrainingPlan.getId())
-            );
-            List<Map<String, Object>> frActions = new ArrayList<>();
-            for (FrTrainingAction frTrainingAction : frTrainingActions) {
-                Map<String, Object> frAction = frActionMapper.getAction(
-                        frTrainingAction.getClassId()
-                );
-                System.out.println(frAction);
-                if (frAction != null) {
-                    frActions.add(frAction);
-                }
 
-            }
-            frTrainingPlan.setFrActions(frActions);
-        }
-        page.setRecords(frTrainingPlans);
-
-        return JsonResult.success(new PageUtils(page));
     }
 
+    /**
+     * 获取导入 1.训练计划 2.训练套餐内容
+     *
+     * @param type
+     * @return
+     * @throws YJException
+     */
     @GetMapping("/getCourse")
     public JsonResult getCourse(String type) throws YJException {
         List<FrTrainingSeries> frTrainingSeries = trainingSeriesService.getCourse(type);
@@ -107,16 +88,42 @@ public class FrTrainingPlanController {
         return JsonResult.success(list);
     }
 
+    /**
+     * 训练计划添加
+     *
+     * @param params
+     * @return
+     * @throws YJException
+     */
     @PostMapping("/saveProject")
-    public JsonResult saveProject(@RequestBody AddProjectParam params)throws YJException {
+    public JsonResult saveProject(@RequestBody AddProjectParam params) throws YJException {
 
         return service.saveProject(params);
     }
 
+    /**
+     * 训练计划修改
+     *
+     * @param params
+     * @return
+     * @throws YJException
+     */
     @PostMapping("/updateProject")
-    public JsonResult updateProject(@RequestBody AddProjectParam params)throws YJException {
+    public JsonResult updateProject(@RequestBody AddProjectParam params) throws YJException {
 
         return service.updateProject(params);
+    }
+
+    /**
+     * 删除训练计划
+     *
+     * @param id
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/delPlan")
+    public JsonResult delPlan(String id) throws YJException {
+        return service.delPlan(id);
     }
 
 }

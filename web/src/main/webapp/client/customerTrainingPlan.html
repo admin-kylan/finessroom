@@ -53,7 +53,7 @@
                         </label>
                     </p>
                     <p class="line5">
-                        <input type="submit" value="添加" @click="add"/>
+                        <input type="button" value="添加" @click="add"/>
                     </p>
                 </form>
             </fieldset>
@@ -81,14 +81,15 @@
                     <td><input style="border:none"  type="date" :value="formatDate(item.trainDate)"/></td>
                     <td><input style="border:none"  type="time" :value="formatSeconds(item.trainStartDate)"/></td>
                     <td><input style="border:none"  type="time" :value="formatSeconds(item.trainEndDate)"/></td>
-                    <td @click="course(item.frActions,index)">课程详情</td>
+                    <td @click="course(item.frPlanClasses,index)">课程详情</td>
                     <td><input style="border:none"  type="date" :value="formatDate(item.actualDate)"/></td>
                     <td><input style="border:none"  type="time" :value="formatSeconds(item.actualStartDate)"/></td>
                     <td><input style="border:none"  type="time" :value="formatSeconds(item.actualEndDate)"/></td>
                     <td><input style="border:none" type="text" :value="item.memberFeel"/></td>
                     <td><input style="border:none" type="text" :value="item.coachSummary"/></td>
                     <input type="hidden" :value="item.id"/>
-                    <td><span @click="update(item.frActions,index)">修改</span><span>删除</span></td>
+                    <td><span @click="update(item.frPlanClasses,index)">修改</span>
+                        <span @click="del(item.id)">删除</span></td>
                 </tr>
                 <!--<tr>-->
                 <!--<td>2</td>-->
@@ -153,8 +154,8 @@
                 <p class="title">课程筛选</p>
                 <span class="close upClose"> X </span>
                 <div class="tab">
-                    <span class="toBlue">导入训练计划</span>
-                    <span class="toGreen">导入训练计划套餐</span>
+                    <span class="toBlue" @click="open(1)">导入训练计划</span>
+                    <span class="toGreen" @click="open(2)">导入训练计划套餐</span>
                 </div>
                 <table border="1" bordercolor="#ccc">
                     <thead>
@@ -171,19 +172,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(item,index) in ActionInfo">
+                    <tr v-for="(item,index) in ActionInfo" class="action">
                         <input type="hidden" :value="item.id">
-                        <td>{{item.name}}</td>
-                        <td>{{item.sname}}</td>
-                        <td><img :src="item.image" alt="" class="img-responsive"></td>
-                        <td>{{item.diff}}</td>
-                        <td>{{item.time}}</td>
-                        <td>{{item.strength}}</td>
-                        <td>{{item.count}}</td>
-                        <td>{{item.remark}}</td>
+                        <td><input style="border:none;width: 50px" type="text" :value="item.name"/></td>
+                        <td><input style="border:none;width: 50px" type="text" :value="item.sname"/></td>
+                        <td><input type="hidden" :value="item.image"/><img :src="item.image" alt="" class="img-responsive"></td>
+                        <td><input style="border:none;width: 50px" type="text" :value="item.diff"/></td>
+                        <td><input style="border:none;width: 20px" type="text" :value="item.time"/></td>
+                        <td><input style="border:none;width: 20px" type="text" :value="item.strength"/></td>
+                        <td><input style="border:none;width: 20px" type="text" :value="item.count"/></td>
+                        <td><input style="border:none;width: 20px" type="text" :value="item.remark"/></td>
+                        <input type="hidden" :value="item.tid"/>
                         <td>
-                            <span class="toBlue">修改</span>
-                            <span class="noBg">删除</span>
+                            <span class="toBlue" @click="updateAction(index)">修改</span>
+                            <span class="noBg" @click="delAction(index)">删除</span>
                         </td>
                     </tr>
                     <tr>
@@ -207,14 +209,17 @@
                     <div class="content">
                         <div class="lef">
                             <ul class="ulUp">
-                                <div v-for="(item,index) in PlanInfo">
+                                <div v-for="(item,index2) in PlanInfo">
                                 <li class="sup" style="cursor: default">
-                                    <input type="checkbox"/>{{item.name}}
+                                    <input class="checkboxParent" type="checkbox" @click="checkAll(5,item.frTrainingSeries,index2,$event)" />{{item.name}}
                                 </li>
                                 <li class="sub">
                                     <ul class="ulDown">
-                                        <li style="cursor: pointer" v-for="list in item.frTrainingSeries"><input type="checkbox" />
+
+                                        <li style="cursor: pointer" v-for="(list,index) in item.frTrainingSeries">
+                                            <input type="checkbox" class="planParent" @click="checkAll(3,list.id,index)"/>
                                             <span  @click="getContentInfo(list.id)" >{{list.name}}</span></li>
+
                                     </ul>
                                 </li>
                                 </div>
@@ -242,12 +247,12 @@
                         </div>
                         <div class="rig">
                             <p>
-                                <span @click="addPlan">导入训练计划</span>
+                                <span @click="addPlan(1)">导入训练计划</span>
                             </p>
                             <table border="1" bordercolor="#ccc">
                                 <thead>
                                 <tr>
-                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox" id="checkPlan" @click="checkAll(1)"/></td>
                                     <td>序号</td>
                                     <td>课程类型</td>
                                     <td>内容类型</td>
@@ -257,9 +262,9 @@
                                     <td>备注</td>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="planBody">
                                 <tr v-for="(item,index) in ContentInfo">
-                                    <td><input type="checkbox" v-model="ids" :value="item.id"/></td>
+                                    <td><input type="checkbox" v-model="ids" :value="item.id" /></td>
                                     <td>{{index+1}}</td>
                                     <td>{{item.sname}}</td>
                                     <td>{{item.name}}</td>
@@ -329,13 +334,13 @@
                     <div class="content">
                         <div class="lef">
                             <ul class="ulUp">
-                                <div v-for="(item,index) in SetMealInfo">
+                                <div v-for="item in SetMealInfo">
                                     <li class="sup" style="cursor: default">
                                         <input type="checkbox"/>{{item.name}}
                                     </li>
                                     <li class="sub">
                                         <ul class="ulDown">
-                                            <li style="cursor: pointer" v-for="list in item.frTrainingSeries"><input type="checkbox" />
+                                            <li style="cursor: pointer" v-for="(list,index) in item.frTrainingSeries"><input class="setMealParent" type="checkbox" @click="checkAll(4,list.id,index)"/>
                                                 <span  @click="getSetMealContentInfo(list.id)" >{{list.name}}</span></li>
                                         </ul>
                                     </li>
@@ -364,13 +369,13 @@
                         </div>
                         <div class="rig">
                             <p>
-                                <span>导入训练计划套餐</span>
+                                <span @click="addPlan(2)">导入训练计划套餐</span>
                             </p>
                             <table border="1" bordercolor="#ccc">
                                 <thead>
                                 <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>序号</td>
+                                    <td><input type="checkbox" id="checkSetMeal" @click="checkAll(2)"/></td>
+                                    <td>序号11</td>
                                     <td>训练时间</td>
                                     <td>课程类型</td>
                                     <td>内容类型</td>
@@ -380,9 +385,9 @@
                                     <td>备注</td>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="setMealBody">
                                 <tr v-for="(item,index) in SetMealContentInfo">
-                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox" v-model="ids" :value="item.id"/></td>
                                     <td>{{index+1}}</td>
                                     <td>{{item.traningTime}}</td>
                                     <td>{{item.sname}}</td>
@@ -483,15 +488,15 @@
     $('#addClass').click(function () {
         $('.box').css('display', 'block');
     });
-    $('#customerTrainingPlan .box .tab .toBlue').click(function () {
-        $('.box1').css('display', 'block');
-    });
+//    $('#customerTrainingPlan .box .tab .toBlue').click(function () {
+//        $('.box1').css('display', 'block');
+//    });
     $('.box1 .close').click(function () {
         $('.box1').css('display', 'none');
     });
-    $('#customerTrainingPlan .box .tab .toGreen').click(function () {
-        $('.box2').css('display', 'block');
-    });
+//    $('#customerTrainingPlan .box .tab .toGreen').click(function () {
+//        $('.box2').css('display', 'block');
+//    });
     $('.box2 .close').click(function () {
         $('.box2').css('display', 'none');
     });

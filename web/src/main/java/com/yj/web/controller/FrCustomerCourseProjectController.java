@@ -69,4 +69,13 @@ public class FrCustomerCourseProjectController {
         return JsonResult.success(map);
 
     }
+
+    @GetMapping("fetchOrderListByUserId")
+    public JsonResult fetchOrderListByUserId( HttpServletRequest request){
+        Map map = new HashMap();
+        String cid = request.getParameter("cid");
+        String code = CookieUtils.getCookieValue(request, "code", true);
+        List list = frCustomerCourseProjectService.getOrderListByCid(cid, code);
+        return JsonResult.success(list);
+    }
 }

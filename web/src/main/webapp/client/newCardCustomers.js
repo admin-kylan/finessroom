@@ -968,7 +968,7 @@ var newCardCustomers = new Vue({
             }
             if(that.cardMap.isFlage == 1){
                 if(!that.cardMap.bindTime){
-                    return $.alert("开卡，请设置开卡日期");
+                    // return $.alert("开卡，请设置开卡日期");
                 }
             }
             if(!that.cardMap.externalNo){

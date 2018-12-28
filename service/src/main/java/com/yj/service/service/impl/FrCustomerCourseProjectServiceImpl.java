@@ -3,6 +3,7 @@ package com.yj.service.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
 import com.yj.common.util.UUIDUtils;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,13 @@ public class FrCustomerCourseProjectServiceImpl {
     @Autowired
     private FrCustomerCourseProjectMapper frCustomerCourseProjectMapper;
 
+    @Autowired
+    private ShopMapper shopMapper;
+    @Autowired
+    private SdaduimMapper sdaduimMapper;
+
+    @Autowired
+    private AddConsumeProjectMapper addConsumeProjectMapper;
 
     @Resource
     private IFrCardOrderPayModeService iFrCardOrderPayModeService;
@@ -63,6 +72,10 @@ public class FrCustomerCourseProjectServiceImpl {
     }
 
 
+    /**
+     * 保存
+     * @param map
+     */
     public void addSaveCustomer(Map map) {
         //json 转成实体
         ProjectOrder projectOrder = JSONObject.parseObject((String) map.get("projectOrder"), ProjectOrder.class);
@@ -144,11 +157,56 @@ public class FrCustomerCourseProjectServiceImpl {
             frClientPersonnelRelate.setId(UUIDUtils.generateGUID());
             frClientPersonnelRelate.setCreateUserName(createUserName);
             frClientPersonnelRelate.setCreateUserId(createUserId);
+            frClientPersonnelRelate.setOtherTableId(orderId);
             frClientPersonnelRelateMapper.insert(frClientPersonnelRelate);
 
         }
 
 
 
+    }
+
+    public List getOrderListByCid(String cid, String code){
+        List<ProjectOrder> list = projectOrderMapper.selectList(new EntityWrapper<ProjectOrder>()
+                .where("PersonnelId = '" + cid + "' and CustomerCode = '" + code + "' "));
+        List list1 = new ArrayList();
+        //订单id
+        String id = "";
+        for(ProjectOrder projectOrder: list){
+            Map map = new JSONObject();
+            AddProject addProject = new AddProject();
+            AddConsumeProject addConsumeProject = new AddConsumeProject();
+            Shop shop = new Shop();
+            Sdaduim sdaduim = new Sdaduim();
+            id = projectOrder.getId();
+            addProject.setProjectId(id);
+            addConsumeProject.setProjectId(id);
+            addProject = addProjectMapper.selectOne(addProject);
+            shop = shopMapper.selectById(projectOrder.getShopId());
+            sdaduim = sdaduimMapper.selectById(addProject.getSdadiumId());
+            addConsumeProject = addConsumeProjectMapper.selectOne(addConsumeProject);
+            if(null == addConsumeProject){
+                addConsumeProject = new AddConsumeProject();
+            }
+            //查询教练
+           // List coachList = frClientPersonnelRelateMapper.selectOne()
+            //项目订单表
+            map.put("projectOrder", JSONObject.toJSON(projectOrder));
+
+            //会员增购项目表
+            map.put("addProject", JSONObject.toJSON(addProject));
+
+            //门店
+            map.put("shop", JSONObject.toJSON(shop));
+
+            // 场馆
+            map.put("sdaduim", JSONObject.toJSON(sdaduim));
+
+            // 增购项目表
+            map.put("addConsumeProject", JSONObject.toJSON(addConsumeProject));
+
+            list1.add(map);
+        }
+        return list1;
     }
 }

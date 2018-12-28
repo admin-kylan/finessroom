@@ -248,19 +248,19 @@ var customerMembershipCard = new Vue({
             ],
             clientUserStaff:[
                 {"staffList": [
-                    {"name":"销售人员","defMess":"请选择销售人员","vtype":1,"vModel":"loadData0.clientStaffList.type1"},
-                    {"name":"游泳教练","defMess":"请选择游泳教练","vtype":2,"vModel":"loadData0.clientStaffList.type2"},
-                    {"name":"私教教练","defMess":"请选择私教教练","vtype":3,"vModel":"loadData0.clientStaffList.type3"},
-                    {"name":"团教助教","defMess":"请选择团教助教","vtype":4,"vModel":"loadData0.clientStaffList.type4"},
-                    {"name":"美容销售","defMess":"请选择美容销售","vtype":5,"vModel":"loadData0.clientStaffList.type5"},
-                    {"name":"美甲师","defMess":"请选择美甲师","vtype":6,"vModel":"loadData0.clientStaffList.type6"}]},
+                    {"name":"销售人员","defMess":"请选择销售人员","RoleInfoId":"BEA9D54D151A6444","UserType":1,"BusinessType":"134d3d485168f5er","vModel":"personnelId1"},
+                    {"name":"游泳教练","defMess":"请选择游泳教练","RoleInfoId":"48e5bc7d3741184f","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId2"},
+                    {"name":"私教教练","defMess":"请选择私教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId3"},
+                    {"name":"团教助教","defMess":"请选择团教助教","RoleInfoId":"3f934302ec19d1fa","UserType":4,"BusinessType":"134d3d485168f5er","vModel":"personnelId4"},
+                    {"name":"美容销售","defMess":"请选择美容销售","RoleInfoId":"","UserType":1,"BusinessType":"334d3d485168f5er","vModel":"personnelId5"},
+                    {"name":"美甲师","defMess":"请选择美甲师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId6"}]},
                 {"staffList":[
-                     {"name":"健身教练","defMess":"请选择健身教练","vtype":1,"vModel":"loadData0.clientStaffList.type1"},
-                     {"name":"服务会籍","defMess":"请选择服务会籍","vtype":2,"vModel":"loadData0.clientStaffList.type2"},
-                     {"name":"团教教练","defMess":"请选择团教教练","vtype":3,"vModel":"loadData0.clientStaffList.type3"},
-                     {"name":"美容师","defMess":"请选择美容师","vtype":4,"vModel":"loadData0.clientStaffList.type4"},
-                     {"name":"美容顾问","defMess":"请选择美容顾问","vtype":5,"vModel":"loadData0.clientStaffList.type5"},
-                     {"name":"美发师","defMess":"请选择美发师","vtype":6,"vModel":"loadData0.clientStaffList.type6"}]},
+                     {"name":"健身教练","defMess":"请选择健身教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId7"},
+                     {"name":"服务会籍","defMess":"请选择服务会籍","RoleInfoId":"179b1aa3ee2a00e5","UserType":2,"BusinessType":"134d3d485168f5er","vModel":"personnelId8"},
+                     {"name":"团教教练","defMess":"请选择团教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId9"},
+                     {"name":"美容师","defMess":"请选择美容师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId10"},
+                     {"name":"美容顾问","defMess":"请选择美容顾问","RoleInfoId":"","UserType":2,"BusinessType":"334d3d485168f5er","vModel":"personnelId11"},
+                     {"name":"美发师","defMess":"请选择美发师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId12"}]},
             ],
 
         },
@@ -296,9 +296,17 @@ var customerMembershipCard = new Vue({
             unOpenedCard:0,     //未开卡会员卡
             stopCard:0,         //停卡会员卡
             historyCard:0,      //历史会员卡
-            stopNum:0,           //可停卡次数
-            stopDays:0,          //每次时长
+            addOpenCard:{
+                bindTime:'',      //开卡时间
+                invalidTime:'',   //失效时间
+                seviceLife:'',    //有效期
+                cardTypeName:'开卡',  //弹窗标题
+                stopNum:0,           //可停卡次数
+                stopDays:0,          //每次时长
+            },
+            openClientStaffList:[],    //查询的销售人员
             clientStaffList:{},
+            imgsList:[],                //存放设置的图片
         },
         loadData1:{
             shopList:[],//销售门店列表
@@ -2180,26 +2188,6 @@ var customerMembershipCard = new Vue({
             that.loadData4.imgNum = num;
             $('#file-fr').click();
         },
-        //显示图片
-        pictureShow: function (e) {
-            var that = this;
-            var file = e.srcElement.files.item(0);
-            that.loadData4.imagesList = {};
-            var num = 'price' + that.loadData4.imgNum;
-            // 看支持不支持FileReader
-            if (!file || !window.FileReader) return;
-            if (/^image/.test(file.type)) {
-                // 创建一个reader
-                var reader = new FileReader();
-                // 将图片将转成 base64 格式
-                reader.readAsDataURL(file);
-                // 读取成功后的回调
-                reader.onloadend = function () {
-                    $("#" + num).attr('src', this.result);
-                    that.loadData4.imagesList[num] = file;
-                }
-            }
-        },
         //初始化停卡开始时间（时间联动）
         initGetStartTime: function () {
             var that = this;
@@ -3795,9 +3783,7 @@ var customerMembershipCard = new Vue({
             var that = this;
             if (!that.clientId) {return ;}
             var type = 3;
-            if(t == 1){
-                type = 4;
-            }
+            if(t == 1){  type = 4;  }
             var url = $.stringFormat("{0}/frCardSupplyRecord/getCarDsupplyRecordList", $.cookie('url'));
             $.get(url, {
                 CustomerCode: that.code,
@@ -3895,9 +3881,194 @@ var customerMembershipCard = new Vue({
             var that = this;
             var stopNum = that.getParemtDate(obj.stopNum,0);
             var stopDays = that.getParemtDate(obj.stopDays,0);
-            that.loadData0.stopNum = stopNum;
-            that.loadData0.stopDays = stopDays;
+            var seviceLife = that.getParemtDate(obj.seviceLife,'') ;
+            var cardTypeName =  that.getParemtDate(obj.cardTypeName,'');
+            var shopId = obj.shopId;
+            that.loadData0.addOpenCard.cardTypeName = cardTypeName+' - 开卡'
+            that.loadData0.addOpenCard.stopNum = stopNum;
+            that.loadData0.addOpenCard.stopDays = stopDays;
+            that.loadData0.addOpenCard.seviceLife = seviceLife;
+            that.getOpenCardPopup();
             $('.year2-modal').modal('show');
+            var shopId = obj.shopId;
+            if(!shopId){ return $.alert("未获取到对应的门店信息"); };
+            var url = $.stringFormat("{0}/personnelInfo/getPersonnelByShopId", $.cookie('url'));
+            $.get(url, {
+                    CustomerCode: $.cookie("code"),
+                    shopId:shopId,
+                },
+                function (res) {
+                    if (res.code == '200') {
+                        console.log("获取指定门店下的所有员工信息");
+                        console.log(res);
+                        that.loadData0.openClientStaffList = res.data;
+                    } else {
+                        $.alert(res.msg)
+                    }
+                }
+            )
         },
+        //初始开卡弹窗
+        getOpenCardPopup:function(){
+            var that =this;
+            var len  = 13;
+            for(var i = 1;i<len; i++){
+                var name = 'personnelId'+i;
+                that.loadData0.clientStaffList[name] = 1;
+            }
+            that.loadData0.imgsList = [];
+            that.loadData0.addOpenCard.invalidTime = '';
+            that.loadData0.addOpenCard.bindTime = '';
+            $("#toPictureSelected").show();
+        },
+        //打印
+        print:function (index) {
+            var headhtml = "<html><head><title></title></head><body>";
+            var foothtml = "</body>";
+            // 获取div中的html内容，jquery写法如下
+            var newhtml = "<table border='1' rules='none' width='200px'>" +
+                "<tr><td colspan='2' style='text-align: center'>"+"03万达店"+"</td></tr>" +
+                "<tr><td style='text-align: left'>"+"协议编号 : "+"</td><td>1554922648955</td></tr>" +
+                "<tr><td>"+"客户姓名 : "+"</td><td>Klaus</td></tr>" +
+                "<tr><td>"+"客户电话 : "+"</td><td>13645945925</td></tr>" +
+                "<tr><td>"+"付款方式 : "+"</td><td>交全款</td></tr>" +
+                "<tr><td>"+"现金 : "+"</td><td>2000</td></tr>" +
+                "<tr><td>"+"总付款 : "+"</td><td>2000</td></tr>" +
+                "<tr><td>"+"会员卡种 : "+"</td><td>普通年卡</td></tr>" +
+                "<tr><td>"+"有效期 : "+"</td><td>10年</td></tr>" +
+                "<tr><td>"+"服务会稽 : "+"</td><td>Klaus</td></tr>" +
+                "<tr><td>"+"联系电话 : "+"</td><td>13645945925</td></tr>" +
+                "<tr><td>"+"门店地址 : "+"</td><td>湖里万达</td></tr>" +
+                "<tr><td>"+"门店电话 : "+"</td><td>05952152266</td></tr>" +
+                "<tr><td>"+"收银员 : "+"</td><td>Klaus</td></tr>" +
+                "<tr><td>"+"收款日期 : "+"</td><td>2018年10月30号</td></tr>" +
+                "<tr><td colspan='2' style='text-align: center'>"+"谢谢光临"+"</td></tr>" +
+                "</table>";
+            // 获取原来的窗口界面body的html内容，并保存起来
+            var oldhtml = document.body.innerHTML;
+
+            // 给窗口界面重新赋值，赋自己拼接起来的html内容
+            document.body.innerHTML = headhtml + newhtml + foothtml;
+            // 调用window.print方法打印新窗口
+            window.print();
+
+            // 将原来窗口body的html值回填展示
+            // document.body.innerHTML = oldhtml;
+            window.location.reload();
+            return false;
+        },
+        //选择图片弹窗
+        pictureSelected: function (num) {
+            var that = this;
+            that.loadData4.imgNum = num;
+            $('#file-fr').click();
+        },
+        //显示图片
+        pictureShow: function (e) {
+            var that = this;
+            var file = e.srcElement.files.item(0);
+            that.loadData4.imagesList = {};
+            var num = 'price' + that.loadData4.imgNum;
+            // 看支持不支持FileReader
+            if (!file || !window.FileReader) return;
+            if (/^image/.test(file.type)) {
+                // 创建一个reader
+                var reader = new FileReader();
+                // 将图片将转成 base64 格式
+                reader.readAsDataURL(file);
+                // 读取成功后的回调
+                reader.onloadend = function () {
+                    $("#" + num).attr('src', this.result);
+                    that.loadData4.imagesList[num] = file;
+                }
+            }
+        },
+        // 开卡弹窗图片
+        toPictureSelected:function(obj){
+            var that = this;
+            console.log("=======================");
+            console.log(obj);
+            var priceId =  obj.id;
+            if(!priceId){
+                var len =  that.loadData0.imgsList.length;
+                if(len >= 5){
+                    return $.alert("最多设置5张图片");
+                }
+            }
+            that.loadData0.priceId = priceId;
+            $('.file-fr').click();
+        },
+        //多张图片显示
+        pictureShowList: function (e) {
+            var that = this;
+            var file = e.srcElement.files.item(0);
+            var priceId = that.getParemtDate(that.loadData0.priceId,false);
+            var isFlag = true;
+            var num = ''
+            if(!priceId){
+                var len =  that.loadData0.imgsList.length;
+                if(len >= 5){
+                    return ;
+                }
+                num = 'price' +(++len);
+                isFlag = false;
+            }
+            // 看支持不支持FileReader
+            if (!file || !window.FileReader) return;
+            if (/^image/.test(file.type)) {
+                // 创建一个reader
+                var reader = new FileReader();
+                // 将图片将转成 base64 格式
+                reader.readAsDataURL(file);
+                // 读取成功后的回调
+                reader.onloadend = function () {
+                    if(!isFlag){
+                        var img = {
+                            "srcUrl":this.result,
+                            "id":num,
+                            "file":file,
+                        }
+                        that.loadData0.imgsList.push(img);
+                        var getLen = that.loadData0.imgsList.length;
+                        if(getLen >= 5 ){
+                            $("#toPictureSelected").hide();
+                        }
+                        return ;
+                    }
+                    var imgList = that.loadData0.imgsList;
+                    that.loadData0.imgsList = [];
+                    for(var i = 0 ; i< imgList.length ; i++){
+                        if(imgList[i].id == priceId){
+                            imgList[i].srcUrl = this.result;
+                            imgList[i].file = file;
+                        }
+                        that.loadData0.imgsList.push(imgList[i]);
+                    }
+                    return ;
+                }
+            }
+        },
+        //开卡弹窗--获取失效时间
+        getInvalidTime:function(){
+            var  that = this;
+            var bindTime = that.loadData0.addOpenCard.bindTime;
+            var nums = 0;
+            var interval = '';
+            var seviceLife  =that.getParemtDate(that.loadData0.addOpenCard.seviceLife,false);
+            if(seviceLife){
+                var spli = that.loadData0.addOpenCard.seviceLife.split(",");
+                if(spli){
+                    nums = spli[0];
+                    interval = spli[1];
+                }
+            }
+            if(nums <= 0){
+                alert("此卡种未设置有效期限，请重新选择其他卡种");
+                return that.closeCustomer();
+            }
+            var dateS =new Date(bindTime.replace(/-/g, "/"));
+            var d = DateAdd(interval,parseInt(nums),dateS);
+            that.loadData0.addOpenCard.invalidTime = formatDate(d);
+        }
     },
 });

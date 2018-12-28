@@ -16,4 +16,5 @@ const COURSE_URL = {
     getCardListByMobile: 'frCard/queryByFrCardListByStatus', // 通过客户，查询会员卡
     queryByFrCardList: 'frCard/queryByFrCardList', // 通过客户，查询会员卡
     addSaveCustomer: 'frCustomerCourse/addSaveCustomer', //新购的结账
+    fetchOrderListByUserId: 'frCustomerCourse/fetchOrderListByUserId', //根据用户Id查询
 };

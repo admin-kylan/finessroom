@@ -6,6 +6,7 @@ import com.yj.dal.model.PersonnelInfo;
 import com.yj.service.base.BaseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,4 +25,6 @@ public interface IPersonnelInfoService extends BaseService<PersonnelInfo> {
     List<PersonnelInfo> getUnallocatedPersonnel(String rid)throws YJException;
 
     List<PersonnelInfo> getPsersonnelListByShopId(String CustomerCode,String shopId,Integer UserType)throws YJException;
+
+    List<Map<String,Object>> getPersonnelByShopId(String CustomerCode,String shopId)throws YJException;
 }

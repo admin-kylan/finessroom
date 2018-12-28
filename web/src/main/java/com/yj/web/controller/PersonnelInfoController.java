@@ -131,5 +131,20 @@ public class PersonnelInfoController {
         List<PersonnelInfo> personnelInfos = service.getPsersonnelListByShopId(CustomerCode,shopId,UserType);
         return JsonResult.success(personnelInfos);
     }
+
+    /**
+     * 获取指定门店下的所有员工信息
+     * @param CustomerCode
+     * @param shopId
+     * @param request
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getPersonnelByShopId")
+    public JsonResult getPersonnelByShopId(@RequestParam("CustomerCode")String CustomerCode,@RequestParam("shopId") String shopId,
+                                           HttpServletRequest request)throws YJException{
+        return  JsonResult.success(service.getPersonnelByShopId(CustomerCode,shopId));
+    }
+
 }
 

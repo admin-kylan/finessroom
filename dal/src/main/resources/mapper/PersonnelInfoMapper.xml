@@ -72,4 +72,39 @@
         AND pi.CustomerCode = #{CustomerCode}
     </select>
 
+
+    <!--查询销售人员列表-->
+    <select id="getPersonnelByShopId" resultType="java.util.Map">
+        SELECT
+             r.id,
+             r.FirstName,
+             r.ParentId,
+             r.RoleType,
+             r.ISTeach,
+             r.ServiceRole,
+             r.BusinessType,
+             r.UserType,
+            rf.RoleInfoId,
+            p.RelName,
+            p.id,
+            p.ShopId
+       FROM PersonnelInfo p
+       LEFT JOIN PersonlRole rf ON rf.PersonnelInfoId = p.id
+       LEFT JOIN RoleInfo r ON  r.id = rf.RoleInfoId
+       WHERE  r.IsDel=0
+         AND  rf.IsDel = 0
+         AND  p.IsDel = 0
+         AND  p.Status = 0
+         AND  p.CustomerCode = #{CustomerCode}
+         AND  p.ShopId = #{shopId}
+       <if test="businessTypeList != null and businessTypeList.size >0" >
+         AND (
+            <foreach collection="businessTypeList" item="BusinessType" index="i" open="" close="" separator="or">
+                r.BusinessType = #{BusinessType}
+            </foreach>
+            )
+       </if>
+    </select>
+
+
 </mapper>

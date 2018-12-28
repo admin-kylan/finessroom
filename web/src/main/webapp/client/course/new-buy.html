@@ -4,14 +4,86 @@
         <span :class='{on:index == 1}' v-on:click="index = 1">购买套餐/疗程</span>
     </div>
 
-    <div >
+    <div>
         <div id="course-head-body">
 
         </div>
-        <div id="course-main-body"  >
+        <div id="course-main-body">
 
         </div>
 
+    </div>
+    <div class="tab">
+        <div class="tabWrap">
+            <table border="1" bordercolor="#ccc" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <td>操作</td>
+                    <td>状态</td>
+                    <td>套餐详情</td>
+                    <td>订单创建日期</td>
+                    <td>协议编号</td>
+                    <td>所在门店</td>
+                    <td>所在场馆</td>
+                    <td>购买项目/产品</td>
+                    <td>购买数量</td>
+                    <td>赠送数量</td>
+                    <td>可用数量</td>
+                    <td>退费数量</td>
+                    <td>退费金额</td>
+                    <td>剩余数量</td>
+                    <td>已消费数量</td>
+                    <td>单价</td>
+                    <td>购买金额</td>
+                    <td>实际付款金额</td>
+                    <td>剩余金额</td>
+                    <td>欠款金额</td>
+                    <td>付款方式</td>
+                    <td>有效期</td>
+                    <td>启用日期</td>
+                    <td>结束日期</td>
+                    <td>销售类型</td>
+                    <td>教练</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, index) in result">
+                    <td><span>打印</span>
+                        <span class="lightBlue" @click="remnantMethod(item)">补余</span>
+                        <span class="red" @click="refundMethod(item)">退费</span>
+                        <span class="blue" @click="transferMethod(item)">转让</span>
+                        <span class="green" @click="enableMethod(item)">启用</span>
+                        <span class="yellow" @click="extensionMethod(item)">延期</span>
+                    </td>
+                    <td class="deepBlue">{{item.addProject.state |stateFilter}}</td>
+                    <td class="deepBlue">查看</td>
+                    <td>{{item.projectOrder.createTime |formatDate}}</td>
+                    <td>{{item.addProject.contractNumber}}</td>
+                    <td>{{item.shop.shopName}}</td>
+                    <td>{{item.sdaduim.name}}</td>
+                    <td class="deepBlue">私教套餐</td>
+                    <td>{{item.projectOrder.buyCount| toNum}}</td>
+                    <td>{{item.projectOrder.sendCount|toNum}}</td>
+                    <td class="green">{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
+                    <td>0</td>
+                    <td>0.00</td>
+                    <td>{{item.addConsumeProject.surplusCount |toNum}}</td>
+                    <td>{{item.addConsumeProject.expenseCount|toNum}}</td>
+                    <td>{{item.projectOrder.price |toMoney}}</td>
+                    <td>{{item.projectOrder.totalPrice|toMoney}}</td>
+                    <td class="yellow">{{item.projectOrder.needPrice|toMoney}}</td>
+                    <td>{{item.projectOrder.noPrice|toMoney}}</td>
+                    <td>{{item.projectOrder.noPrice|toMoney}}</td>
+                    <td>{{item.projectOrder| payStatus}}</td>
+                    <td>{{item.addProject.useful}} 个月</td>
+                    <td>{{item.addProject.startTime| formatDate2}}</td>
+                    <td>{{item.addProject.endTime| formatDate2}}</td>
+                    <td>{{item.addProject.saleType| saleType}}</td>
+                    <td class="grey">无</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
@@ -24,6 +96,89 @@
             html: '', //页面不同体的html
             headHtml: './course/new-buy/head.html', //页面头部html
             billStatus: '', //用来显示结算的状态
+            result: [], //结果集合
+        },
+        filters: {
+            stateFilter: function (val) {
+                let back = "";
+                if((val + "") == "0"){
+                    back = "正常"
+                }
+                if((val + "") == "1"){
+                    back = "欠款"
+                }
+                if((val + "") == "2"){
+                    back = "过期"
+                }
+                if((val + "") == "3"){
+                    back = "历史"
+                }
+                if((val + "") == "4"){
+                    back = "未开始"
+                }
+
+                return back;
+            },
+            formatDate(val){
+                return timeFormatDate(val, true, false);
+            },
+            toNum(val){
+
+                if(!val){
+                    return '0';
+                }
+                return val;
+            },
+            toMoney: function (val) {
+                if (!val || 'undefined' == typeof(val)) {
+                    return parseFloat(0).toFixed(2);
+                }
+                return parseFloat(val).toFixed(2);
+            },
+            payStatus(item){
+                //现金：￥1000.00 支付宝：￥600.00
+                let str = '';
+                if(parseFloat(item.cashPrice) > 0){
+                    str += '现金：￥' + parseFloat(item.cashPrice).toFixed(2)
+                }
+                if(parseFloat(item.alipayPrice) > 0){
+                    str += '支付宝：￥' + parseFloat(item.alipayPrice).toFixed(2)
+                }
+                if(parseFloat(item.payCardPrice) > 0){
+                    str += '刷卡：￥' + parseFloat(item.payCardPrice).toFixed(2)
+                }
+                if(parseFloat(item.wechatPrice) > 0){
+                    str += '微信：￥' + parseFloat(item.wechatPrice).toFixed(2)
+                }
+                if(parseFloat(item.accountsPrice) > 0){
+                    str += '转账：￥' + parseFloat(item.accountsPrice).toFixed(2)
+                }
+                if(parseFloat(item.flowerPrice) > 0){
+                    str += '花呗：￥' + parseFloat(item.flowerPrice).toFixed(2)
+                }
+                if(parseFloat(item.otherPrice) > 0){
+                    str += '其他：￥' + parseFloat(item.otherPrice).toFixed(2)
+                }
+                return str;
+            },
+            formatDate2(val){
+                return timeFormatDate(val, false, false);
+            },
+            saleType(val){
+                if(val === 0){
+                    return "POS销售";
+                }
+                if(val === 1){
+                    return "新会员购买";
+                }
+                if(val === 2){
+                    return "续课";
+                }
+                if(val === 3){
+                    return "场地开课";
+                }
+                //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+            }
         },
         computed: {},
         watch: {
@@ -45,17 +200,54 @@
         created: function () {
             this.index = 0; //默认执行第一个tab
         },
+        mounted(){// 初始化加载
+            axiosGetParams(COURSE_URL.fetchOrderListByUserId, {cid: $.cookie('cid')}, (res) => {
+                if (res.code == '200') {
+                    this.result = res.data;
+                }
+                console.log(res);
+            })
+
+        },
         methods: {
             load: function () { //动态加载html
                 $('#course-main-body').load(this.html)
                 $('#course-head-body').load(this.headHtml)
             },
-
+            //补余
+            remnantMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到补余页面
+                Vue.set(customerCourseProject, 'index', 4);
+            },
+            //退费
+            refundMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到退费页面
+                Vue.set(customerCourseProject, 'index', 7);
+            },
+            //转让
+            transferMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到转让页面
+                Vue.set(customerCourseProject, 'index', 6);
+            },
+            //启用
+            enableMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到启用页面
+                Vue.set(customerCourseProject, 'index', 3);
+            },
+            //延期
+            extensionMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到延期页面
+                Vue.set(customerCourseProject, 'index', 5);
+            },
 
         }
     });
 </script>
-
 <style>
     #course-new-buy-li .ag-error {
         float: right;

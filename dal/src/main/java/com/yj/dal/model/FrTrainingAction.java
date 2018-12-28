@@ -23,10 +23,10 @@ public class FrTrainingAction extends Model<FrTrainingAction> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 动作ID
+     * 课程详情ID
      */
-    @TableField("class_id")
-    private String classId;
+    @TableField("plan_class_id")
+    private String planClassId;
     /**
      * 训练计划ID
      */
@@ -46,12 +46,12 @@ public class FrTrainingAction extends Model<FrTrainingAction> {
     private String id;
 
 
-    public String getClassId() {
-        return classId;
+    public String getPlanClassId() {
+        return planClassId;
     }
 
-    public void setClassId(String classId) {
-        this.classId = classId;
+    public void setPlanClassId(String planClassId) {
+        this.planClassId = planClassId;
     }
 
     public String getTrainingId() {

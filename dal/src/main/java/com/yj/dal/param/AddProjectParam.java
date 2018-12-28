@@ -1,8 +1,14 @@
 package com.yj.dal.param;
 
+import com.yj.dal.model.FrPlanClass;
+
+import java.util.List;
+import java.util.Map;
+
 public class AddProjectParam {
-    //id
-    private String id;
+
+    private List<FrPlanClass> actionInfo;
+    private String fid;
     //私教项目
     private String project;
     //训练日期
@@ -28,12 +34,20 @@ public class AddProjectParam {
     //教练小结
     private String coachSummary;
 
-    public String getId() {
-        return id;
+    public String getFid() {
+        return fid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFid(String fid) {
+        this.fid = fid;
+    }
+
+    public List<FrPlanClass> getActionInfo() {
+        return actionInfo;
+    }
+
+    public void setActionInfo(List<FrPlanClass> actionInfo) {
+        this.actionInfo = actionInfo;
     }
 
     public String getActualStartDate() {
