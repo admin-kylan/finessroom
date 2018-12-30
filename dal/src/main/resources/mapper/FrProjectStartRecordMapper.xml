@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrProjectStartRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrProjectStartRecord">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="operateDate" property="operateDate" />
+        <result column="operatePersonId" property="operatePersonId" />
+        <result column="operatePersonName" property="operatePersonName" />
+        <result column="projectOrderId" property="projectOrderId" />
+        <result column="startDate" property="startDate" />
+        <result column="endDate" property="endDate" />
+        <result column="oldStartDate" property="oldStartDate" />
+        <result column="oldEndDate" property="oldEndDate" />
+        <result column="is_using" property="isUsing" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, operateDate, operatePersonId, operatePersonName, projectOrderId, startDate, endDate, oldStartDate, oldEndDate, is_using AS isUsing, create_user AS createUser, update_user AS updateUser, create_time AS createTime, update_time AS updateTime
+    </sql>
+
+</mapper>

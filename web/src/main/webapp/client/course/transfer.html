@@ -1,11 +1,18 @@
-<li class="list4 list7 list on" v-if="LiIndex==6">
+<li class="list4 list7 list on" id="course-transfer">
     <fieldset class="fieldset1">
         <legend>操作项目/产品</legend>
-        <select name="">
-            <option value="" selected>
+        <select name="" v-model="index">
+            <option value="" v-for="(item, index) in result"  :value="index">
 
-                所在门店：软件园店 所在场馆：私人教学 项目/产品名称：私教课程30节 数量：2（1+ <span class="yellow">1</span> ） 已消费数量：0 价格：3000.00 剩余价格：3000.00
-                有效期：1年 结 剩余价格：3000.00 有效期：1年 束时间：2019-08-27 状态：<span class="blod">未开始</span>
+                所在门店：{{item.shop.shopName}} 所在场馆：{{item.sdaduim.name}} 项目/产品名称：私教课程30节
+                数量：{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}
+                （{{item.projectOrder.buyCount| toNum}}+ <span class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
+                已消费数量：{{item.addProjectConsumes.length| toNum}} 价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                * (item.addProjectConsumes.length)|toMoney}}
+                剩余价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}
+                有效期：{{item.addProject.useful}} 个月 结束时间：{{item.addProject.endTime| formatDate2}}
+                状态：<span class="blod">{{item.addProject.state |stateFilter}}</span>
             </option>
         </select>
     </fieldset>
@@ -14,31 +21,56 @@
             <legend>转让操作</legend>
             <label >
                 转让手机号码：
-                <input type="text" placeholder="输入转让对象手机号码" />
+                <input type="text" placeholder="输入转让对象手机号码"
+                       oninput="value=value.replace(/[^\d]+/g,'')" v-model="mobile" @blur="searchUser"/>
             </label>
             <fieldset class="fieldset5">
                 <legend>会员信息</legend>
-                无
+                <template v-if="memberInfo.isHas == true">
+                    <label >
+                        姓名：
+                        {{memberInfo.name}}
+                    </label>
+                    <label >
+                        性别：
+                        {{memberInfo.sex}}
+                    </label>
+                </template>
+                <!--<template v-else>-->
+                    <!--<label >-->
+                        <!--姓名：-->
+                        <!--<input type="text" placeholder="输入转让对象姓名" v-model="memberInfo.name" />-->
+                    <!--</label>-->
+                    <!--<label >-->
+                        <!--性别：-->
+                        <!--<input type="radio" style="width:20px;height: 16px;" value="0" v-model="memberInfo.sex"/>男-->
+                        <!--<input type="radio" style="width:20px;height: 16px;" value="1" v-model="memberInfo.sex"/>女-->
+                    <!--</label>-->
+                <!--</template>-->
+
             </fieldset>
             <label >
                 手续费：
-                <input type="text" placeholder="0.00" />
+                <input type="text" placeholder="0.00" v-model="fee" oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"/>
             </label>
             <label >
                 选择支付方式：
-                <select name="">
-                    <option value="">现金</option>
+                <select v-model="payType">
+                    <option value="0">现金</option>
+                    <option value="1">刷卡</option>
+                    <option value="2">微信</option>
+                    <option value="3">支付宝</option>
                 </select>
             </label>
             <label >
                 输入凭证：
-                <input type="password" />
+                <input type="password" v-model="usepass" @blur="verifyUser"/>
             </label>
             <label >
-                操作人：<span class="red">Klaus</span> 当前操作时间:2018-09-04
+                操作人：<span class="red">{{clientName}}</span> 当前操作时间:{{now|formatDate2}}
             </label>
             <p>
-                <span class="btn">转让</span>
+                <span class="btn" @click="save">转让</span>
             </p>
         </fieldset>
         <fieldset class="fieldset4 fl">
@@ -60,47 +92,292 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>2018-06-05 20:26</td>
-                    <td>吴改</td>
-                    <td>13645945925</td>
-                    <td>18065287706</td>
-                    <td>小智</td>
-                    <td>支付宝</td>
-                    <td>0</td>
-                    <td>Demacia</td>
-                    <td>Klaus</td>
-                    <td class="red">冲销</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr v-for="(item, index) in tableList">
+                    <td>{{index+1}}</td>
+                    <td>{{item.turnProject.createTime|formatDate}}</td>
+                    <td>{{item.frClientOld.clientName}}</td>
+                    <td>{{item.frClientOld.mobile}}</td>
+                    <td>{{item.frClientNew.clientName}}</td>
+                    <td>{{item.frClientNew.mobile}}</td>
+                    <td>{{item.turnProject.payType| stateFilter1}}</td>
+                    <td>{{item.turnProject.fee| toMoney}}</td>
+                    <td>{{item.frClientOld.clientName}}</td>
+                    <td>{{item.frClientOld.createName}}</td>
+                    <td class="red" @click="deleteTurn(item)">冲销</td>
                 </tr>
                 </tbody>
             </table>
         </fieldset>
     </div>
 </li>
+
+
+<script>
+    var transferVue = new Vue({
+        el: '#course-transfer',
+        data: {
+            orderId: '', //订单表ID
+            index: '', //序列
+            result: [], //数据
+            selectData: {}, //选择的数据
+            now: new Date(), //当前时间
+            clientName: $.cookie('name'), //当前系统人名
+            cid: $.cookie('cid'), //当前系统人id
+            password: '', //输入的密码
+            status: false, //验证状态
+            tableList: [], //表格历史记录
+            mobile: '', //手机号码
+            fee: '', //手续费
+            usepass: '', //密码
+            memberInfo:{
+                name: '',
+                sex: '',
+                isHas: false, //该用户是否存在
+            },
+            payType:'0', //付款方式
+            tableList:[],
+        },
+        filters: {
+            stateFilter: function (val) {
+                let back = "";
+                if((val + "") == "0"){
+                    back = "正常"
+                }
+                if((val + "") == "1"){
+                    back = "欠款"
+                }
+                if((val + "") == "2"){
+                    back = "过期"
+                }
+                if((val + "") == "3"){
+                    back = "历史"
+                }
+                if((val + "") == "4"){
+                    back = "未开始"
+                }
+
+                return back;
+            },
+            stateFilter1: function (val) {
+                let back = "";
+                if((val + "") == "0"){
+                    back = "现金"
+                }
+                if((val + "") == "1"){
+                    back = "刷卡"
+                }
+                if((val + "") == "2"){
+                    back = "微信"
+                }
+                if((val + "") == "3"){
+                    back = "支付宝"
+                }
+                return back;
+            },
+            formatDate(val){
+                if(!val){
+                    return "";
+                }
+                return timeFormatDate(val, true, false);
+            },
+            toNum(val){
+
+                if(!val){
+                    return '0';
+                }
+                return val;
+            },
+            toMoney: function (val) {
+                if (!val || 'undefined' == typeof(val)) {
+                    return parseFloat(0).toFixed(2);
+                }
+                return parseFloat(val).toFixed(2);
+            },
+            payStatus(item){
+                //现金：￥1000.00 支付宝：￥600.00
+                let str = '';
+                if(parseFloat(item.cashPrice) > 0){
+                    str += '现金：￥' + parseFloat(item.cashPrice).toFixed(2)
+                }
+                if(parseFloat(item.alipayPrice) > 0){
+                    str += '支付宝：￥' + parseFloat(item.alipayPrice).toFixed(2)
+                }
+                if(parseFloat(item.payCardPrice) > 0){
+                    str += '刷卡：￥' + parseFloat(item.payCardPrice).toFixed(2)
+                }
+                if(parseFloat(item.wechatPrice) > 0){
+                    str += '微信：￥' + parseFloat(item.wechatPrice).toFixed(2)
+                }
+                if(parseFloat(item.accountsPrice) > 0){
+                    str += '转账：￥' + parseFloat(item.accountsPrice).toFixed(2)
+                }
+                if(parseFloat(item.flowerPrice) > 0){
+                    str += '花呗：￥' + parseFloat(item.flowerPrice).toFixed(2)
+                }
+                if(parseFloat(item.otherPrice) > 0){
+                    str += '其他：￥' + parseFloat(item.otherPrice).toFixed(2)
+                }
+                return str;
+            },
+            formatDate2(val){
+                if(!val){
+                    return "";
+                }
+                return timeFormatDate(val, false, false);
+            },
+            saleType(val){
+                if(val === 0){
+                    return "POS销售";
+                }
+                if(val === 1){
+                    return "新会员购买";
+                }
+                if(val === 2){
+                    return "续课";
+                }
+                if(val === 3){
+                    return "场地开课";
+                }
+                //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+            }
+        },
+        computed: {},
+        watch: {
+            index(val){
+                this.selectData = this.result[val];
+            },
+            'selectData':{
+                handler(val){
+                    this.startTime = val.addProject.startTime;
+                    this.endTime = val.addProject.endTime;
+                },
+                deep: true,
+            },
+        },
+        created: function () {
+
+        },
+        mounted(){// 初始化加载
+            this.search();//
+            this.fetch()
+        },
+        methods: {
+            fetch(){
+                axiosGetFetch(COURSE_URL.turnProjects,(res)=>{
+                    if(res.code == '200'){
+                        this.tableList = res.data;
+                    }
+                })
+            },
+            //查询记录
+            search(){
+                let interval = setInterval(()=>{
+                    this.result = customerCourseProject.resultList;
+                    if(this.result.length > 0){
+                        let array = [];
+                        this.index = 0;//初始化index
+                        // this.tableList = customerCourseProject.resultList;
+                        clearInterval(interval);
+                    }
+                },500)
+            },
+            searchUser(){
+              //输入手机号码 this.mobile
+                this.memberInfo.name = '';
+                this.memberInfo.sex = '';
+                this.memberInfo.isHas = false;
+                //判断手机号码是否有输入
+                if (this.mobile == "") {
+                    return false;
+                }
+                //15345982222
+                let param = {
+                    mobile: this.mobile,
+                    CustomerCode: $.cookie('code')
+                };
+
+                axiosGetParams(COURSE_URL.getClientListByMobile, param, (response) => {
+                    if (response.code === '200') {
+                        if(response.data.length > 0){
+                            let data = response.data[0];
+                            this.memberInfo.name = data.clientName;
+                            this.memberInfo.sex = data.sex == 1 ? '女' : '男';
+                            this.memberInfo.isHas = true; //该用户存在
+
+                        }
+
+
+                    }
+                });
+
+            },
+            verifyUser(){
+                this.status = false; //设置为原始状态
+                if(!this.password){
+                    alert("请输入密码");
+                    return false
+                }
+                //开始验证 verifyPersonInfo
+                let param = {};
+                param.customerCode = $.cookie('code');
+                param.ShopId = $.cookie('shopid');
+                param.PassWord = this.password;
+                param.id = this.cid;
+                axiosPostParams(COURSE_URL.verifyPersonInfo, param, (response) => {
+                    if (response.code === '200') {
+                        this.status = true;
+                    }
+                });
+            },
+            //转让操作
+            save(){
+
+                if(!this.selectData.addProject){
+                    alert("请选择项目转让")
+                    return false;
+                }
+                if(this.memberInfo.isHas === false){
+                    alert("转让的用户不存在，请添加该用户")
+                    return false;
+                }
+                if(this.status === false){
+                    //输入凭证验证失败
+                    alert("输入凭证验证失败")
+                    return false;
+                }
+                let param = JSON.toJSON(JSON.stringify(this.selectData));
+                //param.
+                let obj = {
+                    mobile: this.mobile,
+                    name: this.memberInfo.name,
+                    sex: this.memberInfo.sex,
+                    fee: this.fee? this.fee: 0,
+                    payType: this.payType
+
+                };
+                param.insertData = obj;
+                ajaxPostJsonParams(COURSE_URL.customerTransfer, param, (res)=>{
+                    if (res.code === '200') {
+                        customerCourseProject.$options.methods.loadData();//加载数据
+                        this.search();
+                        alert("转让成功");
+
+                    }
+                });
+
+            },
+            //删除，冲消除
+            deleteTurn(data){
+                let item = data.turnProject;
+                let param = {};
+                param.id = item.id;
+                axiosGetParams(COURSE_URL.turnProjectsDelete,(res)=>{
+                    if(res.code == '200'){
+                       this.fetch();
+                    }
+                })
+            }
+
+        }
+    });
+</script>

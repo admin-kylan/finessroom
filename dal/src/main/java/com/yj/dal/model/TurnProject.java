@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-12-27
+ * @since 2018-12-30
  */
 @TableName("TurnProject")
 public class TurnProject extends Model<TurnProject> {
@@ -33,7 +34,7 @@ public class TurnProject extends Model<TurnProject> {
     @TableId(value = "ID", type = IdType.UUID)
     private String id;
     /**
-     * 旧卡Id
+     * 旧主人id
      */
     private String OldCardId;
     /**
@@ -47,7 +48,7 @@ public class TurnProject extends Model<TurnProject> {
     /**
      * 创建时间
      */
-    private Double CreateTime;
+    private Date CreateTime;
     /**
      * 创建人ID
      */
@@ -72,6 +73,14 @@ public class TurnProject extends Model<TurnProject> {
      * 算业绩的门店
      */
     private String PerShopId;
+    /**
+     * 旧会员ID
+     */
+    private String OldCustomerId;
+    /**
+     * 新会员Id
+     */
+    private String NewCustomerId;
 
 
     public String getCustomerCode() {
@@ -114,11 +123,11 @@ public class TurnProject extends Model<TurnProject> {
         this.AddProjectId = AddProjectId;
     }
 
-    public Double getCreateTime() {
+    public Date getCreateTime() {
         return CreateTime;
     }
 
-    public void setCreateTime(Double CreateTime) {
+    public void setCreateTime(Date CreateTime) {
         this.CreateTime = CreateTime;
     }
 
@@ -170,6 +179,22 @@ public class TurnProject extends Model<TurnProject> {
         this.PerShopId = PerShopId;
     }
 
+    public String getOldCustomerId() {
+        return OldCustomerId;
+    }
+
+    public void setOldCustomerId(String OldCustomerId) {
+        this.OldCustomerId = OldCustomerId;
+    }
+
+    public String getNewCustomerId() {
+        return NewCustomerId;
+    }
+
+    public void setNewCustomerId(String NewCustomerId) {
+        this.NewCustomerId = NewCustomerId;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -190,6 +215,8 @@ public class TurnProject extends Model<TurnProject> {
         ", PayMoney=" + PayMoney +
         ", Fee=" + Fee +
         ", PerShopId=" + PerShopId +
+        ", OldCustomerId=" + OldCustomerId +
+        ", NewCustomerId=" + NewCustomerId +
         "}";
     }
 }

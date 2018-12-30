@@ -16,11 +16,13 @@
         <result column="PayMoney" property="PayMoney" />
         <result column="Fee" property="Fee" />
         <result column="PerShopId" property="PerShopId" />
+        <result column="OldCustomerId" property="OldCustomerId" />
+        <result column="NewCustomerId" property="NewCustomerId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        CustomerCode, ID, OldCardId, NewCardId, AddProjectId, CreateTime, CreateId, CreateName, PayType, PayMoney, Fee, PerShopId
+        CustomerCode, ID, OldCardId, NewCardId, AddProjectId, CreateTime, CreateId, CreateName, PayType, PayMoney, Fee, PerShopId, OldCustomerId, NewCustomerId
     </sql>
 
 </mapper>

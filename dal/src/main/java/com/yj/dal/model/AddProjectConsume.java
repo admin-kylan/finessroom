@@ -16,7 +16,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-12-27
+ * @since 2018-12-30
  */
 @TableName("AddProjectConsume")
 public class AddProjectConsume extends Model<AddProjectConsume> {
@@ -38,7 +38,7 @@ public class AddProjectConsume extends Model<AddProjectConsume> {
      */
     private String OpenId;
     /**
-     * 开场ID
+     * 消费订单ID
      */
     private String SysConsumeOrderId;
     /**
@@ -97,6 +97,31 @@ public class AddProjectConsume extends Model<AddProjectConsume> {
      * 创建时间
      */
     private Date CreateTime;
+    /**
+     * 单价
+     */
+    private Double Price;
+    /**
+     * 数量
+     */
+    private Integer Count;
+    /**
+     * 折扣
+     */
+    private Double Discount;
+    /**
+     * 小计
+     */
+    private Double Total;
+    /**
+     * 创建人ID
+     */
+    private String CreatePeople
+;
+    /**
+     * 创建人姓名
+     */
+    private String CreatePeopleName;
 
 
     public String getCustomerCode() {
@@ -243,6 +268,60 @@ public class AddProjectConsume extends Model<AddProjectConsume> {
         this.CreateTime = CreateTime;
     }
 
+    public Double getPrice() {
+        return Price;
+    }
+
+    public void setPrice(Double Price) {
+        this.Price = Price;
+    }
+
+    public Integer getCount() {
+        return Count;
+    }
+
+    public void setCount(Integer Count) {
+        this.Count = Count;
+    }
+
+    public Double getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(Double Discount) {
+        this.Discount = Discount;
+    }
+
+    public Double getTotal() {
+        return Total;
+    }
+
+    public void setTotal(Double Total) {
+        this.Total = Total;
+    }
+
+    public String getCreatePeople
+() {
+        return CreatePeople
+;
+    }
+
+    public void setCreatePeople
+(String CreatePeople
+) {
+        this.CreatePeople
+ = CreatePeople
+;
+    }
+
+    public String getCreatePeopleName() {
+        return CreatePeopleName;
+    }
+
+    public void setCreatePeopleName(String CreatePeopleName) {
+        this.CreatePeopleName = CreatePeopleName;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -269,6 +348,12 @@ public class AddProjectConsume extends Model<AddProjectConsume> {
         ", ServiceId=" + ServiceId +
         ", ServiceName=" + ServiceName +
         ", CreateTime=" + CreateTime +
+        ", Price=" + Price +
+        ", Count=" + Count +
+        ", Discount=" + Discount +
+        ", Total=" + Total +
+        ", CreatePeople " + CreatePeople +
+        ", CreatePeopleName=" + CreatePeopleName +
         "}";
     }
 }

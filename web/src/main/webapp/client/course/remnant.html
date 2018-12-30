@@ -1,11 +1,18 @@
-<li class="list4 list5 list on" v-if="LiIndex==4">
+<li class="list4 list5 list on" id="course-remnant">
     <fieldset class="fieldset1">
         <legend>操作项目/产品</legend>
-        <select name="">
-            <option value="" selected>
+        <select name="" v-model="index">
+            <option value="" v-for="(item, index) in result"  :value="index">
 
-                所在门店：软件园店 所在场馆：私人教学 项目/产品名称：私教课程30节 数量：2（1+ <span class="yellow">1</span> ） 已消费数量：0 价格：3000.00 剩余价格：3000.00
-                有效期：1年 结 剩余价格：3000.00 有效期：1年 束时间：2019-08-27 状态：<span class="blod">未开始</span>
+                所在门店：{{item.shop.shopName}} 所在场馆：{{item.sdaduim.name}} 项目/产品名称：私教课程30节
+                数量：{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}
+                （{{item.projectOrder.buyCount| toNum}}+ <span class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
+                已消费数量：{{item.addProjectConsumes.length| toNum}} 价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                * (item.addProjectConsumes.length)|toMoney}}
+                剩余价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}
+                有效期：{{item.addProject.useful}} 个月 结束时间：{{item.addProject.endTime| formatDate2}}
+                状态：<span class="blod">{{item.addProject.state |stateFilter}}</span>
             </option>
         </select>
     </fieldset>
@@ -13,17 +20,17 @@
         <legend>补余</legend>
         <p class="date">
             <label >
-                需付款：6000.00
+                需付款：{{totalPrice|toMoney}}
             </label>
             <label >
-                已付款：<span class="yellow">3000.00</span>
+                已付款：<span class="yellow">{{price|toMoney}}</span>
             </label>
             <label >
-                欠款：<span class="red">3000.00</span>
+                欠款：<span class="red">{{noPrice|toMoney}}</span>
             </label>
         </p>
-        <p>操作人：Klaus 当前操作时间：2018-09-04</p>
-        <p><span class="useful"  onclick="offers()" >补余</span></p>
+        <p>操作人：{{clientName}} 当前操作时间：{{now| formatDate2}}</p>
+        <p><span class="useful"  @click="save" >补余</span></p>
     </fieldset>
     <div class="tabTitle">补余记录</div>
     <table border="1" bordercolor="#ccc">
@@ -46,694 +53,196 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>1</td>
-            <td>2018-09-04 17:34</td>
-            <td>软件园店</td>
-            <td>私人教学</td>
+        <tr v-for="(item, index) in tableList">
+            <td>{{index + 1}}</td>
+            <td>{{item.frProjectRemnantRecord.createTime| formatDate2}}</td>
+            <td>{{item.shop.shopName}}</td>
+            <td>{{item.sdaduim.name}}</td>
             <td>私教课程30节</td>
-            <td>6000.00</td>
-            <td>3000.00</td>
-            <td>3000.00</td>
-            <td>0.0</td>
-            <td>1年</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04 17:34</td>
-            <td>Klaus</td>
+            <td>{{item.projectOrder.totalPrice|toMoney}}</td>
+            <td>{{item.projectOrder.totalPrice|toMoney}}</td>
+            <td>{{item.frProjectRemnantRecord.remnantPrice|toMoney}}</td>
+            <td>0</td>
+            <td>{{item.addProject.useful}}</td>
+            <td>{{item.addProject.startTime| formatDate2}}</td>
+            <td>{{item.addProject.endTime| formatDate2}}</td>
+            <td>{{item.frProjectRemnantRecord.operateDate| formatDate2}}</td>
+            <td>{{item.personnelInfo.relName}}</td>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>2018-09-04 17:34</td>
-            <td>软件园店</td>
-            <td>私人教学</td>
-            <td>私教课程30节</td>
-            <td>6000.00</td>
-            <td>3000.00</td>
-            <td>3000.00</td>
-            <td>0.0</td>
-            <td>1年</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04 17:34</td>
-            <td>Klaus</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2018-09-04 17:34</td>
-            <td>软件园店</td>
-            <td>私人教学</td>
-            <td>私教课程30节</td>
-            <td>6000.00</td>
-            <td>3000.00</td>
-            <td>3000.00</td>
-            <td>0.0</td>
-            <td>1年</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04 17:34</td>
-            <td>Klaus</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2018-09-04 17:34</td>
-            <td>软件园店</td>
-            <td>私人教学</td>
-            <td>私教课程30节</td>
-            <td>6000.00</td>
-            <td>3000.00</td>
-            <td>3000.00</td>
-            <td>0.0</td>
-            <td>1年</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04 17:34</td>
-            <td>Klaus</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2018-09-04 17:34</td>
-            <td>软件园店</td>
-            <td>私人教学</td>
-            <td>私教课程30节</td>
-            <td>6000.00</td>
-            <td>3000.00</td>
-            <td>3000.00</td>
-            <td>0.0</td>
-            <td>1年</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04</td>
-            <td>2018-09-04 17:34</td>
-            <td>Klaus</td>
-        </tr>
+
+
         </tbody>
     </table>
-    <!-- 结账 -->
-    <div id="offer" class="newCustomers_maskLayer">
-        <div class="newCustomers_maskLayer_box">
-            <div class="newCustomers_maskLayer_box_top">
-                <span>补余</span><a href="#" class="newCustomers_maskLayer_X" onclick="newCustomers_maskLayer_X()">X</a>
-            </div>
-            <div class="newCustomers_maskLayer_box_shen">
-                <fieldset class="section2">
-                    <legend>消费人员信息</legend>
-                    <div>
-                        <span>会员姓名：<strong>吴改 </strong></span>
-                        <span>手机号码：<strong>13645945925 </strong></span>
-                        <span>性别：<strong>男 </strong></span>
-                    </div>
-                </fieldset>
-                <fieldset class="section3">
-                    <legend>产品信息</legend>
-                    <div class="section3_box">
-                        <div class="section3_box_top">
-                            <span>订单编号：<strong>201808252038665 </strong> </span> <span>创建时间：2018-08-25 20:29</span>
-                        </div>
-                        <div class="section3_box_botton">
-                            <div class="section3_box_botton_left">
-                                <img src="../img/u601.png" alt="">
-                            </div>
-                            <div class="section3_box_botton_rigth">
-                                <div>
-                                    <strong>健身私教一对一</strong>
-                                    <span>单价：<strong>￥1200.00</strong></span>
-                                    <span style="margin-left: 7px;">可用数量：<strong>365</strong></span>
-                                    <span>总价：<strong>￥6000.00</strong></span>
-                                </div>
-                                <div>
-                                    <span>有效期：2018-08-25~2019-08-25</span>
-                                    <span>购买数量：365</span>
-                                    <span>已付金额：<strong>￥3000.00</strong></span>
 
-                                </div>
-                                <div>
-                                    <span style="margin-left: 215px;">赠送数量：0</span>
-                                    <span>未付金额：<strong>￥3000.00</strong></span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset class="section4">
-                    <legend>结账</legend>
-                    <div class="section4_box">
-                        <div class="section4_box_top">
-                            <div>付款类型：
-                                <label v-on:click="section4BoxTop(0)"><input type="radio" name="quan">全款</label>
-                                <label v-on:click="section4BoxTop(1)"><input type="radio" name="quan">定金</label>
-                                <label v-on:click="section4BoxTop(2)"><input type="radio" name="quan">赠送</label>
-                                <label v-on:click="section4BoxTop(3)"><input type="radio" name="quan">置换</label>
-                                <label v-on:click="section4BoxTop(4)"><input type="radio" name="quan">分期付款</label>
-                            </div>
-                        </div>
-                        <div class="section4_box_botton">
-                            <fieldset>
-                                <div style="line-height: 50px !important">
-                                    选择全款，请填写对应的支付方式，以及对应支付金额，完成结账！
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <div>
-                                    <label><input type="radio" name="tian">3天</label>
-                                    <label><input type="radio" name="tian">5天</label>
-                                    <label><input type="radio" name="tian">7天</label>
-                                    <label><input type="radio" name="tian">15天</label>
-                                    <label><input type="radio" name="tian">30天</label>
-                                    <label><input type="radio" name="tian">90天</label>
-                                    <label><input type="radio" name="tian">180天</label>
-                                    <label>其他<input type="text" name="tian">元</label>
-                                </div>
-                            </fieldset>
-                            <fieldset class="fieldset3">
-                                <div>
-                                    赠送人：
-                                    <select name="1" id="">
-                                        <option value="1">Klaus</option>
-                                        <option value="1">Klaus</option>
-                                        <option value="1">Klaus</option>
-                                    </select>
-                                    输入授权（密码/指纹/指静脉）：
-                                    <input type="text" style="float:initial">
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <div>
-                                    <div>
-                                        <span> 置换单位名称：</span><input type="text"> <span>置换方式：</span><input type="text">
-                                    </div>
-                                    <div>
-                                        <span>审核人：</span>
-                                        <select name="1" id="">
-                                            <option value="1">Klaus</option>
-                                            <option value="1">Klaus</option>
-                                            <option value="1">Klaus</option>
-                                        </select>
-                                        <span>输入授权（密码/指纹/指静脉）：</span>
-                                        <input type="text">
-                                    </div>
-
-
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <div class="maskLayerAlert">
-                                    <div class="maskLayerAlert_box">
-                                        <div class="table_hide">
-                                            <table class="table table-bordered text-center table-hover" style="margin-bottom: 0;">
-                                                <thead>
-                                                <tr>
-                                                    <th>购卡价格</th>
-                                                    <th>首付</th>
-                                                    <th>分期金额</th>
-                                                    <th>期限</th>
-                                                    <th>分期付款类型</th>
-                                                    <th>内容</th>
-                                                    <th>分期类型</th>
-                                                    <th>操作</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>3960.00</td>
-                                                    <td>1000.00</td>
-                                                    <td>2960.00</td>
-                                                    <td>3</td>
-                                                    <td>金额</td>
-                                                    <td>大多数</td>
-                                                    <td><a href="#" onclick="setting_a()">分期详情</a></td>
-                                                    <td><a href="#" onclick="setting_a2()">重新选择</a></td>
-
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="maskLayerAlert_box_alert" style="display: none;">
-                                            <div class="maskLayerAlert_box_alert_a">分期详情<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a></div>
-                                            <div>
-                                                <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
-                                                <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
-                                                <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
-                                            </div>
-                                        </div>
-                                        <div class="maskLayerAlert_box_alert2" style="display: none;">
-                                            <div class="maskLayerAlert_box_alert_a">选择分期类型<a href="#" class="setting_hide_a" onclick="settingOut_a2()">X</a></div>
-                                            <div>
-                                                <div class="maskLayerAlert">
-                                                    <div class="maskLayerAlert_box">
-                                                        <div class="table_hide">
-                                                            <table class="table table-bordered text-center table-hover">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>选择</th>
-                                                                    <th>购卡价格</th>
-                                                                    <th>首付</th>
-                                                                    <th>分期金额</th>
-                                                                    <th>期限</th>
-                                                                    <th>分期付款类型</th>
-                                                                    <th>内容</th>
-                                                                    <th>分期类型</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td><label><input type="checkbox"></label></td>
-                                                                    <td>3960.00</td>
-                                                                    <td>1000.00</td>
-                                                                    <td>2960.00</td>
-                                                                    <td>3</td>
-                                                                    <td>金额</td>
-                                                                    <td>大多数</td>
-                                                                    <td><a href="javascript:;" onclick="setting_a()">分期详情</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><label><input type="checkbox"></label></td>
-                                                                    <td>3960.00</td>
-                                                                    <td>1000.00</td>
-                                                                    <td>2960.00</td>
-                                                                    <td>3</td>
-                                                                    <td>比例</td>
-                                                                    <td>大多数</td>
-                                                                    <td><a href="#" onclick="setting_a()">分期详情</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><label><input type="checkbox"></label></td>
-                                                                    <td>3960.00</td>
-                                                                    <td>1000.00</td>
-                                                                    <td>2960.00</td>
-                                                                    <td>3</td>
-                                                                    <td>金额</td>
-                                                                    <td>大多数</td>
-                                                                    <td><a href="#" onclick="setting_a()">分期详情</a></td>
-                                                                </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            <a href="javascript:;" class="btn btn-default">确定</a>
-                                                        </div>
-                                                        <div class="maskLayerAlert_box_alert" style="display: none;">
-                                                            <div class="maskLayerAlert_box_alert_a">分期详情<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a></div>
-                                                            <div>
-                                                                <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
-                                                                <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
-                                                                <p> 01/03期，还款时间：2018-07-23 分期比例：30% 还款金额：￥420.00</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="maskLayerAlert_footer">
-                                                        <div class="category_span_red">
-                                                            注:时间到期,卡自动进入待补余未开卡状态,必须支付对应金额才能开卡。可以一次性把剩余卡卡价付清。
-                                                            <p>默认有几种平均分期情况。如果不一样请自行修改或者添加。</p>
-                                                            <p>购卡总金额:等于卡销售价+实际利息。如果实际利息为0那么就等于卡销售价。请自行修改。</p>
-                                                            <p>首付:是指第一次需要付款的金额。如果直接是购卡总金额上做分期的。那么首付请填写0。</p>
-                                                            <p>分期金额:等于购卡总金额一首付。</p>
-                                                            <p>账期:是指分期金额需要分几期还完。</p>
-                                                            <p>类型:可以是按照设置的金额每期还款多少钱,也可以按照设置比例来确定每期还款多少钱</p>
-                                                            <p>分期详情:具体设置每期的还款时间和还款金额。</p>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </fieldset>
-                <div class="payment_method">
-                    <div class="payment_method_top">
-                        <ul>
-                            <li class="on" v-on:click="paymentMethodTop(0)">会员消费</li>
-                            <li v-on:click="paymentMethodTop(1)">普通消费</li>
-                            <li v-on:click="paymentMethodTop(2)">员工领用</li>
-                            <li v-on:click="paymentMethodTop(3)">协议单位</li>
-                        </ul>
-                    </div>
-                    <div class="payment_method_left pull-left">
-                        <ul>
-                            <li class="on li1" v-if="paymentMethodTops==0">
-                                <div class="col-md7">
-                                    <div class="col_md7_top">卡号/手机号码：<input type="text" name="" id=""> <a href="#" class="btn btn-success">搜索</a></div>
-                                    <div class="col_md7_botton">
-                                        <table class="table table-bordered text-center table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>序号</th>
-                                                <th>票券号码</th>
-                                                <th>票券名称</th>
-                                                <th>可用权益</th>
-                                                <th>使用</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                                <td><label><input type="checkbox"></label></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <div>显示更多</div>
-                                    </div>
-                                </div>
-                                <div class="col-md5">
-                                    <div>
-                                        <div>会员卡号：<strong> 201807241100652 </strong></div>
-                                        <div>会员名称：<strong>2年卡</strong></div>
-                                        <div>卡中储值金额：<span>500.00 </span> </div>
-                                        <div>扣储值金额：<input type="text"></div>
-                                        <div>充值卡剩余金额：<span>0.00</span></div>
-                                        <div>扣卡中金额：<input type="text"> </div>
-                                        <div>输入凭证：<input type="text"> </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="on li2" v-if="paymentMethodTops==1">
-                                <div class="col-md7">
-                                    <div class="col_md7_top">手机号码：<input type="text" name="" id=""> <a href="#" class="btn btn-success">搜索</a></div>
-                                    <div class="col_md7_botton">
-                                        <table class="table table-bordered text-center table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>序号</th>
-                                                <th>票券号码</th>
-                                                <th>票券名称</th>
-                                                <th>可用权益</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>201807246158</td>
-                                                <td>抵用券</td>
-                                                <td>110</td>
-                                            </tr>
-
-                                            </tbody>
-                                        </table>
-                                        <div>显示更多</div>
-                                    </div>
-                                </div>
-                                <div class="col-md5">
-                                    <div>
-                                        <div>票券可用总权益：<strong>600</strong></div>
-                                        <div>输入使用权益：<input type="text"></div>
-                                        <div>需补差价：<strong>600</strong></div>
-                                        <fieldset>
-                                            <legend>普通消费说明</legend>
-                                            <div>
-                                                <p>1、本阶段只支持系统存在的潜在客户消费;</p>
-                                                <p>2、如果系统不存在的客户想用票券消费;</p>
-                                                <div>
-                                                    <p>1）新建潜在客户必须要有手机号码、姓名；</p>
-                                                    <p>2）销售/赠送票券;</p>
-                                                    <p>3）在本届面录入手机号码，如果有消费权益就会自动带出 ;</p>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="on li3" v-if="paymentMethodTops==2">
-                                <div class="col-md12">
-                                    <fieldset>
-                                        <legend>人员选择</legend>
-                                        <div>
-                                            <div class="col-md3">
-                                                <select name="1" id="">
-                                                    <option value="1">选择门店</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md3">
-                                                <select name="1" id="">
-                                                    <option value="1">选择部门</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md3">
-                                                <select name="1" id="">
-                                                    <option value="1">选择人员</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                    </fieldset>
-                                    <div>
-                                        输入授权人凭证：<input type="text">
-                                    </div>
-                                    <div>
-                                        <a href="#" class="btn">领用</a>
-                                        <a href="#" class="btn">借用</a>
-                                        <a href="#" class="btn">归还</a>
-                                        <a href="#" class="btn">消耗</a>
-                                        <a href="#" class="btn">废弃</a>
-                                    </div>
-
-                                </div>
-                            </li>
-                            <li class="on li4" v-if="paymentMethodTops==3">
-                                <div class="col-md7">
-                                    <div>
-                                        <input type="text" placeholder="手机号码/协议号/部门/公司名称">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="公司名称">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="部门名称">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="手机号码">
-
-                                    </div>
-                                    <div>
-                                        <input type="text" placeholder="使用人">
-
-                                    </div>
-                                </div>
-                                <div class="col-md5">
-                                    <div>
-                                        企业扣费：<input type="text">
-
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="payment_method_box pull-left">
-                        <fieldset style="border-color:red">
-                            <legend style="color:#FF9900">支付方式</legend>
-                            <div class="section2_boxs1_right">
-                                <div class="section2_boxs1_top">
-                                    <div>支付方式</div>
-                                    <div>支付宝</div>
-                                    <div>刷卡</div>
-                                    <div>微信</div>
-                                    <div>现金</div>
-                                    <div>转账</div>
-                                    <div>花呗</div>
-                                    <div>其他支付</div>
-                                </div>
-                                <div class="section2_boxs1_botton">
-                                    <div>金额</div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                    <div> <span>￥</span><input type="text"></div>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="payment_method_rigth pull-left">
-                        <fieldset>
-                            <legend style="color:#FF9900">折扣优惠</legend>
-                            <div>
-                                <div><label><input type="checkbox"><span>整单打折</span></label> </div>
-                                <div>
-                                    <ul>
-                                        <li><span>优惠折扣：</span> <input type="text"></li>
-                                        <li> <span>整单去零：</span> <input type="text"></li>
-                                    </ul>
-                                </div>
-                                <div><label><input type="checkbox"><span>满额优惠</span></label></div>
-                                <div>
-                                    <ul>
-                                        <li>满：<input type="text"></li>
-                                        <li>减：<input type="text"></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="payment_method_rigth2 pull-left">
-                        <fieldset style="border-color:#009900">
-                            <legend style="color:#009900">支付详情</legend>
-                            <div class="rows">
-                                <div>
-                                    <div class="col-md-6">小计：</div>
-                                    <div class="col-md-6"> ￥<strong>6000.00</strong> </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">折扣/优惠：</div>
-                                    <div class="col-md-6">￥<strong>0.00</strong></div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">抵扣金额：</div>
-                                    <div class="col-md-6">￥<strong>0.00</strong> </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">应付金额：</div>
-                                    <div class="col-md-6">￥ <strong><span class="tored">6000.00</span></strong></div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">未付金额：￥0.00</div>
-                                    <div class="col-md-6">找零：<strong><span class="tored">￥0.00</span></strong> </div>
-                                </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂账</a></div>
-                                    <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂单</a></div>
-                                </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-12">
-                                        <a href="javascript:;" class="btn btn-success">结账</a>
-                                    </div>
-                                </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-12">
-                                        <label>
-                                            <input type="checkbox">
-                                            <span>购置发票</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 结账 -->
 </li>
+
+<script>
+    var remnantVue = new Vue({
+        el: '#course-remnant',
+        data: {
+            orderId: '', //订单表ID
+            index: '', //序列
+            result: [], //数据
+            selectData: {}, //选择的数据
+            now: new Date(), //当前时间
+            clientName: $.cookie('name'), //当前系统人名
+            cid: $.cookie('cid'), //当前系统人id
+            password: '', //输入的密码
+            status: false, //严重状态
+            startTime: '', //原开始时间
+            tableList: [], //表格历史记录
+            price: '', //已付款金额
+            totalPrice: '', //实际付款金额
+            noPrice: '', //实际欠款金额
+        },
+        filters: {
+            stateFilter: function (val) {
+                let back = "";
+                if((val + "") == "0"){
+                    back = "正常"
+                }
+                if((val + "") == "1"){
+                    back = "欠款"
+                }
+                if((val + "") == "2"){
+                    back = "过期"
+                }
+                if((val + "") == "3"){
+                    back = "历史"
+                }
+                if((val + "") == "4"){
+                    back = "未开始"
+                }
+
+                return back;
+            },
+            formatDate(val){
+                if(!val){
+                    return "";
+                }
+                return timeFormatDate(val, true, false);
+            },
+            toNum(val){
+
+                if(!val){
+                    return '0';
+                }
+                return val;
+            },
+            toMoney: function (val) {
+                if (!val || 'undefined' == typeof(val)) {
+                    return parseFloat(0).toFixed(2);
+                }
+                return parseFloat(val).toFixed(2);
+            },
+            payStatus(item){
+                //现金：￥1000.00 支付宝：￥600.00
+                let str = '';
+                if(parseFloat(item.cashPrice) > 0){
+                    str += '现金：￥' + parseFloat(item.cashPrice).toFixed(2)
+                }
+                if(parseFloat(item.alipayPrice) > 0){
+                    str += '支付宝：￥' + parseFloat(item.alipayPrice).toFixed(2)
+                }
+                if(parseFloat(item.payCardPrice) > 0){
+                    str += '刷卡：￥' + parseFloat(item.payCardPrice).toFixed(2)
+                }
+                if(parseFloat(item.wechatPrice) > 0){
+                    str += '微信：￥' + parseFloat(item.wechatPrice).toFixed(2)
+                }
+                if(parseFloat(item.accountsPrice) > 0){
+                    str += '转账：￥' + parseFloat(item.accountsPrice).toFixed(2)
+                }
+                if(parseFloat(item.flowerPrice) > 0){
+                    str += '花呗：￥' + parseFloat(item.flowerPrice).toFixed(2)
+                }
+                if(parseFloat(item.otherPrice) > 0){
+                    str += '其他：￥' + parseFloat(item.otherPrice).toFixed(2)
+                }
+                return str;
+            },
+            formatDate2(val){
+                if(!val){
+                    return "";
+                }
+                return timeFormatDate(val, false, false);
+            },
+            saleType(val){
+                if(val === 0){
+                    return "POS销售";
+                }
+                if(val === 1){
+                    return "新会员购买";
+                }
+                if(val === 2){
+                    return "续课";
+                }
+                if(val === 3){
+                    return "场地开课";
+                }
+                //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+            }
+        },
+        computed: {},
+        watch: {
+            index(val){
+                this.selectData = this.result[val];
+            },
+            'selectData':{
+                handler(val){
+                    this.price = val.projectOrder.totalPrice - val.projectOrder.noPrice;//已付款金额
+                    this.totalPrice = val.projectOrder.totalPrice;//实际付款金额
+                    this.noPrice = val.projectOrder.noPrice;//实际欠款金额
+
+
+                },
+                deep: true,
+            },
+
+        },
+        created: function () {
+
+        },
+        mounted(){// 初始化加载
+            this.search();//
+        },
+        methods: {
+            //查询记录
+            search(){
+                let interval = setInterval(()=>{
+                    this.result = customerCourseProject.resultList;
+                    this.tableList = this.result; //便利表格
+                    if(this.result.length > 0){
+                        this.index = 0;//初始化index
+                        clearInterval(interval);
+                    }
+                },500)
+            },
+            //启用
+            save(){
+                //继续操作启用动作
+                //判断当前是否正常
+                if(!this.selectData.addProject){
+                    alert("请选择项目")
+                    return false;
+                }
+                if(this.selectData.addProject['state'] !== 1){
+                    alert("请选择欠款项目");
+                    return false;
+                }
+                let param = {};
+                param.orderId = this.selectData.addProject.id;
+
+                axiosPostParams(COURSE_URL.customerRemnant, param, (res)=>{
+                    if (res.code === '200') {
+                        customerCourseProject.$options.methods.loadData();//加载数据
+                        this.search();
+                        alert("补余成功");
+
+                    }
+                })
+            }
+
+        }
+    });
+</script>

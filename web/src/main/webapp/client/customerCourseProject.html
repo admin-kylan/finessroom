@@ -56,6 +56,7 @@
             boxNavs: 0,
             paymentMethodTops: 0,
             orderId: '', //订单表ID
+			resultList: [], //全部数据的数组，项目
         },
         computed: {},
         watch: {
@@ -92,64 +93,28 @@
             },
         },
         created: function () {
-            this.index = 2; //默认执行 0 代表第一个
+            this.index = 0; //默认执行 0 代表第一个
+        },
+        mounted(){// 初始化加载
+           this.loadData(); //加载数据
+
         },
         methods: {
             load: function () { //动态加载html
                 $('#course-show-html').load(this.html)
             },
-            //会员卡子页面切换
-//            showHtmlLi: function () {
-//                console.log(99999)
-// 				  this.index = t;
-//                //$('.MembershipCard-list li').eq(t).addClass('active').siblings().removeClass('active');
-//            },
-//			boxNav: function (t) {
-//				this.boxNavs = t;
-//				$('#customerCourseProject .boxNav span').eq(t).addClass('on').siblings().removeClass('on');
-//			},
-//			// 会员消费/普通消费/员工领用/协议单位切换
-//			paymentMethodTop: function (t) {
-//				$('.payment_method_top li').eq(t).addClass('on').siblings().removeClass('on');
-//				this.paymentMethodTops = t;
-//			},
-//			//结账的切换
-//			section4BoxTop: function (t) {
-//				$('.section4_box_top label input[name=quan]').eq(t).addClass('on').siblings().removeClass('on');
-//				$('.section4_box_botton fieldset').eq(t).show().siblings().hide();
-//			}
+			loadData(){
+                axiosGetParams(COURSE_URL.fetchOrderListByUserId, {cid: $.cookie('cid')}, (res) => {
+                    if (res.code == '200') {
+                        this.resultList = res.data;
+                    }
+                })
+			}
+
 
         }
     });
-    //	//业绩分配弹窗
-    //	function performances() {
-    //		$('#performance').show();
-    //	}
-    //	//选择会员卡弹窗
-    //	function products() {
-    //		$('#product').show();
-    //	}
-    //	//去结账弹窗
-    //	function offers() {
-    //		$('#offer').show();
-    //	}
-    //	// 退费弹窗
-    //	function Refunds() {
-    //		$('#Refund').show();
-    //	}
-    //	// 关闭弹窗
-    //	function newCustomers_maskLayer_X() {
-    //		$('.newCustomers_maskLayer').hide();
-    //	}
-    //	$('.section4_box_top label input[name=quan]').click(function () {
-    //		if ($(this).is(':checked')) {
-    //			$('.section4_box_botton fieldset').eq($(this).parent().index()).show().siblings().hide();
-    //		}
-    //	})
-    //	$('.payment_method_top li').click(function () {
-    //		$(this).addClass('on').siblings().removeClass('on');
-    //		$('.payment_method_left li').eq($(this).index()).addClass('on').siblings().removeClass('on');
-    //	})
+
 </script>
 
 </html>

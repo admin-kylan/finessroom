@@ -1,5 +1,5 @@
 
-<li class="list1 list on" v-if="LiIndex==0">
+<li class="list1 list on" id="course-commodity-list">
     <fieldset>
         <legend>筛选条件</legend>
         <div class="clearfix">
@@ -68,251 +68,183 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
+            <tr v-for="(item, index) in result">
+                <td>{{index+1}}</td>
+                <td><span>打印</span>
+                    <span class="lightBlue" @click="remnantMethod(item)">补余</span>
+                    <span class="red" @click="refundMethod(item)">退费</span>
+                    <span class="blue" @click="transferMethod(item)">转让</span>
+                    <span class="green" @click="enableMethod(item)">启用</span>
+                    <span class="yellow" @click="extensionMethod(item)">延期</span>
                 </td>
-                <td class="deepBlue">正常</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="red">挂账</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="grey" v-on:click="LI(4)">补余</span>
-                    <span class="grey" v-on:click="LI(7)">退费</span>
-                    <span class="grey" v-on:click="LI(6)">转让</span>
-                    <span class="grey" v-on:click="LI(3)">启用</span>
-                    <span class="grey" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="grey">历史</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="yellow">挂单</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="deepBlue">正常</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="deepBlue">正常</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="deepBlue">正常</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="deepBlue">正常</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
-                <td class="grey">无</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <span>打印</span>
-                    <span class="lightBlue" v-on:click="LI(4)">补余</span>
-                    <span class="red" v-on:click="LI(7)">退费</span>
-                    <span class="blue" v-on:click="LI(6)">转让</span>
-                    <span class="green" v-on:click="LI(3)">启用</span>
-                    <span class="yellow" v-on:click="LI(5)">延期</span>
-                </td>
-                <td class="deepBlue">正常</td>
-                <td>软件园店</td>
-                <td>健身私教</td>
-                <td class="deepBlue">私教一对一</td>
-                <td class="green">2</td>
-                <td>30</td>
-                <td>0</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1600.00</td>
-                <td>1年</td>
-                <td>2018-08-25</td>
-                <td>2019-08-25</td>
-                <td>20180825211565</td>
-                <td>POS销售</td>
+                <td class="deepBlue">{{item.addProject.state |stateFilter}}</td>
+
+                <td>{{item.shop.shopName}}</td>
+                <td>{{item.sdaduim.name}}</td>
+                <td class="deepBlue">私教套餐</td>
+                <td>{{item.projectOrder.buyCount| toNum}}</td>
+                <td>{{item.projectOrder.sendCount|toNum}}</td>
+                <td class="green">{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
+                <td>{{item.projectOrder.price |toMoney}}</td>
+                <td>{{item.projectOrder.totalPrice|toMoney}}</td>
+                <td class="yellow">{{item.projectOrder.needPrice|toMoney}}</td>
+                <td>{{item.projectOrder.noPrice|toMoney}}</td>
+                <td>{{item.projectOrder.noPrice|toMoney}}</td>
+                <td>{{item.projectOrder| payStatus}}</td>
+                <td>{{item.addProject.useful}} 个月</td>
+                <td>{{item.addProject.startTime| formatDate2}}</td>
+                <td>{{item.addProject.endTime| formatDate2}}</td>
+                <td>{{item.addProject.saleType| saleType}}</td>
                 <td class="grey">无</td>
             </tr>
             </tbody>
         </table>
     </div>
 </li>
-<script src="../js/vue.js"></script>
+
+<script>
+    var commodityListVue = new Vue({
+        el: '#course-commodity-list',
+        data: {
+            orderId: '', //订单表ID
+            result: [],
+        },
+        filters: {
+            stateFilter: function (val) {
+                let back = "";
+                if((val + "") == "0"){
+                    back = "正常"
+                }
+                if((val + "") == "1"){
+                    back = "欠款"
+                }
+                if((val + "") == "2"){
+                    back = "过期"
+                }
+                if((val + "") == "3"){
+                    back = "历史"
+                }
+                if((val + "") == "4"){
+                    back = "未开始"
+                }
+
+                return back;
+            },
+            formatDate(val){
+                return timeFormatDate(val, true, false);
+            },
+            toNum(val){
+
+                if(!val){
+                    return '0';
+                }
+                return val;
+            },
+            toMoney: function (val) {
+                if (!val || 'undefined' == typeof(val)) {
+                    return parseFloat(0).toFixed(2);
+                }
+                return parseFloat(val).toFixed(2);
+            },
+            payStatus(item){
+                //现金：￥1000.00 支付宝：￥600.00
+                let str = '';
+                if(parseFloat(item.cashPrice) > 0){
+                    str += '现金：￥' + parseFloat(item.cashPrice).toFixed(2)
+                }
+                if(parseFloat(item.alipayPrice) > 0){
+                    str += '支付宝：￥' + parseFloat(item.alipayPrice).toFixed(2)
+                }
+                if(parseFloat(item.payCardPrice) > 0){
+                    str += '刷卡：￥' + parseFloat(item.payCardPrice).toFixed(2)
+                }
+                if(parseFloat(item.wechatPrice) > 0){
+                    str += '微信：￥' + parseFloat(item.wechatPrice).toFixed(2)
+                }
+                if(parseFloat(item.accountsPrice) > 0){
+                    str += '转账：￥' + parseFloat(item.accountsPrice).toFixed(2)
+                }
+                if(parseFloat(item.flowerPrice) > 0){
+                    str += '花呗：￥' + parseFloat(item.flowerPrice).toFixed(2)
+                }
+                if(parseFloat(item.otherPrice) > 0){
+                    str += '其他：￥' + parseFloat(item.otherPrice).toFixed(2)
+                }
+                return str;
+            },
+            formatDate2(val){
+                return timeFormatDate(val, false, false);
+            },
+            saleType(val){
+                if(val === 0){
+                    return "POS销售";
+                }
+                if(val === 1){
+                    return "新会员购买";
+                }
+                if(val === 2){
+                    return "续课";
+                }
+                if(val === 3){
+                    return "场地开课";
+                }
+                //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+            }
+        },
+        computed: {},
+        watch: {
+
+        },
+        mounted(){// 初始化加载
+            let interval = setInterval(()=>{
+                this.result = customerCourseProject.resultList;
+                if(this.result.length > 0){
+                    let array = [];
+                    this.index = 0;//初始化index
+                    // this.tableList = customerCourseProject.resultList;
+                    clearInterval(interval);
+                }
+            },500)
+
+        },
+        created: function () {
+
+        },
+        methods: {
+            load: function () { //动态加载html
+
+            },
+            //补余
+            remnantMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到补余页面
+                Vue.set(customerCourseProject, 'index', 4);
+            },
+            //退费
+            refundMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到退费页面
+                Vue.set(customerCourseProject, 'index', 7);
+            },
+            //转让
+            transferMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到转让页面
+                Vue.set(customerCourseProject, 'index', 6);
+            },
+            //启用
+            enableMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到启用页面
+                Vue.set(customerCourseProject, 'index', 3);
+            },
+            //延期
+            extensionMethod(item){
+                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                //跳转到延期页面
+                Vue.set(customerCourseProject, 'index', 5);
+            },
+
+        }
+    });
+</script>

@@ -34,12 +34,12 @@ public class MybatisPlusGenerator {
     private static String authorName="MP自动生成";
     //需要生成的表
     private static String[] tables={
-            "fr_plan_class",
+            "TurnProject",
     };
     //table前缀
     private static String prefix="";
     private static File file = new File(packageName);
-    private static String path = "E://mybatis生成/";
+    private static String path = "/Java/IntellijIdeaHouse/";
     // private static String path = file.getAbsolutePath();
 
     public static void main(String[] args) {

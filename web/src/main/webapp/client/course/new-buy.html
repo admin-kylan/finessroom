@@ -31,7 +31,7 @@
                     <td>可用数量</td>
                     <td>退费数量</td>
                     <td>退费金额</td>
-                    <td>剩余数量</td>
+                    <!-- 14 --> <td>剩余数量</td>
                     <td>已消费数量</td>
                     <td>单价</td>
                     <td>购买金额</td>
@@ -65,10 +65,11 @@
                     <td>{{item.projectOrder.buyCount| toNum}}</td>
                     <td>{{item.projectOrder.sendCount|toNum}}</td>
                     <td class="green">{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
-                    <td>0</td>
-                    <td>0.00</td>
-                    <td>{{item.addConsumeProject.surplusCount |toNum}}</td>
-                    <td>{{item.addConsumeProject.expenseCount|toNum}}</td>
+                    <td>{{(item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length}}</td>
+                    <td>{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                        * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)}}</td>
+                    <!-- 14 --><td>{{item.projectOrder.allCount - item.addProjectConsumes.length |toNum}}</td>
+                    <td>{{item.addProjectConsumes.length| toNum}}</td>
                     <td>{{item.projectOrder.price |toMoney}}</td>
                     <td>{{item.projectOrder.totalPrice|toMoney}}</td>
                     <td class="yellow">{{item.projectOrder.needPrice|toMoney}}</td>
@@ -178,6 +179,10 @@
                     return "场地开课";
                 }
                 //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+            },
+            //剩余价格
+            remnantMoney(val){
+
             }
         },
         computed: {},
@@ -201,12 +206,12 @@
             this.index = 0; //默认执行第一个tab
         },
         mounted(){// 初始化加载
-            axiosGetParams(COURSE_URL.fetchOrderListByUserId, {cid: $.cookie('cid')}, (res) => {
-                if (res.code == '200') {
-                    this.result = res.data;
-                }
-                console.log(res);
-            })
+//            axiosGetParams(COURSE_URL.fetchOrderListByUserId, {cid: $.cookie('cid')}, (res) => {
+//                if (res.code == '200') {
+//                    this.result = res.data;
+//                }
+//            })
+            this.result = customerCourseProject.resultList;
 
         },
         methods: {

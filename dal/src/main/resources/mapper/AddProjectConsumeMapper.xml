@@ -22,11 +22,17 @@
         <result column="ServiceId" property="ServiceId" />
         <result column="ServiceName" property="ServiceName" />
         <result column="CreateTime" property="CreateTime" />
+        <result column="Price" property="Price" />
+        <result column="Count" property="Count" />
+        <result column="Discount" property="Discount" />
+        <result column="Total" property="Total" />
+        <result column="CreatePeople" property="CreatePeople" />
+        <result column="CreatePeopleName" property="CreatePeopleName" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        CustomerCode, ID, OpenId, SysConsumeOrderId, MemberCardId, AddProjectId, AddProjectName, ShopId, SdaduimId, Unit, StartTime, EndTime, IfOffset, SalesId, SalesName, ServiceId, ServiceName, CreateTime
+        CustomerCode, ID, OpenId, SysConsumeOrderId, MemberCardId, AddProjectId, AddProjectName, ShopId, SdaduimId, Unit, StartTime, EndTime, IfOffset, SalesId, SalesName, ServiceId, ServiceName, CreateTime, Price, Count, Discount, Total, CreatePeople, CreatePeopleName
     </sql>
 
 </mapper>

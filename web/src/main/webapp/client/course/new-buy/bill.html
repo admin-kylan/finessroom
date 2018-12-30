@@ -1154,7 +1154,8 @@
                 let projectOrder = { //项目订单表
                     CustomerCode: $.cookie('code'),
                     OrderNumber: this.formData.orderInfo.orderNo,
-                    ObjectId: this.formData.orderInfo.data.projectId, //对象ID
+                   // ObjectId: this.formData.orderInfo.data.projectId, //对象ID
+                    ObjectId: '',
                     OrderType: OrderType, //0-增购 1-增购消费 2-增购套餐
                     Price: this.formData.orderInfo.data.price, //售价
                     BuyCount: this.formData.orderInfo.data.buyNum, //购买数量
@@ -1228,7 +1229,12 @@
 
                 };
                 let saleType = headVue.sdaduimTypeResult.type == 'teach' ? headVue.sdaduimTypeResult.salesTypeId : '';
-                let isTimeOut = (new Date(this.formData.orderInfo.data.beginDate) - new Date()) > 0 ? 4 : 0; //计算过期状态
+                let isTimeOut = '';
+                if(projectOrder.NoPrice > 0){
+                    isTimeOut = 1;
+                }else{
+                    isTimeOut = (new Date(this.formData.orderInfo.data.beginDate) - new Date()) > 0 ? 4 : 0; //计算过期状态
+                }
                 let addProject = { //会员增购项目表
                     CustomerCode: $.cookie('code'),
                     ContractNumber: headVue.agreementData, //合同编号
@@ -1237,6 +1243,7 @@
                     ShopId: headVue.shopId, //门店
                     SdadiumId: headVue.sdaduimId, //场馆
                     CardId: this.formData.orderInfo.data.cardId,//卡号id
+                 //   ProjectId: this.formData.orderInfo.data.projectId, //项目ID
                     ProjectId: this.formData.orderInfo.data.projectId, //项目ID
                     CourseSeriousId: this.formData.orderInfo.data.courseSeriesId, //课程系列ID
                     CourseId: this.formData.orderInfo.data.courseId, //课程ID

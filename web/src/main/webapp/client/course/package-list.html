@@ -1,4 +1,4 @@
-<li class="list2 list on" v-if="LiIndex==1">
+<li class="list2 list on" id="course-package-list">
     <fieldset>
         <legend>筛选条件</legend>
         <div class="clearfix">
@@ -171,3 +171,25 @@
         </table>
     </div>
 </li>
+
+<script>
+    var packageListVue = new Vue({
+        el: '#course-package-list',
+        data: {
+            orderId: '', //订单表ID
+        },
+        computed: {},
+        watch: {
+
+        },
+        created: function () {
+
+        },
+        methods: {
+            load: function () { //动态加载html
+
+            },
+
+        }
+    });
+</script>

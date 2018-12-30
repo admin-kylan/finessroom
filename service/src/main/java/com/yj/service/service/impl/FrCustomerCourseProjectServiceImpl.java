@@ -10,14 +10,12 @@ import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dao.*;
 import com.yj.dal.model.*;
 import com.yj.service.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * by Kylan
@@ -36,8 +34,8 @@ public class FrCustomerCourseProjectServiceImpl {
     @Autowired
     private SdaduimMapper sdaduimMapper;
 
-    @Autowired
-    private AddConsumeProjectMapper addConsumeProjectMapper;
+//    @Autowired
+//    private AddConsumeProjectMapper addConsumeProjectMapper;
 
     @Resource
     private IFrCardOrderPayModeService iFrCardOrderPayModeService;
@@ -58,6 +56,24 @@ public class FrCustomerCourseProjectServiceImpl {
     private AddProjectMapper addProjectMapper;
     @Resource
     private FrClientPersonnelRelateMapper frClientPersonnelRelateMapper;
+    @Resource
+    private PersonnelInfoMapper personnelInfoMapper;
+
+    @Autowired
+    private AddProjectConsumeMapper addProjectConsumeMapper;
+
+    @Resource
+    private FrProjectStartRecordMapper frProjectStartRecordMapper;
+    @Resource
+    private FrProjectExtensionRecordMapper frProjectExtensionRecordMapper;
+    @Resource
+    private FrProjectRemnantRecordMapper frProjectRemnantRecordMapper;
+    @Resource
+    private ReturnAddProjectMapper returnAddProjectMapper;
+    @Resource
+    private TurnProjectMapper turnProjectMapper;
+    @Resource
+    private FrClientMapper frClientMapper;
 
     /**
      * 根据场馆ID查询 并且 userType 是动态的，选择教练还是助教
@@ -93,11 +109,17 @@ public class FrCustomerCourseProjectServiceImpl {
         String createUserId = (String) map.get("createUserId");
         String createUserName = (String) map.get("createUserName");
         String orderId = UUIDUtils.generateGUID();
+        //addProject
+        addProject.setId(orderId);
+      //  addProject.setProjectId(orderId);
+        addProjectMapper.insert(addProject);
+
         //保存数据库 order
-        projectOrder.setId(orderId);
+        projectOrder.setId(UUIDUtils.generateGUID());
         projectOrder.setCreateTime(now);
         projectOrder.setCreateUserId(createUserId);
         projectOrder.setCreateUserName(createUserName);
+        projectOrder.setObjectId(orderId);
         projectOrderMapper.insert(projectOrder);
 
         //sysConsumeOrder
@@ -107,10 +129,7 @@ public class FrCustomerCourseProjectServiceImpl {
         sysConsumeOrder.setCreateTime(now);
         sysConsumeOrderMapper.insert(sysConsumeOrder);
 
-        //addProject
-        addProject.setId(UUIDUtils.generateGUID());
-        addProject.setProjectId(orderId);
-        addProjectMapper.insert(addProject);
+
 
         //cardAgreement
         frCardAgreement.setId(UUIDUtils.generateGUID());
@@ -166,30 +185,68 @@ public class FrCustomerCourseProjectServiceImpl {
 
     }
 
-    public List getOrderListByCid(String cid, String code){
-        List<ProjectOrder> list = projectOrderMapper.selectList(new EntityWrapper<ProjectOrder>()
-                .where("PersonnelId = '" + cid + "' and CustomerCode = '" + code + "' "));
+    /**
+     * 查询全部
+     * @param shopid
+     * @param code
+     * @return
+     */
+    public List getOrderListByCid(String shopid, String code){
+        List<AddProject> list = addProjectMapper.selectList(new EntityWrapper<AddProject>()
+                .where("ShopId = '" + shopid + "' and CustomerCode = '" + code + "' "));
+
         List list1 = new ArrayList();
         //订单id
         String id = "";
-        for(ProjectOrder projectOrder: list){
+        for(AddProject addProject: list){
             Map map = new JSONObject();
-            AddProject addProject = new AddProject();
-            AddConsumeProject addConsumeProject = new AddConsumeProject();
+            ProjectOrder projectOrder = new ProjectOrder();
+           // AddProject addProject = new AddProject();
+            AddProjectConsume addProjectConsume = new AddProjectConsume();
+            List<AddProjectConsume> addProjectConsumes = null;
+            PersonnelInfo personnelInfo = new PersonnelInfo();
+            SysConsumeOrder sysConsumeOrder = new SysConsumeOrder();
+            FrProjectStartRecord frProjectStartRecord = new FrProjectStartRecord();
+            FrProjectRemnantRecord frProjectRemnantRecord = new FrProjectRemnantRecord();
+            List<FrProjectExtensionRecord> frProjectExtensionRecords = new ArrayList<>();
             Shop shop = new Shop();
             Sdaduim sdaduim = new Sdaduim();
-            id = projectOrder.getId();
-            addProject.setProjectId(id);
-            addConsumeProject.setProjectId(id);
+            //----
+            id = addProject.getId();
+            //projectOrder
+            projectOrder.setObjectId(id);
+
+           // addProject.setProjectId(id);
+            //消费表
+            addProjectConsume.setAddProjectId(id);
+            //启用记录表
+            frProjectStartRecord.setProjectOrderId(id);
+
+            //补余
+            frProjectRemnantRecord.setProjectOrderId(id);
+
+            //延期
+            frProjectRemnantRecord.setProjectOrderId(id);
+
+            //---
+            projectOrder = projectOrderMapper.selectOne(projectOrder);
+            sysConsumeOrder.setOrderNumber(projectOrder.getOrderNumber());
             addProject = addProjectMapper.selectOne(addProject);
-            shop = shopMapper.selectById(projectOrder.getShopId());
+            shop = shopMapper.selectById(addProject.getShopId());
             sdaduim = sdaduimMapper.selectById(addProject.getSdadiumId());
-            addConsumeProject = addConsumeProjectMapper.selectOne(addConsumeProject);
-            if(null == addConsumeProject){
-                addConsumeProject = new AddConsumeProject();
+            addProjectConsumes = addProjectConsumeMapper.selectList(new EntityWrapper<AddProjectConsume>()
+                    .where("AddProjectId = '" + id + "'"));
+            sysConsumeOrder = sysConsumeOrderMapper.selectOne(sysConsumeOrder);
+            personnelInfo = personnelInfoMapper.selectById(sysConsumeOrder.getCreateId());
+            frProjectStartRecord = frProjectStartRecordMapper.selectOne(frProjectStartRecord);
+            frProjectRemnantRecord = frProjectRemnantRecordMapper.selectOne(frProjectRemnantRecord);
+            frProjectExtensionRecords = frProjectExtensionRecordMapper.selectList(new EntityWrapper<FrProjectExtensionRecord>()
+                    .where("projectOrderId = '" + id + "'"));
+
+            if(null == addProjectConsumes){
+                addProjectConsumes = new ArrayList<>();
             }
-            //查询教练
-           // List coachList = frClientPersonnelRelateMapper.selectOne()
+
             //项目订单表
             map.put("projectOrder", JSONObject.toJSON(projectOrder));
 
@@ -202,11 +259,275 @@ public class FrCustomerCourseProjectServiceImpl {
             // 场馆
             map.put("sdaduim", JSONObject.toJSON(sdaduim));
 
-            // 增购项目表
-            map.put("addConsumeProject", JSONObject.toJSON(addConsumeProject));
+            // 增购项目表 //addConsumeProject
+            map.put("addProjectConsumes", JSONObject.toJSON(addProjectConsumes));
+
+            // 消费结账单表
+            map.put("sysConsumeOrder", JSONObject.toJSON(sysConsumeOrder));
+
+            // 用户
+            map.put("personnelInfo", JSONObject.toJSON(personnelInfo));
+
+            // 启用记录
+            map.put("frProjectStartRecord", JSONObject.toJSON(frProjectStartRecord));
+
+            // 补余记录
+            map.put("frProjectRemnantRecord", JSONObject.toJSON(frProjectRemnantRecord));
+
+            // 延期记录
+            map.put("frProjectExtensionRecords", JSONArray.toJSON(frProjectExtensionRecords));
 
             list1.add(map);
         }
         return list1;
     }
+
+    /**
+     * 启用项目
+     * @param id
+     */
+    public AddProject starCustomer(String id, String cid, String name, String code){
+        Date now = new Date();
+        AddProject addProject = new AddProject();
+        FrProjectStartRecord frProjectStartRecord = new FrProjectStartRecord();
+        //查询
+        addProject.setProjectId(id);
+        addProject = addProjectMapper.selectOne(addProject);
+        //记录表
+        frProjectStartRecord.setId(UUIDUtils.generateGUID());
+        frProjectStartRecord.setCustomerCode(code);
+        frProjectStartRecord.setOperateDate(now);
+        frProjectStartRecord.setOperatePersonId(cid);
+        frProjectStartRecord.setOperatePersonName(name);
+        frProjectStartRecord.setCreateUser(name);
+        frProjectStartRecord.setCreateTime(now);
+        frProjectStartRecord.setOldStartDate(addProject.getStartTime());
+        frProjectStartRecord.setOldEndDate(addProject.getEndTime());
+        frProjectStartRecord.setProjectOrderId(id);
+        //计算时间差
+        Date startTime = addProject.getStartTime();
+        Date endTime = addProject.getEndTime();
+        long time = startTime.getTime() - now.getTime();
+        addProject.setStartTime(now);
+        addProject.setEndTime(new Date(endTime.getTime() - time));
+        frProjectStartRecord.setStartDate(now);
+        frProjectStartRecord.setEndDate(addProject.getEndTime());
+        //正常
+        addProject.setState(0);
+        //更新
+        addProjectMapper.updateAllColumnById(addProject);
+        //---- 保存
+        frProjectStartRecordMapper.insert(frProjectStartRecord);
+
+        return addProject;
+    }
+
+
+    /**
+     * 补余
+     * @param id
+     * @return
+     */
+    public ProjectOrder customerRemnant(String id, String cid, String name, String code){
+        Date now = new Date();
+        FrProjectRemnantRecord frProjectRemnantRecord = new FrProjectRemnantRecord();
+        AddProject addProject = new AddProject();
+        addProject.setProjectId(id);
+        ProjectOrder projectOrder = projectOrderMapper.selectById(id);
+        addProject = addProjectMapper.selectOne(addProject);
+        //修改成正常
+        addProject.setState(0);
+        //
+        //记录表
+        frProjectRemnantRecord.setId(UUIDUtils.generateGUID());
+        frProjectRemnantRecord.setCustomerCode(code);
+        frProjectRemnantRecord.setOperateDate(now);
+        frProjectRemnantRecord.setOperatePersonId(cid);
+        frProjectRemnantRecord.setOperatePersonName(name);
+        frProjectRemnantRecord.setCreateUser(name);
+        frProjectRemnantRecord.setCreateTime(now);
+        frProjectRemnantRecord.setArrearsPrice(projectOrder.getNoPrice());
+        frProjectRemnantRecord.setRemnantPrice(projectOrder.getNoPrice());
+        frProjectRemnantRecord.setProjectOrderId(id);
+        //---
+        projectOrder.setNoPrice(0.0);
+        projectOrder.setRetChange(0.0);
+        projectOrderMapper.updateAllColumnById(projectOrder);
+        addProjectMapper.updateAllColumnById(addProject);
+        frProjectRemnantRecordMapper.insert(frProjectRemnantRecord);
+        return projectOrder;
+    }
+
+    /**
+     * 延期
+     * @param orderId
+     * @param useful
+     * @return
+     */
+    public AddProject customerExtension(String orderId, String useful, String flag, String cid, String name, String code){
+        Date now = new Date();
+        FrProjectExtensionRecord frProjectExtensionRecord = new FrProjectExtensionRecord();
+        AddProject addProject = new AddProject();
+
+        addProject.setProjectId(orderId);
+        addProject = addProjectMapper.selectOne(addProject);
+        addProject.setUseful(addProject.getUseful() + Integer.parseInt(useful));
+
+        //延期记录
+        frProjectExtensionRecord.setId(UUIDUtils.generateGUID());
+        frProjectExtensionRecord.setCustomerCode(code);
+        frProjectExtensionRecord.setOperateDate(now);
+        frProjectExtensionRecord.setOperatePersonId(cid);
+        frProjectExtensionRecord.setOperatePersonName(name);
+        frProjectExtensionRecord.setCreateUser(name);
+        frProjectExtensionRecord.setCreateTime(now);
+        frProjectExtensionRecord.setProjectOrderId(orderId);
+        frProjectExtensionRecord.setExtensionDate(useful);
+        frProjectExtensionRecord.setDescription(flag);
+        frProjectExtensionRecord.setOldStartDate(addProject.getStartTime());
+        frProjectExtensionRecord.setOldEndDate(addProject.getEndTime());
+
+        //正常
+        if(addProject.getState() == 0){
+            Date date = addProject.getEndTime();
+            Calendar cl = Calendar.getInstance();
+            cl.setTime(date);
+            cl.add(Calendar.MONTH, +Integer.parseInt(useful));
+            addProject.setEndTime(cl.getTime());
+
+        }
+        if(addProject.getState() == 2){
+            Date date = new Date();
+            Calendar cl = Calendar.getInstance();
+            cl.setTime(date);
+            cl.add(Calendar.MONTH, +Integer.parseInt(useful));
+            addProject.setEndTime(cl.getTime());
+        }
+        frProjectExtensionRecord.setStartDate(now);
+        frProjectExtensionRecord.setEndDate(addProject.getEndTime());
+        //
+
+
+        addProject.setStartTime(now);
+        addProject.setState(0);
+        addProjectMapper.updateAllColumnById(addProject);
+        frProjectExtensionRecordMapper.insert(frProjectExtensionRecord);
+        return addProject;
+    }
+
+    /**
+     * 转让表
+     * @param map
+     * @return
+     */
+    public ReturnAddProject setTurnProject(Map map, String cid, String name, String shopid){
+        TurnProject turnProject = new TurnProject();
+        JSONObject jsonObject = JSONObject.parseObject((String) map.get("insertData"));
+        ProjectOrder projectOrder = JSONObject.parseObject((String) map.get("projectOrder"), ProjectOrder.class);
+        AddProject addProject = JSONObject.parseObject((String) map.get("addProject"), AddProject.class);
+        SysConsumeOrder sysConsumeOrder = JSONObject.parseObject((String) map.get("sysConsumeOrder"), SysConsumeOrder.class);
+        PersonnelInfo personnelInfo = new PersonnelInfo();
+        personnelInfo.setMobile(jsonObject.getString("mobile"));
+        personnelInfo = personnelInfoMapper.selectOne(personnelInfo);
+//        turnProject.setNewCardId(addProject.getCardId());
+//        turnProject.setOldCardId(addProject.getCardId());
+        turnProject.setAddProjectId(addProject.getId());
+        turnProject.setCreateId(cid);
+        turnProject.setCreateTime(new Date());
+        turnProject.setCreateName(name);
+        turnProject.setPayType(jsonObject.getInteger("payType"));
+        turnProject.setFee(jsonObject.getDouble("fee"));
+        turnProject.setPayMoney(jsonObject.getDouble("fee"));
+        turnProject.setOldCustomerId(sysConsumeOrder.getCustomerId());
+      //  turnProject.setOldCardId(sysConsumeOrder.getCustomerId());
+        turnProject.setNewCustomerId(personnelInfo.getId());
+        turnProject.setPerShopId(shopid);
+        //转让过去，sysConsumeOrder的客户Id也要改成现在的Id
+        sysConsumeOrder = sysConsumeOrderMapper.selectById(sysConsumeOrder.getId());
+        sysConsumeOrder.setCustomerId(personnelInfo.getId());
+        sysConsumeOrderMapper.updateAllColumnById(sysConsumeOrder);
+        turnProjectMapper.insert(turnProject);
+        return null;
+    }
+
+
+    /**
+     * 退费表
+     * @param map
+     * @return
+     */
+    public ReturnAddProject setReturnAddProject(Map map, String cid, String name){
+        ReturnAddProject returnAddProject = new ReturnAddProject();
+        JSONObject jsonObject = JSONObject.parseObject((String) map.get("insertData"));
+        AddProject addProject = JSONObject.parseObject((String) map.get("addProject"), AddProject.class);
+        String objectId = addProject.getId();
+        //计算付款方式
+        String payType = jsonObject.getString("payType");
+        double money = jsonObject.getDouble("returnMoney");
+        returnAddProject.setAddProjectID(objectId);
+        returnAddProject.setCustomerCode(addProject.getCustomerCode());
+        returnAddProject.setReturnCount(jsonObject.getInteger("endCount"));
+        returnAddProject.setReturnMoney(money);
+        returnAddProject.setCash(jsonObject.getDouble("fee"));
+        returnAddProject.setTurnMoney(0.0);
+        returnAddProject.setReturnNumber(jsonObject.getString("count"));
+        returnAddProject.setSaleName(name);
+        returnAddProject.setCreateTime(new Date());
+        returnAddProject.setCreateNameID(cid);
+        returnAddProject.setPayType(payType);
+        returnAddProject.setRaShopid(jsonObject.getString("deduct"));
+        returnAddProjectMapper.insert(returnAddProject);
+        return returnAddProject;
+    }
+
+    /**
+     * 查询退费记录
+     * @param cid
+     * @return
+     */
+    public List getListReturnAddProject(String cid){
+        List<ReturnAddProject> returnAddProjects = returnAddProjectMapper.selectList(new EntityWrapper<ReturnAddProject>()
+                .where("CreateNameID = '" + cid + "'"));
+        return returnAddProjects;
+    }
+
+
+    /**
+     * 查询转让记录
+     * @param cid
+     * @return
+     */
+    public List getListTurnProject(String cid){
+        List<TurnProject> returnAddProjects = turnProjectMapper.selectList(new EntityWrapper<TurnProject>()
+                .where("OldCustomerId = '" + cid + "'"));
+        List list = new ArrayList();
+        for(TurnProject turnProject: returnAddProjects){
+            Map map = new JSONObject();
+            FrClient frClientOld = frClientMapper.selectById(turnProject.getOldCustomerId());
+            FrClient frClientNew = frClientMapper.selectById(turnProject.getNewCustomerId());
+            map.put("turnProject", turnProject);
+            map.put("frClientOld", frClientOld);
+            map.put("frClientNew", frClientNew);
+            list.add(map);
+        }
+        return list;
+    }
+
+
+    /**
+     * 冲销
+     * @param id
+     */
+    public void deleteTurnProject(String id){
+        TurnProject turnProject = turnProjectMapper.selectById(id);
+        AddProject addProject = addProjectMapper.selectById(turnProject.getAddProjectId());
+        SysConsumeOrder sysConsumeOrder = new SysConsumeOrder();
+        sysConsumeOrder.setOrderNumber(addProject.getContractNumber());
+        sysConsumeOrder.setCustomerId(turnProject.getNewCustomerId());
+        sysConsumeOrder = sysConsumeOrderMapper.selectOne(sysConsumeOrder);
+        sysConsumeOrder.setCustomerId(turnProject.getOldCustomerId());
+        sysConsumeOrderMapper.updateAllColumnById(sysConsumeOrder);
+        turnProjectMapper.deleteById(turnProject.getId());
+    }
 }
+

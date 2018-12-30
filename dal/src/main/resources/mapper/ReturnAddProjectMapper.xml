@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ReturnAddProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.ReturnAddProject">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="AddProjectID" property="AddProjectID" />
+        <result column="ReturnCount" property="ReturnCount" />
+        <result column="ReturnMoney" property="ReturnMoney" />
+        <result column="Cash" property="Cash" />
+        <result column="TurnMoney" property="TurnMoney" />
+        <result column="EmployID" property="EmployID" />
+        <result column="EmployName" property="EmployName" />
+        <result column="CardId" property="CardId" />
+        <result column="CustomerPwd" property="CustomerPwd" />
+        <result column="PersonalPwd" property="PersonalPwd" />
+        <result column="CreateTime" property="CreateTime" />
+        <result column="CreateName" property="CreateName" />
+        <result column="CreateNameID" property="CreateNameID" />
+        <result column="WeChat" property="WeChat" />
+        <result column="RA_ShopID" property="raShopid" />
+        <result column="CardMoney" property="CardMoney" />
+        <result column="SaleID" property="SaleID" />
+        <result column="SaleName" property="SaleName" />
+        <result column="ReturnNumber" property="ReturnNumber" />
+        <result column="PayType" property="PayType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ID, AddProjectID, ReturnCount, ReturnMoney, Cash, TurnMoney, EmployID, EmployName, CardId, CustomerPwd, PersonalPwd, CreateTime, CreateName, CreateNameID, WeChat, RA_ShopID AS raShopid, CardMoney, SaleID, SaleName, ReturnNumber,PayType
+    </sql>
+
+</mapper>

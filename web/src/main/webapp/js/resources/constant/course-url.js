@@ -15,6 +15,14 @@ const COURSE_URL = {
     getClientListByMobile: 'frClient/getClientList', // 通过号码查询用户信息
     getCardListByMobile: 'frCard/queryByFrCardListByStatus', // 通过客户，查询会员卡
     queryByFrCardList: 'frCard/queryByFrCardList', // 通过客户，查询会员卡
-    addSaveCustomer: 'frCustomerCourse/addSaveCustomer', //新购的结账
     fetchOrderListByUserId: 'frCustomerCourse/fetchOrderListByUserId', //根据用户Id查询
+    addSaveCustomer: 'frCustomerCourse/addSaveCustomer', //新购的结账
+    customerStar: 'frCustomerCourse/customerStar', //项目启用
+    customerRemnant: 'frCustomerCourse/customerRemnant', //项目补余
+    customerExtension: 'frCustomerCourse/customerExtension', //项目延期
+    customerTransfer: 'frCustomerCourse/customerTransfer', //项目转让
+    customerReturnMoney: 'frCustomerCourse/customerReturnMoney', //退费操作
+    returnAddProjects: 'frCustomerCourse/returnAddProjects', //项目查询退费
+    turnProjects: 'frCustomerCourse/turnProjects', //查询转让记录
+    turnProjectsDelete: 'frCustomerCourse/turnProjectsDelete', //冲销
 };
