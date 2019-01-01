@@ -737,94 +737,62 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         List<FrCardSupplyRecord> list = baseMapper.updateSupplyRecordTime(map);
         if(list != null && list.size()>0){
             for(FrCardSupplyRecord frCardSupplyRecord:list){
-                this.continueOpenList(frCardSupplyRecord);
+                this.continueOpenList(frCardSupplyRecord,true,true);
             }
         }
     }
 
     /**
-     * 续卡开卡---------此方法暂时默认是现在的直接延续
+     * 续卡开卡
      * @param frCardSupplyRecord
      * @return
      * @throws YJException
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean  continueOpenList(FrCardSupplyRecord frCardSupplyRecord) throws YJException {
+    public boolean  continueOpenList(FrCardSupplyRecord frCardSupplyRecord,boolean isFlag,boolean toChildCard) throws YJException {
         //如果协议规则，会员卡，会员卡订单未获取，返回
         if(frCardSupplyRecord == null ){
             throw  new YJException(YJExceptionEnum.REQUEST_NULL);
         }
-        //续卡开卡==============
         // 开卡方式（0，直接延续 ； 1，另行开卡）
         boolean cardOpening = frCardSupplyRecord.getCardOpening();
         // 是否更换新卡(0、否；1、是)
         boolean replacementCard = frCardSupplyRecord.getReplacementCard();
         //直接延续才需要需要定时任务开启，如果过是另行开卡的话，客户自己设置开卡时间
-        if(!cardOpening) {
-            //直接延续
-            String bindTime = frCardSupplyRecord.getBindTime();
-            if (StringUtils.toIsEmpty(bindTime)) {
+        String bindTime = frCardSupplyRecord.getBindTime();
+        if (StringUtils.toIsEmpty(bindTime)) {
+            //直接延续尝试获取开卡时间
+            if(!cardOpening) {
                 //如果未查询到设置的开卡时间
                 FrCard frCard = iFrCardService.selectById(frCardSupplyRecord.getOriCardId());
                 if (frCard == null) {
                     throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
                 }
                 bindTime = frCard.getInvalidTime();
-                if (StringUtils.toIsEmpty(bindTime)) {
-                    throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
-                }
+                isFlag = true;
             }
-            //准备会员卡信息
+            if (StringUtils.toIsEmpty(bindTime)) {
+                throw new YJException(YJExceptionEnum.OLD_CARD_OPEN_EXISTED);
+            }
+        }
+        Date endData = DateUtils.getDataforString(bindTime,"yyyy-MM-dd HH:mm:ss");
+        //判断开卡时间是否到了
+        boolean isFlage = DateUtil.compareDate(new Date(),endData);
+        //开卡时间到了，自动开卡
+        if(isFlage){
             FrCard oldCard = new FrCard();
-            oldCard.setId(frCardSupplyRecord.getOriCardId());
-            oldCard.setStatus(CommonUtils.CARD_STATUS_6);
             FrCard newCard = new FrCard();
-            newCard.setId(frCardSupplyRecord.getNewCardId());
-            oldCard.setStatus(CommonUtils.CARD_STATUS_0);
-            // 是否更换新卡(0、否；1、是)
-            if (!replacementCard) {
-                oldCard.setCardNo(frCardSupplyRecord.getNewCardNo());
-                oldCard.setCardNumId(frCardSupplyRecord.getNewCardNumId());
-                newCard.setCardNo(frCardSupplyRecord.getOriCardNo());
-                newCard.setCardNumId(frCardSupplyRecord.getOrderInfoId());
+            List<FrCardOrderDatail> frCardOrderDatailList = this.getCardOrderList(frCardSupplyRecord,oldCard,newCard,true);
+            if(isFlag){
+                this.toInterCardOrder(frCardOrderDatailList);
             }
-            //先更新会员卡状态--旧卡先更新成会员卡后，金额不再变动
-            iFrCardService.update(oldCard,new EntityWrapper<FrCard>().where("id={0}",frCardSupplyRecord.getOriCardId()).and("CustomerCode={0}",frCardSupplyRecord.getCustomerCode()));
-            iFrCardService.update(newCard,new EntityWrapper<FrCard>().where("id={0}",frCardSupplyRecord.getNewCardId()).and("CustomerCode={0}",frCardSupplyRecord.getCustomerCode()));
-            //初始化参数
-            Map<String,Integer> mapI = new HashMap<>();
-            mapI.put("cardType",frCardSupplyRecord.getType());
-            mapI.put("orderType",CommonUtils.PAY_MODE_ORDER_TYPE_2);
-            mapI.put("type",CommonUtils.ORDER_DATAIL_TYPE_2);
-            Map<String,String> mapS = new HashMap<>();
-            //表示定时任务，系统操作
-            String timeTask = "-1";
-            mapS.put("shopId",timeTask);
-            mapS.put("personnelId",timeTask);
-            mapS.put("orderId",timeTask);
-            mapS.put("flag","定时任务系统：转移剩余储值扣款");
-            mapS.put("OrderStatus","false");
-            mapS.put("cardId",frCardSupplyRecord.getOriCardId());
-            //获取卡种剩余权益/或者储值
-            Double orderPrice = iFrCardOrderDatailService.getOrderPrice(mapS.get("cardId"),frCardSupplyRecord.getClientId(),frCardSupplyRecord.getCustomerCode(), mapI.get("type"),false);
-            List<FrCardOrderDatail> frCardOrderDatailList = new ArrayList();
-            this.getOrderDatailInfo(frCardSupplyRecord,orderPrice,mapI,mapS,frCardOrderDatailList);
-            mapS.put("flag","定时任务系统：转移剩余储值到新卡");
-            mapS.put("OrderStatus","true");
-            mapS.put("cardId",frCardSupplyRecord.getNewCardId());
-            this.getOrderDatailInfo(frCardSupplyRecord,orderPrice,mapI,mapS,frCardOrderDatailList);
-            if(frCardOrderDatailList != null && frCardOrderDatailList.size()>0){
-               for(FrCardOrderDatail frCardOrderDatail1 :frCardOrderDatailList){
-                   //获取卡种剩余权益/或者储值
-                   Double havaRightsNum = iFrCardOrderDatailService.getOrderPrice(frCardOrderDatail1.getCardId(),frCardOrderDatail1.getClientId(),frCardOrderDatail1.getCustomerCode(),frCardOrderDatail1.getType(),false);
-                   frCardOrderDatail1.setOrderAmt(havaRightsNum+frCardOrderDatail1.getOrderPrice());
-                   iFrCardOrderDatailService.insert(frCardOrderDatail1);
-               }
+            if(toChildCard){
+                //续卡后需要把子卡都转移到此卡名下
+                FrChildCard frChildCard = new FrChildCard();
+                frChildCard.setParentCardId(frCardSupplyRecord.getNewCardId());
+                iFrChildCardService.update(frChildCard, new EntityWrapper<FrChildCard>().where("CustomerCode={0}", frCardSupplyRecord.getCustomerCode()).and("parent_card_id={0}", frCardSupplyRecord.getOriCardId()));
             }
-            //续卡后需要把子卡都转移到此卡名下
-            FrChildCard frChildCard = new FrChildCard();
-            frChildCard.setParentCardId(frCardSupplyRecord.getNewCardId());
-            iFrChildCardService.update(frChildCard, new EntityWrapper<FrChildCard>().where("CustomerCode={0}", frCardSupplyRecord.getCustomerCode()).and("parent_card_id={0}", frCardSupplyRecord.getOriCardId()));
         }
         return true;
     }
@@ -905,56 +873,131 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         return frCardOrderDatail;
     }
 
-    //    /**
-//     * 初始化扣除旧卡的剩余权益，储值金额，转移到新卡上
+
+//    /**
+//     * 转移储值
 //     * @param frCardSupplyRecord
-//     * @return
+//     * @param isFlag
 //     * @throws YJException
 //     */
-//   public List<FrCardOrderDatail> getListDatail(FrCardSupplyRecord frCardSupplyRecord,FrCardOrderPriceDatail frCardOrderPriceDatail,Integer oldType,Integer newType,Map<String,Double> allHave)throws YJException{
-//        //获取指定会员卡的剩余权益
-//        FrCardOrderDatail frCardOrderDatail = new FrCardOrderDatail();
-//        frCardOrderDatail.setCardId(frCardSupplyRecord.getOriCardId());
-//        frCardOrderDatail.setClientId(frCardSupplyRecord.getClientId());
-//        frCardOrderDatail.setCustomerCode(frCardSupplyRecord.getCustomerCode());
-//        frCardOrderDatail.setType(CommonUtils.ORDER_DATAIL_TYPE_1);
-//        //不包含子卡的所有信息
-//        Map<String,Double> map1 = iFrCardOrderDatailService.getAmtByCardId(frCardOrderDatail);
-//        Double orderPrice = NumberUtilsTwo.getDoubleNum("orderPrice",map1); //剩余储值金额
-//        Double orderRightsNum = NumberUtilsTwo.getDoubleNum("orderRightsNum",map1);  //剩余权益
-//        allHave.put("orderPrice",orderPrice);
-//        allHave.put("orderRightsNum",orderRightsNum);
-//        // 类型（1、补卡；2、续卡；3、转卡；4、卡升级；）
-//        String  flagNum = "" , flagPrice = "",addFlagNum = "",addFlagPrice = "";
-//        if(CommonUtils.CARD_SUPPLY_RECORD_TYPE_2 == frCardSupplyRecord.getType()){
-//            //续卡
-//            flagNum = "续卡操作扣除旧卡全部剩余权益";
-//            flagPrice = "续卡操作扣除旧卡全部剩余金额";
-//            addFlagNum = "续卡操作添加旧卡全部剩余权益";
-//            addFlagPrice = "续卡操作添加旧卡全部剩余金额";
+//    @Transactional(rollbackFor = Exception.class)
+//    public boolean transferStorage(FrCardSupplyRecord frCardSupplyRecord,boolean isFlag,boolean toChildCard)throws YJException{
+//        if(frCardSupplyRecord == null){
+//            return false;
 //        }
-//       if(CommonUtils.CARD_SUPPLY_RECORD_TYPE_3 == frCardSupplyRecord.getType()){
-//           //转卡
-//           flagNum = "转卡操作扣除旧卡全部剩余权益";
-//           flagPrice = "转卡操作扣除旧卡全部剩余金额";
-//           addFlagNum = "转卡操作添加旧卡全部剩余权益";
-//           addFlagPrice = "转卡操作添加旧卡全部剩余金额";
-//       }
-//       if(CommonUtils.CARD_SUPPLY_RECORD_TYPE_4 == frCardSupplyRecord.getType()){
-//           //卡升级
-//           flagNum = "卡升级操作扣除旧卡全部剩余权益";
-//           flagPrice = "卡升级操作扣除旧卡全部剩余金额";
-//           addFlagNum = "卡升级操作添加旧卡全部剩余权益";
-//           addFlagPrice = "卡升级操作添加旧卡全部剩余金额";
-//       }
-//       List<FrCardOrderDatail> list = new ArrayList<>();
-//       this.getOrderDatailInfo(frCardOrderPriceDatail,flagNum,CommonUtils.ORDER_DATAIL_TYPE_1, orderRightsNum,list,false,frCardSupplyRecord.getOriCardId(),oldType);
-//       this.getOrderDatailInfo(frCardOrderPriceDatail,flagPrice,CommonUtils.ORDER_DATAIL_TYPE_2, orderPrice,list,false,frCardSupplyRecord.getOriCardId(),oldType);
-//       this.getOrderDatailInfo(frCardOrderPriceDatail,addFlagNum,CommonUtils.ORDER_DATAIL_TYPE_1, orderRightsNum,list,true,frCardSupplyRecord.getNewCardId(),newType);
-//       this.getOrderDatailInfo(frCardOrderPriceDatail,addFlagPrice,CommonUtils.ORDER_DATAIL_TYPE_2, orderPrice,list,true,frCardSupplyRecord.getNewCardId(),newType);
-//       return list;
+//        // 开卡方式（0，直接延续 ； 1，另行开卡）
+//        boolean cardOpening = frCardSupplyRecord.getCardOpening();
+//        // 是否更换新卡(0、否；1、是)
+//        boolean replacementCard = frCardSupplyRecord.getReplacementCard();
+//        //直接延续才需要需要定时任务开启，如果过是另行开卡的话，客户自己设置开卡时间
+//        String bindTime = frCardSupplyRecord.getBindTime();
+//        if (StringUtils.toIsEmpty(bindTime)) {
+//            //直接延续尝试获取开卡时间
+//            if(!cardOpening) {
+//                //如果未查询到设置的开卡时间
+//                FrCard frCard = iFrCardService.selectById(frCardSupplyRecord.getOriCardId());
+//                if (frCard == null) {
+//                    throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
+//                }
+//                bindTime = frCard.getInvalidTime();
+//                isFlag = true;
+//            }
+//            if (StringUtils.toIsEmpty(bindTime)) {
+//                throw new YJException(YJExceptionEnum.OLD_CARD_OPEN_EXISTED);
+//            }
+//        }
+//        Date endData = DateUtils.getDataforString(bindTime,"yyyy-MM-dd HH:mm:ss");
+//        //判断开卡时间是否到了
+//        boolean isFlage = DateUtil.compareDate(new Date(),endData);
+//        //开卡时间到了，自动开卡
+//        if(isFlage){
+//            FrCard oldCard = new FrCard();
+//            FrCard newCard = new FrCard();
+//            List<FrCardOrderDatail> frCardOrderDatailList = this.getCardOrderList(frCardSupplyRecord,oldCard,newCard);
+//            if(isFlag){
+//                this.toInterCardOrder(frCardOrderDatailList);
+//            }
+//            if(toChildCard){
+//                //续卡后需要把子卡都转移到此卡名下
+//                FrChildCard frChildCard = new FrChildCard();
+//                frChildCard.setParentCardId(frCardSupplyRecord.getNewCardId());
+//                iFrChildCardService.update(frChildCard, new EntityWrapper<FrChildCard>().where("CustomerCode={0}", frCardSupplyRecord.getCustomerCode()).and("parent_card_id={0}", frCardSupplyRecord.getOriCardId()));
+//            }
+//        }
+//        return true;
 //    }
 
+    /**
+     * 根据续卡条件更新新旧会员卡
+     * @param frCardSupplyRecord
+     * @param oldCard
+     * @param newCard
+     * @param isFlag  是否转移储值金额
+     * @return
+     * @throws YJException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public  List<FrCardOrderDatail> getCardOrderList(FrCardSupplyRecord frCardSupplyRecord,FrCard oldCard,FrCard newCard,boolean isFlag)throws YJException{
+        //准备会员卡信息
+        oldCard.setId(frCardSupplyRecord.getOriCardId());
+        oldCard.setStatus(CommonUtils.CARD_STATUS_6);
+        newCard.setId(frCardSupplyRecord.getNewCardId());
+        oldCard.setStatus(CommonUtils.CARD_STATUS_0);
+        // 是否更换新卡(0、否；1、是)
+        if (!frCardSupplyRecord.getReplacementCard()) {
+            oldCard.setCardNo(frCardSupplyRecord.getNewCardNo());
+            oldCard.setCardNumId(frCardSupplyRecord.getNewCardNumId());
+            newCard.setCardNo(frCardSupplyRecord.getOriCardNo());
+            newCard.setCardNumId(frCardSupplyRecord.getOrderInfoId());
+        }
+        //先更新会员卡状态--旧卡先更新成会员卡后，金额不再变动
+        iFrCardService.update(oldCard,new EntityWrapper<FrCard>().where("id={0}",frCardSupplyRecord.getOriCardId()).and("CustomerCode={0}",frCardSupplyRecord.getCustomerCode()));
+        iFrCardService.update(newCard,new EntityWrapper<FrCard>().where("id={0}",frCardSupplyRecord.getNewCardId()).and("CustomerCode={0}",frCardSupplyRecord.getCustomerCode()));
+        List<FrCardOrderDatail> frCardOrderDatailList = null;
+        if(isFlag){
+            frCardOrderDatailList = new ArrayList();
+            //初始化参数
+            Map<String,Integer> mapI = new HashMap<>();
+            mapI.put("cardType",frCardSupplyRecord.getType());
+            mapI.put("orderType",CommonUtils.PAY_MODE_ORDER_TYPE_2);
+            mapI.put("type",CommonUtils.ORDER_DATAIL_TYPE_2);
+            Map<String,String> mapS = new HashMap<>();
+            //表示定时任务，系统操作
+            String timeTask = "-1";
+            mapS.put("shopId",timeTask);
+            mapS.put("personnelId",timeTask);
+            mapS.put("orderId",timeTask);
+            mapS.put("flag","定时任务系统：转移剩余储值扣款");
+            mapS.put("OrderStatus","false");
+            mapS.put("cardId",frCardSupplyRecord.getOriCardId());
+            //获取卡种剩余权益/或者储值
+            Double orderPrice = iFrCardOrderDatailService.getOrderPrice(mapS.get("cardId"),frCardSupplyRecord.getClientId(),frCardSupplyRecord.getCustomerCode(), mapI.get("type"),false);
+            this.getOrderDatailInfo(frCardSupplyRecord,orderPrice,mapI,mapS,frCardOrderDatailList);
+            mapS.put("flag","定时任务系统：转移剩余储值到新卡");
+            mapS.put("OrderStatus","true");
+            mapS.put("cardId",frCardSupplyRecord.getNewCardId());
+            this.getOrderDatailInfo(frCardSupplyRecord,orderPrice,mapI,mapS,frCardOrderDatailList);
+        }
+        return  frCardOrderDatailList;
+    }
 
+    /**
+     * 插入转移数据
+     * @param frCardOrderDatailList
+     * @throws YJException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void toInterCardOrder(List<FrCardOrderDatail> frCardOrderDatailList)throws YJException{
+        if(frCardOrderDatailList != null && frCardOrderDatailList.size()>0){
+            for(FrCardOrderDatail frCardOrderDatail1 :frCardOrderDatailList){
+                //获取卡种剩余权益/或者储值
+                Double havaRightsNum = iFrCardOrderDatailService.getOrderPrice(frCardOrderDatail1.getCardId(),frCardOrderDatail1.getClientId(),frCardOrderDatail1.getCustomerCode(),frCardOrderDatail1.getType(),false);
+                frCardOrderDatail1.setOrderAmt(havaRightsNum+frCardOrderDatail1.getOrderPrice());
+                iFrCardOrderDatailService.insert(frCardOrderDatail1);
+            }
+        }
+    }
 
 }

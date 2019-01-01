@@ -1,10 +1,7 @@
 ;!function() {
 	var version = "1.0";//版本控制
 	postjs([
-		"js/vue.js",
-		"js/jquery/jquery.min.js",
 		"js/jquery-slimscroll/jquery.slimscroll.min.js",
-		"js/bootstrap/bootstrap.min.js",
 		"component/top-menu-bar.js",
 		"component/sidebar-nav.js",
 	])

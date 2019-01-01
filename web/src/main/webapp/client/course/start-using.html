@@ -1,16 +1,19 @@
-<li class="list4 list on" id="course-start-using">
+<li class="list4 list on" id="course-start-using" xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <fieldset class="fieldset1">
         <legend>操作项目/产品</legend>
         <select name="" v-model="index">
-            <option value="" v-for="(item, index) in result"  :value="index">
+            <option value="" v-for="(item, index) in result" :value="index">
 
                 所在门店：{{item.shop.shopName}} 所在场馆：{{item.sdaduim.name}} 项目/产品名称：私教课程30节
                 数量：{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}
-                （{{item.projectOrder.buyCount| toNum}}+ <span class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
-                已消费数量：{{item.addProjectConsumes.length| toNum}} 价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                （{{item.projectOrder.buyCount| toNum}}+ <span
+                    class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
+                已消费数量：{{item.addProjectConsumes.length| toNum}}
+                价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
                 * (item.addProjectConsumes.length)|toMoney}}
                 剩余价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}
+                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) -
+                item.addProjectConsumes.length)|toMoney}}
                 有效期：{{item.addProject.useful}} 个月 结束时间：{{item.addProject.endTime| formatDate2}}
                 状态：<span class="blod">{{item.addProject.state |stateFilter}}</span>
             </option>
@@ -19,10 +22,10 @@
     <fieldset class="fieldset2">
         <legend>启用项目操作</legend>
         <p class="date">
-            <label >
+            <label>
                 原开始日期：{{startTime| formatDate2}}
             </label>
-            <label >
+            <label>
                 启用日期：{{now| formatDate2}}
             </label>
         </p>
@@ -30,7 +33,7 @@
             会员授权：<input type="password" v-model="password" @change="verifyUser"/>
         </p>
         <p>操作人：{{clientName}} 当前操作时间：{{now| formatDate2}}</p>
-        <p><span class="useful" @click="save">启用</span></p>
+        <p><span class="useful" @click="save" >启用</span></p>
     </fieldset>
     <div class="tabTitle">操作记录</div>
     <table border="1" bordercolor="#ccc">
@@ -50,6 +53,7 @@
         </tr>
         </thead>
         <tbody>
+
         <tr v-for="(item, index) in tableList">
             <td>{{index + 1}}</td>
             <td>{{item.frProjectStartRecord.operateDate| formatDate2}}</td>
@@ -60,9 +64,12 @@
             <td>私教课程30节</td>
             <td>{{item.addProject.useful}} 个月</td>
             <td>{{item.frProjectStartRecord.oldStartDate| formatDate2}}</td>
-            <td>{{item.addProject.startDate| formatDate}}</td>
+            <td>{{item.addProject.startTime| formatDate}}</td>
             <td>{{item.addProject.endTime| formatDate}}</td>
+
         </tr>
+
+
         </tbody>
     </table>
 </li>
@@ -72,13 +79,14 @@
     var startUsingVue = new Vue({
         el: '#course-start-using',
         data: {
+            toDisabled: false,
             orderId: '', //订单表ID
             index: '', //序列
             result: [], //数据
             selectData: {}, //选择的数据
             now: new Date(), //当前时间
             clientName: $.cookie('name'), //当前系统人名
-            cid: $.cookie('cid'), //当前系统人id
+            cid: $.cookie('id'), //当前系统人id
             password: '', //输入的密码
             status: false, //严重状态
             startTime: '', //原开始时间
@@ -89,7 +97,7 @@
             index(val){
                 this.selectData = this.result[val];
             },
-            'selectData':{
+            'selectData': {
                 handler(val){
                     this.startTime = val.addProject.startTime;
                 },
@@ -100,33 +108,33 @@
         filters: {
             stateFilter: function (val) {
                 let back = "";
-                if((val + "") == "0"){
+                if ((val + "") == "0") {
                     back = "正常"
                 }
-                if((val + "") == "1"){
+                if ((val + "") == "1") {
                     back = "欠款"
                 }
-                if((val + "") == "2"){
+                if ((val + "") == "2") {
                     back = "过期"
                 }
-                if((val + "") == "3"){
+                if ((val + "") == "3") {
                     back = "历史"
                 }
-                if((val + "") == "4"){
+                if ((val + "") == "4") {
                     back = "未开始"
                 }
 
                 return back;
             },
             formatDate(val){
-                if(!val){
+                if (!val) {
                     return "";
                 }
                 return timeFormatDate(val, true, false);
             },
             toNum(val){
 
-                if(!val){
+                if (!val) {
                     return '0';
                 }
                 return val;
@@ -140,46 +148,46 @@
             payStatus(item){
                 //现金：￥1000.00 支付宝：￥600.00
                 let str = '';
-                if(parseFloat(item.cashPrice) > 0){
+                if (parseFloat(item.cashPrice) > 0) {
                     str += '现金：￥' + parseFloat(item.cashPrice).toFixed(2)
                 }
-                if(parseFloat(item.alipayPrice) > 0){
+                if (parseFloat(item.alipayPrice) > 0) {
                     str += '支付宝：￥' + parseFloat(item.alipayPrice).toFixed(2)
                 }
-                if(parseFloat(item.payCardPrice) > 0){
+                if (parseFloat(item.payCardPrice) > 0) {
                     str += '刷卡：￥' + parseFloat(item.payCardPrice).toFixed(2)
                 }
-                if(parseFloat(item.wechatPrice) > 0){
+                if (parseFloat(item.wechatPrice) > 0) {
                     str += '微信：￥' + parseFloat(item.wechatPrice).toFixed(2)
                 }
-                if(parseFloat(item.accountsPrice) > 0){
+                if (parseFloat(item.accountsPrice) > 0) {
                     str += '转账：￥' + parseFloat(item.accountsPrice).toFixed(2)
                 }
-                if(parseFloat(item.flowerPrice) > 0){
+                if (parseFloat(item.flowerPrice) > 0) {
                     str += '花呗：￥' + parseFloat(item.flowerPrice).toFixed(2)
                 }
-                if(parseFloat(item.otherPrice) > 0){
+                if (parseFloat(item.otherPrice) > 0) {
                     str += '其他：￥' + parseFloat(item.otherPrice).toFixed(2)
                 }
                 return str;
             },
             formatDate2(val){
-                if(!val){
+                if (!val) {
                     return "";
                 }
                 return timeFormatDate(val, false, false);
             },
             saleType(val){
-                if(val === 0){
+                if (val === 0) {
                     return "POS销售";
                 }
-                if(val === 1){
+                if (val === 1) {
                     return "新会员购买";
                 }
-                if(val === 2){
+                if (val === 2) {
                     return "续课";
                 }
-                if(val === 3){
+                if (val === 3) {
                     return "场地开课";
                 }
                 //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
@@ -194,19 +202,27 @@
         methods: {
             //查询记录
             search(){
-                let interval = setInterval(()=>{
+                let interval = setInterval(() => {
                     this.result = customerCourseProject.resultList;
-                    this.tableList = this.result; //便利表格
-                    if(this.result.length > 0){
+                    //this.tableList = this.result; //便利表格
+                    //计算记录
+                    let array = [];
+                    $.each(this.result, (i, d) => {
+                        if (d.frProjectStartRecord) {
+                            array.push(d);
+                        }
+                    });
+                    this.tableList = array;
+                    if (this.result.length > 0) {
                         this.index = 0;//初始化index
                         clearInterval(interval);
                     }
-                },500)
+                }, 500)
             },
             //验证
             verifyUser(){
-                this.password = false; //设置为原始状态
-                if(!this.password){
+                this.status = false; //设置为原始状态
+                if (!this.password) {
                     alert("请输入密码");
                     return false
                 }
@@ -219,31 +235,41 @@
                 axiosPostParams(COURSE_URL.verifyPersonInfo, param, (response) => {
                     if (response.code === '200') {
                         this.status = true;
+                    }else{
+                        alert(response.msg)
                     }
                 });
             },
             //启用
             save(){
+                if(this.toDisabled !== false){
+                    return false;
+
+                }
+                this.toDisabled = true;
                 //继续操作启用动作
                 //判断当前是否正常
-                if(!this.selectData.addProject){
+                if (!this.selectData.addProject) {
                     alert("请选择项目")
                     return false;
                 }
-                if(this.selectData.addProject['state'] !== 4){
+                if (this.selectData.addProject['state'] !== 4) {
                     alert("请选择未开始的项目");
                     return false;
                 }
                 let param = {};
-                if(this.status !== true){
+                if (this.status !== true) {
+                    alert("请验证会员权限")
                     return false;
                 }
-                param.orderId = this.selectData.addProject.id;
 
-                axiosPostParams(COURSE_URL.customerStar, param, (res)=>{
+                param.orderId = this.selectData.addProject.id;
+                param.cid = $.cookie('cid');
+                axiosPostParams(COURSE_URL.customerStar, param, (res) => {
                     if (res.code === '200') {
-                        customerCourseProject.$options.methods.loadData();//加载数据
-                        this.search();
+//                        customerCourseProject.$options.methods.loadData();//加载数据
+//                        this.search();
+                        window.location.reload()
                         alert("启动成功");
 
                     }

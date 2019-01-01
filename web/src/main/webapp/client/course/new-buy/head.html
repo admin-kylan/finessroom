@@ -403,7 +403,8 @@
                         data = response.data.data;
                         $.each(data, (i, d) => {
                             if (i == 0) {
-                                this.marketUserId = d.id;
+                                //this.marketUserId = d.id;
+                                this.performance.saleId = d.id;
                             }
                             obj.relName = d.relName;
                             obj.id = d.id;

@@ -125,13 +125,13 @@ public class FrEmployeeClientFollowController {
                              @RequestParam("planPurchaseTime") String planPurchaseTime,@RequestParam("clientId") String clientId, HttpServletRequest request) throws YJException {
        if(StringUtils.isEmpty(followType) || StringUtils.isEmpty(followContent) || StringUtils.isEmpty(nextFollowTime)
                || StringUtils.isEmpty(nextFollowTime)){
-           JsonResult.failMessage("请填写完整");
+          return JsonResult.failMessage("请填写完整");
        }
        if(StringUtils.isEmpty(clientId)){
-           JsonResult.failMessage("cId参数异常");
+           return   JsonResult.failMessage("cId参数异常");
        }
        if(FOLLOW_TYPE_1.equals(followType) && files.length < 4){
-           JsonResult.failMessage("微信/文字跟进请上传4张图片");
+           return  JsonResult.failMessage("微信/文字跟进请上传4张图片");
        }
         String code = CookieUtils.getCookieValue(request, "code", true);
         String personalId = CookieUtils.getCookieValue(request, "id", true);

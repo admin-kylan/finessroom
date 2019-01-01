@@ -5,15 +5,22 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
+import com.yj.common.util.CommonUtils;
 import com.yj.common.util.CookieUtils;
+import com.yj.common.util.UUIDUtils;
+import com.yj.dal.model.FrClientPersonnelRelate;
+import com.yj.dal.model.FrClientPic;
 import com.yj.dal.model.PersonnelInfo;
+import com.yj.service.service.IFrClientPersonnelRelateService;
+import com.yj.service.service.IFrClientPicService;
 import com.yj.service.service.IPersonnelInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -27,8 +34,16 @@ import java.util.List;
 @RequestMapping("/personnelInfo")
 public class PersonnelInfoController {
 
-    @Autowired
-    IPersonnelInfoService service;
+    @Resource
+    private IPersonnelInfoService service;
+
+    @Resource
+    private IFrClientPicService iFrClientPicService;
+
+    @Resource
+    private IFrClientPersonnelRelateService iFrClientPersonnelRelateService;
+
+
 
     /**
      * @Description: 根据客户代码查询销售顾问(员工列表)
@@ -142,8 +157,20 @@ public class PersonnelInfoController {
      */
     @GetMapping("/getPersonnelByShopId")
     public JsonResult getPersonnelByShopId(@RequestParam("CustomerCode")String CustomerCode,@RequestParam("shopId") String shopId,
-                                           HttpServletRequest request)throws YJException{
-        return  JsonResult.success(service.getPersonnelByShopId(CustomerCode,shopId));
+                                           @RequestParam("clientId") String clientId,HttpServletRequest request)throws YJException{
+        List<Map<String,Object>> map = service.getPersonnelByShopId(CustomerCode,shopId);
+        //查询出客户绑定的图片
+        List<FrClientPic> frClientPicList = iFrClientPicService.selectList(new EntityWrapper<FrClientPic>().where("client_id={0}",clientId)
+                .and("pic_type={0}",CommonUtils.PIC_TYPE_2).and("pic_state={0}",1));
+        //查询出客户绑定的人员
+        List<FrClientPersonnelRelate> frClientPersonnelRelateList = iFrClientPersonnelRelateService.selectList(new EntityWrapper<FrClientPersonnelRelate>()
+                .where("client_id={0}",clientId).and("is_using={0}",1)
+                .and("CustomerCode={0}",CustomerCode).and("shop_id={0}",shopId));
+        Map<String,Object> m = new HashMap<>();
+        m.put("personnelList",map);
+        m.put("frClientPicList",frClientPicList);
+        m.put("clientPersonnelList",frClientPersonnelRelateList);
+        return  JsonResult.success(m);
     }
 
 }

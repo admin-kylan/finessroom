@@ -125,6 +125,7 @@ public class PersonnelInfoServiceImpl extends BaseServiceImpl<PersonnelInfoMappe
         // 通过用行业---销售
         list.add("034d3d485168f5er");
         map.put("businessTypeList",list);
-        return baseMapper.getPersonnelByShopId(map);
+        List<Map<String,Object>>  maps = baseMapper.getPersonnelByShopId(map);
+        return maps;
     }
 }

@@ -7,6 +7,7 @@ import com.yj.service.base.BaseService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -50,4 +51,5 @@ public interface IFrCardTypeService extends BaseService<FrCardType> {
 
     FrCardType queryByCardId(String cardId ,String CustomerCode)throws  YJException;
 
+    List<Map<String,Object>> getCardTypeByShopIdList(String code) throws YJException;
 }

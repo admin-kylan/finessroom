@@ -45,4 +45,11 @@ public interface FrCardMapper extends BaseMapper<FrCard> {
     Integer toUpdateStopTime(Map<String,Object> map);
 
     Integer toUpdateComplement(Map<String,Object> map);
+
+    /**
+     * 根据会员卡信息查询出是否有需卡记录及续卡设置
+     * @param frCard
+     * @return
+     */
+    Map<String,Object> queryAndCardSupply(FrCard frCard);
 }

@@ -8,6 +8,7 @@ import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CommonUtils;
 import com.yj.common.util.CookieUtils;
+import com.yj.common.util.DateUtil;
 import com.yj.common.util.PageUtil;
 import com.yj.dal.model.*;
 import com.yj.service.service.IFrCardOrderAllotSetService;
@@ -18,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,6 +50,9 @@ public class FrCardController {
 
     @Autowired
     IFrCardOrderAllotSetService iFrCardOrderAllotSetService;
+
+    @Autowired
+    FileController fileController;
 
     /**
      * @Description: 获取作废会员号列表
@@ -403,6 +409,48 @@ public class FrCardController {
         }
         pageUtil.setCode(code);
     }
+
+    /**
+     * @Description: 开卡
+     * @Author: zhangxb
+     * @Date: 2018/9/6 10:25
+     */
+    @PostMapping("/toAddUpdateLoad")
+    public JsonResult toAddUpdateLoad(@RequestParam("file") MultipartFile[] files,
+                                      @RequestParam("childPath")String childPath, @RequestParam("priceListId") String priceListId,
+                                      @RequestParam("personalList") String personalList, @RequestParam("bindTime") String bindTime,
+                                      @RequestParam("cardId") String cardId, @RequestParam("clientId") String clientId,
+                                      @RequestParam("CustomerCode") String CustomerCode, @RequestParam("cardOpening") boolean cardOpening,
+                                      HttpServletRequest request) throws YJException {
+        //如果有图片的话，上传图片，获取图片路径
+        List<String> imagesList = null;
+        StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true)) ;
+        if(files != null  && files.length >0){
+            imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
+            imagesList = fileController.getImgUrlList(files,childPath);
+        }
+        //初始化要修改的图片ID，如果没有默认是插入图片
+        List<String> priceIdList = null;
+        if(!StringUtils.isEmpty(priceListId)){
+            priceIdList = JSONArray.parseArray(priceListId,String.class);
+        }
+        //初始化绑定的服务人员信息
+        List<FrClientPersonnelRelate> frClientPersonnelRelateList = null;
+        if(!StringUtils.isEmpty(personalList)){
+            frClientPersonnelRelateList = JSONArray.parseArray(personalList,FrClientPersonnelRelate.class);
+        }
+        if(!StringUtils.isEmpty(bindTime)){
+            bindTime = DateUtil.dateToString(DateUtil.stringToDate(bindTime,"yyyy-MM-dd"),DateUtil.NORMAL_FORM);
+        }
+        //初始化要开卡的会员卡信息
+        FrCard frCard = new FrCard();
+        frCard.setId(cardId);
+        frCard.setClientId(clientId);
+        frCard.setBindTime(bindTime);
+        frCard.setCustomerCode(CustomerCode);
+        return JsonResult.success(service.addOpenCardClient(frCard,imagesList,priceIdList,frClientPersonnelRelateList,cardOpening,imagePath));
+    }
+
 
 //    /**
 //     * 测定时任务是否失效

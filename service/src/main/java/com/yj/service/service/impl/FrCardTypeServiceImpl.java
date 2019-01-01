@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
+import com.yj.common.util.NumberUtilsTwo;
+import com.yj.common.util.StringUtils;
 import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dao.FrCardMapper;
 import com.yj.dal.dao.FrShopCardTypeRelateMapper;
@@ -12,15 +14,12 @@ import com.yj.dal.model.*;
 import com.yj.dal.dao.FrCardTypeMapper;
 import com.yj.service.service.IFrCardTypeService;
 import com.yj.service.base.BaseServiceImpl;
-import org.apache.commons.lang3.StringUtils;
+import com.yj.service.service.IShopService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -41,6 +40,9 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
 
     @Resource
     private FrCardMapper frCardMapper;
+
+    @Resource
+    private IShopService iShopService;
 
     /**
      * 加入卡系列、卡种
@@ -124,6 +126,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
         if (type == 0) {
             frCardType.setpId("0");
         }
+
         //添加UUID
         frCardType.setId(UUIDUtils.generateGUID());
         if (ids != null && ids.length != 0) {
@@ -534,9 +537,11 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
         if (StringUtils.isEmpty(CustomerCode) || StringUtils.isEmpty(shopId) || type == null) {
             throw new YJException(YJExceptionEnum.REQUEST_NULL);
         }
+        List<String> shopIdList = new ArrayList<>();
+        shopIdList.add(shopId);
         Map<String, Object> map = new HashMap<>();
         map.put("CustomerCode", CustomerCode);
-        map.put("shopId", shopId);
+        map.put("shopIdList", shopIdList);
         if (type > 0) {
             map.put("type", type);
         }
@@ -550,6 +555,122 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
             throw new YJException(YJExceptionEnum.REQUEST_NULL);
         }
         return baseMapper.queryByCardId(cardId, CustomerCode);
+    }
+
+
+    @Override
+    public List<Map<String,Object>> getCardTypeByShopIdList(String code) throws YJException {
+        if (StringUtils.isEmpty(code)) {
+            throw new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("CustomerCode", code);
+        List<Map<String,Object>> listMap = new ArrayList<>();
+        List<Shop> shopList = iShopService.selectList(new EntityWrapper<Shop>().where("CustomerCode={0}",code));
+        List<Map<String,Object>> list = baseMapper.getCardTypeByShopIdList(map);
+        List<Map<String,String>> cityL = new ArrayList<>();
+        boolean isFlag = false;
+        //初始化城市
+        StringBuffer cityLT = new StringBuffer();
+        if(shopList != null && shopList.size()>0){
+            if(shopList != null && shopList.size() >0){
+                for(int i = 0;i<shopList.size();i++){
+                    isFlag = cityLT.toString().indexOf(shopList.get(i).getCityId()) != -1;
+                    if(!isFlag){
+                        cityLT.append(shopList.get(i).getCityId());
+                        Map<String,String> map1 = new HashMap<>();
+                        map1.put("cityId",shopList.get(i).getCityId());
+                        map1.put("cityName",shopList.get(i).getCityName());
+                        cityL.add(map1);
+                        //0代表城市
+                        this.getMapInfo(listMap,shopList.get(i).getId(),"-1",shopList.get(i).getCityName(),false,0,false,0.0,0.0);
+                    }
+                }
+            }
+        }
+        List<Shop> disShop = new ArrayList<>();
+        //初始化门店
+        StringBuffer shops = new StringBuffer();
+        if(shopList != null && shopList.size()>0){
+            for(int i = 0;i<shopList.size();i++){
+                isFlag = shops.toString().indexOf(shopList.get(i).getId()) != -1;
+                if(!isFlag){
+                    shops.append(shopList.get(i).getId());
+                    disShop.add(shopList.get(i));
+                    String shopName = shopList.get(i).getShopName();
+                    String id = shopList.get(i).getId();
+                    String cityId = shopList.get(i).getCityId();
+                    // 1代表门店
+                    this.getMapInfo(listMap,id,cityId,shopName,false,1,false,0.0,0.0);
+                    // 所有会员卡
+                    this.getMapInfo(listMap,"Fal",id,"所有会员卡",true,2,true,0.0,0.0);
+                }
+            }
+        }
+        StringBuffer cardFlagL = new StringBuffer();
+        //初始化卡系列
+        if(disShop != null && disShop.size() >0){
+            for(int i = 0;i<disShop.size();i++){
+                if(list != null && list.size() >0) {
+                    for (Map<String, Object> map1 : list) {
+                        isFlag = cardFlagL.toString().indexOf(StringUtils.getStringObject("cardFlagId",map1)) != -1;
+                        if(!isFlag){
+                            String cityName = StringUtils.getStringObject("CityName",map1);
+                            String shopName = StringUtils.getStringObject("ShopName",map1);
+                            String id = StringUtils.getStringObject("id",map1);
+                            String cardFlag = StringUtils.getStringObject("cardFlag",map1);
+                            String cardFlagId = StringUtils.getStringObject("cardFlagId",map1);
+
+                            cardFlagL.append(cardFlagId);
+                            //  2代表系列
+                            this.getMapInfo(listMap,cardFlagId,id,cardFlag,false,2,false,0.0,0.0);
+                            this.getMapInfo(listMap,"Fal-1",cardFlagId,"选择全部",true,3,true,0.0,0.0);
+                            for(Map<String, Object> map2 : list){
+                                if(cardFlagId.equals(StringUtils.getStringObject("cardFlagId",map2))){
+                                    Double originalPrice = NumberUtilsTwo.getDouNum("originalPrice",map2);
+                                    Double salesPrice = NumberUtilsTwo.getDouNum("salesPrice",map2);
+                                    String cardTypeId = StringUtils.getStringObject("cardTypeId",map2);
+                                    String cardTypeName = StringUtils.getStringObject("cardTypeName",map2);
+                                    //  3代表具体产品
+                                    this.getMapInfo(listMap,cardTypeId,cardFlagId,cardTypeName,true,3,false,originalPrice,salesPrice);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+       System.out.println(listMap);
+        return listMap ;
+    }
+
+    /**
+     * 初始化参数格式
+     * @param list
+     * @param id
+     * @param ParentId
+     * @param NavName
+     * @param IsCheckbox
+     * @param Type
+     * @param IsChoiceAll
+     * @param MarketPrice
+     * @param SalePrice
+     */
+    public void getMapInfo(List<Map<String,Object>> list,String id,String ParentId,
+                           String NavName,boolean IsCheckbox,Integer Type,boolean IsChoiceAll,
+                           Double MarketPrice,Double SalePrice){
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("ID",id);
+        map1.put("ParentId",ParentId);
+        map1.put("NavName",NavName);
+        map1.put("IsCheckbox",IsCheckbox);
+        map1.put("Type",Type);
+        map1.put("IsChoiceAll",IsChoiceAll);
+        map1.put("MarketPrice",MarketPrice);
+        map1.put("SalePrice",SalePrice);
+        if(list != null){
+            list.add(map1);
+        }
     }
 
 }

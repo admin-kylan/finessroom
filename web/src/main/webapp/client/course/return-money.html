@@ -61,7 +61,7 @@
                 操作人：{{clientName}}
             </label>
             <label >
-                输入凭证：<input type="text" v-model="password" @blur="verifyUser"/>
+                输入凭证：<input type="password" v-model="password" @change="verifyUser"/>
             </label>
         </p>
         <p><span class="useful" @click="save">确认退款</span></p>
@@ -89,11 +89,11 @@
             <td>私教课程30节</td>
             <td class="red">{{item.returnMoney| toMoney}}</td>
             <td>{{item.returnMoney| toMoney}}</td>
-            <td>{{item.turnProject.payType| stateFilter1}}</td>
-            <td>{{item.ReturnNumber| accountNum}}</td>
-            <td>{{item.SaleName}}</td>
+            <td>{{item.payType| stateFilter1}}</td>
+            <td>{{item.returnNumber| accountNum}}</td>
+            <td>{{item.saleName}}</td>
             <td>{{item.raShopid == '1'? '是': '否'}}</td>
-            <td>{{item.CreateName}}</td>
+            <td>{{item.createName}}</td>
         </tr>
         </tbody>
     </table>
@@ -104,6 +104,7 @@
     var returnMoneyVue = new Vue({
         el: '#course-return-monty',
         data: {
+            toDisabled: false,
             orderId: '', //订单表ID
             index: '', //序列
             result: [], //数据
@@ -229,8 +230,17 @@
                 //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
             },
             accountNum(val){
+                if(!val){
+                    return "";
+                }
+                if(val.length <= 8){
+                    let num = val.substr(0,3) + "****" + val.substr(-1);
+                    return num
+                }
+
                 let num = val.substr(0,3) + "****" + val.substr(-3);
-                return num;
+                return num
+
             }
         },
         computed: {},
@@ -259,7 +269,10 @@
         },
         methods: {
             fetch(){
-                axiosGetFetch(COURSE_URL.returnAddProjects,(res)=>{
+                let param = {
+                    cid: $.cookie('cid')
+                };
+                axiosGetParams(COURSE_URL.returnAddProjects, param, (res)=>{
                     if(res.code == '200'){
                         this.tableList = res.data;
                     }
@@ -271,16 +284,21 @@
                     alert("请输入密码");
                     return false
                 }
+
                 //开始验证 verifyPersonInfo
                 let param = {};
                 param.customerCode = $.cookie('code');
                 param.ShopId = $.cookie('shopid');
                 param.PassWord = this.password;
-                param.id = this.cid;
+                param.id = $.cookie('id');
+
                 axiosPostParams(COURSE_URL.verifyPersonInfo, param, (response) => {
                     if (response.code === '200') {
                         this.status = true;
+                    } else {
+                        alert(response.msg)
                     }
+
                 });
             },
             //查询记录
@@ -296,7 +314,11 @@
                 },500)
             },
             save(){
+                if(this.toDisabled !== false){
+                    return false;
 
+                }
+                this.toDisabled = true;
                 if(!this.selectData.addProject){
                     alert("请选择项目退费")
                     return false;
@@ -306,7 +328,7 @@
                     alert("输入凭证验证失败")
                     return false;
                 }
-                let param = JSON.toJSON(JSON.stringify(this.selectData));
+                let param = JSON.parse(JSON.stringify(this.selectData));
                 //param.
                 let obj = {
                     returnMoney: this.returnMoney,
@@ -315,12 +337,16 @@
                     count: this.count,
                     deduct: this.deduct,
                     fee: this.fee,
+                    cid: $.cookie('cid'),
+                    id: $.cookie('id'),
+                    name: $.cookie('name'),
                 };
                 param.insertData = obj;
-                ajaxPostJsonParams(COURSE_URL.customerReturnMoney, param, (res)=>{
+                axiosPostParams(COURSE_URL.customerReturnMoney, param, (res)=>{
                     if (res.code === '200') {
-                        customerCourseProject.$options.methods.loadData();//加载数据
-                        this.search();
+//                        customerCourseProject.$options.methods.loadData();//加载数据
+//                        this.search();
+                        window.location.reload()
                         alert("退费成功");
 
                     }

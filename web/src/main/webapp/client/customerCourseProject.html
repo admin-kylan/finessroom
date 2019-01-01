@@ -44,7 +44,7 @@
 <script src="../js/resources/constant/course-url.js"></script>
 <script src="../js/resources/constant/course-constant.js"></script>
 <script src="../js/dateUtil.js"></script>
-<!--<script src="../js/jedate.js"></script>-->
+<script src="../js/jedate.js"></script>
 
 <!--<script src="../js/common.js"></script>-->
 <script>
@@ -89,7 +89,7 @@
                     default:
                         this.html = "./course/commodity-list.html";
                 }
-                this.load();//执行加载html，填充页面
+                this.loadHtml();//执行加载html，填充页面
             },
         },
         created: function () {
@@ -100,7 +100,7 @@
 
         },
         methods: {
-            load: function () { //动态加载html
+            loadHtml: function () { //动态加载html
                 $('#course-show-html').load(this.html)
             },
 			loadData(){

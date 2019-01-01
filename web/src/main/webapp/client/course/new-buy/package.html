@@ -37,7 +37,7 @@
         <p class="line">
             <label>
                 <span>开始日期：</span>
-                <input type="date" v-model="formData.beginDate"/>
+                <input type="text" v-model="formData.beginDate" id="course-package-begin-time"/>
             </label>
             <label>
                 <span>失效日期：</span>
@@ -319,27 +319,38 @@
             )
         },
         mounted(){ //初始化
+
+            jeDate("#course-package-begin-time",{
+                isinitVal:true,
+                festival: true,
+                format: 'YYYY-MM-DD'
+            });
             //test
             //this.billFull();
         },
         methods: {
             billFull(){//结账
-//                let saleId = headVue.marketUserId,
-//                    salesNum = this.formData.salesNum;
-//                //结账前判断验证
-//                if(!this.formData.projectId){
-//                    alert("请选择项目");
-//                    return false;
-//                }
-//                //判断销售ID  performance.saleId
-//                if(!saleId){
-//                    alert("请选择销售人员");
-//                    return false;
-//                }
-//                if(!salesNum || salesNum === '0'){
-//                    alert("请输入消费最多数量");
-//                    return false;
-//                }
+                let saleId = headVue.performance.saleId,
+                    salesNum = parseInt(this.formData.salesNum);
+                //结账前判断验证
+                if(!this.formData.projectId){
+                    alert("请选择项目");
+                    return false;
+                }
+                //判断销售ID  performance.saleId
+                if(!saleId){
+                    alert("请选择销售人员");
+                    return false;
+                }
+                if (!(parseInt(this.formData.salesNum) > 0)) {
+                    alert("请输入消费最多数量");
+                    return false;
+                }
+                if(!this.formData.beginDate){
+                    alert("请输入开始日期");
+                    return false;
+                }
+
 
                 Vue.set(newBuyVue, 'billStatus', 'package')
                 $('#customer-new-buy-project-bill').load(this.billHtml)

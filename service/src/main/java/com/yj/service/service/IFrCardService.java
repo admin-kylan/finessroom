@@ -129,6 +129,10 @@ public interface IFrCardService extends BaseService<FrCard> {
      */
     Double getHaveNumByType(Integer type, String bindTime,Double haveNum)throws YJException;
 
+    boolean addOpenCardClient(FrCard frCard, List<String> imagesList,List<String> priceIdList, List<FrClientPersonnelRelate> frClientPersonnelRelateList,boolean isFlag,StringBuffer imagePath)throws YJException;
+
+
+
     /**
      * 更新会员卡状态的定时任务
      * @throws YJException

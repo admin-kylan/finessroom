@@ -248,25 +248,24 @@ var customerMembershipCard = new Vue({
             ],
             clientUserStaff:[
                 {"staffList": [
-                    {"name":"销售人员","defMess":"请选择销售人员","RoleInfoId":"BEA9D54D151A6444","UserType":1,"BusinessType":"134d3d485168f5er","vModel":"personnelId1"},
-                    {"name":"游泳教练","defMess":"请选择游泳教练","RoleInfoId":"48e5bc7d3741184f","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId2"},
-                    {"name":"私教教练","defMess":"请选择私教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId3"},
-                    {"name":"团教助教","defMess":"请选择团教助教","RoleInfoId":"3f934302ec19d1fa","UserType":4,"BusinessType":"134d3d485168f5er","vModel":"personnelId4"},
-                    {"name":"美容销售","defMess":"请选择美容销售","RoleInfoId":"","UserType":1,"BusinessType":"334d3d485168f5er","vModel":"personnelId5"},
-                    {"name":"美甲师","defMess":"请选择美甲师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId6"}]},
+                    {"name":"销售人员","defMess":"请选择销售人员","RoleInfoId":"BEA9D54D151A6444","UserType":1,"BusinessType":"134d3d485168f5er","vModel":"personnelId1","PersonalType":1},
+                    {"name":"游泳教练","defMess":"请选择游泳教练","RoleInfoId":"48e5bc7d3741184f","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId2","PersonalType":2},
+                    {"name":"私教教练","defMess":"请选择私教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId3","PersonalType":3},
+                    {"name":"团教助教","defMess":"请选择团教助教","RoleInfoId":"3f934302ec19d1fa","UserType":4,"BusinessType":"134d3d485168f5er","vModel":"personnelId4","PersonalType":4},
+                    {"name":"美容销售","defMess":"请选择美容销售","RoleInfoId":"","UserType":1,"BusinessType":"334d3d485168f5er","vModel":"personnelId5","PersonalType":5},
+                    {"name":"美甲师","defMess":"请选择美甲师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId6","PersonalType":6}]},
                 {"staffList":[
-                     {"name":"健身教练","defMess":"请选择健身教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId7"},
-                     {"name":"服务会籍","defMess":"请选择服务会籍","RoleInfoId":"179b1aa3ee2a00e5","UserType":2,"BusinessType":"134d3d485168f5er","vModel":"personnelId8"},
-                     {"name":"团教教练","defMess":"请选择团教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId9"},
-                     {"name":"美容师","defMess":"请选择美容师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId10"},
-                     {"name":"美容顾问","defMess":"请选择美容顾问","RoleInfoId":"","UserType":2,"BusinessType":"334d3d485168f5er","vModel":"personnelId11"},
-                     {"name":"美发师","defMess":"请选择美发师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId12"}]},
+                     {"name":"健身教练","defMess":"请选择健身教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId7","PersonalType":7},
+                     {"name":"服务会籍","defMess":"请选择服务会籍","RoleInfoId":"179b1aa3ee2a00e5","UserType":2,"BusinessType":"134d3d485168f5er","vModel":"personnelId8","PersonalType":8},
+                     {"name":"团教教练","defMess":"请选择团教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId9","PersonalType":9},
+                     {"name":"美容师","defMess":"请选择美容师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId10","PersonalType":10},
+                     {"name":"美容顾问","defMess":"请选择美容顾问","RoleInfoId":"","UserType":2,"BusinessType":"334d3d485168f5er","vModel":"personnelId11","PersonalType":11},
+                     {"name":"美发师","defMess":"请选择美发师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId12","PersonalType":12}]},
             ],
-
         },
 //      后期可动态从字典表获取赋值参数--end
         loadData0:{
-            cardList:[],            //会员卡列表
+            cardList:[],      //会员卡列表
             cardFlag:'',     //卡系列
             cardTypeName:'', //卡系列名称
             status:'',        //卡状态
@@ -296,6 +295,7 @@ var customerMembershipCard = new Vue({
             unOpenedCard:0,     //未开卡会员卡
             stopCard:0,         //停卡会员卡
             historyCard:0,      //历史会员卡
+            cardId:'',           //要开卡的会员卡Id
             addOpenCard:{
                 bindTime:'',      //开卡时间
                 invalidTime:'',   //失效时间
@@ -303,6 +303,9 @@ var customerMembershipCard = new Vue({
                 cardTypeName:'开卡',  //弹窗标题
                 stopNum:0,           //可停卡次数
                 stopDays:0,          //每次时长
+                replacementCard:false, //是否更换新卡(0、否；1、是)
+                isMess:'',              //返回的信息
+                isFlage:true,             //是否转移卡中储值金额 默认是转移
             },
             openClientStaffList:[],    //查询的销售人员
             clientStaffList:{},
@@ -1258,6 +1261,8 @@ var customerMembershipCard = new Vue({
                 function (res) {
                     if (res.code == '200') {
                         var cardList = res.data.list;
+                        console.log("获取的会员卡信息=======================");
+                        console.log(cardList);
                         if (cardList) {
                             that.loadData0.cardList = cardList.list;
                             that.loadData0.count = cardList.totalCount;
@@ -2439,7 +2444,7 @@ var customerMembershipCard = new Vue({
                         $.alert(res.msg)
                     }
                     Loading.prototype.hide();
-                    that.randomNumberAdd = '';
+                    that.randomNumber = '';
                 }
             });
         },
@@ -3876,32 +3881,87 @@ var customerMembershipCard = new Vue({
         //开卡弹窗
         openCard:function(obj){
             if(!obj){return ;}
+            var that = this;
+            var isFlag = that.getParemtDate(obj.isFlag,true);
+            if(!isFlag || "false" == isFlag){
+                return $.alert(obj.isMess);
+            }
+            that.loadData0.addOpenCard.replacementCard = that.getParemtDate(obj.replacementCard,false);
             var status = obj.status;
             if(status != 4){ return ;}
-            var that = this;
+            var id = that.getParemtDate(obj.id,false);
+            if(!id){ return ; }
+            var shopId = obj.shopId;
+            if(!shopId){ return $.alert("未获取到对应的门店信息"); };
             var stopNum = that.getParemtDate(obj.stopNum,0);
             var stopDays = that.getParemtDate(obj.stopDays,0);
             var seviceLife = that.getParemtDate(obj.seviceLife,'') ;
             var cardTypeName =  that.getParemtDate(obj.cardTypeName,'');
-            var shopId = obj.shopId;
+            var bindTime = that.getParemtDate(obj.bindTime,'');
+            var invalidTime = that.getParemtDate(obj.invalidTime,'');
+            var isMess = that.getParemtDate(obj.isMess,'');
             that.loadData0.addOpenCard.cardTypeName = cardTypeName+' - 开卡'
             that.loadData0.addOpenCard.stopNum = stopNum;
             that.loadData0.addOpenCard.stopDays = stopDays;
             that.loadData0.addOpenCard.seviceLife = seviceLife;
+            that.loadData0.addOpenCard.isMess = isMess;
+            that.loadData0.bindTime = bindTime;
+            that.loadData0.invalidTime = invalidTime;
+            that.loadData0.addOpenCard.invalidTime = that.loadData0.bindTime;
+            that.loadData0.addOpenCard.bindTime = that.loadData0.invalidTime;
+            that.loadData0.cardId = id;
+            that.loadData0.status = status;
+
             that.getOpenCardPopup();
             $('.year2-modal').modal('show');
-            var shopId = obj.shopId;
-            if(!shopId){ return $.alert("未获取到对应的门店信息"); };
             var url = $.stringFormat("{0}/personnelInfo/getPersonnelByShopId", $.cookie('url'));
             $.get(url, {
                     CustomerCode: $.cookie("code"),
                     shopId:shopId,
+                    clientId:that.clientId,
                 },
                 function (res) {
                     if (res.code == '200') {
                         console.log("获取指定门店下的所有员工信息");
                         console.log(res);
-                        that.loadData0.openClientStaffList = res.data;
+                        that.loadData0.openClientStaffList = res.data.personnelList;
+                        var clientPersonnelList = res.data.clientPersonnelList;
+                        var clientPriceList = res.data.frClientPicList;
+                        //渲染图片
+                        if(clientPriceList && clientPriceList.length >0){
+                            var imgList = clientPriceList;
+                            for(var i = 0 ; i< imgList.length ; i++){
+                                var Num = i;
+                                var num = 'price' +(++Num);
+                                var oo = imgList[i];
+                                var img = {
+                                    "srcUrl":oo.picLink,
+                                    "id":num,
+                                    "priceId":oo.id,
+                                    "isFlag":false,
+                                }
+                                that.loadData0.imgsList.push(img);
+                            }
+                            if(that.loadData0.imgsList.length >= 5 ){
+                                $("#toPictureSelected").hide();
+                            }
+                        }
+                        //处理人员信息
+                        if(clientPersonnelList && clientPersonnelList.length >0){
+                            var clientUserStaff = that.parameterList.clientUserStaff;
+                            for(var i = 0; i< clientUserStaff.length;i++){
+                                for(var j = 0 ; j< clientUserStaff[i].staffList.length ; j++){
+                                    for(var k = 0 ; k < clientPersonnelList.length ; k++){
+                                        var personalType = clientPersonnelList[k].personalType;
+                                        var personalId = clientPersonnelList[k].personalId
+                                        if(personalType == clientUserStaff[i].staffList[j].PersonalType){
+                                            var name = that.getParemtDate(clientUserStaff[i].staffList[j].vModel,'personnelId'+(++k));
+                                            that.loadData0.clientStaffList[name] = personalId;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         $.alert(res.msg)
                     }
@@ -3917,8 +3977,8 @@ var customerMembershipCard = new Vue({
                 that.loadData0.clientStaffList[name] = 1;
             }
             that.loadData0.imgsList = [];
-            that.loadData0.addOpenCard.invalidTime = '';
-            that.loadData0.addOpenCard.bindTime = '';
+            that.loadData0.addOpenCard.invalidTime = that.getParemtDate(that.loadData0.invalidTime,'');
+            that.loadData0.addOpenCard.bindTime = that.getParemtDate(that.loadData0.bindTime,'');
             $("#toPictureSelected").show();
         },
         //打印
@@ -3986,8 +4046,6 @@ var customerMembershipCard = new Vue({
         // 开卡弹窗图片
         toPictureSelected:function(obj){
             var that = this;
-            console.log("=======================");
-            console.log(obj);
             var priceId =  obj.id;
             if(!priceId){
                 var len =  that.loadData0.imgsList.length;
@@ -3995,7 +4053,9 @@ var customerMembershipCard = new Vue({
                     return $.alert("最多设置5张图片");
                 }
             }
+            var  toPriceId = obj.priceId;
             that.loadData0.priceId = priceId;
+            that.loadData0.toPriceId = toPriceId;
             $('.file-fr').click();
         },
         //多张图片显示
@@ -4027,6 +4087,8 @@ var customerMembershipCard = new Vue({
                             "srcUrl":this.result,
                             "id":num,
                             "file":file,
+                            "priceId":that.getParemtDate(that.loadData0.toPriceId,"-1"),
+                            "isFlag":true,
                         }
                         that.loadData0.imgsList.push(img);
                         var getLen = that.loadData0.imgsList.length;
@@ -4041,6 +4103,8 @@ var customerMembershipCard = new Vue({
                         if(imgList[i].id == priceId){
                             imgList[i].srcUrl = this.result;
                             imgList[i].file = file;
+                            imgList[i].priceId = that.getParemtDate(that.loadData0.toPriceId,"-1");
+                            imgList[i].isFlag = true;
                         }
                         that.loadData0.imgsList.push(imgList[i]);
                     }
@@ -4069,6 +4133,134 @@ var customerMembershipCard = new Vue({
             var dateS =new Date(bindTime.replace(/-/g, "/"));
             var d = DateAdd(interval,parseInt(nums),dateS);
             that.loadData0.addOpenCard.invalidTime = formatDate(d);
+        },
+        // 开卡提交验证
+        openCardSubmit:function(){
+            var that = this;
+            var cardId =  that.getParemtDate(that.loadData0.cardId,false);
+            if(!cardId){
+                return $.alert("选择的会员卡信息有误");
+            }
+            if(that.loadData0.status != 4){
+                return $.alert("开卡操作仅限未开卡的会员卡");
+            }
+            if(!that.loadData0.addOpenCard.bindTime){
+                return $.alert("开卡时间未设置");
+            }
+            var isFlage = true;
+            var imgList = that.loadData0.imgsList;
+            //验证图片是否过大
+            if (imgList.length > 0) {
+               for(var i = 0;i< imgList.length;i++){
+                   if(that.getParemtDate(imgList[i].isFlag,false) && that.getParemtDate(imgList[i].file,false)){
+                       if(imgList[i].file.size > 5242880){
+                           return $.alert("图片大小不得大于5MB")
+                       }
+                   }
+               }
+            }
+            if (that.randomNumber) {
+                return $.alert("请勿太快重复点击");
+            }
+            //生成字符串
+            that.randomNumber = Math.random().toString(36).substr(2);
+            var methName = "openSubmit";
+            var isFlag = that.loadData0.addOpenCard.replacementCard+'';
+            var isMess = that.loadData0.addOpenCard.isMess;
+            if("true" == isFlag.trim() && isMess.indexOf("未过期") != -1 ){
+                methName = "openSetIsFlag";
+            }
+            that.commonConfirm(methName,"","是否确认开卡？");
+        },
+        openSetIsFlag:function(){
+            var that = this;
+            $.confirm({
+                title: '确认',
+                content: "是否需要转移原卡储值金额",
+                icon: 'glyphicon glyphicon-question-sign',
+                buttons: {
+                    ok: {
+                        text: '需要',
+                        btnClass: 'btn-primary',
+                        action: function() {
+                            that.loadData0.addOpenCard.isFlage = true;
+                            return that["openSubmit"]();
+                        }
+                    },
+                    cancel: {
+                        text: '不需要',
+                        btnClass: 'btn-primary',
+                        action: function() {
+                            that.loadData0.addOpenCard.isFlage = false;
+                            return that["openSubmit"]();
+                        }
+                    }
+                }
+            })
+        },
+        // 开卡提交
+        openSubmit:function(){
+            var that = this;
+            var param = new FormData();
+            var priceListId = [];
+            for(var i =0;i<that.loadData0.imgsList.length;i++){
+                if(that.loadData0.imgsList[i].isFlag){
+                    param.append('file', that.loadData0.imgsList[i].file); //通过append向form对象添加数据
+                    priceListId.push(that.loadData0.imgsList[i].priceId);
+                }
+            }
+            var leng = Object.keys(that.loadData0.clientStaffList);
+            var personalList = [];
+            if(leng.length > 0) {
+                //处理人员信息
+                var clientUserStaff = that.parameterList.clientUserStaff;
+                for (var i = 0; i < clientUserStaff.length; i++) {
+                    for (var j = 0; j < clientUserStaff[i].staffList.length; j++) {
+                        for (var k = 0; k < leng.length; k++) {
+                            if (leng[k] == clientUserStaff[i].staffList[j].vModel) {
+                                var obj = clientUserStaff[i].staffList[j];
+                                var name = leng[k];
+                                var per = {
+                                    roleId: obj.RoleInfoId,
+                                    personalType: obj.PersonalType,
+                                    flag: obj.name,
+                                    personalId:that.loadData0.clientStaffList[name]
+                                }
+                                personalList.push(per);
+                            }
+                        }
+                    }
+                }
+            }
+            param.append('childPath', 'avatar/'); //通过append向form对象添加数据
+            param.append('priceListId',JSON.stringify(priceListId));
+            param.append('personalList',JSON.stringify(personalList));
+            param.append('bindTime',that.loadData0.addOpenCard.bindTime);
+            param.append('cardId',that.loadData0.cardId);
+            param.append('clientId',that.getParemtDate($.cookie('cid'),that.clientId));
+            param.append('CustomerCode',that.getParemtDate($.cookie("code"),that.code));
+            param.append('cardOpening', that.loadData0.addOpenCard.isFlage);
+            var url = $.stringFormat('{0}/frCard/toAddUpdateLoad',$.cookie('url'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                cache:false,
+                success: function(res){
+                    if(res.code=='200'){
+                      that.getCardUserList(1, 10, that.clientId);
+                      $(".year2-modal").hide();
+                    }else {
+                        $.alert(res.msg)
+                    }
+                    Loading.prototype.hide();
+                    that.randomNumber = '';
+                }
+            });
+            that.randomNumber = '';
         }
     },
 });

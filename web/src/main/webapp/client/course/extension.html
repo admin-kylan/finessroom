@@ -1,16 +1,19 @@
-<li class="list4 list6 list on" id="course-extension">
+<li class="list4 list6 list on" id="course-extension" xmlns="http://www.w3.org/1999/html">
     <fieldset class="fieldset1">
         <legend>操作项目/产品</legend>
         <select name="" v-model="index">
-            <option value="" v-for="(item, index) in result"  :value="index">
+            <option value="" v-for="(item, index) in result" :value="index">
 
                 所在门店：{{item.shop.shopName}} 所在场馆：{{item.sdaduim.name}} 项目/产品名称：私教课程30节
                 数量：{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}
-                （{{item.projectOrder.buyCount| toNum}}+ <span class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
-                已消费数量：{{item.addProjectConsumes.length| toNum}} 价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                （{{item.projectOrder.buyCount| toNum}}+ <span
+                    class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
+                已消费数量：{{item.addProjectConsumes.length| toNum}}
+                价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
                 * (item.addProjectConsumes.length)|toMoney}}
                 剩余价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}
+                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) -
+                item.addProjectConsumes.length)|toMoney}}
                 有效期：{{item.addProject.useful}} 个月 结束时间：{{item.addProject.endTime| formatDate2}}
                 状态：<span class="blod">{{item.addProject.state |stateFilter}}</span>
             </option>
@@ -19,10 +22,10 @@
     <fieldset class="fieldset2">
         <legend>延期操作</legend>
         <p class="date">
-            <label >
+            <label>
                 开始日期：{{startTime| formatDate2}}
             </label>
-            <label >
+            <label>
                 失效日期：{{endTime| formatDate2}}
             </label>
             <label for="course_extension_label_id">
@@ -60,8 +63,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, i) in tableList">
-            <template  v-for="(data, index) in tableList.frProjectExtensionRecords">
+        <template v-for="(item, i) in tableList">
+
+            <tr v-for="(data, index) in item.frProjectExtensionRecords">
                 <td>{{index + 1}}</td>
                 <td>{{data.operateDate| formatDate2}}</td>
                 <td>{{data.operatePersonName}}</td>
@@ -71,11 +75,11 @@
                 <td>私教课程30节</td>
                 <td>{{data.useful}} 个月</td>
                 <td>{{item.addProject.useful}} 个月</td>
-                <td>{{item.oldStartDate| formatDate2}}</td>
+                <td>{{data.oldStartDate| formatDate2}}</td>
                 <td>{{item.addProject.startTime| formatDate}}</td>
                 <td>{{item.addProject.endTime| formatDate}}</td>
-            </template>
-        </tr>
+            </tr>
+        </template>
 
         </tbody>
     </table>
@@ -85,6 +89,7 @@
     var extensionVue = new Vue({
         el: '#course-extension',
         data: {
+            toDisabled: false,
             orderId: '', //订单表ID
             index: '', //序列
             result: [], //数据
@@ -103,33 +108,33 @@
         filters: {
             stateFilter: function (val) {
                 let back = "";
-                if((val + "") == "0"){
+                if ((val + "") == "0") {
                     back = "正常"
                 }
-                if((val + "") == "1"){
+                if ((val + "") == "1") {
                     back = "欠款"
                 }
-                if((val + "") == "2"){
+                if ((val + "") == "2") {
                     back = "过期"
                 }
-                if((val + "") == "3"){
+                if ((val + "") == "3") {
                     back = "历史"
                 }
-                if((val + "") == "4"){
+                if ((val + "") == "4") {
                     back = "未开始"
                 }
 
                 return back;
             },
             formatDate(val){
-                if(!val){
+                if (!val) {
                     return "";
                 }
                 return timeFormatDate(val, true, false);
             },
             toNum(val){
 
-                if(!val){
+                if (!val) {
                     return '0';
                 }
                 return val;
@@ -143,46 +148,46 @@
             payStatus(item){
                 //现金：￥1000.00 支付宝：￥600.00
                 let str = '';
-                if(parseFloat(item.cashPrice) > 0){
+                if (parseFloat(item.cashPrice) > 0) {
                     str += '现金：￥' + parseFloat(item.cashPrice).toFixed(2)
                 }
-                if(parseFloat(item.alipayPrice) > 0){
+                if (parseFloat(item.alipayPrice) > 0) {
                     str += '支付宝：￥' + parseFloat(item.alipayPrice).toFixed(2)
                 }
-                if(parseFloat(item.payCardPrice) > 0){
+                if (parseFloat(item.payCardPrice) > 0) {
                     str += '刷卡：￥' + parseFloat(item.payCardPrice).toFixed(2)
                 }
-                if(parseFloat(item.wechatPrice) > 0){
+                if (parseFloat(item.wechatPrice) > 0) {
                     str += '微信：￥' + parseFloat(item.wechatPrice).toFixed(2)
                 }
-                if(parseFloat(item.accountsPrice) > 0){
+                if (parseFloat(item.accountsPrice) > 0) {
                     str += '转账：￥' + parseFloat(item.accountsPrice).toFixed(2)
                 }
-                if(parseFloat(item.flowerPrice) > 0){
+                if (parseFloat(item.flowerPrice) > 0) {
                     str += '花呗：￥' + parseFloat(item.flowerPrice).toFixed(2)
                 }
-                if(parseFloat(item.otherPrice) > 0){
+                if (parseFloat(item.otherPrice) > 0) {
                     str += '其他：￥' + parseFloat(item.otherPrice).toFixed(2)
                 }
                 return str;
             },
             formatDate2(val){
-                if(!val){
+                if (!val) {
                     return "";
                 }
                 return timeFormatDate(val, false, false);
             },
             saleType(val){
-                if(val === 0){
+                if (val === 0) {
                     return "POS销售";
                 }
-                if(val === 1){
+                if (val === 1) {
                     return "新会员购买";
                 }
-                if(val === 2){
+                if (val === 2) {
                     return "续课";
                 }
-                if(val === 3){
+                if (val === 3) {
                     return "场地开课";
                 }
                 //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
@@ -193,7 +198,7 @@
             index(val){
                 this.selectData = this.result[val];
             },
-            'selectData':{
+            'selectData': {
                 handler(val){
                     this.startTime = val.addProject.startTime;
                     this.endTime = val.addProject.endTime;
@@ -211,42 +216,52 @@
         methods: {
             //查询记录
             search(){
-                let interval = setInterval(()=>{
+                let interval = setInterval(() => {
                     this.result = customerCourseProject.resultList;
-                    if(this.result.length > 0){
+                    if (this.result.length > 0) {
                         let array = [];
                         this.index = 0;//初始化index
-                        $.each(this.result, (i,d)=>{
-                            if(d.addProject.state === 0 || d.addProject.state === 2){
-                                array.push(d)
+                        //计算记录
+                        $.each(this.result, (i, d) => {
+                            if (d.frProjectExtensionRecords && d.frProjectExtensionRecords.length > 0) {
+                                array.push(d);
                             }
                         });
-                        //
                         this.tableList = array;
                         clearInterval(interval);
                     }
-                },500)
+                }, 500)
             },
             //启用
             save(){
+                if (this.toDisabled !== false) {
+                    return false;
+
+                }
+                this.toDisabled = true;
                 //继续操作启用动作
-                if(!this.flag){
+                if (!this.flag) {
                     alert("请输入延期原因");
                     return false;
                 }
-                if(!this.selectData.addProject){
+                if (!this.selectData.addProject) {
                     alert("请选择项目");
+                    return false;
+                }
+                if (!(parseInt(this.useful) > 0)) {
+                    alert("请选择延期期限");
                     return false;
                 }
                 let param = {};
                 param.orderId = this.selectData.addProject.id;
                 param.useful = this.useful;
                 param.flag = this.flag;
-
-                axiosPostParams(COURSE_URL.customerExtension, param, (res)=>{
+                param.cid = $.cookie('cid');
+                axiosPostParams(COURSE_URL.customerExtension, param, (res) => {
                     if (res.code === '200') {
-                        customerCourseProject.$options.methods.loadData();//加载数据
-                        this.search();
+//                        customerCourseProject.$options.methods.loadData();//加载数据
+//                        this.search();
+                        window.location.reload()
                         alert("延期成功");
 
                     }

@@ -313,18 +313,13 @@ const ecapp = new Vue({
             
         },
         // initAppText:function(){
-        //     var clientId = "5fdfe5c3e3a1537";
         //     var code = "003";
-        //     var cardId = "7d02bf6d2df47915";
         //     var data = {
-        //         clientId: clientId,
-        //         code: code,
-        //         cardId:cardId,
+        //         CustomerCode: "003",
         //     }
-        //     var mess = '/frCardOrderInfo/getCardInfoByCardId';
+        //     var mess = '/frCardType/getCardTypeByShopIdList';
         //     var url = $.stringFormat('{0}'+mess,$.cookie('url'));
-        //
-        //     console.log(url+'?clientId='+clientId+'&code='+code+'&cardId='+cardId);
+        //     console.log(url+'?CustomerCode='+code);
         //     console.log(data);
         //     $.get(url,data,function(res){
         //         if(res.code=='200'){
@@ -350,7 +345,7 @@ ecapp.initExistenceStat();
 //初始化现有客户列表
 ecapp.initExistenceList({page:ecapp.$data.existence.currPage,limit:ecapp.$data.existence.pageSize});
 
-//测试App接口
+// // 测试App接口
 // ecapp.initAppText();
 
 

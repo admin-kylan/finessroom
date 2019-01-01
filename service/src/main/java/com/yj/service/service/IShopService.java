@@ -8,6 +8,7 @@ import com.yj.dal.model.Shop;
 import com.yj.service.base.BaseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>

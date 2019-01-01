@@ -25,6 +25,7 @@ public class NumberUtilsTwo{
 		}
 		return  intNum;
 	}
+
 	/**
 	 * 获取map里的指定key 的value 转换Double
 	 * @param key
@@ -72,5 +73,25 @@ public class NumberUtilsTwo{
 			price = 0.0+intPrice;
 		}
 		return  price;
+	}
+
+	/**
+	 * 判断boolean  1，ture 0，false 2，未设置
+	 * @param key
+	 * @param map
+	 * @return
+	 */
+	public static Integer getBoolean(String key,Map<String,Object> map){
+		Integer intNum = 2;
+		if(map != null ){
+			Object val = map.get(key);
+		    if("true".equals(val.toString())){
+				intNum = 1;
+			}
+			if("false".equals(val.toString())){
+				intNum = 0;
+			}
+		}
+		return  intNum;
 	}
 }  

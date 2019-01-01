@@ -1,6 +1,7 @@
 package com.yj.web.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
@@ -15,6 +16,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -265,5 +267,23 @@ public class FrCardTypeController {
         .where(" CustomerCode = {0}",code).where("p_id = {0} ",cardId);
         return JsonResult.success(frCardTypeService.selectList(entityWrapper));
     }
+
+
+    /**
+     * 根据店铺ID获取对应门店的系列卡
+     * @param request
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getCardTypeByShopIdList")
+    public JsonResult getCardTypeByShopIdList(@RequestParam("CustomerCode")String CustomerCode, HttpServletRequest request)throws YJException{
+        if(StringUtils.isEmpty(CustomerCode)){
+            throw new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        return JsonResult.success(frCardTypeService.getCardTypeByShopIdList(CustomerCode));
+    }
+
+
+
 }
 

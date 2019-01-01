@@ -48,7 +48,7 @@
         <p class="line">
             <label>
                 <span>开始日期：</span>
-                <input type="date" v-model="formData.beginDate"/>
+                <input type="text" v-model="formData.beginDate" id="course-project-begin-time"/>
             </label>
             <label>
                 <span>失效日期：</span>
@@ -79,8 +79,8 @@
                     </span>
 
                     <!--<span style="float: right;">-->
-                        <!--<input style="float: none;">-->
-                        <!--<a href="javascript:;" class="btn btn-primary" style="height: 30px;line-height: 13px;">查询</a>-->
+                    <!--<input style="float: none;">-->
+                    <!--<a href="javascript:;" class="btn btn-primary" style="height: 30px;line-height: 13px;">查询</a>-->
                     <!--</span>-->
 
                 </div>
@@ -210,18 +210,18 @@
             },
             'formData.validityPeriod'(val){ //选择有效期时间
                 let date = new Date(this.formData.beginDate);
-               // this.formData.cardId = '';
+                // this.formData.cardId = '';
                 //这里判断val 的值
                 if (val == "all") {
                     //会员卡同期
                     this.formData.endDate = this.formData.time.split(' ')[0];
-                    if(this.formData.endDate == ""){
+                    if (this.formData.endDate == "") {
                         this.formData.validityPeriodTime = 0;
                         return false;
                     }
                     let now = new Date();
                     let endDate = new Date(this.formData.endDate);
-                    this.formData.validityPeriodTime = Math.ceil((endDate - now)/ (1000*60*60*24*30));// 计算出来，月份
+                    this.formData.validityPeriodTime = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24 * 30));// 计算出来，月份
                     //
                     return false;
                 }
@@ -264,7 +264,8 @@
                 code: $.cookie('code'),
             };
             jqueryPostParams(COURSE_URL.queryByFrCardList, param, (res) => {
-                    let cardId = '-1',time = '';
+                    let cardId = '-1', time = '';
+                   // console.log(res)
                     if (res.code == '200') {
                         let now = new Date();
                         let data = res.data;
@@ -291,26 +292,35 @@
         mounted(){ //初始化
             //test
             // this.billFull();
+            //获取团教私教
+          //  this.getPrivateCourceGroupCourseList();
+
+            jeDate("#course-project-begin-time",{
+                isinitVal:true,
+                festival: true,
+                format: 'YYYY-MM-DD'
+            });
         },
         methods: {
             billFull(){//结账
-                let saleId = headVue.marketUserId;
-                if(!headVue.agreementId){
+
+                let saleId = headVue.performance.saleId;
+                if (!headVue.agreementId) {
                     alert("请输入协议编号");
                     return false;
                 }
                 //判断销售ID  performance.saleId
-                if(!saleId){
+                if (!saleId) {
                     alert("请选择销售人员");
                     return false;
                 }
                 //结账前判断验证
-                if(!this.formData.projectId){
+                if (!this.formData.projectId) {
                     alert("请选择项目");
                     return false;
                 }
 
-                if(!this.formData.buyNum){
+                if (!(parseInt(this.formData.buyNum) > 0)) {
                     alert("请输入购买数量");
                     return false;
                 }
@@ -326,6 +336,46 @@
                 this.formData.projectId = item.projectId;
                 this.formData.projectPrice = item.sale;
                 this.selectData = item;
+            },
+            //获取团团教私教
+            getPrivateCourceGroupCourseList(){
+               // this.product.data = [];
+                let GroupCourseParam = {
+                    curPage: 1,
+                    limit: 100,
+                };
+                let privateParam = {
+                    curPage: 1,
+                    limit: 100,
+                    seriesId: "5b59b3553f924fe88f45aa1fb3596ed6"
+                };
+
+                axiosPostParams(COURSE_URL.frPrivateCourceList, privateParam, (res) => {
+                  //  console.log("111")
+                  //  console.log(res)
+//                    shop: '1',
+//                        shopId: '1',
+//                        sdadium: '1',
+//                        sdadiumId: '1',
+//                        project: '1',
+//                        projectId: '1',
+//                        price: '1',
+//                        sale: '1',
+//                        courseId: '1', //课程id
+//                        courseSeriesId: '1', //课程系列id
+                    if (res.code == '200') {
+                        $.each(res.data, (i, d) => {
+                           // this.product.data.push(d)
+                        })
+                    }
+                })
+                axiosPostParams(COURSE_URL.frGroupCourseList, GroupCourseParam, (res) => {
+                    if (res.code == '200') {
+                        $.each(res.data, (i, d) => {
+                           // this.product.data.push(d)
+                        })
+                    }
+                })
             }
         }
     });

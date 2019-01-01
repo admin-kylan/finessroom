@@ -80,4 +80,10 @@ public interface IFrCardSupplyRecordService extends BaseService<FrCardSupplyReco
     * 根据续卡信息判断是否开卡
     */
    void updateSupplyRecordTime()throws YJException ;
+
+   boolean  continueOpenList(FrCardSupplyRecord frCardSupplyRecord,boolean isFlag,boolean toChildCard) throws YJException;
+
+   List<FrCardOrderDatail> getCardOrderList(FrCardSupplyRecord frCardSupplyRecord,FrCard oldCard,FrCard newCard,boolean isFlag)throws YJException;
+
+   void toInterCardOrder(List<FrCardOrderDatail> frCardOrderDatailList)throws YJException;
 }

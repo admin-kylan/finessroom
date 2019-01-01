@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrSetGymMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrSetGym">
+        <id column="id" property="id"/>
+        <result column="project_name" property="projectName"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="company" property="company"/>
+        <result column="market_price" property="marketPrice"/>
+        <result column="promotion_price" property="promotionPrice"/>
+        <result column="member_price" property="memberPrice"/>
+        <result column="deposit" property="deposit"/>
+        <result column="remarks" property="remarks"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="is_currency" property="isCurrency"/>
+        <result column="venue_name" property="venueName"/>
+        <result column="venue_id" property="venueId"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user_name" property="updateUserName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        project_name AS projectName, shop_name AS shopName, shop_id AS shopId, company, market_price AS marketPrice, promotion_price AS promotionPrice, member_price AS memberPrice, deposit, remarks, is_using AS isUsing, is_currency AS isCurrency, venue_name AS venueName, venue_id AS venueId, create_user_name AS createUserName, create_user_id AS createUserId, CustomerCode, update_time AS updateTime, update_user_id AS updateUserId, id, create_time AS createTime, update_user_name AS updateUserName
+    </sql>
+    <select id="getTime" resultType="java.util.Map">
+            SELECT
+            top 1
+            update_time updateTime,
+            update_user_name updateUserName
+            FROM
+            fr_set_gym
+            ORDER BY
+            update_time desc
+    </select>
+    <select id="getCity" resultType="java.util.Map">
+     SELECT DISTINCT
+	  CityName,
+	  CityId
+    FROM
+	  Shop
+    WHERE
+	CityId IN ( SELECT CityId FROM Shop WHERE CustomerCode = #{customerCode} GROUP BY CityId )
+	AND CustomerCode = #{customerCode}
+    </select>
+</mapper>

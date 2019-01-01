@@ -32,4 +32,6 @@ public interface FrCardTypeMapper extends BaseMapper<FrCardType> {
     FrCardType queryByCardId(@Param("cardId") String cardId , @Param("CustomerCode")String CustomerCode);
 
     List<FrCardType> getAllShopIdList(Map<String,Object> map);
+
+    List<Map<String,Object>> getCardTypeByShopIdList(Map<String,Object> map);
 }

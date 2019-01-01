@@ -6,41 +6,41 @@
             <p class="lef">
                 <span class="title">类别选择：</span>
                 <span class="category">
-									<span class="on">全部</span>
-									<span>项目</span>
-									<span>产品</span>
+									<span :class='{on: index == 0}' @click="index = 0">全部</span>
+									<span :class='{on: index == 1}' @click="index = 1">项目</span>
+									<span :class='{on: index == 2}' @click="index = 2">产品</span>
 								</span>
             </p>
             <p class="rig">
                 <span class="title">状态选择：</span>
                 <span class="category">
-									<span class="on">全部</span>
-									<span>正常</span>
-									<span>历史</span>
-									<span>挂账</span>
-									<span>挂单</span>
+									<span :class='{on: selectIndex == 0}' @click="selectIndex = 0">全部</span>
+									<span :class='{on: selectIndex == 1}' @click="selectIndex = 1">正常</span>
+									<span :class='{on: selectIndex == 2}' @click="selectIndex = 2">历史</span>
+									<!--<span>挂账</span>-->
+									<!--<span>挂单</span>-->
 								</span>
             </p>
         </div>
         <div class="clearfix">
             <p class="lef">
-                <span class="title">销售门店：</span>
-                <input type="text" />
+                <span class="title" >销售门店：</span>
+                <input type="text" v-model="shopName"/>
             </p>
             <p class="rig">
-                <select name="">
-                    <option value="">开始时间</option>
-                    <option value="">失效时间</option>
-                    <option value="">创建时间</option>
+                <select name="" v-model="timeType">
+                    <option value="1">开始时间</option>
+                    <option value="2">失效时间</option>
+                    <option value="3">创建时间</option>
                 </select>
-                <input type="text" class="jeinput startDate" placeholder="开始日期" /> ~
-                <input type="text" class="jeinput endDate" placeholder="结束日期" />
+                <input type="datetime" v-model="startDate" class="jeinput startDate" placeholder="开始日期" /> ~
+                <input type="datetime" v-model="endDate" class="jeinput endDate" placeholder="结束日期" />
             </p>
         </div>
         <div>
             <span class="title lh25">项目/产品搜索：</span>
-            <input type="text" placeholder="产品名称/项目名称" />
-            <input type="submit" value="搜索" class="search" />
+            <input type="text" placeholder="产品名称/项目名称" v-model="name"/>
+            <input type="submit" value="搜索" class="search" @click="loadData"/>
         </div>
     </fieldset>
     <div class="tab">
@@ -82,18 +82,19 @@
                 <td>{{item.shop.shopName}}</td>
                 <td>{{item.sdaduim.name}}</td>
                 <td class="deepBlue">私教套餐</td>
-                <td>{{item.projectOrder.buyCount| toNum}}</td>
-                <td>{{item.projectOrder.sendCount|toNum}}</td>
-                <td class="green">{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
-                <td>{{item.projectOrder.price |toMoney}}</td>
-                <td>{{item.projectOrder.totalPrice|toMoney}}</td>
-                <td class="yellow">{{item.projectOrder.needPrice|toMoney}}</td>
-                <td>{{item.projectOrder.noPrice|toMoney}}</td>
-                <td>{{item.projectOrder.noPrice|toMoney}}</td>
-                <td>{{item.projectOrder| payStatus}}</td>
+                <td>{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
+                <td>{{item.projectOrder.buyCount + item.projectOrder.sendCount - item.addProjectConsumes.length|toNum}}</td>
+
+                <td>{{item.addProjectConsumes.length |toNum}}</td>
+                <td>{{item.projectOrder.price|toMoney}}</td>
+                <td class="yellow">{{item.projectOrder.totalPrice|toMoney}}</td>
+                <td>{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
+                    * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}</td>
+
                 <td>{{item.addProject.useful}} 个月</td>
                 <td>{{item.addProject.startTime| formatDate2}}</td>
                 <td>{{item.addProject.endTime| formatDate2}}</td>
+                <td>{{item.addProject.contractNumber}}</td>
                 <td>{{item.addProject.saleType| saleType}}</td>
                 <td class="grey">无</td>
             </tr>
@@ -106,7 +107,13 @@
     var commodityListVue = new Vue({
         el: '#course-commodity-list',
         data: {
-            orderId: '', //订单表ID
+            index: 0, //全部
+            selectIndex: 0,//全部
+            shopName: '',
+            timeType: '1',
+            startDate: '',
+            endDate: '',
+            name: '',
             result: [],
         },
         filters: {
@@ -196,22 +203,38 @@
 
         },
         mounted(){// 初始化加载
-            let interval = setInterval(()=>{
-                this.result = customerCourseProject.resultList;
-                if(this.result.length > 0){
-                    let array = [];
-                    this.index = 0;//初始化index
-                    // this.tableList = customerCourseProject.resultList;
-                    clearInterval(interval);
-                }
-            },500)
-
+            this.loadData()
         },
         created: function () {
 
         },
         methods: {
-            load: function () { //动态加载html
+            loadData: function () { //
+                let param = {};
+                param.type = this.index;
+                param.status = this.selectIndex;
+                param.shopName = this.shopName;
+                param.timeType = this.timeType;
+                param.startDate = this.startDate;
+                param.endDate = this.endDate;
+                param.name = this.name;
+                param.orderType = '1';
+                param.cid = $.cookie('cid');
+                axiosGetParams(COURSE_URL.customerCommodityList, param, (res)=>{
+                    if(res.code = '200'){
+                        this.result = res.data;
+                    }
+                })
+
+//                let interval = setInterval(()=>{
+//                    this.result = customerCourseProject.resultList;
+//                    if(this.result.length > 0){
+//                        let array = [];
+//                        this.index = 0;//初始化index
+//                        // this.tableList = customerCourseProject.resultList;
+//                        clearInterval(interval);
+//                    }
+//                },500)
 
             },
             //补余

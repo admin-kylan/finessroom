@@ -80,6 +80,7 @@
     var remnantVue = new Vue({
         el: '#course-remnant',
         data: {
+            toDisabled: false,
             orderId: '', //订单表ID
             index: '', //序列
             result: [], //数据
@@ -211,7 +212,15 @@
             search(){
                 let interval = setInterval(()=>{
                     this.result = customerCourseProject.resultList;
-                    this.tableList = this.result; //便利表格
+                  //  this.tableList = this.result; //便利表格
+                    //计算记录
+                    let array = [];
+                    $.each(this.result, (i,d)=>{
+                        if(d.frProjectRemnantRecord){
+                            array.push(d);
+                        }
+                    });
+                    this.tableList = array;
                     if(this.result.length > 0){
                         this.index = 0;//初始化index
                         clearInterval(interval);
@@ -220,6 +229,11 @@
             },
             //启用
             save(){
+                if(this.toDisabled !== false){
+                    return false;
+
+                }
+                this.toDisabled = true;
                 //继续操作启用动作
                 //判断当前是否正常
                 if(!this.selectData.addProject){
@@ -232,11 +246,13 @@
                 }
                 let param = {};
                 param.orderId = this.selectData.addProject.id;
+                param.cid = $.cookie('cid');
 
                 axiosPostParams(COURSE_URL.customerRemnant, param, (res)=>{
                     if (res.code === '200') {
-                        customerCourseProject.$options.methods.loadData();//加载数据
-                        this.search();
+//                        customerCourseProject.$options.methods.loadData();//加载数据
+//                        this.search();
+                        window.location.reload()
                         alert("补余成功");
 
                     }

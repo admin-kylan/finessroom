@@ -16,7 +16,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-12-30
+ * @since 2018-12-31
  */
 @TableName("AddProjectConsume")
 public class AddProjectConsume extends Model<AddProjectConsume> {
@@ -300,18 +300,12 @@ public class AddProjectConsume extends Model<AddProjectConsume> {
         this.Total = Total;
     }
 
-    public String getCreatePeople
-() {
-        return CreatePeople
-;
+    public String getCreatePeople() {
+        return CreatePeople;
     }
 
-    public void setCreatePeople
-(String CreatePeople
-) {
-        this.CreatePeople
- = CreatePeople
-;
+    public void setCreatePeople(String CreatePeople) {
+        this.CreatePeople = CreatePeople;
     }
 
     public String getCreatePeopleName() {
@@ -352,7 +346,7 @@ public class AddProjectConsume extends Model<AddProjectConsume> {
         ", Count=" + Count +
         ", Discount=" + Discount +
         ", Total=" + Total +
-        ", CreatePeople " + CreatePeople +
+        ", CreatePeople=" + CreatePeople +
         ", CreatePeopleName=" + CreatePeopleName +
         "}";
     }

@@ -382,7 +382,7 @@
                 <span> X </span>
                 <p class="title">推荐训练方案</p>
                 <div class="set">
-                    将选中的方案自<input type="date"/>设定为训练方案<input type="submit"/>
+                    将选中的方案自<input type="date" v-model="planDate"/>设定为训练方案<input type="submit" @click="addPlan"/>
                 </div>
                 <p class="details">说明：本过程为不可逆过程，若需修改请在训练方案中修改</p>
                 <div class="table-wrap">
@@ -400,7 +400,7 @@
                         </thead>
                         <tbody>
                         <tr v-for="(item,index) in ClassInfo">
-                            <td><input type="radio" name="radioClass"/></td>
+                            <td><input type="radio" name="radioClass" :value="item.id"/></td>
                             <td>{{index+1}}</td>
                             <td>{{item.pname}}</td>
                             <td>{{item.name}}</td>

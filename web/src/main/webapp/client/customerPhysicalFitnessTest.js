@@ -9,8 +9,8 @@ var customerPhysicalFitnessTest = new Vue({
         imageFiles: [],
         imgNum: null,
         delImg: [],
-        ClassInfo:{},
-
+        ClassInfo: {},
+        planDate: null,
     },
     crated: function () {
     },
@@ -33,7 +33,7 @@ var customerPhysicalFitnessTest = new Vue({
             const that = this;
             that.getPersonnel();
             for (var i = 0; i < 3; i++) {
-                var num = 'test'+(i+1);
+                var num = 'test' + (i + 1);
                 $("#" + num).attr('src', '../img/addImg.png')
             }
             if (date != null) {
@@ -112,7 +112,7 @@ var customerPhysicalFitnessTest = new Vue({
                                 that.PhysicalInfoTwo = n;
                             }
                         })
-                       that.getPic();
+                        that.getPic();
                         console.log(that.PhysicalInfoOne)
                     } else {
 
@@ -155,8 +155,8 @@ var customerPhysicalFitnessTest = new Vue({
                         that.PhysicalInfoTwo.clientId = $.cookie("cid");
                         that.PhysicalInfoOne.result = false;
                         that.PhysicalInfoTwo.result = true;
-                        that.PhysicalInfoTwo.superiorEvaluation=that.PhysicalInfoOne.superiorEvaluation;
-                        that.PhysicalInfoTwo.personalTrainerAdvice=that.PhysicalInfoOne.personalTrainerAdvice;
+                        that.PhysicalInfoTwo.superiorEvaluation = that.PhysicalInfoOne.superiorEvaluation;
+                        that.PhysicalInfoTwo.personalTrainerAdvice = that.PhysicalInfoOne.personalTrainerAdvice;
                         var pass = $("#pass").val();
                         console.log(pass)
                         PhysicalInfo.push(that.PhysicalInfoOne)
@@ -231,15 +231,15 @@ var customerPhysicalFitnessTest = new Vue({
             })
 
         },
-      //显示推荐方案
-        show:function () {
+        //显示推荐方案
+        show: function () {
             const that = this;
             that.getClass();
             $('.box').show();
 
         },
         //获得推荐方案
-        getClass:function () {
+        getClass: function () {
             const that = this;
             const url = $.stringFormat('{0}/frClientPhysicalTest/getTrainClass', $.cookie('url'));
             $.get(url, function (res) {
@@ -247,6 +247,28 @@ var customerPhysicalFitnessTest = new Vue({
                 console.log(that.ClassInfo)
 
             })
+        },
+        //设定训练方案
+        addPlan: function () {
+            const that = this;
+            console.log(getNowTime(false))
+            console.log(that.planDate)
+
+            if (that.planDate == null) {
+                that.planDate = getNowTime(false)
+
+            }
+            console.log($("input[name='radioClass']:checked").val())
+            var oDate1 = new Date(getNowTime(false));
+            var oDate2 = new Date(that.planDate);
+            if (oDate1.getTime() > oDate2.getTime()) {
+                alert("日期不能小于当前日期")
+                return;
+            } else {
+                alert("功能未完成")
+            }
+
+
         },
         //选择图片弹窗
         pictureSelected: function (num) {
@@ -256,11 +278,11 @@ var customerPhysicalFitnessTest = new Vue({
             // console.log(num);
         },
         // 点击上传图片
-        picModalFile: function (){
+        picModalFile: function () {
             $('#file-fr').click();
             console.log('click');
         },
-        closeImgModal: function(){
+        closeImgModal: function () {
             $('.ImgModal-wrap').hide();
         },
         //显示图片
@@ -314,18 +336,18 @@ var customerPhysicalFitnessTest = new Vue({
             return isFlage;
         },
         //图片下载
-        picDownload:function () {
+        picDownload: function () {
             var that = this;
-          var alink=document.createElement("a")
-            var num=that.imgNum;
-          console.log(that.imgNum)
-            alink.href=$("#"+num).attr("src");
-            console.log($("#"+num).attr("src"))
-            alink.download='img';
+            var alink = document.createElement("a")
+            var num = that.imgNum;
+            console.log(that.imgNum)
+            alink.href = $("#" + num).attr("src");
+            console.log($("#" + num).attr("src"))
+            alink.download = 'img';
             alink.click();
         },
     }
 });
-$('body').on('click','img.img-responsive',function () {
-    $("#ImgModal-ImgUrl").attr("src",$(this).attr('src'));
+$('body').on('click', 'img.img-responsive', function () {
+    $("#ImgModal-ImgUrl").attr("src", $(this).attr('src'));
 })

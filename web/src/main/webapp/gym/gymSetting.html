@@ -1,426 +1,639 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<title>Home</title>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<script type="text/javascript" src="js/head_css.js"></script>
-		<style type="text/css">
-			.opeacity-info{color: #333;font-weight: 400;}
-			.opeacity-info strong{margin-right: 10px;}
-			.add-project{padding: 3.5px 5px;border-radius: 0;margin-bottom: 15px;}
-		</style>
-	</head>
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script type="text/javascript" src="js/head_css.js"></script>
+    <style type="text/css">
+        .opeacity-info {
+            color: #333;
+            font-weight: 400;
+        }
 
-	<body>
-		<!-- 整个页面内容 -->
-		<div id="wrapper" v-cloak>
-			<!-- 顶部菜单 -->
-			<top-menu-bar></top-menu-bar>
-			<!-- END 顶部菜单 -->
+        .opeacity-info strong {
+            margin-right: 10px;
+        }
 
-			<!-- 左侧菜单  -->
-			<sidebar-nav></sidebar-nav>
-			<!-- END 左侧菜单 -->
+        .add-project {
+            padding: 3.5px 5px;
+            border-radius: 0;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
 
-			<!-- 右边容器 -->
-			<div class="main">
-				<!-- 主要内容 -->
-				<div class="main-content">
-					<!--真正开始写你的页面-->
-					<div class="flex-box flex-stretch">
-						<div class="w170 sub-nav">
-							<ul class="nav">
-								<li class="active">
-									<a href="#">
-										<span>健身馆设置</span></a>
-								</li>
-								<li>
-									<a href="#">
-										<span>健身团教设置</span></a>
-								</li>
-								<li>
-									<a href="#">
-										<span>健身私教设置</span></a>
-								</li>
-							</ul>
-						</div>
-						<div class="flex-box-item bgc-fff p10 border1-e4e4e4">
-							<p class="opeacity-info">
-								<span>操作人：</span><strong>Klaus</strong>
-								<span>操作时间：</span><strong>2018-09-05 21:58</strong>
-	 							<span class="c-ff0000">但有新建门店时，门店会自动添加本项目</span>
-							</p>
- 							<div>
- 								<button class="btn btn-red add-project" @click="add">新增项目</button>
- 							</div>
- 							<table class="table table-bordered table-style">
-  								<thead>
-  									<tr>
-  										<td>可用门店</td>
-  										<td>场馆</td>
-  										<td>项目名称</td>
-  										<td>消费单位</td>
-  										<td>市场价格</td>
-  										<td>促销价格</td>
-  										<td>会员价</td>
-  										<td>押金</td>
-  										<td>消费设置</td>
-  										<td>备注</td>
-  										<td>操作</td>
-  									</tr>
-  								</thead>
-  								<tbody>
-  									<tr>
-  										<td>连锁店通用</td>
-  										<td>健身馆</td>
-  										<td>健身</td>
-  										<td> 次 </td>
-  										<td>60.00</td>
-  										<td>45.00</td>
-  										<td><span class="c-ff0000">50.00</span></td>
-  										<td>0.00</td>
-  										<td>不限时</td>
-  										<td></td>
-  										<td><span class="c-009900" @click="modify">修改</span> <span class="c-ccc">删除</span></td>
-  									</tr>
-  									<tr>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  										<td></td>
-  									</tr>
-  								</tbody>
-							</table>
-						</div>
-						<!--修改模态框-->
-						<div class="modal fade modal-style" id="modifyModal" tabindex="-1" role="dialog" data-backdrop="false">
-						  <div class="modal-dialog" role="document">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						        <h4 class="modal-title">修改项目</h4>
-						      </div>
-						      <div class="modal-body">
-						        <fieldset class="fieldset-info">
-						        	<legend class="c-999">项目设置</legend>
-						        	<div class="fieldset-content">
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				使用门店：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				连锁店通用
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				场馆：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				健身馆
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>项目名称：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="text" class="form-control w205" value="健身" />
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>市场价：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="60.00" /> 次 
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				 促销价：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="45.00" /> 次 
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>会员价：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="50.00" /> 次 
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>押金：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="0.00" /> 次<span class="c-ff0000">&emsp;如果该场馆需要收费时设置，不收押金则填写0.00</span>
-						        			</div>
-						        		</div>
-						        		<div class="flex-box flex-start">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>备注：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<textarea class="form-control" rows="4"></textarea>
-						        			</div>
-						        		</div>
-						        	</div>
-						        </fieldset>
-						      </div>
-						      <div class="modal-footer">
-						      	<button type="button" class="btn btn-success">修改</button>
-						        <button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
-						      </div>
-						    </div><!-- /.modal-content -->
-						  </div><!-- /.modal-dialog -->
-						</div><!-- /.modal -->
-						
-						<!--新增项目模态框-->
-						<!-- Modal -->
-						<div class="modal fade modal-style" id="addModal" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
-						  <div class="modal-dialog" role="document">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						        <h4 class="modal-title" id="myModalLabel">添加项目</h4>
-						      </div>
-						      <div class="modal-body">
-						        <fieldset class="fieldset-info bc-00cccc pb10">
-						        	<legend class="c-00cccc">给门店批量添加本项目（<span class="c-ff0000">批量添加时，所有门店会自动增加本项目</span>）</legend>
-						        	<div class="checkbox ml15 mtb0">
-									    <label>
-									      <input type="checkbox" v-model="isAuth" value="true">连锁店自动添加（但有新建门店时，门店会自动添加本项目）
-									    </label>
-									  </div>
-									  <fieldset class="fieldset-info pt0 pb35 mtb0">
-									  	<div class="checkbox-box">
-										  <div class="checkbox ml5" v-for="store in storeData">
-											    <label>
-											      <input type="checkbox" :disabled="isAuth" v-model="store.selected" value="true">{{store.text}}
-											    </label>
-											    <div class="checkbox ml15" v-show="store.children && store.children.length">
-												    <label v-for="sto in store.children">
-												      <input type="checkbox" :disabled="isAuth" v-model="sto.selected" value="true">{{sto.text}}
-												    </label>
-											  </div>
-										  </div>
-										</div>
-										<div class="checkbox all-select">
-										    <label>
-										      <input type="checkbox" :disabled="isAuth" value="true" v-model="isAll">全选/全不选
-										    </label>
-										</div>
-									  </fieldset>
-						        </fieldset>
-						        <fieldset class="fieldset-info">
-						        	<legend class="c-999">项目设置</legend>
-						        	<div class="fieldset-content">
-							        	<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				场馆：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				健身馆
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>项目名称：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="text" class="form-control w205" value="健身" />
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>市场价：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="60.00" /> 次 
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				 促销价：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="45.00" /> 次 
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>会员价：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="50.00" /> 次 
-						        			</div>
-						        		</div>
-						        		<div class="flex-box">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>押金：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<input type="number" step="0.01" class="form-control" value="0.00" /> 次<span class="c-ff0000">&emsp;如果该场馆需要收费时设置，不收押金则填写0.00</span>
-						        			</div>
-						        		</div>
-						        		<div class="flex-box flex-start">
-						        			<div class="w80 text-right">
-						        				<span class="c-ff0000">* </span>备注：
-						        			</div>
-						        			<div class="flex-box-item">
-						        				<textarea class="form-control" rows="4"></textarea>
-						        			</div>
-						        		</div>
-						        	</div>
-						        </fieldset>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-red add-project mb0">添加</button>
-						      </div>
-						    </div>
-						  </div>
-						</div>
-						<!--END 模态框-->
-						
-					</div>
-				</div>
-				<!-- END 主要内容 -->
-			</div>
-			<!-- END 右边容器 -->
+<body>
+<!-- 整个页面内容 -->
+<div id="wrapper" v-cloak>
+    <!-- 顶部菜单 -->
+    <top-menu-bar></top-menu-bar>
+    <!-- END 顶部菜单 -->
 
-			<div class="clearfix"></div>
+    <!-- 左侧菜单  -->
+    <sidebar-nav></sidebar-nav>
+    <!-- END 左侧菜单 -->
 
-			<!--<footer>
-			<div class="container-fluid">
-				<p class="copyright">Copyright &copy; 2017-2019xxx版权所有</p>
-			</div>
-		</footer>-->
-		</div>
-		<!-- END 整个页面内容 -->
+    <!-- 右边容器 -->
+    <div class="main">
+        <!-- 主要内容 -->
+        <div class="main-content">
+            <!--真正开始写你的页面-->
+            <div class="flex-box flex-stretch">
+                <div class="w170 sub-nav">
+                    <ul class="nav">
+                        <li class="active" id="ChainStore">
+                            <a href="#" @click="ChainStoreClick">
+                                <span>连锁店自动添加</span></a>
+                        </li>
+                        <li v-for="(item,index) in shopInfo">
+                            <a href="#" @click="shopClick(item.frSetGyms)">
+                                <span>{{item.shopName}}</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex-box-item bgc-fff p10 border1-e4e4e4">
+                    <p class="opeacity-info">
+                        <span>操作人：</span><strong>{{timeInfo.updateUserName}}</strong>
+                        <span>操作时间：</span><strong>{{timeInfo.updateTime}}</strong>
+                        <span id="temp1" class="c-ff0000">但有新建门店时，门店会自动添加本项目</span>
+                    </p>
+                    <div>
+                        <button class="btn btn-red add-project" @click="add">新增项目</button>
+                    </div>
+                    <table class="table table-bordered table-style">
+                        <thead>
+                        <tr>
+                            <td>可用门店</td>
+                            <td>场馆</td>
+                            <td>项目名称</td>
+                            <td>消费单位</td>
+                            <td>市场价格</td>
+                            <td>促销价格</td>
+                            <td>会员价</td>
+                            <td>押金</td>
+                            <td>备注</td>
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item,index) in ChainStoreInfo">
+                            <td v-if="item.shopName!=null &&  item.shopName!=''">{{item.shopName}}</td>
+                            <td v-if="item.shopName==null || item.shopName==''">连锁店通用</td>
+                            <td>{{item.venueName}}</td>
+                            <td>{{item.projectName}}</td>
+                            <td>{{item.company}}</td>
+                            <td>{{item.marketPrice}}</td>
+                            <td>{{item.promotionPrice}}</td>
+                            <td><span class="c-ff0000">{{item.memberPrice}}</span></td>
+                            <td>{{item.deposit}}</td>
+                            <td>{{item.remarks}}</td>
+                            <td><span class="c-009900" @click="modify(item)">修改</span>
+                                <span class="c-ccc" @click="delProject(item.id,item.mel)">删除</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--修改模态框-->
+                <div class="modal fade modal-style" id="modifyModal" tabindex="-1" role="dialog" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true" @click="temp">&times;</span></button>
+                                <h4 class="modal-title">修改项目</h4>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset class="fieldset-info">
+                                    <legend class="c-999">项目设置</legend>
+                                    <div class="fieldset-content">
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                使用门店：
+                                            </div>
+                                            <div class="flex-box-item" v-if="tempInfo.shopName!=''">
+                                                {{tempInfo.shopName}}
+                                            </div>
+                                            <div class="flex-box-item" v-if="tempInfo.shopName==''">
+                                                连锁店通用
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                场馆：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                {{tempInfo.venueName}}
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>项目名称：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="text" class="form-control w205"
+                                                       v-model="tempInfo.projectName"/>
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>市场价：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="tempInfo.marketPrice"/> {{tempInfo.company}}
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                促销价：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="tempInfo.promotionPrice"/> {{tempInfo.company}}
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>会员价：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="tempInfo.memberPrice"/> {{tempInfo.company}}
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>押金：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="tempInfo.deposit"/>
+                                                元/次<span class="c-ff0000">&emsp;如果该场馆需要收费时设置，不收押金则填写0.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-box flex-start">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>备注：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <textarea class="form-control" rows="4"
+                                                          v-model="tempInfo.remarks"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" @click="updateProject">修改</button>
+                                <button type="button" class="btn btn-fff" data-dismiss="modal"  @click="temp">取消</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
 
-		<script type="text/javascript" src="js/post_js.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				new Vue({
-					el: '#wrapper',
-					data: {
-						isAuth:false,
-						isAll:false,
-						storeData:[
-							{
-								value:1,
-								text:'厦门市',
-								selected:false,
-								children:[
-									{
-										value:10000,
-										text:'软件园店',
-										selected:false,
-									},
-									{
-										value:10001,
-										text:'集美店',
-										selected:false,
-									},
-									{
-										value:10002,
-										text:'思明店',
-										selected:false,
-									}
-								]
-							},
-							{
-								value:2,
-								text:'泉州市',
-								selected:false,
-								children:[
-									{
-										value:20000,
-										text:'丰泽区',
-										selected:false,
-									},
-									{
-										value:20001,
-										text:'鲤城区',
-										selected:false,
-									},
-									{
-										value:20002,
-										text:'东海区',
-										selected:false,
-									}
-								]
-							}
-						]
-					},
-					mounted: function() {
-						
-					},
-					methods: {
-						add:function(){
-							$('#addModal').modal('show');
-						},
-						modify:function(){
-							$('#modifyModal').modal('show');
-						}
-					},
-					watch:{
-						isAuth:function(val){
-							if(val){
-								for(var i in this.storeData){
-									this.storeData[i].selected=false;
-									var children=this.storeData[i].children;
-									if(children && children.length){
-										for(var j in children){
-											this.storeData[i].children[j].selected=false;
-										}
-									}
-								}
-								this.isAll=false;
-							}
-						},
-						isAll:function(val){
-							if(val){
-								for(var i in this.storeData){
-									this.storeData[i].selected=true;
-									var children=this.storeData[i].children;
-									if(children && children.length){
-										for(var j in children){
-											this.storeData[i].children[j].selected=true;
-										}
-									}
-								}
-							}else{
-								for(var i in this.storeData){
-									this.storeData[i].selected=false;
-									var children=this.storeData[i].children;
-									if(children && children.length){
-										for(var j in children){
-											this.storeData[i].children[j].selected=false;
-										}
-									}
-								}
-							}
-						}
-					}
-				})
-			});
-		</script>
-		</script>
-	</body>
+                <!--新增项目模态框-->
+                <!-- Modal -->
+                <div class="modal fade modal-style" id="addModal" tabindex="-1" role="dialog" data-backdrop="false"
+                     aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">添加项目</h4>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset class="fieldset-info bc-00cccc pb10">
+                                    <legend class="c-00cccc">给门店批量添加本项目（<span class="c-ff0000">批量添加时，所有门店会自动增加本项目</span>）
+                                    </legend>
+                                    <div class="checkbox ml15 mtb0">
+                                        <label id="temp2">
+                                            <input type="checkbox" v-model="isAuth" value="true">连锁店自动添加（但有新建门店时，门店会自动添加本项目）
+                                        </label>
+                                    </div>
+                                    <fieldset class="fieldset-info pt0 pb35 mtb0">
+                                        <div class="checkbox-box">
+                                            <div class="checkbox ml5" v-for="store in storeData">
+                                                <label>
+                                                    <input type="checkbox" :disabled="isAuth" v-model="store.selected"
+                                                           :value="store.CityId">{{store.CityName}}
+                                                </label>
+                                                <div class="checkbox ml15"
+                                                     v-show="store.shopList && store.shopList.length">
+                                                    <label v-for="sto in store.shopList">
+                                                        <input class="shopCheck" type="checkbox" :disabled="isAuth"
+                                                               v-model="sto.selected"
+                                                               :value="sto.ID">{{sto.ShopName}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox all-select">
+                                            <label>
+                                                <input type="checkbox" :disabled="isAuth" value="true" v-model="isAll">全选/全不选
+                                            </label>
+                                        </div>
+                                    </fieldset>
+                                </fieldset>
+                                <fieldset class="fieldset-info">
+                                    <legend class="c-999">项目设置</legend>
+                                    <div class="fieldset-content">
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                场馆：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                健身馆
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>项目名称：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="text" class="form-control w205"
+                                                       v-model="params.projectName"/>
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>市场价：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="params.marketPrice"/> 元/次
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                促销价：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="params.promotionPrice"/> 元/次
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>会员价：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="params.memberPrice"/> 元/次
+                                            </div>
+                                        </div>
+                                        <div class="flex-box">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>押金：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <input type="number" step="0.01" class="form-control"
+                                                       v-model="params.deposit"/>
+                                                元/次<span class="c-ff0000">&emsp;如果该场馆需要收费时设置，不收押金则填写0.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-box flex-start">
+                                            <div class="w80 text-right">
+                                                <span class="c-ff0000">* </span>备注：
+                                            </div>
+                                            <div class="flex-box-item">
+                                                <textarea class="form-control" rows="4"
+                                                          v-model="params.remarks"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-red add-project mb0" @click="addProject">添加
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--END 模态框-->
+
+            </div>
+        </div>
+        <!-- END 主要内容 -->
+    </div>
+    <!-- END 右边容器 -->
+
+    <div class="clearfix"></div>
+
+    <!--<footer>
+    <div class="container-fluid">
+        <p class="copyright">Copyright &copy; 2017-2019xxx版权所有</p>
+    </div>
+</footer>-->
+</div>
+<!-- END 整个页面内容 -->
+<!--基础-->
+
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.min.js"></script>
+<!--插件-->
+<script src="../js/loading.js"></script>
+<script src="../js/jedate.js"></script>
+<script src="../js/combobox.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/dateUtil.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
+<script type="text/javascript" src="js/post_js.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var gymSetting = new Vue({
+            el: '#wrapper',
+            data: {
+                isAuth: false,
+                isAll: false,
+                storeData: [],
+                timeInfo: [],
+                shopInfo: [],
+                ChainStoreInfo: [],
+                params: {
+                    projectName: '',
+                    marketPrice: null,
+                    promotionPrice: null,
+                    memberPrice: null,
+                    deposit: null,
+                    remarks: '',
+                    isCurrency: false,
+                    shop: [],
+                    venueName: '健身馆',
+                    venueId: '120012',
+                    company: '元/次',
+                },
+                tempInfo: [],
+                tempInfo2: [],
+            },
+            mounted: function () {
+                const that = this;
+                that.getChainStore();
+                that.getShop();
+                that.getTime();
+                that.getCityShop();
+            },
+            methods: {
+                add: function () {
+                    $('#addModal').modal('show');
+                },
+                modify: function (list) {
+                    var that = this;
+                    $('#modifyModal').modal('show');
+                    that.tempInfo = list;
+                    that.tempInfo2 = JSON.parse(JSON.stringify(list));
+                    console.log(that.tempInfo)
+                },
+                //查询操作人与时间
+                getTime: function () {
+                    var that = this;
+                    var url = $.stringFormat('{0}/frSetGym/getTime', $.cookie('url'));
+                    $.get(url, function (res) {
+                        if (res.code == "200") {
+                            that.timeInfo = res.data;
+                            that.timeInfo.updateTime = timeFormatDate(that.timeInfo.updateTime, true, true)
+                        } else {
+                            alert("网络繁忙")
+                        }
+                    })
+                },
+                //查询城市门店
+                getCityShop: function () {
+                    var that = this;
+                    var url = $.stringFormat('{0}/frSetGym/getCityShop', $.cookie('url'));
+                    $.get(url, function (res) {
+                        if (res.code == "200") {
+                            that.storeData = res.data;
+                        } else {
+                            alert("网络繁忙")
+                        }
+                    })
+
+                },
+                //查询连锁
+                getChainStore: function () {
+                    var that = this;
+                    var url = $.stringFormat('{0}/frSetGym/getChainStore', $.cookie('url'));
+                    $.get(url, function (res) {
+                        if (res.code == "200") {
+                            that.ChainStoreInfo = res.data;
+                        } else {
+                            alert("网络繁忙")
+                        }
+
+                    })
+
+                },
+                //查询非连锁
+                getShop: function () {
+                    var that = this;
+                    var url = $.stringFormat('{0}/frSetGym/getShop', $.cookie('url'));
+                    $.get(url, function (res) {
+                        if (res.code == "200") {
+                            that.shopInfo = res.data;
+                        } else {
+                            alert("网络繁忙")
+                        }
+                    })
+
+                },
+                //点击连锁
+                ChainStoreClick: function () {
+                    var that = this;
+                    that.getChainStore();
+                    $("#temp1").show();
+                    $("#temp2").show();
+                },
+                //点击门店
+                shopClick: function (list) {
+                    var that = this;
+                    $("#ChainStore").removeClass("active");
+                    $("#temp1").hide();
+                    $("#temp2").hide();
+                    that.ChainStoreInfo = list;
+                },
+                //添加项目
+                addProject: function () {
+                    var that = this;
+                    var patt1 = new RegExp(/\s+/g);
+                    if (that.params.projectName == null || that.params.projectName == '' || patt1.test(that.params.projectName)) {
+                        alert("项目名称不能为空")
+                        return;
+                    } else if (that.params.marketPrice == null || that.params.marketPrice == '') {
+                        alert("市场价格不能为空")
+                        return;
+                    } else if (that.params.promotionPrice == null || that.params.promotionPrice == '') {
+                        alert("促销价格不能为空")
+                        return;
+                    } else if (that.params.memberPrice == null || that.params.memberPrice == '') {
+                        alert("会员价不能为空")
+                        return;
+                    } else if (that.params.deposit == null || that.params.deposit == '') {
+                        alert("押金不能为空")
+                        return;
+                    } else if (that.params.remarks == null || that.params.remarks == '' || patt1.test(that.params.remarks)) {
+                        alert("备注不能为空")
+                        return;
+                    }
+                    that.params.isCurrency = that.isAuth;
+                    $("input[class='shopCheck']:checked").each(function (i, n) {
+                        console.log(n.value)
+                        var temp = $("input[class='shopCheck']:checked")[i]
+                        var list = {}
+                        list.shopName = $(temp).parent().text().replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+                        list.shopId = n.value
+                        that.params.shop.push(list);
+                    })
+                    if (!that.isAuth) {
+                        if (that.params.shop.length == 0 || that.params.shop == "" || that.params.shop == [] || that.params.shop == null) {
+                            alert("未选择门店")
+                            return;
+                        }
+                    }
+                    var url = $.stringFormat('{0}/frSetGym/saveProject', $.cookie('url'));
+                    var data = JSON.stringify(that.params)
+                    $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: "application/json;charset=utf-8",
+                        success: function (res) {
+                            if (res.code == "200") {
+                                alert("添加成功")
+                                location.reload();
+                            } else {
+                                alert("网络繁忙")
+                            }
+                        }
+                    })
+
+                },
+                //修改
+                updateProject: function () {
+                    var that = this;
+                    var patt1 = new RegExp(/\s+/g);
+                    if (that.tempInfo.projectName == null || that.tempInfo.projectName == '' || patt1.test(that.tempInfo.projectName)) {
+                        alert("项目名称不能为空")
+
+                        return;
+                    } else if (that.tempInfo.marketPrice == null || that.tempInfo.marketPrice == '') {
+                        alert("市场价格不能为空")
+                        return;
+                    } else if (that.tempInfo.promotionPrice == null || that.tempInfo.promotionPrice == '') {
+                        alert("促销价格不能为空")
+                        return;
+                    } else if (that.tempInfo.memberPrice == null || that.tempInfo.memberPrice == '') {
+                        alert("会员价不能为空")
+                        return;
+                    } else if (that.tempInfo.deposit == null || that.tempInfo.deposit == '') {
+                        alert("押金不能为空")
+                        return;
+                    } else if (that.tempInfo.remarks == null || that.tempInfo.remarks == '' || patt1.test(that.tempInfo.remarks)) {
+                        alert("备注不能为空")
+                        return;
+                    }
+                    var url = $.stringFormat('{0}/frSetGym/updateProject', $.cookie('url'));
+                    var data = JSON.stringify(that.tempInfo)
+                    $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: "application/json;charset=utf-8",
+                        success: function (res) {
+                            if (res.code == "200") {
+                                alert("修改成功")
+                                $('#modifyModal').modal('hide');
+                            } else {
+                                alert("网络繁忙")
+                            }
+                        }
+                    })
+                },
+                //删除
+                delProject: function (id, mel) {
+                    var that = this;
+                    if (mel) {
+                        alert("系统默认不可删除")
+                    } else {
+                        var flag = confirm("确定要删除这条记录吗")
+                        if (flag) {
+                            var url = $.stringFormat('{0}/frSetGym/delProject', $.cookie('url'));
+                            $.get(url, {"id": id}, function (res) {
+                                if (res.code == "200") {
+                                    alert("删除成功")
+                                    location.reload();
+                                } else {
+                                    alert("网络繁忙")
+                                }
+                            })
+                        } else {
+                            return;
+                        }
+                    }
+
+                },
+                //还原数据
+                temp: function () {
+                    var that = this;
+                    for (let item in that.tempInfo) {
+                        that.tempInfo[item] = that.tempInfo2[item];
+                    }
+                },
+            },
+            watch: {
+                isAuth: function (val) {
+                    if (val) {
+                        for (var i in this.storeData) {
+                            this.storeData[i].selected = false;
+                            var children = this.storeData[i].shopList;
+                            if (children && children.length) {
+                                for (var j in children) {
+                                    this.storeData[i].shopList[j].selected = false;
+                                }
+                            }
+                        }
+                        this.isAll = false;
+                    }
+                },
+                isAll: function (val) {
+                    if (val) {
+                        for (var i in this.storeData) {
+                            this.storeData[i].selected = true;
+                            var children = this.storeData[i].shopList;
+                            if (children && children.length) {
+                                for (var j in children) {
+                                    this.storeData[i].shopList[j].selected = true;
+                                }
+                            }
+                        }
+                    } else {
+                        for (var i in this.storeData) {
+                            this.storeData[i].selected = false;
+                            var children = this.storeData[i].shopList;
+                            if (children && children.length) {
+                                for (var j in children) {
+                                    this.storeData[i].shopList[j].selected = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    });
+</script>
+
+</body>
 
 </html>

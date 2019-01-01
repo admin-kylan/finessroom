@@ -76,7 +76,7 @@
     <!--查询销售人员列表-->
     <select id="getPersonnelByShopId" resultType="java.util.Map">
         SELECT
-             r.id,
+             r.id rId,
              r.FirstName,
              r.ParentId,
              r.RoleType,
@@ -86,7 +86,7 @@
              r.UserType,
             rf.RoleInfoId,
             p.RelName,
-            p.id,
+            p.id pId,
             p.ShopId
        FROM PersonnelInfo p
        LEFT JOIN PersonlRole rf ON rf.PersonnelInfoId = p.id

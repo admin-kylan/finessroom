@@ -300,4 +300,5 @@
         SELECT ShopName FROM Shop where ID=(
         SELECT shop_id FROM fr_client_latence_personal WHERE client_id=#{cid})
     </select>
+
 </mapper>

@@ -268,9 +268,7 @@ var customerFollowUpRecord = new Vue({
            var that = this;
            var followUpRecordAdd = that.followUpRecordAdd;
            var imgList = that.imagesList;
-            console.log(imgList)
            var leng = Object.keys(imgList);
-            console.log(leng)
            var isFlage = true;
            var followOne = followUpRecordAdd.followType;
            var followTypeOne = true;

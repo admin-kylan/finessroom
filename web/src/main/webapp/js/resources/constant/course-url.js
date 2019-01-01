@@ -25,4 +25,7 @@ const COURSE_URL = {
     returnAddProjects: 'frCustomerCourse/returnAddProjects', //项目查询退费
     turnProjects: 'frCustomerCourse/turnProjects', //查询转让记录
     turnProjectsDelete: 'frCustomerCourse/turnProjectsDelete', //冲销
+    frPrivateCourceList: '/frCustomerCourse/getCourseList', //私教,团教
+  //  frGroupCourseList: '/frCustomerCourse/list', //团教
+    customerCommodityList: 'frCustomerCourse/list', //项目list
 };

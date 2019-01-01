@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.sun.org.apache.xerces.internal.xs.ShortList;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
+import com.yj.common.util.StringUtils;
 import com.yj.dal.dao.*;
 import com.yj.dal.dto.ShopItemDTO;
 import com.yj.dal.dto.ShopListDTO;
@@ -310,9 +311,9 @@ public class ShopServiceImpl extends BaseServiceImpl<ShopMapper, Shop> implement
                    if(frCardType1!=null){
                        frCardType.setFlag(frCardType1.getCardTypeName());
                    }
-
                }
            }
         return JsonResult.success(shop);
     }
+
 }

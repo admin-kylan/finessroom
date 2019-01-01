@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -33,6 +34,7 @@ public interface ShopMapper extends BaseMapper<Shop> {
     Shop getByShopIdList(@Param("code") String code, @Param("shopId") String shopId, @Param("type") Integer type);
 
     String getShopName(@Param("cid") String cid);
+
 }
 
 

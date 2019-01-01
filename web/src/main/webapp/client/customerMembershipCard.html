@@ -2402,10 +2402,10 @@
                                             <div class="flex-box" v-for="(staff,num) in item.staffList">
                                                 <div class="w100 text-center">{{staff.name}}</div>
                                                 <div class="flex-box-item">
-                                                    <select class="form-control" v-model="loadData0.clientStaffList[staff.vModel]" @change="toConsoleT(staff.vModel)">
+                                                    <select class="form-control" v-model="loadData0.clientStaffList[staff.vModel]">
                                                         <option selected="selected" disabled="disabled" value="1">{{staff.defMess}}</option>
                                                         <option v-for='(pel,index) in loadData0.openClientStaffList'
-                                                                :value="pel.id" v-if="staff.BusinessType=='334d3d485168f5er'?(pel.UserType == staff.UserType&&pel.BusinessType==staff.BusinessType):(pel.RoleInfoId == staff.RoleInfoId)">
+                                                                :value="pel.pId" v-if="staff.BusinessType=='334d3d485168f5er'?(pel.UserType == staff.UserType&&pel.BusinessType==staff.BusinessType):(pel.RoleInfoId == staff.RoleInfoId)">
                                                             {{pel.RelName}}
                                                         </option>
                                                     </select>
@@ -2432,7 +2432,7 @@
                             <p class="fieldset-p">操作人：<strong>{{personnelName}}</strong></p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">开卡</button>
+                            <button type="button" class="btn btn-primary" @click="openCardSubmit">开卡</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         </div>
                     </div><!-- /.modal-content -->

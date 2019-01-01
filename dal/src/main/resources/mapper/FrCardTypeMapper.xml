@@ -175,8 +175,13 @@
         WHERE a.is_using = 1
           AND a.type_set_state = 2
           AND b.CustomerCode = #{CustomerCode}
-          AND b.shop_id = #{shopId}
-          <if test="type !=null and typ >= 0">
+          AND b.shop_id in
+             (
+               <foreach collection="shopIdList" item="shopId" separator=",">
+                   #{shopId}
+               </foreach>
+              )
+        <if test="type !=null and typ >= 0">
              AND a.type = #{type}
           </if>
     </select>
@@ -188,6 +193,25 @@
         WHERE a.is_using = 1
         AND a.CustomerCode = #{CustomerCode}
         AND a.id = (SELECT b.card_type_id  FROM  fr_card b WHERE b.id = #{cardId})
+    </select>
+
+    <select id="getCardTypeByShopIdList" resultType="java.util.Map">
+        SELECT
+        s.CityId ,
+        s.CityName,
+        s.ShopName,
+        s.id,
+        (SELECT c.card_type_name FROM fr_card_type c WHERE a.p_id = c.id) cardFlag,
+        a.original_price originalPrice,
+        a.sales_price salesPrice,
+        a.id cardTypeId,
+        a.card_type_name cardTypeName,
+        a.p_id cardFlagId
+        FROM Shop s
+        LEFT JOIN fr_shop_card_type_relate b ON b.shop_id = s.id
+        LEFT JOIN  fr_card_type a ON a.id = b.card_type_id
+        WHERE a.is_using = 1 AND a.type_set_state = 2 AND b.type_set_state = 2
+        AND b.CustomerCode = #{CustomerCode} AND s.CustomerCode = #{CustomerCode} AND  a.CustomerCode = #{CustomerCode}
     </select>
 
 </mapper>

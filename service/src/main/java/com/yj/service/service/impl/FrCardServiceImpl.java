@@ -78,6 +78,8 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
     private  IFrCardOrderStopService iFrCardOrderStopService;
     @Resource
     private  IFrCardSupplyRecordService iFrCardSupplyRecordService;
+    @Resource
+    private  IFrClientPersonnelRelateService iFrClientPersonnelRelateService;
 
 
 
@@ -317,6 +319,14 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             for(Map<String,Object> carMap:list){
                 if(carMap != null){
                     iFrCardOrderInfoService.getOrderNumInfo(carMap);
+                    //统计的续卡记录
+                    Integer supplyCount = NumberUtilsTwo.getIntNum("supplyCount",carMap);
+                    //如果查询到是续卡的会员卡
+                    if(supplyCount > 0){
+                        Map<String,String>  map = this.OpenCardStatus(carMap);
+                        carMap.put("isFlag",map.get("isFlag"));
+                        carMap.put("isMess",map.get("isMess"));
+                    }
                     this.getCardByStatus(carMap);
                 }
             }
@@ -609,15 +619,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         frCard.setType(frCardType.getType());
         frCard.setUsing(true);
         //    开卡时间未设置，不设置失效时间
-        if(!StringUtils.isEmpty(frCard.getBindTime())){
-            frCard.setStatus(CommonUtils.CARD_STATUS_0);
-            //若开卡了设置失效时间 = 开卡时间+使用期限；
-            String inv = frCardType.getServiceLife();
-            String serviceLisfe = this.getInv(inv,frCard.getBindTime());
-            if(!StringUtils.isEmpty(serviceLisfe)){
-                frCard.setInvalidTime(serviceLisfe);
-            }
-        }
+        this.getInvalidTimeInfo(frCard,frCardType.getServiceLife());
         //续卡的话，--------会员卡状态固定未开卡
         if(CommonUtils.CARD_SUPPLY_RECORD_TYPE_2 == infoType){
             frCard.setStatus(CommonUtils.CARD_STATUS_4);
@@ -1006,7 +1008,12 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         return orderHaveNum;
     }
 
-
+    /**
+     * 初始化会员卡状态
+     * @param map
+     * @return
+     * @throws YJException
+     */
     public boolean getCardByStatus (Map<String, Object> map)throws YJException{
         //设置会员卡状态  --- 不是历史卡
         Integer cardStat = NumberUtilsTwo.getIntNum("status",map);
@@ -1046,6 +1053,61 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         }
         return  true;
     }
+
+    /**
+     * 初始化是否可开卡
+     * @param map
+     * @return
+     * @throws YJException
+     */
+    public Map<String,String> OpenCardStatus (Map<String, Object> map)throws YJException{
+        Map<String,String> map1 = new HashMap<>();
+        //开卡方式（0，直接延续 ； 1，另行开卡）
+        Integer cardOpening = NumberUtilsTwo.getBoolean("cardOpening",map);
+        //是否更换新卡(0、否；1、是)
+        Integer replacementCard = NumberUtilsTwo.getBoolean("replacementCard",map);
+        //旧会员卡的状态
+        Integer oldStatus = NumberUtilsTwo.getIntNum("oldStatus",map);
+        //旧会员卡的失效时间
+        String oldInvalidTime = StringUtils.getStringObject("oldInvalidTime",map);
+        //获取原始卡号
+        StringBuffer oldCardNo = new StringBuffer(StringUtils.getStringObject("oldCardNo",map));
+
+        //默认之前的会员卡未过期
+        boolean  timeFlag = false;
+        if(!StringUtils.isEmpty(oldInvalidTime)){
+            Date endData = DateUtils.getDataforString(oldInvalidTime,"yyyy-MM-dd HH:mm:ss");
+            //true 表示过期
+            timeFlag = DateUtil.compareDate(new Date(),endData);
+        }
+        //是否更换新卡(0、否；1、是)
+        if(replacementCard == 0){
+            //不更换新卡，且之前的会员卡未过期，禁止操作
+            if(!timeFlag){
+                map1.put("isFlag","false");
+                map1.put("isMess",oldCardNo.append("未过期，不是更换新卡禁止操作").toString());
+                return map1;
+            }
+        }
+        //开卡方式（0，直接延续 ； 1，另行开卡）
+        if(cardOpening == 0){
+            //直接延续
+            //之前的会员卡不是正常卡，或者过期卡---禁止操作
+            if(CommonUtils.CARD_STATUS_0 != oldStatus &&  CommonUtils.CARD_STATUS_3 != oldStatus  && !timeFlag){
+                map1.put("isFlag","false");
+                map1.put("isMess","直接延续开卡，续卡的会员卡状态只能是正常，或者过期卡");
+                return map1;
+            }
+        }
+        String isMess = oldCardNo.append("原会员卡未过期").toString();
+        if(timeFlag){
+            isMess = oldCardNo.append("原会员卡已过期").toString();
+        }
+        map1.put("isFlag","true");
+        map1.put("isMess",isMess);
+        return map1;
+    }
+
 
     /**
      * 会员卡状态的定时任务
@@ -1098,4 +1160,179 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         map.put("status",status);
         baseMapper.toUpdateStopTime(map);
     }
+
+
+    /**
+     * 会员卡开卡---手动开卡
+     * @param frCard
+     * @param imagesList
+     * @param priceIdList
+     * @param frClientPersonnelRelateList
+     * @return
+     * @throws YJException
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addOpenCardClient(FrCard frCard, List<String> imagesList, List<String> priceIdList,
+                                     List<FrClientPersonnelRelate> frClientPersonnelRelateList,boolean isFlage,StringBuffer imagePath) throws YJException {
+       if(frCard == null){
+           throw new YJException(YJExceptionEnum.PARAM_ERROR);
+       }
+        if(StringUtils.isEmpty(frCard.getBindTime()) || StringUtils.isEmpty(frCard.getId())
+                || StringUtils.isEmpty(frCard.getClientId())|| StringUtils.isEmpty(frCard.getCustomerCode())){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        //查询出此会员卡的信息--是否续卡的？卡前设置的失效时间
+        Map<String,Object> map = baseMapper.queryAndCardSupply(frCard);
+        //初始化会员卡信息
+        String serviceLife = StringUtils.getStringObject("serviceLife",map);
+        //设置失效时间
+        this.getInvalidTimeInfo(frCard,serviceLife);
+        frCard.setStatus(CommonUtils.CARD_STATUS_0);
+        frCard.setShopId(StringUtils.getStringObject("shopId",map));
+        //初始化图片信息
+        List<FrClientPic> frClientPicList  = new ArrayList<>();
+        if(imagesList != null && imagesList.size()>0){
+            String imgURL = imagePath.toString();
+            for(String imgUrl: imagesList){
+                StringBuffer URLImg = new StringBuffer(imagePath);
+                FrClientPic frClientPic = new FrClientPic();
+                frClientPic.setPicType(CommonUtils.PIC_TYPE_2);
+                frClientPic.setClientId(frCard.getClientId());
+                frClientPic.setPicState(true);
+                frClientPic.setPicLink(URLImg.append(imgUrl).toString());
+                frClientPicList.add(frClientPic);
+            }
+        }
+        if(frClientPicList != null  && frClientPicList.size() >0){
+            if(priceIdList != null && priceIdList.size() >0){
+                for(int i = 0 ; i< priceIdList.size();i++) {
+                    frClientPicList.get(i).setId(priceIdList.get(i));
+                }
+            }
+        }
+        //初始化绑定的人员信息
+        if(frClientPersonnelRelateList != null  && frClientPersonnelRelateList.size() >0){
+            for(FrClientPersonnelRelate frClientPersonnelRelate: frClientPersonnelRelateList){
+                if("1".equals(frClientPersonnelRelate.getPersonalId())){
+                    continue;
+                }
+                frClientPersonnelRelate.setClientId(frCard.getClientId());
+                frClientPersonnelRelate.setShopId(frCard.getShopId());
+                frClientPersonnelRelate.setType(0);
+                frClientPersonnelRelate.setUsing(true);
+                frClientPersonnelRelate.setCustomerCode(frCard.getCustomerCode());
+                frClientPersonnelRelate.setUserType(0);
+            }
+        }
+        List<FrClientPersonnelRelate> frClientPersonnelRelateList1 =
+                iFrClientPersonnelRelateService.selectList(new EntityWrapper<FrClientPersonnelRelate>().where("client_id={0}",frCard.getClientId())
+                        .and("shop_id={0}",frCard.getShopId()).and("type={0}",0)
+                        .and("is_using={0}",1).and("CustomerCode={0}",frCard.getCustomerCode())
+                        .and("user_type={0}",0));
+        if(frClientPersonnelRelateList1 != null && frClientPersonnelRelateList1.size()>0 &&
+           frClientPersonnelRelateList != null  && frClientPersonnelRelateList.size() >0){
+            for(FrClientPersonnelRelate frClientPersonnelRelate:frClientPersonnelRelateList1){
+                String roleId = frClientPersonnelRelate.getRoleId();
+                Integer type = frClientPersonnelRelate.getPersonalType();
+                for(FrClientPersonnelRelate personnelRelate : frClientPersonnelRelateList){
+                    if(!StringUtils.isEmpty(roleId) && roleId.equals(personnelRelate.getRoleId()) && type == personnelRelate.getPersonalType() ){
+                        personnelRelate.setId(frClientPersonnelRelate.getId());
+                    }
+                }
+            }
+        }
+        if(frClientPicList != null && frClientPicList.size() >0){
+            for(FrClientPic frClientPic:frClientPicList){
+                if(StringUtils.isEmpty(frClientPic.getId()) || "-1".equals(frClientPic.getId())){
+                    frClientPic.setId(UUIDUtils.generateGUID());
+                    iFrClientPicService.insert(frClientPic);
+                    continue;
+                }
+                iFrClientPicService.update(frClientPic,new EntityWrapper<FrClientPic>().where("id={0}",frClientPic.getId()));
+            }
+        }
+        if(frClientPersonnelRelateList != null && frClientPersonnelRelateList.size()>0){
+            for(FrClientPersonnelRelate frClientPersonnelRelate: frClientPersonnelRelateList){
+                if("1".equals(frClientPersonnelRelate.getPersonalId())){
+                    continue;
+                }
+                if(StringUtils.isEmpty(frClientPersonnelRelate.getId())  && !"-1".equals(frClientPersonnelRelate.getId())){
+                    frClientPersonnelRelate.setId(UUIDUtils.generateGUID());
+                    iFrClientPersonnelRelateService.insert(frClientPersonnelRelate);
+                    continue;
+                }
+                iFrClientPersonnelRelateService.update(frClientPersonnelRelate,new EntityWrapper<FrClientPersonnelRelate>().where("id={0}",frClientPersonnelRelate.getId()));
+            }
+        }
+        //统计的续卡记录
+        Integer supplyCount = NumberUtilsTwo.getIntNum("supplyCount",map);
+        //如果查询到是续卡的会员卡
+        if(supplyCount > 0){
+            this.getCardSupplyRecord(map,isFlage,frCard);
+            return true;
+        }
+        //判断设置的时间是不是现在
+        Integer statusType = CommonUtils.CARD_STATUS_4;
+        boolean isTime = DateUtil.compareDate(new Date(),DateUtil.stringToDate(frCard.getBindTime(),DateUtil.NORMAL_FORM));
+        if(isTime){
+            statusType = CommonUtils.CARD_STATUS_0;
+        }
+        frCard.setStatus(statusType);
+        baseMapper.update(frCard,new EntityWrapper<FrCard>().where("id={0}",frCard.getId())
+                .and("client_id={0}",frCard.getClientId())
+                .and("status={0}",CommonUtils.CARD_STATUS_4)
+                .and("is_using={0}",1).and("CustomerCode={0}",frCard.getCustomerCode()));
+        return true;
+    }
+
+    /**
+     * 根据开卡时间初始化失效时间
+     * @param frCard
+     * @param serviceLife
+     * @throws YJException
+     */
+    public void getInvalidTimeInfo(FrCard frCard,String serviceLife)throws YJException{
+        if(frCard != null  && !StringUtils.isEmpty(serviceLife)){
+            if(!StringUtils.isEmpty(frCard.getBindTime())){
+                frCard.setStatus(CommonUtils.CARD_STATUS_0);
+                //若开卡了设置失效时间 = 开卡时间+使用期限；
+                String inv = serviceLife;
+                String serviceLisfe = this.getInv(inv,frCard.getBindTime());
+                if(!StringUtils.isEmpty(serviceLisfe)){
+                    frCard.setInvalidTime(serviceLisfe);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 续卡开卡
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void getCardSupplyRecord(Map<String,Object> map,boolean isFlage,FrCard frCard)throws YJException{
+        Map<String,String> map1 = this.OpenCardStatus(map);
+        String isFlag = map1.get("isFlag");
+        String isMess = map1.get("isMess");
+        if("false".equals(isFlag)){
+            throw  new YJException(YJExceptionEnum.OLD_CARD_STATUS_EXISTED);
+        }
+        if("true".equals(isFlag)){
+            //  之前的会员卡过期了，------ 转移储值
+            if(!StringUtils.isEmpty(isMess) && isMess.indexOf("已过期")!=-1){
+                isFlage = true;
+            }
+        }
+        FrCard oldCard = new FrCard();
+        FrCardSupplyRecord frCardSupplyRecord = iFrCardSupplyRecordService.selectOne(new EntityWrapper<FrCardSupplyRecord>().where("new_card_id={0}",frCard.getId())
+                .and("is_using={0}",1).and("CustomerCode={0}",frCard.getCustomerCode())
+                .and("type={0}",CommonUtils.CARD_ORDRE_INFO_TYPE_2).and("client_id={0}",frCard.getClientId()));
+        List<FrCardOrderDatail> frCardOrderDatailList = iFrCardSupplyRecordService.getCardOrderList(frCardSupplyRecord,oldCard,frCard,isFlage);
+        if(isFlage){
+            iFrCardSupplyRecordService.toInterCardOrder(frCardOrderDatailList);
+        }
+    }
+
+
 }

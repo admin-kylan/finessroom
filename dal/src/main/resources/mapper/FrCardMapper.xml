@@ -341,9 +341,22 @@
         ELSE '未设置'
         END) a_status,
         (SELECT SUM(c.order_price) FROM fr_card_order_datail c WHERE c.client_id = a.client_id  AND c.is_using = 1
-        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2)orderPrice,
+                 AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2)orderPrice,
         (SELECT SUM(c.order_rights_num) FROM fr_card_order_datail c  WHERE c.client_id = a.client_id  AND c.is_using = 1
-        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1)orderNum,
+                  AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1)orderNum,
+        (SELECT b.service_life FROM fr_card_original_set b WHERE a.original_id = b.id ) serviceLife,
+        (SELECT b.card_opening FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2 ) cardOpening,
+        (SELECT b.replacement_card FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2  ) replacementCard,
+        (SELECT COUNT(1) FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2  ) supplyCount,
+        (SELECT c.status FROM fr_card c WHERE c.id =
+                   (SELECT b.ori_card_id FROM fr_card_supply_record b
+                        WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldStatus,
+        (SELECT c.invalid_time FROM fr_card c WHERE c.id =
+                   (SELECT b.ori_card_id FROM fr_card_supply_record b
+                        WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldInvalidTime,
+        (SELECT c.card_no FROM fr_card c WHERE c.id =
+               (SELECT b.ori_card_id FROM fr_card_supply_record b
+                     WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldCardNo,
         <include refid="Base_Column_List_Frcard"/>
         FROM fr_card a
         WHERE a.CustomerCode = #{CustomerCode}
@@ -447,6 +460,23 @@
                                           WHERE b.order_id = a.id) ORDER BY c.split_order) &lt; #{nowTime}))
     </select>
 
-
+    <select id="queryAndCardSupply"  resultType="java.util.Map">
+       SELECT
+        (SELECT b.service_life FROM fr_card_original_set b WHERE a.original_id = b.id ) serviceLife,
+        (SELECT b.card_opening FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2 ) cardOpening,
+        (SELECT b.replacement_card FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2  ) replacementCard,
+        (SELECT COUNT(1) FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2  ) supplyCount,
+        (SELECT c.status FROM fr_card c WHERE c.id =
+                 (SELECT b.ori_card_id FROM fr_card_supply_record b
+                   WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldStatus,
+        (SELECT c.invalid_time FROM fr_card c WHERE c.id =
+                    (SELECT b.ori_card_id FROM fr_card_supply_record b
+                     WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldInvalidTime,
+          <include refid="Base_Column_List_Frcard"/>
+       FROM fr_card a
+       WHERE  a.is_using = 1
+        AND a.CustomerCode = #{CustomerCode}
+        AND a.id = #{id}
+    </select>
 
 </mapper>

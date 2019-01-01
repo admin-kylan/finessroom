@@ -77,10 +77,10 @@ public class FrCustomerCourseProjectController {
      */
     @GetMapping("fetchOrderListByUserId")
     public JsonResult fetchOrderListByUserId( HttpServletRequest request){
-        Map map = new HashMap();
-        String shopid = request.getParameter("shopid");
+        String cid = request.getParameter("cid");
         String code = CookieUtils.getCookieValue(request, "code", true);
-        List list = frCustomerCourseProjectService.getOrderListByCid(shopid, code);
+        String shopId = CookieUtils.getCookieValue(request, "shopid", true);
+        List list = frCustomerCourseProjectService.getOrderListByCid(shopId, code, cid);
         return JsonResult.success(list);
     }
 
@@ -90,9 +90,9 @@ public class FrCustomerCourseProjectController {
      * @return
      */
     @PostMapping("customerStar")
-    public JsonResult starCustomer(HttpServletRequest request){
-        String orderId = request.getParameter("orderId");
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+    public JsonResult starCustomer(@RequestBody Map<String, String> map,HttpServletRequest request){
+        String orderId = map.get("orderId");
+        String cid = map.get("cid");
         String name = CookieUtils.getCookieValue(request, "name", true);
         String code = CookieUtils.getCookieValue(request, "code", true);
         AddProject addProject = frCustomerCourseProjectService.starCustomer(orderId, cid, name, code);
@@ -106,9 +106,9 @@ public class FrCustomerCourseProjectController {
      * @return
      */
     @PostMapping("customerRemnant")
-    public JsonResult customerRemnant(HttpServletRequest request){
-        String orderId = request.getParameter("orderId");
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+    public JsonResult customerRemnant(@RequestBody Map<String, String> map, HttpServletRequest request){
+        String orderId = map.get("orderId");
+        String cid = map.get("cid");
         String name = CookieUtils.getCookieValue(request, "name", true);
         String code = CookieUtils.getCookieValue(request, "code", true);
         ProjectOrder projectOrder = frCustomerCourseProjectService.customerRemnant(orderId, cid, name, code);
@@ -121,11 +121,11 @@ public class FrCustomerCourseProjectController {
      * @return
      */
     @PostMapping("customerExtension")
-    public JsonResult customerExtension(HttpServletRequest request){
-        String orderId = request.getParameter("orderId");
-        String useful = request.getParameter("useful");
-        String flag = request.getParameter("flag");
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+    public JsonResult customerExtension(@RequestBody Map<String, String> map, HttpServletRequest request){
+        String orderId = map.get("orderId");
+        String useful = map.get("useful");
+        String flag = map.get("flag");
+        String cid = map.get("cid");
         String name = CookieUtils.getCookieValue(request, "name", true);
         String code = CookieUtils.getCookieValue(request, "code", true);
         AddProject projectOrder = frCustomerCourseProjectService.customerExtension(orderId, useful, flag, cid, name, code);
@@ -140,11 +140,11 @@ public class FrCustomerCourseProjectController {
      */
     @PostMapping("customerTransfer")
     public JsonResult setReturnAddProject(@RequestBody Map<String, String> map, HttpServletRequest request){
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+        //String cid = map.get("cid");
         String name = CookieUtils.getCookieValue(request, "name", true);
         String shopid = CookieUtils.getCookieValue(request, "shopid", true);
        // String code = CookieUtils.getCookieValue(request, "code", true);
-        frCustomerCourseProjectService.setTurnProject(map, cid, name,shopid);
+        frCustomerCourseProjectService.setTurnProject(map, name,shopid);
         return JsonResult.success(map);
     }
 
@@ -156,10 +156,10 @@ public class FrCustomerCourseProjectController {
      */
     @PostMapping("customerReturnMoney")
     public JsonResult customerReturnMoney(@RequestBody Map<String, String> map, HttpServletRequest request){
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+       // String cid = map.get("cid");
         String name = CookieUtils.getCookieValue(request, "name", true);
 
-        frCustomerCourseProjectService.setReturnAddProject(map, cid, name);
+        frCustomerCourseProjectService.setReturnAddProject(map, name);
         return JsonResult.success(map);
     }
 
@@ -170,7 +170,8 @@ public class FrCustomerCourseProjectController {
      */
     @GetMapping("returnAddProjects")
     public JsonResult getListReturnAddProject( HttpServletRequest request){
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+        String cid = request.getParameter("cid");
+       // String cid = CookieUtils.getCookieValue(request, "cid", true);
         List<ReturnAddProject> returnAddProjects = frCustomerCourseProjectService.getListReturnAddProject(cid);
         return JsonResult.success(returnAddProjects);
     }
@@ -183,7 +184,7 @@ public class FrCustomerCourseProjectController {
      */
     @GetMapping("turnProjects")
     public JsonResult getListTurnProject( HttpServletRequest request){
-        String cid = CookieUtils.getCookieValue(request, "cid", true);
+        String cid = request.getParameter("cid");
         List<TurnProject> turnProjects = frCustomerCourseProjectService.getListTurnProject(cid);
         return JsonResult.success(turnProjects);
     }
@@ -193,11 +194,34 @@ public class FrCustomerCourseProjectController {
      * @param request
      * @return
      */
-    @GetMapping("turnProjectsDelete")
-    public JsonResult turnProjectsDelete( HttpServletRequest request){
-        String id = request.getParameter("id");
+    @PostMapping("turnProjectsDelete")
+    public JsonResult turnProjectsDelete(@RequestBody Map<String, String> map, HttpServletRequest request){
+        String id = map.get("id");
         frCustomerCourseProjectService.deleteTurnProject(id);
         return JsonResult.success(new HashMap<>());
+    }
+
+
+    /**
+     * 查询数组
+     * @param request
+     * @return
+     */
+    @GetMapping("list")
+    public JsonResult getCourseList(HttpServletRequest request){
+
+        String cid = request.getParameter("cid");
+        String type = request.getParameter("type");
+        String status = request.getParameter("status");
+        String shopName = request.getParameter("shopName");
+        String timeType = request.getParameter("timeType");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String name = request.getParameter("name");
+        String orderType = request.getParameter("orderType");
+        String code = CookieUtils.getCookieValue(request, "code", true);
+        List list = frCustomerCourseProjectService.getCourseList(type,status,shopName,timeType,startDate,endDate,name,code,orderType,cid);
+        return JsonResult.success(list);
     }
 
 }
