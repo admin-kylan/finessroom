@@ -198,6 +198,12 @@
     text-align: right;
     float: left;
 }
+.basis .common7 ul li span:nth-child(1){
+	min-width: 195px;
+    display: inline-block;
+    text-align: right;
+    float: left;
+}
 .basis .common5 p{
     display: inline-block;
     color: red;

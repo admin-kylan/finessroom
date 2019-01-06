@@ -66,6 +66,10 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
     @Resource
     private IFrClientLatencePersonalService iFrClientLatencePersonalService;
 
+    @Resource
+    private IFrStoreSingleService iFrStoreSingleService;
+
+
 
     @Override
     public PageUtils selectExistenceList(ExistenceFilterParam conditions) throws YJException {
@@ -519,12 +523,27 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
             if (!isFlag) {
                 return frClient1;
             }
+            //查询设置的保护天数
+            FrStoreSingle frStoreSingle = iFrStoreSingleService.selectOne(
+                    new EntityWrapper<FrStoreSingle>().where("CustomerCode={0}",frClient.getCustomerCode()).and("is_using={0}",1)
+                            .orderBy("update_time DESC"));
+            Integer protectDay = 1;
+            if(frStoreSingle != null){
+                Integer  hours = frStoreSingle.getXyGjHour();
+                if(hours != null && hours >0){
+                    hours = hours/24;
+                    if(hours >0 ){
+                        protectDay = hours;
+                    }
+                }
+            }
             Date date = new Date();
             //初始化新的客户数据准备插入
             frClient1 = frClient;
             frClient1.setId(UUIDUtils.generateGUID());
             frClient1.setStatus(false);
             frClient1.setApplyTime(date);
+            frClient1.setProtectDay(protectDay);
             baseMapper.insert(frClient1);
         }
         FrClientPersonal frClientPersonal = null;
@@ -555,6 +574,7 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
             frClientPersonal.setId(UUIDUtils.generateGUID());
             frClientPersonal.setUsing(true);
             frClientPersonal.setShopId(shopId);
+            frClientPersonal.setProtectDay(frClient1.getProtectDay());
             iFrClientPersonalService.insert(frClientPersonal);
         }
         //之前已经存在的现有客户，状态是不启用的更新为启用

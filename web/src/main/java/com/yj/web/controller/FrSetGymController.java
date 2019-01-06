@@ -31,8 +31,8 @@ public class FrSetGymController {
      * @throws YJException
      */
     @GetMapping("/getTime")
-    public JsonResult getTime() throws YJException{
-        return JsonResult.success(service.getTime());
+    public JsonResult getTime(String type) throws YJException{
+        return JsonResult.success(service.getTime(type));
     }
 
     /**
@@ -42,8 +42,8 @@ public class FrSetGymController {
      * @throws YJException
      */
     @GetMapping("/getShop")
-    public JsonResult getShop(String code) throws YJException{
-        return JsonResult.success(service.getShop(code));
+    public JsonResult getShop(String code,String type) throws YJException{
+        return JsonResult.success(service.getShop(code,type));
     }
 
     /**
@@ -52,8 +52,8 @@ public class FrSetGymController {
      * @throws YJException
      */
     @GetMapping("/getChainStore")
-    public JsonResult getChainStore() throws YJException{
-        return JsonResult.success(service.getChainStore());
+    public JsonResult getChainStore(String type) throws YJException{
+        return JsonResult.success(service.getChainStore(type));
     }
 
     /**
@@ -75,7 +75,7 @@ public class FrSetGymController {
      */
     @PostMapping("/saveProject")
     public JsonResult saveProject(@RequestBody Map<String, Object> map) throws YJException{
-        return JsonResult.success(service.saveProject(map));
+        return service.saveProject(map);
     }
 
     /**
@@ -86,7 +86,7 @@ public class FrSetGymController {
      */
     @PostMapping("/updateProject")
     public JsonResult updateProject(@RequestBody FrSetGym frSetGym) throws YJException{
-        return JsonResult.success(service.updateProject(frSetGym));
+        return service.updateProject(frSetGym);
     }
 
     /**
@@ -97,7 +97,7 @@ public class FrSetGymController {
      */
     @GetMapping("/delProject")
     public JsonResult delProject(String id) throws YJException{
-        return JsonResult.success(service.delProject(id));
+        return service.delProject(id);
     }
 }
 

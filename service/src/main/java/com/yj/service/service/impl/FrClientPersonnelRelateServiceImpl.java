@@ -157,6 +157,7 @@ public class FrClientPersonnelRelateServiceImpl extends BaseServiceImpl<FrClient
         frClientPersonnelRelate.setCreateUserName(name);
         frClientPersonnelRelate.setClientId(cid);
         frClientPersonnelRelate.setCreateUserId(pid);
+        frClientPersonnelRelate.setUserType(0);
         baseMapper.insert(frClientPersonnelRelate);
     }
 
@@ -177,7 +178,7 @@ public class FrClientPersonnelRelateServiceImpl extends BaseServiceImpl<FrClient
             throw new YJException(YJExceptionEnum.PARAM_ERROR);
         }
         List<FrClientPersonnelRelate> relates = baseMapper.selectList(
-                new EntityWrapper<FrClientPersonnelRelate>().where("client_id={0}", cid)
+                new EntityWrapper<FrClientPersonnelRelate>().where("client_id={0} and user_type=0", cid)
                         .and("type!=1")
         );
         List<RoleInfo> roleInfos = new ArrayList<>();
@@ -193,23 +194,23 @@ public class FrClientPersonnelRelateServiceImpl extends BaseServiceImpl<FrClient
         }
 
         List<Map<String, String>> list = new ArrayList<>();
-       if (roleInfos.size()>0){
-           for (FrClientPersonnelRelate relate : relates) {
-               for (RoleInfo roleInfo : roleInfos) {
-                   Map map = new HashMap();
-                   if (relate.getRoleId().equals(roleInfo.getId())) {
-                       PersonnelInfo relName = personnelInfoService.selectOne(
-                               new EntityWrapper<PersonnelInfo>().setSqlSelect("RelName")
-                                       .where("ID={0}", relate.getPersonalId()).where("Status={0}", 0)
-                       );
-                       map.put("key", roleInfo.getFirstName());
-                       map.put("val", relName.getRelName());
-                       list.add(map);
-                   }
-               }
+        if (roleInfos.size() > 0) {
+            for (FrClientPersonnelRelate relate : relates) {
+                for (RoleInfo roleInfo : roleInfos) {
+                    Map map = new HashMap();
+                    if (relate.getRoleId().equals(roleInfo.getId())) {
+                        PersonnelInfo relName = personnelInfoService.selectOne(
+                                new EntityWrapper<PersonnelInfo>().setSqlSelect("RelName")
+                                        .where("ID={0}", relate.getPersonalId()).where("Status={0}", 0)
+                        );
+                        map.put("key", roleInfo.getFirstName());
+                        map.put("val", relName.getRelName());
+                        list.add(map);
+                    }
+                }
 
-           }
-       }
+            }
+        }
         return list;
     }
 
@@ -254,6 +255,7 @@ public class FrClientPersonnelRelateServiceImpl extends BaseServiceImpl<FrClient
             relate.setShopId(params.getPersonalId().split(",")[1]);
             relate.setRoleId(params.getRoleId());
             relate.setClientId(cid);
+            relate.setUserType(0);
             baseMapper.insert(relate);
         }
         return JsonResult.success();

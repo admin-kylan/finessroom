@@ -34,7 +34,15 @@ public class MybatisPlusGenerator {
     private static String authorName="MP自动生成";
     //需要生成的表
     private static String[] tables={
-            "AddProjectConsume",
+//            "fr_education",
+//                    "fr_education_client_info",
+//                    "fr_education_plan",
+//                    "fr_education_class_order",
+//                    "fr_education_config",
+//                    "fr_education_reserve_object",
+//                    "fr_education_card_object",
+//                    "fr_education_member_order",
+            "fr_education_card_object"
     };
     //table前缀
     private static String prefix="";

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationClientInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationClientInfo">
+        <id column="id" property="id" />
+        <result column="education_id" property="educationId" />
+        <result column="member_id" property="memberId" />
+        <result column="member_name" property="memberName" />
+        <result column="member_type" property="memberType" />
+        <result column="member_card_no" property="memberCardNo" />
+        <result column="mobile" property="mobile" />
+        <result column="reserve_client_id" property="reserveClientId" />
+        <result column="reserve_client_name" property="reserveClientName" />
+        <result column="reserve_date" property="reserveDate" />
+        <result column="seat_id" property="seatId" />
+        <result column="seat_name" property="seatName" />
+        <result column="settle_type" property="settleType" />
+        <result column="deduction_balance" property="deductionBalance" />
+        <result column="reserve_status" property="reserveStatus" />
+        <result column="remarks" property="remarks" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="create_time" property="createTime" />
+        <result column="sex" property="sex" />
+        <result column="is_use" property="isUse" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="update_user_name" property="updateUserName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        education_id AS educationId, member_id AS memberId, member_name AS memberName, member_type AS memberType, member_card_no AS memberCardNo, mobile, reserve_client_id AS reserveClientId, reserve_client_name AS reserveClientName, reserve_date AS reserveDate, seat_id AS seatId, seat_name AS seatName, settle_type AS settleType, deduction_balance AS deductionBalance, reserve_status AS reserveStatus, remarks, create_user_name AS createUserName, create_time AS createTime, sex, is_use AS isUse, CustomerCode, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId, id, update_user_name AS updateUserName
+    </sql>
+
+</mapper>

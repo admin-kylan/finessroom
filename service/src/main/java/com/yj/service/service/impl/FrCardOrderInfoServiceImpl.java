@@ -289,6 +289,8 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
         //初始化剩余总权益
         Double allHaveNum = allNum;
         for(FrCardOrderInfo frCardOrderInfo:frCardOrderInfoList){
+            //支付总金额 = 购卡金额+补余总金额
+            Double toPayModel  = NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscountPrice())+NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscount());
             if(CommonUtils.ORDER_STATUS_1 != frCardOrderInfo.getStatus() || CommonUtils.AUDIT_ORDER_STATUS_1 != frCardOrderInfo.getAuditStatus()){
                 throw  new YJException(YJExceptionEnum.CARD_INFO_STATUS_EXISTED);
             }
@@ -302,7 +304,7 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
                 // 默认是未结款状态
                 boolean isFlag = true;
                 if(CommonUtils.CARD_ORDRE_STATE_3 == orderState || CommonUtils.CARD_ORDRE_STATE_4 == orderState || CommonUtils.CARD_ORDRE_STATE_5 == orderState){
-                    blackPrice = blackPrice + NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getNeedPrice());
+                    blackPrice = blackPrice + toPayModel;
                     isFlag = false;
                 }
                 if(isFlag){
@@ -316,7 +318,8 @@ public class FrCardOrderInfoServiceImpl extends BaseServiceImpl<FrCardOrderInfoM
                 //退款金额 = 购卡金额/（购买权益+赠送权益）*剩余权益
                 //购卡金额 = 实际付款金额
                 Double buyCardPrice =  NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscountPrice())+NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getDiscount());
-                Double needPayPrice = NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getNeedPrice());
+//                Double needPayPrice = NumberUtilsTwo.getDoublPrice(frCardOrderInfo.getNeedPrice());
+                Double needPayPrice = toPayModel;
                 Double needPrice = needPayPrice;
                 //若应付款金额大于实际付款金额，购卡金额 = 实际付款金额；
                 if(buyCardPrice < needPayPrice ){

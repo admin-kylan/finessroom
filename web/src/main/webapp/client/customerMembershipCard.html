@@ -15,7 +15,7 @@
 </head>
 
 <body>
-<div id="customerMembershipCard">
+<div id="customerMembershipCard" v-cloak>
     <div class="customerMembershipCard">
         <div class="tableWrap">
             <div class="tabW_top">
@@ -84,7 +84,7 @@
                                     <td class="toblue"><a href="javascript:;" @click="carddetails(item)" class="toblue">{{item.cardTypeName}}</a></td>
                                     <td class="toceng">{{item.cardNo}}</td>
                                     <td>{{item.externalNo}}</td>
-                                    <td><strong>{{item.needPrice}}</strong></td>
+                                    <td><strong>{{item.needPrice<=0?item.needPriceTwo:item.needPrice}}</strong></td>
                                     <td>
                                         <strong v-if="item.status == 6">0.00</strong>
                                         <strong v-else>{{item.cardHavePrice|toManey}}</strong>
@@ -1127,10 +1127,10 @@
                                 <div class="transferCard_box_bottom">
                                     <div class="transferCard_b">
                                         <div class="transferCard_a_left">
+                                            <div class="sc_box_title">
+                                                <strong>补卡操作</strong>
+                                            </div>
                                             <div class="sc">
-                                                <div class="sc_box">
-                                                    <strong>补卡操作</strong>
-                                                </div>
                                                 <div class="sc_box">
                                                     <div class="sc_box_left">新卡号：</div>
                                                     <div class="sc_box_right"><input type="text" placeholder="自动生成" style="width: 70%;" readonly id="cardSupply">
@@ -1162,7 +1162,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>微信</td>
-                                                                <td><input type="text" v-model="payModel.L4" @change="isCommonMoney(payModel.L4,'L4')"></td>
+                                                                <td><input type="text" v-model="payModel.L3" @change="isCommonMoney(payModel.L3,'L3')"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>现金</td>
@@ -1180,11 +1180,11 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                <div class="sc_box">
+                                                <!--<div class="sc_box">
                                                     <div class="sc_box_left">付款金额：</div>
                                                     <div class="sc_box_right"><input type="text" placeholder="付款金额" readonly v-model="payModelMoney">
                                                     </div>
-                                                </div>
+                                                </div>-->
                                                 <div class="sc_box">
                                                     <div class="sc_box_left"> 备注：</div>
                                                     <div class="sc_box_right">
@@ -1221,8 +1221,7 @@
                                                     <th>新会员卡号</th>
                                                     <th>外部卡号</th>
                                                     <th>旧卡号</th>
-                                                    <th>付款类型</th>
-                                                    <th>补卡费</th>
+                                                    <th>付款类型:补卡费</th>
                                                     <th>操作人</th>
                                                     <th>操作</th>
                                                 </tr>
@@ -1235,8 +1234,7 @@
                                                     <td :value="item.newCardId">{{item.newCardNo}}</td>
                                                     <td class="tored">{{item.externalNo}}</td>
                                                     <td :value="item.oriCardId">{{item.oriCardNo}}</td>
-                                                    <td>{{item.paymentMoney}}</td>
-                                                    <td class="tored">{{item.payPrice}}</td>
+                                                    <td>{{item.paymentMoney+'--'+item.payPrice}}</td>
                                                     <td>{{item.personnerlName}}</td>
                                                     <td class="tored">打印</td>
                                                 </tr>
@@ -1538,10 +1536,10 @@
                                 <div class="transferCard_box_bottom">
                                     <div class="transferCard_b">
                                         <div class="transferCard_a_left">
+                                            <div class="sc_box_title">
+                                                添加子卡操作
+                                            </div>
                                             <div class="sc">
-                                                <div class="sc_box">
-                                                    添加子卡操作
-                                                </div>
                                                 <div class="sc_box">
                                                     <div class="sc_box_left">当前卡设置：</div>
                                                     <div class="sc_box_right">
@@ -1623,6 +1621,7 @@
                                             <table class="table table-hover table-bordered">
                                                 <thead>
                                                 <tr>
+                                                    <th>卡种</th>
                                                     <th>父卡号</th>
                                                     <th>子卡号</th>
                                                     <th>外部卡号</th>
@@ -1637,6 +1636,7 @@
                                                 <tbody>
                                                 <tbody>
                                                 <tr v-for="item in loadData7.childCardList">
+                                                    <td>{{item.cardTypeName}}</td>
                                                     <td>{{item.parentCardNo}}</td>
                                                     <td>{{item.cardNo}}</td>
                                                     <td>{{item.outCardNo}}</td>
@@ -1698,7 +1698,8 @@
                                                                 <label>
                                                                     <input type="checkbox" v-model="loadData8.orderSetIdListTwo" :value="item" @change="checkMoeny" name="orderSet" > 第{{item.splitOrder}}期
                                                                 </label>
-                                                                <strong class="font-bold col-orange">￥{{item.splitNum|toMoneySet(item.splitNum,item,item)}}</strong>
+                                                                <!--<strong class="font-bold col-orange">￥{{item.splitNum|toMoneySet(item.splitNum,item,item)}}</strong>-->
+                                                                <strong class="font-bold col-orange">￥{{item.splitNum|toManey}}</strong>
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -1900,13 +1901,25 @@
                                                     <td>{{item.shopName}}</td>
                                                     <td>{{item.allotNum}}{{item.allotType==1?'%':''}}</td>
                                                     <td :value="item.createUserId">{{item.createUserName}}</td>
-                                                    <td><a href="javascript:;" v-if="item.status!=1&&item.auditStatus!=1">
-                                                        <i v-for="orderType in parameterList.continueOrderStat" v-if="item.orderState==orderType.vue" :value="item.id" @click="toDelComplement(item.id,item.orderState)">
-                                                            {{orderType.lav}}
-                                                        </i>
-                                                    </a>
-                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus==0">审核中</a>
-                                                        <a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus!=0">已审核</a>
+                                                    <td>
+                                                        <a v-for="orderType in parameterList.continueOrderStat" v-if="item.orderState==orderType.vue" :value="item.id">
+                                                            <i v-if="item.status!=1&&item.auditStatus!=1||orderType.vue==2" @click="toDelComplement(item.id,item.orderState)">
+                                                                {{orderType.lav}}
+                                                            </i>
+                                                            <i v-else-if="item.status!=0&&item.auditStatus==0&&orderType.vue!=2">
+                                                                审核中
+                                                            </i>
+                                                            <i v-else-if="item.status!=0&&item.auditStatus!=0&&orderType.vue!=2">
+                                                                已审核
+                                                            </i>
+                                                        </a>
+                                                        <!--<a href="javascript:;" v-if="item.status!=1&&item.auditStatus!=1">-->
+                                                          <!--<i v-for="orderType in parameterList.continueOrderStat" v-if="item.orderState==orderType.vue" :value="item.id" @click="toDelComplement(item.id,item.orderState)">-->
+                                                            <!--{{orderType.lav}}-->
+                                                          <!--</i>-->
+                                                        <!--</a>-->
+                                                        <!--<a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus==0">审核中</a>-->
+                                                        <!--<a href="javascript:;" v-else-if="item.status!=0&&item.auditStatus!=0">已审核</a>-->
                                                         <a href="javascript:;">打印</a></td>
                                                 </tr>
                                                 </tbody>
@@ -2132,13 +2145,13 @@
 																	<span>是否扣除销售员当月业绩：</span>
 																	<span>
 																		<label>
-																			<input type="radio"
+																			<input type="radio" style="height: 15px;margin-top: 0px;vertical-align: middle;"
                                                                                    v-model="loadData10.addBlackCard.allotSetType"
                                                                                    value="1">
 																			<span>是</span>
 																		</label>
 																		<label>
-																			<input type="radio"
+																			<input type="radio" style="height: 15px;margin-top: 0px;vertical-align: middle;"
                                                                                    v-model="loadData10.addBlackCard.allotSetType"
                                                                                    value="0">
 																			<span>否</span>
@@ -2147,7 +2160,7 @@
 																</span>
                                                         </div>
                                                     </div>
-                                                    <div>
+                                                    <div style="margin-bottom: 5px;">
                                                         <div class="NewPurchase_box_left"><span> 退款方式：</span></div>
                                                         <div class="NewPurchase_box_right">
 																<span>
@@ -2267,7 +2280,7 @@
                                             {{items.relName}}
                                         </option>
                                     </select>
-                                    <input type="text" placeholder="分配比例/金额" v-model="loadData1.orderAllotSet.saleAllotNum" @change="checkNum(3,'saleAllotNum')">
+                                    <input type="text" placeholder="分配比例/金额" v-model="loadData1.orderAllotSet.saleAllotNum" @change="checkNum(loadData1.orderAllotSet.saleAllotNum,'saleAllotNum',3)">
                                     <a href="#" class="btn btn-primary" @click="addOrderAllotSetOne">添加</a>
                                 </div>
                                 <table class="table table-bordered table-hover">
@@ -2287,8 +2300,8 @@
                                         </td>
                                         <td>{{item.saleAllotNum}}</td>
                                         <td>
-                                            <a href="#" @click="updateFamily(index)">修改</a>
-                                            /<a href="#" @click="deleteFamily(index)">删除</a>
+                                            <!--<a href="#" @click="updateFamily(index)">修改</a>/-->
+                                            <a href="#" @click="deleteFamily(index)">删除</a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -2483,6 +2496,11 @@
                }
             }
         });
+    })
+
+    $(function () {
+        var id = document.URL.split("=")[1];
+        $.cookie('cid', id)  //存入值
     })
 
     Loading.prototype.init();

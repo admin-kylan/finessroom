@@ -15,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-10-31
+ * @since 2018-12-30
  */
 @TableName("fr_card_limit")
 public class FrCardLimit extends Model<FrCardLimit> {
@@ -76,7 +76,7 @@ public class FrCardLimit extends Model<FrCardLimit> {
      */
     private String flag;
     /**
-     * 类型(备用)
+     * 类型(1、通用限定；2、单卡限定)
      */
     private Integer type;
     /**
@@ -119,6 +119,11 @@ public class FrCardLimit extends Model<FrCardLimit> {
      */
     @TableField(value = "update_user_id", fill = FieldFill.INSERT_UPDATE)
     private String updateUserId;
+    /**
+     * 客户ID
+     */
+    @TableField("client_id")
+    private String clientId;
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -283,6 +288,14 @@ public class FrCardLimit extends Model<FrCardLimit> {
         this.updateUserId = updateUserId;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
     public String getId() {
         return id;
     }
@@ -299,27 +312,28 @@ public class FrCardLimit extends Model<FrCardLimit> {
     @Override
     public String toString() {
         return "FrCardLimit{" +
-        ", cardId=" + cardId +
-        ", useName=" + useName +
-        ", usePhone=" + usePhone +
-        ", usePasswd=" + usePasswd +
-        ", useLimit1=" + useLimit1 +
-        ", useLimit2=" + useLimit2 +
-        ", useLimit3=" + useLimit3 +
-        ", useLimit4=" + useLimit4 +
-        ", useLimit5=" + useLimit5 +
-        ", note=" + note +
-        ", flag=" + flag +
-        ", type=" + type +
-        ", isUsing=" + isUsing +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        ", createUserName=" + createUserName +
-        ", updateUserName=" + updateUserName +
-        ", CustomerCode=" + CustomerCode +
-        ", createUserId=" + createUserId +
-        ", updateUserId=" + updateUserId +
-        ", id=" + id +
-        "}";
+                ", cardId=" + cardId +
+                ", useName=" + useName +
+                ", usePhone=" + usePhone +
+                ", usePasswd=" + usePasswd +
+                ", useLimit1=" + useLimit1 +
+                ", useLimit2=" + useLimit2 +
+                ", useLimit3=" + useLimit3 +
+                ", useLimit4=" + useLimit4 +
+                ", useLimit5=" + useLimit5 +
+                ", note=" + note +
+                ", flag=" + flag +
+                ", type=" + type +
+                ", isUsing=" + isUsing +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", createUserName=" + createUserName +
+                ", updateUserName=" + updateUserName +
+                ", CustomerCode=" + CustomerCode +
+                ", createUserId=" + createUserId +
+                ", updateUserId=" + updateUserId +
+                ", clientId=" + clientId +
+                ", id=" + id +
+                "}";
     }
 }

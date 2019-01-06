@@ -62,15 +62,23 @@ public class PersonnelInfoController {
     }
 
     /**
-     * 获取销售人员列表
+     * 获取指定门店的销售人员
      *
      * @param shopId 商店id
      * @return
      * @throws YJException
      */
     @GetMapping("/getMarketUserList")
-    public JsonResult getMarketUserList(HttpServletRequest request, String shopId) throws YJException {
-        String code = CookieUtils.getCookieValue(request, "code", true);
+    public JsonResult getMarketUserList(HttpServletRequest request, @RequestParam("shopId") String shopId,String code) throws YJException {
+        if(StringUtils.isEmpty(shopId)){
+            return JsonResult.failMessage("门店ID未获取");
+        }
+        if(StringUtils.isEmpty(code)){
+            code = CookieUtils.getCookieValue(request, "code", true);
+            if(StringUtils.isEmpty(code)){
+                return JsonResult.failMessage("客户代码获取异常");
+            }
+        }
         return JsonResult.success(service.getMarketUserList(shopId, code));
     }
 
@@ -96,14 +104,23 @@ public class PersonnelInfoController {
         String code = personnelInfo.getCustomerCode();
         if (StringUtils.isEmpty(code)) {
             code = CookieUtils.getCookieValue(request, "code", true);
+            if(StringUtils.isEmpty(code)){
+                return JsonResult.failMessage("客户代码未获取");
+            }
         }
         String shopid = personnelInfo.getShopId();
         if (StringUtils.isEmpty(shopid)) {
             shopid = CookieUtils.getCookieValue(request, "shopid", true);
+            if(StringUtils.isEmpty(shopid)){
+                return JsonResult.failMessage("门店ID未获取");
+            }
         }
         String id = personnelInfo.getId();
         if (StringUtils.isEmpty(id)) {
             id = CookieUtils.getCookieValue(request, "id", true);
+            if(StringUtils.isEmpty(shopid)){
+                return JsonResult.failMessage("操作人员ID未获取");
+            }
         }
         EntityWrapper entityWrapper = new EntityWrapper<PersonnelInfo>();
         entityWrapper.where("CustomerCode = {0}", code).and("ID={0}", id)

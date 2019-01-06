@@ -140,4 +140,10 @@ public  interface CommonUtils {
     static final Integer CARD_TYPE_4 = 4; //储值卡
     static final Integer CARD_TYPE_5 = 5; //充值卡
     static final Integer CARD_TYPE_6 = 6; //折扣卡
+    //  类型(1、通用限定；)
+    static final Integer CARD_LIMIT_1 = 1; //1、通用限定
+    static final Integer CARD_LIMIT_2 = 2; //2、单卡限定
+
+    static final Integer PIC_TYPT_1 = 1; //1、头像
+    static final Integer PIC_TYPT_2 = 2; //2、图片
 }

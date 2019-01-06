@@ -10,6 +10,7 @@ var right = new Vue({
 		cardTypeSet: {
 			pzfs: '',
 			pid: '',
+			cardTypeName:'',
 			serviceLife: '',
 			swipingInterval: '',
 			swipingTime: '',
@@ -89,7 +90,10 @@ var right = new Vue({
 		//项目id
 		Consumeids: null,
 	},
-
+	mounted:function(){
+//		this.init();
+		this.getMemberCard();
+	},
 	methods: {
            //设置项目时间   上午下午
 		setsetTime: function() {
@@ -548,19 +552,26 @@ var right = new Vue({
 						//console.log(res.data.cardType)
 						that.cardTypeSet = res.data.cardType; //卡基础设置
 						//that.shopCardConsume.cardTypeId=res.data.cardType.id;/** * 卡类型ID */
-
+						that.init();
 						///****门店******
-						if(res.data.store != null) {
-							that.SetStoreItems = res.data.store;
-							for(var i = 0; i < res.data.store.length; i++) {
-								if(i > 0) {
+						var _store=[];
+						for(var i in res.data.store){
+							if(!!res.data.store[i]) _store.push(res.data.store[i]);
+						}
+						if(_store.length) {
+							that.SetStoreItems = _store;
+							for(var i = 0; i < _store.length; i++) {
+								if(that.Storelist.length > 0) {
 									for(var j = 0; j < that.Storelist.length; j++) {
-										if(that.Storelist[j].cityId != res.data.store[i].cityId) {
-											that.Storelist.push(res.data.store[i]);
+										if(!_store[i]) break;
+										if(that.Storelist[j].cityId != _store[i].cityId) {
+											that.Storelist.push(_store[i]);
+											break;
 										}
 									}
 								} else {
-									that.Storelist.push(res.data.store[i]);
+									if(!_store[i]) continue;
+									that.Storelist.push(_store[i]);
 								}
 							}
 						}
@@ -706,8 +717,9 @@ var right = new Vue({
 
 		//初始化加载
 		init: function() {
-			var type = 1; // window.parent.getType();
-			switch(parseInt(type)) {
+//			var type = 1; // window.parent.getType();
+			if(!this.cardTypeSet.type) alert('未获取到卡类型')
+			switch(parseInt(this.cardTypeSet.type)) {
 				//时间卡(年卡）
 				case 1:
 					// $('#years').html('一年卡');
@@ -736,7 +748,7 @@ var right = new Vue({
 					$('.basis .common').show();
 					break;
 					//储值卡
-				case 4:
+				case 4:case 6:
 					// $('#years').html('储值卡');
 					$('#time').html('储值卡');
 					$('.basis .common2 p').html('（填写使用期限，如果期限已到，该卡权益失效）');
@@ -794,7 +806,7 @@ var right = new Vue({
 
 })
 
-right.getMemberCard();
+
 
 //var mask = new Vue({
 //	el: '#masks',

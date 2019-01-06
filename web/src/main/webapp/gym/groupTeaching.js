@@ -1382,7 +1382,7 @@ $(function() {
 
             },
             //单节训练课程设置 主要请求
-            simpleLinkSettingMain:function (type) {
+                simpleLinkSettingMain:function (type) {
                 if (type ==1) {
                     this.actionEduSettingIndex = 0;
                 }else{
@@ -1568,14 +1568,12 @@ $(function() {
             },
             deleteItem: function (index,id, type) {
                 let that =this;
-                let url = $.stringFormat("{0}/frTrainingSeries/list",$.cookie('url'));
-                let data ={
-                    type:type,
-                    parentId:id,
-                    ownType:2
-                };
-                this.deleteItemId = id,
-                    this.deletItemType = type,
+
+             console.log(that.simpleLinkSettingAction)
+                console.log(id)
+                console.log(type)
+                that.deleteItemId = id,
+                    that.deletItemType = type,
 
                     $.confirm({
                         title: '确认',
@@ -1586,23 +1584,65 @@ $(function() {
                                 btnClass: 'btn-primary',
                                 action: function() {
                                     //确认后的操作
-                                    axios.get(url,{params:data})
+                                    let that =this;
+
+                                    let url =$.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+
+                                    let jsonData = {
+                                        id:id,
+                                        isUsing:0,
+                                        type:type,
+                                        ownType:2,
+                                    };
+                                    // Loading.prototype.show();
+                                    // ajax提交
+                                    axios.post(url, jsonData)
                                         .then(function (res) {
                                             let resData = eval(res);
-                                            if(resData['data']['code'] === '200'){
-                                                if(type == 1){
-                                                    that.simpleLinkSettingActionSub = resData['data']['data'];
-                                                    that.actionEduSettingIndex=index;
+                                            // console.log(that.simpleLinkSettingActionSub);
+
+                                            if (type == 0) {
+                                                that.actions.push(resData['data']['data']);
+                                            }else if (type == 1){
+                                                that.simpleLinkSettingMain(type);
+                                                for(var i in that.simpleLinkSettingAction){
+
+                                                    if(that.simpleLinkSettingAction[i].id==resData.data.data.id){
+                                                        that.simpleLinkSettingAction.splice(i,1);
+                                                        that.simpleLinkSettingActionSub=[];
+                                                        // that.actionEduSettingIndex = 0;
+                                                        if(that.simpleLinkSettingAction.length>0){
+                                                            that.actionEduClick(0,that.simpleLinkSettingAction[0].id,1);
+                                                        }
+                                                        // that.actionEduClick(0,this.deleteItemId,1);
+                                                    }
+                                                }
+                                                //console.log(that.simpleLinkSettingAction);
+                                            }else if (type == 2){
+
+                                                for(var i in that.mealLinkSettingAction){
+                                                    if(that.mealLinkSettingAction[i].id==resData.data.data.id){
+                                                        that.mealLinkSettingAction.splice(i,1);
+                                                        that.mealLinkSettingActionSub=[];
+                                                        // that.actionEduSettingIndex = 0;
+                                                        if(that.mealLinkSettingAction.length>0){
+                                                            that.actionEduClick(0,that.mealLinkSettingAction[0].id,2);
+                                                        }
+                                                        // that.actionEduClick(0,this.deleteItemId,1);
+                                                    }
                                                 }
 
 
-
-                                            }else {
-                                                $.alert(resData['data']['msg']);
                                             }
+                                            //    that.updateItemName ='';
+
+                                            //$.alert(resData['data']['msg']);
+
                                         })
                                         .catch(function (error) {
-                                            $.alert(error);
+                                            //隐藏加载中
+                                            // Loading.prototype.hide();
+                                            $.alert(error)
                                         });
 
                                 }
@@ -1613,6 +1653,21 @@ $(function() {
                             }
                         }
                     });
+
+                let url2 = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList",$.cookie('url'));
+                let data2 ={
+                    type:type,
+                    ownType:2
+                };
+                axios.get(url2,{params:data2})
+                    .then(function (res) {
+                        let resData = eval(res);
+                        if(resData['data']['code'] === '200'){
+
+                        }else {
+                            $.alert(resData['data']['msg']);
+                        }
+                    })
             },
             updateTrain:function(id,type){
                 //this.

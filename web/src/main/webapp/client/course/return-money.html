@@ -349,6 +349,9 @@
                         window.location.reload()
                         alert("退费成功");
 
+                    }else{
+                        alert('退费失败,请重试');
+                        this.toDisabled = false;
                     }
                 });
             }

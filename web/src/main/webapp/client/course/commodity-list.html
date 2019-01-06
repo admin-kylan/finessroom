@@ -1,5 +1,5 @@
 
-<li class="list1 list on" id="course-commodity-list">
+<li class="list1 list on" id="course-commodity-list" v-cloak>
     <fieldset>
         <legend>筛选条件</legend>
         <div class="clearfix">
@@ -32,14 +32,21 @@
                     <option value="1">开始时间</option>
                     <option value="2">失效时间</option>
                     <option value="3">创建时间</option>
-                </select>
-                <input type="datetime" v-model="startDate" class="jeinput startDate" placeholder="开始日期" /> ~
-                <input type="datetime" v-model="endDate" class="jeinput endDate" placeholder="结束日期" />
+                </select> : 
+                <button type="button" class="btn btn-default" id="daterange-btn">
+					<span>
+						{{startDate&&endDate?(startDate+'至'+endDate):'选择筛选区间'}}
+					</span>
+					<i class="fa fa-calendar pull-right" style="margin-top: 3px;"></i>
+				</button>
+				<button type="button" class="btn select-time-btn" v-for="(item,key,index) in ranges" @click="changeTime(key,index)" :class="rangesIndex==index?'btn-info':'btn-default'">{{key}}</button>
+                <!--<input type="datetime" v-model="startDate" class="jeinput startDate" placeholder="开始日期" /> ~
+                <input type="datetime" v-model="endDate" class="jeinput endDate" placeholder="结束日期" />-->
             </p>
         </div>
         <div>
             <span class="title lh25">项目/产品搜索：</span>
-            <input type="text" placeholder="产品名称/项目名称" v-model="name"/>
+            <input type="text" placeholder="产品名称/项目名称" style="width: 300px;" v-model="name"/>
             <input type="submit" value="搜索" class="search" @click="loadData"/>
         </div>
     </fieldset>
@@ -96,14 +103,30 @@
                 <td>{{item.addProject.endTime| formatDate2}}</td>
                 <td>{{item.addProject.contractNumber}}</td>
                 <td>{{item.addProject.saleType| saleType}}</td>
-                <td class="grey">无</td>
+                <td class="grey">{{item.frClientPersonnelRelates|teachName}}</td>
             </tr>
             </tbody>
         </table>
     </div>
 </li>
 
-<script>
+<script type="text/javascript">
+	
+    var jdStar,jdEnd;
+    !function(){
+		let currentQuarter = moment().quarter() // 当前是第几季度
+		let currentYear = moment().year() // 当前年
+		jdStar=moment(moment(currentYear + '-01-01').toDate()).quarter(currentQuarter)
+		let endMonth = 3 * parseInt(currentQuarter) //当季度最后一个月
+		/* 对月数进行格式化 */
+		if(endMonth < 10)
+		   endMonth = '0' + endMonth
+		else
+		   endMonth += ''
+		let endMonthDays = this.moment(currentYear + '-' + endMonth).daysInMonth(); // 末尾月天数
+		let endDays = currentYear + '-' + endMonth + '-' + endMonthDays //完整年月日整合
+		jdEnd=this.moment(endDays)
+    }();
     var commodityListVue = new Vue({
         el: '#course-commodity-list',
         data: {
@@ -115,6 +138,15 @@
             endDate: '',
             name: '',
             result: [],
+            rangesIndex:0,//全部
+            ranges: {
+				'全部':['', ''],
+				'本天':[moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')],
+				'本周':[moment().startOf('week').format('YYYY-MM-DD'), moment().endOf('week').format('YYYY-MM-DD')],
+				'本月':[moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')],
+				'本季度':[jdStar.format('YYYY-MM-DD'), jdEnd.format('YYYY-MM-DD')],
+				'本年度':[moment().startOf('year').format('YYYY-MM-DD'), moment().endOf('year').format('YYYY-MM-DD')]
+			}, 
         },
         filters: {
             stateFilter: function (val) {
@@ -196,6 +228,12 @@
                     return "场地开课";
                 }
                 //销售类型 0 POS销售 1 新会员购买 2 续课 3 场地开课
+            },
+            teachName(item){
+                if(item){
+                    return item.flag;
+                }
+                return "无";
             }
         },
         computed: {},
@@ -209,6 +247,13 @@
 
         },
         methods: {
+        	changeTime:function(ky,idx){
+        		var vm=this;
+        		var _data=this.ranges[ky]
+        		vm.rangesIndex=idx;
+        		vm.startDate=_data[0];
+            	vm.endDate=_data[1];
+        	},
             loadData: function () { //
                 let param = {};
                 param.type = this.index;
@@ -270,4 +315,35 @@
 
         }
     });
+	var daterangeBtn=$('#daterange-btn').daterangepicker({
+			ranges: {
+				'本天': [moment(), moment()],
+				'本周': [moment().startOf('week'), moment().endOf('week')],
+				'本月': [moment().startOf('month'), moment().endOf('month')],
+				'本季度':[jdStar, jdEnd],
+				'本年度': [moment().startOf('year'), moment().endOf('year')]
+			},
+			showDropdowns:true,
+			locale: {
+		        applyLabel: '确定',
+		        cancelLabel: '取消',
+		        fromLabel: '起始时间',
+		        toLabel: '结束时间',
+		        customRangeLabel: '自定义',
+		        daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+		        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月','七月', '八月', '九月', '十月', '十一月', '十二月'],
+		        firstDay: 1,
+		
+		    },
+			opens: "right",
+			format: "YYYY-MM-DD",
+		},
+		function(start, end) {
+			var _start=start.format('YYYY-MM-DD')
+			var _end=end.format('YYYY-MM-DD')
+			commodityListVue.startDate=_start;
+			commodityListVue.endDate=_end;
+		}
+	);
+
 </script>

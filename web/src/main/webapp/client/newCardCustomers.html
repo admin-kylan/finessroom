@@ -1290,7 +1290,7 @@
                                         {{items.relName}}
                                     </option>
                                 </select>
-                                <input type="text" placeholder="分配比例/金额" v-model="loadData1.orderAllotSet.saleAllotNum" @change="checkNum(3,'saleAllotNum')">
+                                <input type="text" placeholder="分配比例/金额" v-model="loadData1.orderAllotSet.saleAllotNum" @change="checkNum(loadData1.orderAllotSet.saleAllotNum,'saleAllotNum',3)">
                                 <a href="#" class="btn btn-primary" @click="addOrderAllotSetOne">添加</a>
                             </div>
                             <table class="table table-bordered table-hover">
@@ -1310,8 +1310,8 @@
                                     </td>
                                     <td>{{item.saleAllotNum}}</td>
                                     <td>
-                                        <a href="#" @click="updateFamily(index)">修改</a>
-                                        /<a href="#" @click="deleteFamily(index)">删除</a>
+                                        <!--<a href="#" @click="updateFamily(index)">修改</a>/-->
+                                        <a href="#" @click="deleteFamily(index)">删除</a>
                                     </td>
                                 </tr>
                                 </tbody>

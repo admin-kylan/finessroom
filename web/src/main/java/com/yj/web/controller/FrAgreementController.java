@@ -64,11 +64,16 @@ public class FrAgreementController {
      * @return
      */
     @GetMapping("checkCardAgreement")
-    public JsonResult checkCardAgreement(HttpServletRequest request,String agreement){
+    public JsonResult checkCardAgreement(HttpServletRequest request,@RequestParam("agreement") String agreement,String code){
         if(StringUtils.isEmpty(agreement)){
             return JsonResult.failMessage("协议号不能为空");
         }
-        String code = CookieUtils.getCookieValue(request, "code",true);
+        if(StringUtils.isEmpty(code)){
+            code = CookieUtils.getCookieValue(request, "code", true);
+            if(StringUtils.isEmpty(code)){
+                return JsonResult.failMessage("客户代码获取异常");
+            }
+        }
         String id = service.checkCardAgreement(agreement,code);
         if("".equals(id)){
             return JsonResult.failMessage("协议号不可用");
@@ -85,7 +90,7 @@ public class FrAgreementController {
      * @return
      */
     @GetMapping("addCardAgreement")
-    public JsonResult addCardAgreement(HttpServletRequest request,@RequestParam("code")String code)throws YJException{
+    public JsonResult addCardAgreement(HttpServletRequest request,String code)throws YJException{
         if(StringUtils.isEmpty(code)){
             code = CookieUtils.getCookieValue(request, "code",true);
             if(StringUtils.isEmpty(code)){

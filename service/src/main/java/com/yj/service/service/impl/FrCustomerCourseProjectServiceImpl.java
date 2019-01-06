@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.yj.common.util.StringUtils;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dao.*;
 import com.yj.dal.model.*;
@@ -12,6 +12,7 @@ import com.yj.service.service.IFrCardOrderAllotSetService;
 import com.yj.service.service.IFrCardOrderDatailService;
 import com.yj.service.service.IFrCardOrderPayModeService;
 import com.yj.service.service.IFrCardOrderPriceDatailService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +92,8 @@ public class FrCustomerCourseProjectServiceImpl {
     private FrPrivatePackageMapper frPrivatePackageMapper;
     @Autowired
     private FrPrivatePackageRelationMapper frPrivatePackageRelationMapper;
+    @Autowired
+    private FrCardOrderDatailMapper frCardOrderDatailMapper;
 
 
     /**
@@ -120,10 +123,12 @@ public class FrCustomerCourseProjectServiceImpl {
         //数组
         JSONArray cardOrderPayModeData = JSONArray.parseArray((String) map.get("cardOrderPayModeData")) ;
         JSONArray cardOrderDetailList = JSONArray.parseArray((String) map.get("cardOrderDetailList"));
-        JSONArray cardOrderPriceDetailList = JSONArray.parseArray((String) map.get("cardOrderPriceDetailList"));
+      //  JSONArray cardOrderPriceDetailList = JSONArray.parseArray((String) map.get("cardOrderPriceDetailList"));
         JSONArray cardOrderAllotSetList = JSONArray.parseArray((String) map.get("cardOrderAllotSetList"));
         JSONArray clientPersonnelRelate = JSONArray.parseArray((String) map.get("clientPersonnelRelate"));
+        JSONObject cardOrderDetail = JSONObject.parseObject((String) map.get("cardOrderDetail"));
         Date now = new Date();
+
         String createUserId = (String) map.get("createUserId");
         String createUserName = (String) map.get("createUserName");
         String orderId = UUIDUtils.generateGUID();
@@ -131,6 +136,7 @@ public class FrCustomerCourseProjectServiceImpl {
         addProject.setId(orderId);
       //  addProject.setProjectId(orderId);
         addProjectMapper.insert(addProject);
+
 
         //保存数据库 order
         projectOrder.setId(UUIDUtils.generateGUID());
@@ -160,25 +166,39 @@ public class FrCustomerCourseProjectServiceImpl {
             frCardOrderPayMode.setOrderId(orderId);
             iFrCardOrderPayModeService.insert(frCardOrderPayMode);
         }
+
+        //资金明细表
         for(Object object: cardOrderDetailList){
-            FrCardOrderDatail frCardOrderDatail = JSONObject.parseObject(JSON.toJSONString(object), FrCardOrderDatail.class) ;
+            JSONObject jsonObject = (JSONObject) object;
+            FrCardOrderPriceDatail frCardOrderPriceDatail = JSONObject.parseObject(JSON.toJSONString(jsonObject.getJSONObject("orderdetailPrice")), FrCardOrderPriceDatail.class) ;
+            FrCardOrderDatail frCardOrderDatail = JSONObject.parseObject(JSON.toJSONString(jsonObject.getJSONObject("orderDetail")), FrCardOrderDatail.class) ;
+            String priceID = UUIDUtils.generateGUID();
+            frCardOrderPriceDatail.setOrderId(orderId);
+            frCardOrderPriceDatail.setCreateUserId(createUserId);
+            frCardOrderPriceDatail.setCreateUserName(createUserName);
+            frCardOrderPriceDatail.setId(priceID);
+            frCardOrderPriceDatail.setCreateTime(now);
+            iFrCardOrderPriceDatailService.insert(frCardOrderPriceDatail);
+
+
             frCardOrderDatail.setId(UUIDUtils.generateGUID());
             frCardOrderDatail.setCreateTime(now);
             frCardOrderDatail.setCreateUserId(createUserId);
             frCardOrderDatail.setCreateUserName(createUserName);
             frCardOrderDatail.setOrderId(orderId);
+            frCardOrderDatail.setOrderPriceId(priceID);
             iFrCardOrderDatailService.insert(frCardOrderDatail);
         }
 
-        for(Object object: cardOrderPriceDetailList){
-            FrCardOrderPriceDatail frCardOrderPriceDatail = JSONObject.parseObject(JSON.toJSONString(object), FrCardOrderPriceDatail.class) ;
-            frCardOrderPriceDatail.setOrderId(orderId);
-            frCardOrderPriceDatail.setCreateUserId(createUserId);
-            frCardOrderPriceDatail.setCreateUserName(createUserName);
-            frCardOrderPriceDatail.setId(UUIDUtils.generateGUID());
-            frCardOrderPriceDatail.setCreateTime(now);
-            iFrCardOrderPriceDatailService.insert(frCardOrderPriceDatail);
-        }
+//        for(Object object: cardOrderPriceDetailList){
+//            FrCardOrderPriceDatail frCardOrderPriceDatail = JSONObject.parseObject(JSON.toJSONString(object), FrCardOrderPriceDatail.class) ;
+//            frCardOrderPriceDatail.setOrderId(orderId);
+//            frCardOrderPriceDatail.setCreateUserId(createUserId);
+//            frCardOrderPriceDatail.setCreateUserName(createUserName);
+//            frCardOrderPriceDatail.setId(UUIDUtils.generateGUID());
+//            frCardOrderPriceDatail.setCreateTime(now);
+//            iFrCardOrderPriceDatailService.insert(frCardOrderPriceDatail);
+//        }
         for(Object object: cardOrderAllotSetList){
             FrCardOrderAllotSet frCardOrderAllotSet = JSONObject.parseObject(JSON.toJSONString(object), FrCardOrderAllotSet.class) ;
             frCardOrderAllotSet.setOrderId(orderId);
@@ -274,6 +294,8 @@ public class FrCustomerCourseProjectServiceImpl {
             FrProjectStartRecord frProjectStartRecord = new FrProjectStartRecord();
             FrProjectRemnantRecord frProjectRemnantRecord = new FrProjectRemnantRecord();
             List<FrProjectExtensionRecord> frProjectExtensionRecords = new ArrayList<>();
+            List<FrClientPersonnelRelate> frClientPersonnelRelates = null;
+            FrClientPersonnelRelate frClientPersonnelRelate = null;
             Shop shop = new Shop();
             Sdaduim sdaduim = new Sdaduim();
             //----
@@ -311,15 +333,22 @@ public class FrCustomerCourseProjectServiceImpl {
             addProjectConsumes = addProjectConsumeMapper.selectList(new EntityWrapper<AddProjectConsume>()
                     .where("AddProjectId = '" + addProject.getId() + "'"));
 
+            if(null == addProjectConsumes){
+                addProjectConsumes = new ArrayList<>();
+            }
             personnelInfo = personnelInfoMapper.selectById(sysConsumeOrder.getCreateId());
             frProjectStartRecord = frProjectStartRecordMapper.selectOne(frProjectStartRecord);
             frProjectRemnantRecord = frProjectRemnantRecordMapper.selectOne(frProjectRemnantRecord);
             frProjectExtensionRecords = frProjectExtensionRecordMapper.selectList(new EntityWrapper<FrProjectExtensionRecord>()
                     .where("projectOrderId = '" + addProject.getId() + "'"));
 
-            if(null == addProjectConsumes){
-                addProjectConsumes = new ArrayList<>();
+            frClientPersonnelRelates = frClientPersonnelRelateMapper.selectList(new EntityWrapper<FrClientPersonnelRelate>()
+                    .where("other_table_id = '" + addProject.getId() + "'"));
+            if(null != frClientPersonnelRelates && frClientPersonnelRelates.size() > 0){
+                frClientPersonnelRelate = frClientPersonnelRelates.get(0);
             }
+            //教练
+            map.put("frClientPersonnelRelates",frClientPersonnelRelate);
 
             //项目订单表
             map.put("projectOrder", JSONObject.toJSON(projectOrder));
@@ -380,6 +409,8 @@ public class FrCustomerCourseProjectServiceImpl {
             FrProjectStartRecord frProjectStartRecord = new FrProjectStartRecord();
             FrProjectRemnantRecord frProjectRemnantRecord = new FrProjectRemnantRecord();
             List<FrProjectExtensionRecord> frProjectExtensionRecords = new ArrayList<>();
+            List<FrClientPersonnelRelate> frClientPersonnelRelates = null;
+            FrClientPersonnelRelate frClientPersonnelRelate = null;
             Shop shop = new Shop();
             Sdaduim sdaduim = new Sdaduim();
             //----
@@ -421,10 +452,16 @@ public class FrCustomerCourseProjectServiceImpl {
             frProjectRemnantRecord = frProjectRemnantRecordMapper.selectOne(frProjectRemnantRecord);
             frProjectExtensionRecords = frProjectExtensionRecordMapper.selectList(new EntityWrapper<FrProjectExtensionRecord>()
                     .where("projectOrderId = '" + addProject.getId() + "'"));
-
+            frClientPersonnelRelates = frClientPersonnelRelateMapper.selectList(new EntityWrapper<FrClientPersonnelRelate>()
+                    .where("other_table_id = '" + addProject.getId() + "'"));
+            if(null != frClientPersonnelRelates && frClientPersonnelRelates.size() > 0){
+                frClientPersonnelRelate = frClientPersonnelRelates.get(0);
+            }
             if(null == addProjectConsumes){
                 addProjectConsumes = new ArrayList<>();
             }
+            //教练
+            map.put("frClientPersonnelRelates",frClientPersonnelRelate);
 
             //项目订单表
             map.put("projectOrder", JSONObject.toJSON(projectOrder));

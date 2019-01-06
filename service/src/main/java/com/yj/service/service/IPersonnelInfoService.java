@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public interface IPersonnelInfoService extends BaseService<PersonnelInfo> {
 
-    JsonResult getMarketUserList(String shopId,String code);
+    JsonResult getMarketUserList(String shopId,String code)throws YJException;
 
     List<PersonnelInfo> getServicePersonnel(Integer userType,String customerCode)throws YJException;
 

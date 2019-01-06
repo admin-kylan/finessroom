@@ -80,7 +80,7 @@
                     <td>{{item.addProject.startTime| formatDate2}}</td>
                     <td>{{item.addProject.endTime| formatDate2}}</td>
                     <td>{{item.addProject.saleType| saleType}}</td>
-                    <td class="grey">无</td>
+                    <td class="grey">{{item.frClientPersonnelRelates | teachName}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -100,6 +100,12 @@
             result: [], //结果集合
         },
         filters: {
+            teachName(item){
+                if(item){
+                    return item.flag;
+                }
+                return "无";
+            },
             stateFilter: function (val) {
                 let back = "";
                 if((val + "") == "0"){

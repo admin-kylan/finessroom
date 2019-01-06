@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationMemberOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationMemberOrder">
+        <id column="id" property="id" />
+        <result column="client_info_id" property="clientInfoId" />
+        <result column="class_num" property="classNum" />
+        <result column="begin_date_real" property="beginDateReal" />
+        <result column="end_date_real" property="endDateReal" />
+        <result column="use_user_name" property="useUserName" />
+        <result column="total_time" property="totalTime" />
+        <result column="create_date" property="createDate" />
+        <result column="price" property="price" />
+        <result column="card_type" property="cardType" />
+        <result column="card_name" property="cardName" />
+        <result column="use_benefit" property="useBenefit" />
+        <result column="remain_benefit" property="remainBenefit" />
+        <result column="create_name" property="createName" />
+        <result column="sale_user_name" property="saleUserName" />
+        <result column="score" property="score" />
+        <result column="description" property="description" />
+        <result column="bill_number" property="billNumber" />
+        <result column="is_use" property="isUse" />
+        <result column="member_assess" property="memberAssess" />
+        <result column="coach_summary" property="coachSummary" />
+        <result column="program_better" property="programBetter" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        client_info_id AS clientInfoId, class_num AS classNum, begin_date_real AS beginDateReal, end_date_real AS endDateReal, use_user_name AS useUserName, total_time AS totalTime, create_date AS createDate, price, card_type AS cardType, card_name AS cardName, use_benefit AS useBenefit, remain_benefit AS remainBenefit, create_name AS createName, sale_user_name AS saleUserName, score, description, bill_number AS billNumber, is_use AS isUse, member_assess AS memberAssess, coach_summary AS coachSummary, program_better AS programBetter, id
+    </sql>
+
+</mapper>

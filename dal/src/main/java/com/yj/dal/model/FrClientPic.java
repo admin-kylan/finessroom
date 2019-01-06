@@ -32,7 +32,7 @@ public class FrClientPic extends Model<FrClientPic> {
     @TableField("client_id")
     private String clientId;
     /**
-     * 图片类型（1、头像）
+     * 图片类型（1、头像；2、图片）
      */
     @TableField("pic_type")
     private Integer picType;

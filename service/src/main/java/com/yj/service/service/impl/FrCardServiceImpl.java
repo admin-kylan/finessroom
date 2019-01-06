@@ -80,6 +80,11 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
     private  IFrCardSupplyRecordService iFrCardSupplyRecordService;
     @Resource
     private  IFrClientPersonnelRelateService iFrClientPersonnelRelateService;
+    @Resource
+    private IFrCardLimitService limitService;
+    @Resource
+    private IFrClientVisitingService iFrClientVisitingService;
+
 
 
 
@@ -668,7 +673,6 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         Double allRightsNum = 0.0+(buyRights+giveRights);
         Double rightsNum = iFrCardOrderDatailService.getOrderPriceByOrderStatus(true, allRightsNum);
         frCardOrderDatail.setOrderRightsNum(rightsNum);
-
         //会员卡表
         baseMapper.insert(frCard);
         //订单表
@@ -711,6 +715,12 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         iFrCardOrderDatailService.insert(frCardOrderDatail);
         //设置会员卡的使用权益范围；
         iFrShopCardConsumeService.queryByCardTypeId(cardTypeId,frCard.getId(),frCard.getCustomerCode());
+        //查询客户是否设置了通用限定
+        FrCardLimit frCardLimit = limitService.getLimitInfoByClient(frCard.getCustomerCode(),frCard.getClientId());
+        if(frCardLimit != null){
+            frCardLimit.setCardId(frCard.getId());
+            limitService.insert(frCardLimit);
+        }
         return JsonResult.success(true);
     }
 
@@ -821,7 +831,8 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
      * @param CustomerCode
      * @return
      */
-    public Map<String,Object> getNumCard(String clientId,String CustomerCode,Integer num,boolean isFlag){
+    @Override
+    public Map<String,Object> getNumCard(String clientId,String CustomerCode,Integer num,boolean isFlag)throws YJException{
 //        获取当前时间+1个月后的时间
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -939,6 +950,14 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             frClientPic.setPicLink(userURL);
             iFrClientPicService.insert(frClientPic);
         }
+        //客户到访记录表插入一条数据
+        FrClientVisiting frClientVisiting = new FrClientVisiting();
+        frClientVisiting.setId(UUIDUtils.generateGUID());
+        frClientVisiting.setClientId(frClient1.getId());
+        Date date = new Date();
+        frClientVisiting.setVisitingTime(date);
+        frClientVisiting.setVisitingTime(date);
+        iFrClientVisitingService.insert(frClientVisiting);
         return JsonResult.success(true);
     }
 

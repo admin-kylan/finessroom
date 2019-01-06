@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducation">
+        <id column="id" property="id" />
+        <result column="execute_date_plan" property="executeDatePlan" />
+        <result column="begin_date_plan" property="beginDatePlan" />
+        <result column="end_date_plan" property="endDatePlan" />
+        <result column="shop_id" property="shopId" />
+        <result column="shop_name" property="shopName" />
+        <result column="course_id" property="courseId" />
+        <result column="course_name" property="courseName" />
+        <result column="type" property="type" />
+        <result column="coach_id" property="coachId" />
+        <result column="coach_name" property="coachName" />
+        <result column="room_id" property="roomId" />
+        <result column="room_name" property="roomName" />
+        <result column="reserve_total_num" property="reserveTotalNum" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="status" property="status" />
+        <result column="assistant_name" property="assistantName" />
+        <result column="assistant_id" property="assistantId" />
+        <result column="is_use" property="isUse" />
+        <result column="sdaduim_id" property="sdaduimId" />
+        <result column="sdaduim_name" property="sdaduimName" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="update_user_name" property="updateUserName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, execute_date_plan AS executeDatePlan, begin_date_plan AS beginDatePlan, end_date_plan AS endDatePlan, shop_id AS shopId, shop_name AS shopName, course_id AS courseId, course_name AS courseName, type, coach_id AS coachId, coach_name AS coachName, room_id AS roomId, room_name AS roomName, reserve_total_num AS reserveTotalNum, create_time AS createTime, update_time AS updateTime, status, assistant_name AS assistantName, assistant_id AS assistantId, is_use AS isUse, sdaduim_id AS sdaduimId, sdaduim_name AS sdaduimName, create_user_id AS createUserId, CustomerCode, create_user_name AS createUserName, update_user_id AS updateUserId, update_user_name AS updateUserName
+    </sql>
+
+
+    <select id="findEducationPublicListCoach" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            pi.ID coachId,
+            pi.RelName coachName,
+            pi.Mobile coachMobile,
+            pi.Sex coachSex,
+            pi.JobNumber coachJobNumber,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            edu.id eduId,
+            edu.begin_date_plan eduBeginDate,
+            edu.end_date_plan eduEndDate,
+            edu.shop_name shopName,
+            edu.course_id courseId,
+            edu.course_name courseName,
+           /* edu.coach_id coachId,
+            edu.coach_name coachName,*/
+            edu.reserve_total_num reserveTotalNum,
+            edu.assistant_name assistantName,
+            edu.assistant_id assistantId
+        FROM
+            PersonnelInfo pi
+            LEFT JOIN PersonlRole pr ON pi.id = pr.PersonnelInfoId
+            LEFT JOIN RoleInfo ri ON pr.RoleInfoId = ri.Id
+            LEFT JOIN ( SELECT * FROM fr_education edu WHERE edu.execute_date_plan =  #{executeDate} AND edu.type = ${teachType} AND edu.status = 0 AND edu.is_use = 1 AND edu.sdaduim_id = #{sdaduimId}) edu ON edu.coach_id = pi.id
+        WHERE
+            ri.UserType = 3
+            AND ri.ISTeach = 1
+            AND edu.CustomerCode = #{CustomerCode}
+            AND pi.ShopId= #{shopId}
+            AND pi.IsDel = 0
+        ORDER BY
+            edu.execute_date_plan ASC
+    </select>
+
+    <select id="findEducationPublicListRoom" parameterType="java.lang.String" resultType="java.util.Map">
+         SELECT
+            pi.ID coachId,
+            pi.RelName coachName,
+            pi.Mobile coachMobile,
+            pi.Sex coachSex,
+            pi.JobNumber coachJobNumber,
+            gcr.id roomId,
+            gcrs.id roomSeatId,
+            gcr.name roomName,
+            gcrs.seat_num seatNum,
+            gcrs.cnt_col colNUm,
+            gcrs.cnt_row rowNUm,
+           /* gcr.contain_num allowMemberNum,*/
+           (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            edu.id eduId,
+            edu.begin_date_plan eduBeginDate,
+            edu.end_date_plan eduEndDate,
+            edu.shop_name shopName,
+            edu.course_id courseId,
+            edu.course_name courseName,
+           /* edu.coach_id coachId,
+            edu.coach_name coachName,*/
+            edu.reserve_total_num reserveTotalNum,
+            edu.assistant_name assistantName,
+            edu.assistant_id assistantId
+        FROM
+            fr_group_class_room_seat gcrs
+            LEFT JOIN fr_group_class_room gcr ON gcrs.class_room_id = gcr.id
+            LEFT JOIN fr_education edu ON edu.room_id = gcr.id
+            left join PersonnelInfo pi on edu.coach_id = pi.id
+        WHERE
+            edu.shop_id = #{shopId}
+            AND edu.sdaduim_id = #{sdaduimId}
+            AND edu.CustomerCode = #{CustomerCode}
+            AND gcr.is_using = 1
+            AND gcrs.is_using = 1
+            AND edu.execute_date_plan = #{executeDate}
+            AND edu.type = ${teachType}
+            AND edu.status = 0
+            AND edu.is_use = 1
+    </select>
+
+    <select id="findEducationPublicListDate" parameterType="java.lang.String" resultType="java.util.Map">
+         SELECT
+            pi.ID coachId,
+            pi.RelName coachName,
+            pi.Mobile coachMobile,
+            pi.Sex coachSex,
+            pi.JobNumber coachJobNumber,
+            gcr.id roomId,
+            gcrs.id roomSeatId,
+            gcr.name roomName,
+            gcrs.seat_num seatNum,
+            gcrs.cnt_col colNUm,
+            gcrs.cnt_row rowNUm,
+           (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            edu.id eduId,
+            edu.begin_date_plan eduBeginDate,
+            edu.end_date_plan eduEndDate,
+            edu.shop_name shopName,
+            edu.course_id courseId,
+            edu.course_name courseName,
+           /* edu.coach_id coachId,
+            edu.coach_name coachName,*/
+            edu.reserve_total_num reserveTotalNum,
+            edu.assistant_name assistantName,
+            edu.assistant_id assistantId
+        FROM
+            fr_education edu
+            LEFT JOIN fr_group_class_room gcr on edu.room_id = gcr.id
+            LEFT JOIN fr_group_class_room_seat gcrs ON gcrs.class_room_id = gcr.id
+            left join PersonnelInfo pi on edu.coach_id = pi.id
+        WHERE
+            edu.shop_id = #{shopId}
+            AND edu.sdaduim_id = #{sdaduimId}
+            AND edu.CustomerCode = #{CustomerCode}
+            AND gcr.is_using = 1
+            AND gcrs.is_using = 1
+            AND edu.execute_date_plan >= #{executeBeginDate}
+            AND edu.execute_date_plan <![CDATA[ <= ]]> #{executeEndDate}
+            AND edu.type = ${teachType}
+            AND edu.status = 0
+            AND edu.is_use = 1
+    </select>
+
+</mapper>

@@ -191,10 +191,10 @@
             },
             'selectData':{
                 handler(val){
-                    this.price = val.projectOrder.totalPrice - val.projectOrder.noPrice;//已付款金额
+                    this.price = val.projectOrder.totalPrice - val.projectOrder.noPrice + parseFloat(val.sysConsumeOrder.cashPledge);//已付款金额
                     this.totalPrice = val.projectOrder.totalPrice;//实际付款金额
                     this.noPrice = val.projectOrder.noPrice;//实际欠款金额
-
+                    //已付款要加上定金
 
                 },
                 deep: true,
@@ -255,6 +255,9 @@
                         window.location.reload()
                         alert("补余成功");
 
+                    }else{
+                        alert('补余失败,请重试');
+                        this.toDisabled = false;
                     }
                 })
             }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationPlanMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationPlan">
+        <id column="id" property="id" />
+        <result column="education_id" property="educationId" />
+        <result column="action_type" property="actionType" />
+        <result column="action_name" property="actionName" />
+        <result column="action_period" property="actionPeriod" />
+        <result column="action_strength" property="actionStrength" />
+        <result column="num" property="num" />
+        <result column="remarks" property="remarks" />
+        <result column="create_date" property="createDate" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, education_id AS educationId, action_type AS actionType, action_name AS actionName, action_period AS actionPeriod, action_strength AS actionStrength, num, remarks, create_date AS createDate, update_date AS updateDate
+    </sql>
+
+</mapper>

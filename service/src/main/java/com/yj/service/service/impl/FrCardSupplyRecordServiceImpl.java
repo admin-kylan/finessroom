@@ -322,10 +322,11 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
     @Override
     public PageUtils queryContinueCardLis(Page page, Map<String,Object> map) throws YJException {
         map = this.getCardTypeData(map);
-        if(page != null){
-            List<Map<String,Object>>  list = baseMapper.queryContinueCardLis(page,map);
-            page.setRecords(list);
+        if(page == null){
+            page = new Page();
         }
+        List<Map<String,Object>>  list = baseMapper.queryContinueCardLis(page,map);
+        page.setRecords(list);
         return new PageUtils(page);
     }
 

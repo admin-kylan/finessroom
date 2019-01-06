@@ -976,8 +976,14 @@ var newCardCustomers = new Vue({
             }
             if(that.cardMap.allotSetType == 1){
                 // return $.alert("业绩分配信息设置有误");
+                that.loadData1.orderAllotSetSav = that.cardMap.orderAllotSetSav;
+                that.loadData1.orderAllotSetList =  that.cardMap.orderAllotSetList;
+
                 if (!that.loadData1.orderAllotSetSav.allotType) {
-                    return $.alert("销售价格分配比例/金额类型需选择")
+                    that.loadData1.orderAllotSetSav = that.cardMap.orderAllotSetSav;
+                    if(!that.loadData1.orderAllotSetSav.allotType){
+                        return $.alert("销售价格分配比例/金额类型需选择")
+                    }
                 }
                 if (!that.loadData1.orderAllotSetSav.allotNum) {
                     return $.alert("销售价格分配比例/金额需填写")
@@ -1309,7 +1315,7 @@ var newCardCustomers = new Vue({
             that.loadData1.cardsList = [];
             that.loadData2.cardFlagList = [];
             //根据门店获取门店下的所有卡种
-            var url = $.stringFormat('{0}/frCardType/getByShopIdList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardType/getByShopIdAllList', $.cookie('url'));
             $.get(url, {
                     shopId: shopId,//门店id
                     type: 0,//卡种类型
@@ -1318,13 +1324,13 @@ var newCardCustomers = new Vue({
                 function (res) {
                     if (res.code == '200') {
                         that.loadData1.cardsList = res.data;
-                        var cardF = '';
+                        var cardF = [];
                         if(that.loadData1.cardsList && that.loadData1.cardsList.length >0){
                            for( var i = 0 ; i < that.loadData1.cardsList.length ; i++){
                               var obj = that.loadData1.cardsList[i];
                               var f = obj.cardFlag;
-                              if(cardF.search(f) == -1){
-                                  cardF = cardF+','+f;
+                              if(cardF.indexOf(f) == -1){
+                                  cardF.push(f);
                                   var data = {
                                       cardFlag :f,
                                       cardTypeId:obj.id
@@ -2048,6 +2054,21 @@ var newCardCustomers = new Vue({
                     that.randomNumber = '';
                 }
             });
+        },
+        //检索数据
+        checkNum:function (num,str,t) {
+            var that = this;
+            var mess = '';
+            var isFlag = false;
+            //检索纯数字
+            if(t == 3){
+                var isFlag = checkNum(num);
+                mess = "只能输入纯数字";
+            }
+            if (!isFlag) {
+                that.loadData1.orderAllotSet[str] = '';
+                return $.alert(mess);
+            }
         },
     }
 

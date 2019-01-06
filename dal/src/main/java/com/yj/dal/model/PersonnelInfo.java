@@ -15,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2018-10-09
+ * @since 2018-12-31
  */
 @TableName("PersonnelInfo")
 public class PersonnelInfo extends Model<PersonnelInfo> {
@@ -26,7 +26,7 @@ public class PersonnelInfo extends Model<PersonnelInfo> {
      * 客户代码
      */
     @TableField(fill = FieldFill.INSERT)
-    private String customerCode;
+    private String CustomerCode;
     /**
      * 捷径系统用户信息表
      */
@@ -139,11 +139,11 @@ public class PersonnelInfo extends Model<PersonnelInfo> {
 
 
     public String getCustomerCode() {
-        return customerCode;
+        return CustomerCode;
     }
 
-    public void setCustomerCode(String customerCode) {
-        this.customerCode = customerCode;
+    public void setCustomerCode(String CustomerCode) {
+        this.CustomerCode = CustomerCode;
     }
 
     public String getId() {
@@ -370,34 +370,34 @@ public class PersonnelInfo extends Model<PersonnelInfo> {
     @Override
     public String toString() {
         return "PersonnelInfo{" +
-        ", customerCode=" + customerCode +
-        ", id=" + id +
-        ", UserName=" + UserName +
-        ", PassWord=" + PassWord +
-        ", RelName=" + RelName +
-        ", Sex=" + Sex +
-        ", Mobile=" + Mobile +
-        ", CreateTime=" + CreateTime +
-        ", EntryTime=" + EntryTime +
-        ", LeaveTime=" + LeaveTime +
-        ", ShopId=" + ShopId +
-        ", DepartmentId=" + DepartmentId +
-        ", Status=" + Status +
-        ", Birthday=" + Birthday +
-        ", JobNumber=" + JobNumber +
-        ", Email=" + Email +
-        ", IndoorTel=" + IndoorTel +
-        ", DirectTel=" + DirectTel +
-        ", GroupNumber=" + GroupNumber +
-        ", FingerPrint=" + FingerPrint +
-        ", Veriface=" + Veriface +
-        ", IsDel=" + IsDel +
-        ", DeleteTime=" + DeleteTime +
-        ", DeletedBy=" + DeletedBy +
-        ", DeletedById=" + DeletedById +
-        ", ExtendField1=" + ExtendField1 +
-        ", ExtendField2=" + ExtendField2 +
-        ", ExtendField3=" + ExtendField3 +
-        "}";
+                ", CustomerCode=" + CustomerCode +
+                ", id=" + id +
+                ", UserName=" + UserName +
+                ", PassWord=" + PassWord +
+                ", RelName=" + RelName +
+                ", Sex=" + Sex +
+                ", Mobile=" + Mobile +
+                ", CreateTime=" + CreateTime +
+                ", EntryTime=" + EntryTime +
+                ", LeaveTime=" + LeaveTime +
+                ", ShopId=" + ShopId +
+                ", DepartmentId=" + DepartmentId +
+                ", Status=" + Status +
+                ", Birthday=" + Birthday +
+                ", JobNumber=" + JobNumber +
+                ", Email=" + Email +
+                ", IndoorTel=" + IndoorTel +
+                ", DirectTel=" + DirectTel +
+                ", GroupNumber=" + GroupNumber +
+                ", FingerPrint=" + FingerPrint +
+                ", Veriface=" + Veriface +
+                ", IsDel=" + IsDel +
+                ", DeleteTime=" + DeleteTime +
+                ", DeletedBy=" + DeletedBy +
+                ", DeletedById=" + DeletedById +
+                ", ExtendField1=" + ExtendField1 +
+                ", ExtendField2=" + ExtendField2 +
+                ", ExtendField3=" + ExtendField3 +
+                "}";
     }
 }

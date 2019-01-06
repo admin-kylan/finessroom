@@ -97,6 +97,9 @@
     float: left;
    
 }
+.form_box_right input[type=radio]{margin-top: 9px;
+    margin-right: 2px}
+.form_box_right label{margin-left: 20px;display: inline-block;}
 #employee .form .form_box .form_box_right.shuxing input{
     margin-top: 9px;
     margin-right: 2px

@@ -133,15 +133,14 @@
 
     <select id="getClient" resultMap="BaseResultMap1" parameterType="java.lang.String">
         SELECT
+        (SELECT c.pic_link  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) pic_link,
+        (SELECT c.id  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) cp_id,
+        (SELECT c.client_id  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) client_id,
         cl.*,qq,caution_question,
-        le.level_name c_flag,
-        cp.id cp_id, cp.client_id client_id, cp.pic_link pic_link
+        le.level_name c_flag
         FROM
         fr_client cl
-        <!-- 查询会员等级 -->
         LEFT JOIN fr_level le ON le.id = cl.level_id
-        <!-- 头像 -->
-        LEFT JOIN fr_client_pic cp ON cp.client_id = cl.id
         WHERE cl.id = #{id}
     </select>
     <!--<select id="selectExistenceList" resultType="com.yj.dal.dto.ExistenceClientDTO">-->
@@ -1213,8 +1212,8 @@
                     <when test="clientType=='6'.toString()">
                         <!--今日待跟进 -->
                         <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
-                            AND (follow_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')) or follow_time = ''
-                            or follow_time IS NULL
+                            AND ((follow_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')) or follow_time = ''
+                            or follow_time IS NULL)
                         </if>
                     </when>
                     <when test="clientType=='7'.toString()">
@@ -1759,8 +1758,8 @@
                     <when test="clientType=='7'.toString()">
                         <!--今日待跟进 -->
                         <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
-                            AND (follow_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')) or follow_time = ''
-                            or follow_time IS NULL
+                            AND ((follow_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')) or follow_time = ''
+                            or follow_time IS NULL)
                         </if>
                     </when>
                     <when test="clientType=='8'.toString()">
@@ -1907,13 +1906,13 @@
         <!-- 根据教练 -->
         <if test="personalId != null and personalId != ''">
             JOIN (
-            select client_id,personal_id from fr_client_personnel_relate where type=0
+            select client_id,personal_id from fr_client_personnel_relate where type=0 and user_type=0
             )relate on relate.client_id=cl.id and relate.personal_id in (#{personalId})
         </if>
         <!-- 门店 -->
         <if test="shopId != null and shopId != ''">
             JOIN(
-            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{shopId}
+            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{shopId} and user_type=0
             )sd on sd.client_id=cl.id
         </if>
         ) AS tt
@@ -1923,7 +1922,7 @@
                 fcv.client_id
                 FROM
                 fr_client_personnel_relate fcv
-                where fcv.type=1) or protectDay &lt; 0) and (type=0 or type is null))
+                where fcv.type=1  and fcv.user_type=0) or protectDay &lt; 0) and (type=0 or type is null))
             </if>
             <!-- 根据性别 -->
             <if test="sex != null ">
@@ -2037,7 +2036,7 @@
         pi3.RelName operator
         FROM
         fr_client cl
-        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id and fcpi.pic_type=1
         AND fcpi.pic_state = 1
         AND fcpi.pic_type = 1
         LEFT JOIN ( SELECT *, CAST ( '潜在客户' AS VARCHAR ) AS 'clientType' FROM fr_client_latence_personal UNION SELECT *,
@@ -2060,7 +2059,7 @@
         FROM
         fr_client cl
         LEFT JOIN
-        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr JOIN fr_client_personal fclp ON
+        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr  JOIN fr_client_personal fclp ON
         fclp.client_id= fpr.client_id ) lp on lp.client_id=cl.id
         LEFT JOIN fr_level fl on fl.id=cl.level_id
         WHERE cl.is_using = 1 and fl.is_using = 1 ) lp
@@ -2072,7 +2071,7 @@
         LEFT JOIN PersonnelInfo pi3
         ON pi3.ID = #{personalId}
         AND pi3.Status = 0
-        LEFT JOIN fr_client_personnel_relate fcpr ON cl.id= fcpr.client_id
+        LEFT JOIN fr_client_personnel_relate fcpr  ON cl.id= fcpr.client_id  and fcpr.user_type=0
         LEFT JOIN Shop shop ON fcp.shop_id = shop.ID
         LEFT JOIN (
         SELECT DISTINCT
@@ -2160,13 +2159,13 @@
         <!-- 根据门店 -->
         <if test="storeId != null and storeId != ''">
             JOIN(
-            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{storeId}
+            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{storeId}  and user_type=0
             )sd on sd.client_id=cl.id
         </if>
         <!-- 根据教练 -->
         <if test="coachId != null and coachId != ''">
             JOIN (
-            select client_id,personal_id from fr_client_personnel_relate where type=0
+            select client_id,personal_id from fr_client_personnel_relate where type=0  and user_type=0
             )relate on relate.client_id=cl.id and relate.personal_id in (#{coachId})
         </if>
         ) tt
@@ -2370,7 +2369,7 @@
         cl.sex,
         cl.birthday,
         cl.home_add home,
-        (select pic_link from fr_client_pic where client_id=cl.id) pic,
+        (select pic_link from fr_client_pic where client_id=cl.id and pic_type=1) pic,
         ISNULL((select stuff((select ','+physiology_type_content from fr_client_physiology_relate fc where fc.client_id=cl.id and type=3 for xml path('')),1,1,'')),'无统计') healthy,
         ISNULL((select stuff((select ','+life_type_content from fr_client_life_relate fc where fc.client_id=cl.id and type=4 for xml path('')),1,1,'')),'无记录') vehicle,
         ISNULL((select stuff((select ','+work_type_content from fr_client_work_relate fc where fc.client_id=cl.id and type=1 for xml path('')),1,1,'')),'无记录') industry,

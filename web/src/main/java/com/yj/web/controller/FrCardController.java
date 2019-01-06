@@ -60,8 +60,13 @@ public class FrCardController {
      * @Date: 2018/9/7 10:01
      */
     @GetMapping("/getInvalidCardNoList")
-    public JsonResult invalidList(@RequestParam Map<String, Object> params, HttpServletRequest request) throws YJException {
-        String code = CookieUtils.getCookieValue(request, "code", true);
+    public JsonResult invalidList(@RequestParam Map<String, Object> params, HttpServletRequest request,@RequestParam String code) throws YJException {
+        if(StringUtils.isEmpty(code)){
+            code = CookieUtils.getCookieValue(request, "code", true);
+            if(StringUtils.isEmpty(code)){
+                throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
+            }
+        }
         params.put("code",code);
         return JsonResult.success(service.queryPage(params));
     }
@@ -73,10 +78,12 @@ public class FrCardController {
      * @Date: 2018/9/10 18:14
      */
     @PostMapping("/postAddInvalidCardNo")
-    public JsonResult addInvalidCardNo(@RequestBody FrCard frCard,HttpServletRequest request) throws YJException {
-        String code = CookieUtils.getCookieValue(request, "code", true);
+    public JsonResult addInvalidCardNo(@RequestBody FrCard frCard,HttpServletRequest request,@RequestParam String code) throws YJException {
         if (StringUtils.isEmpty(code)) {
-            throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
+            code = CookieUtils.getCookieValue(request, "code", true);
+            if(StringUtils.isEmpty(code)){
+                throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
+            }
         }
         boolean update = service.addInvalidCardNo(frCard,code);
         if(update){
@@ -334,7 +341,7 @@ public class FrCardController {
         if(StringUtils.isEmpty(shopId)){
             shopId = CookieUtils.getCookieValue(request,"shopid",true);
             if(StringUtils.isEmpty(shopId)){
-               return  JsonResult.failMessage("未获取当前操作的门店id");
+                return  JsonResult.failMessage("未获取当前操作的门店id");
             }
         }
 

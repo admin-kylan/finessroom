@@ -74,7 +74,7 @@ body {
 
 #customerMembershipCard .tableWrap table td {
     white-space: nowrap;
-    padding: 4px;
+    padding: 6px;
 }
 
 #customerMembershipCard .tableWrap .page {
@@ -453,7 +453,7 @@ body {
 
 /* 新购 */
 #NewPurchase {
-    padding: 10px;
+    padding: 10px 15px;
 }
 
 #NewPurchase .NewPurchase_top {
@@ -497,13 +497,14 @@ body {
     border-color: rgba(255, 204, 0, 1);
     color: #fff;
     text-decoration: none;
+    padding: 6px 10px;
 }
 
 #NewPurchase .NewPurchase_top .btn-primary {
     background-color: rgba(153, 153, 153, 1);
     border-color: rgba(153, 153, 153, 1);
+    padding: 6px 10px;
 }
-
 #NewPurchase .NewPurchase_box {
     border: 1px solid #99ccff;
     line-height: 30px;
@@ -540,6 +541,7 @@ body {
 #NewPurchase .NewPurchase_box>div .NewPurchase_box_right input {
     float: left;
     height: 30px;
+    background-color: #fff;    border-width: 1px;
 }
 
 #NewPurchase .NewPurchase_box>div .NewPurchase_box_right input[type="checkbox"] {
@@ -571,16 +573,19 @@ body {
     margin-right: 10px;
     background-color: rgba(153, 153, 153, 1);
     border-color: rgba(153, 153, 153, 1);
+    padding: 6px 10px;
 }
 
 #NewPurchase .NewPurchase_box>div .NewPurchase_box_right .btn-primary:nth-child(3) {
     background-color: rgba(0, 102, 255, 1);
     border-color: rgba(0, 102, 255, 1);
+    padding: 6px 10px;
 }
 
 #NewPurchase .NewPurchase_box>div .NewPurchase_box_right .btn-primary:nth-child(4) {
     background-color: rgba(255, 204, 0, 1);
     border-color: rgba(255, 204, 0, 1);
+    padding: 6px 10px;
 }
 
 #NewPurchase .NewPurchase_box>div .NewPurchase_box_right .btn-warning {
@@ -589,6 +594,7 @@ body {
     color: #fff;
     min-width: 100px;
     border-radius: 5px;
+    padding: 6px 10px;
 }
 
 #NewPurchase .NewPurchase_footer table tr th {
@@ -1596,7 +1602,7 @@ body {
 
 /* <!-- 续卡 --> */
 #renewalCard {
-    padding: 10px;
+    padding: 5px 15px;
 }
 
 #renewalCard .renewalCard_top {
@@ -1607,6 +1613,7 @@ body {
 #renewalCard .renewalCard_top span {
     float: left;
     color: red;
+    margin-bottom: 5px;
 }
 
 #renewalCard .renewalCard_top>span {
@@ -2465,7 +2472,7 @@ body {
     border-right: 1px solid rgba(228, 228, 228, 1);
     /* border-bottom: 1px solid rgba(228, 228, 228, 1); */
     background-color: rgba(246, 246, 246, 1);
-    padding: 20px;
+    padding: 0 20px;
     overflow: hidden;
     text-align: center;
 }
@@ -2475,7 +2482,9 @@ body {
     line-height: 30px;
     margin: 15px 0;
 }
-
+.sc_box_title{
+	background-color: #00cccc;color: #2d433e;padding: 10px 20px;
+}
 #SupplementaryCard .transferCard_b .transferCard_a_left .sc .sc_box input[type=text] {
     height: 30px;
     float: left;
@@ -2498,7 +2507,7 @@ body {
 }
 
 #SupplementaryCard .transferCard_b .transferCard_a_left .sc .sc_box .btn-danger {
-    padding: 4px;
+    padding: 6px;
     float: left;
     background-color: red;
     border-radius: 0;
@@ -2540,7 +2549,7 @@ body {
 }
 
 #SupplementaryCard .transferCard_b .transferCard_a_bottom>div {
-    line-height: 40px;
+    line-height: 37px;
     padding: 0 15px;
 }
 
@@ -2549,11 +2558,15 @@ body {
 }
 
 #SupplementaryCard .transferCard_b .transferCard_a_bottom>div:nth-child(1) {
+    border-bottom: 1px solid #ccc;background-color: #e4e4e4;
+}
+#SupplementaryCard .transferCard_b .transferCard_a_bottom>div:nth-last-of-type(1){
     border-bottom: 1px solid #ccc;
 }
-
+.transferCard_a_bottom .table{margin: 8px!important;}
 #SupplementaryCard .transferCard_b .transferCard_a_bottom .table thead tr th {
     text-align: center;
+    border: 0;font-weight: 500;
 }
 
 
@@ -3097,7 +3110,7 @@ body {
     border-right: 1px solid rgba(228, 228, 228, 1);
     /* border-bottom: 1px solid rgba(228, 228, 228, 1); */
     /* background-color: rgba(246, 246, 246, 1); */
-    padding: 10px;
+    padding: 0 20px;
     overflow: hidden;
     text-align: center;
 }
@@ -3175,10 +3188,10 @@ body {
 }
 
 #DaughterCard .transferCard_b .transferCard_a_bottom>div {
-    line-height: 40px;
+    line-height: 37px;
     padding: 0 15px;
+    border-bottom: 1px solid #ccc;
 }
-
 #DaughterCard .transferCard_b .transferCard_a_bottom .table thead tr th {
     text-align: center;
 }
@@ -4032,7 +4045,7 @@ body {
 }
 
 .transferCard-con {
-    padding: 5px 8px;
+    padding: 5px 15px;
 }
 
 .transferCard-con * {
@@ -4328,7 +4341,7 @@ body {
 }
 
 .green-head-table2 th {
-    background: #090;
+    background: #00cc00;
     font-weight: 400;
     text-align: center;
     border-right: 1px solid #e4e4e4;
@@ -5061,6 +5074,7 @@ div.XFFS-gray-btns .XFFS-gray-btn {
     width: 150px;
     padding-left: 3px;
 }
+.year2-modal .modal-dialog{margin-top: 80px;}
 .modal-style .date-form-control{padding: 5px;background: url(../img/date-bg.png) 170px center / 20px no-repeat;margin-left: 5px;width: 220px;}
 .fieldset-p{margin-top: 10px;}
 .year2-modal .w100{width: 100px;background-color: #c1e5fb;line-height: 30px;}

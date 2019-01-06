@@ -15,11 +15,13 @@
 	height: 30px;
 	line-height: 30px;
 	border-bottom:1px solid #ccc;
+	border-left: 4px solid transparent;
 	cursor: pointer;
 }
+#customerPersonalDetails fieldset{padding: 5px 10px;}
 #customerPersonalDetails .content .left li.on{
-	background: #0cc;
-	color:#fff;
+	border-left-color: #0cc;
+	color:#0cc;
 }
 #customerPersonalDetails .content .right{
 	float:left;
@@ -110,7 +112,7 @@
 	line-height: 20px;
 	padding-left:20px;
 }
-#customerPersonalDetails .content .right input[type=checkbox]{
+#customerPersonalDetails .content .right input[type=checkbox],#customerPersonalDetails .content .right input[type=radio]{
 	position: relative;
 	top:2px;
 	margin-right:3px;
@@ -200,6 +202,11 @@
 #customerPersonalDetails .content .right .lis8910 .lefBar{
 	float:left;
 	width:10%;
+	height: 100%;
+	height: 100vh;
+	border-right: 1px solid #ccc;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	
 }
 #customerPersonalDetails .content .right .lis8910 .lefBar p{

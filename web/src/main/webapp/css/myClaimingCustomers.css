@@ -87,14 +87,14 @@ fieldset{
 .follow input[type=date]{
     padding: 4px 0;
 }
-.follow input[type=button]{
+.follow button[type=button]{
 	width:60px;
 	height:30px;
 	border-radius: 3px;
-	background:#fff;
-	color: #333;
+	padding: 0;
 	cursor: pointer;
-	border: 1px solid #333;
+	border: none;
+	margin-right: 8px;
 }
 .follow input[type=submit].active {
 	background: #0cc;
@@ -113,7 +113,7 @@ fieldset{
     height: 18px;
 	border:1px solid #ccc;
 }
-.search input:nth-child(3){
+/*.search input:nth-child(3){
 	background:#fc0;
 }
 .search input:nth-child(4){
@@ -121,7 +121,7 @@ fieldset{
 }
 .search input:nth-child(5){
 	background:rgba(0, 153, 255, 1);
-}
+}*/
 .operation{
 	margin:10px;
 	overflow: hidden;

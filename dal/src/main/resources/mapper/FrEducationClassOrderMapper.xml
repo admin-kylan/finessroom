@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationClassOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationClassOrder">
+        <id column="id" property="id" />
+        <result column="education_id" property="educationId" />
+        <result column="total_time" property="totalTime" />
+        <result column="total_gain" property="totalGain" />
+        <result column="total_num" property="totalNum" />
+        <result column="finish_num" property="finishNum" />
+        <result column="undone_num" property="undoneNum" />
+        <result column="create_user" property="createUser" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="score" property="score" />
+        <result column="member_assess" property="memberAssess" />
+        <result column="coach_summary" property="coachSummary" />
+        <result column="program_better" property="programBetter" />
+        <result column="begin_date_real" property="beginDateReal" />
+        <result column="end_date_real" property="endDateReal" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, education_id AS educationId, total_time AS totalTime, total_gain AS totalGain, total_num AS totalNum, finish_num AS finishNum, undone_num AS undoneNum, create_user AS createUser, create_user_id AS createUserId, score, member_assess AS memberAssess, coach_summary AS coachSummary, program_better AS programBetter, begin_date_real AS beginDateReal, end_date_real AS endDateReal
+    </sql>
+
+</mapper>

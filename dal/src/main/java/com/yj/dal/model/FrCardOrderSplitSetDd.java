@@ -27,7 +27,7 @@ public class FrCardOrderSplitSetDd extends Model<FrCardOrderSplitSetDd> {
     @TableField("split_set_id")
     private String splitSetId;
     /**
-     * 分期天数
+     * 分期到期时间
      */
     @TableField("split_date")
     private Date splitDate;

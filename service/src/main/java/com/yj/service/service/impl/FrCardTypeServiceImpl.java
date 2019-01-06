@@ -246,7 +246,6 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
     public JsonResult deleteFrCardType(String id, String shopId) {
         try {
             //获取该系列下是否有卡种，以及卡种下是否有卡，并提示删除着
-
             //先查询底下卡种
             List<FrCardType> list = this.selectList(
                     new EntityWrapper<FrCardType>().where("p_id = {0}", id)
@@ -257,7 +256,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                     List list1 = frCardMapper.selectList(
                             new EntityWrapper<FrCard>()
                                     .where("card_type_id = {0}", frCardType.getId())
-                                    .and("is_using=1")
+                                    .and("is_using = 1")
                     );
                     if (list1 != null && list1.size() > 0) {
                         return JsonResult.failMessage("该卡系列的卡种下已有会员卡正在使用，不可删除！");
@@ -265,7 +264,6 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                 }
                 //删除卡种与门店关系
                 for (FrCardType frCardType : list) {
-
                     //删除卡种与门店关系表
                     int c1 = frShopCardTypeRelateMapper.delete(
                             new EntityWrapper<FrShopCardTypeRelate>()
@@ -273,25 +271,22 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                     );
                     //删除卡种（与卡系列关系）
                     int c2 = frCardTypeMapper.deleteById(frCardType.getId());
-
                     if (c1 < 1 || c2 < 1) {
                         return JsonResult.failMessage("删除失败");
                     }
-
-
                 }
                 //删除卡系列
                 int c3 = frCardTypeMapper.deleteById(list.get(0).getpId());
                 if (c3 < 1) {
                     return JsonResult.failMessage("删除失败");
                 }
-
-            } else {//下无卡种与会员卡则直接删除卡系列
+            } else {
+                //下无卡种与会员卡则直接删除卡系列
                 //先删除卡系列与门店关系表
                 Integer code = frCardTypeMapper.delete(
                         new EntityWrapper<FrCardType>()
                                 .where("id = {0}", id)
-                                .and("shop_id = {0}", shopId)
+//                                .and("shop_id = {0}", shopId)
                 );
                 if (code < 1) {
                     return JsonResult.failMessage("删除错误！");
@@ -323,7 +318,6 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                 return JsonResult.failMessage("该卡种下已有会员卡正在使用，不可删除！");
             } else {
                 //无会员卡情况
-
                 //判断是否是通用门店员工卡卡种，是则没有关系门店
                 FrCardType frCardType = frCardTypeMapper.selectById(id);
                 if (frCardType.getType() != 7) {
@@ -533,7 +527,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
     }
 
     @Override
-    public List<FrCardType> queryByShopIdList(String shopId, String CustomerCode, Integer type) throws YJException {
+    public List<FrCardType> queryByShopIdList(String shopId, String CustomerCode, Integer type,Integer typeSetState) throws YJException {
         if (StringUtils.isEmpty(CustomerCode) || StringUtils.isEmpty(shopId) || type == null) {
             throw new YJException(YJExceptionEnum.REQUEST_NULL);
         }
@@ -542,6 +536,9 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
         Map<String, Object> map = new HashMap<>();
         map.put("CustomerCode", CustomerCode);
         map.put("shopIdList", shopIdList);
+        if(typeSetState != null){
+            map.put("typeSetState",typeSetState);
+        }
         if (type > 0) {
             map.put("type", type);
         }

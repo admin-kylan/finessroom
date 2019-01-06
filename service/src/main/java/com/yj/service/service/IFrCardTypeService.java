@@ -47,7 +47,7 @@ public interface IFrCardTypeService extends BaseService<FrCardType> {
 
     JsonResult getGeneralStoreNotList(String code);
 
-    List<FrCardType> queryByShopIdList(String shopId, String code, Integer type) throws YJException;
+    List<FrCardType> queryByShopIdList(String shopId, String code, Integer type,Integer typeSetState) throws YJException;
 
     FrCardType queryByCardId(String cardId ,String CustomerCode)throws  YJException;
 

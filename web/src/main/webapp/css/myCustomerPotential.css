@@ -124,10 +124,14 @@ fieldset{
 	cursor: pointer;
 	border: 1px solid #333;
 }
-.follow input[type=submit].active {
-	background: #0cc;
-	color: #fff;
-	border: 1px solid #0cc;
+.follow button[type=button]{
+	width:60px;
+	height:30px;
+	border-radius: 3px;
+	padding: 0;
+	cursor: pointer;
+	border: none;
+	margin-right: 8px;
 }
 .screening{
 	margin:8px 0;
@@ -136,12 +140,6 @@ fieldset{
 	width:500px;
 	height: 18px;
 	border:1px solid #ccc;
-}
-.search input:nth-child(3){
-	background:#fc0;
-}
-.search input:nth-child(4){
-	background:#00f;
 }
 .operation{
 	margin:10px;

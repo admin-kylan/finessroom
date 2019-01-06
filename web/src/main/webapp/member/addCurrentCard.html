@@ -18,9 +18,11 @@
         float: left;
 
     }
+    .form_box_right label{margin-right: 10px;}
+    .form_box_right input[type=radio]{margin-top: 9px;margin-right: 3px;}
 </style>
 <body>
-    <div id="employee">
+    <div id="employee" v-cloak>
         <div class="main_top">会员卡设置</div>
         <div class="main_box">
             <div class="common">
@@ -132,7 +134,7 @@
                     </form>
                 </div>
             </div>
-            <div class="main_sub"> <a href="#" class="on" v-on:click="add()">新增</a><a href="#">取消</a></div>
+            <div class="main_sub"> <a class="on" v-on:click="add()">新增</a><a href="">取消</a></div>
         </div>
     </div>
 </body>
@@ -182,8 +184,8 @@
         methods: {
             init: function (t) {
                 const that = this;
-                var thisUrl = decodeURI(document.URL);
-               that.cardName = thisUrl.split('=')[2]
+                var thisUrl = document.URL;
+               that.cardName = decodeURIComponent(thisUrl.split('=')[2])
             },
             add: function () {
                 var that = this;
@@ -210,7 +212,7 @@
                 //获取卡系列id
                 var thisUrl = document.URL;
                 var pId = thisUrl.split('=')[1];
-                that.cardName = thisUrl.split('=')[2];
+//              that.cardName = thisUrl.split('=')[2];
                 var name = $(".form_box_right_inp").val();
                 if(name == '' || name==null || name.length<0){
                     alert("卡种名称不能为空")

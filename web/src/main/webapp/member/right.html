@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -17,7 +17,7 @@
 </head>
 
 <body>
-	<div id="right">
+	<div id="right" v-cloak>
 		<div class="main_top">卡权益设置</div>
 		<div class="main_box">
 
@@ -34,6 +34,7 @@
 							<div v-if="cardTypeSet.type==4">卡性质：<strong >储值卡</strong></div>
 							<div v-if="cardTypeSet.type==5">卡性质：<strong >充值卡</strong></div>
 							<div v-if="cardTypeSet.type==6">卡性质：<strong >折扣卡</strong></div>
+							<div v-if="cardTypeSet.type==7">卡性质：<strong >员工卡</strong></div>
 
 						</div>
 						<div class="common">
@@ -51,9 +52,19 @@
 							<div class="common2 co">
 								<div>
 									<span class="total">总时长：</span>
-									<span><input type="text" placeholder="总时长(天)" class="total_input" v-model="cardTypeSet.totalNum"></span>
-									<span>使用期限：</span>
-									<span>
+									<span><input type="text" placeholder="总时长(天)" class="total_input" v-model="cardTypeSet.totalNum" /></span>
+									<!--<span v-if="cardTypeSet.type==1||cardTypeSet.type==2" class="total">总时长：
+										<input type="text" placeholder="总时长(天)" class="total_input" v-model="cardTypeSet.totalNum" />
+									</span>
+									<span v-if="cardTypeSet.type==3" class="total">
+										总次数：
+										<input type="text" placeholder="扣卡次数" class="total_input" v-model="cardTypeSet.totalNum" />
+									</span>
+									<span v-if="cardTypeSet.type==5 || cardTypeSet.type==4" class="total">
+										卡余额：
+										<input type="text" placeholder="充值卡余额(元)" class="total_input" v-model="cardTypeSet.totalNum" />
+									</span>-->
+									<span>使用期限：
 										<input type="text" placeholder="使用期限" id="service" style="width: 50%">
 										<select id="life" class="form-control">
 											<option value="小时">小时</option>
@@ -934,7 +945,6 @@
 <script src="employee.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-	right.init();
 
 	//初始化:ru
 	//		jeDate('.jddate', {

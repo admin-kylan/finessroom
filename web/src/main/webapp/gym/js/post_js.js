@@ -1,9 +1,13 @@
 ;!function() {
 	var version = "1.0";//版本控制
 	postjs([
+		"../js/jquery-3.3.1.min.js",
+		"../js/vue.js",
 		"js/jquery-slimscroll/jquery.slimscroll.min.js",
 		"component/top-menu-bar.js",
 		"component/sidebar-nav.js",
+		"../js/bootstrap.min.js",
+		"../js/axios.min.js"
 	])
 	function postjs(srcipts) {
 		var arr = [];

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationCardObjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationCardObject">
+        <id column="id" property="id" />
+        <result column="education_config_id" property="educationConfigId" />
+        <result column="shop_id" property="shopId" />
+        <result column="sdadium_id" property="sdadiumId" />
+        <result column="project_id" property="projectId" />
+        <result column="price" property="price" />
+        <result column="shop_name" property="shopName" />
+        <result column="sdadium_name" property="sdadiumName" />
+        <result column="project_name" property="projectName" />
+        <result column="education_type" property="educationType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        education_config_id AS educationConfigId, shop_id AS shopId, sdadium_id AS sdadiumId, project_id AS projectId, price, shop_name AS shopName, sdadium_name AS sdadiumName, project_name AS projectName, education_type AS educationType, id
+    </sql>
+
+</mapper>

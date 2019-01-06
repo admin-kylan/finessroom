@@ -173,8 +173,10 @@
         LEFT JOIN  fr_card_type a
         ON a.id = b.card_type_id
         WHERE a.is_using = 1
-          AND a.type_set_state = 2
           AND b.CustomerCode = #{CustomerCode}
+          <if test="typeSetState != null">
+             AND a.type_set_state =  #{typeSetState}
+          </if>
           AND b.shop_id in
              (
                <foreach collection="shopIdList" item="shopId" separator=",">

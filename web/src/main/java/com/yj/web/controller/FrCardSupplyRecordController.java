@@ -182,6 +182,7 @@ public class FrCardSupplyRecordController {
         map.put("CustomerCode",CustomerCode);
         map.put("clientId",clientId);
         map.put("newCardId",cardId);
+        map.put("type",CommonUtils.CARD_SUPPLY_RECORD_TYPE_2);
         PageUtils pageUtil = service.queryContinueCardLis(page,map);
         map.put("data",pageUtil);
         return JsonResult.success(map);
@@ -201,7 +202,7 @@ public class FrCardSupplyRecordController {
         if(map == null ){
             throw  new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
-        //续卡信息
+        //转卡或者卡升级信息
         String transferCard = map.get("transferCard");
         // 支付
         String payModel = map.get("payModel");

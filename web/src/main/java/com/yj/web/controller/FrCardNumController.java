@@ -62,11 +62,16 @@ public class FrCardNumController {
      * @return
      */
     @GetMapping("checkCardNum")
-    public JsonResult checkCardNum(HttpServletRequest request,String cardNum){
+    public JsonResult checkCardNum(HttpServletRequest request,@RequestParam("cardNum") String cardNum,String code){
         if(StringUtils.isEmpty(cardNum)){
             return JsonResult.failMessage("会员卡号不能为空");
         }
-        String code = CookieUtils.getCookieValue(request, "code",true);
+        if(StringUtils.isEmpty(code)){
+            code = CookieUtils.getCookieValue(request, "code",true);
+            if(StringUtils.isEmpty(code)){
+                return  JsonResult.failMessage("客户代码获取异常");
+            }
+        }
         String id = service.checkCardNum(cardNum,code);
         if("".equals(id)){
             return JsonResult.failMessage("会员卡号不可用");

@@ -37,7 +37,7 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
     IShopService shopService;
 
     @Override
-    public List<Map<String, Object>> getShop(String code) throws YJException {
+    public List<Map<String, Object>> getShop(String code, String type) throws YJException {
         if (code == null || code == "") {
             HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             code = CookieUtils.getCookieValue(req, "code", true);
@@ -48,7 +48,7 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
         for (Map<String, Object> map : list) {
             if (map != null) {
                 List<FrSetGym> frSetGyms = baseMapper.selectList(
-                        new EntityWrapper<FrSetGym>().where("is_using=1 and shop_id={0} and is_currency=0", map.get("ID"))
+                        new EntityWrapper<FrSetGym>().where("is_using=1 and shop_id={0} and is_currency=0 and venue_type={1}", map.get("ID"), type)
                 );
                 map.put("frSetGyms", frSetGyms);
             }
@@ -57,16 +57,16 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
     }
 
     @Override
-    public List<FrSetGym> getChainStore() {
+    public List<FrSetGym> getChainStore(String type) {
         List<FrSetGym> frSetGyms = baseMapper.selectList(
-                new EntityWrapper<FrSetGym>().where("is_using=1 and is_currency=1")
+                new EntityWrapper<FrSetGym>().where("is_using=1 and is_currency=1 and venue_type={0}", type)
         );
         return frSetGyms;
     }
 
     @Override
-    public Map<String, Object> getTime() {
-        return baseMapper.getTime();
+    public Map<String, Object> getTime(String type) {
+        return baseMapper.getTime(type);
     }
 
     @Override
@@ -100,17 +100,34 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
         frSetGym.setPromotionPrice((Double.parseDouble(map.get("promotionPrice").toString())));
         frSetGym.setMemberPrice((Double.parseDouble(map.get("memberPrice").toString())));
         frSetGym.setRemarks((String) map.get("remarks"));
-        frSetGym.setMel((Boolean) map.get("isCurrency"));
+        frSetGym.setCurrency((Boolean) map.get("isCurrency"));
         frSetGym.setDeposit((Double.parseDouble(map.get("deposit").toString())));
         frSetGym.setProjectName((String) map.get("projectName"));
         frSetGym.setVenueId((String) map.get("venueId"));
         frSetGym.setVenueName((String) map.get("venueName"));
         frSetGym.setCompany((String) map.get("company"));
+        frSetGym.setVenueType(Integer.parseInt(map.get("venueType").toString()));
+        if (frSetGym.getVenueType() == 3) {
+            frSetGym.setIsTime((String) map.get("isTime"));
+            frSetGym.setOvertime((String) map.get("overtime"));
+
+
+        }
         boolean b = false;
-        for (Map shop : (List<Map<String, String>>) map.get("shop")) {
+        List<Map<String, String>> list = (List<Map<String, String>>) map.get("shop");
+        if (list.size() > 0) {
+            for (Map shop : list) {
+                frSetGym.setId(UUIDUtils.generateGUID());
+                frSetGym.setShopId((String) shop.get("shopId"));
+                frSetGym.setShopName((String) shop.get("shopName"));
+                b = insert(frSetGym);
+                if (!b) {
+                    return JsonResult.fail();
+                }
+            }
+        } else {
             frSetGym.setId(UUIDUtils.generateGUID());
-            frSetGym.setShopId((String) shop.get("shopId"));
-            frSetGym.setShopName((String) shop.get("shopName"));
+            frSetGym.setCurrency(true);
             b = insert(frSetGym);
             if (!b) {
                 return JsonResult.fail();
@@ -143,7 +160,7 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
                 frSetGym.setUsing(false);
                 b = updateById(frSetGym);
             }
-            if (!b) {
+            if (b) {
                 return JsonResult.success();
             }
         }

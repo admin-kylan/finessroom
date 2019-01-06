@@ -156,8 +156,12 @@ var customerPersonalDetails = new Vue({
                 that.UserSource = res.data.frClientSources;
                 setTimeout(function () {
                     $('#' + res.data.sourceId).attr('checked', true)
-                    var arr = res.data.customerSource.split(':');
-                    $("input[name=" + res.data.sourceId + "]").val(arr[1])
+                    if(res.data.customerSource!=null &&res.data.customerSource!=''){
+                        var arr = res.data.customerSource.split(':');
+
+                        $("input[name=" + res.data.sourceId + "]").val(arr[1])
+                    }
+
                 }, 200)
 
             });

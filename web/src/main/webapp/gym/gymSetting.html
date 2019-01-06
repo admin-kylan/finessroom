@@ -188,7 +188,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-success" @click="updateProject">修改</button>
-                                <button type="button" class="btn btn-fff" data-dismiss="modal"  @click="temp">取消</button>
+                                <button type="button" class="btn btn-fff" data-dismiss="modal" @click="temp">取消</button>
                             </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
@@ -332,11 +332,7 @@
 </div>
 <!-- END 整个页面内容 -->
 <!--基础-->
-
-<script src="../js/jquery-3.3.1.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/vue.js"></script>
-<script src="../js/axios.min.js"></script>
+<script type="text/javascript" src="js/post_js.js"></script>
 <!--插件-->
 <script src="../js/loading.js"></script>
 <script src="../js/jedate.js"></script>
@@ -347,7 +343,6 @@
 <script src="../js/jquery-confirm.js"></script>
 <script src="../js/extendjQuery.js"></script>
 <script src="../js/setCookie.js"></script>
-<script type="text/javascript" src="js/post_js.js"></script>
 <script type="text/javascript">
     $(function () {
         var gymSetting = new Vue({
@@ -370,10 +365,12 @@
                     shop: [],
                     venueName: '健身馆',
                     venueId: '120012',
+                    venueType: '1',
                     company: '元/次',
                 },
                 tempInfo: [],
                 tempInfo2: [],
+                type: 1,
             },
             mounted: function () {
                 const that = this;
@@ -397,7 +394,7 @@
                 getTime: function () {
                     var that = this;
                     var url = $.stringFormat('{0}/frSetGym/getTime', $.cookie('url'));
-                    $.get(url, function (res) {
+                    $.get(url, {"type": that.type}, function (res) {
                         if (res.code == "200") {
                             that.timeInfo = res.data;
                             that.timeInfo.updateTime = timeFormatDate(that.timeInfo.updateTime, true, true)
@@ -423,7 +420,7 @@
                 getChainStore: function () {
                     var that = this;
                     var url = $.stringFormat('{0}/frSetGym/getChainStore', $.cookie('url'));
-                    $.get(url, function (res) {
+                    $.get(url, {"type": that.type}, function (res) {
                         if (res.code == "200") {
                             that.ChainStoreInfo = res.data;
                         } else {
@@ -437,7 +434,7 @@
                 getShop: function () {
                     var that = this;
                     var url = $.stringFormat('{0}/frSetGym/getShop', $.cookie('url'));
-                    $.get(url, function (res) {
+                    $.get(url, {"type": that.type}, function (res) {
                         if (res.code == "200") {
                             that.shopInfo = res.data;
                         } else {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationConfig">
+        <id column="id" property="id" />
+        <result column="education_id" property="educationId" />
+        <result column="reserve_time" property="reserveTime" />
+        <result column="setting_time" property="settingTime" />
+        <result column="is_start_class" property="isStartClass" />
+        <result column="is_choose_coach" property="isChooseCoach" />
+        <result column="is_reserve_confirm" property="isReserveConfirm" />
+        <result column="admission_time" property="admissionTime" />
+        <result column="is_online_pay" property="isOnlinePay" />
+        <result column="lesson_price" property="lessonPrice" />
+        <result column="is_limit_reserve" property="isLimitReserve" />
+        <result column="is_card_settle" property="isCardSettle" />
+        <result column="is_course_settle" property="isCourseSettle" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        education_id AS educationId, reserve_time AS reserveTime, setting_time AS settingTime, is_start_class AS isStartClass, is_choose_coach AS isChooseCoach, is_reserve_confirm AS isReserveConfirm, admission_time AS admissionTime, is_online_pay AS isOnlinePay, lesson_price AS lessonPrice, is_limit_reserve AS isLimitReserve, is_card_settle AS isCardSettle, is_course_settle AS isCourseSettle, id
+    </sql>
+
+</mapper>

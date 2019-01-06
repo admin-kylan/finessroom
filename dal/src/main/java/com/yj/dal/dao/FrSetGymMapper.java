@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface FrSetGymMapper extends BaseMapper<FrSetGym> {
 
-    Map<String, Object> getTime();
+    Map<String, Object> getTime(String type);
 
     List<Map<String, Object>> getCity(String customerCode);
 }

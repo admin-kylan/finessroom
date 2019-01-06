@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationReserveObjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationReserveObject">
+        <id column="id" property="id" />
+        <result column="education_config_id" property="educationConfigId" />
+        <result column="is_new_user" property="isNewUser" />
+        <result column="is_general_member" property="isGeneralMember" />
+        <result column="is_silver_member" property="isSilverMember" />
+        <result column="is_gold_member" property="isGoldMember" />
+        <result column="is_diamond_member" property="isDiamondMember" />
+        <result column="is_latence_member" property="isLatenceMember" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, education_config_id AS educationConfigId, is_new_user AS isNewUser, is_general_member AS isGeneralMember, is_silver_member AS isSilverMember, is_gold_member AS isGoldMember, is_diamond_member AS isDiamondMember, is_latence_member AS isLatenceMember
+    </sql>
+
+</mapper>

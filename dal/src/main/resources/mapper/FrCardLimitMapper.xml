@@ -25,11 +25,12 @@
         <result column="CustomerCode" property="CustomerCode" />
         <result column="create_user_id" property="createUserId" />
         <result column="update_user_id" property="updateUserId" />
+        <result column="client_id" property="clientId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        card_id AS cardId, use_name AS useName, use_phone AS usePhone, use_passwd AS usePasswd, use_limit1 AS useLimit1, use_limit2 AS useLimit2, use_limit3 AS useLimit3, use_limit4 AS useLimit4, use_limit5 AS useLimit5, note, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, id
+        card_id AS cardId, use_name AS useName, use_phone AS usePhone, use_passwd AS usePasswd, use_limit1 AS useLimit1, use_limit2 AS useLimit2, use_limit3 AS useLimit3, use_limit4 AS useLimit4, use_limit5 AS useLimit5, note, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, client_id AS clientId, id
     </sql>
 
 </mapper>

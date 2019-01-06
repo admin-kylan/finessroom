@@ -34,7 +34,7 @@
                 客户信息
             </div>
             <div class="customerrightFrame_box">
-                <div><img src="../img/u3174.jpg" class="img-responsive" id="clientURL" onerror="this.src='../img/u3174.jpg'"></div>
+                <div><img src="../img/addImg.png" class="img-responsive" id="clientURL" onerror="this.src='../img/addImg.png'"></div>
                 <ul>
                     <li>客户姓名：<strong id="clientUserName"></strong></li>
                     <li>客户性别：<strong id="clientSet"></strong></li>
@@ -282,6 +282,7 @@
                     $(".customerrightFrame_box").find("li").eq(7).find("strong").html(res.data.applyTime);
                     $(".customerrightFrame_box").find("li").eq(8).find("strong").html(res.data.flag);
                     if (res.data.clientPic) {
+                        var clientPrice  = res.data.clientPic;
                         // var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, $.cookie('url'), $.cookie('imgPath'))
                         var stc = res.data.clientPic.picLink;
                         if(stc === null||stc ===''||typeof stc ==='undefined'){

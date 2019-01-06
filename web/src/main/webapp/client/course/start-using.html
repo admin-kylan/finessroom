@@ -272,6 +272,9 @@
                         window.location.reload()
                         alert("启动成功");
 
+                    }else{
+                        alert('启动失败,请重试');
+                        this.toDisabled = false;
                     }
                 })
             }

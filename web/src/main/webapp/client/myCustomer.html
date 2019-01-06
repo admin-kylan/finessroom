@@ -113,9 +113,9 @@
             <div class="search">
                 <input type="text" placeholder="姓名/手机号码/跟进内容关键字" v-model="customerFilter.keyword"
                        @keyup.enter="buildFilterDate"/>
-                <input type="submit" value="搜索" @click="buildFilterDate"/>
-                <input type="submit" value="打印" @click="print"/>
-                <input type="submit" value="导出" @click="exportExcel"/>
+                <button type="button" class="btn btn-warning" @click="buildFilterDate">搜索</button>
+                <button type="button" class="btn btn-info" @click="print">打印</button>
+                <button type="button" class="btn btn-primary" @click="exportExcel">导出</button>
             </div>
         </div>
     </fieldset>

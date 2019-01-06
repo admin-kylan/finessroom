@@ -27,7 +27,7 @@
                 <span v-text="parseInt(formData.buyNum || 0) + parseInt(formData.giftNum || 0)"></span>
             </label>
         </p>
-        <p class="line">
+        <p class="line" style="margin-top: 0;">
             <label for="project_label_id">
                 <span id="project_label_id">选择有效期：</span>
                 <!--<input type="radio" name="month" v-model="formData.validityPeriod"/>12个月-->
@@ -45,7 +45,7 @@
                 <span class="red">有效期指的是：项目或者商品的有效期，有效期内才能享受项目/商品的权益</span>
             </label>
         </p>
-        <p class="line">
+        <p class="line" style="margin-top: 5px;">
             <label>
                 <span>开始日期：</span>
                 <input type="text" v-model="formData.beginDate" id="course-project-begin-time"/>

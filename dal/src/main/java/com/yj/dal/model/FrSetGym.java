@@ -91,7 +91,23 @@ public class FrSetGym extends Model<FrSetGym> {
      */
     @TableField("is_Mel")
     private Boolean isMel;
+    /**
+     * 1.健身馆 2.游泳馆 3.儿童馆 区分场馆
+     */
+    @TableField("venue_type")
+    private Integer venueType;
 
+    /**
+     * 儿童馆才有此设置 是否限时  不限时为空 不为空的值为限时的时间
+     */
+    @TableField("isTime")
+    private String isTime;
+
+    /**
+     * 儿童馆才有此设置  限时才有效 计消费一次为空 不为空为每小时计费的金额
+     */
+    @TableField("overtime")
+    private String overtime;
     @TableField(value = "create_user_name", fill = FieldFill.INSERT)
     private String createUserName;
     @TableField(value = "create_user_id", fill = FieldFill.INSERT)
@@ -108,6 +124,30 @@ public class FrSetGym extends Model<FrSetGym> {
     private Date createTime;
     @TableField(value = "update_user_name", fill = FieldFill.INSERT_UPDATE)
     private String updateUserName;
+
+    public String getIsTime() {
+        return isTime;
+    }
+
+    public void setIsTime(String isTime) {
+        this.isTime = isTime;
+    }
+
+    public String getOvertime() {
+        return overtime;
+    }
+
+    public void setOvertime(String overtime) {
+        this.overtime = overtime;
+    }
+
+    public Integer getVenueType() {
+        return venueType;
+    }
+
+    public void setVenueType(Integer venueType) {
+        this.venueType = venueType;
+    }
 
     public Boolean getMel() {
         return isMel;

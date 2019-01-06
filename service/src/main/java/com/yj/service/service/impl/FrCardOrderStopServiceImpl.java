@@ -398,7 +398,7 @@ public class FrCardOrderStopServiceImpl extends BaseServiceImpl<FrCardOrderStopM
             throw  new YJException(YJExceptionEnum.REQUEST_NULL);
         }
         //撤销停卡数据
-        baseMapper.update(frCardOrderStop1,new EntityWrapper<FrCardOrderStop>().where("id={0}",frCardOrderStop.getId())
+        success =  baseMapper.update(frCardOrderStop1,new EntityWrapper<FrCardOrderStop>().where("id={0}",frCardOrderStop.getId())
                 .and("card_id={0}",frCardOrderStop.getCardId()).and("client_id={0}",frCardOrderStop.getClientId())
                 .and("CustomerCode={0}",frCardOrderStop.getCustomerCode()));
         // 若是终止冲销，不更新交易明细

@@ -387,6 +387,9 @@
                         window.location.reload()
                         alert("转让成功");
 
+                    }else{
+                        alert('转让失败,请重试');
+                        this.toDisabled = false;
                     }
                 });
 
@@ -408,6 +411,9 @@
 //                        this.fetch();
                         window.location.reload();
                         alert("冲销成功");
+                    }else{
+                        alert('冲销失败,请重试');
+                        this.toDelete = false;
                     }
                 })
             }

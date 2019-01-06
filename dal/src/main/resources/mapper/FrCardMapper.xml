@@ -267,7 +267,7 @@
 
     <select id="queryNumCard" resultType="java.util.Map">
         SELECT TOP 1
-          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id AND a.status != 6)cardAll,
+          (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id )cardAll,
           (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id
               AND a.status != 6 AND a.status != 3 AND a.invalid_time between #{startTime} and #{endTime})beOverdue,
           (SELECT COUNT(1) FROM fr_card a  WHERE a.is_using = b.is_using  AND a.CustomerCode = b.CustomerCode AND a.client_id = b.client_id AND a.status = 0 )normalCard,
@@ -317,7 +317,11 @@
         (SELECT s.ShopName FROM  Shop s WHERE s.id = a.shop_id) shopName,
         (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = a.card_type_id) cardTypeName,
         (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = (SELECT c.p_id FROM fr_card_type c WHERE c.id = a.card_type_id)) cardFlag,
-        (SELECT b.need_price FROM fr_card_order_info b WHERE b.card_id = a.id) needPrice,
+        ISNULL(( SELECT  SUM (b.pay_price)  FROM  fr_card_order_pay_mode b  WHERE b.order_id =
+             ( SELECT  b.id   FROM  fr_card_order_info b  WHERE  b.card_id = a.id  ) AND ( b.order_type = '1' OR b.order_type = '2' )),0)
+        +ISNULL(( SELECT SUM (b.pay_price) FROM  fr_card_order_complement f  LEFT JOIN fr_card_order_pay_mode b ON b.order_id = f.id
+              WHERE  f.card_id = a.id  AND b.order_type = '6'   AND f.order_state = 1 AND f.status = 1 AND f.audit_status = 1 ),0) needPrice,
+        (SELECT b.need_price   FROM  fr_card_order_info b  WHERE  b.card_id = a.id) needPriceTwo,
         (SELECT b.buy_rights_num FROM fr_card_order_info b WHERE b.card_id = a.id) buyRightsNum,
         (SELECT b.give_rights_num FROM fr_card_order_info b WHERE b.card_id = a.id) giveRightsNum,
         (SELECT b.status FROM fr_card_order_info b WHERE b.card_id = a.id) InfoStatus,

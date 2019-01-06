@@ -217,8 +217,7 @@ public class ShopServiceImpl extends BaseServiceImpl<ShopMapper, Shop> implement
      **/
     @Override
     public JsonResult getShopSdaduimList(String[] sids) {
-     // List<List> list = new ArrayList<>();
-        List<Shop> shopList=new ArrayList<>();
+        List<Shop> shopList = new ArrayList<>();
         for (int i = 0; i < sids.length; i++) {
             //查场馆
 //            List<Sdaduim> sdaduimArrayList = new ArrayList<>();

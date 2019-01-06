@@ -130,8 +130,8 @@
                     </tr>
                     <tr>
                         <td>QQ</td>
-                        <!--<td v-if="ClientInfo.qq==null">暂无</td>-->
-                        <td v-if="ClientInfo.qq!=null" v-model="ClientInfo.qq">
+
+                        <td  >
                             <input type="text" v-model="ClientInfo.qq"></td>
                         <td colspan="2">
                             <span class="toGreen">修改</span>
@@ -140,8 +140,8 @@
                     </tr>
                     <tr>
                         <td>微信</td>
-                        <!--<td v-if="ClientInfo.wechat==null">暂无</td>-->
-                        <td v-if="ClientInfo.wechat!=null">
+
+                        <td >
                             <input type="text" v-model="ClientInfo.wechat">
                         </td>
                         <td colspan="2">
@@ -246,7 +246,16 @@
             </li>
             <li class="on list2" v-if="LiIndex==1">
                 <p class="title">
-                    资源类型：<span>新资源</span>
+                   	 资源类型：
+                   	<label >
+                        <input name="resources" value="1" type="radio" checked="checked"/>新资源
+                    </label>
+                   	<label >
+                        <input name="resources" value="2" type="radio" disabled="disabled"/>认领资源
+                    </label>
+                   	<label >
+                        <input name="resources" value="3" type="radio" disabled="disabled"/>分配资源
+                    </label>
                 </p>
                 <fieldset class="section1">
                     <legend>性格描述</legend>

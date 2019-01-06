@@ -1600,7 +1600,7 @@ new Vue({
             axios.post(url, jsonData)
                 .then(function (res) {
                     let resData = eval(res);
-                   // console.log(that.simpleLinkSettingActionSub);
+                    // console.log(that.simpleLinkSettingActionSub);
                     if (that.deletItemType == 0) {
                         that.actions.push(resData['data']['data']);
                     }else if (that.deletItemType == 1){
@@ -1608,15 +1608,16 @@ new Vue({
                             if(that.simpleLinkSettingAction[i].id==resData.data.data.id){
                                 that.simpleLinkSettingAction.splice(i,1);
                                 that.simpleLinkSettingActionSub=[];
-                               // that.actionEduSettingIndex = 0;
+                                // that.actionEduSettingIndex = 0;
                                 if(that.simpleLinkSettingAction.length>0){
                                     that.actionEduClick(0,that.simpleLinkSettingAction[0].id,1);
                                 }
-                               // that.actionEduClick(0,this.deleteItemId,1);
+                                // that.actionEduClick(0,this.deleteItemId,1);
                             }
                         }
                         //console.log(that.simpleLinkSettingAction);
                     }else if (that.deletItemType == 2){
+                        
                         for(var i in that.mealLinkSettingAction){
                             if(that.mealLinkSettingAction[i].id==resData.data.data.id){
                                 that.mealLinkSettingAction.splice(i,1);
@@ -1631,7 +1632,7 @@ new Vue({
 
 
                     }
-                //    that.updateItemName ='';
+                    //    that.updateItemName ='';
                     $('#deleteItemModal').modal('hide');
                     //$.alert(resData['data']['msg']);
 

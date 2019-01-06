@@ -30,6 +30,8 @@ import java.util.List;
 public class WebConfigurer extends WebMvcConfigurerAdapter{
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
+//    static final String ORIGINS[] = new String[] { "GET", "POST", "PUT", "DELETE" };
+
     @Autowired
     FitnessConfig fitnessConfig;
 
@@ -90,4 +92,15 @@ public class WebConfigurer extends WebMvcConfigurerAdapter{
         resolver.setSuffix(".html");
         return resolver;
     }
+
+
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("*")
+//                .allowCredentials(true)
+//                .allowedMethods(ORIGINS)
+//                .maxAge(3600);
+//    }
+
 }

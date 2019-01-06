@@ -161,8 +161,8 @@
                                 <td v-text="item.saleName"></td>
                                 <td v-text="item.num"></td>
                                 <td>
-                                    <a href="#">修改</a>
-                                    /<a href="#">删除</a>
+                                    <!--<a href="#">修改</a>-->
+                                    <a href="javascript:;" @click="deleteSalesId(index)">删除</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -259,7 +259,9 @@
                 coach: [], //教练数组
                 assistant: [], //助教数组
                 coachId: '', //教练Id
+                coachName: '', //教练名字
                 assistantId: '', //助教Id
+                assistantName: '', //助教名字
                 coachRoleId: '', //教练角色Id
                 assistantRoleId: '', //助教角色Id
                 salesTypeId: '', //销售类型
@@ -325,8 +327,16 @@
                 }
 
 
-
-
+            },
+            'sdaduimTypeResult.coachId'(val){
+                if(val){
+                    this.sdaduimTypeResult.coachName = this.sdaduimTypeResult.coach.find(item => item.id === val)['relName'];
+                }
+            },
+            'sdaduimTypeResult.assistantId'(val){
+                if(val){
+                    this.sdaduimTypeResult.assistantName = this.sdaduimTypeResult.assistant.find(item => item.id === val)['relName'];
+                }
             }
         },
         created: function () {
@@ -484,6 +494,10 @@
                     list: [], //销售人员数组
                     isSave: false, //是否数据被保存
                 };
+            },
+            //删除销售人员
+            deleteSalesId(index){
+                this.performance.list.splice(index, 1);//删除一个
             },
             //保存业绩分配
             savePerformance(){

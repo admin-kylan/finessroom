@@ -5,10 +5,10 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yj.dal.model.PersonnelInfo">
         <id column="ID" property="id" />
-        <result column="c_CustomerCode" property="customerCode" />
+        <result column="CustomerCode" property="CustomerCode" />
         <result column="UserName" property="UserName" />
         <result column="PassWord" property="PassWord" />
-        <result column="c_RelName" property="RelName" />
+        <result column="RelName" property="RelName" />
         <result column="Sex" property="Sex" />
         <result column="Mobile" property="Mobile" />
         <result column="CreateTime" property="CreateTime" />
@@ -33,15 +33,49 @@
         <result column="ExtendField2" property="ExtendField2" />
         <result column="ExtendField3" property="ExtendField3" />
     </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         CustomerCode, ID, UserName, PassWord, RelName, Sex, Mobile, CreateTime, EntryTime, LeaveTime, ShopId, DepartmentId, Status, Birthday, JobNumber, Email, IndoorTel, DirectTel, GroupNumber, FingerPrint, Veriface, IsDel, DeleteTime, DeletedBy, DeletedById, ExtendField1, ExtendField2, ExtendField3
     </sql>
 
+    <!--去除用户名，及密码-->
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List_PersonnelInfo">
+        pi.CustomerCode,
+        pi.ID,
+        pi.RelName,
+        pi.Sex,
+        pi.Mobile,
+        pi.CreateTime,
+        pi.EntryTime,
+        pi.LeaveTime,
+        pi.ShopId,
+        pi.DepartmentId,
+        pi.Status,
+        pi.Birthday,
+        pi.JobNumber,
+        pi.Email,
+        pi.IndoorTel,
+        pi.DirectTel,
+        pi.GroupNumber,
+        pi.FingerPrint,
+        pi.Veriface,
+        pi.IsDel,
+        pi.DeleteTime,
+        pi.DeletedBy,
+        pi.DeletedById,
+        pi.ExtendField1,
+        pi.ExtendField2,
+        pi.ExtendField3
+    </sql>
+
+
+
     <!--查询销售人员列表-->
     <select id="getMarketUserList" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
-        pi.CustomerCode c_CustomerCode, pi.RelName c_RelName, pi.*
+          <include refid="Base_Column_List_PersonnelInfo" />
         FROM
         PersonnelInfo pi
         LEFT JOIN
@@ -61,7 +95,7 @@
     <!--查询销售人员列表-->
     <select id="getPsersonnelListByShopId" resultMap="BaseResultMap">
         select
-          pi.CustomerCode c_CustomerCode, pi.RelName c_RelName, pi.*
+          <include refid="Base_Column_List_PersonnelInfo" />
         FROM  PersonnelInfo pi
         LEFT JOIN   PersonlRole pr
         ON  pi.ID = pr.PersonnelInfoId

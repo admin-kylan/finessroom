@@ -100,7 +100,8 @@ body {
 
 #newCardCustomers .tableWrap table td {
     white-space: nowrap;
-    padding: 8px;
+    padding: 4px 8px;
+    line-height: 20px;
 }
 
 #newCardCustomers .tableWrap table tbody tr:nth-child(odd) {
@@ -360,7 +361,7 @@ body {
     border: 1px solid #ccc;
     overflow-y: auto;
 }
-
+.section2_boxs1_left i{font-style: normal;}
 #newCardCustomers .section2_boxs1_left .section2_boxs1_top {
     text-align: center;
 }

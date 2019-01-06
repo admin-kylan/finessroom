@@ -142,6 +142,9 @@
         AND a.CustomerCode = #{CustomerCode}
         AND a.client_id = #{clientId}
         AND a.new_card_id = #{newCardId}
+        <if test="type!=null ">
+            AND a.type = #{type}
+       </if>
    </select>
 
    <select id="quereySupplyList" resultType="com.yj.dal.model.FrCardSupplyRecord">

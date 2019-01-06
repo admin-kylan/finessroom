@@ -115,14 +115,14 @@ fieldset{
 .follow input[type=date]{
 	padding: 5px 0;
 }
-.follow input[type=submit]{
+.follow button[type=button]{
 	width:60px;
 	height:30px;
 	border-radius: 3px;
-	background:#fff;
-	color: #333;
+	padding: 0;
 	cursor: pointer;
-	border: 1px solid #333;
+	border: none;
+	margin-right: 8px;
 }
 .follow input[type=submit].active {
 	background: #0cc;
@@ -136,12 +136,6 @@ fieldset{
 	width:500px;
 	height: 18px;
 	border:1px solid #ccc;
-}
-.search input:nth-child(3){
-	background:#fc0;
-}
-.search input:nth-child(4){
-	background:#00f;
 }
 .operation{
 	margin:10px;

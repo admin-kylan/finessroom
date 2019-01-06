@@ -20,36 +20,36 @@
     }
 </style>
 <body>
-    <div id="employee">
-        <div class="main_top">会员卡设置</div>
-        <div class="main_box">
-            <div class="common">
-                <span class="common_span">添加卡种信息</span>
-                <div class="form">
-                    <form action="" id="form">
-                        <div class="form_box">
-                            <div class="form_box_left">卡类别：</div>
-                            <div class="form_box_right"><strong id="idck">{{name}}</strong></div>
-                        </div>
-                        <div class="form_box">
-                            <div class="form_box_left">卡种名称：</div>
-                            <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="卡类名称"></div>
-                        </div>
+<div id="employee">
+    <div class="main_top">会员卡设置</div>
+    <div class="main_box">
+        <div class="common">
+            <span class="common_span">添加卡种信息</span>
+            <div class="form">
+                <form action="" id="form">
+                    <div class="form_box">
+                        <div class="form_box_left">卡类别：</div>
+                        <div class="form_box_right"><strong id="idck">{{name}}</strong></div>
+                    </div>
+                    <div class="form_box">
+                        <div class="form_box_left">卡种名称：</div>
+                        <div class="form_box_right"><input type="text" class="form_box_right_inp" placeholder="卡类名称"></div>
+                    </div>
 
-                        <div class="form_box">
-                            <div class="form_box_left">操作人：</div>
-                            <div class="form_box_right"><strong class="form_box_right_red">Klaus</strong></div>
-                        </div>
-                        <div class="form_box">
-                            <div class="form_box_left">上次操作时间：</div>
-                            <div class="form_box_right">{{createTime}}</div>
-                        </div>
-                    </form>
-                </div>
+                    <div class="form_box">
+                        <div class="form_box_left">操作人：</div>
+                        <div class="form_box_right"><strong class="form_box_right_red">Klaus</strong></div>
+                    </div>
+                    <div class="form_box">
+                        <div class="form_box_left">上次操作时间：</div>
+                        <div class="form_box_right">{{createTime}}</div>
+                    </div>
+                </form>
             </div>
-            <div class="main_sub"> <a href="#" class="on" v-on:click="add()">新增</a><a href="#">取消</a></div>
         </div>
+        <div class="main_sub"> <a href="#" class="on" v-on:click="add()">新增</a><a href="#">取消</a></div>
     </div>
+</div>
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/extendjQuery.js"></script>
@@ -59,7 +59,7 @@
 <script src="../js/loading.js"></script>
 <script src="../js/common.js"></script>
 <script>
-//    var kid = window.parent.getParam('kid');
+    //    var kid = window.parent.getParam('kid');
     var employee = new Vue({
         el: '#employee',
         data: {
@@ -68,11 +68,13 @@
             storeList:[],
         },
         created:function () {
+            console.log(111)
             var that = this;
             var userName = $.cookie('name');
             $(".form_box_right_red").html(userName);
             Loading.prototype.show();
             var url = $.stringFormat("{0}/frCardType/selectFrCardTypeTime",$.cookie('url'));
+            //这个路径有没有问题你看下文档
             $.get(url, {
                     type:0,
                 },
@@ -98,9 +100,7 @@
             add: function () {
                 var that = this;
                 var ids = new Array();
-
                 //获取卡系列id
-
                 var pId = getParam('pId');
                 // var thisUrl = document.URL;
                 // var pId = thisUrl.split("=")[1];
@@ -123,13 +123,14 @@
                     type: "POST",
                     url: url,
 //                    data: {username:name, id:Ids,ty:0},
-                    dataType: "json",
+                    dataType: "json".p,
                     success: function(data){
                         if(data.code == 200) {
                             alert("添加成功！");
-                            window.location.reload()
+                            window.location.reload();
                             window.parent.rightFrame();
                             Loading.prototype.hide();
+                            console.log(that.name);
                         } else {
                             alert(data.msg);
                             Loading.prototype.hide();
@@ -137,7 +138,6 @@
                         }
                     }
                 });
-
 
             },
             //查询卡系列名称
@@ -156,8 +156,10 @@
                         storeId:'',
                     },
                     function(res) {
+                        console.log(res)
                         if(res.code == 200) {
-                            that.name = res.data.data.cardTypeName;
+                            that.name = res.data.data[0].cardTypeName;
+                            //第二个data是数组，你要数组的第几项数组在哪
                             Loading.prototype.hide();
                         } else {
                             alert(res.msg);

@@ -45,7 +45,7 @@ public class PersonnelInfoServiceImpl extends BaseServiceImpl<PersonnelInfoMappe
      * @return
      */
     @Override
-    public JsonResult getMarketUserList(String shopId, String code) {
+    public JsonResult getMarketUserList(String shopId, String code)throws YJException {
         List<PersonnelInfo> list = baseMapper.getMarketUserList(shopId, code);
         return JsonResult.success(list);
     }

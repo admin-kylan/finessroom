@@ -31,13 +31,14 @@
     <sql id="Base_Column_List">
         project_name AS projectName, shop_name AS shopName, shop_id AS shopId, company, market_price AS marketPrice, promotion_price AS promotionPrice, member_price AS memberPrice, deposit, remarks, is_using AS isUsing, is_currency AS isCurrency, venue_name AS venueName, venue_id AS venueId, create_user_name AS createUserName, create_user_id AS createUserId, CustomerCode, update_time AS updateTime, update_user_id AS updateUserId, id, create_time AS createTime, update_user_name AS updateUserName
     </sql>
-    <select id="getTime" resultType="java.util.Map">
+    <select id="getTime" parameterType="java.lang.String" resultType="java.util.Map">
             SELECT
             top 1
             update_time updateTime,
             update_user_name updateUserName
             FROM
             fr_set_gym
+            WHERE venue_type=#{type}
             ORDER BY
             update_time desc
     </select>

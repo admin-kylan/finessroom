@@ -46,8 +46,8 @@
                     </li>
                     <li>
                         <div>
-                            <a v-if="treers.type == 7" :href="'yuangong.html?pId='+treers.id+'&name='+encodeURI(treers.cardTypeName)" target="rightFrame" >+ 添加卡种设置</a>
-                            <a :name="treers.cardTypeName" v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id+'&name='+encodeURI(treers.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
+                            <a v-if="treers.type == 7" :href="'yuangong.html?pId='+treers.id+'&name='+encodeURIComponent(treers.cardTypeName)" target="rightFrame" >+ 添加卡种设置</a>
+                            <a :name="treers.cardTypeName" v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id+'&name='+encodeURIComponent(treers.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
                         </div>
                         <ul>
                             <li v-for="tferr in treers.frCardTypeList">
@@ -332,14 +332,14 @@
                         <span><input type="checkbox" class="series" :title="''+trea.id"></span>
                         <span>{{trea.cardTypeName}}</span>
                         <span class="span_sd">
-                                <a :href="'main1.html?id='+trea.id+'&shopId='" target="rightFrame" class="success">修改</a>
+                                <a :href="'main1.html?id='+trea.id+'&storeId='" target="rightFrame" class="success">修改</a>
                                 <a href="#" class="del" v-on:click="delCurrent(trea.id)">删除</a>
                         </span>
                     </li>
                     <li>
                         <div>
                             <a v-if="trea.type == 7" :href="'yuangong.html?pId='+trea.id" target="rightFrame">+ 添加卡种设置</a>
-                            <a v-if="trea.type != 7" :href="'addCurrentCard.html?pId='+trea.id+'&name='+encodeURI(trea.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
+                            <a v-if="trea.type != 7" :href="'addCurrentCard.html?pId='+trea.id+'&name='+encodeURIComponentComponent(trea.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
                         </div>
                         <ul>
                             <li v-for="tferrse in trea.frCardTypeList">
@@ -487,6 +487,7 @@
                 window.parent.setParam(cardId);
                 window.parent.setType(type);
             },
+
             // 删除卡系列
             del:function(t,storeId){
                 if (!confirm('是否删除!')) {
@@ -503,17 +504,14 @@
                     function(res) {
                         if(res.code == 200) {
                             alert("删除成功！")
-
                             window.parent.rightFrame();
                             Loading.prototype.hide();
                         } else {
                             alert(res.msg);
                             //$('#tip').text(res.msg);//异常处理
                         }
-
                     }
                 );
-
             },
             // 删除卡种
             dels:function(t,shopId){

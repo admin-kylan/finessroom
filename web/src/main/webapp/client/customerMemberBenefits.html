@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<title>会员权益</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css"/>
 	<link rel="stylesheet" href="../css/reset.css" />
 	<!-- <link rel="stylesheet" href="../css/base.css" /> -->
 	<link rel="stylesheet" href="../css/skin/jedate.css" />
@@ -24,7 +25,7 @@
 								<a href="customerMembershipCard.html" target="customerrightFrame" onclick="window.parent.customerrightFrame_botton_li(1)">
 									<div>会员卡</div>
 									<div>
-										<span>5</span> <img src="../img/u2905.png" alt="">
+										<span>{{cardNum}}</span> <img src="../img/u2905.png" alt="">
 									</div>
 									<div>当前会员所持有会员卡数</div>
 								</a>
@@ -42,17 +43,15 @@
 							</div>
 						</li>
 						<li>
-						
-								<div>
-										<a href="customerCourseProject.html" target="customerrightFrame" onclick="window.parent.customerrightFrame_botton_li(2)">
-											<div>项目/产品</div>
-											<div>
-												<span>30</span> <img src="../img/u2909.png" alt="">
-											</div>
-											<div>当前会员拥有项目/产品</div>
-										</a>
-								</div>
-							
+							<div>
+								<a href="customerCourseProject.html" target="customerrightFrame" onclick="window.parent.customerrightFrame_botton_li(2)">
+									<div>项目/产品</div>
+									<div>
+										<span>{{projectNum}}</span> <img src="../img/u2909.png" alt="">
+									</div>
+									<div>当前会员拥有项目/产品</div>
+								</a>
+							</div>
 						</li>
 						<li>
 							<div>
@@ -70,23 +69,10 @@
 				<legend><span>会员照片：</span></legend>
 				<div class="customerMemberBenefits_photo">
 					<ul>
-						<li>
-							<img src="../img/u2871.png" alt="" class="img-responsive">
-						</li>
-						<li>
-							<img src="../img/u2871.png" alt="" class="img-responsive">
-						</li>
-						<li>
-							<img src="../img/u2871.png" alt="" class="img-responsive">
-						</li>
-						<li>
-							<img src="../img/u2871.png" alt="" class="img-responsive">
-						</li>
-						<li>
-							<img src="../img/u2871.png" alt="" class="img-responsive">
+						<li v-for="item in priceList">
+							<img :src="item.picLink" class="img-responsive"  onerror="this.src='../img/u2871.png'">
 						</li>
 					</ul>
-
 				</div>
 			</fieldset>
 			<fieldset>
@@ -96,7 +82,7 @@
 						<div class="form-group">
 							<label for="usePassword" class="col-md-1 control-label">使用密码：</label>
 							<div class="col-md-10">
-								<input type="password" class="form-control" id="usePassword" placeholder="使用密码">
+								<input type="password" class="form-control" id="usePassword" placeholder="使用密码" v-model="userPasswd">
 							</div>
 						</div>
 						<div class="form-group">
@@ -121,17 +107,35 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="usingFacebook" class="col-md-1 control-label">备注：</label>
+							<label class="col-md-1 control-label">备注：</label>
 							<div class="col-md-10">
-								<textarea name=""  class="form-control" id="" ></textarea>
+								<textarea class="form-control" v-model="note" ></textarea>
 							</div>
 						</div>
 					</form>
 				</div>
-
+				<div>
+					<table class="table table-bordered table-hover" border="1" bordercolor="#ccc"
+						   style="width: 50%;">
+						<thead>
+						<tr>
+							<td>使用者</td>
+							<td>联系方式</td>
+							<td>操作</td>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="item in limitList">
+							<td>{{item.useName}}</td>
+							<td>{{item.usePhone}}</td>
+							<td class="toyin" @click="toDeleteCardLimit(item.id)">删除</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 			</fieldset>
 			<div>
-				<a href="javascript:;" class="btn btn-danger">保存</a>
+				<a href="javascript:;" class="btn btn-danger" @click="toAddLimtTypeOne">保存</a>
 			</div>
 		</div>
 	</div>
@@ -145,12 +149,11 @@
 <script src="../js/jquery-confirm.js"></script>
 <script src="../js/setCookie.js"></script>
 <script src="../js/extendjQuery.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script src="../js/common.js"></script>
+<script src="customerMemberBenefits.js"></script>
 <script>
-    $(function () {
-        var id = document.URL.split("=")[1];
-        $.cookie('cid', id)  //存入值
-    })
+    customerMemberBenefits.init();
 </script>
 
 </html>

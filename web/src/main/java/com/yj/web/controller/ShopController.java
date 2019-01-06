@@ -122,8 +122,13 @@ public class ShopController {
      * @throws YJException
      */
     @GetMapping("/getMarketShopList")
-    public JsonResult getMarketShopList(HttpServletRequest request) throws YJException {
-        String code = CookieUtils.getCookieValue(request, "code", true);
+    public JsonResult getMarketShopList(String code, HttpServletRequest request) throws YJException {
+        if(StringUtils.isEmpty(code)){
+            code = CookieUtils.getCookieValue(request, "code", true);
+            if(StringUtils.isEmpty(code)){
+                return JsonResult.failMessage("客户代码获取异常");
+            }
+        }
         return JsonResult.success(shopService.getShopList(code));
     }
 
@@ -137,7 +142,7 @@ public class ShopController {
      */
     @PostMapping("/ShopSdaduimList")
     public JsonResult getShopSdaduimList(@RequestParam(value = "sids[]") String[] sids) throws YJException {
-        System.out.println(sids);
+        System.out.println("--------------------------------------------");
 
         return shopService.getShopSdaduimList(sids);
     }

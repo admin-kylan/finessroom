@@ -264,6 +264,9 @@
                         window.location.reload()
                         alert("延期成功");
 
+                    }else{
+                        alert('延期失败,请重试');
+                        this.toDisabled = false;
                     }
                 })
             }

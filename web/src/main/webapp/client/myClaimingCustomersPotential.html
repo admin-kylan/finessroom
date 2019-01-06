@@ -14,7 +14,7 @@
 </head>
 
 <body>
-<div id="myClaimingCustomersPotential">
+<div id="myClaimingCustomersPotential" v-cloak>
     <div class="tab clearfix">
         <span>潜在客户认领</span>
     </div>
@@ -71,10 +71,10 @@
             <div class="search">
                 <input type="text" placeholder="姓名/手机号码" v-model="customerFilter.keyword"
                        @keyup.enter="buildFilterDate"/>
-                <input type="button" value="搜索" @click="buildFilterDate"/>
-                <input type="button" value="打印" @click="print"/>
-                <input type="button" value="导出" @click="exportExcel"/>
-                <input type="button" value="帮助?"/>
+                <button type="button" class="btn btn-warning" @click="buildFilterDate">搜索</button>
+                <button type="button" class="btn btn-info" @click="print">打印</button>
+                <button type="button" class="btn btn-primary" @click="exportExcel">导出</button>
+                <button type="button" class="btn btn-danger">帮助?</button>
             </div>
         </div>
     </fieldset>

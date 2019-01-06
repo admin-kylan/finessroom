@@ -71,6 +71,8 @@
     <!--查询指定会员会员卡的总条数-->
     <select id="selectChildCardList" resultType="java.util.Map">
         SELECT
+          (SELECT t.card_type_name FROM fr_card_type t
+               WHERE t.id = (SELECT c.card_type_id FROM fr_card c WHERE c.id = a.parent_card_id)) cardTypeName,
           (SELECT p.RelName FROM PersonnelInfo p WHERE a.sale_man_id = p.id) saleName,
           (SELECT p.RelName FROM PersonnelInfo p WHERE a.handle_personal_id = p.id) handleName,
           (SELECT f.card_no FROM fr_card f WHERE a.parent_card_id = f.id) parentCardNo,
@@ -91,7 +93,11 @@
     </select>
 
     <select id="queryChildCardAmt" resultType="java.util.Map" >
-        SELECT a.share_num AS shareNum,a.id,a.child_client_id AS childClientId,a.create_time AS createTime,
+        SELECT
+           a.share_num AS shareNum,
+           a.id,
+           a.child_client_id AS childClientId,
+           a.create_time AS createTime,
           (SELECT b.type FROM fr_card b WHERE b.id = a.parent_card_id) type,
           isNull((SELECT TOP 1 (c.order_amt) FROM fr_card_order_datail c WHERE c.client_id = a.child_client_id  AND c.is_using = 1
             AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2 ORDER BY c.create_time DESC),0)orderPrice,

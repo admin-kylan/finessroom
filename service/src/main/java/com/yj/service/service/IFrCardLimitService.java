@@ -20,7 +20,15 @@ public interface IFrCardLimitService extends BaseService<FrCardLimit> {
 
     JsonResult getCardLimitList(String code,String cardId);
 
-    JsonResult deleteCardLimit(String code,String id);
+    JsonResult deleteCardLimit(String code,String id,String clientId);
 
+    /**
+     * 查询指定客户的通用限定记录
+     * @param code
+     * @param clientId
+     * @return
+     * @throws YJException
+     */
+    FrCardLimit getLimitInfoByClient(String code,String clientId)throws YJException;
 
 }

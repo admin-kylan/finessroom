@@ -57,6 +57,7 @@ public enum  YJExceptionEnum implements ServiceExceptionEnum  {
     BLACE_PRICE_EXISTED(500,"退款金额有变动，请重新核对后操作"),
     OLD_CARD_STATUS_EXISTED(500,"直接延续开卡，续卡的会员卡状态只能是正常，或者过期卡"),
     OLD_CARD_OPEN_EXISTED(500,"续卡的开卡时间设置有误"),
+    CLITEN_EXISTED(500,"客户信息获取有误"),
 
     PROTOCOLNO_NOT_EXISTED(500, "协议号不存在"),
     PROTOCOLNO_ABOLISHED(500, "协议号已作废"),
