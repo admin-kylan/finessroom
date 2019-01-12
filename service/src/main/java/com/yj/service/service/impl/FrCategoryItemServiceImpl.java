@@ -62,8 +62,8 @@ public class FrCategoryItemServiceImpl extends BaseServiceImpl<FrCategoryItemMap
 
 
             List<CategoryItemDTO> items = categoryItemMapper.selectItemsBySdaduimId(ssids[i]);
-            //
-          //  sdaduim.setCategoryItemlist(items);
+
+            //  sdaduim.setCategoryItemlist(items);
 
             //查询 获取项目的设置
 //            for (int j = 0; j < items.size(); j++) {

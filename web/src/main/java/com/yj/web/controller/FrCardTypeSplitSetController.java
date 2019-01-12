@@ -2,7 +2,6 @@ package com.yj.web.controller;
 
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.sun.org.apache.regexp.internal.RE;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,41 +31,89 @@ public class FrCardTypeSplitSetController {
     @Resource
     private IFrCardTypeSplitSetService service;
 
-    @GetMapping("getCardTypeSplitList")
-    public JsonResult getCardTypeSplitList(@RequestParam("cardTypeId")String cardTypeId,
-                                           @RequestParam("code") String code)throws YJException{
+    /**
+     * 查询列表（不分页）
+     * @param cardTypeId
+     * @param code
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/list")
+    public JsonResult getCardTypeSplitList(@RequestParam("cardTypeId")String cardTypeId, @RequestParam("code") String code)throws YJException{
+
         if(StringUtils.isEmpty(cardTypeId) || StringUtils.isEmpty(code)){
             throw new YJException(YJExceptionEnum.PARAM_ERROR);
         }
         List<FrCardTypeSplitSet> list = service.selectList(new EntityWrapper<FrCardTypeSplitSet>()
-                .where("CustomerCode={0}",code).and("is_using={0}",1).and("card_type_id={0}",cardTypeId));
+                .where("CustomerCode={0}",code).and("card_type_id={0}",cardTypeId));
+//        and("is_using={0}",1).
         return JsonResult.success(list);
     }
-
-    @PostMapping("insertCardTypeSplit")
-    public JsonResult insertCardTypeSplit(HttpServletRequest request,FrCardTypeSplitSet frCardTypeSplitSet)throws YJException{
-        if(frCardTypeSplitSet == null){
-            return JsonResult.failMessage("参数错误");
+    /**
+     * 新增会员卡分期及详情
+     * @param request
+     * @param map
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("/insert")
+    public JsonResult insert(HttpServletRequest request,@RequestBody Map<String, Object> map)throws YJException{
+        FrCardTypeSplitSet frCardTypeSplitSet = new FrCardTypeSplitSet();
+        //从cookie里获取
+        String code = CookieUtils.getCookieValue(request,"code",true);
+        if(StringUtils.isEmpty(code)){
+            throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
         }
-        if (StringUtils.isEmpty(frCardTypeSplitSet.getCustomerCode())) {
-            String code = CookieUtils.getCookieValue(request,"code",true);
-            if(StringUtils.isEmpty(code)){
-                throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
-            }
-            frCardTypeSplitSet.setCustomerCode(code);
-            //获取创建人名称
-            String createUserName = CookieUtils.getCookieValue(request, "id", true);
-            if(StringUtils.isEmpty(createUserName)){
-                throw new YJException(YJExceptionEnum.PERSONNEL_ID_NOT_NULL);
-            }
-            frCardTypeSplitSet.setCreateUserName(createUserName);
-        }
-//        boolean flag = service.insert(frCardTypeSplitSet);
-//        if (flag){
-//            return JsonResult.successMessage("添加成功");
-//        }
-//        return JsonResult.failMessage("添加失败");
-        return service.insertCardTypeSplit(frCardTypeSplitSet);
+        frCardTypeSplitSet.setCustomerCode(code);
+        //设置创建者信息
+        String userId = CookieUtils.getCookieValue(request, "id", true);
+        String userName = CookieUtils.getCookieValue(request,"name",true);
+        frCardTypeSplitSet.setCreateUserId(userId);
+        frCardTypeSplitSet.setUpdateUserId(userId);
+        frCardTypeSplitSet.setCreateUserName(userName);
+        frCardTypeSplitSet.setUpdateUserName(userName);
+        return service.insert(map);
     }
+
+    /**
+     * 查询分期信息详情
+     * @return
+     */
+    @GetMapping("/get")
+    public FrCardTypeSplitSet get(String id)throws YJException{
+        return service.get(id);
+    }
+
+    /**
+     * 根据id更新修改分期信息
+     * @param frCardTypeSplitSet
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("/update")
+    public JsonResult update(@RequestBody FrCardTypeSplitSet frCardTypeSplitSet) throws YJException{
+        return service.update(frCardTypeSplitSet);
+    }
+
+    /**
+     * 根据id删除分期信息（修改启用状态）
+     * @param id
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/delete")
+    public JsonResult delete(String id) throws YJException{
+        return service.delete(id);
+    }
+
+    /**
+     * 是否启用
+     * @return
+     */
+    @PostMapping("/isUsing")
+    public JsonResult isUsing(@RequestBody FrCardTypeSplitSet frCardTypeSplitSet)throws YJException{
+        return service.isUsing(frCardTypeSplitSet);
+    }
+
 }
 

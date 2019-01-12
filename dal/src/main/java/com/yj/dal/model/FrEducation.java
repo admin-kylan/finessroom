@@ -102,7 +102,7 @@ public class FrEducation extends Model<FrEducation> {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
     /**
-     * 开课状态 1/0/2 已开始，未开始，已结束
+     * 开课状态 1/0/2/3 已开始，未开始，已结束, 已取消
      */
     private Integer status;
     /**
@@ -130,6 +130,12 @@ public class FrEducation extends Model<FrEducation> {
      */
     @TableField("sdaduim_name")
     private String sdaduimName;
+    /**
+     * 场馆名字
+     */
+    @TableField("reserve_type")
+    private Integer reserveType;
+
     @TableField(value = "create_user_id", fill = FieldFill.INSERT)
     private String createUserId;
     @TableField(fill = FieldFill.INSERT)
@@ -356,6 +362,14 @@ public class FrEducation extends Model<FrEducation> {
 
     public void setUpdateUserName(Date updateUserName) {
         this.updateUserName = updateUserName;
+    }
+
+    public Integer getReserveType() {
+        return reserveType;
+    }
+
+    public void setReserveType(Integer reserveType) {
+        this.reserveType = reserveType;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.yj.service.service;
 
+import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
 import com.yj.dal.model.FrCardTypeSplitSet;
 import com.yj.service.base.BaseService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,5 +18,43 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IFrCardTypeSplitSetService extends BaseService<FrCardTypeSplitSet> {
 
-    JsonResult insertCardTypeSplit(FrCardTypeSplitSet frCardTypeSplitSet);
+    /**
+     * 新增会员卡分期信息
+     * @param map
+     * @return
+     * @throws YJException
+     */
+    JsonResult insert(Map<String, Object> map)throws YJException ;
+
+    /**
+     * 根据id更新修改会员卡分期信息
+     * @param frCardTypeSplitSet
+     * @return
+     * @throws YJException
+     */
+    JsonResult update(FrCardTypeSplitSet frCardTypeSplitSet)throws YJException ;
+
+    /**
+     * 根据id删除数据（修改启用状态）
+     * @param id
+     * @return
+     * @throws YJException
+     */
+    JsonResult delete(String id)throws YJException;
+
+    /**
+     * 会员卡分期详情
+     * @param id
+     * @return
+     * @throws YJException
+     */
+    FrCardTypeSplitSet get(String id)throws YJException;
+
+    /**
+     * 是否启用
+     * @param frCardTypeSplitSet
+     * @return
+     * @throws YJException
+     */
+    JsonResult isUsing(FrCardTypeSplitSet frCardTypeSplitSet)throws YJException;
 }

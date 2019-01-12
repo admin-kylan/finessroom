@@ -11,6 +11,7 @@ import com.yj.dal.base.BaseModel;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -127,6 +128,16 @@ public class Shop extends Model<Shop> {
     private List<Sdaduim> sdaduimArrayList;
     @TableField(exist = false)
     List<FrCategoryItem> categoryItemlist ;
+    @TableField(exist = false)
+    List<Map<String,Object>> map ;
+
+    public List<Map<String, Object>> getMap() {
+        return map;
+    }
+
+    public void setMap(List<Map<String, Object>> map) {
+        this.map = map;
+    }
 
     public List<FrCategoryItem> getCategoryItemlist() {
         return categoryItemlist;

@@ -31,11 +31,12 @@
         <result column="create_user_name" property="createUserName" />
         <result column="update_user_id" property="updateUserId" />
         <result column="update_user_name" property="updateUserName" />
+        <result column="reserve_type" property="reserveType" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, execute_date_plan AS executeDatePlan, begin_date_plan AS beginDatePlan, end_date_plan AS endDatePlan, shop_id AS shopId, shop_name AS shopName, course_id AS courseId, course_name AS courseName, type, coach_id AS coachId, coach_name AS coachName, room_id AS roomId, room_name AS roomName, reserve_total_num AS reserveTotalNum, create_time AS createTime, update_time AS updateTime, status, assistant_name AS assistantName, assistant_id AS assistantId, is_use AS isUse, sdaduim_id AS sdaduimId, sdaduim_name AS sdaduimName, create_user_id AS createUserId, CustomerCode, create_user_name AS createUserName, update_user_id AS updateUserId, update_user_name AS updateUserName
+        id, execute_date_plan AS executeDatePlan, begin_date_plan AS beginDatePlan, end_date_plan AS endDatePlan, shop_id AS shopId, shop_name AS shopName, course_id AS courseId, course_name AS courseName, type, coach_id AS coachId, coach_name AS coachName, room_id AS roomId, room_name AS roomName, reserve_total_num AS reserveTotalNum, create_time AS createTime, update_time AS updateTime, status, assistant_name AS assistantName, assistant_id AS assistantId, is_use AS isUse, sdaduim_id AS sdaduimId, sdaduim_name AS sdaduimName, create_user_id AS createUserId, CustomerCode, create_user_name AS createUserName, update_user_id AS updateUserId, update_user_name AS updateUserName, reserve_type as reserveType
     </sql>
 
 

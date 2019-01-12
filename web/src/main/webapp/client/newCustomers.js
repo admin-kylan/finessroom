@@ -297,6 +297,12 @@ const ncapp = new Vue({
             console.log(error);
         });
         },
+        //手机号码校验
+        checkPhone:function (phone) {
+
+            console.log(phone);
+        },
+
     }
 })
 

@@ -183,6 +183,7 @@ body {
     border-right: 1px solid #ccc;
     line-height: 30px;
     text-align: center;
+        height: 30px;
 }
 
 #newCardCustomers .section1_box .col_box>div>div input {
@@ -190,7 +191,7 @@ body {
     width: 85%;
     line-height: 22px;
     text-align: center;
-    color: #a3a3a3;
+    color: #333;
 }
 
 #newCardCustomers .section1_box .col_box>div>div span {
@@ -240,7 +241,7 @@ body {
     width: 100%;
     text-align: center;
     text-align-last: center;
-    color: #a3a3a3;
+    color: #333;
 }
 
 #newCardCustomers .section1_box .col_box>div>div input::-webkit-input-placeholder {

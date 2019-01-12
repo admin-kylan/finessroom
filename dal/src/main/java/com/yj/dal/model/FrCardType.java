@@ -100,7 +100,7 @@ public class FrCardType extends Model<FrCardType> {
     @JSONField(serialzeFeatures= SerializerFeature.WriteMapNullValue)
     private Integer totalDays;
     /**
-     * 超出时间每天费用
+         * 超出时间每天费用
      */
     @TableField("out_price")
     @JSONField(serialzeFeatures= SerializerFeature.WriteMapNullValue)
@@ -213,7 +213,7 @@ public class FrCardType extends Model<FrCardType> {
      * 子卡消费方式（0：随主卡同步附属使用 1：子卡与主卡分割额度使用 2：子卡与主卡享有同等权益）
      */
     @TableField("zk_xffs")
-    private String zkXffs;
+    private Integer zkXffs;
     /**
      * 子卡处理方式（0：子卡存在 1：独立分卡）默认0
      */
@@ -567,11 +567,11 @@ public class FrCardType extends Model<FrCardType> {
         this.zkTkqy = zkTkqy;
     }
 
-    public String getZkXffs() {
+    public Integer getZkXffs() {
         return zkXffs;
     }
 
-    public void setZkXffs(String zkXffs) {
+    public void setZkXffs(Integer zkXffs) {
         this.zkXffs = zkXffs;
     }
 

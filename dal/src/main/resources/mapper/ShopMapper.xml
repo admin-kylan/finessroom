@@ -300,5 +300,8 @@
         SELECT ShopName FROM Shop where ID=(
         SELECT shop_id FROM fr_client_latence_personal WHERE client_id=#{cid})
     </select>
-
+    <select id="getShopName2" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT ShopName FROM Shop where ID=(
+        SELECT shop_id FROM fr_client_personal WHERE client_id=#{cid})
+    </select>
 </mapper>

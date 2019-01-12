@@ -1,0 +1,22 @@
+
+/*公共表格*/
+.table-style.table-bordered>thead>tr>td, .table-bordered>thead>tr>th{border-bottom-width: 1px;}
+.table-style thead td{background-color: #00d0cd;border: none!important;}
+.table-style td{color: #333;text-align: center;height: 30px;vertical-align: middle!important;padding: 0!important;}
+/*公共模态框*/
+.modal-style .fieldset-content{padding: 0 55px 0 20px;}
+.modal-style .modal-header{padding: 8px;border-bottom-width: 0;background-color: #0060ff;color: #fff;}
+.modal-style .modal-dialog{margin-top: 105px;width: 450px;}
+.modal-style .modal-header .close{font-weight: bold;color: #333;opacity: 1;text-shadow: none;}
+.modal-style .modal-header .close>span{font-size: 21px;}
+.modal-style .modal-content{border-radius: 0;box-shadow: 5px 5px 5px rgba(0,0,0,.3);border: 1px solid #e4e4e4;}
+.modal-style .modal-footer{text-align: left;padding: 5px;}
+.modal-style .fieldset-content>.flex-box{margin-bottom: 10px;}
+.modal-style .form-control{width: 190px;display: inline-block;padding: 4px 0px;height: auto;line-height: 15px;border-radius: 0;border-color: #a9a9a9;}
+.modal-style textarea.form-control{border-radius: 0;width: 100%;}
+.modal-style .checkbox input[type=radio],.modal-style .checkbox input[type=checkbox]{clip: auto;margin-top: 2px;margin-left: -15px;}
+.modal-style .checkbox > .checkbox{margin-bottom: 5px;margin-top: 0;}
+.modal-style .fieldset-info .all-select{position: absolute;bottom: 0;background-color: rgba(242, 242, 242, 1);border: 1px solid #e4e4e4;margin: 0;padding: 5px 0;left: 0;right: 0;padding-left: 14px;}
+.modal-style .checkbox label+label{margin-left: 25px;}
+.modal-style .modal-header h4{font-size: 13px;text-align: center;}
+.modal-style .modal-footer .btn{min-width: 70px;padding: 4.5px 12px;border-radius: 2px;background-color: #009cd9;color: #fff;}

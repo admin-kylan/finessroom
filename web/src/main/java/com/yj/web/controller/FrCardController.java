@@ -338,6 +338,7 @@ public class FrCardController {
         String userURL = map.get("userURL");
         //当前操作的门店id
         String shopId = map.get("shopId");
+        String temp1 = map.get("temp");
         if(StringUtils.isEmpty(shopId)){
             shopId = CookieUtils.getCookieValue(request,"shopid",true);
             if(StringUtils.isEmpty(shopId)){
@@ -380,7 +381,8 @@ public class FrCardController {
         }
         Map<String,Integer> mapI = new HashMap<>();
         mapI.put("infoType",CommonUtils.CARD_ORDRE_INFO_TYPE_1);
-        return  service.addSaveCustomer(frClient,frCard,frCardOrderInfo,frCardOrderPayModes,frCardOrderAllotSetList,mapS,mapI);
+        FrClient temp =  JSONObject.parseObject(temp1,FrClient.class);
+        return  service.addSaveCustomer(frClient,frCard,frCardOrderInfo,frCardOrderPayModes,frCardOrderAllotSetList,mapS,mapI,temp);
     }
 
 

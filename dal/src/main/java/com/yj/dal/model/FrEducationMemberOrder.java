@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2019-01-05
+ * @since 2019-01-10
  */
 @TableName("fr_education_member_order")
 public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
@@ -123,6 +123,7 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
      */
     @TableField("program_better")
     private String programBetter;
+
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -294,6 +295,7 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
     public void setProgramBetter(String programBetter) {
         this.programBetter = programBetter;
     }
+
 
     public String getId() {
         return id;

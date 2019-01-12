@@ -87,13 +87,13 @@
                         <div class="form_box">
                             <div class="form_box_left">会员卡可销售门店：</div>
                             <div class="form_box_right on">
-                                <!--<div>-->
-                                    <!--<label>-->
-                                        <!--<input type="checkbox">-->
-                                        <!--<span>连锁店通用</span>-->
-                                    <!--</label>-->
-                                    <!--<span class="form_box_right_red on">选择连锁店通用设置，则创建一家新的门店时，无需重新创建</span>-->
-                                <!--</div>-->
+                                <!--<div>
+                                    <label>
+                                        <input type="checkbox" id="current" @click="current()">
+                                        <span>连锁店通用</span>
+                                    </label>
+                                    <span class="form_box_right_red on">选择连锁店通用设置，则创建一家新的门店时，无需重新创建</span>
+                                </div>-->
                                 <div class="form_box_right_cb">
                                     <div v-for="tfer in storeList">
 
@@ -134,7 +134,8 @@
                     </form>
                 </div>
             </div>
-            <div class="main_sub"> <a class="on" v-on:click="add()">新增</a><a href="">取消</a></div>
+            <div class="main_sub"> <a class="on" v-on:click="add()">新增11
+            </a><a href="">取消</a></div>
         </div>
     </div>
 </body>
@@ -154,6 +155,7 @@
             name:'',
             storeList:[],
             cardName:null,
+            type:'',
         },
         created:function () {
             var that = this;
@@ -182,10 +184,25 @@
             );
         },
         methods: {
+        	current: function () {
+                var that = this;
+                //选中下面门店则不能选中
+                if ($("#current").prop("checked")) {
+                    $(".form_box_right_cb input").attr("checked", false).attr("disabled", "disabled");
+                    that.typeSetState = 1;
+                } else {
+                    $(".form_box_right_cb input").attr("checked", false).attr("disabled", false);
+                    that.typeSetState = 2;
+                }
+            },
             init: function (t) {
                 const that = this;
                 var thisUrl = document.URL;
-               that.cardName = decodeURIComponent(thisUrl.split('=')[2])
+               that.cardName = decodeURIComponent(thisUrl.split('=')[3])
+               that.type=decodeURIComponent(thisUrl.split('&')[1]).split('=')[1];
+                console.log(that.type)
+
+
             },
             add: function () {
                 var that = this;
@@ -226,14 +243,14 @@
                     "{0}/frCardType/addCurrentFrCardType?type=" +type
                     +"&cardTypeName="+name+"&ids="+ids+"&pId="
                     +pId+"&typeSetState=1&createUserName="+createUserName +
-                    "&CustomerCode="+CustomerCode+"&createUserId="+createUserId,$.cookie('url'));
+                    "&CustomerCode="+CustomerCode+"&createUserId="+createUserId+"&cardType="+that.type,$.cookie('url'));
                 $.ajax({
                     type: "POST",
                     url: url,
 //                    data: {username:name, id:Ids,ty:0},
                     dataType: "json",
                     success: function(data){
-                        if(data.code == 200) {
+                        if(data.code == '200') {
                             alert("添加成功！");
                             window.location.reload();
                             window.parent.rightFrame();
@@ -253,7 +270,7 @@
                 var that = this;
                 //获取卡系列id
                 var thisUrl = document.URL;
-                var pId = thisUrl.split('=')[1];
+                var pId = thisUrl.split('&')[0].split('=')[1];
                 if(pId.split("#").length>0){
                     pId = pId.split("#")[0];
                 }
@@ -263,8 +280,8 @@
                         id:pId,
                     },
                     function(res) {
-                        if(res.code == 200) {
-                            that.name = res.data.data.cardTypeName;
+                        if(res.code == '200') {
+                            that.name = res.data.cardTypeName;
                             Loading.prototype.hide();
                         } else {
                             alert(res.msg);

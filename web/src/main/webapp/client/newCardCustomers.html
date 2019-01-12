@@ -69,7 +69,10 @@
                                 <div><input type="text" placeholder="体重" v-model="loadData2.clitenUser.weight"  @change="getUserDatat(loadData2.clitenUser.weight,'weight',3)">kg</div>
                             </div>
                             <div  v-if="LiIndex==0">
-                                <img class="img-responsive" src="../img/u2871.png" alt="" @click="pictureSelected" id="price1">
+                                <img v-if="loadData2.clitenUser.image!='undefined'&&loadData2.clitenUser.image!=null" class="img-responsive" :src="loadData2.clitenUser.image"
+                                     alt="" @click="pictureSelected" >
+                                <img v-if="loadData2.clitenUser.image=='undefined'||loadData2.clitenUser.image==null" class="img-responsive" src='../img/u2871.png'
+                                     alt="" @click="pictureSelected" id="price1">
                                 <a class="btn btn-primary" @click="uploadAvatar">上传图片</a>
                                 <input id="file-fr" style="display: none;" ref="avatar" name="file" type="file"
                                                @change="pictureShow($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
@@ -89,8 +92,8 @@
                             <div>
                                 <div><input type="text" placeholder="身份证号码" v-model="loadData2.clitenUser.idNo"  ></div>
                                 <div><input type="text" placeholder="填写推荐人电话"  v-model="loadData2.clitenUser.referenceTel"   @change="getUserDatat(loadData2.clitenUser.referenceTel,'referenceTel',1)" ></div>
-                                <div v-if="LiIndex == 0">
-                                    <select name="1"  v-model="loadData2.clitenUser.consultantId">
+                                <div v-if="LiIndex == 0" id="consultant">
+                                    <select  name="1"  v-model="loadData2.clitenUser.consultantId">
                                         <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
                                             {{items.relName}}
                                         </option>
@@ -104,7 +107,7 @@
                                 </div>
                                 <div>
                                     <input type="date" v-model="loadData2.clitenUser.buildDate"></div>
-                                <div>
+                                <div  id="shopName">
                                     <select name="1"  v-model="cardMap.shopId"  @change="products" >
                                         <option v-for='(item,index) in loadData1.shopList' :value="item.id" v-if="index==0" selected>
                                             {{item.shopName}}
@@ -127,7 +130,7 @@
                                     <input type="text" placeholder="填写居住地址" v-model="loadData2.clitenUser.homeAdd" >
                                 </div>
                                 <div><input type="text" placeholder="推荐人姓名" v-model="loadData2.clitenUser.referenceName" ></div>
-                                <div v-if="LiIndex == 0">
+                                <div v-if="LiIndex == 0" id="fwhj">
                                     <select name="1"  v-model="loadData2.clitenUser.fwhjName" >
                                         <option v-for='(items,index) in maeketUserListTwo' :value="items.relName" v-if="index==0" selected>
                                             {{items.relName}}
@@ -140,7 +143,7 @@
                                 <div v-else>
                                     <input :value="loadData2.clitenUser.fwhjName" readonly/>
                                 </div>
-                                <div><input type="date" v-model="loadData2.clitenUser.createTime" ></div>
+                                <div><input type="date" v-model="loadData2.clitenUser.applyTime" ></div>
                                 <div><a href="#" @click="performances">业绩分配</a></div>
                             </div>
                         </div>
@@ -1414,8 +1417,30 @@
 <script src="../js/jquery-confirm.js"></script>
 <script src="newCardCustomers.js"></script>
 <script>
-    newCardCustomers.init();
+	newCardCustomers.init();
     $(function () {
+    		$('body').on('focus','.TCR-tables-box2 input,.green-head-table2 input',function(){
+				if($(this).val()=='0.00'){
+					$(this).val('')
+				}
+			})
+			$('body').on('blur','.TCR-tables-box2 input,.green-head-table2 input',function(){
+				console.log($(this).val())
+				if(!$(this).val()){
+					$(this).val('0.00')
+				}
+			})
+    	$('.section1 input').focus(function(){
+    		var _placeholder=$(this).attr('placeholder');
+    		$(this).attr('data-prompt',_placeholder)
+    		$(this).attr('placeholder',' ')
+    	})
+    	$('.section1 input').blur(function(){
+    		var _placeholder=$(this).attr('data-prompt');
+    		if(!$(this).val()){		
+    			$(this).attr('placeholder',_placeholder)
+    		}
+    	})
         $('.section2_box_top a').click(function () {
             var inex = $(this).index();
             $('.section2_boxs1').eq(inex).addClass('on').siblings().removeClass('on');

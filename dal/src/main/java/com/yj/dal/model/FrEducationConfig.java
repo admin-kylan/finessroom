@@ -57,10 +57,10 @@ public class FrEducationConfig extends Model<FrEducationConfig> {
     @TableField("admission_time")
     private Integer admissionTime;
     /**
-     * 是否在线支付 
+     * 团会员预约与扣费【pc端不能预约】
      */
-    @TableField("is_online_pay")
-    private Boolean isOnlinePay;
+    @TableField("is_online_reserve")
+    private Boolean isOnlineReserve;
     /**
      * 每节课多少元
      */
@@ -141,12 +141,12 @@ public class FrEducationConfig extends Model<FrEducationConfig> {
         this.admissionTime = admissionTime;
     }
 
-    public Boolean getOnlinePay() {
-        return isOnlinePay;
+    public Boolean getOnlineReserve() {
+        return isOnlineReserve;
     }
 
-    public void setOnlinePay(Boolean isOnlinePay) {
-        this.isOnlinePay = isOnlinePay;
+    public void setOnlineReserve(Boolean isOnlineReserve) {
+        this.isOnlineReserve = isOnlineReserve;
     }
 
     public Double getLessonPrice() {
@@ -204,7 +204,7 @@ public class FrEducationConfig extends Model<FrEducationConfig> {
         ", isChooseCoach=" + isChooseCoach +
         ", isReserveConfirm=" + isReserveConfirm +
         ", admissionTime=" + admissionTime +
-        ", isOnlinePay=" + isOnlinePay +
+        ", isOnlineReserve=" + isOnlineReserve +
         ", lessonPrice=" + lessonPrice +
         ", isLimitReserve=" + isLimitReserve +
         ", isCardSettle=" + isCardSettle +

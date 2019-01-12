@@ -2482,6 +2482,17 @@
 <script src="../js/lq.datetimepick.js"></script>
 
 <script>
+	$('body').on('focus','.TCR-tables-box2 input,.green-head-table2 input',function(){
+		if($(this).val()=='0.00'){
+			$(this).val('')
+		}
+	})
+	$('body').on('blur','.TCR-tables-box2 input,.green-head-table2 input',function(){
+		console.log($(this).val())
+		if(!$(this).val()){
+			$(this).val('0.00')
+		}
+	})
     // $('.year2-modal').modal('show');
     $(".datetimepicker").on("click",function(e){
         e.stopPropagation();
@@ -2497,7 +2508,6 @@
             }
         });
     })
-
     $(function () {
         var id = document.URL.split("=")[1];
         $.cookie('cid', id)  //存入值

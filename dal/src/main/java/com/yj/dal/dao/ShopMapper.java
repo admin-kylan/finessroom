@@ -35,6 +35,8 @@ public interface ShopMapper extends BaseMapper<Shop> {
 
     String getShopName(@Param("cid") String cid);
 
+    String getShopName2(@Param("cid") String cid);
+
 }
 
 

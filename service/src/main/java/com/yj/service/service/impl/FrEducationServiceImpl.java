@@ -64,12 +64,15 @@ public class FrEducationServiceImpl {
     @Autowired
     private FrEducationCardObjectMapper frEducationCardObjectMapper;
 
+    @Autowired
+    private FrEducationPublicMapper frEducationPublicMapper;
+
     /**
      * 添加预约
      *
      * @param map
      */
-    public void addReserveGroup(Map<String, String> map, Integer teachType) throws Exception {
+    public void addReserveGroup(Map<String, String> map, Integer teachType, Integer platformType) throws Exception {
         //预约课程Id
         String eduId = map.get("eduId");
         //会员卡Id
@@ -82,7 +85,7 @@ public class FrEducationServiceImpl {
         String memberId = map.get("memberId");
         //预约人id
         String reserveClientId = map.get("reserveClientId");
-        //结算方式
+        //结算方式 //
         String settleType = map.get("settleType");
         //扣费（余额）
         String deductionBalance = map.get("deductionBalance");
@@ -121,14 +124,13 @@ public class FrEducationServiceImpl {
         if ((frEducationConfig.getReserveTime().getTime() - now.getTime()) > 0) {
             throw new Exception("预约失败，课程还未开放预约");
         }
+
         //判断会员等级预约限制
-        FrClientPersonal frClientPersonal = new FrClientPersonal();
-        frClientPersonal.setClientId(frClient.getId());
-        frClientPersonal.setUsing(true);
-        frClientPersonal = frClientPersonalMapper.selectOne(frClientPersonal);
+        Map<String, Object> mapClient = frEducationPublicMapper.getClientMemberType(frClient.getId());
+        String memberType = (String) mapClient.get("memberType");
         if (frEducationConfig.getLimitReserve()) {
             level = frClient.getLevelId();
-            this.checkLevel(level, frEducationConfig.getId(), frClientPersonal);
+            this.checkLevel(level, frEducationConfig.getId(), memberType);
         }
         if (!StringUtils.equals(memberId, reserveClientId)) {
             //判断如果相同，同一个人预约。不同则是web预约，由操作员预约的
@@ -139,6 +141,12 @@ public class FrEducationServiceImpl {
         } else {
             reserveClientName = frClient.getClientName();
         }
+        //团会员预约，是否需要确认
+        Integer reserveStatus = 1;
+        if(frEducationConfig.getReserveConfirm()){
+            reserveStatus = 2;
+        }
+
 //        //设置扣款方式
 //        FrEducationCardObject frEducationCardObject = new FrEducationCardObject();
 //        frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
@@ -158,7 +166,7 @@ public class FrEducationServiceImpl {
         frEducationClientInfo.setEducationId(eduId);
         frEducationClientInfo.setMemberId(memberId);
         frEducationClientInfo.setMemberName(frClient.getClientName());
-        frEducationClientInfo.setMemberType(null != frClientPersonal ? "现有客户" : "潜在客户");
+        frEducationClientInfo.setMemberType(memberType);
         frEducationClientInfo.setMemberCardNo(frCard.getCardNo());
         frEducationClientInfo.setMobile(frClient.getMobile());
         frEducationClientInfo.setReserveClientId(reserveClientId);
@@ -173,7 +181,7 @@ public class FrEducationServiceImpl {
         frEducationClientInfo.setSettleType(settleType);
         //扣费余额
         frEducationClientInfo.setDeductionBalance(deductionBalance);
-        frEducationClientInfo.setReserveStatus(1);
+        frEducationClientInfo.setReserveStatus(reserveStatus);
         frEducationClientInfo.setCreateUserId(createUserId);
         frEducationClientInfo.setCreateUserName(createUserName);
         frEducationClientInfo.setCreateTime(now);
@@ -189,7 +197,7 @@ public class FrEducationServiceImpl {
      * @param configId
      * @throws Exception
      */
-    private void checkLevel(String level, String configId, FrClientPersonal frClientPersonal) throws Exception {
+    private void checkLevel(String level, String configId, String memberType) throws Exception {
         FrEducationReserveObject frEducationReserveObject = new FrEducationReserveObject();
         frEducationReserveObject.setEducationConfigId(configId);
         frEducationReserveObject = frEducationReserveObjectMapper.selectOne(frEducationReserveObject);
@@ -211,7 +219,7 @@ public class FrEducationServiceImpl {
                     break;
                 default:
                     //判断是否是现有客户，还是潜在客户
-                    if (null == frClientPersonal) {
+                    if (StringUtils.equals(memberType, "潜在客户")) {
                         //不是现有客户
                         isLimit = frEducationReserveObject.getLatenceMember();
                     } else {

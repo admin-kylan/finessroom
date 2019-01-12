@@ -10,6 +10,7 @@
         <result column="member_name" property="memberName" />
         <result column="member_type" property="memberType" />
         <result column="member_card_no" property="memberCardNo" />
+        <result column="member_card_id" property="memberCardId" />
         <result column="mobile" property="mobile" />
         <result column="reserve_client_id" property="reserveClientId" />
         <result column="reserve_client_name" property="reserveClientName" />
@@ -36,4 +37,25 @@
         education_id AS educationId, member_id AS memberId, member_name AS memberName, member_type AS memberType, member_card_no AS memberCardNo, mobile, reserve_client_id AS reserveClientId, reserve_client_name AS reserveClientName, reserve_date AS reserveDate, seat_id AS seatId, seat_name AS seatName, settle_type AS settleType, deduction_balance AS deductionBalance, reserve_status AS reserveStatus, remarks, create_user_name AS createUserName, create_time AS createTime, sex, is_use AS isUse, CustomerCode, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId, id, update_user_name AS updateUserName
     </sql>
 
+    <!-- 查询待确认数组 -->
+    <select id="findMemberReserveStatusList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List"></include>
+        FROM
+            fr_education_client_info
+        WHERE
+            education_id = #{eduId}
+        <if test="reserveStatus != null and reserveStatus != ''">
+            AND reserve_status = ${reserveStatus}
+        </if>
+            and is_use = 1
+        <if test="searchInput != null and searchInput != ''">
+            and member_name like '%'+#{searchInput}+'%'
+        </if>
+        <if test="searchInput != null and searchInput != ''">
+            and mobile like '%'+#{searchInput}+'%'
+        </if>
+
+
+    </select>
 </mapper>

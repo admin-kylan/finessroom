@@ -115,7 +115,7 @@ public interface IFrCardService extends BaseService<FrCard> {
     JsonResult addSaveCustomer(FrClient frClient,FrCard frCard, FrCardOrderInfo frCardOrderInfo,
                                List<FrCardOrderPayMode> frCardOrderPayModes,
                                List<FrCardOrderAllotSet> frCardOrderAllotSetList,
-                               Map<String,String> mapS,Map<String,Integer> mapI)throws YJException;
+                               Map<String,String> mapS,Map<String,Integer> mapI,FrClient temp)throws YJException;
 
     List<Map<String,Object>> getClientCardList(String client,String code)throws YJException;
 

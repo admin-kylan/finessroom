@@ -27,7 +27,7 @@ public interface IFrCardTypeService extends BaseService<FrCardType> {
     JsonResult addFrCardType (FrCardType frCardType, String[] id, Integer type);
 
     @Transactional(rollbackFor = Exception.class)
-    JsonResult addCurrentFrCardType(FrCardType frCardType, String[] id, Integer type);
+    JsonResult addCurrentFrCardType(FrCardType frCardType, String[] id, Integer type, String cardType);
 
     JsonResult deleteFrCardType(String id ,String storeId);
 

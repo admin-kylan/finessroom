@@ -28,14 +28,7 @@
 					<form action="#" id="common-form" method="post">
 						<div class="form_top">
 							<div>卡名称：<strong id="years">{{cardTypeSet.cardTypeName}}</strong></div>
-							<div v-if="cardTypeSet.type==1">卡性质：<strong >时间卡</strong></div>
-							<div v-if="cardTypeSet.type==2">卡性质：<strong >小时卡</strong></div>
-							<div v-if="cardTypeSet.type==3">卡性质：<strong >次卡</strong></div>
-							<div v-if="cardTypeSet.type==4">卡性质：<strong >储值卡</strong></div>
-							<div v-if="cardTypeSet.type==5">卡性质：<strong >充值卡</strong></div>
-							<div v-if="cardTypeSet.type==6">卡性质：<strong >折扣卡</strong></div>
-							<div v-if="cardTypeSet.type==7">卡性质：<strong >员工卡</strong></div>
-
+							<div >卡性质：<strong >{{cardTypeSet.type}}</strong></div>
 						</div>
 						<div class="common">
 							<span class="common_span">会员卡价格设置</span>
@@ -95,7 +88,7 @@
 											<option value="天">天</option>
 										</select></span>
 									<span>刷卡次数</span>
-									<span><input type="text" id="timess" value="0" name="timess"></span>
+									<span><input type="text" id="timess"  name="timess"></span>
 								</div>
 							</div>
 						</div>
@@ -152,11 +145,11 @@
 									<li>
 										<span>前台是否可修改实际销售价格：</span>
 										<label>
-											<input type="radio" name="qtXxjgUpdate" value="1" v-model="cardTypeSet.qtXxjgUpdate">
+											<input type="radio" name="qtXxjgUpdate" value="true" v-model="cardTypeSet.qtXxjgUpdate" >
 											<span>可修改</span>
 										</label>
 										<label>
-											<input type="radio" name="qtXxjgUpdate" value="0" v-model="cardTypeSet.qtXxjgUpdate">
+											<input type="radio" name="qtXxjgUpdate" value="false" v-model="cardTypeSet.qtXxjgUpdate">
 											<span>不可修改</span>
 										</label>
 										<span>前台可修改最低销售价格：</span>
@@ -167,22 +160,22 @@
 									<li>
 										<span>前台是否可修改销售权益/有效期：</span>
 										<label>
-											<input type="radio" name="qtXxqyUpdate" value="1" v-model="cardTypeSet.qtXxqyUpdate">
+											<input type="radio" name="qtXxqyUpdate" value="true" v-model="cardTypeSet.qtXxqyUpdate">
 											<span>可修改</span>
 										</label>
 										<label>
-											<input type="radio" name="qtXxqyUpdate" value="0" v-model="cardTypeSet.qtXxqyUpdate">
+											<input type="radio" name="qtXxqyUpdate" value="false" v-model="cardTypeSet.qtXxqyUpdate">
 											<span>不可修改</span>
 										</label>
 									</li>
 									<li>
 										<span>前台是否可以修改赠送权益：</span>
 										<label>
-											<input type="radio" name="qtZsqyUpdate" value="1" v-model="cardTypeSet.qtZsqyUpdate">
+											<input type="radio" name="qtZsqyUpdate" value="true" v-model="cardTypeSet.qtZsqyUpdate">
 											<span>可修改</span>
 										</label>
 										<label>
-											<input type="radio" name="qtZsqyUpdate" value="0" v-model="cardTypeSet.qtZsqyUpdate">
+											<input type="radio" name="qtZsqyUpdate" value="false" v-model="cardTypeSet.qtZsqyUpdate">
 											<span>不可修改</span>
 										</label>
 										<span>前台可赠送的最大权益：</span>
@@ -193,11 +186,11 @@
 									<li>
 										<span>前台开卡后是否需要录入照片：</span>
 										<label>
-											<input type="radio" name="qtLrzpUpdate" value="1" v-model="cardTypeSet.qtLrzpUpdate">
+											<input type="radio" name="qtLrzpUpdate" value="true" v-model="cardTypeSet.qtLrzpUpdate">
 											<span>必须</span>
 										</label>
 										<label>
-											<input type="radio" name="qtLrzpUpdate" value="0" v-model="cardTypeSet.qtLrzpUpdate">
+											<input type="radio" name="qtLrzpUpdate" value="false" v-model="cardTypeSet.qtLrzpUpdate">
 											<span>不必须</span>
 										</label>
 									</li>
@@ -206,42 +199,42 @@
 						</div>
 						<div class="common">
 							<span class="common_span">转让续卡设置</span>
-							<div class="common6 co">
+							<div class="common5 co">
 								<ul>
-									<li>
+									<li style="margin-bottom: 10px;">
 										<span>此会员卡是否转让他人：</span>
 										<label>
-											<input type="radio" name="canTransfer" value="0" v-model="cardTypeSet.canTransfer">
+											<input type="radio" name="canTransfer" value="true" v-model="cardTypeSet.canTransfer">
 											<span>可转让</span>
 										</label>
 										<span>转让时余额需扣除费用：</span>
-										<span><input type="text" name="changeTransferFee" value="0" v-model="cardTypeSet.changeTransferFee"></span>
+										<span><input type="text" name="changeTransferFee"  v-model="cardTypeSet.changeTransferFee"></span>
 										<span>元，设置为（0或者空时，前台可以自行设置）</span>
 										<label>
-											<input type="radio" name="canTransfer" value="1" v-model="cardTypeSet.canTransfer">
+											<input type="radio" name="canTransfer" value="false" v-model="cardTypeSet.canTransfer">
 											<span>不可转让</span>
 										</label>
 									</li>
-									<li>
+									<li style="margin-bottom: 10px;">
 										<span>此会员卡是否可转成其他卡种：</span>
 										<label>
-											<input type="radio" name="canChangeType" value="1" v-model="cardTypeSet.canChangeType">
+											<input type="radio" name="canChangeType" value="true" v-model="cardTypeSet.canChangeType">
 											<span>可转让</span>
 										</label>
 										<span>转卡时余额需扣除费用：</span>
-										<span><input type="text" name="transferFee" value="0" v-model="cardTypeSet.transferFee"></span>
+										<span><input type="text" name="transferFee"  v-model="cardTypeSet.transferFee"></span>
 										<span>元，设置为（0或者空时，前台可以自行设置）</span>
 										<label>
-											<input type="radio" name="canChangeType" value="0" v-model="cardTypeSet.canChangeType">
+											<input type="radio" name="canChangeType" value="false" v-model="cardTypeSet.canChangeType">
 											<span>不可转让</span>
 										</label>
 									</li>
-									<li>
+									<li style="margin-bottom: 10px;">
 										<span>会员卡续卡价格：</span>
 										<span><input type="text" name="renewCommonPrice" value="0.00" v-model="cardTypeSet.renewCommonPrice"></span>
 										<span>元</span>
 										<label>
-											<input type="checkbox" class="special_checkbox" @click="special_checkbox()">
+											<input type="checkbox" v-model="special" class="special_checkbox" @click="special_checkbox()">
 											<span>特殊续卡价格</span>
 										</label>
 										<div class="special">
@@ -268,11 +261,11 @@
 										<span>会员卡续卡价格前台是否可以修改：</span>
 
 										<label>
-											<input type="radio" name="qtCanRenew" value="1" v-model="cardTypeSet.qtCanRenew">
+											<input type="radio" name="qtCanRenew" value="true" v-model="cardTypeSet.qtCanRenew">
 											<span>前台可修改</span>
 										</label>
 										<label>
-											<input type="radio" name="qtCanRenew" value="0" v-model="cardTypeSet.qtCanRenew">
+											<input type="radio" name="qtCanRenew" value="false" v-model="cardTypeSet.qtCanRenew">
 											<span>前台不可修改</span>
 										</label>
 
@@ -288,18 +281,18 @@
 							<ul>
 								<li>
 									<span>此卡共可设置子卡：</span>
-									<span><input type="text" value="0"></span>
+									<span><input type="text" v-model="cardTypeSet.zkNum"></span>
 									<span>张</span>
 								</li>
 								<li>
 									<span>子卡持有方式：</span>
 
 									<label>
-										<input type="radio" name="zkCyfs" value="1" v-model="cardTypeSet.cyfs">
+										<input type="radio" name="zkCyfs" value="1" v-model="cardTypeSet.zkCyfs">
 										<span>指定人员持有子卡</span>
 									</label>
 									<label>
-										<input type="radio" name="zkCyfs" value="0" v-model="cardTypeSet.cyfs">
+										<input type="radio" name="zkCyfs" value="0" v-model="cardTypeSet.zkCyfs">
 										<span>子卡不限人员使用</span>
 									</label>
 									<p>仅针对是否需要录入持有人信息，指定持有人信息不可修改</p>
@@ -321,22 +314,23 @@
 									<div style="overflow: hidden;">
 										<span>子卡消费方式：</span>
 										<label>
-											<input type="checkbox">
-											<span>最长间隔时间</span>
+                                                <input type="radio" name="zkXffs" value="0" v-model="cardTypeSet.zkXffs">
+                                                <span>随主卡同步附属使用</span>
+											    <span>最长间隔时间</span>
 										</label>
-										<span><input type="text"></span>
+										<span><input type="text"  v-model="cardTypeSet.zkSjjg"></span>
 										<span>分钟</span>
 									</div>
-									<div style="overflow: hidden;margin-left: 94px;">
+									<div style="overflow: hidden;margin-left: 205px;">
 
 										<label>
-											<input type="checkbox" value="1" v-model="cardTypeSet.zkXffs">
+											<input type="radio" name="zkXffs" value="1" v-model="cardTypeSet.zkXffs">
 											<span>子卡与主卡分割额度使用</span>
 										</label>
 									</div>
-									<div style="overflow: hidden;margin-left: 94px;">
+									<div style="overflow: hidden;margin-left: 205px;">
 										<label>
-											<input type="checkbox" value="2" v-model="cardTypeSet.zkXffs">
+											<input type="radio" name="zkXffs" value="2" v-model="cardTypeSet.zkXffs">
 											<span>子卡与主卡享有同等权益</span>
 										</label>
 									</div>
@@ -345,11 +339,11 @@
 									<span>子卡处理方式：</span>
 
 									<label>
-										<input type="radio" value="0" v-model="cardTypeSet.zkCyfs">
+										<input type="radio" value="0" v-model="cardTypeSet.zkClfs">
 										<span>子卡存在</span>
 									</label>
 									<label>
-										<input type="radio" value="1" v-model="cardTypeSet.zkCyfs">
+										<input type="radio" value="1" v-model="cardTypeSet.zkClfs">
 										<span>独立分卡</span>
 									</label>
 								</li>
@@ -521,7 +515,7 @@
 																	</td>
 																	<td>
 																		<label>
-																			<input type="radio" :name="'plSet'+index" value="false" v-model="categoryItem.setChecked">
+																			<input type="radio" :name="'plSet'+index" value="false" v-model="categoryItem.plSet" >
 																			<span>无</span>
 																		</label>
 																		<label>
@@ -610,7 +604,8 @@
 			<div class="common on">
 				<span class="common_span">卡权益总结说明（根据使用权益自动生成）</span>
 				<div>
-					<textarea name="" id="textarea" readonly="readonly" placeholder="卡类别：次卡，卡名称：一次卡，可使用门店：软件园店、集美店，可使用场馆：软件园店-健身房、软件园店-健身私教、软件园店-健身团课、软件园店-游泳、集美店-健身房、集美店-健身私教、集美店-健身团课、集美店-游泳，使用项目：（1）、增肌，扣卡消费，无使用限制；（2）、体态调整，免费通用，无使用限制；"></textarea>
+					<textarea name="" id="textarea" readonly="readonly"
+							  :placeholder="cardExplainInfo"></textarea>
 				</div>
 			</div>
 			<!-- 卡权益总结说明 -->
@@ -635,12 +630,12 @@
 							<div class="col-md4">下午时间</div>
 						</div>
 <div>
-	
+
 	<form action="#" method="post" id="setTimeform" >
-		
-	
-	
-<!--v-for="ConsumePlset in cardConsumeSetDTO.cardConsumePlsetDTO"--> 
+
+
+
+<!--v-for="ConsumePlset in cardConsumeSetDTO.cardConsumePlsetDTO"-->
 						<div class="col-md text-center">
 							<div class="col-md4"><label><input type="checkbox" class="jddatess1" value="1"  name="setTimeList[0].useSelect"> </label>周一</div>
 							<div class="col-md4"><input class="jeinput test1 jddate1" placeholder="时:分:秒 至 时:分:秒" name="setTimeList[0].AM" type="text" ></div>
@@ -699,8 +694,8 @@
 						<input type="hidden"  value="7" name="setTimeList[6].useDays"/>
 						</div>
 						</form>
-					</div>	
-					</div>		
+					</div>
+					</div>
 					<p>其他可用或者禁用时间设置（日期不需要年，只需要月日，可针对与节假日设置）</p>
 					<div class="table_hide">
 						<table class="table table-bordered text-center">

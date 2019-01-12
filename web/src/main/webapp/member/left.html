@@ -31,7 +31,7 @@
         <div id="yes">
             <div class="left_box_div on" id="tong" onclick="leftBoxDiv(this)">连锁店通用</div>
             <ul class="ul_li on">
-                <div class="left_box_red"><a href="current.html" target="rightFrame">添加卡类别</a></div>
+                <div class="left_box_red"><a href="current.html?type=1" target="rightFrame">添加卡类别1</a></div>
 
                 <!--通用门店卡系列-->
                 <div v-for="treers in frCardTypeList">
@@ -41,37 +41,36 @@
                         <span>{{treers.cardTypeName}}</span>
                         <span class="span_sd">
                                 <a :href="'main1.html?id='+treers.id+'&shopId='" target="rightFrame" class="success">修改</a>
-                                <a href="#" class="del" v-on:click="delCurrent(treers.id)">删除</a>
+                                <a  class="del" v-on:click="delCurrent(treers.id)">删除</a>
                         </span>
                     </li>
                     <li>
                         <div>
                             <a v-if="treers.type == 7" :href="'yuangong.html?pId='+treers.id+'&name='+encodeURIComponent(treers.cardTypeName)" target="rightFrame" >+ 添加卡种设置</a>
-                            <a :name="treers.cardTypeName" v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id+'&name='+encodeURIComponent(treers.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
+                            <a :name="treers.cardTypeName" v-if="treers.type != 7" :href="'addCurrentCard.html?pId='+treers.id+'&type=1&name='+encodeURIComponent(treers.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
                         </div>
                         <ul>
                             <li v-for="tferr in treers.frCardTypeList">
                                 <span><input type="checkbox" :title="''+tferr.id"></span>
                                 <span>
                                     <!--按卡种类型跳相关页面-->
-                                    <a v-on:click="modify(tferr.id,tferr.type)"  href="right.html" target="rightFrame">{{tferr.cardTypeName}}</a>
+                                    <a v-on:click="modify(tferr.id,tferr.type,$event)"  href="right.html" target="rightFrame">{{tferr.cardTypeName}}</a>
                                 </span>
                                 <span class="span_sd">
                                     <a :href="'updateCurrent.html?id='+tferr.id" target="rightFrame" class="success">修改</a>
-                                    <a href="#" class="del" v-on:click="dels(tferr.id)">删除</a>
+                                    <a  class="del" v-on:click="dels(tferr.id)">删除</a>
                                 </span>
                             </li>
                         </ul>
                     </li>
                 </div>
-
                 <!--<li>-->
                     <!--<span><img src="../img/u25_selected.png"></span>-->
                     <!--<span><input type="checkbox" class="series"></span>-->
                     <!--<span>员工用卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('mains')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -82,7 +81,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(1)" target="rightFrame">股东卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -90,7 +89,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(2)" target="rightFrame">经理卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(2)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -98,7 +97,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(3)" target="rightFrame">员工卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(3)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(3)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -106,7 +105,7 @@
             </ul>
 
             <!--分门店-->
-            <div>
+            <div style="border-bottom: 1px solid #ccc;">
                 <div v-for="tf in storeList" >
                     <div class="left_box_div" onclick="leftBoxDiv(this)">{{tf.shopName}}</div>
                     <ul class="ul_li">
@@ -117,9 +116,9 @@
                                 <span><input type="checkbox" class="series" :title="''+tfers.id"></span>
                                 <span>{{tfers.cardTypeName}}</span>
                                 <span class="span_sd">
-                                <a :href="'main1.html?id='+tfers.id+'&storeId='+tf.id" target="rightFrame" class="success">修改</a>
-                                <a href="#" class="del" v-on:click="del(tfers.id,tf.id)">删除</a>
-                        </span>
+		                                <a :href="'main1.html?id='+tfers.id+'&storeId='+tf.id" target="rightFrame" class="success">修改</a>
+		                                <a  class="del" v-on:click="del(tfers.id,tf.id)">删除</a>
+		                        </span>
                             </li>
                             <li>
                                 <div><a :href="'employee.html?pId='+tfers.id+'&storeId='+tf.id" target="rightFrame">+ 添加卡种设置</a></div>
@@ -131,9 +130,9 @@
                                             <a href="right.html" v-on:click="modify(tfer.id,tfer.type)" target="rightFrame">{{tfer.cardTypeName}}</a>
                                         </span>
                                         <span class="span_sd">
-                                    <a :href="'employee1.html?id='+tfer.id"  target="rightFrame" class="success">修改</a>
-                                    <a href="#" class="del" v-on:click="dels(tfer.id,tf.id)">删除</a>
-                                </span>
+		                                    <a :href="'employee1.html?id='+tfer.id"  target="rightFrame" class="success">修改</a>
+		                                    <a  class="del" v-on:click="dels(tfer.id,tf.id)">删除</a>
+		                                </span>
                                     </li>
                                 </ul>
                             </li>
@@ -152,7 +151,7 @@
                     <!--<span>员工用卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('mains')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -163,7 +162,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(1)" target="rightFrame">股东卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -171,7 +170,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(2)" target="rightFrame">经理卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(2)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -179,7 +178,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(3)" target="rightFrame">员工卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(1)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(3)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(3)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -190,7 +189,7 @@
                     <!--<span>次卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -201,7 +200,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(4)" target="rightFrame">一次卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(2)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -209,7 +208,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(5)" target="rightFrame">30次卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(2)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(2)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -220,7 +219,7 @@
                     <!--<span>年卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -231,7 +230,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(6)" target="rightFrame">一年卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(3)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -239,7 +238,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(7)" target="rightFrame">二年卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(3)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(2)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(2)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                         <!--<li>-->
@@ -247,7 +246,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(8)" target="rightFrame">三年卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(3)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(3)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(3)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -258,7 +257,7 @@
                     <!--<span>小时卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -269,7 +268,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(9)" target="rightFrame">10小时卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(4)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -280,7 +279,7 @@
                     <!--<span>充值卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -291,7 +290,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(10)" target="rightFrame">充值卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(5)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -302,7 +301,7 @@
                     <!--<span>储蓄卡系列</span>-->
                     <!--<span class="span_sd">-->
                             <!--<a href="main.html" v-on:click="main('main')" target="rightFrame" class="success">修改</a>-->
-                            <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                            <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                     <!--</span>-->
                 <!--</li>-->
                 <!--<li>-->
@@ -313,7 +312,7 @@
                             <!--<span><a href="right.html" v-on:click="modify(11)" target="rightFrame">储蓄卡</a></span>-->
                             <!--<span class="span_sd">-->
                                 <!--<a href="employee.html" v-on:click="employee(6)" target="rightFrame" class="success">修改</a>-->
-                                <!--<a href="#" class="del" v-on:click="del(1)">删除</a>-->
+                                <!--<a  class="del" v-on:click="del(1)">删除</a>-->
                             <!--</span>-->
                         <!--</li>-->
                     <!--</ul>-->
@@ -323,7 +322,7 @@
            <div id="Not">
             <div class="left_box_div" id="tong1" onclick="leftBoxDiv(this)">连锁店通用</div>
             <ul class="ul_li on">
-                <div class="left_box_red"><a href="current.html" target="rightFrame">添加卡类别</a></div>
+                <div class="left_box_red"><a href="current.html?type=2" target="rightFrame">添加卡类别2</a></div>
 
                 <!--通用门店卡系列-->
                 <div v-for="trea in currentNotList" v-if="trea.flag != '1'">
@@ -333,24 +332,24 @@
                         <span>{{trea.cardTypeName}}</span>
                         <span class="span_sd">
                                 <a :href="'main1.html?id='+trea.id+'&storeId='" target="rightFrame" class="success">修改</a>
-                                <a href="#" class="del" v-on:click="delCurrent(trea.id)">删除</a>
+                                <a  class="del" v-on:click="delCurrent(trea.id)">删除</a>
                         </span>
                     </li>
                     <li>
                         <div>
                             <a v-if="trea.type == 7" :href="'yuangong.html?pId='+trea.id" target="rightFrame">+ 添加卡种设置</a>
-                            <a v-if="trea.type != 7" :href="'addCurrentCard.html?pId='+trea.id+'&name='+encodeURIComponentComponent(trea.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
+                            <a v-if="trea.type != 7" :href="'addCurrentCard.html?pId='+trea.id+'&type=2&name='+encodeURIComponent(trea.cardTypeName)" target="rightFrame">+ 添加卡种设置</a>
                         </div>
                         <ul>
                             <li v-for="tferrse in trea.frCardTypeList">
                                 <span><input type="checkbox" :title="''+tferrse.id"></span>
                                 <span>
                                     <!--按卡种类型跳相关页面-->
-                                    <a v-on:click="modify(tferrse.id,tferrse.type)"  href="right.html" target="rightFrame">{{tferrse.cardTypeName}}</a>
+                                    <a v-on:click="modify(tferrse.id,tferrse.type,$event)"  href="right.html" target="rightFrame">{{tferrse.cardTypeName}}</a>
                                 </span>
                                 <span class="span_sd">
                                     <a :href="'updateCurrent.html?id='+tferrse.id" target="rightFrame" class="success">修改</a>
-                                    <a href="#" class="del" v-on:click="dels(tferrse.id)">删除</a>
+                                    <a  class="del" v-on:click="dels(tferrse.id)">删除</a>
                                 </span>
                             </li>
                         </ul>
@@ -371,7 +370,7 @@
                                 <span>{{tfers.cardTypeName}}</span>
                                 <span class="span_sd">
                                 <a :href="'main1.html?id='+tfers.id+'&storeId='+nots.id" target="rightFrame" class="success">修改</a>
-                                <a href="#" class="del" v-on:click="del(tfers.id,nots.id)">删除</a>
+                                <a  class="del" v-on:click="del(tfers.id,nots.id)">删除</a>
                         </span>
                             </li>
                             <li>
@@ -381,11 +380,11 @@
                                         <span><input type="checkbox" :title="''+tfer.id"></span>
                                         <span>
                                             <!--按卡种类型跳相关页面-->
-                                            <a href="right.html" v-on:click="modify(tfer.id,tfer.type)" target="rightFrame">{{tfer.cardTypeName}}</a>
+                                            <a href="right.html" v-on:click="modify(tfer.id,tfer.type,$event)" target="rightFrame">{{tfer.cardTypeName}}</a>
                                         </span>
                                         <span class="span_sd">
                                     <a :href="'employee1.html?id='+tfer.id"  target="rightFrame" class="success">修改</a>
-                                    <a href="#" class="del" v-on:click="dels(tfer.id,nots.id)">删除</a>
+                                    <a  class="del" v-on:click="dels(tfer.id,nots.id)">删除</a>
                                 </span>
                                     </li>
                                 </ul>
@@ -400,8 +399,8 @@
             <div class="left_footer">
                 <ul >
                     <li ><input type="checkbox" id="expand_list">展开列表</li>
-                    <li style="text-align: center" id="show"><a href="#" v-on:click="updateIsUsing(0)">前台不显示选中会员卡</a></li>
-                    <li style="text-align: center;display: none" id="noShow" ><a href="#" v-on:click="updateIsUsing(1)">前台显示选中会员卡</a></li>
+                    <li style="text-align: center" id="show"><a v-on:click="updateIsUsing(0)">前台不显示选中会员卡</a></li>
+                    <li style="text-align: center;display: none" id="noShow" ><a v-on:click="updateIsUsing(1)">前台显示选中会员卡</a></li>
                 </ul>
             </div>
         </div>
@@ -459,7 +458,7 @@
                     function(res) {
                         if(res.code == 200) {
                             that.storeList = res.data.data;
-                            $("#Not").hide();
+//                          $("#Not").hide();
                         } else {
                             //alert(res.msg);
                             //$('#tip').text(res.msg);//异常处理
@@ -481,11 +480,13 @@
                 window.parent.setParam(t);
             },
               // 跳转相应卡权益页面
-            modify:function(cardId,type){
+            modify:function(cardId,type,evt){
                 var cardId = cardId;//卡种ID
                 var type = type;//卡类型
                 window.parent.setParam(cardId);
                 window.parent.setType(type);
+                $('.selectLeft').removeClass('selectLeft')
+                $(evt.target).addClass('selectLeft')
             },
 
             // 删除卡系列
@@ -615,10 +616,23 @@
 
             //获取前台不显示列表
             getNotList:function () {
+                var that=this;
                 $("#yes").hide();
                 $("#Not").show();
                 $("#show").hide();
                 $("#noShow").show();
+                //获取通用门店前台不显示的列表
+                this.getGeneralStoreNotList();
+            },
+            getYesList:function () {
+                $("#Not").hide();
+                $("#yes").show();
+                $("#noShow").hide();
+                $("#show").show();
+
+            },
+            //获取通用门店前台不显示的列表
+            getGeneralStoreNotList:function () {
                 var that = this;
                 Loading.prototype.show();
                 var url = $.stringFormat("{0}/shop/getIsUsingIsTrue",$.cookie('url'));
@@ -636,20 +650,6 @@
 
                     }
                 );
-                //获取通用门店前台不显示的列表
-                that.getGeneralStoreNotList();
-            },
-            getYesList:function () {
-                $("#Not").hide();
-                $("#yes").show();
-                $("#noShow").hide();
-                $("#show").show();
-
-            },
-            //获取通用门店前台不显示的列表
-            getGeneralStoreNotList:function () {
-                var that = this;
-                Loading.prototype.show();
                 var url = $.stringFormat("{0}/frCardType/getGeneralStoreNotList",$.cookie('url'))
                 $.get(url, {
                     },
@@ -657,6 +657,7 @@
                         if(res.code == 200) {
                             Loading.prototype.hide();
                             that.currentNotList = res.data;
+                            console.log(that.currentNotList)
                         } else {
                             alert(res.msg);
                             //$('#tip').text(res.msg);//异常处理

@@ -12,7 +12,7 @@
         <result column="is_choose_coach" property="isChooseCoach" />
         <result column="is_reserve_confirm" property="isReserveConfirm" />
         <result column="admission_time" property="admissionTime" />
-        <result column="is_online_pay" property="isOnlinePay" />
+        <result column="is_online_reserve" property="isOnlineReserve" />
         <result column="lesson_price" property="lessonPrice" />
         <result column="is_limit_reserve" property="isLimitReserve" />
         <result column="is_card_settle" property="isCardSettle" />
@@ -21,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        education_id AS educationId, reserve_time AS reserveTime, setting_time AS settingTime, is_start_class AS isStartClass, is_choose_coach AS isChooseCoach, is_reserve_confirm AS isReserveConfirm, admission_time AS admissionTime, is_online_pay AS isOnlinePay, lesson_price AS lessonPrice, is_limit_reserve AS isLimitReserve, is_card_settle AS isCardSettle, is_course_settle AS isCourseSettle, id
+        education_id AS educationId, reserve_time AS reserveTime, setting_time AS settingTime, is_start_class AS isStartClass, is_choose_coach AS isChooseCoach, is_reserve_confirm AS isReserveConfirm, admission_time AS admissionTime, is_online_reserve AS isOnlineReserve, lesson_price AS lessonPrice, is_limit_reserve AS isLimitReserve, is_card_settle AS isCardSettle, is_course_settle AS isCourseSettle, id
     </sql>
 
 </mapper>

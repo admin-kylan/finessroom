@@ -62,7 +62,13 @@ html,body{
     font-size: 12px;
 }
 #left .left_box ul div a{
-    color: #09a1bb;
+    color: #333;
+}
+#left .left_box ul div>a{
+    padding-left:24px;color:#337ab7;text-align: left;
+}
+#left .left_box ul div a:hover,#left .left_box ul div a.selectLeft{
+    color: #00CCCC;
 }
 
 #left .left_box .left_box_div{
@@ -102,7 +108,7 @@ html,body{
 }
 #left .left_box ul li .span_sd{
     float: right;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 #left .left_box ul li .span_sd .success{
    color:#0C0;

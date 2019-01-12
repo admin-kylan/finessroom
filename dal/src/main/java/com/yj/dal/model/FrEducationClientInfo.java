@@ -48,6 +48,11 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
     @TableField("member_card_no")
     private String memberCardNo;
     /**
+     * 会员卡Id
+     */
+    @TableField("member_card_id")
+    private String memberCardId;
+    /**
      * 电话号码
      */
     private String mobile;
@@ -87,7 +92,7 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
     @TableField("deduction_balance")
     private String deductionBalance;
     /**
-     * 预约状态 1/已预约 0/已取消
+     * 预约状态 1/已预约 0/已取消 2/待确认
      */
     @TableField("reserve_status")
     private Integer reserveStatus;
@@ -328,6 +333,14 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
         this.updateUserName = updateUserName;
     }
 
+    public String getMemberCardId() {
+        return memberCardId;
+    }
+
+    public void setMemberCardId(String memberCardId) {
+        this.memberCardId = memberCardId;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -341,6 +354,7 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
         ", memberName=" + memberName +
         ", memberType=" + memberType +
         ", memberCardNo=" + memberCardNo +
+        ", memberCardId=" + memberCardId +
         ", mobile=" + mobile +
         ", reserveClientId=" + reserveClientId +
         ", reserveClientName=" + reserveClientName +

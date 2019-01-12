@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationPublicMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducation">
+        <id column="id" property="id"/>
+        <result column="execute_date_plan" property="executeDatePlan"/>
+        <result column="begin_date_plan" property="beginDatePlan"/>
+        <result column="end_date_plan" property="endDatePlan"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="course_id" property="courseId"/>
+        <result column="course_name" property="courseName"/>
+        <result column="type" property="type"/>
+        <result column="coach_id" property="coachId"/>
+        <result column="coach_name" property="coachName"/>
+        <result column="room_id" property="roomId"/>
+        <result column="room_name" property="roomName"/>
+        <result column="reserve_total_num" property="reserveTotalNum"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="assistant_name" property="assistantName"/>
+        <result column="assistant_id" property="assistantId"/>
+        <result column="is_use" property="isUse"/>
+        <result column="sdaduim_id" property="sdaduimId"/>
+        <result column="sdaduim_name" property="sdaduimName"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="CustomerCode" property="CustomerCode"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_user_name" property="updateUserName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, execute_date_plan AS executeDatePlan, begin_date_plan AS beginDatePlan, end_date_plan AS endDatePlan, shop_id AS shopId, shop_name AS shopName, course_id AS courseId, course_name AS courseName, type, coach_id AS coachId, coach_name AS coachName, room_id AS roomId, room_name AS roomName, reserve_total_num AS reserveTotalNum, create_time AS createTime, update_time AS updateTime, status, assistant_name AS assistantName, assistant_id AS assistantId, is_use AS isUse, sdaduim_id AS sdaduimId, sdaduim_name AS sdaduimName, create_user_id AS createUserId, CustomerCode, create_user_name AS createUserName, update_user_id AS updateUserId, update_user_name AS updateUserName, reserve_type as reserveType
+    </sql>
+    <sql id="Base_Column_List_alias">
+        edu.id id, edu.execute_date_plan AS executeDatePlan, edu.begin_date_plan AS beginDatePlan, edu.end_date_plan AS endDatePlan,
+         edu.shop_id AS shopId, edu.shop_name AS shopName, edu.course_id AS courseId, edu.course_name AS courseName, edu.type,
+         edu.coach_id AS coachId, edu.coach_name AS coachName, edu.room_id AS roomId, edu.room_name AS roomName,
+          edu.reserve_total_num AS reserveTotalNum, edu.create_time AS createTime, edu.update_time AS updateTime, edu.status,
+           edu.assistant_name AS assistantName, edu.assistant_id AS assistantId, edu.is_use AS isUse, edu.sdaduim_id AS sdaduimId,
+           edu.sdaduim_name AS sdaduimName, edu.create_user_id AS createUserId, edu.CustomerCode, edu.create_user_name AS createUserName,
+           edu.update_user_id AS updateUserId, edu.update_user_name AS updateUserName, edu.reserve_type as reserveType
+    </sql>
+
+
+    <select id="findCoachList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            pi.ID coachId,
+            pi.RelName coachName,
+            pi.Mobile coachMobile,
+            pi.Sex coachSex,
+            pi.JobNumber coachJobNumber
+
+        FROM
+            PersonnelInfo pi
+            LEFT JOIN PersonlRole pr ON pi.id = pr.PersonnelInfoId
+            LEFT JOIN RoleInfo ri ON pr.RoleInfoId = ri.Id
+
+        WHERE
+            ri.UserType = 3
+            AND ri.ISTeach = 1
+            AND pi.CustomerCode = #{CustomerCode}
+            AND pi.ShopId= #{shopId}
+            AND pi.IsDel = 0
+
+    </select>
+
+    <select id="findSdaduimList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            numId,
+            name,
+            id
+        FROM
+            Sdaduim
+        WHERE
+            shopId = #{shopId}
+            AND Status = 0
+            AND CustomerCode = #{CustomerCode}
+    </select>
+
+    <select id="findEducationList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List_alias"></include>,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 0 and eci.is_use = 1) eduCancelCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 2 and eci.is_use = 1) eduToConfirmCount,
+            ec.reserve_time configReserveTime,
+            ec.setting_time configSettingTime,
+            ec.is_start_class configStartClass,
+            ec.is_choose_coach configChooseCoach,
+            ec.is_reserve_confirm configReserveConfirm,
+            ec.admission_time configAdmissionTime,
+            ec.is_online_reserve configOnlineReserve
+        FROM
+            fr_education edu
+            left join fr_education_config ec on edu.id = ec.education_id
+        WHERE
+            edu.shop_id = #{shopId}
+        <if test="coachId != null and coachId != ''">
+            AND edu.coach_id = #{coachId}
+        </if>
+            AND edu.CustomerCode = #{CustomerCode}
+        <if test="sdaduimId != null and sdaduimId != ''">
+            AND edu.sdaduim_id = #{sdaduimId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND edu.execute_date_plan >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND edu.execute_date_plan <![CDATA[ <= ]]> #{endDate}
+        </if>
+            AND edu.type = ${eduType}
+        <if test="eduType == '1'">
+            and edu.reserve_type = 2
+        </if>
+        ORDER BY
+            edu.execute_date_plan ASC
+    </select>
+
+    <select id="findEducationOneToOneList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List_alias"></include>,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 0 and eci.is_use = 1) eduCancelCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 2 and eci.is_use = 1) eduToConfirmCount,
+            eci.member_id infoMemberId,
+            eci.member_name infoMemberName,
+            eci.mobile infoMobile,
+            eci.reserve_client_name infoReserveClientName,
+            eci.reserve_client_id infoReserveClientId,
+            eci.reserve_date infoReserveDate,
+            eci.settle_type infoSettleType,
+            eci.deduction_balance infoDeductionBalance,
+            eci.reserve_status infoReserveStatus,
+            eci.remarks infoRemarks
+        FROM
+            fr_education edu
+        left join
+            fr_education_client_info eci on edu.id = eci.education_id
+        WHERE
+            edu.shop_id = #{shopId}
+        <if test="coachId != null and coachId != ''">
+            AND edu.coach_id = #{coachId}
+        </if>
+            AND edu.CustomerCode = #{CustomerCode}
+        <if test="sdaduimId != null and sdaduimId != ''">
+            AND edu.sdaduim_id = #{sdaduimId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND edu.execute_date_plan >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND edu.execute_date_plan <![CDATA[ <= ]]> #{endDate}
+        </if>
+            AND edu.type = ${eduType}
+            and edu.reserve_type = 1
+        ORDER BY
+            edu.execute_date_plan ASC
+    </select>
+
+    <select id="findEducationById" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List"></include>,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 0 and eci.is_use = 1) eduCancelCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 2 and eci.is_use = 1) eduToConfirmCount
+        FROM
+            fr_education edu
+        WHERE
+            edu.id = #{eduId}
+    </select>
+
+   <select id="getGroupRoomSeatById" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            gcr.id roomId,
+            gcrs.id roomSeatId,
+            gcr.name roomName,
+            gcrs.seat_num seatNum,
+            gcrs.cnt_col colNum,
+            gcrs.cnt_row rowNum
+        FROM
+            fr_group_class_room gcr
+            LEFT JOIN fr_group_class_room_seat gcrs ON gcr.id = gcrs.class_room_id
+        WHERE
+            gcr.id = #{roomId}
+    </select>
+
+
+    <select id="getClientByMobileName" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            c.id,
+            c.client_name clientName,
+            c.mobile,
+            ( CASE WHEN c.sex = 1 THEN '女' ELSE '男' END ) sex,
+            (
+            CASE
+
+                    WHEN ( SELECT id FROM fr_client_personal cp WHERE cp.client_id = c.id ) IS NULL THEN
+                    ( CASE WHEN ( SELECT id FROM fr_client_latence_personal clp WHERE clp.client_id = c.id ) IS NULL THEN NULL ELSE '潜在客户' END ) ELSE '现有客户'
+                END
+                ) memberType
+            FROM
+                fr_client c
+        WHERE
+            c.is_using = 1
+            and c.CustomerCode = #{CustomerCode}
+             AND ( mobile LIKE '%'+#{mobile}+'%' OR client_name LIKE '%'+#{mobile}+'%' )
+    </select>
+
+    <!-- 查找是否现有客户还是潜在客户 -->
+    <select id="getClientMemberType" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            (
+            CASE
+
+                    WHEN ( SELECT id FROM fr_client_personal cp WHERE cp.client_id = c.id ) IS NULL THEN
+                    ( CASE WHEN ( SELECT id FROM fr_client_latence_personal clp WHERE clp.client_id = c.id ) IS NULL THEN NULL ELSE '潜在客户' END ) ELSE '现有客户'
+                END
+                ) memberType
+            FROM
+                fr_client c
+        WHERE
+            c.is_using = 1
+            and c.id = #{clientId}
+    </select>
+
+</mapper>

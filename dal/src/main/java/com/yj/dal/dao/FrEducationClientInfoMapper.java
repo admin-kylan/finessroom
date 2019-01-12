@@ -2,6 +2,10 @@ package com.yj.dal.dao;
 
 import com.yj.dal.model.FrEducationClientInfo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +17,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface FrEducationClientInfoMapper extends BaseMapper<FrEducationClientInfo> {
 
+
+    List<Map<String, Object>> findMemberReserveStatusList(@Param("eduId") String eduId, @Param("reserveStatus") String reserveStatus, @Param("searchInput") String searchInput);
 }

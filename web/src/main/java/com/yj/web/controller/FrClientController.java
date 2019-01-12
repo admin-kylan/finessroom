@@ -2,11 +2,19 @@ package com.yj.web.controller;
 
 
 import com.alibaba.druid.sql.visitor.functions.If;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
+import com.yj.dal.dao.FrClientPersonalMapper;
+import com.yj.dal.dao.ShopMapper;
+import com.yj.dal.model.FrClient;
+import com.yj.dal.model.FrClientPersonal;
+import com.yj.dal.model.FrClientPic;
 import com.yj.dal.param.*;
+import com.yj.service.service.IFrClientPersonalService;
+import com.yj.service.service.IFrClientPicService;
 import com.yj.service.service.IFrClientService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +37,10 @@ public class FrClientController {
 
     @Autowired
     IFrClientService service;
+    @Autowired
+    ShopMapper shopMapper;
+    @Autowired
+    IFrClientPicService frClientPicService;
 
     /**
      * @Description: 根据筛选条件查询现有客户列表
@@ -52,7 +64,7 @@ public class FrClientController {
 
 
     /**
-     * @Description: 现有客户统计(会员总数/近一周生日会员数/本周新增会员数)
+     * @Description: 现有客户统计(会员总数 / 近一周生日会员数 / 本周新增会员数)
      * @Author: 欧俊俊
      * @Date: 2018/9/30 12:01
      */
@@ -101,17 +113,18 @@ public class FrClientController {
 
     /**
      * 获取客户信息---根据手机号
+     *
      * @param CustomerCode
      * @param mobile
      * @return
      * @throws YJException
      */
     @GetMapping("/getClientList")
-    public JsonResult getClientList(@RequestParam String CustomerCode,@RequestParam String mobile) throws YJException {
-       if(StringUtils.isEmpty(mobile) || StringUtils.isEmpty(CustomerCode)){
-           return JsonResult.failMessage("参数有误");
-       }
-        return service.getClientList(CustomerCode,mobile);
+    public JsonResult getClientList(@RequestParam String CustomerCode, @RequestParam String mobile) throws YJException {
+        if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(CustomerCode)) {
+            return JsonResult.failMessage("参数有误");
+        }
+        return service.getClientList(CustomerCode, mobile);
     }
 
 
@@ -137,44 +150,74 @@ public class FrClientController {
 
     /**
      * 查询潜在未认领客户
+     *
      * @param params
      * @return
      * @throws YJException
      */
     @GetMapping("/getCollarList")
-    public JsonResult CollarList(@ModelAttribute CollarClientParam params)throws YJException{
+    public JsonResult CollarList(@ModelAttribute CollarClientParam params) throws YJException {
         return JsonResult.success(service.selectCollarList(params));
     }
+
     /**
      * 查询现有未认领客户
+     *
      * @param params
      * @return
      * @throws YJException
      */
     @GetMapping("/getExistingList")
-    public JsonResult ExistingList(@ModelAttribute CollarClientParam params)throws YJException{
+    public JsonResult ExistingList(@ModelAttribute CollarClientParam params) throws YJException {
         return JsonResult.success(service.selectExistingList(params));
     }
+
     /**
      * 查询我的现有客户
      */
     @GetMapping("/getMyExistenceList")
-    public JsonResult MyExistenceList(@ModelAttribute MyExistenceFilterParam params)throws YJException{
+    public JsonResult MyExistenceList(@ModelAttribute MyExistenceFilterParam params) throws YJException {
         return JsonResult.success(service.selectMyExistenceList(params));
     }
+
     /**
      * 查询客户分配
      */
     @GetMapping("/getClientAllot")
-    public JsonResult ClientAllot(@ModelAttribute CollarClientParam params)throws YJException{
+    public JsonResult ClientAllot(@ModelAttribute CollarClientParam params) throws YJException {
         return JsonResult.success(service.selectClientAllot(params));
     }
+
     /**
      * 查询客户信息分析
      */
     @GetMapping("/getClientInformation")
-    public JsonResult ClientInformation(@ModelAttribute ClientInformationParam params)throws YJException{
+    public JsonResult ClientInformation(@ModelAttribute ClientInformationParam params) throws YJException {
         return JsonResult.success(service.selectClientInformation(params));
     }
+
+    //根据手机号码查询客户信息
+    @GetMapping("/getByPhone")
+    public JsonResult getByPhone(String phone) throws YJException {
+        Map<String, Object> map = service.selectMap(
+                new EntityWrapper<FrClient>().where("is_using=1 and mobile={0}", phone)
+        );
+        if (map == null || map.size() < 1) {
+            return JsonResult.success(false);
+        }
+
+        String shopName = shopMapper.getShopName2(map.get("id").toString());
+        FrClientPic frClientPic = frClientPicService.selectOne(
+                new EntityWrapper<FrClientPic>().where("pic_type=1 and pic_state=1 and client_id={0}", map.get("id").toString())
+        );
+        if (shopName != null) {
+            map.put("shopName", shopName);
+        }
+        if (frClientPic != null) {
+            map.put("image", frClientPic.getPicLink());
+        }
+        return JsonResult.success(map);
+    }
+
 }
 

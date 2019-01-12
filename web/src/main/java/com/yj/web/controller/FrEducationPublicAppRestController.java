@@ -24,6 +24,11 @@ public class FrEducationPublicAppRestController {
 
     private static final Integer PUBLIC = 0;
 
+    /**
+     * app 端
+     */
+    private static final Integer PLATFORM_TYPE = 0;
+
     @Autowired
     private FrEducationServiceImpl frEducationService;
 
@@ -37,7 +42,13 @@ public class FrEducationPublicAppRestController {
      */
     @PostMapping("reserve")
     public JsonResult addReservePublic(@RequestBody Map<String, String> map, HttpServletRequest request) throws Exception {
-        frEducationService.addReserveGroup(map,PUBLIC);
+
+        try {
+            frEducationService.addReserveGroup(map,PUBLIC, PLATFORM_TYPE);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+
         return JsonResult.success(null);
 
     }

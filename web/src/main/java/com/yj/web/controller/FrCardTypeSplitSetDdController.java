@@ -6,14 +6,9 @@ import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.StringUtils;
-import com.yj.dal.model.FrCardTypeSplitSet;
 import com.yj.dal.model.FrCardTypeSplitSetDd;
 import com.yj.service.service.IFrCardTypeSplitSetDdService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,7 +28,13 @@ public class FrCardTypeSplitSetDdController {
     @Resource
     private IFrCardTypeSplitSetDdService service;
 
-    @GetMapping("getCardTypeSplitDd")
+    /**
+     * 根据关联字段splitSetId 查询分期信息的详情（列表数据）
+     * @param splitSetId
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getBySplitSetId")
     public JsonResult getCardTypeSplitList(@RequestParam("splitSetId")String splitSetId)throws YJException {
         if(StringUtils.isEmpty(splitSetId)){
             throw new YJException(YJExceptionEnum.PARAM_ERROR);
@@ -42,5 +43,29 @@ public class FrCardTypeSplitSetDdController {
         return JsonResult.success(list);
     }
 
+    /**
+     * 根据主键id查询分期信息详情（单条数据）
+     * @param id
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getById")
+    public FrCardTypeSplitSetDd get(String id)throws YJException{
+        return service.get(id);
+    }
+
+    /**
+     * 根据主键id修改数据
+     * @param frCardTypeSplitSetDd
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("/update")
+    public JsonResult update(@RequestBody FrCardTypeSplitSetDd frCardTypeSplitSetDd) throws YJException{
+        return service.update(frCardTypeSplitSetDd);
+    }
+
 }
+
+
 

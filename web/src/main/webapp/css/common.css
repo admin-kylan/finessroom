@@ -346,3 +346,5 @@ label input{
     height: 25px;
     width: calc(100% - 20px);
 }
+.red{color: #ff0000;}
+.00f{color: #00f;}
