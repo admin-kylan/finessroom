@@ -76,7 +76,7 @@ public class FrEducationServiceImpl {
         //预约课程Id
         String eduId = map.get("eduId");
         //会员卡Id
-        String cardId = map.get("cardId");
+       // String cardId = map.get("cardId");
         //座位Id
         String seatId = map.get("seatId");
         //座位名字
@@ -95,20 +95,20 @@ public class FrEducationServiceImpl {
         String createUserId = map.get("createUserId");
         if(teachType == 0){
             if (StringUtils.isBlank(eduId) || StringUtils.isBlank(seatId) || StringUtils.isBlank(seatName) ||
-                    StringUtils.isBlank(memberId)|| StringUtils.isBlank(cardId)) {
+                    StringUtils.isBlank(memberId)) {
                 throw new Exception("参数错误");
             }
         }
         //私教
         if(teachType == 1){
-            if (StringUtils.isBlank(eduId) || StringUtils.isBlank(memberId)|| StringUtils.isBlank(cardId)) {
+            if (StringUtils.isBlank(eduId) || StringUtils.isBlank(memberId)) {
                 throw new Exception("参数错误");
             }
         }
 
         Date now = new Date();
         FrClient frClient = frClientMapper.selectById(memberId);
-        FrCard frCard = new FrCard();
+       // FrCard frCard = new FrCard();
         PersonnelInfo personnelInfo = null;
         String level = "";
         String reserveClientName = "";
@@ -158,7 +158,7 @@ public class FrEducationServiceImpl {
 //        }
 
         //开始做预约操作
-        frCard = frCardMapper.selectById(cardId);
+       // frCard = frCardMapper.selectById(cardId);
 
 
         FrEducationClientInfo frEducationClientInfo = new FrEducationClientInfo();
@@ -167,7 +167,7 @@ public class FrEducationServiceImpl {
         frEducationClientInfo.setMemberId(memberId);
         frEducationClientInfo.setMemberName(frClient.getClientName());
         frEducationClientInfo.setMemberType(memberType);
-        frEducationClientInfo.setMemberCardNo(frCard.getCardNo());
+      //  frEducationClientInfo.setMemberCardNo(frCard.getCardNo());
         frEducationClientInfo.setMobile(frClient.getMobile());
         frEducationClientInfo.setReserveClientId(reserveClientId);
         frEducationClientInfo.setReserveClientName(reserveClientName);

@@ -15,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2019-01-05
+ * @since 2019-01-12
  */
 @TableName("fr_education_client_info")
 public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
@@ -42,16 +42,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
      */
     @TableField("member_type")
     private String memberType;
-    /**
-     * 会员卡号
-     */
-    @TableField("member_card_no")
-    private String memberCardNo;
-    /**
-     * 会员卡Id
-     */
-    @TableField("member_card_id")
-    private String memberCardId;
     /**
      * 电话号码
      */
@@ -119,8 +109,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
      */
     @TableField("is_use")
     private Boolean isUse;
-    @TableField(fill = FieldFill.INSERT)
-    private String CustomerCode;
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
     @TableField(value = "create_user_id", fill = FieldFill.INSERT)
@@ -163,14 +151,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
 
     public void setMemberType(String memberType) {
         this.memberType = memberType;
-    }
-
-    public String getMemberCardNo() {
-        return memberCardNo;
-    }
-
-    public void setMemberCardNo(String memberCardNo) {
-        this.memberCardNo = memberCardNo;
     }
 
     public String getMobile() {
@@ -285,14 +265,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
         this.isUse = isUse;
     }
 
-    public String getCustomerCode() {
-        return CustomerCode;
-    }
-
-    public void setCustomerCode(String CustomerCode) {
-        this.CustomerCode = CustomerCode;
-    }
-
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -333,14 +305,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
         this.updateUserName = updateUserName;
     }
 
-    public String getMemberCardId() {
-        return memberCardId;
-    }
-
-    public void setMemberCardId(String memberCardId) {
-        this.memberCardId = memberCardId;
-    }
-
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -353,8 +317,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
         ", memberId=" + memberId +
         ", memberName=" + memberName +
         ", memberType=" + memberType +
-        ", memberCardNo=" + memberCardNo +
-        ", memberCardId=" + memberCardId +
         ", mobile=" + mobile +
         ", reserveClientId=" + reserveClientId +
         ", reserveClientName=" + reserveClientName +
@@ -369,7 +331,6 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
         ", createTime=" + createTime +
         ", sex=" + sex +
         ", isUse=" + isUse +
-        ", CustomerCode=" + CustomerCode +
         ", updateTime=" + updateTime +
         ", createUserId=" + createUserId +
         ", updateUserId=" + updateUserId +

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MP自动生成
- * @since 2019-01-10
+ * @since 2019-01-12
  */
 @TableName("fr_education_member_order")
 public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
@@ -123,7 +123,16 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
      */
     @TableField("program_better")
     private String programBetter;
-
+    /**
+     * 会员卡Id
+     */
+    @TableField("member_card_id")
+    private String memberCardId;
+    /**
+     * 会员卡号
+     */
+    @TableField("member_card_no")
+    private String memberCardNo;
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -296,6 +305,21 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
         this.programBetter = programBetter;
     }
 
+    public String getMemberCardId() {
+        return memberCardId;
+    }
+
+    public void setMemberCardId(String memberCardId) {
+        this.memberCardId = memberCardId;
+    }
+
+    public String getMemberCardNo() {
+        return memberCardNo;
+    }
+
+    public void setMemberCardNo(String memberCardNo) {
+        this.memberCardNo = memberCardNo;
+    }
 
     public String getId() {
         return id;
@@ -334,6 +358,8 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
         ", memberAssess=" + memberAssess +
         ", coachSummary=" + coachSummary +
         ", programBetter=" + programBetter +
+        ", memberCardId=" + memberCardId +
+        ", memberCardNo=" + memberCardNo +
         ", id=" + id +
         "}";
     }

@@ -60,306 +60,13 @@
                         <edu-work-bench-children></edu-work-bench-children>
                         <!-- 预约工作台 -->
                         <!-- 课程预约/预约详情 -->
-                        <edu-book-detail-children @return-page="LI"
-
-                        ></edu-book-detail-children>
+                        <edu-book-detail-children @return-page="LI"></edu-book-detail-children>
                         <!-- 课程预约/预约详情 -->
                         <!-- 开课 -->
-                        <div id="startClass">
-                            <h4>团课开课</h4>
-                            <div class="startClass_fieldset">
-                                <fieldset>
-                                    <legend><span>教练/场馆信息</span></legend>
-                                    <div class="startClass_fieldset1">
-                                        <span>教练：</span> <strong>Nicolas Klaus</strong> <a href="javascript:;"
-                                                                                           class="btn btn-danger">读取指纹</a><span>地点/场馆：</span>
-                                        <strong>动感单车-01A室</strong>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <legend><span>消费项目</span></legend>
-                                    <div class="startClass_fieldset2">
-                                        <ul>
-                                            <li>
-                                                <span>消费课程：</span>
-                                                <span>
-														<select name="1">
-															<option value="1">动感单车</option>
-															<option value="1">动感单车</option>
-															<option value="1">动感单车</option>
-														</select>
-													</span>
-
-                                            </li>
-                                            <li><span>消费市场：</span> <span><strong>30分钟</strong></span></li>
-                                            <li><span>训练计划：</span> <span><a href="javascript:;" class="btn btn-danger">查看训练计划</a></span>
-                                            </li>
-                                            <li><span>消费数量：</span> <span><strong>1</strong></span></li>
-                                            <li>
-                                                <span>助教：</span>
-                                                <span>
-														<select name="1">
-															<option value="1">选择助教</option>
-															<option value="1">选择助教</option>
-															<option value="1">选择助教</option>
-														</select>
-													</span>
-                                            </li>
-                                        </ul>
-                                        <div class="text-center">
-                                            <div style="width: 70%;margin: 0 auto">
-                                                <span>会员卡号/指纹：</span>
-                                                <span><input type="text" placeholder="会员卡号/手机号码/票券号/团购号"></span>
-                                                <span><a href="javascript:;" class="btn btn-primary">更新指纹数据</a></span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div style="width: 70%;margin: 0 auto">
-                                                <fieldset class="memberInformation">
-                                                    <legend><span>会员信息</span></legend>
-                                                    <div class="memberInformation_box">
-                                                        <div class="memberInformation_box_left">
-                                                            <div>
-																	<span>
-																		<span>会员姓名：</span><span><strong>吴改</strong></span>
-																	</span>
-                                                                <span>
-																		<span>会员性别：</span><span><strong>男</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>会员卡号：</span><span><strong>1110080065448</strong></span>
-																	</span>
-                                                            </div>
-                                                            <div>
-																	<span>
-																		<span>会员卡系列：</span><span><strong>年卡</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>会员卡名称：</span><span><strong>一年卡</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>总权益：</span><span><strong>900</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>剩余权益：</span><span><strong>900</strong></span>
-
-																	</span>
-                                                            </div>
-                                                            <div>
-																	<span>
-																		<span>开始时间：</span><span><strong>2018-07-08</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>失效时间：</span><span><strong>2018-07-08</strong></span>
-																	</span>
-                                                            </div>
-                                                            <div>
-																	<span>
-																		<span>销售顾问：</span><span><strong>Klaus</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>指定教练：</span><span><strong>Nicolas Klaus</strong></span>
-
-																	</span>
-                                                                <span>
-																		<span>服务顾问：</span><span><strong>Nicolas Klaus</strong></span>
-																	</span>
-                                                            </div>
-                                                            <div>
-                                                                <fieldset>
-                                                                    <legend><span>票券信息</span></legend>
-                                                                    <div>
-                                                                        <ul>
-                                                                            <li><span>票券条形码：</span><span>无</span></li>
-                                                                            <li><span>使用人姓名：</span><span>无</span></li>
-                                                                            <li><span>使用人电话：</span><span>无</span></li>
-                                                                            <li><span>差额：</span><span>无</span></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </fieldset>
-
-                                                            </div>
-                                                            <div>
-                                                                <fieldset>
-                                                                    <legend><span>团购信息</span></legend>
-                                                                    <div>
-                                                                        <ul>
-                                                                            <li><span>票券条形码：</span><span>无</span></li>
-                                                                            <li><span>使用人姓名：</span><span>无</span></li>
-                                                                            <li><span>使用人电话：</span><span>无</span></li>
-                                                                            <li><span>差额：</span><span>无</span></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </fieldset>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="memberInformation_box_right">
-                                                            <div>
-                                                                <img src="../img/u601.png" class="img-responsive"
-                                                                     alt="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <legend><span>学员信息</span></legend>
-                                    <div class="startClass_fieldset3">
-                                        <div class="startClass_fieldset3_top">
-                                            <div class="col-md-6 text-left">当前约课人数：<strong>5</strong>人</div>
-                                            <div class="col-md-6 text-right"><a href="javascript:;"
-                                                                                class="btn btn-default">搜索</a><input
-                                                    type="text"
-                                                    placeholder="姓名/卡号"></div>
-                                        </div>
-                                        <div style="overflow-x:  scroll;">
-                                            <table class="table table-hover table-bordered">
-                                                <thead>
-                                                <tr>
-                                                    <th>消费时间</th>
-                                                    <th>会员卡号</th>
-                                                    <th>会员姓名</th>
-                                                    <th>性别</th>
-                                                    <th>卡种</th>
-                                                    <th>会员卡名</th>
-                                                    <th>剩余权益</th>
-                                                    <th>失效日期</th>
-                                                    <th>使用人</th>
-                                                    <th>消费数量</th>
-                                                    <th>消费金额</th>
-                                                    <th>座位号</th>
-                                                    <th>票据号</th>
-                                                    <th>销售员</th>
-                                                    <th>操作员</th>
-                                                    <th>操作</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>2018-07-03 12:03</td>
-                                                    <td>1000665948949</td>
-                                                    <td class="blue">Klaus</td>
-                                                    <td>男</td>
-                                                    <td>年卡</td>
-                                                    <td class="sblue">一年卡</td>
-                                                    <td class="red">600</td>
-                                                    <td>2018-06-03</td>
-                                                    <td>吴改</td>
-                                                    <td>1</td>
-                                                    <td>0.00</td>
-                                                    <td class="red">3排4列5号</td>
-                                                    <td><strong>6559191486</strong></td>
-                                                    <td>Klaus</td>
-                                                    <td><strong>Klaus</strong></td>
-                                                    <td class="red">冲销</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2018-07-03 12:03</td>
-                                                    <td>1000665948949</td>
-                                                    <td class="blue">Klaus</td>
-                                                    <td>男</td>
-                                                    <td>年卡</td>
-                                                    <td class="sblue">一年卡</td>
-                                                    <td class="red">600</td>
-                                                    <td>2018-06-03</td>
-                                                    <td>吴改</td>
-                                                    <td>1</td>
-                                                    <td>0.00</td>
-                                                    <td class="red">3排4列5号</td>
-                                                    <td><strong>6559191486</strong></td>
-                                                    <td>Klaus</td>
-                                                    <td><strong>Klaus</strong></td>
-                                                    <td class="red">冲销</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2018-07-03 12:03</td>
-                                                    <td>1000665948949</td>
-                                                    <td class="blue">Klaus</td>
-                                                    <td>男</td>
-                                                    <td>年卡</td>
-                                                    <td class="sblue">一年卡</td>
-                                                    <td class="red">600</td>
-                                                    <td>2018-06-03</td>
-                                                    <td>吴改</td>
-                                                    <td>1</td>
-                                                    <td>0.00</td>
-                                                    <td class="red">3排4列5号</td>
-                                                    <td><strong>6559191486</strong></td>
-                                                    <td>Klaus</td>
-                                                    <td><strong>Klaus</strong></td>
-                                                    <td class="red">冲销</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2018-07-03 12:03</td>
-                                                    <td>1000665948949</td>
-                                                    <td class="blue">Klaus</td>
-                                                    <td>男</td>
-                                                    <td>年卡</td>
-                                                    <td class="sblue">一年卡</td>
-                                                    <td class="red">600</td>
-                                                    <td>2018-06-03</td>
-                                                    <td>吴改</td>
-                                                    <td>1</td>
-                                                    <td>0.00</td>
-                                                    <td class="red">3排4列5号</td>
-                                                    <td><strong>6559191486</strong></td>
-                                                    <td>Klaus</td>
-                                                    <td><strong>Klaus</strong></td>
-                                                    <td class="red">冲销</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2018-07-03 12:03</td>
-                                                    <td>1000665948949</td>
-                                                    <td class="blue">Klaus</td>
-                                                    <td>男</td>
-                                                    <td>年卡</td>
-                                                    <td class="sblue">一年卡</td>
-                                                    <td class="red">600</td>
-                                                    <td>2018-06-03</td>
-                                                    <td>吴改</td>
-                                                    <td>1</td>
-                                                    <td>0.00</td>
-                                                    <td class="red">3排4列5号</td>
-                                                    <td><strong>6559191486</strong></td>
-                                                    <td>Klaus</td>
-                                                    <td><strong>Klaus</strong></td>
-                                                    <td class="red">冲销</td>
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div>
-                                            <div class="text-center" style="margin: 15px 0;">
-                                                <span>开始时间：<input type="text" class="jeinput startDate"
-                                                                  placeholder="开始时间"></span>
-                                                <span>结束时间：<input type="text" class="jeinput endDate"
-                                                                  placeholder="结束时间"></span>
-                                            </div>
-                                            <div class="text-center">
-                                                <a href="javascript:;" class="btn btn-group">开始</a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </fieldset>
-                            </div>
-                        </div>
+                        <edu-start-class-children></edu-start-class-children>
                         <!-- 开课 -->
                         <!-- 添加预约 -->
-                        <edu-add-reservation-children>
-                        </edu-add-reservation-children>
+                        <edu-add-reservation-children></edu-add-reservation-children>
                         <!-- 添加预约 -->
                     </li>
                     <li class="list" v-if="LiIndex==1">
@@ -2501,8 +2208,8 @@
                             <template v-if="item.status == 0">
                                 <span class="green margin"
                                       @click="addReserve(item.id, item)">添加预约</span>
-                                <span class="red margin" onclick="startClass()"
-                                      @click="changeEduId(item.id, item)">开课</span>
+                                <span class="red margin"
+                                      @click="startClass(item.id, item)">开课</span>
                             </template>
                             <!--<span class="margin">已约满</span>-->
 
@@ -2726,12 +2433,12 @@
                             <div><span>{{clientInfo.itemClient.clientName}}</span></div>
                         </div>
                     </div>
-                    <div class="bookBody2 clearfix">
-                        <div class="lef fl"><span>*</span>会员卡号：</div>
-                        <div class="rig fl">
-                            <div><span>{{clientInfo.itemCard.cardNo}}</span></div>
-                        </div>
-                    </div>
+                    <!--<div class="bookBody2 clearfix">-->
+                        <!--<div class="lef fl"><span>*</span>会员卡号：</div>-->
+                        <!--<div class="rig fl">-->
+                            <!--<div><span>{{clientInfo.itemCard.cardNo}}</span></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="bookBody2 clearfix">
                         <div class="lef fl"><span>*</span> 选择座位：</div>
                         <div style="float: left; width: 30%;">{{seatName}}</div>
@@ -2808,7 +2515,7 @@
                 </div>
             </div>
             <!--查询客户信息 卡号信息-->
-            <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false"
+         <!--   <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false"
                  style="display: block; top: 34px; right: -250px;" aria-labelledby="myModalLabel" v-show="cardBoxStatus">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -2839,11 +2546,305 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!--<div class="modal-footer">-->
-                            <!--<button type="button" class="btn btn-red">保存</button>-->
-                        <!--</div>-->
+                        &lt;!&ndash;<div class="modal-footer">&ndash;&gt;
+                            &lt;!&ndash;<button type="button" class="btn btn-red">保存</button>&ndash;&gt;
+                        &lt;!&ndash;</div>&ndash;&gt;
                     </div>
                 </div>
+            </div>-->
+        </div>
+    </template>
+
+    <template id="edu-start-class-id">
+        <div id="startClass">
+            <h4>团课开课</h4>
+            <div class="startClass_fieldset">
+                <fieldset>
+                    <legend><span>教练/场馆信息</span></legend>
+                    <div class="startClass_fieldset1">
+                        <span>教练：</span> <strong>Nicolas Klaus</strong> <a href="javascript:;"
+                                                                           class="btn btn-danger">读取指纹</a><span>地点/场馆：</span>
+                        <strong>动感单车-01A室</strong>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend><span>消费项目</span></legend>
+                    <div class="startClass_fieldset2">
+                        <ul>
+                            <li>
+                                <span>消费课程：</span>
+                                <span>
+														<select name="1">
+															<option value="1">动感单车</option>
+															<option value="1">动感单车</option>
+															<option value="1">动感单车</option>
+														</select>
+													</span>
+
+                            </li>
+                            <li><span>消费市场：</span> <span><strong>30分钟</strong></span></li>
+                            <li><span>训练计划：</span> <span><a href="javascript:;" class="btn btn-danger">查看训练计划</a></span>
+                            </li>
+                            <li><span>消费数量：</span> <span><strong>1</strong></span></li>
+                            <li>
+                                <span>助教：</span>
+                                <span>
+														<select name="1">
+															<option value="1">选择助教</option>
+															<option value="1">选择助教</option>
+															<option value="1">选择助教</option>
+														</select>
+													</span>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <div style="width: 70%;margin: 0 auto">
+                                <span>会员卡号/指纹：</span>
+                                <span><input type="text" placeholder="会员卡号/手机号码/票券号/团购号"></span>
+                                <span><a href="javascript:;" class="btn btn-primary">更新指纹数据</a></span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="width: 70%;margin: 0 auto">
+                                <fieldset class="memberInformation">
+                                    <legend><span>会员信息</span></legend>
+                                    <div class="memberInformation_box">
+                                        <div class="memberInformation_box_left">
+                                            <div>
+																	<span>
+																		<span>会员姓名：</span><span><strong>吴改</strong></span>
+																	</span>
+                                                <span>
+																		<span>会员性别：</span><span><strong>男</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>会员卡号：</span><span><strong>1110080065448</strong></span>
+																	</span>
+                                            </div>
+                                            <div>
+																	<span>
+																		<span>会员卡系列：</span><span><strong>年卡</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>会员卡名称：</span><span><strong>一年卡</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>总权益：</span><span><strong>900</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>剩余权益：</span><span><strong>900</strong></span>
+
+																	</span>
+                                            </div>
+                                            <div>
+																	<span>
+																		<span>开始时间：</span><span><strong>2018-07-08</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>失效时间：</span><span><strong>2018-07-08</strong></span>
+																	</span>
+                                            </div>
+                                            <div>
+																	<span>
+																		<span>销售顾问：</span><span><strong>Klaus</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>指定教练：</span><span><strong>Nicolas Klaus</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>服务顾问：</span><span><strong>Nicolas Klaus</strong></span>
+																	</span>
+                                            </div>
+                                            <div>
+                                                <fieldset>
+                                                    <legend><span>票券信息</span></legend>
+                                                    <div>
+                                                        <ul>
+                                                            <li><span>票券条形码：</span><span>无</span></li>
+                                                            <li><span>使用人姓名：</span><span>无</span></li>
+                                                            <li><span>使用人电话：</span><span>无</span></li>
+                                                            <li><span>差额：</span><span>无</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </fieldset>
+
+                                            </div>
+                                            <div>
+                                                <fieldset>
+                                                    <legend><span>团购信息</span></legend>
+                                                    <div>
+                                                        <ul>
+                                                            <li><span>票券条形码：</span><span>无</span></li>
+                                                            <li><span>使用人姓名：</span><span>无</span></li>
+                                                            <li><span>使用人电话：</span><span>无</span></li>
+                                                            <li><span>差额：</span><span>无</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </fieldset>
+
+                                            </div>
+                                        </div>
+                                        <div class="memberInformation_box_right">
+                                            <div>
+                                                <img src="../img/u601.png" class="img-responsive"
+                                                     alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend><span>学员信息</span></legend>
+                    <div class="startClass_fieldset3">
+                        <div class="startClass_fieldset3_top">
+                            <div class="col-md-6 text-left">当前约课人数：<strong>5</strong>人</div>
+                            <div class="col-md-6 text-right"><a href="javascript:;"
+                                                                class="btn btn-default">搜索</a><input
+                                    type="text"
+                                    placeholder="姓名/卡号"></div>
+                        </div>
+                        <div style="overflow-x:  scroll;">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>消费时间</th>
+                                    <th>会员卡号</th>
+                                    <th>会员姓名</th>
+                                    <th>性别</th>
+                                    <th>卡种</th>
+                                    <th>会员卡名</th>
+                                    <th>剩余权益</th>
+                                    <th>失效日期</th>
+                                    <th>使用人</th>
+                                    <th>消费数量</th>
+                                    <th>消费金额</th>
+                                    <th>座位号</th>
+                                    <th>票据号</th>
+                                    <th>销售员</th>
+                                    <th>操作员</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <div class="text-center" style="margin: 15px 0;">
+                                                <span>开始时间：<input type="text" class="jeinput startDate"
+                                                                  placeholder="开始时间"></span>
+                                <span>结束时间：<input type="text" class="jeinput endDate"
+                                                  placeholder="结束时间"></span>
+                            </div>
+                            <div class="text-center">
+                                <a href="javascript:;" class="btn btn-group">开始</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
             </div>
         </div>
     </template>
@@ -2868,6 +2869,7 @@
 <script src="../fitness/js/public/reserve-list.js"></script>
 <script src="../fitness/js/public/book-detail.js"></script>
 <script src="../fitness/js/public/reservation.js"></script>
+<script src="../fitness/js/public/start-class.js"></script>
 <script type="text/javascript">
     $('#cckhxx').modal('show')
     $('#cckhxx1').modal('show')

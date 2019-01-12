@@ -144,12 +144,12 @@ public class FrEducationPublicServiceImpl {
         List<Map<String, Object>> lists = frEducationPublicMapper.getClientByMobileName(CustomerCode, mobile);
         //查询会员卡
         String clientId = "";
-        for(Map<String, Object> map: lists){
-            clientId = (String) map.get("id");
-            String condition = "client_id='" + clientId + "' and is_using=1 and status=0 and CustomerCode='" + CustomerCode + "'";
-            List cards = frCardMapper.selectList(new EntityWrapper<FrCard>().where(condition));
-            map.put("cards", cards);
-        }
+//        for(Map<String, Object> map: lists){
+//            clientId = (String) map.get("id");
+//            String condition = "client_id='" + clientId + "' and is_using=1 and status=0 and CustomerCode='" + CustomerCode + "'";
+//            List cards = frCardMapper.selectList(new EntityWrapper<FrCard>().where(condition));
+//            map.put("cards", cards);
+//        }
 
 
         return lists;
@@ -176,7 +176,7 @@ public class FrEducationPublicServiceImpl {
         FrEducationClientInfo frEducationClientInfo1 = new FrEducationClientInfo();
         frEducationClientInfo1.setEducationId(frEducationClientInfo.getEducationId());
         frEducationClientInfo1.setSeatId(frEducationClientInfo.getSeatId());
-        frEducationClientInfo1.setMemberCardId(frEducationClientInfo.getMemberCardId());
+
         frEducationClientInfo1 = frEducationClientInfoMapper.selectOne(frEducationClientInfo1);
         if(null != frEducationClientInfo1 && frEducationClientInfo1.getReserveStatus() != 0){
             throw new Exception("该会员已经预约");

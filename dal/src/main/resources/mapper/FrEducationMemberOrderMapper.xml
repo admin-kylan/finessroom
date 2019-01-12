@@ -26,11 +26,13 @@
         <result column="member_assess" property="memberAssess" />
         <result column="coach_summary" property="coachSummary" />
         <result column="program_better" property="programBetter" />
+        <result column="member_card_id" property="memberCardId" />
+        <result column="member_card_no" property="memberCardNo" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        client_info_id AS clientInfoId, class_num AS classNum, begin_date_real AS beginDateReal, end_date_real AS endDateReal, use_user_name AS useUserName, total_time AS totalTime, create_date AS createDate, price, card_type AS cardType, card_name AS cardName, use_benefit AS useBenefit, remain_benefit AS remainBenefit, create_name AS createName, sale_user_name AS saleUserName, score, description, bill_number AS billNumber, is_use AS isUse, member_assess AS memberAssess, coach_summary AS coachSummary, program_better AS programBetter, id
+        client_info_id AS clientInfoId, class_num AS classNum, begin_date_real AS beginDateReal, end_date_real AS endDateReal, use_user_name AS useUserName, total_time AS totalTime, create_date AS createDate, price, card_type AS cardType, card_name AS cardName, use_benefit AS useBenefit, remain_benefit AS remainBenefit, create_name AS createName, sale_user_name AS saleUserName, score, description, bill_number AS billNumber, is_use AS isUse, member_assess AS memberAssess, coach_summary AS coachSummary, program_better AS programBetter, member_card_id AS memberCardId, member_card_no AS memberCardNo, id
     </sql>
 
 </mapper>

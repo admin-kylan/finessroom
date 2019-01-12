@@ -9,8 +9,6 @@
         <result column="member_id" property="memberId" />
         <result column="member_name" property="memberName" />
         <result column="member_type" property="memberType" />
-        <result column="member_card_no" property="memberCardNo" />
-        <result column="member_card_id" property="memberCardId" />
         <result column="mobile" property="mobile" />
         <result column="reserve_client_id" property="reserveClientId" />
         <result column="reserve_client_name" property="reserveClientName" />
@@ -25,7 +23,6 @@
         <result column="create_time" property="createTime" />
         <result column="sex" property="sex" />
         <result column="is_use" property="isUse" />
-        <result column="CustomerCode" property="CustomerCode" />
         <result column="update_time" property="updateTime" />
         <result column="create_user_id" property="createUserId" />
         <result column="update_user_id" property="updateUserId" />
@@ -33,8 +30,9 @@
     </resultMap>
 
     <!-- 通用查询结果列 -->
+    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        education_id AS educationId, member_id AS memberId, member_name AS memberName, member_type AS memberType, member_card_no AS memberCardNo, mobile, reserve_client_id AS reserveClientId, reserve_client_name AS reserveClientName, reserve_date AS reserveDate, seat_id AS seatId, seat_name AS seatName, settle_type AS settleType, deduction_balance AS deductionBalance, reserve_status AS reserveStatus, remarks, create_user_name AS createUserName, create_time AS createTime, sex, is_use AS isUse, CustomerCode, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId, id, update_user_name AS updateUserName
+        education_id AS educationId, member_id AS memberId, member_name AS memberName, member_type AS memberType, mobile, reserve_client_id AS reserveClientId, reserve_client_name AS reserveClientName, reserve_date AS reserveDate, seat_id AS seatId, seat_name AS seatName, settle_type AS settleType, deduction_balance AS deductionBalance, reserve_status AS reserveStatus, remarks, create_user_name AS createUserName, create_time AS createTime, sex, is_use AS isUse, update_time AS updateTime, create_user_id AS createUserId, update_user_id AS updateUserId, id, update_user_name AS updateUserName
     </sql>
 
     <!-- 查询待确认数组 -->

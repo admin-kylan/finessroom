@@ -240,7 +240,7 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
         changeStatusAll(status){
             let num = this.toConfirmCheckbox.length;
             let ind = '';
-            this.toConfirmCheckbox.forEach((clientInfoId) =>{
+            this.toConfirmCheckbox.forEach((clientInfoId, index) =>{
                 if(num == (index + 1)){
                     ind = 'true';
                 }
@@ -292,7 +292,11 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
             Event.$emit(EDU_CONSTANT.listenerEduItem, eduId, eduItem)
 
             reservation();
-
+        },
+        //开课
+        startClass(eduId, eduItem){
+            Event.$emit(EDU_CONSTANT.listenerEduItem, eduId, eduItem);
+            startClass();
         }
     },
 });
