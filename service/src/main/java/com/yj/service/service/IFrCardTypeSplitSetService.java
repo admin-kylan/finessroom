@@ -6,6 +6,7 @@ import com.yj.dal.model.FrCardTypeSplitSet;
 import com.yj.service.base.BaseService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,18 +25,18 @@ public interface IFrCardTypeSplitSetService extends BaseService<FrCardTypeSplitS
      * @return
      * @throws YJException
      */
-    JsonResult insert(Map<String, Object> map)throws YJException ;
+    JsonResult insert(Map<String, Object> map,FrCardTypeSplitSet frCardTypeSplitSet)throws YJException ;
 
     /**
      * 根据id更新修改会员卡分期信息
-     * @param frCardTypeSplitSet
+     * @param map
      * @return
      * @throws YJException
      */
-    JsonResult update(FrCardTypeSplitSet frCardTypeSplitSet)throws YJException ;
+    JsonResult update(HttpServletRequest request,Map<String, Object> map)throws YJException ;
 
     /**
-     * 根据id删除数据（修改启用状态）
+     * 根据id删除数据
      * @param id
      * @return
      * @throws YJException
@@ -48,7 +49,7 @@ public interface IFrCardTypeSplitSetService extends BaseService<FrCardTypeSplitS
      * @return
      * @throws YJException
      */
-    FrCardTypeSplitSet get(String id)throws YJException;
+    JsonResult get(String id)throws YJException;
 
     /**
      * 是否启用

@@ -39,7 +39,7 @@ public class FrCardTypeSplitSetDdController {
         if(StringUtils.isEmpty(splitSetId)){
             throw new YJException(YJExceptionEnum.PARAM_ERROR);
         }
-        List<FrCardTypeSplitSetDd> list = service.selectList(new EntityWrapper<FrCardTypeSplitSetDd>().where("split_set_id={0}",splitSetId));
+        List<FrCardTypeSplitSetDd> list = service.selectList(new EntityWrapper<FrCardTypeSplitSetDd>().where("split_set_id={0}",splitSetId).orderBy("split_order", true));
         return JsonResult.success(list);
     }
 

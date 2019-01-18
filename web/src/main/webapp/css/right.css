@@ -516,7 +516,7 @@
 }
 .mask1 .maskLayerAlert{
     width: 600px;
-    height: 850px;
+    /*height: 850px;*/
     background-color: #fff;
     border-radius: 5px;
     position: relative;
@@ -539,13 +539,22 @@
     color: #fff;
     padding: 0 15px;
 }
+.mask_new .setting_hide_a{
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    padding: 0 15px;
+}
 .mask1 .section1 {
     border: 1px dashed #ccc;
     padding: 0 15px;
     margin-bottom: 10px;
     line-height: 26px;
 }
-.mask1 .section1 legend{
+.mask_new>.section1{border: none;
+}
+.mask1 .section1 legend,.mask_new .section1 legend{
     color: red;
     font-size: 12px;
     border-bottom: none;
@@ -553,30 +562,30 @@
     width: auto;
     margin: 0;
 }
-.mask1 .section1 input{
+.mask1 .section1 input,.mask_new .section1 input{
     max-width: 100px;
 }
-.mask1 .section1 input[type="radio"]{
+.mask1 .section1 input[type="radio"],.mask_new .section1 input[type="radio"]{
     margin-top: 7px;
 }
-.mask1 .section1 .category{
+.mask1 .section1 .category,.mask_new .section1 .category{
     margin-bottom: 10px;
 }
-.mask1 .section1 .category div{
+.mask1 .section1 .category div,.mask_new .section1 .category div{
     overflow: hidden;
 }
-.mask1 .section1 .category span{
+.mask1 .section1 .category span,.mask_new .section1 .category span{
     float: left;
     margin-right: 5px;
 }
-.mask1 .section1 .category .category_span_red{
+.mask1 .section1 .category .category_span_red,.mask_new .section1 .category .category_span_red{
     color: red;
 }
 .mask1 .maskLayerAlert_box{
     padding: 10px;
     position: relative;
 }
-.mask1 .section1 .category .category_box{
+.mask1 .section1 .category .category_box,.mask_new .section1 .category .category_box{
     overflow: hidden;
 }
 .category_box .category_box_right{
@@ -586,11 +595,19 @@
 .category_box .category_box_left{
     float: left;
     width: 12%;
-}   
+} 
+.mask_new .category_box .category_box_right{
+    float: left;
+    width: 85%;
+}
+.mask_new .category_box .category_box_left{
+    float: left;
+    width: 15%;
+}     
 .category_box p{
     margin: 0;
 }
-.mask1 .section1 textarea{
+.mask1 .section1 textarea,.mask_new .section1 textarea{
     width: 99%;
 }
 .category_box .category_box_right input{
@@ -623,12 +640,30 @@
     width: 50%;
     background-color: #fff;
     text-align: center;
-    height: 180px;
+    min-height: 180px;
     box-shadow: 3px 3px 20px 1px #000; 
 }
 .maskLayerAlert_box_alert .maskLayerAlert_box_alert_a{
     background-color: #B1DBFF;
     margin-bottom: 15px;
+}
+
+.maskLayerAlert_box_alert_big{
+    display: none;
+    position: absolute;
+    top: 20px;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    width: 90%;
+    background-color: #fff;
+    /*height: 180px;*/
+    box-shadow: 3px 3px 20px 1px #000; 
+}
+.maskLayerAlert_box_alert_big .maskLayerAlert_box_alert_a{
+    background-color: #B1DBFF;
+    margin-bottom: 15px;
+    padding-left: 10px;
 }
 
 .maskLayerAlert_box_alert .maskLayerAlert_box_alert_a .setting_hide_a{

@@ -26,11 +26,13 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
      */
     @TableField("client_info_id")
     private String clientInfoId;
+
     /**
-     * 课时数 消费数量
+     * 课程用户表，用户预约课程Id
      */
-    @TableField("class_num")
-    private Integer classNum;
+    @TableField("education_id")
+    private String educationId;
+
     /**
      * 真实开始时间
      */
@@ -133,6 +135,18 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
      */
     @TableField("member_card_no")
     private String memberCardNo;
+
+    /**
+     * 订单状态 可用/作废/完成   1/0/2
+     */
+    @TableField("status")
+    private Integer status;
+    /**
+     * 失效日期
+     */
+    @TableField("invalid_date")
+    private Date invalidDate;
+
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -145,13 +159,6 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
         this.clientInfoId = clientInfoId;
     }
 
-    public Integer getClassNum() {
-        return classNum;
-    }
-
-    public void setClassNum(Integer classNum) {
-        this.classNum = classNum;
-    }
 
     public Date getBeginDateReal() {
         return beginDateReal;
@@ -321,6 +328,30 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
         this.memberCardNo = memberCardNo;
     }
 
+    public String getEducationId() {
+        return educationId;
+    }
+
+    public void setEducationId(String educationId) {
+        this.educationId = educationId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getInvalidDate() {
+        return invalidDate;
+    }
+
+    public void setInvalidDate(Date invalidDate) {
+        this.invalidDate = invalidDate;
+    }
+
     public String getId() {
         return id;
     }
@@ -338,7 +369,6 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
     public String toString() {
         return "FrEducationMemberOrder{" +
         ", clientInfoId=" + clientInfoId +
-        ", classNum=" + classNum +
         ", beginDateReal=" + beginDateReal +
         ", endDateReal=" + endDateReal +
         ", useUserName=" + useUserName +
@@ -360,6 +390,8 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
         ", programBetter=" + programBetter +
         ", memberCardId=" + memberCardId +
         ", memberCardNo=" + memberCardNo +
+        ", educationId=" + educationId +
+        ", invalidDate=" + invalidDate +
         ", id=" + id +
         "}";
     }

@@ -10,12 +10,14 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
         return {
             eduId: '', //
             eduItem: {}, //
-            searchInput: '1865080899',//1865080899
+            searchInput: '',//1865080899
             clientInfo: {
                 itemCard: {},
                 itemClient: {},
             }, //会员信息,包括会员卡
-            roomSeatItem: {},
+            roomSeatItem: {
+                seatNum: [],
+            },
             clientInfoList: [],//用户的集合
             cardInfoList: [],//会员卡的集合
             clientBoxStatus: false,
@@ -33,12 +35,15 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
         }
     },
     filters: {
-        toDateHHmm(val) {
+        toDateHHmm(val){
             let date = new Date(val);
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            let result = hours < 10 ? ("0" + hours) : hours + ":" + minutes < 10 ? ("0" + minutes) : minutes;
-            return result;
+            let h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            let m = date.getMinutes();
+            m = m < 10 ? ('0' + m) : m;
+            let _time = "";
+            _time += ' '+h + ':' + m;
+            return _time;
         },
         toDateyyyyMMddHHmm(val) {
             return timeFormatDate(val, true)
@@ -73,6 +78,7 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
     },
     created() {
         //监听事件
+       // Event.$off(EDU_CONSTANT.listenerEduItem)
         Event.$on(EDU_CONSTANT.listenerEduItem, (eduId, eduItem)=>{
             this.eduId = eduId;
             this.eduItem = eduItem;
@@ -83,9 +89,9 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
 
     },
     updated: function () {
-        this.$nextTick(() => {
-
-        })
+        // this.$nextTick(() => {
+        //
+        // })
     },
     methods: {
         findRoomClientByEduId(){
@@ -100,23 +106,32 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
                 eduId: this.eduId,
                 reserveStatus: "", //取空，表示全部
             };
+
             //查询已预约的会员数
             axiosGetParams(EDUCATION_URL.findToConfirmList, param1, (res) => {
 
-                this.clientList = res;
-                $.each(this.clientList, (i,d)=>{
+
+                $.each(res, (i,d)=>{
                     if(d.reserveStatus == 0){
-                        this.clientList.splice(i, 1);
+                       // this.clientList.splice(i, 1);
+                        this.clientList.push(d);
                     }
                 });
+
                 //获取教室
                 axiosGetParams(EDUCATION_URL.getGroupRoomSeatById, {
                     roomId: this.eduItem.roomId
                 }, (res) => {
-                    //  console.log(res)
-                    this.roomSeatItem = res;
-                    this.roomSeatItem.seatNum = eval(this.roomSeatItem.seatNum);
-                    this.seatNumCopy = eval(this.roomSeatItem.seatNum);
+                    if(res){
+                        this.roomSeatItem = res
+                        this.roomSeatItem.seatNum = eval(this.roomSeatItem.seatNum);
+                        this.seatNumCopy = eval(this.roomSeatItem.seatNum);
+                    }else{
+                        this.roomSeatItem = {
+                            seatNum: "[]"
+                        }
+                    }
+
 
                 });
             })
@@ -250,9 +265,9 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
             this.isSave = true;
             //预约是否确认
             let reserveStatus = 1;
-            if(this.eduItem.configReserveConfirm == true){
-                reserveStatus = 2;
-            }
+            // if(this.eduItem.configReserveConfirm == true){
+            //     reserveStatus = 2;
+            // }
             let param = {
                 educationId: this.eduId,
                // cardId: this.clientInfo.itemCard.id,

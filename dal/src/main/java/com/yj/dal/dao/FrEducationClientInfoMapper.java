@@ -19,4 +19,7 @@ public interface FrEducationClientInfoMapper extends BaseMapper<FrEducationClien
 
 
     List<Map<String, Object>> findMemberReserveStatusList(@Param("eduId") String eduId, @Param("reserveStatus") String reserveStatus, @Param("searchInput") String searchInput);
+
+    List<FrEducationClientInfo> findMemberNotCancel(@Param("eduId") String eduId, @Param("memberId") String memberId);
+
 }

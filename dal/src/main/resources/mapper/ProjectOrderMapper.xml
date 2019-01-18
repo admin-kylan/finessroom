@@ -63,4 +63,28 @@
         CustomerCode, ID, OrderNumber, ObjectId, OrderType, Price, BuyCount, SendCount, AllCount, PayStatus, SalesId, SalesName, PayType, ConsumeType, TotalPrice, AlipayPrice, PayCardPrice, WechatPrice, CashPrice, AccountsPrice, FlowerPrice, OtherPrice, Discount, ChangeNum, FullType, DiscountFull, DiscountReduce, DiscountPrice, DiscountNum, NeedPrice, NoPrice, RetChange, ShopId, PersonnelId, Flag, Type, CreateTime, UpdateTime, CreateUserName, UpdateUserName, CreateUserId, UpdateUserId, Status, AuditStatus, StatusUserId, AuditUserId, DeposiTime, InvoiceStatus, AllotType, AllotNum, SaleAllotType, SaleAllotNum
     </sql>
 
+
+    <!-- 查询训练计划 -->
+    <select id="findCourseByClientId" parameterType="java.lang.String" resultType="java.util.Map">
+         SELECT
+            top 1 ad.id projectId,
+            po.id projectOrderId,
+            po.AllCount orderAllCount,
+            ad.ShopId shopId,
+            ad.SdadiumId sdadiumId,
+            ad.CardId cardId,
+            ad.ProjectId courseId,
+            ad.EndTime endDate
+        FROM
+            AddProject ad
+            LEFT JOIN ProjectOrder po ON ad.id = po.objectId
+        WHERE
+            po.PayStatus = 1
+            AND ad.ShopId = #{shopId}
+            AND ad.ProjectId = #{courseId}
+            AND po.AllCount > ${num}
+            and ad.CustomerCode = #{code}
+            and ad.CardId = #{cardId}
+        order by ad.EndTime asc
+    </select>
 </mapper>

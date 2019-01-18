@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="../css/combobox.css"/>
     <link rel="stylesheet" href="../css/simple-calendar.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../fitness/css/bill.css">
 
 </head>
 
@@ -2086,132 +2085,337 @@
             </div>
 
         </div>
-        <!-- 付款 -->
-        <edu-pay-bill-children></edu-pay-bill-children>
+    </div>
+
+    <div class="modal fade modal-style" id="xzhhk" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 1200px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">选择会员卡</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-style table-bordered">
+                        <thead>
+                        <tr>
+                            <td>选择</td>
+                            <td>序号</td>
+                            <td>姓名</td>
+                            <td>性别</td>
+                            <td>卡名称</td>
+                            <td>卡号</td>
+                            <td>开卡日期</td>
+                            <td>结束日期</td>
+                            <td>总权益</td>
+                            <td>剩余权益</td>
+                            <td>销售顾问</td>
+                            <td>服务顾问</td>
+                            <td>状态</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="red">选择</td>
+                            <td>1</td>
+                            <td class="c-00f">吴改</td>
+                            <td>男</td>
+                            <td class="c-00f">健身一年卡</td>
+                            <td>121212</td>
+                            <td>2018-1-1</td>
+                            <td>2018-1-1</td>
+                            <td>232</td>
+                            <td class="red">60</td>
+                            <td>dsd</td>
+                            <td>sds</td>
+                            <td class="c-0f0">正常</td>
+                        </tr>
+                        <tr>
+                            <td class="red">选择</td>
+                            <td>1</td>
+                            <td class="c-00f">吴改</td>
+                            <td>男</td>
+                            <td class="c-00f">健身一年卡</td>
+                            <td>121212</td>
+                            <td>2018-1-1</td>
+                            <td>2018-1-1</td>
+                            <td>232</td>
+                            <td class="red">60</td>
+                            <td>dsd</td>
+                            <td>sds</td>
+                            <td class="c-0f0">正常</td>
+                        </tr>
+                        <tr>
+                            <td class="red">选择</td>
+                            <td>1</td>
+                            <td class="c-00f">吴改</td>
+                            <td>男</td>
+                            <td class="c-00f">健身一年卡</td>
+                            <td>121212</td>
+                            <td>2018-1-1</td>
+                            <td>2018-1-1</td>
+                            <td>232</td>
+                            <td class="red">60</td>
+                            <td>dsd</td>
+                            <td>sds</td>
+                            <td class="c-0f0">正常</td>
+                        </tr>
+                        <tr>
+                            <td class="red">选择</td>
+                            <td>1</td>
+                            <td class="c-00f">吴改</td>
+                            <td>男</td>
+                            <td class="c-00f">健身一年卡</td>
+                            <td>121212</td>
+                            <td>2018-1-1</td>
+                            <td>2018-1-1</td>
+                            <td>232</td>
+                            <td class="red">60</td>
+                            <td>dsd</td>
+                            <td>sds</td>
+                            <td class="c-0f0">正常</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-red">保存</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- 子组建模版 -->
-<!-- 预约工作台 -->
-<template id="edu-work-bench-id">
-    <div id="appointmentWorkbench">
-        <div class="searchWrap">
-            <div class="search">
-                <input type="text" placeholder="可按会员姓名、手机号搜索" v-model="searchInput"/>
-                <input type="submit" value="搜索" @click="save"/>
+    <!-- 子组建模版 -->
+    <!-- 预约工作台 -->
+    <template id="edu-work-bench-id">
+        <div id="appointmentWorkbench">
+            <div class="searchWrap">
+                <div class="search">
+                    <input type="text" placeholder="可按会员姓名、手机号搜索" v-model="searchInput"/>
+                    <input type="submit" value="搜索" @click="save"/>
+                </div>
             </div>
-        </div>
-        <div class="screening clearfix">
-            <label class="fl">
-                <span class="title">筛选条件：</span>
-                <select name="" v-model="selectCoachId">
-                    <option value="" selected>全部教练</option>
-                    <option v-for='(item,index) in coachList' :value="item.coachId">
-                        {{item.coachName}}
-                    </option>
-                </select>
-                <!--<select name="">-->
-                <!--<option value="" selected>全部课程类型</option>-->
-                <!--</select>-->
-                <select name="" v-model="selectSdaduimId">
-                    <option value="" selected>全部场地</option>
-                    <option v-for='(item,index) in sdaduimList' :value="item.id">
-                        {{item.name}}
-                    </option>
-                </select>
-                <input type="text" class="jeinput startDate" placeholder="开始时间" v-model="beginDate"/> ~
-                <input type="text" class="jeinput endDate" placeholder="结束时间" v-model="endDate"/>
-            </label>
-            <span class="btnWrap fl">
+            <div class="screening clearfix">
+                <label class="fl">
+                    <span class="title">筛选条件：</span>
+                    <select name="" v-model="selectCoachId">
+                        <option value="" selected>全部教练</option>
+                        <option v-for='(item,index) in coachList' :value="item.coachId">
+                            {{item.coachName}}
+                        </option>
+                    </select>
+                    <!--<select name="">-->
+                    <!--<option value="" selected>全部课程类型</option>-->
+                    <!--</select>-->
+                    <select name="" v-model="selectSdaduimId">
+                        <option value="" selected>全部场地</option>
+                        <option v-for='(item,index) in sdaduimList' :value="item.id">
+                            {{item.name}}
+                        </option>
+                    </select>
+                    <input type="text" class="jeinput startDate" placeholder="开始时间" v-model="beginDate"/> ~
+                    <input type="text" class="jeinput endDate" placeholder="结束时间" v-model="endDate"/>
+                </label>
+                <span class="btnWrap fl">
                     <span class="orange" @click="dateStatus=1">全部</span>
                     <span class="grey" @click="dateStatus=2">当天</span>
                     <span class="skyBlue" @click="dateStatus=3">本周</span>
-                    <span class="red" @click="dateStatus=4" style="color: white!important;">本月</span>
+                    <span class="red" @click="dateStatus=4">本月</span>
                     <span class="blue" @click="dateStatus=5">本季度</span>
                     <span class="green" @click="dateStatus=6">本年度</span>
                 </span>
-        </div>
-        <div class="tab">
-            <h4>{{showBeginDate}} ~ {{showEndDate}}</h4>
-            <p class="info">
-                共<span class="cyan">{{eduCount}}</span>节课，上课人数<span class="cyan">{{eduClientCount}}</span>人
-            </p>
-            <table class="sup table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <td>序号</td>
-                    <td>课程日期</td>
-                    <td>上课时间</td>
-                    <td>门店</td>
-                    <td>课程名</td>
-                    <td>课程类型</td>
-                    <td>教练</td>
-                    <td>教室</td>
-                    <td>(总人数/<span class="green">已确认</span>/<span class="blue">待确认</span>/<span
-                            class="grey">已取消</span>)
-                    </td>
-                    <td>操作</td>
-                </tr>
-                </thead>
-                <tbody class="pre-scrollable">
-                <tr v-for="(item, index) in resultList">
-                    <td>{{index+1}}</td>
-                    <td>{{item.executeDatePlan}}</td>
-                    <td><strong class="red">{{item.beginDatePlan|toDateHHmm}}~{{item.endDatePlan|toDateHHmm}}</strong>
-                    </td>
-                    <td>{{item.shopName}}</td>
-                    <td class="skyBlue">{{item.courseName}}</td>
-                    <td>团课</td>
-                    <td>{{item.coachName}}</td>
-                    <td>{{item.roomName}}</td>
-                    <td>
+            </div>
+            <div class="tab">
+                <h4>{{showBeginDate}} ~ {{showEndDate}}</h4>
+                <p class="info">
+                    共<span class="cyan">{{eduCount}}</span>节课，上课人数<span class="cyan">{{eduClientCount}}</span>人
+                </p>
+                <table class="sup table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>序号</td>
+                        <td>课程日期</td>
+                        <td>上课时间</td>
+                        <td>门店</td>
+                        <td>课程名</td>
+                        <td>课程类型</td>
+                        <td>教练</td>
+                        <td>教室</td>
+                        <td>(总人数/<span class="green">已确认</span>/<span class="blue">待确认</span>/<span
+                                class="grey">已取消</span>)
+                        </td>
+                        <td>操作</td>
+                    </tr>
+                    </thead>
+                    <tbody class="pre-scrollable">
+                    <tr v-for="(item, index) in resultList">
+                        <td>{{index+1}}</td>
+                        <td>{{item.executeDatePlan}}</td>
+                        <td><strong class="red">{{item.beginDatePlan|toDateHHmm}}~{{item.endDatePlan|toDateHHmm}}</strong>
+                        </td>
+                        <td>{{item.shopName}}</td>
+                        <td class="skyBlue">{{item.courseName}}</td>
+                        <td>团课</td>
+                        <td>{{item.coachName}}</td>
+                        <td>{{item.roomName}}</td>
+                        <td>
                             <span>
                                 <strong>{{item.reserveTotalNum}}</strong>
                             </span>/
-                        <span><strong class="green">{{item.eduCurrentCount}}</strong>
+                            <span><strong class="green">{{item.eduCurrentCount}}</strong>
                             </span>/
-                        <span><strong class="blue">{{item.eduToConfirmCount}}</strong>
+                            <span><strong class="blue">{{item.eduToConfirmCount}}</strong>
                             </span>/
-                        <span><strong class="grey">{{item.eduCancelCount}}</strong>
+                            <span><strong class="grey">{{item.eduCancelCount}}</strong>
                             </span>
-                        <span class="orange margin toBlock" @mouseover="selectToConfirmList(item.id, item)">预约确认</span>
-                    </td>
-                    <td>
+                            <span class="orange margin toBlock" @mouseover="selectToConfirmList(item.id)">预约确认</span>
+                        </td>
+                        <td>
                             <span class="skyBlue margin" onclick="checkDetails()"
                                   @click="changeEduId(item.id, item)">查看详情</span>
-                        <template v-if=" item.status== 1">
-                            <span class="margin">已开课</span>
-                        </template>
+                            <template v-if=" item.status== 1">
+                                <span class="margin">已开课</span>
+                            </template>
 
-                        <template v-if="item.status == 2">
-                            <span class="margin">已结束</span>
-                        </template>
+                            <template v-if="item.status == 2">
+                                <span class="margin">已结束</span>
+                            </template>
 
-                        <template v-if="item.status == 0 ">
+                            <template v-if="item.status == 0">
                                 <span class="green margin"
                                       @click="addReserve(item.id, item)">添加预约</span>
-                            <span class="red margin"
-                                  @click="startClass(item.id, item)">开课</span>
-                        </template>
-                       <!-- &lt;!&ndash; 未经允许是否可以上课 &ndash;&gt;
-                        <template v-if="item.status == 0 && item.configStartClass == true">
-                            <span class="red margin"
-                                  @click="startClass(item.id, item)">开课</span>
-                        </template>-->
-                        <!--<span class="margin">已约满</span>-->
+                                <span class="red margin"
+                                      @click="startClass(item.id, item)">开课</span>
+                            </template>
+                            <!--<span class="margin">已约满</span>-->
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
 
-                </tbody>
-            </table>
-            <div class="tabBox">
-                <table border="1" bordercolor="#ccc" class="sub">
+                    </tbody>
+                </table>
+                <div class="tabBox">
+                    <table border="1" bordercolor="#ccc" class="sub">
+                        <thead>
+                        <tr>
+                            <td></td>
+                            <td>序号</td>
+                            <td>会员姓名</td>
+                            <td>手机号码</td>
+                            <td>预约人</td>
+                            <td>座位</td>
+                            <td>预约时间</td>
+                            <td>结算方式</td>
+                            <td>扣费（余额）</td>
+                            <td>预约状态</td>
+                            <td>备注</td>
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr v-for="(item, index) in toConfirmList">
+                            <td><input type="checkbox" @click='checkedOne(item.id)'
+                                       :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
+                            </td>
+                            <td>{{index+1}}</td>
+                            <td>{{item.memberName}}</td>
+                            <td>{{item.mobile}}</td>
+                            <td>{{item.reserveClientName}}</td>
+                            <td>{{item.seatName}}</td>
+                            <td>{{item.reserveDate| toDateyyyyMMddHHmm}}</td>
+                            <td>{{item.settleType}}</td>
+                            <td>{{item.deductionBalance}}</td>
+                            <td class="green">{{item.reserveStatus| reserveStatusFilter}}</td>
+                            <td class="grey">{{item.remarks| remarksFilter}}</td>
+                            <td>
+                                <span class="blue" @click="changeStatus(item.id, 1, 'true')">确认</span>
+                                <span class="red" @click="changeStatus(item.id, 0, 'true')">取消</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="tabFoot clearfix">
+                        <label class="fl">
+                            <input type="checkbox" @click='checkedAll()' :checked="isCheckedAll"/>
+                            <span>全选/全不选</span>
+                        </label>
+                        <span class="btns fl">
+                            <a class="btn btnBlue fl" @click="changeStatusAll(1)">确认</a>
+                            <a class="btn btnRed fl cancel" @click="changeStatusAll(0)">取消</a>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- 课程预约/预约详情 -->
+    <template id="book-detail-id">
+        <div id="bookDetail" class="bookDetail">
+            <div class="bookHeader">
+                <img v-on:click="returnPage" src="../img/goback.png" alt=""/>
+                <span><span class="grey" v-on:click="returnPage">课程预约/</span>预约详情</span>
+            </div>
+            <div class="bookBody clearfix">
+                <div class="lef fl">
+                    <img src="../img/u2871.png" alt=""/>
+                </div>
+                <div class="rig fl">
+                    <h3>课程名称：{{eduItem.courseName}}</h3>
+                    <label>
+                        <span class="title">门店：</span>
+                        <span class="txt"><strong>{{eduItem.shopName}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">教练：</span>
+                        <span class="txt"><strong>{{eduItem.coachName}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">日期：</span>
+                        <span class="txt"><strong>{{eduItem.executeDatePlan |toDateyyyyMMddHHmm}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">时间：</span>
+                        <span class="txt"><strong>{{eduItem.beginDatePlan|toDateHHmm}}~{{eduItem.endDatePlan|toDateHHmm}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">场地：</span>
+                        <span class="txt"><strong>{{eduItem.sdaduimName}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">上课人数：</span>
+                        <span class="txt"><strong>{{reserveNum}}/{{eduItem.reserveTotalNum}}</strong></span>
+                    </label>
+                    <span class="startBtn" onclick="startClass()">开始训练</span>
+                </div>
+            </div>
+            <div class="bookTab">
+                <span class="allBook">全部预约</span>
+                <div class="tabLine clearfix">
+                    <p class="fl">
+                        <label>
+                            <span>已预约人数：</span>
+                            <span>{{reserveNum}}</span>
+                        </label>
+                        <label>
+                            <span>现有客户：</span>
+                            <span>{{nowMember}}</span>
+                        </label>
+                        <label>
+                            <span>潜在客户：</span>
+                            <span>{{unNowMember}}</span>
+                        </label>
+                    </p>
+                    <span class="addBook fr" @click="addReserve">添加预约</span>
+                </div>
+                <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <td></td>
                         <td>序号</td>
                         <td>会员姓名</td>
+                        <td>客户类型</td>
                         <td>手机号码</td>
                         <td>预约人</td>
                         <td>座位</td>
@@ -2224,13 +2428,13 @@
                     </tr>
                     </thead>
                     <tbody>
-
-                    <tr v-for="(item, index) in toConfirmList">
+                    <tr v-for="(item, index) in eduClientInfoList">
                         <td><input type="checkbox" @click='checkedOne(item.id)'
                                    :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
                         </td>
                         <td>{{index+1}}</td>
                         <td>{{item.memberName}}</td>
+                        <td>{{item.memberType}}</td>
                         <td>{{item.mobile}}</td>
                         <td>{{item.reserveClientName}}</td>
                         <td>{{item.seatName}}</td>
@@ -2246,1029 +2450,481 @@
                     </tr>
                     </tbody>
                 </table>
-                <p class="tabFoot clearfix">
-                    <label class="fl">
-                        <input type="checkbox" @click='checkedAll()' :checked="isCheckedAll"/>
-                        <span>全选/全不选</span>
-                    </label>
-                    <span class="btns fl">
-                            <a class="btn btnBlue fl" @click="changeStatusAll(1)">确认</a>
-                            <a class="btn btnRed fl cancel" @click="changeStatusAll(0)">取消</a>
-                        </span>
-                </p>
-            </div>
-        </div>
-    </div>
-</template>
-
-<!-- 课程预约/预约详情 -->
-<template id="book-detail-id">
-    <div id="bookDetail" class="bookDetail">
-        <div class="bookHeader">
-            <img v-on:click="returnPage" src="../img/goback.png" alt=""/>
-            <span><span class="grey" v-on:click="returnPage">课程预约/</span>预约详情</span>
-        </div>
-        <div class="bookBody clearfix">
-            <div class="lef fl">
-                <img src="../img/u2871.png" alt=""/>
-            </div>
-            <div class="rig fl">
-                <h3>课程名称：{{eduItem.courseName}}</h3>
-                <label>
-                    <span class="title">门店：</span>
-                    <span class="txt"><strong>{{eduItem.shopName}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">教练：</span>
-                    <span class="txt"><strong>{{eduItem.coachName}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">日期：</span>
-                    <span class="txt"><strong>{{eduItem.executeDatePlan |toDateyyyyMMddHHmm}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">时间：</span>
-                    <span class="txt"><strong>{{eduItem.beginDatePlan|toDateHHmm}}~{{eduItem.endDatePlan|toDateHHmm}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">场地：</span>
-                    <span class="txt"><strong>{{eduItem.sdaduimName}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">上课人数：</span>
-                    <span class="txt"><strong>{{reserveNum}}/{{eduItem.reserveTotalNum}}</strong></span>
-                </label>
-                <span class="startBtn" @click="startClass">开始训练</span>
-            </div>
-        </div>
-        <div class="bookTab">
-            <span class="allBook">全部预约</span>
-            <div class="tabLine clearfix">
-                <p class="fl">
-                    <label>
-                        <span>已预约人数：</span>
-                        <span>{{reserveNum}}</span>
-                    </label>
-                    <label>
-                        <span>现有客户：</span>
-                        <span>{{nowMember}}</span>
-                    </label>
-                    <label>
-                        <span>潜在客户：</span>
-                        <span>{{unNowMember}}</span>
-                    </label>
-                </p>
-                <span class="addBook fr" @click="addReserve">添加预约</span>
-            </div>
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <td v-if="eduItem.status == 0"></td>
-                    <td>序号</td>
-                    <td>会员姓名</td>
-                    <td>客户类型</td>
-                    <td>手机号码</td>
-                    <td>预约人</td>
-                    <td>座位</td>
-                    <td>预约时间</td>
-                    <td>结算方式</td>
-                    <td>扣费（余额）</td>
-                    <td>预约状态</td>
-                    <td>备注</td>
-                    <td v-if="eduItem.status == 0">操作</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(item, index) in eduClientInfoList">
-                    <td v-if="eduItem.status == 0"><input type="checkbox" @click='checkedOne(item.id)'
-                               :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
-                    </td>
-                    <td>{{index+1}}</td>
-                    <td>{{item.memberName}}</td>
-                    <td>{{item.memberType}}</td>
-                    <td>{{item.mobile}}</td>
-                    <td>{{item.reserveClientName}}</td>
-                    <td>{{item.seatName}}</td>
-                    <td>{{item.reserveDate| toDateyyyyMMddHHmm}}</td>
-                    <td>{{item.settleType}}</td>
-                    <td>{{item.deductionBalance}}</td>
-                    <td class="green">{{item.reserveStatus| reserveStatusFilter}}</td>
-                    <td class="grey">{{item.remarks| remarksFilter}}</td>
-                    <td v-if="eduItem.status == 0">
-                        <span class="blue" @click="changeStatus(item.id, 1, 'true')">确认</span>
-                        <span class="red" @click="changeStatus(item.id, 0, 'true')">取消</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="tabFoot clearfix" v-if="eduItem.status == 0">
-                <label class="fl"><input type="checkbox" @click='checkedAll()' :checked="isCheckedAll">
-                    <span>全选/全不选</span></label> <span
-                    class="fl"><a class="btn btnBlue fl" @click="changeStatusAll(1)">确认</a>
+                <div class="tabFoot clearfix">
+                    <label class="fl"><input type="checkbox" @click='checkedAll()' :checked="isCheckedAll">
+                        <span>全选/全不选</span></label> <span
+                        class="fl"><a class="btn btnBlue fl" @click="changeStatusAll(1)">确认</a>
                                                 <a class="btn btnRed fl" @click="changeStatusAll(0)">取消</a></span>
+                </div>
             </div>
         </div>
-    </div>
-</template>
+    </template>
 
-<!-- 添加预约 -->
-<template id="edu-reservation-id">
+    <!-- 添加预约 -->
+    <template id="edu-reservation-id">
 
-    <div id="reservation" class="newCustomers_maskLayer">
-        <div class="newCustomers_maskLayer_box">
-            <div class="newCustomers_maskLayer_box_top">
-                <span>添加预约</span><a href="#" class="newCustomers_maskLayer_X"
-                                    onclick="newCustomers_maskLayer_X()">X</a>
-            </div>
-            <div class="newCustomers_maskLayer_box_shen">
-                <div class="bookBody clearfix">
-                    <div class="lef fl"><img src="../img/u2871.png" alt=""></div>
-                    <div class="rig fl">
-                        <div><span class="title">课程名称：</span> <span
-                                class="txt"><strong>{{eduItem.courseName}}</strong></span></div>
-                        <div><span class="title">课程日期：</span> <span
-                                class="txt"><strong>{{eduItem.executeDatePlan |toDateyyyyMMddHHmm}}</strong></span>
-                        </div>
-                        <div><span class="title">课程时间：</span> <span
-                                class="txt"><strong>{{eduItem.beginDatePlan|toDateHHmm}}~{{eduItem.endDatePlan|toDateHHmm}}</strong></span>
-                        </div>
-                        <div><span class="title">课程教练：</span> <span
-                                class="txt"><strong>{{eduItem.coachName}}</strong></span>
-                        </div>
-                        <div><span class="title">上课人数：</span> <span
-                                class="txt"><strong>{{eduItem.eduCurrentCount + eduItem.eduToConfirmCount}}/{{eduItem.reserveTotalNum}}</strong></span>
-                        </div>
-                    </div>
+        <div id="reservation" class="newCustomers_maskLayer">
+            <div class="newCustomers_maskLayer_box">
+                <div class="newCustomers_maskLayer_box_top">
+                    <span>添加预约</span><a href="#" class="newCustomers_maskLayer_X"
+                                        onclick="newCustomers_maskLayer_X()">X</a>
                 </div>
-                <div class="bookBody2 clearfix">
-                    <div class="lef fl"><span>*</span> 预约会员：</div>
-                    <div class="rig fl">
-                        <div><input type="text" placeholder="请输入姓名手机号查找" v-model="searchInput"
-                                    @change="searchClient">
-                        </div>
-                    </div>
-                </div>
-                <div class="bookBody2 clearfix">
-                    <div class="lef fl">预约人数：</div>
-                    <div class="rig fl">
-                        <div>
-                            <span>{{eduItem.eduCurrentCount + eduItem.eduToConfirmCount}}/{{eduItem.reserveTotalNum}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bookBody2 clearfix">
-                    <div class="lef fl"><span>*</span>会员名称：</div>
-                    <div class="rig fl">
-                        <div><span>{{clientInfo.itemClient.clientName}}</span></div>
-                    </div>
-                </div>
-                <!--<div class="bookBody2 clearfix">-->
-                <!--<div class="lef fl"><span>*</span>会员卡号：</div>-->
-                <!--<div class="rig fl">-->
-                <!--<div><span>{{clientInfo.itemCard.cardNo}}</span></div>-->
-                <!--</div>-->
-                <!--</div>-->
-                <div class="bookBody2 clearfix">
-                    <div class="lef fl"><span>*</span> 选择座位：</div>
-                    <div style="float: left; width: 30%;">{{seatName}}</div>
-                    <div class="rig fl" style="width: 40%;float: right;">
-                        <div class="sc-pull-right" style="width: 100%;">
-                            <div><strong class="sc-hui"></strong><span>已选</span></div>
-                            <div><strong class="sc-green"></strong><span>未选</span></div>
-                            <div><strong class="sc-hei"></strong><span>被占</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bookBody2 clearfix">
-                    <div class="bookBody2_tb">
-                        <div class="bookBody2_tb_box">
-                            <div class="bookBody2_tb_box_top">
-                                <div>主教练台</div>
+                <div class="newCustomers_maskLayer_box_shen">
+                    <div class="bookBody clearfix">
+                        <div class="lef fl"><img src="../img/u2871.png" alt=""></div>
+                        <div class="rig fl">
+                            <div><span class="title">课程名称：</span> <span
+                                    class="txt"><strong>{{eduItem.courseName}}</strong></span></div>
+                            <div><span class="title">课程日期：</span> <span
+                                    class="txt"><strong>{{eduItem.executeDatePlan |toDateyyyyMMddHHmm}}</strong></span>
                             </div>
-                            <div class="bookBody2_tb_box_buttom">
-                                <table class="table table-bordered">
-                                    <tbody>
-                                    <tr v-for="(rowNum, index) in roomSeatItem.seatNum">
-                                        <td v-for="(colNum, tdIndex) in rowNum" :td-num-id="colNum"
-                                            :class="[checkClientReserve(colNum)]"
-                                            @click="chooseSeat(index, tdIndex,checkClientReserve(colNum), rowNum.length)"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
+                            <div><span class="title">课程时间：</span> <span
+                                    class="txt"><strong>{{eduItem.beginDatePlan|toDateHHmm}}~{{eduItem.endDatePlan|toDateHHmm}}</strong></span>
+                            </div>
+                            <div><span class="title">课程教练：</span> <span
+                                    class="txt"><strong>{{eduItem.coachName}}</strong></span>
+                            </div>
+                            <div><span class="title">上课人数：</span> <span
+                                    class="txt"><strong>{{eduItem.eduCurrentCount + eduItem.eduToConfirmCount}}/{{eduItem.reserveTotalNum}}</strong></span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="newCustomers_maskLayer_box_botton">
-                <a href="#" class="btn btn-success" @click="save">保存</a>
-            </div>
-        </div>
-        <!--查询客户信息-->
-        <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false"
-             style="display: block; top: 4px; right: -250px;height: 100%; overflow: auto;" aria-labelledby="myModalLabel" v-show="clientBoxStatus">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                @click="clientBoxStatus=false"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">添加系列</h4>
+                    <div class="bookBody2 clearfix">
+                        <div class="lef fl"><span>*</span> 预约会员：</div>
+                        <div class="rig fl">
+                            <div><input type="text" placeholder="请输入姓名手机号查找" v-model="searchInput"
+                                        @change="searchClient">
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <table class="table table-style table-bordered">
-                            <thead>
-                            <tr>
-                                <td>选择</td>
-                                <td>序号</td>
-                                <td>姓名</td>
-                                <td>性别</td>
-                                <td>手机号码</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(item, index) in clientInfoList">
-                                <td class="red" @click="selectClient(item)" style="color: red;cursor: pointer;">选择</td>
-                                <td>{{index+1}}</td>
-                                <td class="00f">{{item.clientName}}</td>
-                                <td>{{item.sex}}</td>
-                                <td>{{item.mobile}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="bookBody2 clearfix">
+                        <div class="lef fl">预约人数：</div>
+                        <div class="rig fl">
+                            <div><span>{{eduItem.eduCurrentCount + eduItem.eduToConfirmCount}}/{{eduItem.reserveTotalNum}}</span></div>
+                        </div>
                     </div>
-                    <!--<div class="modal-footer">-->
-                    <!--<button type="button" class="btn btn-red">保存</button>-->
+                    <div class="bookBody2 clearfix">
+                        <div class="lef fl"><span>*</span>会员名称：</div>
+                        <div class="rig fl">
+                            <div><span>{{clientInfo.itemClient.clientName}}</span></div>
+                        </div>
+                    </div>
+                    <!--<div class="bookBody2 clearfix">-->
+                        <!--<div class="lef fl"><span>*</span>会员卡号：</div>-->
+                        <!--<div class="rig fl">-->
+                            <!--<div><span>{{clientInfo.itemCard.cardNo}}</span></div>-->
+                        <!--</div>-->
                     <!--</div>-->
-                </div>
-            </div>
-        </div>
-        <!--查询客户信息 卡号信息-->
-        <!--   <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false"
-                style="display: block; top: 34px; right: -250px;" aria-labelledby="myModalLabel" v-show="cardBoxStatus">
-               <div class="modal-dialog" role="document">
-                   <div class="modal-content">
-                       <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="cardBoxStatus = false"><span
-                                   aria-hidden="true">&times;</span></button>
-                           <h4 class="modal-title">添加系列</h4>
-                       </div>
-                       <div class="modal-body">
-                           <table class="table table-style table-bordered">
-                               <thead>
-                               <tr>
-                                   <td>选择</td>
-                                   <td>序号</td>
-                                   <td>卡号</td>
-                                   <td>开卡时间</td>
-                                   <td>到期时间</td>
-                               </tr>
-                               </thead>
-                               <tbody>
-                               <tr v-for="(item, index) in cardInfoList">
-                                   <td class="red" @click="selectCardObject(item)" style="color: red;cursor: pointer;">选择</td>
-                                   <td>{{index+1}}</td>
-                                   <td class="00f">{{item.cardNo}}</td>
-                                   <td>{{item.bindTime| toDateyyyyMMdd}}</td>
-                                   <td>{{item.invalidTime| toDateyyyyMMdd}}</td>
-                               </tr>
-                               </tbody>
-                           </table>
-                       </div>
-                       &lt;!&ndash;<div class="modal-footer">&ndash;&gt;
-                           &lt;!&ndash;<button type="button" class="btn btn-red">保存</button>&ndash;&gt;
-                       &lt;!&ndash;</div>&ndash;&gt;
-                   </div>
-               </div>
-           </div>-->
-    </div>
-</template>
-
-<!-- 开课预约 -->
-<template id="edu-start-class-id">
-    <div id="startClass">
-        <h4>团课开课</h4>
-        <div class="startClass_fieldset">
-            <fieldset>
-                <legend><span>教练/场馆信息</span></legend>
-                <div class="startClass_fieldset1">
-                    <span>教练：</span> <strong>{{eduItem.coachName}}</strong>
-                    <a href="javascript:;"
-                       class="btn btn-danger">读取指纹</a><span>地点/场馆：</span>
-                    <strong>{{eduItem.roomName}}</strong>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend><span>消费项目</span></legend>
-                <div class="startClass_fieldset2">
-                    <ul>
-                        <li>
-                            <span>消费课程：</span>
-                            <span>
-                                <select>
-                                    <option value="1">{{eduItem.courseName}}</option>
-                                </select>
-                            </span>
-
-                        </li>
-                        <li><span>消费市场：</span> <span><strong>{{courseItem.time}}分钟</strong></span></li>
-                        <li><span>训练计划：</span> <span><a href="javascript:;" class="btn btn-danger" @click="showTrainingPlan">查看训练计划</a></span>
-                        </li>
-                        <li><span>消费数量：</span> <span><strong>{{eduItem.classSalesNum}}</strong></span></li>
-                        <li>
-                            <span>助教：</span>
-                            <span>
-                                <select >
-                                    <option value="1">{{eduItem.assistantName}}</option>
-                                </select>
-                            </span>
-                        </li>
-                    </ul>
-                    <div class="text-center">
-                        <div style="width: 70%;margin: 0 auto">
-                            <span>会员卡号/指纹：</span>
-                            <span><input type="text" placeholder="会员卡号/手机号码/票券号/团购号" v-model="searchInput"></span>
-                            <span><a href="javascript:;" class="btn btn-primary" @click="searchCard">更新指纹数据</a></span>
-                        </div>
-                    </div>
-                    <div>
-                        <div style="width: 70%;margin: 0 auto">
-                            <fieldset class="memberInformation">
-                                <legend><span>会员信息</span></legend>
-                                <div class="memberInformation_box">
-                                    <div class="memberInformation_box_left">
-                                        <div>
-                                                <span>
-                                                    <span>会员姓名：</span><span><strong>{{clientInfo.clientName}}</strong></span>
-                                                </span>
-                                            <span>
-                                                <span>会员性别：</span><span><strong>{{clientInfo.sex}}</strong></span>
-                                            </span>
-                                            <span>
-                                                <span>会员卡号：</span><span><strong>{{clientInfo.cardNo}}</strong></span>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span>
-                                                <span>会员卡系列：</span><span><strong>{{clientInfo.cardType}}</strong></span>
-
-                                            </span>
-                                        <span>
-                                                <span>会员卡名称：</span><span><strong>{{clientInfo.cardTypeName}}</strong></span>
-
-                                            </span>
-                                            <span>
-                                                <span>总权益：</span><span><strong>{{clientInfo.haveRightsNum}}</strong></span>
-
-                                            </span>
-                                            <span>
-                                                <span>剩余权益：</span><span><strong>{{clientInfo.totalAmt}}</strong></span>
-
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span>
-                                                <span>开始时间：</span><span><strong>{{clientInfo.bindDate| toDateyyyyMMdd}}</strong></span>
-
-                                            </span>
-                                            <span>
-                                                <span>失效时间：</span><span><strong>{{clientInfo.invalidDate| toDateyyyyMMdd}}</strong></span>
-                                            </span>
-                                        </div>
-                                        <div>
-                                                <span>
-                                                    <span>销售顾问：</span><span><strong>{{clientInfo.salesName}}</strong></span>
-
-                                                </span>
-                                            <span>
-                                                    <span>指定教练：</span><span><strong>{{eduItem.coachName}}</strong></span>
-
-                                                </span>
-                                            <span>
-                                                <span>服务顾问：</span><span><strong>{{clientInfo.consultantName}}</strong></span>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <fieldset>
-                                                <legend><span>票券信息</span></legend>
-                                                <div>
-                                                    <ul>
-                                                        <li><span>票券条形码：</span><span>无</span></li>
-                                                        <li><span>使用人姓名：</span><span>无</span></li>
-                                                        <li><span>使用人电话：</span><span>无</span></li>
-                                                        <li><span>差额：</span><span>无</span></li>
-                                                    </ul>
-                                                </div>
-                                            </fieldset>
-
-                                        </div>
-                                        <div>
-                                            <fieldset>
-                                                <legend><span>团购信息</span></legend>
-                                                <div>
-                                                    <ul>
-                                                        <li><span>票券条形码：</span><span>无</span></li>
-                                                        <li><span>使用人姓名：</span><span>无</span></li>
-                                                        <li><span>使用人电话：</span><span>无</span></li>
-                                                        <li><span>差额：</span><span>无</span></li>
-                                                    </ul>
-                                                </div>
-                                            </fieldset>
-
-                                        </div>
-                                    </div>
-                                    <div class="memberInformation_box_right">
-                                        <div>
-                                            <img :src="clientInfo.clientPic" class="img-responsive"
-                                                 alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend><span>学员信息</span></legend>
-                <div class="startClass_fieldset3">
-                    <div class="startClass_fieldset3_top">
-                        <div class="col-md-6 text-left">当前约课人数：<strong>{{reserveNum}}</strong>人</div>
-                        <div class="col-md-6 text-right"><a href="javascript:;"
-                                                            class="btn btn-default" @click="searchFunc">搜索</a>
-                            <input type="text"
-                                placeholder="姓名/卡号" v-model="searchInput2"></div>
-                    </div>
-                    <div style="overflow-x:  scroll;">
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                            <tr>
-                                <th>消费时间</th>
-                                <th>会员卡号</th>
-                                <th>会员姓名</th>
-                                <th>性别</th>
-                                <th>卡种</th>
-                                <th>会员卡名</th>
-                                <th>剩余权益</th>
-                                <th>失效日期</th>
-                                <th>使用人</th>
-                                <th>消费数量</th>
-                                <th>消费金额</th>
-                                <th>座位号</th>
-                                <th>票据号</th>
-                                <th>销售员</th>
-                                <th>操作员</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <tr v-for="(item, index) in memberList">
-                                <td>{{item.createDate| toDateyyyyMMddHHmm}}</td>
-                                <td>{{item.memberCardNo}}</td>
-                                <td class="blue">{{item.infoMemberName}}</td>
-                                <td>{{item.infoMemberSex}}</td>
-                                <td>{{item.cardType}}</td>
-                                <td class="sblue">{{item.cardName}}</td>
-                                <td class="red">{{item.remainBenefit}}</td>
-                                <td>{{item.invalidDate| toDateyyyyMMdd}}</td>
-                                <td>{{item.useUserName}}</td>
-                                <td>{{item.eduClassSalesNum}}</td>
-                                <td>{{item.price| toMoney}}</td>
-                                <td class="red">{{item.infoSeatName}}</td>
-                                <td><strong>{{item.billNumber}}</strong></td>
-                                <td>{{item.saleUserName}}</td>
-                                <td><strong>{{item.createName}}</strong></td>
-                                <td class="red" @click="cancelMemberOrder(item.id, item.eduClassSalesNum)" style="cursor: pointer;" v-if="item.status != 0">冲销</td>
-                                <td class="red" v-if="item.status == 0">已冲销</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div>
-                        <div class="text-center" style="margin: 15px 0;">
-                            <span>开始时间：
-                                <input type="text" class="jeinput " id="start-begin-date"
-                                              placeholder="开始时间" v-model="beginDate" readonly></span>
-                            <span>结束时间：<input type="text" class="jeinput " id="start-end-date"
-                                              placeholder="结束时间" v-model="endDate" readonly></span>
-                        </div>
-                        <div class="text-center">
-                            <a href="javascript:;" class="btn btn-group" @click="beginEduFunc">开始</a>
-                        </div>
-                    </div>
-
-                </div>
-            </fieldset>
-        </div>
-        <!--训练计划-->
-        <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel"
-             v-show="trainingPlanViewStatus" style="display: block;height: 100%; overflow: auto;">
-            <div class="modal-dialog" role="document" style="width: 900px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="trainingPlanViewStatus = false"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">训练计划</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-style table-bordered">
-                            <thead>
-                            <tr>
-                                <td>序号</td>
-                                <td></td>
-                                <td>动作类型</td>
-                                <td>动作名称</td>
-                                <td>时间（分）</td>
-                                <td style="width: 100px;">强度</td>
-                                <td style="width: 100px;">次数</td>
-                                <td style="width: 150px;">备注</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <tr v-for="(item, index) in eduPlanList">
-                                <td>{{index + 1}}</td>
-                                <td style="height: 80px;"><img :src="item.image" class="full-height" /></td>
-                                <td class="yellow">{{item.seriesName}}</td>
-                                <td>{{item.actionName}}</td>
-                                <td><span class="c-0f0">{{item.traningTime}}</span>分钟</td>
-                                <td>{{item.traningStrength}}</td><!--item.actionDiff -->
-                                <td><span class="c-00f">{{item.traningCount}}</span></td>
-                                <td>{{item.traningremark}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 选择会员卡信息 -->
-        <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false" v-show="searchCardViewStatus"
-             aria-labelledby="myModalLabel" style="display: block;height: 100%; overflow: auto;">
-            <div class="modal-dialog" role="document" style="width: 1200px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                @click="searchCardViewStatus = false">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" >选择会员卡</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-style table-bordered">
-                            <thead>
-                            <tr>
-                                <td>选择</td>
-                                <td>序号</td>
-                                <td>姓名</td>
-                                <td>性别</td>
-                                <td>卡名称</td>
-                                <td>卡号</td>
-                                <td>开卡日期</td>
-                                <td>结束日期</td>
-                                <td>总权益</td>
-                                <td>剩余权益</td>
-                                <td>销售顾问</td>
-                                <td>服务顾问</td>
-                                <td>状态</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <tr v-for="(item, index) in clientInfoList">
-                                <td class="red" @click="payBill(item)" style="cursor: pointer">选择</td>
-                                <td>{{index +1}}</td>
-                                <td class="c-00f">{{item.clientName}}</td>
-                                <td>{{item.sex}}</td>
-                                <td class="c-00f">{{item.cardTypeName}}</td>
-                                <td>{{item.cardNo}}</td>
-                                <td>{{item.bindDate| toDateyyyyMMdd}}</td>
-                                <td>{{item.invalidDate| toDateyyyyMMdd}}</td>
-                                <td>{{item.haveRightsNum}}</td>
-                                <td class="red">{{item.totalAmt}}</td>
-                                <td>{{item.salesName}}</td>
-                                <td>{{item.consultantName}}</td>
-                                <td class="c-0f0">{{item.status| cardStatusFilter}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--<div class="modal-footer">-->
-                        <!--<button type="button" class="btn btn-red" @click="clientInfo = clientInfoCopy;searchCardViewStatus = false">保存</button>-->
-                    <!--</div>-->
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
-<template id="edu-pay-bill-id">
-    <!-- 付款 -->
-    <div id="offer" class="newCustomers_maskLayer" style="display: block;" v-show="isShowBill">
-        <div class="newCustomers_maskLayer_box">
-            <div class="newCustomers_maskLayer_box_top">
-                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="isShowBill = false">X</a>
-            </div>
-            <div class="newCustomers_maskLayer_box_shen">
-                <fieldset class="section2">
-                    <legend>消费人员信息</legend>
-                    <div>
-
-                        <span>会员姓名：<strong>{{clientInfo.clientName}} </strong></span>
-                        <span>手机号码：<strong>{{clientInfo.mobile}} </strong></span>
-                        <span>性别：<strong>{{clientInfo.sex}} </strong></span>
-                    </div>
-                </fieldset>
-                <fieldset class="section3">
-                    <legend>产品信息</legend>
-                    <div class="section3_box">
-                        <div class="section3_box_top">
-                            <span>订单编号：<strong>{{orderNo}} </strong> </span> <span>创建时间：{{createDate}}</span>
-                        </div>
-                        <div class="section3_box_botton">
-                            <div class="section3_box_botton_left">
-                                <img :src="eduItem.courseImage" alt="">
+                    <div class="bookBody2 clearfix">
+                        <div class="lef fl"><span>*</span> 选择座位：</div>
+                        <div style="float: left; width: 30%;">{{seatName}}</div>
+                        <div class="rig fl" style="width: 40%;float: right;">
+                            <div class="sc-pull-right" style="width: 100%;">
+                                <div><strong class="sc-hui"></strong><span>已选</span></div>
+                                <div><strong class="sc-green"></strong><span>未选</span></div>
+                                <div><strong class="sc-hei"></strong><span>被占</span></div>
                             </div>
-                            <div class="section3_box_botton_rigth">
-                                <div style="width: 300px;float: left;">
-                                    <strong>{{eduItem.courseName}}</strong>
+                        </div>
+                    </div>
+                    <div class="bookBody2 clearfix">
+                        <div class="bookBody2_tb">
+                            <div class="bookBody2_tb_box">
+                                <div class="bookBody2_tb_box_top">
+                                    <div>主教练台</div>
                                 </div>
-                                <div style="width: 300px;">
-                                    <span>单价：<strong>￥{{eduItem.courseMemberPrice| toMoney}}</strong></span>
+                                <div class="bookBody2_tb_box_buttom">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr v-for="(rowNum, index) in roomSeatItem.seatNum">
+                                            <td v-for="(colNum, tdIndex) in rowNum" :td-num-id="colNum"
+                                                :class="[checkClientReserve(colNum)]"
+                                                @click="chooseSeat(index, tdIndex,checkClientReserve(colNum), rowNum.length)"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                </fieldset>
-                <div class="payment_method">
-                    <div class="payment_method_top">
-                        <ul>
-                            <li :class='{on: index == 0}' @click="index = 0">会员消费</li>
-                            <li :class='{on: index == 1}' @click="index = 1">普通消费</li>
-                        </ul>
-                    </div>
-                    <div class="payment_method_left pull-left">
-                        <ul>
-                            <li class="on li1" v-if="index==0">
-                                <div class="col-md7" >
-                                    <div class="col_md7_top">卡号/手机号码：
-                                        <input type="text" v-model="memberInfo.num"
-                                               oninput="value=value.replace(/[^\d]+/g,'')" >
-                                        <a href="javascript:;" class="btn btn-success" @click="searchByTelAndNo()">搜索</a></div>
-                                    <div class="col_md7_botton">
-                                        <table class="table table-bordered text-center table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>序号</th>
-                                                <th>票券号码</th>
-                                                <th>票券名称</th>
-                                                <th>可用权益</th>
-                                                <th>使用</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr v-for='(item,index) in memberInfo.ticketList'>
-                                                <td v-text="index + 1"></td>
-                                                <td v-text="item.num"></td>
-                                                <td v-text="item.name"></td>
-                                                <td v-text="item.interest"></td>
-                                                <td><label><input type="checkbox" v-model="item.use"></label></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <div>显示更多</div>
-                                    </div>
-                                </div>
-                                <div class="col-md5">
-                                    <div>
-                                        <div>会员卡号： <strong
-                                                class="font-bold">{{memberInfo.cardInfo.cardNo}}</strong></div>
-                                        <div>会员名称：<strong
-                                                class="font-bold">{{memberInfo.cardInfo.cardUserName}}</strong></div>
-                                        <div>票劵差价：
-                                            <strong class="font-bold col-red">{{memberInfo.cardInfo.differencePrice|toMoney}}</strong>
-                                        </div>
-                                        <div>票劵抵扣：
-                                            <strong class="font-bold col-red">{{memberInfo.cardInfo.totalPrice|toMoney}}</strong>
-                                        </div>
-                                        <div>卡中储值金额：
-                                            <strong class="font-bold col-red">{{memberInfo.cardInfo.storageOrderPrice|toMoney}}</strong>
-                                        </div>
-                                        <div>扣储值金额：
-                                            <input type="text" v-model="memberInfo.cardInfo.inputMoney" placeholder="0.00"
-                                                   oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
-                                            ></div>
-                                        <div>输入凭证：
-                                            <input type="password" v-model="memberInfo.cardInfo.userPass"
-                                                   @change="verifyPassword"></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="on li2" v-if="index==1">
-                                <div class="col-md7">
-                                    <div class="col_md7_top">手机号码：
-                                        <input type="text" >
-                                        <a href="javascript:;" class="btn btn-success"
-                                           >搜索</a>
-                                    </div>
-                                    <div class="col_md7_botton">
-                                        <table class="table table-bordered text-center table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>序号</th>
-                                                <th>票券号码</th>
-                                                <th>票券名称</th>
-                                                <th>可用权益</th>
-                                                <th>使用</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr v-for='(item,index) in generalInfo.ticketList'>
-                                                <td v-text="index + 1"></td>
-                                                <td v-text="item.num"></td>
-                                                <td v-text="item.name"></td>
-                                                <td v-text="item.interest"></td>
-                                                <td><label><input type="checkbox" v-model="item.use"></label></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <div>显示更多</div>
-                                    </div>
-                                </div>
-                                <div class="col-md5">
-                                    <div>
-                                        <div>票券可用总权益：<strong>{{generalInfo.totalPrice|toMoney}}</strong></div>
-                                        <div>输入使用权益：<input type="text" oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
-                                                           v-model="generalInfo.inputMoney"></div>
-                                        <div>需补差价：<strong>{{generalInfo.differencePrice|toMoney}}</strong></div>
-                                        <fieldset>
-                                            <legend>普通消费说明</legend>
-                                            <div>
-                                                <p>1、本阶段只支持系统存在的潜在客户消费;</p>
-                                                <p>2、如果系统不存在的客户想用票券消费;</p>
-                                                <div>
-                                                    <p>1）新建潜在客户必须要有手机号码、姓名；</p>
-                                                    <p>2）销售/赠送票券;</p>
-                                                    <p>3）在本届面录入手机号码，如果有消费权益就会自动带出 ;</p>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="payment_method_box pull-left">
-                        <fieldset style="border-color:red">
-                            <legend style="color:#FF9900">支付方式</legend>
-                            <div class="section2_boxs1_right">
-                                <div class="section2_boxs1_top">
-                                    <div>支付方式</div>
-                                    <div>支付宝</div>
-                                    <div>刷卡</div>
-                                    <div>微信</div>
-                                    <div>现金</div>
-                                    <div>转账</div>
-                                    <div>花呗</div>
-                                    <div>其他支付</div>
-                                </div>
-                                <div class="section2_boxs1_botton">
-                                    <div>金额</div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p1" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p2" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p3" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p4" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p5" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p6" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                    <div><span>￥</span>
-                                        <input type="text" v-model="payType.p7" placeholder="0.00"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="payment_method_rigth pull-left">
-                        <fieldset>
-                            <legend style="color:#FF9900">折扣优惠</legend>
-                            <table border="0" cellspacing="0" cellpadding="0">
+                </div>
+                <div class="newCustomers_maskLayer_box_botton">
+                    <a href="#" class="btn btn-success" @click="save">保存</a>
+                </div>
+            </div>
+            <!--查询客户信息-->
+            <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false"
+                 style="display: block; top: 4px; right: -250px;" aria-labelledby="myModalLabel" v-show="clientBoxStatus">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="clientBoxStatus=false"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">添加系列</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-style table-bordered">
+                                <thead>
+                                <tr>
+                                    <td>选择</td>
+                                    <td>序号</td>
+                                    <td>姓名</td>
+                                    <td>性别</td>
+                                    <td>手机号码</td>
+                                </tr>
+                                </thead>
                                 <tbody>
-                                <tr>
-                                    <td colspan="2">整单打折</td>
-                                </tr>
-                                <tr>
-                                    <td>优惠折扣：</td>
-                                    <td><input type="text" v-model="rebate.offer" placeholder="0"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>整单去零：</td>
-                                    <td><input type="text" v-model="rebate.integer" placeholder="0"
-                                               oninput="value=value.replace(/[^\d^]+/g,'')"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <label>
-                                            <input type="radio" name="discount-type-radio" v-model="rebate.type"
-                                                   value="1">
-                                            <span>整单打折(重复使用)</span>
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-align-right">满：</td>
-                                    <td class="text-align-right">
-                                        <input type="text" v-model="rebate.repeat.full" placeholder="0"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-align-right">减：</td>
-                                    <td class="text-align-right">
-                                        <input type="text" v-model="rebate.repeat.less" placeholder="0"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <label>
-                                            <input type="radio" name="discount-type-radio" value="0"
-                                                   v-model="rebate.type">
-                                            <span>整单打折(单次使用)</span>
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-align-right">满：</td>
-                                    <td>
-                                        <input type="text" v-model="rebate.single.full" placeholder="0"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-align-right">减：</td>
-                                    <td>
-                                        <input type="text" v-model="rebate.single.less" placeholder="0"
-                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
-                                    </td>
+                                <tr v-for="(item, index) in clientInfoList">
+                                    <td class="red" @click="selectClient(item)" style="color: red;cursor: pointer;">选择</td>
+                                    <td>{{index+1}}</td>
+                                    <td class="00f">{{item.clientName}}</td>
+                                    <td>{{item.sex}}</td>
+                                    <td>{{item.mobile}}</td>
                                 </tr>
                                 </tbody>
                             </table>
-                        </fieldset>
+                        </div>
+                        <!--<div class="modal-footer">-->
+                            <!--<button type="button" class="btn btn-red">保存</button>-->
+                        <!--</div>-->
                     </div>
-                    <div class="payment_method_rigth2 pull-left">
-                        <fieldset style="border-color:#009900">
-                            <legend style="color:#009900">支付详情</legend>
-                            <div class="rows">
-                                <div>
-                                    <div class="col-md-6">小计：</div>
-                                    <div class="col-md-6"> ￥<strong>{{payMoney.totalPrice | toMoney}}</strong>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">折扣/优惠：</div>
-                                    <div class="col-md-6">￥<strong>{{payMoney.discount | toMoney}}</strong></div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">抵扣金额：</div>
-                                    <div class="col-md-6">￥<strong>{{payMoney.discountMoney | toMoney}}</strong>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">应付金额：</div>
-                                    <div class="col-md-6">￥ <strong><span class="tored">{{payMoney.price | toMoney}}</span></strong>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">未付金额：</div>
-                                    <div class="col-md-6">￥{{payMoney.noPrice | toMoney}}</div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">找零：</div>
-                                    <div class="col-md-6">￥<strong><span class="tored">{{payMoney.retChange | toMoney}}</span></strong>
-                                    </div>
-                                </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂账</a></div>
-                                    <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂单</a></div>
-                                </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-12">
-                                        <a href="javascript:;" class="btn btn-success" @click="payBill">结账</a>
-                                    </div>
-                                </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-12">
-                                        <label>
-                                            <input type="checkbox" v-model="invoiceStatus">
-                                            <span>购置发票</span>
-                                        </label>
-                                    </div>
-                                </div>
+                </div>
+            </div>
+            <!--查询客户信息 卡号信息-->
+         <!--   <div class="modal modal-style" tabindex="-1" role="dialog" data-backdrop="false"
+                 style="display: block; top: 34px; right: -250px;" aria-labelledby="myModalLabel" v-show="cardBoxStatus">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="cardBoxStatus = false"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">添加系列</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-style table-bordered">
+                                <thead>
+                                <tr>
+                                    <td>选择</td>
+                                    <td>序号</td>
+                                    <td>卡号</td>
+                                    <td>开卡时间</td>
+                                    <td>到期时间</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item, index) in cardInfoList">
+                                    <td class="red" @click="selectCardObject(item)" style="color: red;cursor: pointer;">选择</td>
+                                    <td>{{index+1}}</td>
+                                    <td class="00f">{{item.cardNo}}</td>
+                                    <td>{{item.bindTime| toDateyyyyMMdd}}</td>
+                                    <td>{{item.invalidTime| toDateyyyyMMdd}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        &lt;!&ndash;<div class="modal-footer">&ndash;&gt;
+                            &lt;!&ndash;<button type="button" class="btn btn-red">保存</button>&ndash;&gt;
+                        &lt;!&ndash;</div>&ndash;&gt;
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </template>
+
+    <!-- 开课预约 -->
+    <template id="edu-start-class-id">
+        <div id="startClass">
+            <h4>团课开课</h4>
+            <div class="startClass_fieldset">
+                <fieldset>
+                    <legend><span>教练/场馆信息</span></legend>
+                    <div class="startClass_fieldset1">
+                        <span>教练：</span> <strong>{{eduItem.coachName}}</strong> <a href="javascript:;"
+                                                                           class="btn btn-danger">读取指纹</a><span>地点/场馆：</span>
+                        <strong>{{eduItem.roomName}}</strong>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend><span>消费项目</span></legend>
+                    <div class="startClass_fieldset2">
+                        <ul>
+                            <li>
+                                <span>消费课程：</span>
+                                <span>
+														<select name="1">
+															<option value="1">动感单车</option>
+															<option value="1">动感单车</option>
+															<option value="1">动感单车</option>
+														</select>
+													</span>
+
+                            </li>
+                            <li><span>消费市场：</span> <span><strong>30分钟</strong></span></li>
+                            <li><span>训练计划：</span> <span><a href="javascript:;" class="btn btn-danger">查看训练计划</a></span>
+                            </li>
+                            <li><span>消费数量：</span> <span><strong>1</strong></span></li>
+                            <li>
+                                <span>助教：</span>
+                                <span>
+														<select name="1">
+															<option value="1">选择助教</option>
+															<option value="1">选择助教</option>
+															<option value="1">选择助教</option>
+														</select>
+													</span>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <div style="width: 70%;margin: 0 auto">
+                                <span>会员卡号/指纹：</span>
+                                <span><input type="text" placeholder="会员卡号/手机号码/票券号/团购号"></span>
+                                <span><a href="javascript:;" class="btn btn-primary">更新指纹数据</a></span>
                             </div>
-                        </fieldset>
+                        </div>
+                        <div>
+                            <div style="width: 70%;margin: 0 auto">
+                                <fieldset class="memberInformation">
+                                    <legend><span>会员信息</span></legend>
+                                    <div class="memberInformation_box">
+                                        <div class="memberInformation_box_left">
+                                            <div>
+																	<span>
+																		<span>会员姓名：</span><span><strong>吴改</strong></span>
+																	</span>
+                                                <span>
+																		<span>会员性别：</span><span><strong>男</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>会员卡号：</span><span><strong>1110080065448</strong></span>
+																	</span>
+                                            </div>
+                                            <div>
+																	<span>
+																		<span>会员卡系列：</span><span><strong>年卡</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>会员卡名称：</span><span><strong>一年卡</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>总权益：</span><span><strong>900</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>剩余权益：</span><span><strong>900</strong></span>
+
+																	</span>
+                                            </div>
+                                            <div>
+																	<span>
+																		<span>开始时间：</span><span><strong>2018-07-08</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>失效时间：</span><span><strong>2018-07-08</strong></span>
+																	</span>
+                                            </div>
+                                            <div>
+																	<span>
+																		<span>销售顾问：</span><span><strong>Klaus</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>指定教练：</span><span><strong>Nicolas Klaus</strong></span>
+
+																	</span>
+                                                <span>
+																		<span>服务顾问：</span><span><strong>Nicolas Klaus</strong></span>
+																	</span>
+                                            </div>
+                                            <div>
+                                                <fieldset>
+                                                    <legend><span>票券信息</span></legend>
+                                                    <div>
+                                                        <ul>
+                                                            <li><span>票券条形码：</span><span>无</span></li>
+                                                            <li><span>使用人姓名：</span><span>无</span></li>
+                                                            <li><span>使用人电话：</span><span>无</span></li>
+                                                            <li><span>差额：</span><span>无</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </fieldset>
+
+                                            </div>
+                                            <div>
+                                                <fieldset>
+                                                    <legend><span>团购信息</span></legend>
+                                                    <div>
+                                                        <ul>
+                                                            <li><span>票券条形码：</span><span>无</span></li>
+                                                            <li><span>使用人姓名：</span><span>无</span></li>
+                                                            <li><span>使用人电话：</span><span>无</span></li>
+                                                            <li><span>差额：</span><span>无</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </fieldset>
+
+                                            </div>
+                                        </div>
+                                        <div class="memberInformation_box_right">
+                                            <div>
+                                                <img src="../img/u601.png" class="img-responsive"
+                                                     alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </fieldset>
+                <fieldset>
+                    <legend><span>学员信息</span></legend>
+                    <div class="startClass_fieldset3">
+                        <div class="startClass_fieldset3_top">
+                            <div class="col-md-6 text-left">当前约课人数：<strong>5</strong>人</div>
+                            <div class="col-md-6 text-right"><a href="javascript:;"
+                                                                class="btn btn-default">搜索</a><input
+                                    type="text"
+                                    placeholder="姓名/卡号"></div>
+                        </div>
+                        <div style="overflow-x:  scroll;">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>消费时间</th>
+                                    <th>会员卡号</th>
+                                    <th>会员姓名</th>
+                                    <th>性别</th>
+                                    <th>卡种</th>
+                                    <th>会员卡名</th>
+                                    <th>剩余权益</th>
+                                    <th>失效日期</th>
+                                    <th>使用人</th>
+                                    <th>消费数量</th>
+                                    <th>消费金额</th>
+                                    <th>座位号</th>
+                                    <th>票据号</th>
+                                    <th>销售员</th>
+                                    <th>操作员</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
+                                <tr>
+                                    <td>2018-07-03 12:03</td>
+                                    <td>1000665948949</td>
+                                    <td class="blue">Klaus</td>
+                                    <td>男</td>
+                                    <td>年卡</td>
+                                    <td class="sblue">一年卡</td>
+                                    <td class="red">600</td>
+                                    <td>2018-06-03</td>
+                                    <td>吴改</td>
+                                    <td>1</td>
+                                    <td>0.00</td>
+                                    <td class="red">3排4列5号</td>
+                                    <td><strong>6559191486</strong></td>
+                                    <td>Klaus</td>
+                                    <td><strong>Klaus</strong></td>
+                                    <td class="red">冲销</td>
+                                </tr>
 
-        <!--表格1 输入手机号码显示-->
-        <div class="newCustomers_maskLayer performance" v-show="memberInfo.isShow" style="display:block;">
-            <div class="newCustomers_maskLayer_box" style="top: 55%;">
-                <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span>
-                    <a href="javascript:;" class="newCustomers_maskLayer_X" @click="memberInfo.isShow = false;">X</a>
-                </div>
-                <div class="KHGL-table-box">
-                    <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
-                        <thead>
-                        <tr>
-                            <th style="width: 15%;">选择</th>
-                            <th style="width: 15%;">标识</th>
-                            <th style="width: 25%;">姓名</th>
-                            <th style="width: 15%;">性别</th>
-                            <th>创建时间</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="item in memberInfo.optionClientList">
-                            <td><span class="col-green" @click="catcherClientList(item)">选择</span></td>
-                            <td><span class="col-red" v-text="item.CustomerMark"></span></td>
-                            <td v-text="item.clientName"></td>
-                            <td v-text="item.sex == 1 ? '女' : '男'"></td>
-                            <td>{{item.applyTime|formatDate }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!-- 表格1 -->
+                                </tbody>
+                            </table>
+                        </div>
 
-        <!-- 选择储值会员卡 -->
-        <div class="newCustomers_maskLayer performance" v-show="memberInfo.isShowCardStatus" style="display: block;">
-            <div class="newCustomers_maskLayer_box" style="top: 65%;">
-                <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span>
-                    <a href="javascript:;" @click="memberInfo.isShowCardStatus = false;" class="newCustomers_maskLayer_X">X</a>
-                </div>
-                <h5 class="KHGL-title">选择要储值的会员卡</h5>
-                <div class="KHGL-table-box">
-                    <table class="KHGL-table2" border="0" cellspacing="0" cellpadding="0">
-                        <thead>
-                        <tr>
-                            <th style="width: 5%;">选择</th>
-                            <th style="width: 10%;">姓名</th>
-                            <th style="width: 12%;">手机号码</th>
-                            <th style="width: 12%;">卡系列</th>
-                            <th style="width: 7%;">卡名称</th>
-                            <th style="width: 15%;">开始日期</th>
-                            <th style="width: 15%;">失效日期</th>
-                            <th style="width: 8%;">剩余权益</th>
-                            <th style="width: 8%;">剩余储值</th>
-                            <th>状态</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="item in memberInfo.optionClientCardList">
-                            <td class="cursorP" style="color: #090 !important;" @click="catcherCardId(item)">选择</td>
-                            <td class='col-blue'>{{item.clientName}}</td>
-                            <td>{{item.mobile}}</td>
-                            <td>{{item.cardFlag}}</td>
-                            <td class='col-red'>{{item.cardTypeName}}</td>
-                            <td>{{item.bindTime| toDateyyyyMMddHHmm}}</td>
-                            <td>{{item.invalidTime| toDateyyyyMMddHHmm}}</td>
-                            <td>{{item.orderNum}}</td>
-                            <td>{{item.orderPrice}}</td>
-                            <td>{{item.a_status}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div>
+                            <div class="text-center" style="margin: 15px 0;">
+                                                <span>开始时间：<input type="text" class="jeinput startDate"
+                                                                  placeholder="开始时间"></span>
+                                <span>结束时间：<input type="text" class="jeinput endDate"
+                                                  placeholder="结束时间"></span>
+                            </div>
+                            <div class="text-center">
+                                <a href="javascript:;" class="btn btn-group">开始</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
             </div>
         </div>
-        <!-- end 选择储值会员卡 -->
-    </div>
-</template>
+    </template>
 
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/jquery.cookie.js"></script>
@@ -3286,15 +2942,15 @@
 <script src="../fitness/js/resources/api/axios-base.js"></script>
 <script src="../fitness/js/resources/constant/education-url.js"></script>
 <script src="../fitness/js/resources/constant/education-constant.js"></script>
-<script src="../js/resources/constant/course-url.js"></script>
 <!--新增js代码-->
 <script src="../fitness/js/public/reserve-list.js"></script>
 <script src="../fitness/js/public/book-detail.js"></script>
 <script src="../fitness/js/public/reservation.js"></script>
 <script src="../fitness/js/public/start-class.js"></script>
-<script src="../fitness/js/pay/bill.js"></script>
 <script type="text/javascript">
-
+//	$('#cckhxx').modal('show')
+//	$('#cckhxx1').modal('show')
+	$('#xzhhk').modal('show')
     var FileTimes = new FileTime({
         config: {
             clickObj: "#quanbu", //绑定点击对象  传递的格式为：#id或.class

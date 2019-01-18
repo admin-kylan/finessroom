@@ -197,7 +197,7 @@ public class FrEducationServiceImpl {
      * @param configId
      * @throws Exception
      */
-    private void checkLevel(String level, String configId, String memberType) throws Exception {
+    public void checkLevel(String level, String configId, String memberType) throws Exception {
         FrEducationReserveObject frEducationReserveObject = new FrEducationReserveObject();
         frEducationReserveObject.setEducationConfigId(configId);
         frEducationReserveObject = frEducationReserveObjectMapper.selectOne(frEducationReserveObject);

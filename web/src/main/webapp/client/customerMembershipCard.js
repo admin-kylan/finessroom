@@ -1071,7 +1071,12 @@ var customerMembershipCard = new Vue({
                         }
                         return;
                     } else {
-                        $.alert(res.msg)
+                        if(methName=='supply34OK'){
+                           $.alert("会员授权"+res.msg)
+                        }else if(methName=='supply34OKTwo'){
+                            $.alert("员工授权"+res.msg)
+                        }
+                        // $.alert(res.msg)
                     }
                     that.randomNumber = '';
                 }
@@ -3292,7 +3297,8 @@ var customerMembershipCard = new Vue({
         checkExternalCard: function (strId) {
             var externalCard = $("#" + strId).val();
             if (!externalCard) {
-                $("#" + strId).next().html('请填写外部卡号');
+            	return ;
+//              $("#" + strId).next().html('请填写外部卡号');
             } else if (externalCard.length > 32) {
                 $("#" + strId).next().html("外部卡号过长").css("color", "red").css("margin-left", "5px");
             } else {

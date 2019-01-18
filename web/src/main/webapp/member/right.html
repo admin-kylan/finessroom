@@ -20,7 +20,6 @@
 	<div id="right" v-cloak>
 		<div class="main_top">卡权益设置</div>
 		<div class="main_box">
-
 			<!-- 基础卡权益 -->
 			<div class="common on">
 				<span class="common_span">基础卡权益</span>
@@ -798,28 +797,33 @@
 						<legend>分期付款设置</legend>
 						<div class="category">
 							<div>
-								<span style="margin-left: 10px;"> 购卡金额: </span><span class="category_span_red">3960.00</span>
+								<span style="margin-left: 10px;"> 购卡金额: </span><span class="category_span_red">{{cardTypeSet.salesPrice}}</span>
 							</div>
 							<div>
-								<span class="category_span_red">*</span> <span>首付金额: <input type="text" value="300.00"></span><span class="category_span_red">*</span>
-								<span>分期数量: <input type="text" value="2"></span>
+								<span class="category_span_red">*</span> <span>首付金额: <input type="text" v-model="firstPrice"></span><span class="category_span_red">*</span>
+								<span>分期数量: <input type="text" v-model="splitNum"></span>
 							</div>
 							<div>
 								<span style="margin-left: 10px;"> 分期金额: </span> <span class="category_span_red">3360.00</span>
 
 							</div>
 							<div>
-								<span class="category_span_red">*</span> <span> 分期类型: </span> <label><input type="radio"><span>比例</span></label><label><input
-									 type="radio"><span>金额</span></label>
+								<span class="category_span_red">*</span> <span> 分期类型: </span> 
+								<label><input type="radio" name="fqtype" value="1" v-model="splitType"><span>比例</span></label>
+								<label><input type="radio" name="fqtype" value="2" v-model="splitType"><span>金额</span></label>
 							</div>
 
 							<div class="category_box">
 								<div class="category_box_left"><span class="category_span_red">*</span>分期详情:</div>
 								<div class="category_box_right">
 									<div>
-										<div class="category_span_red">分期总金额:3360.00</div>
-										<div><input type="text" value="30">天后支付第一期<input type="text" value="1680">元</div>
-										<div><input type="text" value="60">天后支付第二期<input type="text" value="1680">元</div>
+										<div class="category_span_red">分期总金额:{{splitPrice}}</div>
+										<div v-for="(item,index) in splitSetDd">
+											<input type="text" v-model="item.splitDate">
+											天后支付第{{enOrder[item.splitOrder-1]}}期
+											<input type="text" v-model="item.splitNum">
+											{{splitType==2?'元':'%'}}
+										</div>
 									</div>
 									<div>
 										<p class="category_span_red">注:天数和每期付款金额可以自己更改,全部分期付款的总和要等于分期总金额。</p>
@@ -829,10 +833,10 @@
 								</div>
 							</div>
 							<div>
-								<span> 内容: </span> <textarea name="1" id=""></textarea>
+								<span> 内容: </span> <textarea name="splitContent" v-model="splitContent"></textarea>
 							</div>
 							<div>
-								<a href="#" class="btn btn-danger">添加</a>
+								<a href="#" class="btn btn-danger" @click="addFq()">添加</a>
 							</div>
 						</div>
 					</fieldset>
@@ -851,60 +855,75 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td><input type="checkbox"></td>
-									<td>3960.00</td>
-									<td>1000.00</td>
-									<td>2960.00</td>
-									<td>3</td>
-									<td>金额</td>
-									<td>大多数</td>
+								<tr v-for="(item,index) in fQList">
+									<td><input type="checkbox" name="using" v-model="item.using"></td>
+									<td>{{item.totalPrice}}</td>
+									<td>{{item.firstPrice}}</td>
+									<td>{{item.splitPrice}}</td>
+									<td>{{item.splitNum}}</td>
+									<td>{{splitType==1?'比例':'金额'}}</td>
+									<td>{{item.splitContent}}</td>
 									<td>
-										<a href="#" onclick="setting_a()">分期详情</a>/
-										<a href="#">修改</a>/
-										<a href="#">删除</a>
-									</td>
-								</tr>
-								<tr>
-									<td><input type="checkbox"></td>
-									<td>3960.00</td>
-									<td>1000.00</td>
-									<td>2960.00</td>
-									<td>3</td>
-									<td>比例</td>
-									<td>大多数</td>
-									<td>
-										<a href="#" onclick="setting_a()">分期详情</a>/
-										<a href="#">修改</a>/
-										<a href="#">删除</a>
-									</td>
-								</tr>
-								<tr>
-									<td><input type="checkbox"></td>
-									<td>3960.00</td>
-									<td>1000.00</td>
-									<td>2960.00</td>
-									<td>3</td>
-									<td>金额</td>
-									<td>大多数</td>
-									<td>
-										<a href="#">分期详情</a>/
-										<a href="#">修改</a>/
-										<a href="#">删除</a>
+										<a @click="setting_a(item.id)">分期详情</a>/
+										<a @click="modify(item.id)">修改</a>/
+										<a @click="deleteSplit(item.id,index)">删除</a>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
+					<div class="maskLayerAlert_box_alert_big mask_new">
+						<div class="maskLayerAlert_box_alert_a">分期修改
+							<a href="#" class="setting_hide_a" onclick="settingOut_a_big()">X</a>
+						</div>
+						<div class="section1">
+							<div class="category">
+								<div>
+									<span style="margin-left: 10px;"> 购卡金额: </span><span class="category_span_red">{{oneSplit.totalPrice}}</span>
+								</div>
+								<div>
+									<span class="category_span_red">*</span> <span>首付金额: <input type="text" v-model="onefirstPrice"></span><span class="category_span_red">*</span>
+									<span>分期数量: <input type="text" v-model="onesplitNum"></span>
+								</div>
+								<div>
+									<span style="margin-left: 10px;"> 分期金额: </span> <span class="category_span_red">{{onesplitPrice}}</span>
+		
+								</div>
+								<div>
+									<span class="category_span_red">*</span> <span> 分期类型: </span> 
+									<label><input type="radio" name="fqtype" value="1" v-model="onesplitType"><span>比例</span></label>
+									<label><input type="radio" name="fqtype" value="2" v-model="onesplitType"><span>金额</span></label>
+								</div>
+		
+								<div class="category_box">
+									<div class="category_box_left"><span class="category_span_red">*</span>分期详情:</div>
+									<div class="category_box_right">
+										<div>
+											<div class="category_span_red">分期总金额:{{onesplitPrice}}</div>
+											<div v-for="(item,index) in oneSplitSetDd">
+												<input type="text" v-model="item.splitDate">
+												天后支付第{{enOrder[item.splitOrder-1]}}期
+												<input type="text" v-model="item.splitNum">
+												{{onesplitType==2?'元':'%'}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<span> 内容: </span> <textarea name="splitContent" v-model="onesplitContent"></textarea>
+								</div>
+							</div>
+							<div style="text-align: center;">
+								<a href="#" class="btn btn-danger" @click="modifyFq()">修改</a>
+							</div>
+						</div>
+					</div>
 					<div class="maskLayerAlert_box_alert">
 						<div class="maskLayerAlert_box_alert_a">分期付款
 							<a href="#" class="setting_hide_a" onclick="settingOut_a()">X</a>
 						</div>
-						<div><input type="text" value="30">天后支付第一期<input type="text" value="1680">元</div>
-						<div><input type="text" value="60">天后支付第二期<input type="text" value="1680">元</div>
-						<div style="margin-top: 15px;">
-							<a href="#" class="btn btn-success">保存</a>
-							<a href="#" class="btn btn-default">取消</a>
+						<div v-for="(item,index) in fqxqData" style="line-height: 2;">
+							{{item.splitDate}}天后支付第{{enOrder[item.splitOrder-1]}}期{{item.splitNum}}{{splitType==2?'元':'%'}}
 						</div>
 					</div>
 				</div>
@@ -928,6 +947,7 @@
 	</div>
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/underscore.js"></script>
 <script src="../js/extendjQuery.js"></script>
 <script src="../js/jquery.cookie.js"></script>
 <script src="../js/setCookie.js"></script>
@@ -978,18 +998,59 @@
 	//设置弹窗2
 	function setting() {
 		$('.mask1').show();
+		right.splitType=0;//为了更新分期金额
+		setTimeout(function(){
+			right.splitType=2;//为了更新分期金额
+		},100)
+		var data={
+            cardTypeId:right.cardTypeSet.id,
+			code:right.cardTypeSet.customerCode
+		}
+		var url = $.stringFormat("{0}/frCardTypeSplitSet/list", $.cookie('url'));
+        $.ajax({
+            type: "get",
+            url: url,
+            data: data,
+            success: function (res) {
+            	if(res.code==200){            		
+            		right.fQList=res.data
+            	}
+            }
+        });
 	}
 	// 关闭弹窗2
 	function settingOut() {
 		$('.mask1').hide();
 	}
 	//设置小弹窗
-	function setting_a() {
-		$('.maskLayerAlert_box_alert').show();
-	}
+//	function setting_a() {
+////		var id=$(this).attr('data-id');
+//		var id=document.getElementById("data-id");
+//		console.log(id);
+//		$('.maskLayerAlert_box_alert').show();
+//		var data={
+//			splitSetId: id
+//		}
+//		var url = $.stringFormat("{0}/frCardTypeSplitSetDd/getBySplitSetId", $.cookie('url'));
+//        $.ajax({
+//            type: "get",
+//            url: url,
+//            data: data,
+//            success: function (res) {
+//            	if(res.code==200){
+//            		right.fqxqData=res.data;
+//            	}
+//            }
+//        });
+////		fqxqData
+//	}
 	//关闭小弹窗
 	function settingOut_a() {
 		$('.maskLayerAlert_box_alert').hide();
+	}
+	//关闭小弹窗
+	function settingOut_a_big() {
+		$('.maskLayerAlert_box_alert_big').hide();
 	}
 
 

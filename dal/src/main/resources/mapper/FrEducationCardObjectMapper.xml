@@ -21,4 +21,17 @@
         education_config_id AS educationConfigId, shop_id AS shopId, sdadium_id AS sdadiumId, project_id AS projectId, price, shop_name AS shopName, sdadium_name AS sdadiumName, project_name AS projectName, education_type AS educationType, id
     </sql>
 
+
+    <!-- 查看排课配置的课程 eduId-->
+    <select id="findSettCourseEdu" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            eco.*
+        FROM
+            fr_education_card_object eco
+            LEFT JOIN fr_education_config ec ON ec.id = eco.education_config_id
+            LEFT JOIN fr_education edu ON ec.education_id = edu.id
+        WHERE
+            edu.id = #{eduId}
+    </select>
+
 </mapper>

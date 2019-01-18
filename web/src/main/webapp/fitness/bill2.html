@@ -591,7 +591,7 @@
                 }
             },
             member: {//会员消费
-                num: '', //电话，卡号13012345674
+                num: '18650808999', //电话，卡号13012345674
                 mobile: '', //电话13012345674
                 isShow: false, // 显示弹出框
                 optionClientList: [], //查出来的用户列表
@@ -772,7 +772,7 @@
                     });
                     //差价添加进小计
                     this.member.payMoney.totalPrice = this.formData.orderInfo.data.totalPrice + this.member.generalCardInfo.differencePrice;
-                    this.member.generalCardInfo.selectTotalPrice = this.member.generalCardInfo.totalPrice;
+                    this.member.cardInfo.selectTotalPrice = this.member.generalCardInfo.totalPrice;
 
                     //再加上使用权益
                     this.member.payMoney.discountMoney = this.member.generalCardInfo.totalPrice +
@@ -1114,9 +1114,6 @@
             },
             //验证用户密码
             verifyPassword(){
-                if(!this.memberInfo.cardInfo.cardId){
-                    $.alert("请选择会员卡")
-                }
                 this.member.cardInfo.userPassStatus = false;
                 let param = {
                     usePasswd: this.member.cardInfo.userPass,
@@ -1239,7 +1236,7 @@
                     NoPrice: parseFloat(this.member.payMoney.noPrice?this.member.payMoney.noPrice:0),//未付金额
                     RetChange: parseFloat(this.member.payMoney.retChange?this.member.payMoney.retChange:0),//找零
                     ShopId: headVue.shopId,//基础表门店ID
-                    PersonnelId: $.cookie('cid'),//人员（员工）ID
+                    PersonnelId: $.cookie('id'),//人员（员工）ID
                     Flag: '',//备用
                     Status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
                     AuditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
@@ -1403,7 +1400,7 @@
                     };
                     memberChuzhi.orderdetailPrice = {
                         cardId: this.member.cardInfo.cardId, //会员卡ID
-                        clientId: $.cookie('cid'), //客户ID
+                        clientId: $.cookie('id'), //客户ID
                         cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
                         orderStatus: '0', //支付状态（0：支出 1：收入）
                         orderPrice: parseFloat(this.member.cardInfo.inputMoney),//金额（注意正负 支出就是  -0.00）

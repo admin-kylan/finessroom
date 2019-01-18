@@ -4,38 +4,41 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducation">
-        <id column="id" property="id"/>
-        <result column="execute_date_plan" property="executeDatePlan"/>
-        <result column="begin_date_plan" property="beginDatePlan"/>
-        <result column="end_date_plan" property="endDatePlan"/>
-        <result column="shop_id" property="shopId"/>
-        <result column="shop_name" property="shopName"/>
-        <result column="course_id" property="courseId"/>
-        <result column="course_name" property="courseName"/>
-        <result column="type" property="type"/>
-        <result column="coach_id" property="coachId"/>
-        <result column="coach_name" property="coachName"/>
-        <result column="room_id" property="roomId"/>
-        <result column="room_name" property="roomName"/>
-        <result column="reserve_total_num" property="reserveTotalNum"/>
-        <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
-        <result column="status" property="status"/>
-        <result column="assistant_name" property="assistantName"/>
-        <result column="assistant_id" property="assistantId"/>
-        <result column="is_use" property="isUse"/>
-        <result column="sdaduim_id" property="sdaduimId"/>
-        <result column="sdaduim_name" property="sdaduimName"/>
-        <result column="create_user_id" property="createUserId"/>
-        <result column="CustomerCode" property="CustomerCode"/>
-        <result column="create_user_name" property="createUserName"/>
-        <result column="update_user_id" property="updateUserId"/>
-        <result column="update_user_name" property="updateUserName"/>
+        <id column="id" property="id" />
+        <result column="execute_date_plan" property="executeDatePlan" />
+        <result column="begin_date_plan" property="beginDatePlan" />
+        <result column="end_date_plan" property="endDatePlan" />
+        <result column="shop_id" property="shopId" />
+        <result column="shop_name" property="shopName" />
+        <result column="course_id" property="courseId" />
+        <result column="course_name" property="courseName" />
+        <result column="type" property="type" />
+        <result column="coach_id" property="coachId" />
+        <result column="coach_name" property="coachName" />
+        <result column="room_id" property="roomId" />
+        <result column="room_name" property="roomName" />
+        <result column="reserve_total_num" property="reserveTotalNum" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="status" property="status" />
+        <result column="assistant_name" property="assistantName" />
+        <result column="assistant_id" property="assistantId" />
+        <result column="is_use" property="isUse" />
+        <result column="sdaduim_id" property="sdaduimId" />
+        <result column="sdaduim_name" property="sdaduimName" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="update_user_name" property="updateUserName" />
+        <result column="reserve_type" property="reserveType" />
+        <result column="class_sales_num" property="classSalesNum" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, execute_date_plan AS executeDatePlan, begin_date_plan AS beginDatePlan, end_date_plan AS endDatePlan, shop_id AS shopId, shop_name AS shopName, course_id AS courseId, course_name AS courseName, type, coach_id AS coachId, coach_name AS coachName, room_id AS roomId, room_name AS roomName, reserve_total_num AS reserveTotalNum, create_time AS createTime, update_time AS updateTime, status, assistant_name AS assistantName, assistant_id AS assistantId, is_use AS isUse, sdaduim_id AS sdaduimId, sdaduim_name AS sdaduimName, create_user_id AS createUserId, CustomerCode, create_user_name AS createUserName, update_user_id AS updateUserId, update_user_name AS updateUserName, reserve_type as reserveType
+        ,class_sales_num as classSalesNum
     </sql>
     <sql id="Base_Column_List_alias">
         edu.id id, edu.execute_date_plan AS executeDatePlan, edu.begin_date_plan AS beginDatePlan, edu.end_date_plan AS endDatePlan,
@@ -44,7 +47,8 @@
           edu.reserve_total_num AS reserveTotalNum, edu.create_time AS createTime, edu.update_time AS updateTime, edu.status,
            edu.assistant_name AS assistantName, edu.assistant_id AS assistantId, edu.is_use AS isUse, edu.sdaduim_id AS sdaduimId,
            edu.sdaduim_name AS sdaduimName, edu.create_user_id AS createUserId, edu.CustomerCode, edu.create_user_name AS createUserName,
-           edu.update_user_id AS updateUserId, edu.update_user_name AS updateUserName, edu.reserve_type as reserveType
+           edu.update_user_id AS updateUserId, edu.update_user_name AS updateUserName, edu.reserve_type as reserveType,
+           edu.class_sales_num as classSalesNum
     </sql>
 
 
@@ -83,6 +87,7 @@
             AND CustomerCode = #{CustomerCode}
     </select>
 
+    <!-- 获取团教 -->
     <select id="findEducationList" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
             <include refid="Base_Column_List_alias"></include>,
@@ -95,10 +100,16 @@
             ec.is_choose_coach configChooseCoach,
             ec.is_reserve_confirm configReserveConfirm,
             ec.admission_time configAdmissionTime,
-            ec.is_online_reserve configOnlineReserve
+            ec.is_online_reserve configOnlineReserve,
+            ec.is_card_settle configCardSettle,
+            ec.is_course_settle configCourseSettle,
+            gc.image_url courseImage,
+            gc.member_price courseMemberPrice,
+            ec.id configId
         FROM
             fr_education edu
             left join fr_education_config ec on edu.id = ec.education_id
+            left join fr_group_course gc on gc.id = edu.course_id
         WHERE
             edu.shop_id = #{shopId}
         <if test="coachId != null and coachId != ''">
@@ -115,13 +126,55 @@
             AND edu.execute_date_plan <![CDATA[ <= ]]> #{endDate}
         </if>
             AND edu.type = ${eduType}
-        <if test="eduType == '1'">
-            and edu.reserve_type = 2
-        </if>
         ORDER BY
             edu.execute_date_plan ASC
     </select>
 
+    <!-- 获取私教一对多 -->
+    <select id="findEducationOneToManyList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List_alias"></include>,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 0 and eci.is_use = 1) eduCancelCount,
+            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 2 and eci.is_use = 1) eduToConfirmCount,
+            ec.reserve_time configReserveTime,
+            ec.setting_time configSettingTime,
+            ec.is_start_class configStartClass,
+            ec.is_choose_coach configChooseCoach,
+            ec.is_reserve_confirm configReserveConfirm,
+            ec.admission_time configAdmissionTime,
+            ec.is_online_reserve configOnlineReserve,
+            gc.private_image courseImage,
+            gc.member_price courseMemberPrice,
+            ec.id configId
+        FROM
+            fr_education edu
+        left join
+            fr_education_config ec on edu.id = ec.education_id
+        left join
+            fr_private_cource pc on pc.id = edu.course_id
+        WHERE
+            edu.shop_id = #{shopId}
+        <if test="coachId != null and coachId != ''">
+            AND edu.coach_id = #{coachId}
+        </if>
+            AND edu.CustomerCode = #{CustomerCode}
+        <if test="sdaduimId != null and sdaduimId != ''">
+            AND edu.sdaduim_id = #{sdaduimId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND edu.execute_date_plan >= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND edu.execute_date_plan <![CDATA[ <= ]]> #{endDate}
+        </if>
+            AND edu.type = ${eduType}
+            and edu.reserve_type = 2
+        ORDER BY
+            edu.execute_date_plan ASC
+    </select>
+
+    <!-- 获取私教一对一 -->
     <select id="findEducationOneToOneList" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
             <include refid="Base_Column_List_alias"></include>,
@@ -137,11 +190,15 @@
             eci.settle_type infoSettleType,
             eci.deduction_balance infoDeductionBalance,
             eci.reserve_status infoReserveStatus,
-            eci.remarks infoRemarks
+            eci.remarks infoRemarks,
+            gc.private_image courseImage,
+            gc.member_price courseMemberPrice
         FROM
             fr_education edu
         left join
             fr_education_client_info eci on edu.id = eci.education_id
+        left join
+            fr_private_cource pc on pc.id = edu.course_id
         WHERE
             edu.shop_id = #{shopId}
         <if test="coachId != null and coachId != ''">
@@ -228,5 +285,266 @@
             c.is_using = 1
             and c.id = #{clientId}
     </select>
+
+
+    <!-- 根据卡号，手机号，票券，团购号查询卡号 600003081-->
+    <select id="findMemberCardByInput" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            c.id clientId,
+            c.client_name clientName,
+            ( CASE WHEN c.sex = 1 THEN '女' ELSE '男' END ) sex,
+            card.card_no cardNo,
+            (
+            SELECT
+                a.card_type_name
+            FROM
+                fr_card_type a
+            WHERE
+                a.is_using = 1
+                AND a.CustomerCode = #{CustomerCode}
+            AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )) cardTypeName,
+            card.bind_time bindDate,
+            card.invalid_time invalidDate,
+            card.have_rights_num haveRightsNum,
+            (
+            SELECT
+                pi.RelName
+            FROM
+                PersonnelInfo pi
+                LEFT JOIN fr_card_order_info coi ON coi.personnel_id = pi.ID
+            WHERE
+                coi.card_id = card.id
+                AND coi.client_id = c.id
+            ) salesName,
+            (
+            SELECT TOP
+                1 order_amt
+            FROM
+                fr_card_order_datail
+            WHERE
+                card_id = card.id
+                AND client_id = c.id
+                AND type = 1
+                AND is_using = 1
+            ORDER BY
+                create_time DESC
+            ) totalAmt,
+            c.consultant_name consultantName,
+        /* 服务顾问*/
+            card.status status,
+            (
+            SELECT
+                (
+                CASE
+
+                        WHEN a.type = 1 THEN
+                        '时间卡'
+                        WHEN a.type = 2 THEN
+                        '小时卡'
+                        WHEN a.type = 3 THEN
+                        '次卡'
+                        WHEN a.type = 4 THEN
+                        '储值卡'
+                        WHEN a.type = 5 THEN
+                        '充值卡'
+                        WHEN a.type = 6 THEN
+                        '折扣卡'
+                        WHEN a.type = 7 THEN
+                        '员工卡'
+                    END
+                    )
+                FROM
+                    fr_card_type a
+                WHERE
+                    a.is_using = 1
+                    AND a.CustomerCode = #{CustomerCode}
+                AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )) cardType,
+            ( SELECT pic_link FROM fr_client_pic WHERE client_id = c.id AND pic_type = 1 ) clientPic,
+            ( SELECT
+                (
+                CASE WHEN ( SELECT id FROM fr_client_personal cp WHERE cp.client_id = cli.id ) IS NULL THEN
+                ( CASE WHEN ( SELECT id FROM fr_client_latence_personal clp WHERE clp.client_id = cli.id ) IS NULL THEN NULL ELSE '潜在客户' END ) ELSE '现有客户'
+                END
+                ) memberType
+                FROM
+                fr_client cli
+                WHERE
+                cli.is_using = 1
+                and cli.id = c.id
+            ) memberType,
+            c.mobile,
+            card.id cardId,
+            card.card_type_id cardTypeId
+            FROM
+                fr_client c
+                LEFT JOIN fr_card card ON card.client_id = c.id
+               /* LEFT JOIN fr_card_type ct ON ct.id = card.card_type_id*/
+            WHERE
+
+
+            <if test='isSearchMobile == "1"'>
+                c.mobile = #{searchInput}
+            </if>
+            <if test='isSearchMobile == "0"'>
+                card.card_no = #{searchInput}
+            </if>
+
+                AND c.is_using = 1
+            AND c.CustomerCode = #{CustomerCode}
+            AND card.is_using = 1
+            and card.shop_id = #{shopId}
+            and card.status = 0
+        order by card.invalid_time asc
+    </select>
+
+    <!-- 根据卡号，手机号，票券，团购号查询卡号 只能已预约过的可以预约 89e6193e782c68b8-->
+    <select id="findMemberCardReserveByInput" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            eci.member_id clientId,
+            eci.member_name clientName,
+            eci.sex,
+            card.card_no cardNo,
+            (
+            SELECT
+                a.card_type_name
+            FROM
+                fr_card_type a
+            WHERE
+                a.is_using = 1
+                AND a.CustomerCode = #{CustomerCode}
+            AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )) cardTypeName,
+            card.bind_time bindDate,
+            card.invalid_time invalidDate,
+            card.have_rights_num haveRightsNum,
+            (
+            SELECT
+                pi.RelName
+            FROM
+                PersonnelInfo pi
+                LEFT JOIN fr_card_order_info coi ON coi.personnel_id = pi.ID
+            WHERE
+                coi.card_id = card.id
+                AND coi.client_id = eci.member_id
+            ) salesName,
+            (
+            SELECT TOP
+                1 order_amt
+            FROM
+                fr_card_order_datail
+            WHERE
+                card_id = card.id
+                AND client_id = eci.member_id
+                AND type = 1
+                AND is_using = 1
+            ORDER BY
+                create_time DESC
+            ) totalAmt,
+            cl.consultant_name consultantName,
+        /* 服务顾问*/
+            card.status status,
+            (
+            SELECT
+                (
+                CASE
+
+                        WHEN a.type = 1 THEN
+                        '时间卡'
+                        WHEN a.type = 2 THEN
+                        '小时卡'
+                        WHEN a.type = 3 THEN
+                        '次卡'
+                        WHEN a.type = 4 THEN
+                        '储值卡'
+                        WHEN a.type = 5 THEN
+                        '充值卡'
+                        WHEN a.type = 6 THEN
+                        '折扣卡'
+                        WHEN a.type = 7 THEN
+                        '员工卡'
+                    END
+                    )
+                FROM
+                    fr_card_type a
+                WHERE
+                    a.is_using = 1
+                    AND a.CustomerCode = #{CustomerCode}
+                AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )) cardType,
+                ( SELECT pic_link FROM fr_client_pic WHERE client_id = eci.member_id AND pic_type = 1 ) clientPic,
+                ( SELECT(
+                    CASE WHEN ( SELECT id FROM fr_client_personal cp WHERE cp.client_id = cli.id ) IS NULL THEN
+                    ( CASE WHEN ( SELECT id FROM fr_client_latence_personal clp WHERE clp.client_id = cli.id ) IS NULL THEN NULL ELSE '潜在客户' END ) ELSE '现有客户'
+                    END
+                    ) memberType
+                    FROM
+                    fr_client cli
+                    WHERE
+                    cli.is_using = 1
+                    and cli.id = cl.id
+                ) memberType,
+            cl.mobile,
+            card.id cardId,
+            card.card_type_id cardTypeId
+            FROM
+                fr_education_client_info eci
+                LEFT JOIN fr_card card ON card.client_id = eci.member_id
+                LEFT JOIN fr_client cl ON cl.id = eci.member_id
+                LEFT JOIN fr_education ed ON eci.education_id = ed.id
+            WHERE
+
+                <if test='isSearchMobile == "1"'>
+                    eci.mobile = #{searchInput}
+                </if>
+                <if test='isSearchMobile == "0"'>
+                    card.card_no = #{searchInput}
+                </if>
+
+                AND eci.is_use = 1
+                AND eci.reserve_status = 1
+                AND ed.CustomerCode = #{CustomerCode}
+            AND card.is_using = 1
+            AND ed.shop_id = #{shopId}
+            and card.status = 0
+        order by card.invalid_time asc
+    </select>
+
+    <!-- 查询训练计划 -->
+    <select id="findCourseTrainingPlan" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            a.image,
+            ase.name seriesName,
+            a.name actionName,
+            a.diff actionDiff,
+            tc.strength traningStrength,
+            tc.time traningTime,
+            tc.count traningCount,
+            tc.remark traningremark
+        FROM
+            fr_action a
+            LEFT JOIN fr_traning_class tc ON a.id = tc.action_id
+            LEFT JOIN fr_group_cource_relation gcr ON gcr.training_series_id = tc.traning_series_id
+            LEFT JOIN fr_group_course gc ON gc.id = gcr.private_cource_id
+            LEFT JOIN fr_action_series ase ON a.series_id = ase.id
+        WHERE
+            gc.id = #{courseId}
+
+    </select>
+
+    <!-- 查询训练计划 -->
+    <select id="findCardOrderDetailFirst" parameterType="java.lang.String" resultType="java.util.Map">
+     SELECT TOP
+            1 order_amt orderAmt,
+            client_id clientId
+        FROM
+            fr_card_order_datail
+        WHERE
+            card_id = #{cardId}
+            AND type = 1
+            AND is_using = 1
+        ORDER BY
+            create_time DESC
+    </select>
+
+
+
 
 </mapper>

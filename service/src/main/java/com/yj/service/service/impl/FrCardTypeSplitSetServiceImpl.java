@@ -16,9 +16,8 @@ import com.yj.service.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * <p>
@@ -39,20 +38,18 @@ public class FrCardTypeSplitSetServiceImpl extends BaseServiceImpl<FrCardTypeSpl
 
 
     @Override
-    public JsonResult insert(Map<String, Object> map) throws YJException{
-        FrCardTypeSplitSet frCardTypeSplitSet = new FrCardTypeSplitSet();
+    public JsonResult insert(Map<String, Object> map,FrCardTypeSplitSet frCardTypeSplitSet) throws YJException{
         frCardTypeSplitSet.setId(UUIDUtils.generateGUID());
         frCardTypeSplitSet.setCreateTime(new Date());
         frCardTypeSplitSet.setUpdateTime(new Date());
         frCardTypeSplitSet.setUsing(true);
         frCardTypeSplitSet.setCardTypeId((String) map.get("cardTypeId"));
         frCardTypeSplitSet.setFirstPrice(Double.parseDouble(map.get("firstPrice").toString()));
-        frCardTypeSplitSet.setSplitNum(Integer.parseInt(map.get("splitNum ").toString()));
-        frCardTypeSplitSet.setSplitType(Integer.parseInt(map.get("splitType ").toString()));
-        frCardTypeSplitSet.setSplitContent((String) map.get("splitContent "));
+        frCardTypeSplitSet.setSplitNum(Integer.parseInt(String.valueOf(map.get("splitNum"))));
+        frCardTypeSplitSet.setSplitType(Integer.parseInt(map.get("splitType").toString()));
+        frCardTypeSplitSet.setSplitContent((String) map.get("splitContent"));
         frCardTypeSplitSet.setSplitPrice(Double.parseDouble(map.get("splitPrice").toString()));
-        frCardTypeSplitSet.setTotalPrice(Double.parseDouble(map.get("totalPrice ").toString()));
-
+        frCardTypeSplitSet.setTotalPrice(Double.parseDouble(map.get("totalPrice").toString()));
         FrCardTypeSplitSetDd frCardTypeSplitSetDd = new FrCardTypeSplitSetDd();
         List<Map<String,String>> list = (List<Map<String,String>>)map.get("splitSetDd");
         if(list.size() > 0){
@@ -60,8 +57,9 @@ public class FrCardTypeSplitSetServiceImpl extends BaseServiceImpl<FrCardTypeSpl
                 frCardTypeSplitSetDd.setId(UUIDUtils.generateGUID());
                 frCardTypeSplitSetDd.setSplitSetId(frCardTypeSplitSet.getId());
                 frCardTypeSplitSetDd.setSplitNum(Double.parseDouble(splitSetDd.get("splitNum").toString()));
-                frCardTypeSplitSetDd.setSplitDate(Integer.parseInt(splitSetDd.get("splitDate ").toString()));
-                frCardTypeSplitSetDd.setSplitOrder(Integer.parseInt(splitSetDd.get("splitOrder ").toString()));
+                frCardTypeSplitSetDd.setSplitDate(Integer.parseInt(splitSetDd.get("splitDate").toString()));
+                frCardTypeSplitSetDd.setSplitOrder(Integer.parseInt(splitSetDd.get("splitOrder").toString()));
+                System.out.print(frCardTypeSplitSetDd);
                 frCardTypeSplitSetDdMapper.insert(frCardTypeSplitSetDd);
             }
         }
@@ -70,27 +68,35 @@ public class FrCardTypeSplitSetServiceImpl extends BaseServiceImpl<FrCardTypeSpl
     }
 
     @Override
-    public JsonResult update(FrCardTypeSplitSet frCardTypeSplitSet)throws YJException {
-        boolean flag = updateById(frCardTypeSplitSet);
-        if(flag){
-            return  JsonResult.successMessage("修改成功");
+    public JsonResult update(HttpServletRequest request, Map<String, Object> map)throws YJException {
+        String id = (String) map.get("id");
+        this.delete(id);
+        FrCardTypeSplitSet frCardTypeSplitSet = new FrCardTypeSplitSet();
+        //从cookie里获取
+        String code = CookieUtils.getCookieValue(request,"code",true);
+        if(StringUtils.isEmpty(code)){
+            throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
         }
-        return JsonResult.fail();
+        frCardTypeSplitSet.setCustomerCode(code);
+        //设置创建者信息
+        String userId = CookieUtils.getCookieValue(request, "id", true);
+        String userName = CookieUtils.getCookieValue(request,"name",true);
+        frCardTypeSplitSet.setCreateUserId(userId);
+        frCardTypeSplitSet.setUpdateUserId(userId);
+        frCardTypeSplitSet.setCreateUserName(userName);
+        frCardTypeSplitSet.setUpdateUserName(userName);
+        this.insert(map,frCardTypeSplitSet);
+        return  JsonResult.successMessage("修改成功");
     }
-
 
     @Override
     public JsonResult delete(String id) throws YJException {
-
-//        if (id != null && id != "") {
-//            FrCardTypeSplitSet frCardTypeSplitSet = selectOne(
-//                    new EntityWrapper<FrCardTypeSplitSet>().where("is_using=1 and id={0}", id)
-//            );
-//            boolean flag = false;
-//            if (frCardTypeSplitSet != null) {
-//                frCardTypeSplitSet.setUsing(false);
-//                flag = updateById(frCardTypeSplitSet);
-//            }
+        if(id == null){
+            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+        }
+        FrCardTypeSplitSetDd frCardTypeSplitSetDd = new FrCardTypeSplitSetDd();
+        frCardTypeSplitSetDd.setSplitSetId(id);
+        frCardTypeSplitSetDdMapper.delete((new EntityWrapper<FrCardTypeSplitSetDd>().where("split_set_id ={0}",frCardTypeSplitSetDd.getSplitSetId())));
         boolean flag =  deleteById(id);
         if (flag) {
             return JsonResult.successMessage("删除成功");
@@ -99,10 +105,16 @@ public class FrCardTypeSplitSetServiceImpl extends BaseServiceImpl<FrCardTypeSpl
     }
 
     @Override
-    public FrCardTypeSplitSet get(String id) throws YJException {
+    public JsonResult get(String id) throws YJException {
         FrCardTypeSplitSet frCardTypeSplitSet = selectOne(
-                new EntityWrapper<FrCardTypeSplitSet>().where("is_using=1 and id={0}",id));
-        return frCardTypeSplitSet;
+                new EntityWrapper<FrCardTypeSplitSet>().where("id={0}",id));
+        List<Map<String,Object>> splitSetDd  =  frCardTypeSplitSetDdMapper.selectMaps((new EntityWrapper<FrCardTypeSplitSetDd>().where("split_set_id ={0}",id)));
+        Map<String,Object> map = new HashMap<>();
+        map.put("splitSetDd",splitSetDd);
+        List list = new ArrayList();
+        list.add(frCardTypeSplitSet);
+        list.add(map);
+        return JsonResult.success(list);
     }
 
     @Override

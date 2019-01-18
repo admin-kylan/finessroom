@@ -20,6 +20,9 @@ body {
     background: #0cc;
 }
 
+#customerMembershipCard .tableWrap .table-striped>tbody>tr:nth-of-type(odd){background: #f9f9f9;}
+#customerMembershipCard .tableWrap .table-striped>tbody>tr:nth-of-type(even){background: #ecffff;}
+
 #customerMembershipCard .tableWrap table thead tr td {
     color: #000;
     border-bottom: none;
@@ -34,7 +37,15 @@ body {
 #customerMembershipCard .tableWrap table td.tored {
     color: #FF0000;
 }
-
+.c-09f{color: #09f!important;}
+.c-3cf{color: #3cf!important;}
+.c-666{color: #666!important;}
+.c-090{color: #090!important;}
+.c-999{color: #999!important;}
+.c-f00{color: #f00!important;}
+.c-000{color: #000!important;}
+.c-ccc{color: #ccc!important;}
+.c-ccc{color: #ccc!important;}
 #customerMembershipCard .tableWrap table td.togreen {
     color: #00cc00;
 }
@@ -48,15 +59,16 @@ body {
 }
 
 #customerMembershipCard .tableWrap table td.toceng {
-    color: #f90;
+    color: #ff3300
 }
+#customerMembershipCard .tableWrap table td span{color: inherit;}
 
 #customerMembershipCard .tableWrap table td.toshallow {
     color: #00ccff;
 }
 
 #customerMembershipCard .tableWrap table td.toblue {
-    color: rgba(0, 153, 255, 1);
+    color: #00f
 }
 
 #customerMembershipCard .tableWrap table a.toblue {
@@ -95,6 +107,8 @@ body {
     line-height: 25px;
     cursor: pointer;
 }
+
+
 
 #customerMembershipCard .tableWrap .page ul li:nth-child(3),
 .content .tab .page ul li:last-child {
@@ -541,6 +555,7 @@ body {
 #NewPurchase .NewPurchase_box>div .NewPurchase_box_right input {
     float: left;
     height: 30px;
+    padding: 0 10px;
     background-color: #fff;    border-width: 1px;
 }
 

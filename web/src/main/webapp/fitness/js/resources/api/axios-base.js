@@ -112,9 +112,9 @@ function jqueryPostParams(url, params, success, error) {
         data: p,
         success: (response) => {
             if (success) {
-                let code = response.data.code;
+                let code = response.code;
                 if(code === "200"){
-                    success(response.data.data);
+                    success(response.data);
                 }else{
                     if (error) {
                         error(response.data);
@@ -153,9 +153,9 @@ function ajaxPostJsonParams(url, params, success, error) {
         contentType: "application/json;charset=utf-8",
         success: (response) => {
             if (success) {
-                let code = response.data.code;
+                let code = response.code;
                 if(code === "200"){
-                    success(response.data.data);
+                    success(response.data);
                 }else{
                     if (error) {
                         error(response.data);

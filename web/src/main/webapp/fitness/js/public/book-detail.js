@@ -20,12 +20,15 @@ Vue.component('edu-book-detail-children', {//模版挂载的标签名
         }
     },
     filters: {
-        toDateHHmm(val) {
+        toDateHHmm(val){
             let date = new Date(val);
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            let result = hours < 10 ? ("0" + hours) : hours + ":" + minutes < 10 ? ("0" + minutes) : minutes;
-            return result;
+            let h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            let m = date.getMinutes();
+            m = m < 10 ? ('0' + m) : m;
+            let _time = "";
+            _time += ' '+h + ':' + m;
+            return _time;
         },
         toDateyyyyMMddHHmm(val) {
             return timeFormatDate(val, true)
@@ -56,7 +59,9 @@ Vue.component('edu-book-detail-children', {//模版挂载的标签名
     },
     created() {
         //监听事件
+       // Event.$off(EDU_CONSTANT.listenerEduItem)
         Event.$on(EDU_CONSTANT.listenerEduItem, (eduId, eduItem)=>{
+
             this.eduId = eduId;
             this.eduItem = eduItem;
             this.loadClientInfo();
@@ -66,6 +71,11 @@ Vue.component('edu-book-detail-children', {//模版挂载的标签名
 
     },
     methods: {
+        startClass(){
+            if(this.eduItem.status == 0){
+                startClass();
+            }
+        },
         loadClientInfo() {
             //设置100毫秒后执行查询
             // setTimeout((eduId)=>{
@@ -134,6 +144,7 @@ Vue.component('edu-book-detail-children', {//模版挂载的标签名
         },
         //确定 //取消
         changeStatus(id, status, index) {
+
             let param = {
                 clientInfoId: id,
                 status: 0
@@ -150,10 +161,15 @@ Vue.component('edu-book-detail-children', {//模版挂载的标签名
                     Event.$emit(EDU_CONSTANT.listenerEduItem, this.eduId, this.eduItem)//刷新详情页
                 }
 
+            },(res)=>{
+               $.alert(res.msg)
             })
         },
         //添加预约，添加预约限制
         addReserve(){
+            if(this.eduItem.status != 0){
+                return false;
+            }
             let eduId = this.eduId, eduItem = this.eduItem;
             //判断当前预约是否可以在pc端预约
             if(eduItem.configOnlineReserve == true){

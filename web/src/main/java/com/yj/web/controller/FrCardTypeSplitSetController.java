@@ -1,6 +1,7 @@
 package com.yj.web.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
@@ -58,6 +59,8 @@ public class FrCardTypeSplitSetController {
      */
     @PostMapping("/insert")
     public JsonResult insert(HttpServletRequest request,@RequestBody Map<String, Object> map)throws YJException{
+//        JSONObject jsonObject = JSONObject.parseObject(params);
+//        Map<String,Object> map = (Map) jsonObject;
         FrCardTypeSplitSet frCardTypeSplitSet = new FrCardTypeSplitSet();
         //从cookie里获取
         String code = CookieUtils.getCookieValue(request,"code",true);
@@ -72,7 +75,7 @@ public class FrCardTypeSplitSetController {
         frCardTypeSplitSet.setUpdateUserId(userId);
         frCardTypeSplitSet.setCreateUserName(userName);
         frCardTypeSplitSet.setUpdateUserName(userName);
-        return service.insert(map);
+        return service.insert(map,frCardTypeSplitSet);
     }
 
     /**
@@ -80,23 +83,24 @@ public class FrCardTypeSplitSetController {
      * @return
      */
     @GetMapping("/get")
-    public FrCardTypeSplitSet get(String id)throws YJException{
+    public JsonResult get(String id)throws YJException{
         return service.get(id);
     }
 
     /**
      * 根据id更新修改分期信息
-     * @param frCardTypeSplitSet
+     * @param request
+     * @param map
      * @return
      * @throws YJException
      */
     @PostMapping("/update")
-    public JsonResult update(@RequestBody FrCardTypeSplitSet frCardTypeSplitSet) throws YJException{
-        return service.update(frCardTypeSplitSet);
+    public JsonResult update(HttpServletRequest request,@RequestBody Map<String, Object> map) throws YJException{
+        return service.update(request,map);
     }
 
     /**
-     * 根据id删除分期信息（修改启用状态）
+     * 根据id删除分期信息
      * @param id
      * @return
      * @throws YJException

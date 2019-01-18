@@ -6,7 +6,6 @@
     <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationMemberOrder">
         <id column="id" property="id" />
         <result column="client_info_id" property="clientInfoId" />
-        <result column="class_num" property="classNum" />
         <result column="begin_date_real" property="beginDateReal" />
         <result column="end_date_real" property="endDateReal" />
         <result column="use_user_name" property="useUserName" />
@@ -28,11 +27,67 @@
         <result column="program_better" property="programBetter" />
         <result column="member_card_id" property="memberCardId" />
         <result column="member_card_no" property="memberCardNo" />
+        <result column="education_id" property="educationId" />
+        <result column="status" property="status" />
+        <result column="invalid_date" property="invalidDate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        client_info_id AS clientInfoId, class_num AS classNum, begin_date_real AS beginDateReal, end_date_real AS endDateReal, use_user_name AS useUserName, total_time AS totalTime, create_date AS createDate, price, card_type AS cardType, card_name AS cardName, use_benefit AS useBenefit, remain_benefit AS remainBenefit, create_name AS createName, sale_user_name AS saleUserName, score, description, bill_number AS billNumber, is_use AS isUse, member_assess AS memberAssess, coach_summary AS coachSummary, program_better AS programBetter, member_card_id AS memberCardId, member_card_no AS memberCardNo, id
+        client_info_id AS clientInfoId, begin_date_real AS beginDateReal,
+        end_date_real AS endDateReal, use_user_name AS useUserName, total_time AS totalTime,
+         create_date AS createDate, price, card_type AS cardType, card_name AS cardName, use_benefit AS useBenefit,
+         remain_benefit AS remainBenefit, create_name AS createName, sale_user_name AS saleUserName, score,
+         description, bill_number AS billNumber, is_use AS isUse, member_assess AS memberAssess, coach_summary AS coachSummary,
+          program_better AS programBetter, member_card_id AS memberCardId, member_card_no AS memberCardNo, id,
+          education_id as educationId, status
     </sql>
+    <sql id="Base_Column_List_emo">
+        emo.client_info_id AS clientInfoId, emo.begin_date_real AS beginDateReal,
+        emo.end_date_real AS endDateReal, emo.use_user_name AS useUserName, emo.total_time AS totalTime,
+         emo.create_date AS createDate, emo.price, emo.card_type AS cardType, emo.card_name AS cardName, emo.use_benefit AS useBenefit,
+         emo.remain_benefit AS remainBenefit, emo.create_name AS createName, emo.sale_user_name AS saleUserName, emo.score,
+         emo.description, emo.bill_number AS billNumber, emo.is_use AS isUse, emo.member_assess AS memberAssess, emo.coach_summary AS coachSummary,
+          emo.program_better AS programBetter, emo.member_card_id AS memberCardId, emo.member_card_no AS memberCardNo, emo.id,
+          emo.education_id as educationId, emo.status, invalid_date as invalidDate
+    </sql>
+
+
+    <select id="findMemberOrderList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List_emo"></include>,
+        e.class_sales_num eduClassSalesNum,
+        eci.member_name infoMemberName,
+        eci.sex infoMemberSex,
+        eci.seat_name infoSeatName
+        FROM
+            fr_education_member_order emo
+            LEFT JOIN fr_education e ON emo.education_id = e.id
+            left join fr_education_client_info eci on emo.client_info_id = eci.id
+        WHERE
+            /*e.status = 0*/
+            emo.is_use = 1
+          /*  AND emo.status = 1*/
+            AND emo.education_id = #{eduId}
+        <if test="searchInput != null and searchInput != ''">
+            AND ( emo.member_card_no like '%'+#{searchInput}+'%' OR eci.member_name like '%'+#{searchInput}+'%' )
+        </if>
+        order by emo.create_date desc
+
+    </select>
+
+    <!-- 查看当前 -->
+    <select id="findMemberOrderNormal" parameterType="java.lang.String" resultMap="BaseResultMap">
+       SELECT
+            emo.*
+        FROM
+            fr_education_member_order emo
+        WHERE
+            emo.education_id = #{eduId}
+            AND emo.client_info_id = #{clientInfoId}
+            AND emo.status != 0
+
+    </select>
+
 
 </mapper>

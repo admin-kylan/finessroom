@@ -63,7 +63,7 @@
                     <div>
                         <button class="btn btn-red add-project" @click="add">新增项目</button>
                     </div>
-                    <table class="table table-bordered table-style">
+                    <table class="table table-bordered table-striped table-style">
                         <thead>
                         <tr>
                             <td>可用门店</td>
@@ -83,8 +83,8 @@
                             <td v-if="item.shopName!=null &&  item.shopName!=''">{{item.shopName}}</td>
                             <td v-if="item.shopName==null || item.shopName==''">连锁店通用</td>
                             <td>{{item.venueName}}</td>
-                            <td>{{item.projectName}}</td>
-                            <td>{{item.company}}</td>
+                            <td><span class="c-0000ff">{{item.projectName}}</span></td>
+                            <td><span class="c-ff0000">{{item.company}}</span></td>
                             <td>{{item.marketPrice}}</td>
                             <td>{{item.promotionPrice}}</td>
                             <td><span class="c-ff0000">{{item.memberPrice}}</span></td>
@@ -109,16 +109,16 @@
                                 <fieldset class="fieldset-info">
                                     <legend class="c-999">项目设置</legend>
                                     <div class="fieldset-content">
-                                        <div class="flex-box">
+                                        <div class="flex-box" v-if="tempInfo.shopName!=''">
                                             <div class="w80 text-right">
                                                 使用门店：
                                             </div>
-                                            <div class="flex-box-item" v-if="tempInfo.shopName!=''">
-                                                {{tempInfo.shopName}}
+                                            <div class="flex-box-item text-left" v-if="tempInfo.shopName!=''">
+                                                {{tempInfo.shopName==null?'连锁店通用':tempInfo.shopName}}
                                             </div>
-                                            <div class="flex-box-item" v-if="tempInfo.shopName==''">
-                                                连锁店通用
-                                            </div>
+                                            <!--<div class="flex-box-item text-left"  v-if="tempInfo.shopName==''||tempInfo.shopName==null">-->
+                                              <!--连锁店通用-->
+                                            <!--</div>-->
                                         </div>
                                         <div class="flex-box">
                                             <div class="w80 text-right">
@@ -477,9 +477,6 @@
                     } else if (that.params.deposit == null || that.params.deposit == '') {
                         alert("押金不能为空")
                         return;
-                    } else if (that.params.remarks == null || that.params.remarks == '' || patt1.test(that.params.remarks)) {
-                        alert("备注不能为空")
-                        return;
                     }
                     that.params.isCurrency = that.isAuth;
                     $("input[class='shopCheck']:checked").each(function (i, n) {
@@ -534,9 +531,6 @@
                         return;
                     } else if (that.tempInfo.deposit == null || that.tempInfo.deposit == '') {
                         alert("押金不能为空")
-                        return;
-                    } else if (that.tempInfo.remarks == null || that.tempInfo.remarks == '' || patt1.test(that.tempInfo.remarks)) {
-                        alert("备注不能为空")
                         return;
                     }
                     var url = $.stringFormat('{0}/frSetGym/updateProject', $.cookie('url'));

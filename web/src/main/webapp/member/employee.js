@@ -52,7 +52,30 @@ var right = new Vue({
             isUsing: 1,
             setting: false,
             changeTransferFee: 0,
+
         },
+//      分期付款
+        fQList:[],
+        splitSetDd:[],//分期详情 Map
+        oldsplitSetDd:[],
+        splitNum:2,//分期数
+        firstPrice:500,//首付金额
+        splitType:0,//分期类型（1、比例；2、金额）
+        splitContent:'',//分期付款内容
+        splitPrice:0,//分期总额
+//      单个修改
+        oneSplitSetDd:[],//分期详情 Map
+		onesplitSetDd:[],
+        oldonesplitSetDd:[],
+        onesplitNum:2,//分期数onesplitNum
+        onefirstPrice:500,//首付金额
+        onesplitType:0,//分期类型（1、比例；2、金额）
+        onesplitContent:'',//分期付款内容
+        onesplitPrice:0,//分期总额
+        enOrder:['一','二','三','四','五','六'],
+        fqxqData:[],//分期详情
+        oneSplit:{},
+        lastpt:0,//最后平摊的钱或者比例
         //会员卡类型-门店-场馆-项目关系表（消费门店会员卡权益设置）
         shopCardConsume: {
             list: [],
@@ -72,7 +95,6 @@ var right = new Vue({
         //shopSdaduimIId: [], //提交到后台的 门店和场馆id
         sdaduimLists: [],
         cardConsumeSetDTO: [], //设置  fr_shop_ctype_consume_p....
-
         // 测试获取项目  时间设置
         setTimeList: {
             list: [],
@@ -98,7 +120,439 @@ var right = new Vue({
         this.cardExplain();
         $('.special').hide();
     },
+    watch:{
+    	splitNum:function(val){
+    		if(val>6){
+    			val=6
+    			this.splitNum=val
+    			$.alert("最多只能分6期");
+    		}
+    		this.initSplitSetDd();
+    	},
+        onesplitNum:function(val){
+            if(val>6){
+                val=6
+                this.onesplitNum=val
+                $.alert("最多只能分6期");
+            }
+            this.initOneSplitSetDd();
+        },
+    	splitType:function(){
+    		this.initSplitSetDd();
+    	},
+    	onesplitType:function(){
+    		this.initOneSplitSetDd();
+    	},
+    	oneSplitSetDd:{
+    		handler(newName, oldName){
+    			var _len=this.oneSplit.splitNum;
+    			var oldsplitSetDd=this.oldonesplitSetDd;
+    			if(oldsplitSetDd.length!=_len){
+    				this.oldsplitSetDd=JSON.parse(JSON.stringify(newName));
+    				return ;
+    			}
+    			var _type=0;//检测变化项 2 钱变了  1时间变了
+    			var _index=0;
+    			for(var i=0;i<_len;i++){
+    				var item = newName[i]
+    				var item1 = oldsplitSetDd[i]
+//  				if(item.splitDate!=item1.splitDate){
+//  					_index=i;
+//  					_type=1;
+//  					break;
+//  				}
+    				if(item.splitNum!=item1.splitNum){
+    					_index=i;
+    					_type=2;
+    					break;
+    				}
+    			}
+    			if(_type) this.changeOneSplitSetDd(_index);
+    			else this.oldonesplitSetDd=JSON.parse(JSON.stringify(newName));
+		      //要干的事情
+		    },
+		    deep: true
+    	},
+    	splitSetDd:{
+    		handler(newName, oldName){
+    			var _len=this.splitNum;
+    			var oldsplitSetDd=this.oldsplitSetDd;
+    			if(oldsplitSetDd.length!=_len){
+    				this.oldsplitSetDd=JSON.parse(JSON.stringify(newName));
+    				return ;
+    			}
+    			var _type=0;//检测变化项 2 钱变了  1时间变了
+    			var _index=0;
+    			for(var i=0;i<_len;i++){
+    				var item = newName[i]
+    				var item1 = oldsplitSetDd[i]
+//  				if(item.splitDate!=item1.splitDate){
+//  					_index=i;
+//  					_type=1;
+//  					break;
+//  				}
+    				if(item.splitNum!=item1.splitNum){
+    					_index=i;
+    					_type=2;
+    					break;
+    				}
+    			}
+    			if(_type) this.changeSplitSetDd(_index);
+    			else this.oldsplitSetDd=JSON.parse(JSON.stringify(newName));
+		      //要干的事情
+		    },
+		    deep: true
+    	},
+    	onefirstPrice:function(){
+    		this.initOneSplitSetDd();
+    	},
+    	firstPrice:function(){
+    		this.initSplitSetDd();
+    	}
+    },
     methods: {
+        //设置小弹窗
+        setting_a:function(id) {
+    console.log(id);
+    $('.maskLayerAlert_box_alert').show();
+    var data={
+        splitSetId: id
+    }
+    var url = $.stringFormat("{0}/frCardTypeSplitSetDd/getBySplitSetId", $.cookie('url'));
+    $.ajax({
+        type: "get",
+        url: url,
+        data: data,
+        success: function (res) {
+            if(res.code==200){
+                right.fqxqData=res.data;
+            }
+        }
+    });
+//		fqxqData
+},
+    	initOneSplitSetDd:function(){
+    		var val=this.onesplitNum
+    		this.oneSplitSetDd.length=0;
+			var salesPrice=this.oneSplit.totalPrice;
+			var splitPrice=salesPrice - this.onefirstPrice;
+			this.onesplitPrice=splitPrice;
+			if(this.onesplitType==1){
+				splitPrice=100;
+			}
+			var splitNum=(splitPrice/val).toFixed(2);
+			var lastSplitNum=(splitPrice-splitNum*(val-1)).toFixed(2);//最后一个钱可能分不清楚
+			for(var i=1;i<=val;i++){
+				if(i==val){
+					splitNum = lastSplitNum
+				}
+				this.oneSplitSetDd.push({
+					splitNum:splitNum,//该分期需付（金额/比例）
+					splitDate:30,//分期天数
+					splitOrder:i,//第几期
+				})
+			}
+    	},
+    	initSplitSetDd:function(){
+    		var val=this.splitNum
+    		this.splitSetDd.length=0;
+			var salesPrice=this.cardTypeSet.salesPrice||2000;
+			var splitPrice=salesPrice - this.firstPrice;
+			this.splitPrice=splitPrice;
+			if(this.splitType==1){
+				splitPrice=100;
+			}
+			var splitNum=(splitPrice/val).toFixed(2);
+			var lastSplitNum=(splitPrice-splitNum*(val-1)).toFixed(2);//最后一个钱可能分不清楚
+			for(var i=1;i<=val;i++){
+				if(i==val){
+					splitNum = lastSplitNum
+				}
+				this.splitSetDd.push({
+					splitNum:splitNum,//该分期需付（金额/比例）
+					splitDate:30,//分期天数
+					splitOrder:i,//第几期
+				})
+			}
+    	},
+		getFqList:function(){
+    		var vm=this;
+            var data={
+                cardTypeId:vm.cardTypeSet.id,
+                code:vm.cardTypeSet.customerCode
+            }
+            var url = $.stringFormat("{0}/frCardTypeSplitSet/list", $.cookie('url'));
+            $.ajax({
+                type: "get",
+                url: url,
+                data: data,
+                success: function (res) {
+                    if(res.code==200){
+                        vm.fQList=res.data
+                    }
+                }
+            });
+		},
+    	modify:function(id){
+    		var vm=this;
+    		$('.maskLayerAlert_box_alert_big').show();
+    		var data={
+				id:id || 1
+			}
+			var url = $.stringFormat("{0}/frCardTypeSplitSet/get", $.cookie('url'));
+	        $.ajax({
+	            type: "get",
+	            url: url,
+	            data: data,
+	            success: function (res) {
+	            	if(res.code==200){        		
+	            		vm.oneSplit=res.data[0];
+	            		vm.onesplitNum=res.data[0].splitNum
+				        vm.onefirstPrice=res.data[0].firstPrice
+				        vm.onesplitType=res.data[0].splitType
+				        vm.onesplitContent=res.data[0].splitContent
+				        vm.onesplitPrice=res.data[0].splitPrice
+	            		vm.oneSplitSetDd=res.data[1].splitSetDd;
+	            		console.log(vm.oneSplitSetDd)
+	            	}
+	            }
+	        });
+    	},
+    	deleteSplit:function(id,idx){
+    		var vm=this;
+    		var r=confirm("你确定要删除这条分期记录？")
+		  	if (r==true)
+		    {
+		    	var data={
+		    		id:id
+		    	}
+		    	var url = $.stringFormat("{0}/frCardTypeSplitSet/delete", $.cookie('url'));
+		        $.ajax({
+		            type: "get",
+		            url: url,
+		            data: data,
+		            success: function (res) {
+		            	if(res.code==200){
+		            		vm.fQList.splice(idx,1);
+						}
+		            	alert(res.msg)
+		            }
+		        });
+		    }
+    	},
+    	changeOneSplitSetDd:function(){
+    		var splitPrice = this.splitPrice;//分期的钱
+    		var splitSetDd = this.oneSplitSetDd;
+    		if(splitSetDd[idx].splitNum.indexOf('.')!==-1 && (!splitSetDd[idx].splitNum.split('.')[1] || splitSetDd[idx].splitNum.split('.')[1]==0)) return ;//说明用户删除到点  先跳过
+    		var qs=this.splitNum;//总期数
+    		var ptsj=30;//理论上还钱周期30天
+    		var zts=qs*ptsj;
+    		var ptdq=this.lastpt;//理论上平摊的钱
+    		var _type=this.splitType;//钱还是比例
+    		var str='还款金额大于分期金额';
+    		var chazhiBZ=1;//差值标准
+			if(_type==1){
+				splitPrice=100;
+				str='最多只能100%'
+				chazhiBZ=0.05;
+			}
+    		if(ptdq==0 || ptdq==Infinity){
+    			ptdq=(splitPrice/qs).toFixed(2);
+    		}
+			var gbqs=0;//已经改变的期数
+			var sdxgqs=0;//手动修改的钱数总和
+			var types=[];//改变的下标值
+			for(var i=0;i<qs;i++){//找出被修改的值
+				var item = splitSetDd[i];
+				var chazhi = Math.abs(item.splitNum*1-ptdq);
+				if(chazhi>chazhiBZ){
+					types.push(i);
+					gbqs++
+					sdxgqs += (item.splitNum*1);
+				}
+			}
+			if(gbqs==0){
+				types.push(idx)
+				gbqs++
+				sdxgqs += (splitSetDd[idx].splitNum*1);
+			}
+			if(splitPrice<sdxgqs){//数据还原
+				$.extend(this.splitSetDd,this.oldsplitSetDd);
+				$.alert(str);
+				return ;
+			}
+			var pjje=((splitPrice-sdxgqs)/(qs-gbqs)).toFixed(2)//剩余平均天数
+			this.lastpt=pjje;//最后被平摊的钱
+			var ggsl=qs-gbqs;//更改数量  为了找出最后一个
+			var lastje=(splitPrice-(sdxgqs + pjje*(qs-gbqs-1))).toFixed(2);//最后一次的天数  因为使用了向下取整
+			for(var i=0;i<qs;i++){
+				var item = splitSetDd[i];
+				if(types.indexOf(i)===-1){
+					ggsl--
+					if(ggsl==0){//说明是最后一个
+						item.splitNum=lastje;
+					}else{
+						item.splitNum=pjje;
+					}
+				}
+			}
+			this.splitSetDd=splitSetDd;
+			this.oldsplitSetDd=JSON.parse(JSON.stringify(splitSetDd));
+    	},
+    	changeSplitSetDd:function(idx){
+    		var splitPrice = this.splitPrice;//分期的钱
+    		var splitSetDd = this.splitSetDd;
+    		if(splitSetDd[idx].splitNum.indexOf('.')!==-1 && (!splitSetDd[idx].splitNum.split('.')[1] || splitSetDd[idx].splitNum.split('.')[1]==0)) return ;//说明用户删除到点  先跳过
+    		var qs=this.splitNum;//总期数
+    		var ptsj=30;//理论上还钱周期30天
+    		var zts=qs*ptsj;
+    		var ptdq=this.lastpt;//理论上平摊的钱
+    		var _type=this.splitType;//钱还是比例
+    		var str='还款金额大于分期金额';
+    		var chazhiBZ=1;//差值标准
+			if(_type==1){
+				splitPrice=100;
+				str='最多只能100%'
+				chazhiBZ=0.05;
+//				var gbqs=0;//已经改变的期数
+//				var sdxgqs=0;//手动修改期数
+//				var types=[];//改变的下标值
+//				for(var i=0;i<qs;i++){//找出被修改的值
+//					var item = splitSetDd[i];
+//					var chazhi = Math.abs(item.splitNum*1-ptdq);
+//					if(chazhi>1){
+//						types.push(i);
+//						gbqs++
+//						sdxgqs += (item.splitNum*1);
+//					}
+//				}
+//				if(splitPrice<sdxgqs){//数据还原
+//					$.extend(this.splitSetDd,this.oldsplitSetDd);
+//					$.alert("还款金额大于分期金额");
+//					return ;
+//				}
+//				var pjje=((splitPrice-sdxgqs)/(qs-gbqs)).toFixed(2)//剩余平均天数
+//				this.lastpt=pjje;//最后被平摊的钱
+//				var ggsl=qs-gbqs;//更改数量  为了找出最后一个
+//				var lastje=(splitPrice-(sdxgqs + pjje*(qs-gbqs-1))).toFixed(2);//最后一次的天数  因为使用了向下取整
+//				for(var i=0;i<qs;i++){
+//					var item = splitSetDd[i];
+//					if(types.indexOf(i)===-1){
+//						ggsl--
+//						if(ggsl==0){//说明是最后一个
+//							item.splitNum=lastje;
+//						}else{
+//							item.splitNum=pjje;
+//						}
+//					}
+//				}
+//				this.splitSetDd=splitSetDd;
+//				this.oldsplitSetDd=JSON.parse(JSON.stringify(splitSetDd));
+			}
+//			else{
+	
+	    		if(ptdq==0 || ptdq==Infinity){
+	    			ptdq=(splitPrice/qs).toFixed(2);
+	    		}
+				var gbqs=0;//已经改变的期数
+				var sdxgqs=0;//手动修改的钱数总和
+				var types=[];//改变的下标值
+				for(var i=0;i<qs;i++){//找出被修改的值
+					var item = splitSetDd[i];
+					var chazhi = Math.abs(item.splitNum*1-ptdq);
+					if(chazhi>chazhiBZ){
+						types.push(i);
+						gbqs++
+						sdxgqs += (item.splitNum*1);
+					}
+				}
+				if(gbqs==0){
+					types.push(idx)
+					gbqs++
+					sdxgqs += (splitSetDd[idx].splitNum*1);
+				}
+				if(splitPrice<sdxgqs){//数据还原
+					$.extend(this.splitSetDd,this.oldsplitSetDd);
+					$.alert(str);
+					return ;
+				}
+				var pjje=((splitPrice-sdxgqs)/(qs-gbqs)).toFixed(2)//剩余平均天数
+				this.lastpt=pjje;//最后被平摊的钱
+				var ggsl=qs-gbqs;//更改数量  为了找出最后一个
+				var lastje=(splitPrice-(sdxgqs + pjje*(qs-gbqs-1))).toFixed(2);//最后一次的天数  因为使用了向下取整
+				for(var i=0;i<qs;i++){
+					var item = splitSetDd[i];
+					if(types.indexOf(i)===-1){
+						ggsl--
+						if(ggsl==0){//说明是最后一个
+							item.splitNum=lastje;
+						}else{
+							item.splitNum=pjje;
+						}
+					}
+				}
+				this.splitSetDd=splitSetDd;
+				this.oldsplitSetDd=JSON.parse(JSON.stringify(splitSetDd));
+//			}
+    		
+    	},
+    	addFq:function(){
+    		var vm=this;
+    		var data={
+				cardTypeId:vm.cardTypeSet.id,
+				firstPrice:vm.firstPrice,
+				splitNum:vm.splitNum,
+				splitType:vm.splitType,
+				splitContent:vm.splitContent,
+				splitPrice:vm.splitPrice,
+				totalPrice:vm.cardTypeSet.salesPrice||2000,
+				splitSetDd:vm.splitSetDd
+//				splitSetDd:JSON.stringify(vm.splitSetDd)
+			}
+			var url = $.stringFormat("{0}/frCardTypeSplitSet/insert", $.cookie('url'));
+	        $.ajax({
+	            type: "post",
+	            url: url,
+	            data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json;charset=utf-8",
+	            success: function (res) {
+	            	alert(res.msg)
+					if(res.code==200){
+                        vm.getFqList();
+					}
+	            }
+	        });
+    	},
+    	modifyFq:function(){
+    		var vm=this;
+			var url = $.stringFormat("{0}/frCardTypeSplitSet/update", $.cookie('url'));
+			var data={
+				id:vm.oneSplit.id,
+				cardTypeId:vm.oneSplit.cardTypeId,
+				firstPrice:vm.onefirstPrice,
+				splitNum:vm.onesplitNum,
+				splitType:vm.onesplitType,
+				splitContent:vm.onesplitContent,
+				splitPrice:vm.onesplitPrice,
+				totalPrice:vm.oneSplit.totalPrice,
+				splitSetDd:vm.oneSplitSetDd
+			}
+	        $.ajax({
+	            type: "post",
+	            url: url,
+	            data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json;charset=utf-8",
+	            success: function (res) {
+	            	alert(res.msg)
+	            	if(res.code==200){
+                        $('.maskLayerAlert_box_alert_big').hide();
+                        vm.getFqList();
+	            	}
+	            }
+	        });
+    	},
         //设置项目时间   上午下午
         setsetTime: function () {
             $('.setting').eq(parseInt($(this).attr('id')) - 1).prop("checked", true);

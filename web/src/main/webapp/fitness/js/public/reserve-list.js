@@ -26,10 +26,13 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
     filters: {
         toDateHHmm(val){
             let date = new Date(val);
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            let result = hours < 10 ? ("0" + hours): hours + ":" + minutes < 10 ? ("0" + minutes): minutes;
-            return result;
+            let h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            let m = date.getMinutes();
+            m = m < 10 ? ('0' + m) : m;
+            let _time = "";
+            _time += ' '+h + ':' + m;
+            return _time;
         },
         toDateyyyyMMddHHmm(val){
            return timeFormatDate(val, true)
@@ -166,9 +169,12 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
             }
         },
         //鼠标划过，出现的数据
-        selectToConfirmList(eduId){
+        selectToConfirmList(eduId, item){
           //  this.hoverEduId = eduId;
 
+            if(item.status != 0){
+                return false;
+            }
             let a = this.toConfirmResultList.find((item)=>{
                 return item.eduId == eduId;
             });
@@ -234,6 +240,9 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
                 let de = new Date(this.endDate);
                 this.showBeginDate = db.getFullYear() + "年" + (db.getMonth() + 1) + "月" + db.getDate() + "日";
                 this.showEndDate = de.getFullYear() + "年" + (de.getMonth() + 1) + "月" + de.getDate() + "日";
+
+                //测试用的
+             //   Event.$emit("inputEduItem", this.resultList[0])
             });
 
         },

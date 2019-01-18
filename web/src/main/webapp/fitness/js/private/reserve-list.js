@@ -27,10 +27,13 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
     filters: {
         toDateHHmm(val){
             let date = new Date(val);
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            let result = hours < 10 ? ("0" + hours): hours + ":" + minutes < 10 ? ("0" + minutes): minutes;
-            return result;
+            let h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            let m = date.getMinutes();
+            m = m < 10 ? ('0' + m) : m;
+            let _time = "";
+            _time += ' '+h + ':' + m;
+            return _time;
         },
         toDateyyyyMMddHHmm(val){
            return timeFormatDate(val, true)

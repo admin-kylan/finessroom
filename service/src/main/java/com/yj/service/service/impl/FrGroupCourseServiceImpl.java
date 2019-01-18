@@ -29,7 +29,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author MP自动生成
@@ -44,29 +44,38 @@ public class FrGroupCourseServiceImpl extends BaseServiceImpl<FrGroupCourseMappe
     private FrGroupCourceRelationMapper frGroupCourceRelationMapper;
     @Autowired
     private FrTrainingSeriesMapper frTrainingSeriesMapper;
+
     @Override
-    public Object queryPage(Map<String, Object> params) throws YJException{
+    public Object queryPage(Map<String, Object> params) throws YJException {
         String code = String.valueOf(params.get("code")),
                 seriesId = String.valueOf(params.get("seriesId"));
         if (StringUtils.isEmpty(code)) {
             return null;
         }
-        Page page = this.selectPage(new Query<FrGroupCourse>(params).getPage(),
-                new EntityWrapper<FrGroupCourse>()
-                        .where("is_using = 1 and customer_code={0} and series_id={1}",code,seriesId)
-                        .orderBy("create_time desc")
-        );
-
+        Page page = new Page();
+        if (seriesId == null) {
+            page = this.selectPage(new Query<FrGroupCourse>(params).getPage(),
+                    new EntityWrapper<FrGroupCourse>()
+                            .where("is_using = 1 and customer_code={0} ", code)
+                            .orderBy("create_time desc")
+            );
+        } else {
+            page = this.selectPage(new Query<FrGroupCourse>(params).getPage(),
+                    new EntityWrapper<FrGroupCourse>()
+                            .where("is_using = 1 and customer_code={0} and series_id={1}", code, seriesId)
+                            .orderBy("create_time desc")
+            );
+        }
 
         List<FrGroupCourseDTO> dtos = new ArrayList<>();
         List<FrGroupCourse> list = (List<FrGroupCourse>) page.getRecords();
-        list.stream().forEach((course) ->{
+        list.stream().forEach((course) -> {
             FrGroupCourseDTO dto = new FrGroupCourseDTO();
-            BeanUtils.copyProperties(course,dto);
+            BeanUtils.copyProperties(course, dto);
             FrGroupCourceRelation p = new FrGroupCourceRelation();
             p.setPrivateCourceId(course.getId());
             FrGroupCourceRelation relation = frGroupCourceRelationMapper.selectOne(p);
-            if(relation != null){
+            if (relation != null) {
                 FrTrainingSeries series = new FrTrainingSeries();
                 series.setId(relation.getTrainingSeriesId());
                 FrTrainingSeries s = frTrainingSeriesMapper.selectOne(series);

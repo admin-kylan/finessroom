@@ -136,6 +136,12 @@ public class FrEducation extends Model<FrEducation> {
     @TableField("reserve_type")
     private Integer reserveType;
 
+    /**
+     * 课时消费数量
+     */
+    @TableField("class_sales_num")
+    private Integer classSalesNum;
+
     @TableField(value = "create_user_id", fill = FieldFill.INSERT)
     private String createUserId;
     @TableField(fill = FieldFill.INSERT)
@@ -145,7 +151,7 @@ public class FrEducation extends Model<FrEducation> {
     @TableField(value = "update_user_id", fill = FieldFill.INSERT_UPDATE)
     private String updateUserId;
     @TableField(value = "update_user_name", fill = FieldFill.INSERT_UPDATE)
-    private Date updateUserName;
+    private String updateUserName;
 
 
     public String getId() {
@@ -356,11 +362,11 @@ public class FrEducation extends Model<FrEducation> {
         this.updateUserId = updateUserId;
     }
 
-    public Date getUpdateUserName() {
+    public String getUpdateUserName() {
         return updateUserName;
     }
 
-    public void setUpdateUserName(Date updateUserName) {
+    public void setUpdateUserName(String updateUserName) {
         this.updateUserName = updateUserName;
     }
 
@@ -370,6 +376,14 @@ public class FrEducation extends Model<FrEducation> {
 
     public void setReserveType(Integer reserveType) {
         this.reserveType = reserveType;
+    }
+
+    public Integer getClassSalesNum() {
+        return classSalesNum;
+    }
+
+    public void setClassSalesNum(Integer classSalesNum) {
+        this.classSalesNum = classSalesNum;
     }
 
     @Override
@@ -407,6 +421,7 @@ public class FrEducation extends Model<FrEducation> {
         ", createUserName=" + createUserName +
         ", updateUserId=" + updateUserId +
         ", updateUserName=" + updateUserName +
+        ", classSalesNum=" + classSalesNum +
         "}";
     }
 }

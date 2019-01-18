@@ -53,7 +53,7 @@
                                 停卡会员卡:<span>{{loadData0.stopCard}}</span>
                                 历史会员卡:<span>{{loadData0.historyCard}}</span>
                             </div>
-                            <table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
+                            <table class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <td>序号</td>
@@ -98,13 +98,13 @@
                                     <td> {{item.bindTime== null? '':item.invalidTime}}</td>
                                     <td><strong>{{item.saleName}}</strong></td>
                                     <td class="togreen">
-                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status" @click="openCard(item)">{{items.lav}}</span>
+                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status" :class="item.status==0?'c-090':(item.status==1?'c-999':item.status==2?'c-f00':item.status==3?'c-666':item.status==4?'c-000':item.status==5?'c-f00':'c-ccc')" @click="openCard(item)">{{items.lav}}</span>
                                     </td>
                                     <td class="toshallow" >
-                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.InfoStatus">{{items.lav}}</span>
+                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.InfoStatus" :class="item.InfoStatus==1?'c-3cf':'c-666'">{{items.lav}}</span>
                                     </td>
                                     <td class="toblue">
-                                        <span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.auditStatus">{{items.lav}}</span>
+                                        <span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.auditStatus" :class="item.auditStatus==1?'c-09f':'c-666'">{{items.lav}}</span>
                                     </td>
                                     <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
                                     <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
@@ -366,7 +366,7 @@
                                 </div>
                             </div>
                             <div class="NewPurchase_footer">
-                                <table class="table table-bordered table-hover">
+                                <table class="table table-bordered table-striped table-hover">
                                     <thead>
                                     <tr>
                                         <th>订单创建日期</th>

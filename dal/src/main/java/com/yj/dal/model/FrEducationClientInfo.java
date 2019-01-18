@@ -43,6 +43,16 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
     @TableField("member_type")
     private String memberType;
     /**
+     * 会员卡号码
+     */
+    @TableField("member_card_no")
+    private String memberCardNo;
+    /**
+     * 会员卡Id
+     */
+    @TableField("member_card_id")
+    private String memberCardId;
+    /**
      * 电话号码
      */
     private String mobile;
@@ -299,6 +309,22 @@ public class FrEducationClientInfo extends Model<FrEducationClientInfo> {
 
     public String getUpdateUserName() {
         return updateUserName;
+    }
+
+    public String getMemberCardNo() {
+        return memberCardNo;
+    }
+
+    public void setMemberCardNo(String memberCardNo) {
+        this.memberCardNo = memberCardNo;
+    }
+
+    public String getMemberCardId() {
+        return memberCardId;
+    }
+
+    public void setMemberCardId(String memberCardId) {
+        this.memberCardId = memberCardId;
     }
 
     public void setUpdateUserName(String updateUserName) {

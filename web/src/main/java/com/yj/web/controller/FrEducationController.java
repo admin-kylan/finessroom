@@ -98,7 +98,11 @@ public class FrEducationController {
      */
     @PostMapping("changeEduClientStatus")
     public JsonResult changeEduClientStatus(@RequestBody Map<String, String> map, HttpServletRequest request){
-        frEducationPublicService.changeEduClientStatus(map);
+        try {
+            frEducationPublicService.changeEduClientStatus(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
         return JsonResult.success(null);
 
     }
@@ -119,10 +123,10 @@ public class FrEducationController {
      * @param CustomerCode
      * @param mobile
      * @return
-     * @throws YJException
+     * @throws
      */
     @GetMapping("/getClientList")
-    public JsonResult getClientList(@RequestParam String CustomerCode,@RequestParam String mobile) throws YJException {
+    public JsonResult getClientList(@RequestParam String CustomerCode,@RequestParam String mobile) {
         return JsonResult.success(frEducationPublicService.getClientList(CustomerCode,mobile));
     }
 
@@ -130,10 +134,10 @@ public class FrEducationController {
      * 根据roomId 查询
      * @param roomId
      * @return
-     * @throws YJException
+     * @throws
      */
     @GetMapping("/getGroupRoomSeatById")
-    public JsonResult getGroupRoomSeatById(@RequestParam String roomId) throws YJException {
+    public JsonResult getGroupRoomSeatById(@RequestParam String roomId) {
         return JsonResult.success(frEducationPublicService.getGroupRoomSeatById(roomId));
     }
 
@@ -152,5 +156,161 @@ public class FrEducationController {
         return JsonResult.success(null);
 
     }
+
+    /**
+     * 查询已经付钱过的用户
+     * @param eduId
+     * @return
+     * @throws
+     */
+    @GetMapping("/findMemberOrderListByEduId")
+    public JsonResult findMemberOrderListByEduId(@RequestParam String eduId, @RequestParam String searchInput){
+        return JsonResult.success(frEducationPublicService.findMemberOrderListByEduId(eduId, searchInput));
+    }
+
+    /**
+     * 根据卡号，手机号，票券，团购号查询卡号
+     * @param request
+     * @return
+     * @throws
+     */
+    @GetMapping("/findMemberCardByInput")
+    public JsonResult findMemberCardByInput(HttpServletRequest request){
+        String searchInput = request.getParameter("searchInput");
+        String shopId = request.getParameter("shopId");
+        String configStartClass = request.getParameter("configStartClass");
+        String code = request.getParameter("code");
+        return JsonResult.success(frEducationPublicService.findMemberCardByInput(searchInput, shopId, configStartClass, code));
+    }
+
+    /**
+     * 查看训练计划
+     * @param courseId
+     * @return
+     * @throws
+     */
+    @GetMapping("/findShowTrainingPlan")
+    public JsonResult findShowTrainingPlan(@RequestParam String courseId){
+        return JsonResult.success(frEducationPublicService.findShowTrainingPlan(courseId));
+    }
+
+    /**
+     * 查看课程
+     * @param courseId
+     * @return
+     * @throws
+     */
+    @GetMapping("/findCourseById")
+    public JsonResult findCourseById(@RequestParam String courseId){
+        return JsonResult.success(frEducationPublicService.findCourseById(courseId));
+    }
+
+     /**
+     * 查看排课配置的课程
+     * @param eduId
+     * @return
+     * @throws
+     */
+    @GetMapping("/findSettCourseEdu")
+    public JsonResult findSettCourseEdu(@RequestParam String eduId){
+        return JsonResult.success(frEducationPublicService.findSettCourseEdu(eduId));
+    }
+
+    /**
+     * 查看该用户是否买了该课程
+     * @param courseId
+     * @return
+     * @throws
+     */
+    @GetMapping("/findCourseByClientId")
+    public JsonResult findCourseByClientId(@RequestParam String courseId, @RequestParam String clientId,
+                                           @RequestParam String cardId, @RequestParam String code,
+                                           @RequestParam String num, @RequestParam String shopId){
+        return JsonResult.success(frEducationPublicService.findCourseByClientId(courseId, clientId, cardId, code, num,shopId));
+    }
+
+    /**
+     * 保存修改对课程的修改
+     * @param map
+     * @return
+     * @throws
+     */
+    @PostMapping("/updateProjectOrder")
+    public JsonResult updateProjectOrder(@RequestBody Map<String, String> map){
+        try {
+            frEducationPublicService.updateProjectOrder(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+    /**
+     * 更新卡的权益
+     * @param map
+     * @return
+     * @throws
+     */
+    @PostMapping("/updateCardDetail")
+    public JsonResult updateCardDetail(@RequestBody Map<String, String> map){
+        try {
+            frEducationPublicService.updateCardDetail(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
+    /**
+     * 保存预约
+     * @param map
+     * @return
+     * @throws
+     */
+    @PostMapping("/saveEduMemberOrder")
+    public JsonResult saveEduMemberOrder(@RequestBody Map<String, String> map){
+        try {
+            frEducationPublicService.saveEduMemberOrder(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+    /**
+     * 保存预约
+     * @param map
+     * @return
+     * @throws
+     */
+    @PostMapping("/startEduClass")
+    public JsonResult startEduClass(@RequestBody Map<String, String> map){
+        try {
+            frEducationPublicService.startEduClass(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+    /**
+     * 冲销
+     * @param map
+     * @return
+     * @throws
+     */
+    @PostMapping("/cancelMemberOrder")
+    public JsonResult cancelMemberOrder(@RequestBody Map<String, String> map){
+        try {
+            frEducationPublicService.cancelMemberOrder(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
+
 
 }
