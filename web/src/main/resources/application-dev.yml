@@ -4,7 +4,7 @@
 
 #------------------------文件上传路路径------------------------#
 fitness:
-  uploadPath: F:/Project/Java/static/fitness/upload/
+  uploadPath: D:/Project/Java/static/fitness/upload/
 #------------------------数据源配置------------------------#
 spring:
   application:

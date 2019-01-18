@@ -7,6 +7,7 @@ import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
 import com.yj.common.util.StringUtils;
+import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dto.FrGroupClassRoomDTO;
 import com.yj.dal.model.FrGroupClassRoom;
 import com.yj.dal.model.FrGroupClassRoomSeat;
@@ -74,10 +75,11 @@ public class FrGroupClassRoomController {
             seat.setUpdateTime(new Date());
             iFrGroupClassRoomSeatService.update(seat,new EntityWrapper<FrGroupClassRoomSeat>().where("class_room_id={0}",room.getId()));
         }else{
-
+            room.setId(UUIDUtils.generateGUID());
             room.setCreateTime(new Date());
             iFrGroupClassRoomService.insert(room);
             //保存作为信息
+            seat.setId(UUIDUtils.generateGUID());
             seat.setClassRoomId(room.getId());
             seat.setCreateTime(new Date());
             iFrGroupClassRoomSeatService.insert(seat);

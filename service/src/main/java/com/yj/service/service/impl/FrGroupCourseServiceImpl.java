@@ -48,12 +48,12 @@ public class FrGroupCourseServiceImpl extends BaseServiceImpl<FrGroupCourseMappe
     @Override
     public Object queryPage(Map<String, Object> params) throws YJException {
         String code = String.valueOf(params.get("code")),
-                seriesId = String.valueOf(params.get("seriesId"));
+          seriesId = String.valueOf(params.get("seriesId"));
         if (StringUtils.isEmpty(code)) {
             return null;
         }
         Page page = new Page();
-        if (seriesId == null) {
+        if (seriesId == "null") {
             page = this.selectPage(new Query<FrGroupCourse>(params).getPage(),
                     new EntityWrapper<FrGroupCourse>()
                             .where("is_using = 1 and customer_code={0} ", code)
@@ -77,10 +77,12 @@ public class FrGroupCourseServiceImpl extends BaseServiceImpl<FrGroupCourseMappe
             FrGroupCourceRelation relation = frGroupCourceRelationMapper.selectOne(p);
             if (relation != null) {
                 FrTrainingSeries series = new FrTrainingSeries();
-                series.setId(relation.getTrainingSeriesId());
-                FrTrainingSeries s = frTrainingSeriesMapper.selectOne(series);
-                dto.setTrainSeriesIds(s.getId());
-                dto.setTrainSeriesName(s.getName());
+                if(relation.getTrainingSeriesId()!=null){
+                    series.setId(relation.getTrainingSeriesId());
+                    FrTrainingSeries s = frTrainingSeriesMapper.selectOne(series);
+                    dto.setTrainSeriesIds(s.getId());
+                    dto.setTrainSeriesName(s.getName());
+                }
             }
             dtos.add(dto);
         });

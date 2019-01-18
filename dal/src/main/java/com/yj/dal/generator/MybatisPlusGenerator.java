@@ -29,11 +29,12 @@ import java.util.Map;
  */
 public class MybatisPlusGenerator {
     //文件路径
-    private static String packageName="admin";
+    private static String packageName = "admin";
     //作者
-    private static String authorName="MP自动生成";
+    private static String authorName = "MP自动生成";
     //需要生成的表
-    private static String[] tables={
+    private static String[] tables = {
+
 
 //            "fr_education",
 //                    "fr_education_client_info",
@@ -45,9 +46,10 @@ public class MybatisPlusGenerator {
 //                    "fr_education_member_order",
             "fr_education_client_info",
             "fr_education_member_order"
+
     };
     //table前缀
-    private static String prefix="";
+    private static String prefix = "";
     private static File file = new File(packageName);
     private static String path = "/Java/IntellijIdeaHouse/";
     // private static String path = file.getAbsolutePath();
@@ -66,7 +68,7 @@ public class MybatisPlusGenerator {
         AutoGenerator mpg = new AutoGenerator().setGlobalConfig(
                 // 全局配置
                 new GlobalConfig()
-                        .setOutputDir(path+"/src/main/java")//输出目录
+                        .setOutputDir(path + "/src/main/java")//输出目录
                         .setFileOverride(true)// 是否覆盖文件
                         .setActiveRecord(true)// 开启 activeRecord 模式
                         .setEnableCache(false)// XML 二级缓存
@@ -104,7 +106,7 @@ public class MybatisPlusGenerator {
         ).setStrategy(
                 // 策略配置
                 new StrategyConfig()
-                         .setCapitalMode(true)// 全局大写命名
+                        .setCapitalMode(true)// 全局大写命名
                         //.setDbColumnUnderline(true)//全局下划线命名
                         .setTablePrefix(new String[]{prefix})// 此处可以修改为您的表前缀
                         .setNaming(NamingStrategy.underline_to_camel)// 表名生成策略
@@ -115,27 +117,27 @@ public class MybatisPlusGenerator {
                         // .setSuperEntityClass("com.baomidou.demo.TestEntity")
                         // 自定义实体，公共字段
                         //.setSuperEntityColumns(new String[]{"test_id"})
-                         .setTableFillList(tableFillList)
+                        .setTableFillList(tableFillList)
                         // 自定义 mapper 父类
                         // .setSuperMapperClass("com.baomidou.demo.TestMapper")
                         // 自定义 service 父类
                         .setSuperServiceClass("com.yj.service.base.BaseService")
                         // 自定义 service 实现类父类
                         .setSuperServiceImplClass("com.yj.service.base.BaseServiceImpl")
-                // 自定义 controller 父类
-                // .setSuperControllerClass("com.ou."+packageName+".base.AbstractController")
-                // 【实体】是否生成字段常量（默认 false）
-                // public static final String ID = "test_id";
-                // .setEntityColumnConstant(true)
-                // 【实体】是否为构建者模型（默认 false）
-                // public User setName(String name) {this.name = name; return this;}
-                // .setEntityBuilderModel(true)
-                // 【实体】是否为lombok模型（默认 false）<a href="https://projectlombok.org/">document</a>
-                // .setEntityLombokModel(true)
-                // Boolean类型字段是否移除is前缀处理
-                 .setEntityBooleanColumnRemoveIsPrefix(false)
-                 .setRestControllerStyle(true)
-                 //.setControllerMappingHyphenStyle(true)
+                        // 自定义 controller 父类
+                        // .setSuperControllerClass("com.ou."+packageName+".base.AbstractController")
+                        // 【实体】是否生成字段常量（默认 false）
+                        // public static final String ID = "test_id";
+                        // .setEntityColumnConstant(true)
+                        // 【实体】是否为构建者模型（默认 false）
+                        // public User setName(String name) {this.name = name; return this;}
+                        // .setEntityBuilderModel(true)
+                        // 【实体】是否为lombok模型（默认 false）<a href="https://projectlombok.org/">document</a>
+                        // .setEntityLombokModel(true)
+                        // Boolean类型字段是否移除is前缀处理
+                        .setEntityBooleanColumnRemoveIsPrefix(false)
+                        .setRestControllerStyle(true)
+                //.setControllerMappingHyphenStyle(true)
         ).setPackageInfo(
                 // 包配置
                 new PackageConfig()
@@ -171,9 +173,9 @@ public class MybatisPlusGenerator {
         ).setTemplate(
                 // 关闭默认 xml 生成，调整生成 至 根目录
                 new TemplateConfig()
-                        // 自定义模板配置，模板可以参考源码 /mybatis-plus/src/main/resources/template 使用 copy
-                        // 至您项目 src/main/resources/template 目录下，模板名称也可自定义如下配置：
-                        //.setController("/template/controller.java.vm")
+                // 自定义模板配置，模板可以参考源码 /mybatis-plus/src/main/resources/template 使用 copy
+                // 至您项目 src/main/resources/template 目录下，模板名称也可自定义如下配置：
+                //.setController("/template/controller.java.vm")
                 // .setEntity("...")
                 // .setMapper("...")
                 // .setXml("...")

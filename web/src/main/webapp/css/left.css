@@ -58,17 +58,18 @@ html,body{
     overflow: hidden;
 }
 #left .left_box div{
-    text-align: center;
+    /*text-align: center;*/
     font-size: 12px;
 }
 #left .left_box ul div a{
     color: #333;
+    cursor: pointer;
 }
 #left .left_box ul div>a{
-    padding-left:24px;color:#337ab7;text-align: left;
+    padding-left:24px;color:#337ab7;
 }
 #left .left_box ul div a:hover,#left .left_box ul div a.selectLeft{
-    color: #00CCCC;
+    opacity: .8;
 }
 
 #left .left_box .left_box_div{

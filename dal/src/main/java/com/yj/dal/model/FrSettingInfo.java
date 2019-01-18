@@ -38,7 +38,7 @@ public class FrSettingInfo extends Model<FrSettingInfo> {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
     private Integer type;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
 
 

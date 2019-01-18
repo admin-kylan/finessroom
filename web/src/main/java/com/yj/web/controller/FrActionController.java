@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.yj.common.util.UUIDUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +79,7 @@ public class FrActionController {
     			frActionMapper.updateById(frAction);
 //    			iFrActionService.updateAllColumnById(frAction);
     		}else{
+				frAction.setId(UUIDUtils.generateGUID());
     			frAction.setIsUsing(1);
     			iFrActionService.insert(frAction);
     		}

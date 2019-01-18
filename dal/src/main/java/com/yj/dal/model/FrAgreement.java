@@ -134,7 +134,7 @@ public class FrAgreement extends Model<FrAgreement> {
      */
     @TableField("head_num")
     private String headNum;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
 
 

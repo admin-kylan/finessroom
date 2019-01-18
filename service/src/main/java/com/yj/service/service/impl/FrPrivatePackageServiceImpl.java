@@ -10,11 +10,8 @@ import com.yj.dal.dao.SdaduimMapper;
 import com.yj.dal.dao.ShopMapper;
 import com.yj.dal.dto.FrPrivatePackageDTO2;
 import com.yj.dal.dto.PackageCanUsingItemDTO;
-import com.yj.dal.model.FrPrivateCource;
-import com.yj.dal.model.FrPrivatePackage;
+import com.yj.dal.model.*;
 import com.yj.dal.dao.FrPrivatePackageMapper;
-import com.yj.dal.model.FrPrivatePackageRelation;
-import com.yj.dal.model.Sdaduim;
 import com.yj.service.service.IFrPrivateCourceService;
 import com.yj.service.service.IFrPrivatePackageRelationService;
 import com.yj.service.service.IFrPrivatePackageService;
@@ -56,15 +53,33 @@ public class FrPrivatePackageServiceImpl extends BaseServiceImpl<FrPrivatePackag
         if (StringUtils.isEmpty(code)) {
             throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
         }
-        String queryProperty = " valid_value AS validValue,member_price AS memberPrice, count, class_count_desc AS classCountDesc, is_show_desk AS isShowDesk, id, update_time AS updateTime, valid_type AS validType, customer_code AS customerCode, market_price AS marketPrice, is_using AS isUsing, create_user AS createUser, name, remain_count_notice AS remainCountNotice, update_user AS updateUser, promtion_price AS promtionPrice, is_account_spending AS isAccountSpending, create_time AS createTime, class_count AS classCount";
-        Page page = this.selectPage(
-                new Query<FrPrivatePackage>(params).getPage(),
-                new EntityWrapper<FrPrivatePackage>()
-                        .where("is_using = 1 ")
-                        .orderBy("create_time desc")
-                        .setSqlSelect(queryProperty)
-        );
+        Page page = new Page();
+        if (params.get("shopId") != null) {
+            Map<String, Object> map = new HashMap<>();
+            if (params.get("curPage") == null) {
+                map.put("page", "1");
+            } else {
+                map.put("page", params.get("curPage"));
+            }
+            if (params.get("limit") == null) {
+                map.put("limit", "10");
+            } else {
+                map.put("limit", params.get("limit"));
+            }
+            page = new Query<FrPrivatePackage>(map).getPage();
+            List<FrPrivatePackage> frPrivateCources = baseMapper.findCource(page, params.get("shopId").toString());
+            page.setRecords(frPrivateCources);
+        }else {
 
+            String queryProperty = " valid_value AS validValue,member_price AS memberPrice, count, class_count_desc AS classCountDesc, is_show_desk AS isShowDesk, id, update_time AS updateTime, valid_type AS validType, customer_code AS customerCode, market_price AS marketPrice, is_using AS isUsing, create_user AS createUser, name, remain_count_notice AS remainCountNotice, update_user AS updateUser, promtion_price AS promtionPrice, is_account_spending AS isAccountSpending, create_time AS createTime, class_count AS classCount";
+             page = this.selectPage(
+                    new Query<FrPrivatePackage>(params).getPage(),
+                    new EntityWrapper<FrPrivatePackage>()
+                            .where("is_using = 1 ")
+                            .orderBy("create_time desc")
+                            .setSqlSelect(queryProperty)
+            );
+        }
         return new PageUtils(page);
     }
 

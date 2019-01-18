@@ -6,6 +6,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import com.yj.common.util.CookieUtils;
+import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dto.FrPrivatePackageDTO2;
 import com.yj.dal.model.FrPrivatePackageRelation;
 import com.yj.service.service.IFrPrivateCourceRelationService;
@@ -97,6 +98,7 @@ public class FrPrivatePackageController {
 		 BeanUtils.copyProperties(dto,packge);
 
 	 	if(StringUtils.isEmpty(dto.getId())){
+	 		packge.setId(UUIDUtils.generateGUID());
 			packge.setIsUsing(1);
 			packge.setCreateTime(new Date());
 			packge.setUpdateTime(new Date());
@@ -119,9 +121,11 @@ public class FrPrivatePackageController {
 		 if(dto.getCanUsingItem() != null && dto.getCanUsingItem().size() > 0){
 			 dto.getCanUsingItem().stream().forEach((data) -> {
 				 FrPrivatePackageRelation relation  = new FrPrivatePackageRelation();
+				 relation.setId(UUIDUtils.generateGUID());
 				 relation.setSdaduimId(data.getSdaduimId());
 				 relation.setCourceId(data.getCourseId());
 				 relation.setPackageId(packageId);
+				 relation.setShopId(data.getShopId());
 				 relation.setCourceCount(data.getClassCount());
 				 relation.setDayLimitCount(data.getLimitCount());
 				 relation.setIsUsing(1);

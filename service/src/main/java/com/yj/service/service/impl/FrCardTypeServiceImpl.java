@@ -606,7 +606,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                     // 1代表门店
                     this.getMapInfo(listMap, id, cityId, shopName, false, 1, false, 0.0, 0.0);
                     // 所有会员卡
-                    this.getMapInfo(listMap, "Fal", id, "所有会员卡", true, 2, true, 0.0, 0.0);
+                    this.getMapInfo(listMap, UUIDUtils.generateGUID(), id, "所有会员卡", true, 2, true, 0.0, 0.0);
                 }
             }
         }

@@ -50,7 +50,7 @@ public class FrPrivateCource extends Model<FrPrivateCource> {
     private Integer assignTeacherType;
     @TableField("assign_teacher")
     private Double assignTeacher;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("create_user")
     private String createUser;

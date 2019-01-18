@@ -636,7 +636,7 @@
     margin: 0 auto;
     right: 0;
     left: 0;
-    bottom: 0;
+    padding-bottom: 10px;
     width: 50%;
     background-color: #fff;
     text-align: center;

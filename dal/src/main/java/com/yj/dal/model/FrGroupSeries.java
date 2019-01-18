@@ -25,7 +25,7 @@ public class FrGroupSeries extends Model<FrGroupSeries> {
     @TableField("is_using")
     private Integer isUsing;
     private String note;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("create_user")
     private Long createUser;

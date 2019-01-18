@@ -1249,9 +1249,10 @@ var right = new Vue({
         init: function () {
 //			var type = 1; // window.parent.getType();
             if (!this.cardTypeSet.type) alert('未获取到卡类型')
-            switch (parseInt(this.cardTypeSet.type)) {
+			console.log(this.cardTypeSet.type)
+            switch (this.cardTypeSet.type) {
                 //时间卡(年卡）
-                case 1:
+                case "时间卡":
                     // $('#years').html('一年卡');
                     $('#time').html('时间卡');
                     $('.basis .common2 p').html('（填写使用期限，如果期限已到，该卡权益失效）');
@@ -1260,7 +1261,7 @@ var right = new Vue({
                     $('.basis .common').show();
                     break;
                 //小时卡
-                case 2:
+                case "小时卡":
                     // $('#years').html('10小时卡');
                     $('#time').html('时间卡');
                     $('.basis .common2 p').html('（填写使用期限，如果期限已到，该卡权益失效）');
@@ -1269,7 +1270,7 @@ var right = new Vue({
                     $('.basis .common').show();
                     break;
                 //次卡
-                case 3:
+                case "次卡":
                     // $('#years').html('一次卡');
                     $('#time').html('次卡');
                     $('.basis .common2 p').html('（填写使用期限，如果期限已到，该卡权益失效）');
@@ -1278,8 +1279,8 @@ var right = new Vue({
                     $('.basis .common').show();
                     break;
                 //储值卡
-                case 4:
-                case 6:
+				case "折扣卡":
+                case "储值卡":
                     // $('#years').html('储值卡');
                     $('#time').html('储值卡');
                     $('.basis .common2 p').html('（填写使用期限，如果期限已到，该卡权益失效）');
@@ -1288,7 +1289,7 @@ var right = new Vue({
                     $('.basis .common').show();
                     break;
                 //充值卡
-                case 5:
+                case "充值卡":
                     // $('#years').html('10元充值卡');
                     $('#time').html('充值卡');
                     $('.basis .common2 p').html('（填写使用期限，如果期限已到，该卡权益失效）');
@@ -1296,7 +1297,7 @@ var right = new Vue({
                     $('.basis .total_input').attr('placeholder', '充值卡金额(元)').show();
                     $('.basis .common').show();
                     break;
-                case 7: //员工卡
+                case "员工卡": //员工卡
                     // $('#years').html('经理卡');
                     $('#time').html('员工卡');
                     $('.basis .common2 p').html('（员工卡使用期限不能修改）');

@@ -1,7 +1,11 @@
 package com.yj.dal.dao;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.yj.dal.model.FrPrivateCource;
 import com.yj.dal.model.FrPrivatePackage;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface FrPrivatePackageMapper extends BaseMapper<FrPrivatePackage> {
 
+    List<FrPrivatePackage> findCource(Page page, String shopId);
 }

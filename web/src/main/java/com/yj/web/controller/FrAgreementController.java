@@ -6,6 +6,7 @@ import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
+import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dto.NumRoleDTO;
 import com.yj.dal.model.FrAgreement;
 import com.yj.service.service.IFrAgreementService;
@@ -51,6 +52,7 @@ public class FrAgreementController {
      */
     @PostMapping("/postAdd")
     public JsonResult add(@RequestBody FrAgreement frAgreement) throws YJException {
+        frAgreement.setId(UUIDUtils.generateGUID());
         boolean insert = service.addRole(frAgreement);
         if (insert){
             return JsonResult.successMessage("增加成功");

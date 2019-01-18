@@ -13,7 +13,7 @@ public class PackageCanUsingItemDTO {
     private String shopName;
     private String sdaduimName;
     private String sdaduimId;
-
+    private String shopId;
     private Integer classCount;
     private Integer limitCount;
 }

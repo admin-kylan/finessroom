@@ -35,7 +35,7 @@ public class FrActionSeries extends Model<FrActionSeries> {
     private Integer ownType;
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("customer_code")
     private String customerCode;

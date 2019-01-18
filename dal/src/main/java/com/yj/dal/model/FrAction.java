@@ -30,7 +30,7 @@ public class FrAction extends Model<FrAction> {
     @TableField("create_user")
     private String createUser;
     private String image;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;

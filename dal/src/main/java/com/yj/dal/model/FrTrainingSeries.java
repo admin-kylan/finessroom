@@ -41,7 +41,7 @@ public class FrTrainingSeries extends Model<FrTrainingSeries> {
     private Date updateTime;
     @TableField("is_using")
     private Integer isUsing;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField(exist = false)
     private List<FrTrainingSeries> frTrainingSeries;

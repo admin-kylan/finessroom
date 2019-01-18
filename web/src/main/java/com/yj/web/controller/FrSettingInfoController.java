@@ -6,6 +6,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
 import com.yj.common.util.StringUtils;
+import com.yj.common.util.UUIDUtils;
 import com.yj.dal.model.FrSettingInfo;
 import com.yj.service.service.IFrSettingInfoService;
 import com.yj.service.service.impl.FrSettingInfoServiceImpl;
@@ -55,7 +56,7 @@ public class FrSettingInfoController {
 
         if(isNull){//插入记录
             settingList.stream().forEach((setting) ->{
-                setting.setId(null);
+                setting.setId(UUIDUtils.generateGUID());
                 setting.setCustomerCode(code);
                 setting.setCreateTime(new Date());
 

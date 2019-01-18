@@ -6,6 +6,7 @@ import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
 import com.yj.common.util.StringUtils;
+import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dto.FrGroupCourseDTO;
 import com.yj.dal.model.FrGroupCourceRelation;
 import com.yj.dal.model.FrGroupCourse;
@@ -64,6 +65,7 @@ public class FrGroupCourseController {
             iFrGroupCourseService.update(group,new EntityWrapper<FrGroupCourse>().where("id={0}",course.getId()));
 
         }else{
+            group.setId(UUIDUtils.generateGUID());
             group.setCustomerCode(code);
             group.setIsUsing(1);
             group.setCreateTime(new Date());
@@ -71,6 +73,7 @@ public class FrGroupCourseController {
             iFrGroupCourseService.insert(group);
         }
         FrGroupCourceRelation relation = new FrGroupCourceRelation();
+        relation.setId(UUIDUtils.generateGUID());
         relation.setCreateTime(new Date());
         relation.setCustomerCode(code);
         relation.setPrivateCourceId(group.getId());

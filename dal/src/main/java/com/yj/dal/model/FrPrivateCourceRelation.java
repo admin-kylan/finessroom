@@ -30,7 +30,7 @@ public class FrPrivateCourceRelation extends Model<FrPrivateCourceRelation> {
     private String customerCode;
     @TableField("is_using")
     private Integer isUsing;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("create_user")
     private String createUser;

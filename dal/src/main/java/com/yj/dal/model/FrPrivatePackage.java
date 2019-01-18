@@ -31,7 +31,7 @@ public class FrPrivatePackage extends Model<FrPrivatePackage> {
     private String name;
     @TableField("create_user")
     private String createUser;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("valid_type")
     private Integer validType;

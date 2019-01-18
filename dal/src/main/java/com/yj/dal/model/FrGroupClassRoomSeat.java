@@ -28,7 +28,7 @@ public class FrGroupClassRoomSeat extends Model<FrGroupClassRoomSeat> {
     private String customerCode;
     @TableField("cnt_row")
     private Integer cntRow;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("is_using")
     private Integer isUsing;

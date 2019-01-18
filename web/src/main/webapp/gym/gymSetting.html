@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Home</title>
+    <title>健身馆设置</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -45,11 +45,11 @@
                 <div class="w170 sub-nav">
                     <ul class="nav">
                         <li class="active" id="ChainStore">
-                            <a href="#" @click="ChainStoreClick">
+                            <a href="#" @click="ChainStoreClick($event)">
                                 <span>连锁店自动添加</span></a>
                         </li>
                         <li v-for="(item,index) in shopInfo">
-                            <a href="#" @click="shopClick(item.frSetGyms)">
+                            <a href="#" @click="shopClick(item.frSetGyms,$event)">
                                 <span>{{item.shopName}}</span></a>
                         </li>
                     </ul>
@@ -176,7 +176,7 @@
                                         </div>
                                         <div class="flex-box flex-start">
                                             <div class="w80 text-right">
-                                                <span class="c-ff0000">* </span>备注：
+                                               备注：
                                             </div>
                                             <div class="flex-box-item">
                                                 <textarea class="form-control" rows="4"
@@ -297,7 +297,7 @@
                                         </div>
                                         <div class="flex-box flex-start">
                                             <div class="w80 text-right">
-                                                <span class="c-ff0000">* </span>备注：
+                                            备注：
                                             </div>
                                             <div class="flex-box-item">
                                                 <textarea class="form-control" rows="4"
@@ -444,16 +444,17 @@
 
                 },
                 //点击连锁
-                ChainStoreClick: function () {
+                ChainStoreClick: function (e) {
                     var that = this;
+                    $(e.target).parents('li').addClass("active").siblings().removeClass('active');
                     that.getChainStore();
                     $("#temp1").show();
                     $("#temp2").show();
                 },
                 //点击门店
-                shopClick: function (list) {
+                shopClick: function (list,e) {
                     var that = this;
-                    $("#ChainStore").removeClass("active");
+                    $(e.target).parents('li').addClass("active").siblings().removeClass('active');
                     $("#temp1").hide();
                     $("#temp2").hide();
                     that.ChainStoreInfo = list;
@@ -545,6 +546,7 @@
                             if (res.code == "200") {
                                 alert("修改成功")
                                 $('#modifyModal').modal('hide');
+                                that.getTime();
                             } else {
                                 alert("网络繁忙")
                             }
@@ -563,7 +565,14 @@
                             $.get(url, {"id": id}, function (res) {
                                 if (res.code == "200") {
                                     alert("删除成功")
-                                    location.reload();
+                                    $.each(that.ChainStoreInfo, function (i, n) {
+                                        if (n.id == res.data) {
+                                            that.ChainStoreInfo.splice(i, 1);
+                                            return false;
+                                        }
+
+                                    })
+                                    that.getTime();
                                 } else {
                                     alert("网络繁忙")
                                 }

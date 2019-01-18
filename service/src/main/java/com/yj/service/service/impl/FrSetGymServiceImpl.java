@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -141,6 +142,9 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JsonResult updateProject(FrSetGym frSetGym) throws YJException {
+        frSetGym.setUpdateTime(null);
+        frSetGym.setUpdateUserName(null);
+        frSetGym.setUpdateUserId(null);
         boolean b = updateById(frSetGym);
         if (b) {
             return JsonResult.success();
@@ -158,10 +162,13 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
             boolean b = false;
             if (frSetGym != null) {
                 frSetGym.setUsing(false);
+                frSetGym.setUpdateTime(null);
+                frSetGym.setUpdateUserName(null);
+                frSetGym.setUpdateUserId(null);
                 b = updateById(frSetGym);
             }
             if (b) {
-                return JsonResult.success();
+                return JsonResult.success(frSetGym.getId());
             }
         }
         return JsonResult.fail();

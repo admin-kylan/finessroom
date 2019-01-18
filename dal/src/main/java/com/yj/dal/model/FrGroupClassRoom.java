@@ -31,7 +31,7 @@ public class FrGroupClassRoom extends Model<FrGroupClassRoom> {
     @TableField("customer_code")
     private String customerCode;
     private Double area;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("market_price")
     private Double marketPrice;

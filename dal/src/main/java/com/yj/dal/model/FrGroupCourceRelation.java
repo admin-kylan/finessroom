@@ -34,7 +34,7 @@ public class FrGroupCourceRelation extends Model<FrGroupCourceRelation> {
     private Date updateTime;
     @TableField("customer_code")
     private String customerCode;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("create_user")
     private String createUser;

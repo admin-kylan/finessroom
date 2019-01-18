@@ -7,17 +7,96 @@
 		<link rel="stylesheet" href="../css/jquery-confirm.css" />
 		<link rel="stylesheet" href="../css/reset.css" />
 		<link rel="stylesheet" href="../css/base.css" />
+		<link rel="stylesheet" href="../css/skin/jedate.css" />
 		<link rel="stylesheet" href="../css/individual.css" />
+		<style type="text/css">
+			.out-box{border: 1px dashed #e4e4e4;padding: 16px 18px 0;margin: 12px 16px;}
+			.table-box{margin: 12px 16px;}
+			.row-item{display: inline-block;margin-right: 15px;margin-bottom: 16px;white-space: nowrap;}
+			.row-item .btn{line-height: 25px;padding: 0 8px;height: 25px;font-size: 12px;background-color: #fff;border-radius: 0;color: #999999;border: 1px solid #999;margin-left: 5px;}
+			.row-item .btn.btn-primary{background-color: rgba(0, 153, 255, 1);color: #fff;border-color: rgba(0, 153, 255, 1);min-width: 70px;}
+			.row-item .btn.btn-primary.active{background-color: red;border-color: red;}
+			.row-item .btn.btn-info{background-color: #169bd5;color: #fff;border-color: #169bd5;}
+			.row-item .btn.btn-info-light{background-color: rgba(153, 204, 255, 1);border-color: rgba(153, 204, 255, 1);color: #fff;}
+			.row-item .btn.btn-success{background-color: #009900;color: #fff;border-color: #009900;}
+			.row-item .btn.btn-yellow{background-color: rgba(255, 204, 0, 1);color: #fff;border-color: rgba(255, 204, 0, 1);}
+			.row-item .btn.btn-danger{background-color: red;color: #fff;border-color: red;}
+			.row-item .btn-active{background-color: #cccccc;border-color: #cccccc;color: #fff;}
+			.row-item .form-control{line-height: 25px;height: 25px;padding: 0 5px;font-size: 12px;width: 130px;display: inline-block;border: 1px solid #999;border-radius: 0;}
+			.row-item .form-control[readonly]{background-color: #fff;}
+			.row-item select.form-control{width: 70px;}
+			.btn-top-box{border-bottom: 1px solid rgb(228, 228, 228);padding: 5px 11px;}
+			.btn-top-box .row-item{margin-bottom: 0;}
+			.date-input{background: url(../img/date-bg.png) 115px center / auto 20px no-repeat;}
+			.row-item label{font-weight: 500;}
+			.red{color: red;}
+			
+			.table-style{box-sizing: border-box;margin-bottom: 0;width: auto;min-width: 100%;}
+			.table-style td>span{display: inline-block;}
+			.table-style.table-bordered>thead>tr>td, .table-bordered>thead>tr>th{border-bottom-width: 1px;}
+			.table-style td{background-color: #fff;color: #333;text-align: center;padding: 0 8px!important;height: 30px;vertical-align: middle!important;}
+			.table-style thead td{white-space: nowrap;background-color: #d5e7fa;border: none!important;}
+			.table-style tbody tr:last-child td>span{cursor: pointer;}
+			.table-style.table-bordered{background-color: #F0F8FF;}
+			.table-btn-item{display: none;}
+			
+			.modal-style .fieldset-content{padding: 0 30px 0 20px;}
+			.modal-style .modal-header{padding: 0;border-bottom-width: 0;background-color: rgba(0, 102, 255, 1);color: #fff;}
+			.modal-style .modal-dialog{margin-top: 105px;width: 695px;}
+			.modal-style .modal-title{font-size: 12px;line-height: 30px;text-align: center;}
+			.modal-style .modal-header .close{font-weight: bold;color: #333;opacity: 1;text-shadow: none;}
+			.modal-style .modal-header .close>span{font-size: 21px;}
+			.modal-style .modal-content{height: 100%;border-radius: 0;box-shadow: 5px 5px 5px rgba(0,0,0,.3);border: 1px solid #e4e4e4;}
+			.modal-style .modal-footer{text-align: left;border-top-width: 0;}
+			
+			.caozuo{padding: 10px 16px;font-size: 14px;}
+			.caozuo ~ .fieldset-info{margin: 12px 16px;}
+			.fieldset-info{padding: 10px 15px 15px;position: relative;margin-top: 15px;border: 1px dashed #ccc;border-radius: 0;}
+			.fieldset-info legend{width: auto;margin-bottom: 0;border-bottom: 0;font-size: 12px;color: #9999CC;}
+			.checkbox-title{font-size: 12px;margin-top: 10px;}
+			.checkbox-list li{display: inline-block;margin-left: 10px;margin-top: 5px;}
+			.checkbox-list li label{font-weight: 500;margin-bottom: 0;}
+			.checkbox-list li label input{position: relative;top: 3px;}
+			.mui-switch {position: relative;display: inline-block;width: 54px;height: 18px;background-color: red;background-clip: padding-box;border: 1px solid #ddd;border-radius: 20px;-webkit-transition-timing-function: ease-in-out;transition-timing-function: ease-in-out;-webkit-transition-duration: .2s;transition-duration: .2s;-webkit-transition-property: background-color,border;transition-property: background-color,border;}
+			.mui-switch:before {position: absolute;top: 0;right: 11px;font-size: 12px;color: #fff;text-transform: uppercase;content: "Off";}
+			.mui-switch .mui-switch-handle {position: absolute; top: 0;left: 0;z-index: 1; width: 14px;height: 14px;background-color: #cccccc;background-clip: padding-box;border-radius: 100%;border: 2px solid #fff;-webkit-transition: .2s ease-in-out;transition: .2s ease-in-out;-webkit-transition-property: -webkit-transform,width,left;transition-property: transform,width,left;}
+			.mui-switch.mui-active{background-color: #00cc00;}
+			.mui-switch.mui-active:before {right: auto;left: 14px;color: #fff;content: "On";}
+			.mui-switch.mui-active .mui-switch-handle {-webkit-transform: translate(36px,0);transform: translate(36px,0);}
+			.dj-table tr>td:first-child{background-color: #d5e7fa;}
+			
+			.khdj{font-size: 12px;color: #9900FF;line-height: 3;}
+			.kh-condition{padding-left: 60px;margin-bottom: 25px;}
+			.kh-condition p{padding-left: 50px;font-size: 12px;margin-bottom: 8px;}
+			.kh-condition p:first-child{padding-left: 0;}
+			.kh-condition input{width: 40px;line-height: 23px;margin: 0 5px;height: 25px;border: 1px solid #a9a9a9;text-align: center;}
+			.kh-condition input.input-big{width: 70px;}
+			
+			.treeview-div{margin: -15px;}
+			.treeview-div .list-group{margin-bottom: 0;}
+			.treeview-div .list-group-item{border: none;padding: 10px 15px;}
+			.treeview-div .list-group-item .glyphicon{position: relative;top: -1px;left: -5px;}
+			.treeview-div .list-group .list-group .list-group-item{padding-top: 0;padding-bottom: 0;}
+			.treeview-div .list-group label{font-weight: 500;margin-bottom: 0;}
+			.treeview-div .list-group label input{position: relative;top: 3px;left: -2px;}
+			.treeview-div .list-group p{padding-left: 30px;}
+			.treeview-div .list-group .list-group-item > p,.treeview-div .list-group .list-group-item > .list-group{display: none;}
+			.treeview-div .list-group .list-group-item.sel-active > p,.treeview-div .list-group .list-group-item.sel-active > .list-group{display: block;}
+		</style>
 	</head>
 	<body>
 		<div class="wrap" id="app">
 			<!-- <div class="header">基础设置  </div> -->
 			<div class="tab">
-				<span class="on">单个门店设置</span>
+				<span>单个门店设置</span>
 				<span>门店通用设置</span>
+				<span class="on">材料导入导出</span>
+				<span>私教项目记录导入</span>
+				<span>产品销售记录导入</span>
+				<span>会员等级设置</span>
 			</div>
 			<div class="content">
-				<div class="list list1 clearfix">
+				<div class="list list1 clearfix noshow">
 					<ul class="left fl">
 						<li class="on"><a href="#lis1">所在门店</a></li>
 						<li><a href="#lis2">新建客户认领设置</a></li>
@@ -500,12 +579,1481 @@
 						</form>
 					</div>
 				</div>
+				<div class="list list3 clearfix noshow">
+					<div class="btn-top-box">
+						<div class="row-item tab-btn-box">
+							<button type="button" class="btn btn-primary active">导出数据</button>
+							<button type="button" class="btn btn-primary">导入数据</button>
+							<button type="button" class="btn btn-primary">迁移/复制数据</button>
+						</div>
+					</div>
+					<div class="table-btn-content">
+						<div class="table-btn-item" style="display: block;">
+							<div class="out-box">
+								<div class="row-item">
+									<span>客户类型:</span>
+									<button class="btn btn-active">全部客户</button>
+									<button class="btn">现有会员</button>
+									<button class="btn">潜在客户</button>
+								</div>
+								<div class="row-item">
+									<span>选择门店:</span>
+									<select class="form-control">
+						                <option value="全部门店">全部门店</option>
+						                <option value="软件园店">软件园店</option>
+						                <option value="思明店">思明店</option>
+						                <option value="集美店">集美店</option>
+						            </select>
+								</div>
+								<div class="row-item">
+									<span>卡状态:</span>
+									<select class="form-control">
+						                <option value="全部状态">全部状态</option>
+						                <option value="正常">正常</option>
+						                <option value="停卡">停卡</option>
+						                <option value="冻结">冻结</option>
+						                <option value="已过期">已过期</option>
+						                <option value="待付款">待付款</option>
+						                <option value="历史">历史</option>
+						            </select>
+								</div>
+								<div class="row-item">
+									<span>会员等级:</span>
+									<select class="form-control">
+						                <option value="全部等级">全部等级</option>
+						                <option value="钻卡会员">钻卡会员</option>
+						                <option value="金卡会员">金卡会员</option>
+						                <option value="银卡会员">银卡会员</option>
+						                <option value="普通会员">普通会员</option>
+						                <option value="优质">优质</option>
+						                <option value="很好">很好</option>
+						                <option value="一般">一般</option>
+						                <option value="稽查">稽查</option>
+						            </select>
+								</div>
+								<div class="row-item">
+									<span>卡系列名称：</span>
+									<input type="text" class="form-control" >
+								</div>
+								<div class="row-item">
+									<span>卡种名称：</span>
+									<input type="text" class="form-control" >
+								</div>
+								<div class="row-item">
+									<select class="form-control">
+						                <option value="全部日期">全部日期</option>
+						                <option value="开卡日期">开卡日期</option>
+						                <option value="失效日期">失效日期</option>
+						            </select>
+						            <input type="text" class="form-control date-input startDate" placeholder="开始日期" value="" v-model="startTime" readonly/>
+						          	  至 <input type="text" class="form-control date-input endDate" placeholder="结束日期" value="" v-model="endTime" readonly/>
+								</div>
+								<div class="row-item">
+									<span>销售员：</span>
+									<input type="text" class="form-control" >
+								</div>
+								<div class="row-item">
+									<span>服务会籍：</span>
+									<input type="text" class="form-control" >
+									<button class="btn btn-info">搜索</button>
+								</div>
+							</div>
+							<div class="out-box">
+								<div class="row-item">
+									<label><input type="checkbox" />全选/全不选</label>
+									<button class="btn btn-success">确认导出</button>
+								</div>
+							</div>
+							<div class="table-box">
+								<div class="table-responsive">
+									<table class="table table-style table-bordered">
+										<thead>
+											<tr>
+												<td>选择</td>
+												<td>序号</td>
+												<td><span style="width: 100px;">门店名称</span></td>
+												<td><span style="width: 100px;">姓名</span></td>
+												<td><span style="width: 100px;">手机号码</span></td>
+												<td><span style="width: 60px;">性别</span></td>
+												<td><span style="width: 100px;">生日</span></td>
+												<td><span style="width: 100px;">卡号</span></td>
+												<td><span style="width: 100px;">卡系列</span></td>
+												<td><span style="width: 100px;">卡名称</span></td>
+												<td><span style="width: 60px;">卡价格</span></td>
+												<td><span style="width: 60px;">购卡价格</span></td>
+												<td><span style="width: 60px;">刷卡</span></td>
+												<td><span style="width: 60px;">现金</span></td>
+												<td><span style="width: 60px;">微信</span></td>
+												<td><span style="width: 60px;">支付宝</span></td>
+												<td><span style="width: 100px;">销售员</span></td>
+												<td><span style="width: 80px;">服务会籍</span></td>
+												<td><span style="width: 80px;">有效时长</span></td>
+												<td><span style="width: 80px;">开卡时间</span></td>
+												<td><span style="width: 80px;">失效时间</span></td>
+												<td><span style="width: 80px;">卡状态</span></td>
+												<td><span style="width: 80px;">购买权益</span></td>
+												<td><span style="width: 80px;">可用权益</span></td>
+												<td>剩余次数或小时数</td>
+												<td><span style="width: 80px;">剩余金额</span></td>
+												<td><span style="width: 200px;">备注</span></td>
+												<td><span style="width: 110px;">操作时间</span></td>
+												<td><span style="width: 80px;">操作人</span></td>
+												<td><span style="width: 100px;">协议编号</span></td>
+												<td><span style="width: 115px;">增够父卡号</span></td>
+												<td><span style="width: 60px;">储值</span></td>
+												<td><span style="width: 80px;">会员等级</span></td>
+												<td><span style="width: 115px;">开始停卡时间</span></td>
+												<td><span style="width: 115px;">结束停卡时间</span></td>
+												<td><span style="width: 85px;">付款类型</span></td>
+												<td><span style="width: 85px;">停卡收费</span></td>
+												<td><span style="width: 120px;">停卡原因</span></td>
+												<td><span style="width: 85px;">外部卡号</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="table-btn-item">
+							<div class="out-box">
+								<div class="row-item">
+									<span>客户类型:</span>
+									<button class="btn btn-success">现有会员</button>
+									<button class="btn">潜在客户</button>
+									<button class="btn btn-info-light">现有会员数据模板下载</button>
+									<button class="btn btn-info-light">潜在客户数据模板下载</button>
+								</div>
+								<div class="row-item">									
+									<span class="red">必须为EXCEL格式，导数据的时候第一列可以不用管可以参照数据模板来到数据</span>
+								</div>
+							</div>
+							<div class="out-box">
+								<div class="row-item">
+									<label><input type="checkbox" />全选/全不选</label>
+									<button class="btn btn-success">导出EXCEL</button>
+									<button class="btn btn-yellow">确认导入</button>
+								</div>
+							</div>
+							<div class="table-box">
+								<div class="table-responsive">
+									<table class="table table-style table-bordered">
+										<thead>
+											<tr>
+												<td>选择</td>
+												<td>序号</td>
+												<td><span style="width: 100px;">门店名称</span></td>
+												<td><span style="width: 100px;">姓名</span></td>
+												<td><span style="width: 100px;">手机号码</span></td>
+												<td><span style="width: 60px;">性别</span></td>
+												<td><span style="width: 100px;">生日</span></td>
+												<td><span style="width: 100px;">卡号</span></td>
+												<td><span style="width: 100px;">卡系列</span></td>
+												<td><span style="width: 100px;">卡名称</span></td>
+												<td><span style="width: 60px;">卡价格</span></td>
+												<td><span style="width: 60px;">购卡价格</span></td>
+												<td><span style="width: 60px;">刷卡</span></td>
+												<td><span style="width: 60px;">现金</span></td>
+												<td><span style="width: 60px;">微信</span></td>
+												<td><span style="width: 60px;">支付宝</span></td>
+												<td><span style="width: 100px;">销售员</span></td>
+												<td><span style="width: 80px;">服务会籍</span></td>
+												<td><span style="width: 80px;">有效时长</span></td>
+												<td><span style="width: 80px;">开卡时间</span></td>
+												<td><span style="width: 80px;">失效时间</span></td>
+												<td><span style="width: 80px;">卡状态</span></td>
+												<td><span style="width: 80px;">购买权益</span></td>
+												<td><span style="width: 80px;">可用权益</span></td>
+												<td>剩余次数或小时数</td>
+												<td><span style="width: 80px;">剩余金额</span></td>
+												<td><span style="width: 200px;">备注</span></td>
+												<td><span style="width: 110px;">操作时间</span></td>
+												<td><span style="width: 80px;">操作人</span></td>
+												<td><span style="width: 100px;">协议编号</span></td>
+												<td><span style="width: 115px;">增够父卡号</span></td>
+												<td><span style="width: 60px;">储值</span></td>
+												<td><span style="width: 80px;">会员等级</span></td>
+												<td><span style="width: 115px;">开始停卡时间</span></td>
+												<td><span style="width: 115px;">结束停卡时间</span></td>
+												<td><span style="width: 85px;">付款类型</span></td>
+												<td><span style="width: 85px;">停卡收费</span></td>
+												<td><span style="width: 120px;">停卡原因</span></td>
+												<td><span style="width: 85px;">外部卡号</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="table-btn-item">
+							<div class="out-box">
+								<div class="row-item">
+									<label><input type="checkbox" />全选/全不选</label>
+									<button class="btn btn-danger">数据迁移到企业</button>
+								</div>
+								<div class="row-item"><span class="red">该数据为个人数据，个人数据迁移到企业之后，归企业所有，个人不能从企业迁移客户 </span></div>
+							</div>
+							<div class="table-box">
+								<div class="table-responsive">
+									<table class="table table-style table-bordered">
+										<thead>
+											<tr>
+												<td>选择</td>
+												<td>序号</td>
+												<td><span style="width: 100px;">门店名称</span></td>
+												<td><span style="width: 100px;">姓名</span></td>
+												<td><span style="width: 100px;">手机号码</span></td>
+												<td><span style="width: 60px;">性别</span></td>
+												<td><span style="width: 100px;">生日</span></td>
+												<td><span style="width: 100px;">意向卡系列</span></td>
+												<td><span style="width: 100px;">意向卡名称</span></td>
+												<td><span style="width: 60px;">意向卡价格</span></td>
+												<td><span style="width: 60px;">推荐人</span></td>
+												<td><span style="width: 100px;">销售员</span></td>
+												<td><span style="width: 80px;">服务会籍</span></td>
+												<td><span style="width: 200px;">备注</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list list3 clearfix noshow">
+					<div class="table-btn-item" style="display: block;">
+						<div class="out-box">
+							<div class="row-item">
+								<label><input type="checkbox" />全选/全不选</label>
+								<button class="btn btn-danger">确认导入数据</button>
+								<button class="btn btn-yellow">导入EXCEL</button>
+								<button class="btn btn-info-light">数据模板下载</button>
+							</div>
+						</div>
+						<div class="table-box">
+							<div class="table-responsive">
+								<table class="table table-style table-bordered">
+									<thead>
+										<tr>
+											<td>选择</td>
+											<td>序号</td>
+											<td><span style="width: 100px;">门店名称</span></td>
+											<td><span style="width: 100px;">姓名</span></td>
+											<td><span style="width: 60px;">性别</span></td>
+											<td><span style="width: 100px;">手机号码</span></td>
+											<td><span style="width: 100px;">卡号</span></td>
+											<td><span style="width: 100px;">门店</span></td>
+											<td><span style="width: 100px;">场馆</span></td>
+											<td><span style="width: 60px;">项目名称</span></td>
+											<td><span style="width: 60px;">私教课销售员</span></td>
+											<td><span style="width: 100px;">上课教练</span></td>
+											<td><span style="width: 80px;">跟进教练</span></td>
+											<td><span style="width: 80px;">购买节数</span></td>
+											<td><span style="width: 80px;">刷卡</span></td>
+											<td><span style="width: 80px;">现金</span></td>
+											<td><span style="width: 80px;">支付宝</span></td>
+											<td><span style="width: 80px;">欠款金额</span></td>
+											<td><span style="width: 80px;">销售类型</span></td>
+											<td><span style="width: 80px;">开始时间</span></td>
+											<td><span style="width: 80px;">结束时间</span></td>
+											<td><span style="width: 80px;">协议编号</span></td>
+											<td><span style="width: 80px;">操作人</span></td>
+											<td><span style="width: 80px;">操作时间</span></td>
+											<td><span style="width: 80px;">私教教练</span></td>
+											<td><span style="width: 80px;">健身教练</span></td>
+											<td><span style="width: 80px;">游泳教练</span></td>
+											<td><span style="width: 80px;">团课教练</span></td>
+											<td><span style="width: 80px;">団教助教</span></td>
+											<td><span style="width: 80px;">美容师（美业）</span></td>
+											<td><span style="width: 80px;">美容销售</span></td>
+											<td><span style="width: 80px;">美容顾问</span></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list list4 clearfix noshow">
+					<div class="table-btn-item" style="display: block;">
+						<div class="out-box">
+							<div class="row-item">
+								<label><input type="checkbox" />全选/全不选</label>
+								<button class="btn btn-danger">确认导入数据</button>
+								<button class="btn btn-yellow">导入EXCEL</button>
+								<button class="btn btn-info-light">数据模板下载</button>
+							</div>
+						</div>
+						<div class="table-box">
+							<div class="table-responsive">
+								<table class="table table-style table-bordered">
+									<thead>
+										<tr>
+											<td>选择</td>
+											<td>序号</td>
+											<td><span style="width: 100px;">门店名称</span></td>
+											<td><span style="width: 100px;">姓名</span></td>
+											<td><span style="width: 60px;">性别</span></td>
+											<td><span style="width: 100px;">手机号码</span></td>
+											<td><span style="width: 100px;">卡号</span></td>
+											<td><span style="width: 100px;">门店</span></td>
+											<td><span style="width: 100px;">场馆</span></td>
+											<td><span style="width: 60px;">产品名称</span></td>
+											<td><span style="width: 60px;">销售员</span></td>
+											<td><span style="width: 100px;">跟进人</span></td>
+											<td><span style="width: 80px;">购买数量</span></td>
+											<td><span style="width: 80px;">赠送数量</span></td>
+											<td><span style="width: 80px;">刷卡</span></td>
+											<td><span style="width: 80px;">现金</span></td>
+											<td><span style="width: 80px;">支付宝</span></td>
+											<td><span style="width: 80px;">欠款金额</span></td>
+											<td><span style="width: 80px;">销售类型</span></td>
+											<td><span style="width: 80px;">协议编号</span></td>
+											<td><span style="width: 80px;">操作人</span></td>
+											<td><span style="width: 80px;">操作时间</span></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list list5 clearfix noshow">
+					<p class="caozuo">
+						<span>操作人：</span>
+						<span style="font-weight:700;">Klaus</span>&nbsp; &nbsp; 
+						<span>操作上次修改时间：</span>
+						<span style="font-weight:700;">2018-08-31 17:03</span>
+					</p>
+					<fieldset class="fieldset-info" style="padding-top: 0;">
+						<legend>门店设置</legend>
+						<div class="field-content">
+							<div class="checkbox-title">厦门市</div>
+							<ul class="checkbox-list">
+								<li>
+									<label>
+	                                    <input type="checkbox">
+	                                    <span>软件园店</span>
+	                                </label>
+								</li>
+								<li>
+									<label>
+	                                    <input type="checkbox">
+	                                    <span>集美店</span>
+	                                </label>
+								</li>
+								<li>
+									<label>
+	                                    <input type="checkbox">
+	                                    <span>思明店</span>
+	                                </label>
+								</li>
+							</ul>
+							<div class="checkbox-title">泉州市</div>
+							<ul class="checkbox-list">
+								<li>
+									<label>
+	                                    <input type="checkbox">
+	                                    <span>软件园店</span>
+	                                </label>
+								</li>
+								<li>
+									<label>
+	                                    <input type="checkbox">
+	                                    <span>集美店</span>
+	                                </label>
+								</li>
+								<li>
+									<label>
+	                                    <input type="checkbox">
+	                                    <span>思明店</span>
+	                                </label>
+								</li>
+							</ul>
+						</div>
+					</fieldset>
+					<fieldset class="fieldset-info">
+						<legend>等级名称设定（D级为最低级 A级为最高级）</legend>
+						<div class="field-content">
+							<table class="table-style table-bordered dj-table" style="width: 640px;min-width: auto;">
+								<tr>
+									<td>系统默认等级</td>
+									<td>D级</td>
+									<td>C级</td>
+									<td>B级</td>
+									<td>A级</td>
+								</tr>
+								<tr>
+									<td>团会员匹配等级</td>
+									<td>会员</td>
+									<td>银卡</td>
+									<td>金卡</td>
+									<td>钻卡</td>
+								</tr>
+								<tr>
+									<td>系统显示等级名称</td>
+									<td>普通会员</td>
+									<td>银卡会员</td>
+									<td>金卡会员</td>
+									<td>钻卡会员</td>
+								</tr>
+								<tr>
+									<td>是否播音提示</td>
+									<td>
+										<div class="mui-switch mui-active">
+										  <div class="mui-switch-handle"></div>
+										</div>
+									</td>
+									<td>
+										<div class="mui-switch">
+										  <div class="mui-switch-handle"></div>
+										</div>
+									</td>
+									<td>
+										<div class="mui-switch mui-active">
+										  <div class="mui-switch-handle"></div>
+										</div>
+									</td>
+									<td>
+										<div class="mui-switch mui-active">
+										  <div class="mui-switch-handle"></div>
+										</div>
+									</td>
+								</tr>
+								<tr class="text-center">
+									<td>播音内容</td>
+									<td colspan="4">欢迎您！【系统显示等级名称】会员！</td>
+								</tr>
+							</table>
+							<div class="row-item" style="margin-bottom: 0;">								
+								<button class="btn btn-primary" style="margin-top: 10px;background-color: rgba(0, 0, 255, 1);min-width: 30px;height: 28px;border-radius: 4px;">修改</button>
+							</div>
+						</div>
+					</fieldset>
+					
+					<fieldset class="fieldset-info">
+						<legend>等级获取设定</legend>
+						<div class="field-content">
+							<p class="khdj">客户等级：当客户满足以下任意一个条件时升级为<span class="red">普通会员</span></p>
+							<div class="kh-condition">
+								<p>条件一：会员个人消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="2000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件二：自然年度累计<input type="text" value="1" />年</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件三：会员推荐朋友消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="1000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="8000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="10000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件四：推荐有效潜在客户数达到<input type="text" class="input-big" value="1" />个</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件五：购买对应卡种</p>
+								<table class="table-style table-bordered" style="width: 600px;min-width: auto;">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>门店</td>
+											<td>会员卡系列</td>
+											<td>会员卡名称</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td>全系列</td>
+											<td><span class="red">全名称</span></td>
+											<td><span class="red">删除</span></td>
+										</tr>
+										<tr class="text-center">
+											<td colspan="5">+ 参与对象</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<p class="khdj">客户等级：当客户满足以下任意一个条件时升级为<span class="red">银卡会员</span></p>
+							<div class="kh-condition">
+								<p>条件一：会员个人消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="2000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件二：自然年度累计<input type="text" value="1" />年</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件三：会员推荐朋友消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="1000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="8000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="10000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件四：推荐有效潜在客户数达到<input type="text" class="input-big" value="1" />个</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件五：购买对应卡种</p>
+								<table class="table-style table-bordered" style="width: 600px;min-width: auto;">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>门店</td>
+											<td>会员卡系列</td>
+											<td>会员卡名称</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td>全系列</td>
+											<td><span class="red">全名称</span></td>
+											<td><span class="red">删除</span></td>
+										</tr>
+										<tr class="text-center">
+											<td colspan="5">+ 参与对象</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<p class="khdj">客户等级：当客户满足以下任意一个条件时升级为<span class="red">金卡会员</span></p>
+							<div class="kh-condition">
+								<p>条件一：会员个人消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="2000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件二：自然年度累计<input type="text" value="1" />年</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件三：会员推荐朋友消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="1000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="8000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="10000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件四：推荐有效潜在客户数达到<input type="text" class="input-big" value="1" />个</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件五：购买对应卡种</p>
+								<table class="table-style table-bordered" style="width: 600px;min-width: auto;">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>门店</td>
+											<td>会员卡系列</td>
+											<td>会员卡名称</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td>全系列</td>
+											<td><span class="red">全名称</span></td>
+											<td><span class="red">删除</span></td>
+										</tr>
+										<tr class="text-center">
+											<td colspan="5">+ 参与对象</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<p class="khdj">客户等级：当客户满足以下任意一个条件时升级为<span class="red">钻卡会员</span></p>
+							<div class="kh-condition">
+								<p>条件一：会员个人消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="2000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="4000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件二：自然年度累计<input type="text" value="1" />年</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件三：会员推荐朋友消费满足</p>
+								<p>
+									<span>按次累计&emsp;每</span>
+									<input type="text" value="1" />
+									<span>次，消费消费满：</span>
+									<input type="text" class="input-big" value="1000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>阶段累计&emsp;每</span>
+									<input type="text" value="3" />
+									<span>个月，消费累计消费满：</span>
+									<input type="text" class="input-big" value="8000.00" />
+									<span>元</span>
+								</p>
+								<p>
+									<span>金额累计&emsp;消费金额满：</span>
+									<input type="text" class="input-big" value="10000.00" />
+									<span>元</span>
+								</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件四：推荐有效潜在客户数达到<input type="text" class="input-big" value="1" />个</p>
+							</div>
+							<div class="kh-condition">
+								<p>条件五：购买对应卡种</p>
+								<table class="table-style table-bordered" style="width: 600px;min-width: auto;">
+									<thead>
+										<tr>
+											<td>序号</td>
+											<td>门店</td>
+											<td>会员卡系列</td>
+											<td>会员卡名称</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>软件园店</td>
+											<td>全系列</td>
+											<td><span class="red">全名称</span></td>
+											<td><span class="red">删除</span></td>
+										</tr>
+										<tr class="text-center">
+											<td colspan="5">+ 参与对象</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="row-item" style="margin-bottom: 0;margin-top: 10px;padding-left:55px;">								
+								<button class="btn btn-info" style="margin-top: 10px;min-width: 30px;height: 28px;border-radius: 4px;">保存</button>
+							</div>
+						</div>
+					</fieldset>
+				</div>
 			</div>
+			<!--卡种选择-->
+	    	<div class="modal fade modal-style" tabindex="-1" id="kzModal" role="dialog" data-backdrop="false">
+			  <div class="modal-dialog" role="document" style="width: 220px;">
+			    <div class="modal-content" style="min-height: 500px;overflow-x: auto;">
+			      	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        	<h4 class="modal-title">卡种选择</h4>
+			      	</div>
+			      	<div class="modal-body">
+			      		<div class="treeview-div">
+			      			<ul class="list-group">
+			      				<li class="list-group-item sel-active">
+			      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
+			      					<span>厦门市</span>
+			      					<ul class="list-group">
+			      						<li class="list-group-item sel-active">
+					      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
+					      					<span>软件园店</span>
+					      					<p><label><input type="checkbox" value="1" \>所有会员卡</label></p>
+					      					<ul class="list-group">
+					      						<li class="list-group-item sel-active">
+							      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
+							      					<label><input type="checkbox" value="2" \>年卡</label>
+					      							<p><label><input type="checkbox" value="3" \>一年卡</label></p>
+					      							<p><label><input type="checkbox" value="3" \>二年卡</label></p>
+					      							<p><label><input type="checkbox" value="3" \>三年卡</label></p>
+					      						</li>
+					      						<li class="list-group-item sel-active">
+							      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
+							      					<label><input type="checkbox" value="2" \>次卡</label>
+					      							<p><label><input type="checkbox" value="3" \>一年卡</label></p>
+					      							<p><label><input type="checkbox" value="3" \>二年卡</label></p>
+					      							<p><label><input type="checkbox" value="3" \>三年卡</label></p>
+					      						</li>
+					      					</ul>
+			      						</li>
+			      					</ul>
+			      				</li>
+			      			</ul>
+			    		</div>  	
+			    	</div>  
+			    </div> 
+			  </div> 
+			</div> 
 		</div>
 		<script src="../js/jquery-3.3.1.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
 		<script src="../js/jquery.cookie.js"></script>
 		<script src="../js/setCookie.js"></script>
+		<script src="../js/jedate.js"></script>
 		<script src="../js/jquery-confirm.js"></script>
 		<script src="../js/jquery.paging.js"></script>
 		<script src="../js/extendjQuery.js"></script>
@@ -513,15 +2061,30 @@
 		<script src="../js/axios.min.js"></script>
 		<script src="../js/toZhDigit.js"></script>
 		<script src="../js/loading.js"></script>
-		<script src="individual.js"></script>
+		<!--<script src="individual.js"></script>-->
 		<script type="text/javascript">
 //			门店选项卡切换    40是right的上下padding
 			(function (){
+				$('.treeview-div').on('click','.glyphicon',function(e){
+					e.stopPropagation();
+					var _parent=$(this).parent();
+					_parent.toggleClass('sel-active');
+					if(_parent.hasClass('sel-active')){
+						_parent.find('.list-group-item').addClass('sel-active');
+					}
+				})
+//				$('#kzModal').modal('show')//卡种选择选择调用
+				$('.tab-btn-box button').on('click',function(){
+					$(this).addClass('active').siblings().removeClass('active');
+					$('.table-btn-item').eq($(this).index()).show().siblings().hide();
+				})
+				$('.tab-btn-box button').eq(0).trigger('click');
 				$('.tab span').click(function () {
 					$(this).addClass('on').siblings().removeClass('on');
 					$('.list').eq($(this).index()).removeClass('noshow').siblings().addClass('noshow');
 					$('.list').eq($(this).index()).find('.left').height($('.list').eq($(this).index()).find('.right').height()+40); 
 				});
+				$('.tab span').eq(0).trigger('click')
 //			左侧右边框线的高度    40是right的上下padding
 				var h=$('.right').height()+40;
 //				console.log(h);
@@ -549,6 +2112,30 @@
 //			通用门店section10的删除
 				$('#lis19 tbody td:nth-child(8)').click(function (){
 					$(this).parent().remove();
+				})
+				//初始化:开始日期
+				jeDate('.startDate', {
+				    format: "YYYY-MM-DD",
+				    donefun: function(obj){
+				        ecapp.startTime = obj.val;
+				    }
+				});
+				//初始化:结束日期
+				jeDate('.endDate', {
+				    format: "YYYY-MM-DD",
+				    donefun: function(obj){
+				        ecapp.endTime = obj.val;
+				        const that = ecapp.$data;
+				        //重载数据
+				        ecapp.initExistenceList({
+				            dateType:that.dateType,
+				            startTime:that.startTime,
+				            endTime:that.endTime,
+				        })
+				    }
+				});
+				$('.mui-switch').on('click',function(){
+					$(this).toggleClass('mui-active')
 				})
 			})();
 

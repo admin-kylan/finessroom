@@ -39,7 +39,7 @@ public class FrGroupCourse extends Model<FrGroupCourse> {
     private Double memberPrice;
     @TableField("class_status")
     private Integer classStatus;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
@@ -59,6 +59,17 @@ public class FrGroupCourse extends Model<FrGroupCourse> {
     private String imageUrl;
     @TableField("series_id")
     private String seriesId;
+    //课时数
+    @TableField("class_count")
+    private String classCount;
+
+    public String getClassCount() {
+        return classCount;
+    }
+
+    public void setClassCount(String classCount) {
+        this.classCount = classCount;
+    }
 
     public String getSeriesId() {
         return seriesId;

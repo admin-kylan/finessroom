@@ -1,5 +1,6 @@
 package com.yj.dal.dao;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.yj.dal.dto.FrTrainingClassDTO;
 import com.yj.dal.model.FrPrivateCource;
 
@@ -19,7 +20,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface FrPrivateCourceMapper extends BaseMapper<FrPrivateCource> {
 
-	
-	
+	List<FrPrivateCource> findPrivateCource(Page page,@Param("sdaduimId") String sdaduimId);
+	List<FrPrivateCource> findCource(Page page,@Param("shopId") String shopId);
 	List<FrTrainingClassDTO> getActionsByseriesId(@Param("traningSeriesId")String traningSeriesId,@Param("type")Integer type);
+	List<FrTrainingClassDTO> getActionsByseriesId2(@Param("traningSeriesId")String traningSeriesId,@Param("type")Integer type);
 }

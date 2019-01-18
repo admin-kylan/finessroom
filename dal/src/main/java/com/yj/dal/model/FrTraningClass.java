@@ -23,7 +23,7 @@ public class FrTraningClass extends Model<FrTraningClass> {
     private static final long serialVersionUID = 1L;
 
     private Integer count;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     private Integer time;
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)

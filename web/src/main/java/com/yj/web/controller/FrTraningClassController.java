@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+import com.yj.common.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,6 +88,7 @@ public class FrTraningClassController {
             }
         } else {
             //新增
+            frTraningClass.setId(UUIDUtils.generateGUID());
             Integer insert = frTraningClassMapper.insert(frTraningClass);
             if (insert > 0) {
                 return JsonResult.successMessage("操作成功");
@@ -121,6 +123,7 @@ public class FrTraningClassController {
         List<FrTraningClass> list = new ArrayList<FrTraningClass>();
         for (int i = 0; i < actionIdArr.length; i++) {
             FrTraningClass tclass = new FrTraningClass();
+            tclass.setId(UUIDUtils.generateGUID());
             tclass.setActionId(actionIdArr[i]);
             tclass.setTraningSeriesId(traningSeriesId);
             tclass.setCreateTime(new Date());

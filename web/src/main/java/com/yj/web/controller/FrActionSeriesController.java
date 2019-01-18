@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yj.common.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,7 +88,7 @@ public class FrActionSeriesController{
     @RequestMapping(value="/addFrActionSeries",method={RequestMethod.GET,RequestMethod.POST})
     public JsonResult addFrActionSeries(@RequestBody FrActionSeries frActionSeries) {
         //组装数据
-//    	frActionSeries.setId(UUID.randomUUID().toString().replace("-", ""));
+    	frActionSeries.setId(UUIDUtils.generateGUID());
 //    	frActionSeries.setNote("note");
 //    	frActionSeries.setName("huhu");
     	frActionSeries.setCustomerCode("1");
@@ -117,7 +118,6 @@ public class FrActionSeriesController{
          wrapper.setSqlSelect("   name, diff, image, action_princeple AS actionPrinceple, create_time AS createTime, update_user AS updateUser, series_id AS seriesId, update_time AS updateTime, id, customer_code AS customerCode, is_using AS isUsing, create_user AS createUser ").where("is_using = 1 AND series_id = {0}",seriesId);
          List<FrAction> frActions = frActionMapper.selectList(wrapper);
          return JsonResult.success(frActions);
-
     }
 }
 

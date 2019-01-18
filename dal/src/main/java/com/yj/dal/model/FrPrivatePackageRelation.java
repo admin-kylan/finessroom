@@ -25,7 +25,7 @@ public class FrPrivatePackageRelation extends Model<FrPrivatePackageRelation> {
     /**
      * 私教套餐关系表ID
      */
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     /**
      * 店铺ID

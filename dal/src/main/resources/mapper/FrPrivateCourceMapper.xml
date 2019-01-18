@@ -87,4 +87,50 @@ WHERE
 	AND own_type = 1
 	AND is_using =1
     </select>
+    <select id="getActionsByseriesId2" resultType="com.yj.dal.dto.FrTrainingClassDTO">
+        	SELECT
+	frc.time,
+	frc.strength,
+	frc.count,
+	frc.remark,
+	frc.id,
+	( SELECT name FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 ) name,
+		( SELECT image FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 ) image,
+	(
+SELECT name
+FROM
+	fr_action_series fas
+WHERE
+	fas.id = ( SELECT fa.series_id FROM fr_action fa WHERE fa.id = frc.action_id AND fa.is_using = 1 )
+	) seriesName
+FROM
+	fr_traning_class frc
+WHERE
+	frc.traning_series_id = #{traningSeriesId}
+	AND type = #{type}
+	AND own_type = 2
+	AND is_using =1
+    </select>
+
+    <select id="findCource" resultType="com.yj.dal.model.FrPrivateCource" >
+SELECT
+	<include refid="Base_Column_List"></include>
+FROM
+	fr_private_cource
+WHERE
+	is_using = 1
+	AND id IN ( SELECT cource_id FROM fr_private_package_relation WHERE shop_id =#{shopId} AND is_using = 1 )
+
+	</select>
+
+	<select id="findPrivateCource" resultType="com.yj.dal.model.FrPrivateCource" >
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM
+		fr_private_cource
+		WHERE
+		is_using = 1
+		AND id IN ( SELECT cource_id FROM fr_private_package_relation WHERE sdaduim_id =#{sdaduimId} AND is_using = 1 )
+
+	</select>
 </mapper>

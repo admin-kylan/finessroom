@@ -26,7 +26,7 @@ public class FrGroupSeriesShopRelation extends Model<FrGroupSeriesShopRelation> 
     private Integer isUsing;
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id")
     private String id;
     @TableField("create_user")
     private String createUser;

@@ -92,7 +92,7 @@ public class FrSetGym extends Model<FrSetGym> {
     @TableField("is_Mel")
     private Boolean isMel;
     /**
-     * 1.健身馆 2.游泳馆 3.儿童馆 区分场馆
+     * 1.健身馆 2.游泳馆 3.儿童馆 4.瑜伽馆 5.跆拳道馆 区分场馆
      */
     @TableField("venue_type")
     private Integer venueType;

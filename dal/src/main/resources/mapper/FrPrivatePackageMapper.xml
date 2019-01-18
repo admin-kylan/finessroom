@@ -30,4 +30,14 @@
         promtion_price AS promtionPrice, valid_value AS validValue, class_count AS classCount, name, create_user AS createUser, id, valid_type AS validType, is_using AS isUsing, market_price AS marketPrice, remain_count_notice AS remainCountNotice, class_count_desc AS classCountDesc, update_time AS updateTime, member_price AS memberPrice, is_show_desk AS isShowDesk, customer_code AS customerCode, count, is_account_spending AS isAccountSpending, update_user AS updateUser, create_time AS createTime
     </sql>
 
+    <select id="findCource" resultType="com.yj.dal.model.FrPrivatePackage" >
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM
+        fr_private_package
+        WHERE
+        is_using = 1
+        AND id IN ( SELECT package_id FROM fr_private_package_relation WHERE shop_id =#{shopId} AND is_using = 1 )
+
+    </select>
 </mapper>

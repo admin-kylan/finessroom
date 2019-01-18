@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
-	<title>健身团教设置</title>
+	<title>健身私教设置</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -62,14 +62,20 @@
 				    <li role="presentation"><a href="#settingCurse" aria-controls="settingCurse" role="tab" data-toggle="tab" @click="getPrivateSetting">私教设置</a></li>
 				    <li role="presentation"><a href="#settingTrain" aria-controls="settingTrain" role="tab" data-toggle="tab" @click="actionSettingMain">训练课程设置</a></li>
 				  </ul>
-
+					<p class="p5 mb0 pt15 br0">
+						当前门店：
+						<select id="shopSelect" v-model="shopId" @change="shopClick()" class="form-control" style="display: inline-block;width: auto;min-width: 200px;">
+							<option value="">--选择门店--</option>
+							<option  v-for="(shop,index) in shopInfo" :value="shop.id">{{shop.name}}</option>
+						</select>
+					</p>
 				  <!-- Tab panes -->
 				  <div class="tab-content">
 				    <div role="tabpanel" class="tab-pane tab-pane-style active" id="privateCategory">
 				      <div class="main-tabpanel" v-show="!addPrivate && !addPrivateCourse ">
 					      <ul class="nav nav-tabs sub-nav-style" role="tablist">
-						    <li role="presentation" class="active"><a href="#privateClass" aria-controls="privateClass" role="tab" data-toggle="tab">私教课程</a></li>
-						    <li role="presentation" @click="getPackageList({curPage:1,limit:10})"><a href="#privateTeachingPackage" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">单节训练课程设置</a></li>
+						    <li role="presentation" @click="temp()" class="active"><a href="#privateClass" aria-controls="privateClass" role="tab" data-toggle="tab">私教课程</a></li>
+						    <li role="presentation" @click="getPackageList({curPage:1,limit:10})"><a href="#privateTeachingPackage" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab">私教套餐</a></li>
 						  </ul>
 						  <div class="tab-content">
 				    		<div role="tabpanel" class="tab-pane tab-pane-style active" id="privateClass">
@@ -101,7 +107,7 @@
 										<tr v-for="(cource ,index) in privateCource.list">
 				    						<td>{{(privateCource.pageNo-1)*privateCource.pageSize+(index+1)}}</td>
 				    						<td>
-												<img :src="avatarUrl(cource.privateImage)" class="course-img">{{cource.name}}
+												<img :src="avatarUrl(cource.privateImage)" onerror="this.src='../img/u2871.png';this.onerror=null" class="course-img">{{cource.name}}
 												<!--<img src="img/addImg.png" class="course-img" />-->
 											</td>
 				    						<td>{{cource.time}}</td>
@@ -138,7 +144,7 @@
 				    						<td>促销价</td>
 				    						<td>会员价</td>
 				    						<td>有效期</td>
-				    						<td>课时计算数</td>
+				    						<td>课时计算</td>
 				    						<td>课时计算说明</td>
 				    						<td>续购提醒</td>
 				    						<td>是否可以【挂账】消费</td>
@@ -247,7 +253,7 @@
 							  			</div>
 							  			<div class="flex-box mb0">
 							  				<div class="w70 text-right">
-								  				<span class="c-ff0000">*</span>促销价：
+								  				促销价：
 								  			</div>
 								  			<div class="flex-box-item">
 								  				<input type="text" class="form-control w95" placeholder="促销价" maxlength="10" v-model="privateCourceData.promotionPrice"  min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
@@ -328,7 +334,7 @@
 							     	</div>
 					  				<div class="flex-box">
 							  			<div class="w150 text-right">
-							  				<span class="c-ff0000">*</span>默认课程计划：
+							  				默认课程计划：
 							  			</div>
 							  			<div class="flex-box-item">
 							  				<input id="privatemrkcjh" type="text" style="background-color: #fff;" placeholder="--选择课程计划--" :value="privateCourceData.courseName" @click="defaultCurriculumPlanModal" class="form-control w375" />
@@ -338,17 +344,17 @@
 					  			<div class="flex-box-item flex-box flex-column">
 					  				<div class="file-box">
 						  				<img :src="imgUrl==null?'img/positive.png':imgUrl" width="300px" />
-					  					<input type="file" @change="pictureShowVersion($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
+					  					<input type="file" id="privateFile" @change="pictureShowVersion($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
 					  				</div>
 					  				<div class="text-center ptb10">
-					  					<button class="btn btn-primary w200" @click="uploadAvatar">上传私教图片</button>
+					  					<button class="btn btn-primary w200" >上传私教图片</button>
 					  				</div>
 					  				<span class="c-ffcc00">支持JPG,PNG格式，大小不能大于1M</span>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box flex-start">
 					  			<div class="w150 text-right">
-					  				<span class="c-ff0000">*</span>课程详情：
+					  				课程详情：
 					  			</div>
 					  			<div class="flex-box-item">
 					  				<p class="c-ffcc00">编辑课程详情，可让会员更了解该课程的具体信息，增加约课率</p>
@@ -359,7 +365,7 @@
 					  			<div class="w150 text-right">
 					  			</div>
 					  			<div class="flex-box-item btn-lg-box">
-					  				<button class="btn btn-primary" @click="saveOrUpdatePrivateAction">保存</button>
+					  				<button class="btn btn-primary" @click="savePrivateClass">保存</button>
 					  				<button class="btn btn-fff" @click="cancelPrivateCourse">取消</button>
 					  			</div>
 					     	</div>
@@ -499,7 +505,8 @@
 					  				课时计算说明：
 					  			</div>
 					  			<div class="flex-box-item">
-					  				<textarea rows="5"  maxlength="100" class="form-control w300" v-model="packageData.classCountDesc"></textarea>
+					  				<!--<textarea rows="5" disabled maxlength="100" class="form-control w300" v-model="packageData.classCountDesc"></textarea>-->
+									<label  v-if="packageData.classCount!=null &&packageData.classCount!=''" >按照{{packageData.classCount}}节计算单价，以实际课时数量计费，封顶{{packageData.classCount}}节</label>
 					  			</div>
 					  		</div>
 					  		<div class="flex-box">
@@ -845,6 +852,17 @@
 					    				</label>
 						    		</div>
 						    	</div>
+						    	<div class="flex-box">
+						    		<div class="flex-box-item checkbox mtb0">
+						    			教练是否跨店上课：
+						    			<label class="mr15 ml3">
+						    				<input type="radio" name="privateJLKDSK" value="1" v-model="settingInfo.privateKD"/>可以
+					    				</label>
+						    			<label>
+						    				<input type="radio" name="privateJLKDSK" value="2" v-model="settingInfo.privateKD"/>不可以
+					    				</label>
+						    		</div>
+						    	</div>
 					    	</fieldset>
 					    	<fieldset class="fieldset-info  border1-ccc br4 pr30 pl60 ptb15 mt5 mb0">
 					    		<legend class="c-333 ml-40">私教通知</legend>
@@ -1013,12 +1031,13 @@
 				    				<div class="w200 min-height-page-sm">
 						    			<button class="btn btn-red btn-add-action" @click="addAction(0)">新增动作系列</button>
 						    			<ul class="action-list">
-												<li v-for="(action , index) in actions" :key="index" @click="actionClick(index)" :class="actionSettingIndex == index?'active':'' " >
-                          <a>
-                            {{action.name}}
-                          </a>
-                        </li>
-
+											<li v-for="(action , index) in actions" :key="index" @click="actionClick(index)" :class="actionSettingIndex == index?'active':'' " >
+					                          <a>
+					                          	<span class="pull-right c-ff0000" @click.stop="deleteItem(index,action.id ,3)">删除</span>
+												<span class="pull-right c-333" @click.stop="updateItem(action.id , 3)">修改</span>
+					                            {{action.name}}
+					                          </a>
+					                       </li>
 						    			</ul>
 						    		</div>
 						    		<div class="flex-box-item p10">
@@ -1048,7 +1067,7 @@
 						    							</div>
 						    							<div class="flex-box-item">
 						    								<div class="file-box">
-							    								<input class="form-control br0" type="file"  @change="pictureShow($event,0 , actionAddData)"/>
+							    								<input class="form-control br0" type="file" id="ActionFile"  @change="pictureShow($event,0 , actionAddData)"/>
 						    									<!--<b v-if="!hasFile">＋</b>-->
                                                                 <img id="addActionImg0" src="img/addImg.png" width="84px" height="84px" />
 																<!--<img  src="" id="addActionImg" style="width: 75px;height: 75px">-->
@@ -1155,7 +1174,7 @@
 								       		</div>
 								       		<div class="flex-box-item">
 			    								<div class="file-box">
-				    								<input class="form-control br0" type="file" @change="pictureShow($event , 1 , actionSettingData)" />
+				    								<input class="form-control br0" type="file" id="ActionFlie2" @change="pictureShow($event , 1 , actionSettingData)" />
 			    									<!--<b>＋</b>-->
 			    									<img id="addActionImg1" :src="actionSettingData.image?actionSettingData.image:'img/addImg.png'" width="84px" height="84px" />
 
@@ -1226,11 +1245,11 @@
                             <td><img :src="action.image?action.image:'img/addImg.png'" width="85px"></td>
                             <td><span class="c-ff9900">{{action.seriesname}}</span></td>
                             <td>{{action.name}}</td>
-                            <td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 1)" size="10" ></b>分钟</td>
-							<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 1)" size="10" ></b></td>
-                            <td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action, 1)" size="10" ></b></td>
+                            <td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 1)" size="2" ></b>分钟</td>
+							<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 1)" size="2" ></b></td>
+                            <td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action, 1)" size="2" ></b></td>
 							 <td><b class="c-009900">
-								 <textarea rows="8" cols="15" @change="changeData(action , 1)"  v-model="action.remark" >
+								 <textarea rows="5" cols="20" @change="changeData(action , 1)"  v-model="action.remark" >
 							  </textarea>
 							 </b></td>
 							  <td><button class="btn btn-order delete-action" @click="delEduAction(index,action , 1)">删除</button></td>
@@ -1346,11 +1365,11 @@
                           <td><img :src="action.image?action.image:'img/addImg.png'" width="85px"></td>
 							<td><span class="c-ff9900">{{action.seriesname}}</span></td>
                           <td>{{action.name}}</td>
-                          <td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 2)" size="10"></b>分钟</td>
-							<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 2)" size="10" ></b></td>
-                          <td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action , 2)" size="10" ></b></td>
+                          <td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 2)" placeholder="填写分钟数" size="2"></b></td>
+							<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 2)" placeholder="填写强调" size="2" ></b></td>
+                          <td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action , 2)" placeholder="填写次数" size="2" ></b></td>
 							<td><b class="c-009900">
-								 <textarea rows="8" cols="15" @change="changeData(action , 2)"  v-model="action.remark" >
+								 <textarea rows="5" cols="20" style="border-width: 0;" @change="changeData(action , 2)" placeholder="填写备注" v-model="action.remark" >
 							  </textarea>
 							</b></td>
                           <td><button class="btn btn-order delete-action" @click="delEduAction(index,action , 2)">删除</button></td>
@@ -1465,14 +1484,14 @@
           </div><!-- /.modal -->
 					<!--修改课程计划-->
 					<div class="modal fade modal-style mModal" id="updateItemModal" tabindex="-1" role="dialog"  data-backdrop="false">
-						<div class="modal-dialog" role="document">
+						<div class="modal-dialog" role="document" style="width: 300px">
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title">修改训练课程计划</h4>
+									<h4 class="modal-title">修改名称</h4>
 								</div>
 								<div class="modal-body">
-									<input type="text" class="form-control" maxlength="15"  placeholder="修改训练课程计划（限15个字）" v-model="updateItemName"/>
+									<input type="text" class="form-control" maxlength="15"  placeholder="修改名称（限15个字）" v-model="updateItemName"/>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-primary" @click="updateItemConfirm">确定</button>
@@ -1482,7 +1501,7 @@
 						</div><!-- /.modal-dialog -->
 					</div><!-- /.modal -->
 		<div class="modal fade modal-style mModal" id="deleteItemModal" tabindex="-1" role="dialog"  data-backdrop="false">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog" role="document"  style="width: 300px">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1497,13 +1516,16 @@
 
 		</div>
 					<div class="modal fade modal-style mModal" id="deleteTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
-						<div class="modal-dialog" role="document">
+						<div class="modal-dialog" role="document" style="width: 300px;">
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title">是否确定删除训练计划</h4>
+									<h4 class="modal-title">提示</h4>
 								</div>
-								<div class="modal-footer">
+								<div class="modal-body">
+									<p class="modal-title">是否确定删除训练计划</p>
+								</div>
+								<div class="modal-footer" style="text-align: right;">
 									<button type="button" class="btn btn-primary" @click="deleteTrainConfirm">确定</button>
 									<button type="button" class="btn btn-fff" data-dismiss="modal" @click="canceldeleteTrain">取消</button>
 								</div>
@@ -1512,14 +1534,14 @@
 
 					</div>
 		<div class="modal fade modal-style mModal" id="updateTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog" role="document" style="width: 300px;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title">修改训练计划</h4>
 					</div>
 					<div class="modal-body">
-						<input type="text" class="form-control" maxlength="15"  placeholder="修改训练计划（限15个字）" v-model="updateTrainName"/>
+						<input type="text" class="form-control" maxlength="15" style="width: 100%;" placeholder="修改训练计划（限15个字）" v-model="updateTrainName"/>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" @click="updateTrainConfirm">确定</button>
