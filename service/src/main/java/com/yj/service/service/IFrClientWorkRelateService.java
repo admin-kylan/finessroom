@@ -19,5 +19,5 @@ public interface IFrClientWorkRelateService extends BaseService<FrClientWorkRela
 
     JsonResult saveWorks(String[] frClientWorkTypeIds, String cid, String workHistory, String workSituation) throws YJException;
 
-    List<FrClientWorkRelate> getWorks();
+    List<FrClientWorkRelate> getWorks(String clientId);
 }

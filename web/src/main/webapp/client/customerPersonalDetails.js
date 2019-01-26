@@ -71,7 +71,7 @@ var customerPersonalDetails = new Vue({
             } else if (t == 7) {
                 console.log(t)
                 that.type = 1;
-                that.Skinchecked.length=0;
+                that.Skinchecked.length = 0;
                 that.getSaveDate();
                 $(":checkbox").attr('checked', false)
                 $("textarea").text('');
@@ -79,13 +79,13 @@ var customerPersonalDetails = new Vue({
 
             } else if (t == 8) {
                 that.type = 2;
-                that.Hairchecked.length=0;
+                that.Hairchecked.length = 0;
                 that.getSaveDate();
                 $(":checkbox").attr('checked', false)
                 $("textarea").text('');
                 $("p[name='pdate']").html("");
             } else if (t == 9) {
-                that.Plasticitychecked.length=0;
+                that.Plasticitychecked.length = 0;
                 that.type = 3;
                 that.getSaveDate();
                 $(":checkbox").attr('checked', false)
@@ -104,9 +104,9 @@ var customerPersonalDetails = new Vue({
             $(":checkbox").attr('checked', false)
             $("textarea").text('');
             $("p[name='pdate']").html("");
-            that.Skinchecked.length=0;
-            that.Hairchecked.length=0;
-            that.Plasticitychecked.length=0;
+            that.Skinchecked.length = 0;
+            that.Hairchecked.length = 0;
+            that.Plasticitychecked.length = 0;
             $.each(that.time, function (i, n) {
                 if (n.saveDate == formatDate(new Date())) {
                     alert("当天只能新增一次")
@@ -121,15 +121,16 @@ var customerPersonalDetails = new Vue({
             var clientId = $.cookie("cid")//取出值
             $.get(url, {"clientId": clientId}, function (res) {
                 that.ClientInfo = res.data;
-                console.log( that.ClientInfo.coachs)
+                console.log(that.ClientInfo.coachs)
             })
 
         },
         //获取生活详情分类
         getDetails: function () {
             const that = this;
+            var cid = $.cookie("cid");
             const url2 = $.stringFormat('{0}/frClientLifeRelate/getDetails', $.cookie('url'));
-            $.get(url2, function (res) {
+            $.get(url2,{"clientId":cid}, function (res) {
                 that.UserLifeContent = res.data;
             });
             const url1 = $.stringFormat('{0}/frClientLifeType/getDetails', $.cookie('url'));
@@ -150,13 +151,13 @@ var customerPersonalDetails = new Vue({
                     }
                 }
             }, 200)
-            var cid = $.cookie("cid");
+
             const url3 = $.stringFormat('{0}/frClientSource/getSource', $.cookie('url'));
             $.get(url3, {"cid": cid}, function (res) {
                 that.UserSource = res.data.frClientSources;
                 setTimeout(function () {
                     $('#' + res.data.sourceId).attr('checked', true)
-                    if(res.data.customerSource!=null &&res.data.customerSource!=''){
+                    if (res.data.customerSource != null && res.data.customerSource != '') {
                         var arr = res.data.customerSource.split(':');
 
                         $("input[name=" + res.data.sourceId + "]").val(arr[1])
@@ -169,12 +170,13 @@ var customerPersonalDetails = new Vue({
         //获取运动档案
         getSports: function () {
             const that = this;
+            var cid = $.cookie("cid");
             const url = $.stringFormat('{0}/frClientMotionType/getSports', $.cookie('url'));
             $.get(url, function (res) {
                 that.SportInfo = res.data;
             })
             const ur2 = $.stringFormat('{0}/frClientMotionRelate/getSports', $.cookie('url'));
-            $.get(ur2, function (res) {
+            $.get(ur2,{"clientId":cid}, function (res) {
                 that.Sportchecked = res.data;
             })
             var interval = setInterval(function () {
@@ -199,12 +201,13 @@ var customerPersonalDetails = new Vue({
         //获得工作行业
         getWorks: function () {
             const that = this;
+            var cid = $.cookie("cid");
             const url = $.stringFormat('{0}/frClientWorkType/getWorks', $.cookie('url'));
             $.get(url, function (res) {
                 that.WorkInfo = res.data;
             })
             const ur2 = $.stringFormat('{0}/frClientWorkRelate/getWorks', $.cookie('url'));
-            $.get(ur2, function (res) {
+            $.get(ur2,{"clientId":cid}, function (res) {
                 that.Workchecked = res.data;
             })
             var interval = setInterval(function () {
@@ -231,13 +234,14 @@ var customerPersonalDetails = new Vue({
         //获得心理状况
         getMentality: function () {
             const that = this;
+            var cid = $.cookie("cid");
             const url = $.stringFormat('{0}/frClientMentalityType/getMentality', $.cookie('url'));
             $.get(url, function (res) {
 
                 that.MentalityInfo = res.data;
             })
             const ur2 = $.stringFormat('{0}/frClientMentalityRelate/getMentality', $.cookie('url'));
-            $.get(ur2, function (res) {
+            $.get(ur2,{"clientId":cid},function (res) {
                 that.Mentalitychecked = res.data;
             })
 
@@ -264,16 +268,17 @@ var customerPersonalDetails = new Vue({
         },
         //获得家庭关系
         getFamily: function () {
-            const that = this;
-            const url = $.stringFormat('{0}/frClientFamily/getFamily', $.cookie('url'));
-            $.get(url, function (res) {
+            var that = this;
+            var cid = $.cookie("cid");
+            var url = $.stringFormat('{0}/frClientFamily/getFamily', $.cookie('url'));
+            $.get(url, {"clientId": cid}, function (res) {
                 that.FamilyInfo = res.data;
             })
         },
         //获得日期
         getSaveDate: function () {
-            const that = this;
-            const url = $.stringFormat('{0}/frClientArchives/getArchives', $.cookie('url'));
+            var that = this;
+            var url = $.stringFormat('{0}/frClientArchives/getArchives', $.cookie('url'));
             var cid = $.cookie("cid");
             var type = that.type;
             $.post(url, {"cid": cid, "type": type}, function (res) {
@@ -283,7 +288,7 @@ var customerPersonalDetails = new Vue({
                 })
             })
 
-            const typeUrl = $.stringFormat('{0}/frClientArchivesType/getTypeAll', $.cookie('url'));
+            var typeUrl = $.stringFormat('{0}/frClientArchivesType/getTypeAll', $.cookie('url'));
             $.get(typeUrl, {"type": type}, function (res) {
                 that.date = formatDate(new Date());
                 if (type == 1) {
@@ -299,7 +304,7 @@ var customerPersonalDetails = new Vue({
         },
         //点击日期
         getContent: function (date) {
-            const that = this;
+            var that = this;
             for (var i = 0; i < 5; i++) {
                 var num = 'price' + (i + 1);
                 $("#" + num).attr('src', '../img/addImg.png')
@@ -663,13 +668,14 @@ var customerPersonalDetails = new Vue({
         getPsychology: function () {
             const that = this;
             //获取类型
+            var cid = $.cookie("cid");
             const url = $.stringFormat('{0}/frClientPhysiologyType/getPsychology', $.cookie('url'));
             $.get(url, function (res) {
                 that.PsychologyInfo = res.data;
             })
             //获取内容
             const ur2 = $.stringFormat('{0}/frClientPhysiologyRelate/getPsychology', $.cookie('url'));
-            $.get(ur2, function (res) {
+            $.get(ur2,{"clientId":cid}, function (res) {
                 that.Psychologychecked = res.data;
             })
 
@@ -719,31 +725,31 @@ var customerPersonalDetails = new Vue({
             mainheight();
         },
         // 聊天工具确认新增
-        confirmNew: function (event,index) {
+        confirmNew: function (event, index) {
             alert('确认成功');
             var html = '<span class="toGreen">修改</span>' +
                 '<span class="dark">删除</span>';
             $(event).parent().html(html);
         },
         // 教练新增
-        coachAdded: function (event,index) {
+        coachAdded: function (event, index) {
             const that = this;
             index;
             console.log(index)
             const rurl = $.stringFormat('{0}/roleInfo/findAll', $.cookie('url'));
             var el = event.currentTarget;
             $.get(rurl, function (res) {
-                var html = '<tr class="'+"tr1"+'">' +
-                    '<td class="'+"t1"+'"><select onchange="customerPersonalDetails.RoleChange(this,'+index+')" name="" id="">'
+                var html = '<tr class="' + "tr1" + '">' +
+                    '<td class="' + "t1" + '"><select onchange="customerPersonalDetails.RoleChange(this,' + index + ')" name="" id="">'
                 $.each(res.data, function (i, n) {
                     html += '<option value=' + n.id + '>' + n.firstName + '</option>'
                 })
                 html += '</select></td>';
 
-                html += '<td class="'+"t2"+'"></td>' +
-                    '<td class="'+"t3"+'"><select name="" id=""><option value="1"></option></select></td>' +
+                html += '<td class="' + "t2" + '"></td>' +
+                    '<td class="' + "t3" + '"><select name="" id=""><option value="1"></option></select></td>' +
                     '<td >' +
-                    '<span class="toRed" onclick="customerPersonalDetails.coachConfirmation(this,'+index+')">确认</span>' +
+                    '<span class="toRed" onclick="customerPersonalDetails.coachConfirmation(this,' + index + ')">确认</span>' +
                     '</td>' +
                     '</tr>';
                 $('#coachAdded').attr('rowspan', parseInt($('#coachAdded').attr('rowspan')) + 1);
@@ -827,32 +833,32 @@ var customerPersonalDetails = new Vue({
             var that = this;
             console.log(that.ClientInfo.coachs)
             alert('确认成功');
-            console.log(  $(".t1").eq(index).find("option:selected").text())
+            console.log($(".t1").eq(index).find("option:selected").text())
             that.upnum = 0
-            this.updatename=$(".t1").eq(index).find("option:selected").text()
+            this.updatename = $(".t1").eq(index).find("option:selected").text()
             // that.updatephone=$(".t3").eq(index).find("option:selected").text()
-            if(typeof  that.ClientInfo.coachs[index]){
+            if (typeof that.ClientInfo.coachs[index]) {
                 //新增确认
-                var client=new Object();
-                client.firstName=this.updatename;
-                client.rolRoleName=$(".t2").eq(index).text();
-                client.phone=$(".t3").eq(index).find("option:selected").text();
-                client.personalId=$(".t3").eq(index).find("option:selected").val();
-                client.roleId=$(".t1").eq(index).find("option:selected").val();
+                var client = new Object();
+                client.firstName = this.updatename;
+                client.rolRoleName = $(".t2").eq(index).text();
+                client.phone = $(".t3").eq(index).find("option:selected").text();
+                client.personalId = $(".t3").eq(index).find("option:selected").val();
+                client.roleId = $(".t1").eq(index).find("option:selected").val();
                 that.ClientInfo.coachs.push(client)
                 $('.tr1').eq(index).remove();
-            }else {
+            } else {
                 //修改确认
-            that.ClientInfo.coachs[index].firstName =  this.updatename
-            that.ClientInfo.coachs[index].rolRoleName = $(".t2").eq(index).text()
-            that.ClientInfo.coachs[index].phone = $(".t3").eq(index).find("option:selected").text()
+                that.ClientInfo.coachs[index].firstName = this.updatename
+                that.ClientInfo.coachs[index].rolRoleName = $(".t2").eq(index).text()
+                that.ClientInfo.coachs[index].phone = $(".t3").eq(index).find("option:selected").text()
                 var html = '<span class="toGreen" onclick="customerPersonalDetails.coachUpdate(' + index + ')">修改</span>' +
                     '<span class="dark">删除</span>';
                 $('.t1').eq(index).html(this.updatename);
                 $('.t3').eq(index).html($(".t3").eq(index).find("option:selected").text());
                 console.log(html)
                 $(event).parent().html(html);
-                console.log( $('.t1'))
+                console.log($('.t1'))
             }
 
         },
@@ -1541,58 +1547,58 @@ var customerPersonalDetails = new Vue({
         exportExcel: function (num) {
             console.log(num)
             var that = this;
-          if(num==1){
-              var url = $.stringFormat('{0}/excel/getSkin', $.cookie('url'));
-              var data = JSON.stringify(that.Skinchecked)
-              if(data==='{}'||data==='[]' ||that.Skinchecked.length==0){
-                  alert("未选中内容");
-              }else {
-                  $.ajax({
-                      url: url,
-                      data: data,
-                      type: 'POST',
-                      dataType: 'json',
-                      contentType: "application/json;charset=utf-8",
-                      success: function (res) {
-                          alert(res.msg)
-                      }
-                  })
-              }
-          }else if(num==2){
-              var url = $.stringFormat('{0}/excel/getHair', $.cookie('url'));
-              var data = JSON.stringify(that.Hairchecked)
-              if(data==='{}'||data==='[]' ||that.Hairchecked.length==0){
-                  alert("未选中内容");
-              }else {
-                  $.ajax({
-                      url: url,
-                      data: data,
-                      type: 'POST',
-                      dataType: 'json',
-                      contentType: "application/json;charset=utf-8",
-                      success: function (res) {
-                          alert(res.msg)
-                      }
-                  })
-              }
-          }else if(num==3){
-              var url = $.stringFormat('{0}/excel/getPlasticity', $.cookie('url'));
-              var data = JSON.stringify(that.Plasticitychecked)
-              if(data==='{}'||data==='[]' ||that.Plasticitychecked.length==0){
-                  alert("未选中内容");
-              }else {
-                  $.ajax({
-                      url: url,
-                      data: data,
-                      type: 'POST',
-                      dataType: 'json',
-                      contentType: "application/json;charset=utf-8",
-                      success: function (res) {
-                          alert(res.msg)
-                      }
-                  })
-              }
-          }
+            if (num == 1) {
+                var url = $.stringFormat('{0}/excel/getSkin', $.cookie('url'));
+                var data = JSON.stringify(that.Skinchecked)
+                if (data === '{}' || data === '[]' || that.Skinchecked.length == 0) {
+                    alert("未选中内容");
+                } else {
+                    $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: "application/json;charset=utf-8",
+                        success: function (res) {
+                            alert(res.msg)
+                        }
+                    })
+                }
+            } else if (num == 2) {
+                var url = $.stringFormat('{0}/excel/getHair', $.cookie('url'));
+                var data = JSON.stringify(that.Hairchecked)
+                if (data === '{}' || data === '[]' || that.Hairchecked.length == 0) {
+                    alert("未选中内容");
+                } else {
+                    $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: "application/json;charset=utf-8",
+                        success: function (res) {
+                            alert(res.msg)
+                        }
+                    })
+                }
+            } else if (num == 3) {
+                var url = $.stringFormat('{0}/excel/getPlasticity', $.cookie('url'));
+                var data = JSON.stringify(that.Plasticitychecked)
+                if (data === '{}' || data === '[]' || that.Plasticitychecked.length == 0) {
+                    alert("未选中内容");
+                } else {
+                    $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: "application/json;charset=utf-8",
+                        success: function (res) {
+                            alert(res.msg)
+                        }
+                    })
+                }
+            }
 
         },
     },

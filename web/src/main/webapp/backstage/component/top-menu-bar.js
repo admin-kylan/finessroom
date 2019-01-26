@@ -18,6 +18,9 @@
 	  	mounted: function() {
 	  		this.bindEvent();
 	  	},
+		created:function(){
+			document.title=this.title;
+		},
 	  	methods: {
 	  		bindEvent:function(){
 	  			$('.btn-toggle-fullwidth').on('click', function() {

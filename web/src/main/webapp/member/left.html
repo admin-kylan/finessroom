@@ -40,7 +40,7 @@
                         <span><input type="checkbox" class="series" :title="''+treers.id"></span>
                         <span>{{treers.cardTypeName}}</span>
                         <span class="span_sd">
-                                <a :href="'main1.html?id='+treers.id+'&shopId='" target="rightFrame" class="success">修改</a>
+                                <a :href="'main1.html?id='+treers.id+'&name='+encodeURI(treers.cardTypeName)" target="rightFrame" class="success">修改</a>
                                 <a  class="del" v-on:click="delCurrent(treers.id)">删除</a>
                         </span>
                     </li>
@@ -57,7 +57,7 @@
                                     <a v-on:click="modify(tferr.id,tferr.type,$event)"  href="right.html" target="rightFrame">{{tferr.cardTypeName}}</a>
                                 </span>
                                 <span class="span_sd">
-                                    <a :href="'updateCurrent.html?id='+tferr.id" target="rightFrame" class="success">修改</a>
+                                    <a :href="'updateCurrent.html?id='+tferr.id+'&name='+encodeURI(tferr.cardTypeName)" target="rightFrame" class="success">修改</a>
                                     <a  class="del" v-on:click="dels(tferr.id)">删除</a>
                                 </span>
                             </li>
@@ -109,14 +109,14 @@
                 <div v-for="tf in storeList" >
                     <div class="left_box_div" onclick="leftBoxDiv(this)">{{tf.shopName}}</div>
                     <ul class="ul_li">
-                        <div class="left_box_red"><a href="main.html" target="rightFrame">添加卡类别</a></div>
+                        <div class="left_box_red"><a :href="'main.html?type=1&shopId='+tf.id" target="rightFrame">添加卡类别</a></div>
                         <div v-for="tfers in tf.frCardTypeList">
                             <li>
                                 <span><img onclick="ul_liImg(this)" src="../img/u25_selected.png"></span>
                                 <span><input type="checkbox" class="series" :title="''+tfers.id"></span>
                                 <span>{{tfers.cardTypeName}}</span>
                                 <span class="span_sd">
-		                                <a :href="'main1.html?id='+tfers.id+'&storeId='+tf.id" target="rightFrame" class="success">修改</a>
+		                                <a :href="'main1.html?id='+tfers.id+'&storeId='+tf.id+'&name='+encodeURI(tfers.cardTypeName)" target="rightFrame" class="success">修改</a>
 		                                <a  class="del" v-on:click="del(tfers.id,tf.id)">删除</a>
 		                        </span>
                             </li>
@@ -130,7 +130,7 @@
                                             <a href="right.html" v-on:click="modify(tfer.id,tfer.type)" target="rightFrame">{{tfer.cardTypeName}}</a>
                                         </span>
                                         <span class="span_sd">
-		                                    <a :href="'employee1.html?id='+tfer.id"  target="rightFrame" class="success">修改</a>
+		                                    <a :href="'employee1.html?id='+tfer.id+'&name='+tfer.cardTypeName"  target="rightFrame" class="success">修改</a>
 		                                    <a  class="del" v-on:click="dels(tfer.id,tf.id)">删除</a>
 		                                </span>
                                     </li>
@@ -362,7 +362,7 @@
                 <div v-for="nots in notList" >
                     <div class="left_box_div" onclick="leftBoxDiv(this)">{{nots.shopName}}</div>
                     <ul class="ul_li">
-                        <div class="left_box_red"><a href="main.html" target="rightFrame">添加卡类别</a></div>
+                        <div class="left_box_red"><a :href="'main.html?type=2&shopId='+nots.id" target="rightFrame">添加卡类别</a></div>
                         <div v-for="tfers in nots.frCardTypeList" v-if="tfers.flag != '1'">
                             <li>
                                 <span><img onclick="ul_liImg(this)" src="../img/u25_selected.png"></span>

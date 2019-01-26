@@ -36,8 +36,8 @@ public class FrClientLifeRelateController {
     }
 
     @GetMapping("/getDetails")
-    public JsonResult getDetails() {
-        List<FrClientLifeRelate> frClientLifeRelates=iFrClientLifeRelateService.getDetails();
+    public JsonResult getDetails(String clientId) {
+        List<FrClientLifeRelate> frClientLifeRelates=iFrClientLifeRelateService.getDetails(clientId);
         return JsonResult.success(frClientLifeRelates);
     }
 }

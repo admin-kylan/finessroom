@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationFreezeClientMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationFreezeClient">
+        <id column="id" property="id" />
+        <result column="price" property="price" />
+        <result column="freeze_date" property="freezeDate" />
+        <result column="un_freeze_date" property="unFreezeDate" />
+        <result column="remake" property="remake" />
+        <result column="card_id" property="cardId" />
+        <result column="card_no" property="cardNo" />
+        <result column="count" property="count" />
+        <result column="edu_type" property="eduType" />
+        <result column="is_use" property="isUse" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="total_count" property="totalCount" />
+        <result column="client_name" property="clientName" />
+        <result column="shop_id" property="shopId" />
+        <result column="shop_name" property="shopName" />
+        <result column="mobile" property="mobile" />
+        <result column="client_id" property="clientId" />
+        <result column="create_date" property="createDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, price, freeze_date AS freezeDate, un_freeze_date AS unFreezeDate, remake, card_id AS cardId, card_no AS cardNo, count, edu_type AS eduType, is_use AS isUse, begin_date AS beginDate, end_date AS endDate, total_count AS totalCount, client_name AS clientName, shop_id AS shopId, shop_name AS shopName, mobile, client_id AS clientId, create_date AS createDate
+    </sql>
+
+    <select id="findAllByCondition" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            fr_education_freeze_client
+        where
+            shop_id = #{shopId}
+        <if test="beginDate != null and beginDate != ''">
+            AND freeze_date >= #{beginDate}
+        </if>
+        <if test="searchInput != null and searchInput != ''">
+            AND mobile = #{searchInput}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND un_freeze_date <![CDATA[ <= ]]> #{endDate}
+        </if>
+            and is_use = 0
+            and edu_type = ${eduType}
+    </select>
+
+</mapper>

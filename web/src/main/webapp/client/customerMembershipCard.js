@@ -1,19 +1,22 @@
-
 // 票券抵扣弹窗
 function btn_de() {
     $('.btn_de').show();
 }
+
 //年卡详情查看
 function carddetails(id) {
 
 }
-function  newCustomers_maskLayer_X(){
+
+function newCustomers_maskLayer_X() {
     $('.newCustomers_maskLayer').hide();
 }
+
 //关闭小弹窗
 function settingOut_a() {
     $('.maskLayerAlert_box_alert').hide();
 }
+
 //关闭小弹窗
 function settingOut_a2() {
     $('.maskLayerAlert_box_alert2').hide();
@@ -37,553 +40,667 @@ var customerMembershipCard = new Vue({
     data: {
 //      共用参数---start
         LiIndex: 0,
-        clientId:'',           //会员ID
-        code:'',               //客户代码
-        cardId:'',             //所选择的会员卡卡种ID
-        shopId:'',             //选中的会员卡所在店铺ID
-        cardNo:'',             //选中的会员卡号
-        cardNumId:'',         //生成会员卡号的规则ID
-        status:'',             //选中的会员状态
-        catcherClientId:'',   //承接的客户Id
-        catcherClientCardId:'',   //承接的客户会员卡ID
-        givePhone:'',          //承接客户的手机
-        giveName:'',           //承接客户的姓名
-        optionClientList:[],  //获取选择的会员信息
-        optionClientCardList:[],  //获取选择的会员信息
+        clientId: '',           //会员ID
+        code: '',               //客户代码
+        cardId: '',             //所选择的会员卡卡种ID
+        shopId: '',             //选中的会员卡所在店铺ID
+        cardNo: '',             //选中的会员卡号
+        cardNumId: '',         //生成会员卡号的规则ID
+        status: '',             //选中的会员状态
+        catcherClientId: '',   //承接的客户Id
+        catcherClientCardId: '',   //承接的客户会员卡ID
+        givePhone: '',          //承接客户的手机
+        giveName: '',           //承接客户的姓名
+        optionClientList: [],  //获取选择的会员信息
+        optionClientCardList: [],  //获取选择的会员信息
         clientUserName: window.parent.document.getElementById("clientUserName").innerText,    //客户姓名
         clientPhone: window.parent.document.getElementById("clientPhone").innerText, //客户手机
         clientSet: window.parent.document.getElementById("clientSet").innerText,   //客户性别
-        personnelName:$.cookie("name"),  //系统当前操作人信息
-        randomNumber:'',      //随机生成，防止点击过快
-        paginationId:'pagination0',      //分页标签ID
-        paymentMethodTops:0,             //切换支付方式
+        personnelName: $.cookie("name"),  //系统当前操作人信息
+        randomNumber: '',      //随机生成，防止点击过快
+        paginationId: 'pagination0',      //分页标签ID
+        paymentMethodTops: 0,             //切换支付方式
         transferCardBoxTop: 0,           //停卡、冻结切换
-        creatTime:getNowTime(true),  //创建时间
-        methName:'',                  //验证完之后要执行的方法名称
-        methPass:'',                  //要验证的密码的标签id
-        perId:'',                     //要验证的员工ID  不填写，默认是cookie获取
+        creatTime: getNowTime(true),  //创建时间
+        methName: '',                  //验证完之后要执行的方法名称
+        methPass: '',                  //要验证的密码的标签id
+        perId: '',                     //要验证的员工ID  不填写，默认是cookie获取
 //      共用参数---end
 //      小部分共用参数--start
-        PaginationName:'',     //存放调用分页的方法名称
-        optionCardLis:[],      //选择会员卡列表
-        maeketUserList:[],     //销售人员列表
-        payModelParemt:'',       //存放金额
-        payModelMoney:0,        //支付总金额
-        payMentMoney:{           //小计金额
-            price:0,              //实际应付金额
-            totalPrice:0,        //小计 = 实际应付金额 + 票卷差价（默认差价0）
-            discountNum:0,       //抵扣金额
-            discount:0,           //优惠折扣
-            needPrice:0,          //计算后的应付金额
-            noPrice:0,            //未付金额
-            retChange:0,          //找零
+        PaginationName: '',     //存放调用分页的方法名称
+        optionCardLis: [],      //选择会员卡列表
+        maeketUserList: [],     //销售人员列表
+        payModelParemt: '',       //存放金额
+        payModelMoney: 0,        //支付总金额
+        payMentMoney: {           //小计金额
+            price: 0,              //实际应付金额
+            totalPrice: 0,        //小计 = 实际应付金额 + 票卷差价（默认差价0）
+            discountNum: 0,       //抵扣金额
+            discount: 0,           //优惠折扣
+            needPrice: 0,          //计算后的应付金额
+            noPrice: 0,            //未付金额
+            retChange: 0,          //找零
         },
-        payModel:{              //支付方式
-            L1:parseFloat(0).toFixed(2),   //支付宝
-            L2:parseFloat(0).toFixed(2),   //刷卡
-            L3:parseFloat(0).toFixed(2),   //微信
-            L4:parseFloat(0).toFixed(2),   //现金
-            L5:parseFloat(0).toFixed(2),   //转账
-            L6:parseFloat(0).toFixed(2),   //花呗
-            L7:parseFloat(0).toFixed(2),   //其他
+        payModel: {              //支付方式
+            L1: parseFloat(0).toFixed(2),   //支付宝
+            L2: parseFloat(0).toFixed(2),   //刷卡
+            L3: parseFloat(0).toFixed(2),   //微信
+            L4: parseFloat(0).toFixed(2),   //现金
+            L5: parseFloat(0).toFixed(2),   //转账
+            L6: parseFloat(0).toFixed(2),   //花呗
+            L7: parseFloat(0).toFixed(2),   //其他
         },
-        payModelCount:parseFloat(0).toFixed(0),  //统计支付金额共用
-        ticketPrice:{
-            ticketPriceList:[           //选中的会员卡票卷信息    -----------先写死后期动态
-                {"tickNo":201807246565,"tickName":"抵用券","tickNum":10,"differ":5},
-                {"tickNo":201807246158,"tickName":"充值券","tickNum":100,"differ":10},
-                {"tickNo":201807246158,"tickName":"充值券","tickNum":50,"differ":15},
-                {"tickNo":201807246158,"tickName":"充值券","tickNum":100,"differ":20},
-                {"tickNo":201807246158,"tickName":"抵用券","tickNum":50,"differ":15},
-                {"tickNo":201807246158,"tickName":"抵用券","tickNum":100,"differ":20},
-                {"tickNo":201807246158,"tickName":"抵用券","tickNum":50,"differ":15},
-                {"tickNo":201807246158,"tickName":"抵用券","tickNum":100,"differ":20},
+        payModelCount: parseFloat(0).toFixed(0),  //统计支付金额共用
+        ticketPrice: {
+            ticketPriceList: [           //选中的会员卡票卷信息    -----------先写死后期动态
+                {"tickNo": 201807246565, "tickName": "抵用券", "tickNum": 10, "differ": 5},
+                {"tickNo": 201807246158, "tickName": "充值券", "tickNum": 100, "differ": 10},
+                {"tickNo": 201807246158, "tickName": "充值券", "tickNum": 50, "differ": 15},
+                {"tickNo": 201807246158, "tickName": "充值券", "tickNum": 100, "differ": 20},
+                {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 50, "differ": 15},
+                {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 100, "differ": 20},
+                {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 50, "differ": 15},
+                {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 100, "differ": 20},
             ],
-            tickMark:'',                 //票劵标记
-            ticketPriceListOk:[],        //选中的要使用的票卷信息
-            storage0rderPrice:0,         //票卷选中的会员卡的有效储值金额
-            cardNo:'未选择会员卡',       //票卷选中的会员卡号  ------未选择会员卡
-            cardId:'',                    //票卷选中的会员卡号Id
-            cardUserName:'--',           //票卷选中的会员卡客户名称
-            differencePrice:0,           //票卷差价
-            totalPrice:0,                 //选中的票卷金额
-            storagePirc:0,                //要抵扣的储值卡金额
-            userPass:'',                  //票卷客户授权凭证
+            tickMark: '',                 //票劵标记
+            ticketPriceListOk: [],        //选中的要使用的票卷信息
+            storage0rderPrice: 0,         //票卷选中的会员卡的有效储值金额
+            cardNo: '未选择会员卡',       //票卷选中的会员卡号  ------未选择会员卡
+            cardId: '',                    //票卷选中的会员卡号Id
+            cardUserName: '--',           //票卷选中的会员卡客户名称
+            differencePrice: 0,           //票卷差价
+            totalPrice: 0,                 //选中的票卷金额
+            storagePirc: 0,                //要抵扣的储值卡金额
+            userPass: '',                  //票卷客户授权凭证
         },       //票卷部分
-        discount:{                                 //折扣优惠
-            num:0,                   //打几折
-            changeNum:0,            //整单去零
-            fullType:0,             //满减优惠类型（0、一次；1、可重复）
+        discount: {                                 //折扣优惠
+            num: 0,                   //打几折
+            changeNum: 0,            //整单去零
+            fullType: 0,             //满减优惠类型（0、一次；1、可重复）
             // discountFull:0,        //满
             // discountReduce:0,      //减
-            discountPrice:0,       //总折扣/优惠金额
-            discountFullOne:0,     //重复满
-            discountReduceOne:0,   //重复减
-            discountFullTwo:0,     //单次满
-            discountReduceTwo:0,   //单次减
+            discountPrice: 0,       //总折扣/优惠金额
+            discountFullOne: 0,     //重复满
+            discountReduceOne: 0,   //重复减
+            discountFullTwo: 0,     //单次满
+            discountReduceTwo: 0,   //单次减
         },
 //      小部分共用参数--end
 //      后期可动态从字典表获取赋值参数--start
-        parameterList:{
-            payModeList:[               //支付方式参数
-                {"vue":1,"lav":"支付宝"},
-                {"vue":2,"lav":"刷卡"},
-                {"vue":3,"lav":"微信"},
-                {"vue":4,"lav":"现金"},
-                {"vue":5,"lav":"转账"},
-                {"vue":6,"lav":"花呗"},
-                {"vue":7,"lav":"其他"}
+        parameterList: {
+            payModeList: [               //支付方式参数
+                {"vue": 1, "lav": "支付宝"},
+                {"vue": 2, "lav": "刷卡"},
+                {"vue": 3, "lav": "微信"},
+                {"vue": 4, "lav": "现金"},
+                {"vue": 5, "lav": "转账"},
+                {"vue": 6, "lav": "花呗"},
+                {"vue": 7, "lav": "其他"}
             ],
-            status:[               //卡状态
-                {"vue":0,"lav":"正常"},
-                {"vue":1,"lav":"停卡"},
-                {"vue":2,"lav":"冻结"},
-                {"vue":3,"lav":"已过期"},
-                {"vue":4,"lav":"未开卡"},
-                {"vue":5,"lav":"待补余"},
-                {"vue":6,"lav":"历史"}
+            status: [               //卡状态
+                {"vue": 0, "lav": "正常"},
+                {"vue": 1, "lav": "停卡"},
+                {"vue": 2, "lav": "冻结"},
+                {"vue": 3, "lav": "已过期"},
+                {"vue": 4, "lav": "未开卡"},
+                {"vue": 5, "lav": "待补余"},
+                {"vue": 6, "lav": "历史"}
             ],
-            type:[               //卡类型
-                {"vue":1,"lav":"时间卡"},
-                {"vue":2,"lav":"小时卡"},
-                {"vue":3,"lav":"次卡"},
-                {"vue":4,"lav":"储值卡"},
-                {"vue":5,"lav":"充值卡"},
-                {"vue":6,"lav":"折扣卡"},
+            type: [               //卡类型
+                {"vue": 1, "lav": "时间卡"},
+                {"vue": 2, "lav": "小时卡"},
+                {"vue": 3, "lav": "次卡"},
+                {"vue": 4, "lav": "储值卡"},
+                {"vue": 5, "lav": "充值卡"},
+                {"vue": 6, "lav": "折扣卡"},
             ],
-            payType:[          //付款方式
-                {"vue":1,"lav":"全款"},
-                {"vue":2,"lav":"定金"},
-                {"vue":3,"lav":"赠送"},
-                {"vue":4,"lav":"置换"},
-                {"vue":5,"lav":"分期付款"},
+            payType: [          //付款方式
+                {"vue": 1, "lav": "全款"},
+                {"vue": 2, "lav": "定金"},
+                {"vue": 3, "lav": "赠送"},
+                {"vue": 4, "lav": "置换"},
+                {"vue": 5, "lav": "分期付款"},
             ],
-            consumeType:[        //消费方式
-                {"vue":1,"lav":"会员消费"},
-                {"vue":2,"lav":"普通消费"},
-                {"vue":3,"lav":"员工领用"},
-                {"vue":4,"lav":"协议单位"},
+            consumeType: [        //消费方式
+                {"vue": 1, "lav": "会员消费"},
+                {"vue": 2, "lav": "普通消费"},
+                {"vue": 3, "lav": "员工领用"},
+                {"vue": 4, "lav": "协议单位"},
             ],
-            orderState:[       //订单状态
-                {"vue":1,"lav":"代付款"},
-                {"vue":2,"lav":"已付款"},
+            orderState: [       //订单状态
+                {"vue": 1, "lav": "代付款"},
+                {"vue": 2, "lav": "已付款"},
             ],
-            fullType:[        //满减优惠类型
-                {"vue":0,"lav":"一次"},
-                {"vue":1,"lav":"可重复"},
+            fullType: [        //满减优惠类型
+                {"vue": 0, "lav": "一次"},
+                {"vue": 1, "lav": "可重复"},
             ],
-            auditStatus:[     //审核状态
-                {"vue":0,"lav":"待审核"},
-                {"vue":1,"lav":"已审核"},
-                {"vue":2,"lav":"审核不通过"},
+            auditStatus: [     //审核状态
+                {"vue": 0, "lav": "待审核"},
+                {"vue": 1, "lav": "已审核"},
+                {"vue": 2, "lav": "审核不通过"},
             ],
-            saleAllotType:[          //销售业绩分配类型
-                {"vue":0,"lav":"无业绩分配"},
-                {"vue":1,"lav":"按比例分配"},
-                {"vue":2,"lav":"按金额分配"},
+            saleAllotType: [          //销售业绩分配类型
+                {"vue": 0, "lav": "无业绩分配"},
+                {"vue": 1, "lav": "按比例分配"},
+                {"vue": 2, "lav": "按金额分配"},
             ],
-            zkCyfs:[           //持有方式参数
-                {"vue":0,"lav":"不限人员使用"},
-                {"vue":1,"lav":"指定人员持有"}],
-            zkXffs:[           //消费方式参数
-                {"vue":0,"lav":"随主卡同步附属使用"},
-                {"vue":1,"lav":"子卡与主卡分割额度使用"},
-                {"vue":2,"lav":"子卡与主卡享有同等权益"}],
-            cardHandle:[  // 卡处理参数
-                {"vue":0,"lav":"子卡存在"},
-                {"vue":1,"lav":"独立分享"}
+            zkCyfs: [           //持有方式参数
+                {"vue": 0, "lav": "不限人员使用"},
+                {"vue": 1, "lav": "指定人员持有"}],
+            zkXffs: [           //消费方式参数
+                {"vue": 0, "lav": "随主卡同步附属使用"},
+                {"vue": 1, "lav": "子卡与主卡分割额度使用"},
+                {"vue": 2, "lav": "子卡与主卡享有同等权益"}],
+            cardHandle: [  // 卡处理参数
+                {"vue": 0, "lav": "子卡存在"},
+                {"vue": 1, "lav": "独立分享"}
             ],
-            shareBenefit:[  // 分享权益参数
-                {"vue":0,"lav":"主卡共享"},
-                {"vue":1,"lav":"随主卡"}
+            shareBenefit: [  // 分享权益参数
+                {"vue": 0, "lav": "主卡共享"},
+                {"vue": 1, "lav": "随主卡"}
             ],
-            continueOrderStat:[  //续卡操作状态
-                {"vue":0,"lav":"待付款"},
-                {"vue":1,"lav":"冲销"},
-                {"vue":2,"lav":"已冲销"}
+            continueOrderStat: [  //续卡操作状态
+                {"vue": 0, "lav": "待付款"},
+                {"vue": 1, "lav": "冲销"},
+                {"vue": 2, "lav": "已冲销"}
             ],
-            splitType:[
-                {"vue":1,"lav":"比例"},
-                {"vue":2,"lav":"金额"},
+            splitType: [
+                {"vue": 1, "lav": "比例"},
+                {"vue": 2, "lav": "金额"},
             ],
-            saleStatus:[  //人员状态
-                {"vue":0,"lav":"正常"},
-                {"vue":1,"lav":"离职"},
+            saleStatus: [  //人员状态
+                {"vue": 0, "lav": "正常"},
+                {"vue": 1, "lav": "离职"},
             ],
-            allotSetType:[  //人员状态
-                {"vue":0,"lav":"否"},
-                {"vue":1,"lav":"是"},
+            allotSetType: [  //人员状态
+                {"vue": 0, "lav": "否"},
+                {"vue": 1, "lav": "是"},
             ],
-            stopStatus:[  //停卡状态
-                {"vue":0,"lav":"正常"},
-                {"vue":1,"lav":"停卡"},
-                {"vue":2,"lav":"停卡终止"},
-                {"vue":3,"lav":"停卡终止"},
-                {"vue":4,"lav":"停卡终止"},
+            stopStatus: [  //停卡状态
+                {"vue": 0, "lav": "正常"},
+                {"vue": 1, "lav": "停卡"},
+                {"vue": 2, "lav": "停卡终止"},
+                {"vue": 3, "lav": "停卡终止"},
+                {"vue": 4, "lav": "停卡终止"},
             ],
-            stopStatusT:[  //停卡状态
-                {"vue":1,"lav":"冻结"},
-                {"vue":2,"lav":"已解冻"},
-                {"vue":3,"lav":"已解冻"},
-                {"vue":4,"lav":"已解冻"},
+            stopStatusT: [  //停卡状态
+                {"vue": 1, "lav": "冻结"},
+                {"vue": 2, "lav": "已解冻"},
+                {"vue": 3, "lav": "已解冻"},
+                {"vue": 4, "lav": "已解冻"},
             ],
-            storageStatus:[  // 储值状态
-                {"vue":1,"lav":"已储值","cla":"toblue"},
-                {"vue":2,"lav":"已冲销","cla":"togreen"},
-                {"vue":3,"lav":"已退款","cla":"toyin"},
-                {"vue":4,"lav":"已转让","cla":"toyin"},
-                {"vue":5,"lav":"已退款","cla":"toyin"},
-                {"vue":6,"lav":"已退款","cla":"toyin"},
-                {"vue":7,"lav":"已转让","cla":"toyin"},
-                {"vue":8,"lav":"已转让","cla":"toyin"},
-                {"vue":9,"lav":"退全款","cla":"toyin"},
+            storageStatus: [  // 储值状态
+                {"vue": 1, "lav": "已储值", "cla": "toblue"},
+                {"vue": 2, "lav": "已冲销", "cla": "togreen"},
+                {"vue": 3, "lav": "已退款", "cla": "toyin"},
+                {"vue": 4, "lav": "已转让", "cla": "toyin"},
+                {"vue": 5, "lav": "已退款", "cla": "toyin"},
+                {"vue": 6, "lav": "已退款", "cla": "toyin"},
+                {"vue": 7, "lav": "已转让", "cla": "toyin"},
+                {"vue": 8, "lav": "已转让", "cla": "toyin"},
+                {"vue": 9, "lav": "退全款", "cla": "toyin"},
             ],
-            sexList:[
-                {"vue":0,"lav":"男"},
-                {"vue":1,"lav":"女"},
+            sexList: [
+                {"vue": 0, "lav": "男"},
+                {"vue": 1, "lav": "女"},
             ],
-            cardOpening:[
-                {"vue":false,"lav":"直接延续"},
-                {"vue":true,"lav":"另行开卡"},
+            cardOpening: [
+                {"vue": false, "lav": "直接延续"},
+                {"vue": true, "lav": "另行开卡"},
             ],
-            clientUserStaff:[
-                {"staffList": [
-                    {"name":"销售人员","defMess":"请选择销售人员","RoleInfoId":"BEA9D54D151A6444","UserType":1,"BusinessType":"134d3d485168f5er","vModel":"personnelId1","PersonalType":1},
-                    {"name":"游泳教练","defMess":"请选择游泳教练","RoleInfoId":"48e5bc7d3741184f","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId2","PersonalType":2},
-                    {"name":"私教教练","defMess":"请选择私教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId3","PersonalType":3},
-                    {"name":"团教助教","defMess":"请选择团教助教","RoleInfoId":"3f934302ec19d1fa","UserType":4,"BusinessType":"134d3d485168f5er","vModel":"personnelId4","PersonalType":4},
-                    {"name":"美容销售","defMess":"请选择美容销售","RoleInfoId":"","UserType":1,"BusinessType":"334d3d485168f5er","vModel":"personnelId5","PersonalType":5},
-                    {"name":"美甲师","defMess":"请选择美甲师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId6","PersonalType":6}]},
-                {"staffList":[
-                     {"name":"健身教练","defMess":"请选择健身教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId7","PersonalType":7},
-                     {"name":"服务会籍","defMess":"请选择服务会籍","RoleInfoId":"179b1aa3ee2a00e5","UserType":2,"BusinessType":"134d3d485168f5er","vModel":"personnelId8","PersonalType":8},
-                     {"name":"团教教练","defMess":"请选择团教教练","RoleInfoId":"3f934302ec19d1fa","UserType":3,"BusinessType":"134d3d485168f5er","vModel":"personnelId9","PersonalType":9},
-                     {"name":"美容师","defMess":"请选择美容师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId10","PersonalType":10},
-                     {"name":"美容顾问","defMess":"请选择美容顾问","RoleInfoId":"","UserType":2,"BusinessType":"334d3d485168f5er","vModel":"personnelId11","PersonalType":11},
-                     {"name":"美发师","defMess":"请选择美发师","RoleInfoId":"","UserType":3,"BusinessType":"334d3d485168f5er","vModel":"personnelId12","PersonalType":12}]},
+            clientUserStaff: [
+                {
+                    "staffList": [
+                        {
+                            "name": "销售人员",
+                            "defMess": "请选择销售人员",
+                            "RoleInfoId": "BEA9D54D151A6444",
+                            "UserType": 1,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId1",
+                            "PersonalType": 1
+                        },
+                        {
+                            "name": "游泳教练",
+                            "defMess": "请选择游泳教练",
+                            "RoleInfoId": "48e5bc7d3741184f",
+                            "UserType": 3,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId2",
+                            "PersonalType": 2
+                        },
+                        {
+                            "name": "私教教练",
+                            "defMess": "请选择私教教练",
+                            "RoleInfoId": "3f934302ec19d1fa",
+                            "UserType": 3,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId3",
+                            "PersonalType": 3
+                        },
+                        {
+                            "name": "团教助教",
+                            "defMess": "请选择团教助教",
+                            "RoleInfoId": "3f934302ec19d1fa",
+                            "UserType": 4,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId4",
+                            "PersonalType": 4
+                        },
+                        {
+                            "name": "美容销售",
+                            "defMess": "请选择美容销售",
+                            "RoleInfoId": "",
+                            "UserType": 1,
+                            "BusinessType": "334d3d485168f5er",
+                            "vModel": "personnelId5",
+                            "PersonalType": 5
+                        },
+                        {
+                            "name": "美甲师",
+                            "defMess": "请选择美甲师",
+                            "RoleInfoId": "",
+                            "UserType": 3,
+                            "BusinessType": "334d3d485168f5er",
+                            "vModel": "personnelId6",
+                            "PersonalType": 6
+                        }]
+                },
+                {
+                    "staffList": [
+                        {
+                            "name": "健身教练",
+                            "defMess": "请选择健身教练",
+                            "RoleInfoId": "3f934302ec19d1fa",
+                            "UserType": 3,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId7",
+                            "PersonalType": 7
+                        },
+                        {
+                            "name": "服务会籍",
+                            "defMess": "请选择服务会籍",
+                            "RoleInfoId": "179b1aa3ee2a00e5",
+                            "UserType": 2,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId8",
+                            "PersonalType": 8
+                        },
+                        {
+                            "name": "团教教练",
+                            "defMess": "请选择团教教练",
+                            "RoleInfoId": "3f934302ec19d1fa",
+                            "UserType": 3,
+                            "BusinessType": "134d3d485168f5er",
+                            "vModel": "personnelId9",
+                            "PersonalType": 9
+                        },
+                        {
+                            "name": "美容师",
+                            "defMess": "请选择美容师",
+                            "RoleInfoId": "",
+                            "UserType": 3,
+                            "BusinessType": "334d3d485168f5er",
+                            "vModel": "personnelId10",
+                            "PersonalType": 10
+                        },
+                        {
+                            "name": "美容顾问",
+                            "defMess": "请选择美容顾问",
+                            "RoleInfoId": "",
+                            "UserType": 2,
+                            "BusinessType": "334d3d485168f5er",
+                            "vModel": "personnelId11",
+                            "PersonalType": 11
+                        },
+                        {
+                            "name": "美发师",
+                            "defMess": "请选择美发师",
+                            "RoleInfoId": "",
+                            "UserType": 3,
+                            "BusinessType": "334d3d485168f5er",
+                            "vModel": "personnelId12",
+                            "PersonalType": 12
+                        }]
+                },
             ],
         },
 //      后期可动态从字典表获取赋值参数--end
-        loadData0:{
-            cardList:[],      //会员卡列表
-            cardFlag:'',     //卡系列
-            cardTypeName:'', //卡系列名称
-            status:'',        //卡状态
-            agreementNo:'',   //协议编号
-            b_needPrice:'',   //购卡金额
-            balance:0,         //剩余金额（动态计算）
-            storageValue:0,   //储值金额（等储值表出来后关联）
-            b_buyRightsNum:0, //购买卡权益
-            b_giveRightsNum:0,//赠送卡权益
-            availableNum:0,   //可用权益
-            alreadyUsedNum:0, //已使用权益=购买+赠送-剩余权益
-            haveRightsNum:0,  //剩余权益
-            bindTime:'',        //开卡日期
-            invalidTime:'',     //失效日期
-            flag:'',             //失效原因
-            b_status:'',        //财务审核
-            b_auditStatus:'',  //相关复核
-            limitList:[],       //使用限定列表
-            userdNum:1,         //使用本卡限定人数
-            userName:'',        //使用者姓名
-            userPhone:'',       //使用者联系方式
-            userPasswd:'',      //使用密码
-            note:'',             //备注
-            count:'',            //会员卡数量
-            beOverdue:0,        //即将过期会员卡
-            normalCard:0,       //正常会员卡
-            unOpenedCard:0,     //未开卡会员卡
-            stopCard:0,         //停卡会员卡
-            historyCard:0,      //历史会员卡
-            cardId:'',           //要开卡的会员卡Id
-            addOpenCard:{
-                bindTime:'',      //开卡时间
-                invalidTime:'',   //失效时间
-                seviceLife:'',    //有效期
-                cardTypeName:'开卡',  //弹窗标题
-                stopNum:0,           //可停卡次数
-                stopDays:0,          //每次时长
-                replacementCard:false, //是否更换新卡(0、否；1、是)
-                isMess:'',              //返回的信息
-                isFlage:true,             //是否转移卡中储值金额 默认是转移
+        loadData0: {
+            cardList: [],      //会员卡列表
+            cardFlag: '',     //卡系列
+            cardTypeName: '', //卡系列名称
+            status: '',        //卡状态
+            agreementNo: '',   //协议编号
+            b_needPrice: '',   //购卡金额
+            balance: 0,         //剩余金额（动态计算）
+            storageValue: 0,   //储值金额（等储值表出来后关联）
+            b_buyRightsNum: 0, //购买卡权益
+            b_giveRightsNum: 0,//赠送卡权益
+            availableNum: 0,   //可用权益
+            alreadyUsedNum: 0, //已使用权益=购买+赠送-剩余权益
+            haveRightsNum: 0,  //剩余权益
+            bindTime: '',        //开卡日期
+            invalidTime: '',     //失效日期
+            flag: '',             //失效原因
+            b_status: '',        //财务审核
+            b_auditStatus: '',  //相关复核
+            limitList: [],       //使用限定列表
+            userdNum: 1,         //使用本卡限定人数
+            userName: '',        //使用者姓名
+            userPhone: '',       //使用者联系方式
+            userPasswd: '',      //使用密码
+            note: '',             //备注
+            count: '',            //会员卡数量
+            beOverdue: 0,        //即将过期会员卡
+            normalCard: 0,       //正常会员卡
+            unOpenedCard: 0,     //未开卡会员卡
+            stopCard: 0,         //停卡会员卡
+            historyCard: 0,      //历史会员卡
+            cardId: '',           //要开卡的会员卡Id
+            addOpenCard: {
+                bindTime: '',      //开卡时间
+                invalidTime: '',   //失效时间
+                seviceLife: '',    //有效期
+                cardTypeName: '开卡',  //弹窗标题
+                stopNum: 0,           //可停卡次数
+                stopDays: 0,          //每次时长
+                replacementCard: false, //是否更换新卡(0、否；1、是)
+                isMess: '',              //返回的信息
+                isFlage: true,             //是否转移卡中储值金额 默认是转移
             },
-            openClientStaffList:[],    //查询的销售人员
-            clientStaffList:{},
-            imgsList:[],                //存放设置的图片
+            openClientStaffList: [],    //查询的销售人员
+            clientStaffList: {},
+            imgsList: [],                //存放设置的图片
         },
-        loadData1:{
-            shopList:[],//销售门店列表
-            cardsList:[],//指定门店下的卡种列表
-            orderList:[],//新购订单列表
-            qtZdqy:true,//判断赠送权益是否合法
-            minPrice:false, //判断购卡金额是否合法
-            addQtZdqy:0, //最多赠送权益
-            addCardData:{
-                minPrice:0,         //前台可修改最低销售价格
-                qtZdqy:0,           //判断赠送权益是否合法
+        loadData1: {
+            shopList: [],//销售门店列表
+            cardsList: [],//指定门店下的卡种列表
+            orderList: [],//新购订单列表
+            qtZdqy: true,//判断赠送权益是否合法
+            minPrice: false, //判断购卡金额是否合法
+            addQtZdqy: 0, //最多赠送权益
+            addCardData: {
+                minPrice: 0,         //前台可修改最低销售价格
+                qtZdqy: 0,           //判断赠送权益是否合法
             },
-            cardInfoMap:{  //新购的会员卡订单信息
-                totalPrice:0,       //购卡金额
-                salesPrice:0,       //售价
-                shopId:'',          //销售门店
-                personnelId:'',     //员工Id
-                buyRightsNum:0,     //购买权益
-                giveRightsNum:0,    //赠送权益
-                isFlage:'', //是否直接开卡 0，否，1是
-                agreementId:'',//编号协议ID
-                agreementNo:'',  //协议编号
-                cardTypeId:'',     //卡类型ID
-                serviceLife:'',      //时限
-                cardFlag:'',          //卡系列
-                cardTypeName:'',     //卡名称
-                type:'',            //卡类型
-                haveRightsNum:0,  //拥有的总权益
-                bindTime:'',       //开卡日期
-                externalNo:'',     //外部卡号
-                cardNumId:'',      //会员卡号规则ID
-                cardNo:'',         //会员卡号
-                note:'',            //备注
-                allotSetType:0,     //业绩分配设置
-                orderAllotSetList:[],  //业绩分配正式
-                orderAllotSetSav:{},  //业绩分配
+            cardInfoMap: {  //新购的会员卡订单信息
+                totalPrice: 0,       //购卡金额
+                salesPrice: 0,       //售价
+                shopId: '',          //销售门店
+                personnelId: '',     //员工Id
+                buyRightsNum: 0,     //购买权益
+                giveRightsNum: 0,    //赠送权益
+                isFlage: '', //是否直接开卡 0，否，1是
+                agreementId: '',//编号协议ID
+                agreementNo: '',  //协议编号
+                cardTypeId: '',     //卡类型ID
+                serviceLife: '',      //时限
+                cardFlag: '',          //卡系列
+                cardTypeName: '',     //卡名称
+                type: '',            //卡类型
+                haveRightsNum: 0,  //拥有的总权益
+                bindTime: '',       //开卡日期
+                externalNo: '',     //外部卡号
+                cardNumId: '',      //会员卡号规则ID
+                cardNo: '',         //会员卡号
+                note: '',            //备注
+                allotSetType: 0,     //业绩分配设置
+                orderAllotSetList: [],  //业绩分配正式
+                orderAllotSetSav: {},  //业绩分配
             },
-            orderAllotSetListOne:[],  //业绩分配添加的时候
-            orderAllotSetList:[],  //业绩分配正式
-            allotNumOne:0,
-            allotNumTwo:0,
-            orderAllotSetSav:{  //业绩分配
-                allotType:'',  //业绩分配类型（1、分配百分百；2、分配金额）
-                allotNum:0,   //分配数额（百分百或者实际金额，根据分配类型判断）
-                saleAllotType:0, //销售业绩分配类型（0、无业绩分配；1、按比例分配；2、按金额分配）
+            orderAllotSetListOne: [],  //业绩分配添加的时候
+            orderAllotSetList: [],  //业绩分配正式
+            allotNumOne: 0,
+            allotNumTwo: 0,
+            orderAllotSetSav: {  //业绩分配
+                allotType: '',  //业绩分配类型（1、分配百分百；2、分配金额）
+                allotNum: 0,   //分配数额（百分百或者实际金额，根据分配类型判断）
+                saleAllotType: 0, //销售业绩分配类型（0、无业绩分配；1、按比例分配；2、按金额分配）
             },
-            orderAllotSet:{  //业绩分配
-                allotType:'',  //业绩分配类型（1、分配百分百；2、分配金额）
-                allotNum:0,   //分配数额（百分百或者实际金额，根据分配类型判断）
-                saleAllotType:0, //销售业绩分配类型（0、无业绩分配；1、按比例分配；2、按金额分配）
-                personnelId:'',  //业绩分配员工
-                saleAllotNum:'',
+            orderAllotSet: {  //业绩分配
+                allotType: '',  //业绩分配类型（1、分配百分百；2、分配金额）
+                allotNum: 0,   //分配数额（百分百或者实际金额，根据分配类型判断）
+                saleAllotType: 0, //销售业绩分配类型（0、无业绩分配；1、按比例分配；2、按金额分配）
+                personnelId: '',  //业绩分配员工
+                saleAllotNum: '',
             },
         },
-        loadData2:{
-            continuedCardList:[],  //续卡列表
-            cardOpening:0,          //开卡方式（0，直接延续 ； 1，另行开卡）
-            replacementCard:0,      //是否更换新卡(0、否；1、是)
+        loadData2: {
+            continuedCardList: [],  //续卡列表
+            cardOpening: 0,          //开卡方式（0，直接延续 ； 1，另行开卡）
+            replacementCard: 0,      //是否更换新卡(0、否；1、是)
         },
-        loadData3:{
-            context:'选择要转卡的类型卡',
-            shopId:'',//要转卡的门店ID
-            Lindex:0, //切换转卡，卡升级
-            shopList:[],
-            cardFlag:'',//卡系列
-            cardName:'', //卡名称
-            originalPrice:0, //原价
-            salesPrice:0, //售价
-            totalNum:0, //购买权益
-            type:0,     //卡类型
-            supplyList:[],   //补卡或者转卡信息
-            transferFee:parseFloat(0).toFixed(2), //手续费用于切话备用
-            cardTypeId:'', //要转的类型卡的ID
-            cardSupply3:{
-                cardNo:'',//卡号
-                transferFee:parseFloat(0).toFixed(2), //手续费
-                personnelId:'',//授权员工
-                price:0,    //存放计算后的剩余金额
+        loadData3: {
+            context: '选择要转卡的类型卡',
+            shopId: '',//要转卡的门店ID
+            Lindex: 0, //切换转卡，卡升级
+            shopList: [],
+            cardFlag: '',//卡系列
+            cardName: '', //卡名称
+            originalPrice: 0, //原价
+            salesPrice: 0, //售价
+            totalNum: 0, //购买权益
+            type: 0,     //卡类型
+            supplyList: [],   //补卡或者转卡信息
+            transferFee: parseFloat(0).toFixed(2), //手续费用于切话备用
+            cardTypeId: '', //要转的类型卡的ID
+            cardSupply3: {
+                cardNo: '',//卡号
+                transferFee: parseFloat(0).toFixed(2), //手续费
+                personnelId: '',//授权员工
+                price: 0,    //存放计算后的剩余金额
             },
-            canChangeType:'',  //能否转卡
+            canChangeType: '',  //能否转卡
         },
-        loadData4:{
-            imgNum:1,    //第1张图片
-            imagesList:{},
-            imageFiles:[],
-            status:'',    //会员卡状态
-            stopNum:0,  //可操作停卡次数
-            stopDays:0, //每次最多停几天
-            totalDays:0, //停卡总天数
-            outPrice:0,  //超出时间每天费用
-            realStopNum:0,//已使用次数
-            realTotalNum:0,//已经停卡天数（根据实际的）
-            stopType1:[], //停卡列表
-            stopType2:[], //冻结列表
-            personnelName:$.cookie("name"), //操作人员
-            estInvalidTime:'',//预计失效时间
-            terminationId:'', // 要终止停卡的数据Id
-            addStroData:{
-                startTime:'', //开始停卡时间
-                estEndTime:'', //预计停止结束时间
-                estStopTime:'', //预计停卡时长
-                personnelId:'', //操作人员
-                invalidTime:'', //新失效时间
-                flag:'',         //原因
-                totalPrice:0,    //收费
+        loadData4: {
+            imgNum: 1,    //第1张图片
+            imagesList: {},
+            imageFiles: [],
+            status: '',    //会员卡状态
+            stopNum: 0,  //可操作停卡次数
+            stopDays: 0, //每次最多停几天
+            totalDays: 0, //停卡总天数
+            outPrice: 0,  //超出时间每天费用
+            realStopNum: 0,//已使用次数
+            realTotalNum: 0,//已经停卡天数（根据实际的）
+            stopType1: [], //停卡列表
+            stopType2: [], //冻结列表
+            personnelName: $.cookie("name"), //操作人员
+            estInvalidTime: '',//预计失效时间
+            terminationId: '', // 要终止停卡的数据Id
+            addStroData: {
+                startTime: '', //开始停卡时间
+                estEndTime: '', //预计停止结束时间
+                estStopTime: '', //预计停卡时长
+                personnelId: '', //操作人员
+                invalidTime: '', //新失效时间
+                flag: '',         //原因
+                totalPrice: 0,    //收费
             },
-            termination:{
-                stopTime:0, //实际停卡时长
-                endTime:'',  //实际停卡时间，
-                invalidTime:'', //新失效时间
-                flag:'',         //原因
-                totalPrice:0,    //收费
-                personnelId:$.cookie("id"), //操作人员
+            termination: {
+                stopTime: 0, //实际停卡时长
+                endTime: '',  //实际停卡时间，
+                invalidTime: '', //新失效时间
+                flag: '',         //原因
+                totalPrice: 0,    //收费
+                personnelId: $.cookie("id"), //操作人员
             }
         },
-        loadData5:{
-            carDsupplyRecordList:[],//补卡记录列表
-            SupplyMoney:0, //补卡历史金额
-            addSupply1:{
-                externalNo:'',//外部卡号
-                supplyRemarks:'',//备注
-                oriCardId:'',   //会员卡Id
-                oriCardNo:'',   // 原会员卡号
-                newCardNo:'',   //新会员卡号
-                payPrice:parseFloat(0).toFixed(),
-                personnelId:'',  //销售人员
+        loadData5: {
+            carDsupplyRecordList: [],//补卡记录列表
+            SupplyMoney: 0, //补卡历史金额
+            addSupply1: {
+                externalNo: '',//外部卡号
+                supplyRemarks: '',//备注
+                oriCardId: '',   //会员卡Id
+                oriCardNo: '',   // 原会员卡号
+                newCardNo: '',   //新会员卡号
+                payPrice: parseFloat(0).toFixed(),
+                personnelId: '',  //销售人员
             }
         },
-        loadData6:{
-            storageCardList:[], //获取储值列表
-            orderPrice:0,   //当前储值金额
-            givePrice:0,  //赠送金额
-            personnelName:$.cookie("name"),//操作人
-            refundStorageId:'',//要退款的订单id 用于切换
-            transfersStorageId:'',//要转让的订单id
-            clientUserName:'',//提款人姓名
-            transfersMoney:0, //转让的总储值金额
-            addRefund:{  //退款信息
-                totalPrice:0, //需退款金额
-                refundNote:'',//退款原因
-                refundUserId:'',//退款授权人Id
+        loadData6: {
+            storageCardList: [], //获取储值列表
+            orderPrice: 0,   //当前储值金额
+            givePrice: 0,  //赠送金额
+            personnelName: $.cookie("name"),//操作人
+            refundStorageId: '',//要退款的订单id 用于切换
+            transfersStorageId: '',//要转让的订单id
+            clientUserName: '',//提款人姓名
+            transfersMoney: 0, //转让的总储值金额
+            addRefund: {  //退款信息
+                totalPrice: 0, //需退款金额
+                refundNote: '',//退款原因
+                refundUserId: '',//退款授权人Id
             },
-            transfersStorage:{  //转让储值金额
-                giveName:'',//转让人姓名
-                givePhone:'',//转让人手机
-                giveUserId:'',//转让人客户id
-                giveCardId:'',//转让人的会员卡ID
+            transfersStorage: {  //转让储值金额
+                giveName: '',//转让人姓名
+                givePhone: '',//转让人手机
+                giveUserId: '',//转让人客户id
+                giveCardId: '',//转让人的会员卡ID
             },
-            countPrice:{    //存放查询出来的统计数据
-                storePrice:0,   //储值总金额
-                ticketPrice:0,  //票卷抵扣总金额
-                givePrice:0,    //赠送的总金额
-            },
-        },
-        loadData7:{
-            zkNum:0,     //可添加子卡数
-            zkCyfs:0, //持有方式
-            zkXffs:0, //消费方式
-            alreadyNum:0, //已经存在卡数
-            childCardList:[],//子卡列表
-            cardNo:'',     //子卡的会员卡号
-            cardHandle:0,  //卡处理
-            shareBenefit:0,//分享权益
-            outCardNo:'',  //外部卡号
-            userName:'',   //持卡人姓名
-            mobile:'',      //持卡人手机
-            saleManId:'',   //销售人员
-            parentCardId:'',//选中的会员卡号
-            shareNum:0,  //分享的权益
-        },
-        loadData8:{
-            complementCardList:[],//补余列表
-            complementPrice:0,   //已经付款金额
-            noPrice:0,            //欠款金额
-            orderSplitList:[] ,  //还款选择
-            num:0,                 //共几期
-            depositTime:0,        //补余期限，
-            nextTime:'',          //下次补余期限
-            depositMon:0,         //补余金额，
-            orderSetIdList:[],    //分期补余存放ID
-            orderSetIdListTwo:[], // 存放分期数据
-            addComplement:{
-                splitSetId:'',  //要补余的新购订单ID
-                totalPrice:0,   //卡销售金额
-                shopId:'',      //业绩归属门店
-                payRemarks:'',  //支付备注
-                type:0,          // 类型(1、定金补余；2、分期补余)
-                personnelId:'', //销售人员ID
-                allotSetType:0, //是否设置业绩分配
+            countPrice: {    //存放查询出来的统计数据
+                storePrice: 0,   //储值总金额
+                ticketPrice: 0,  //票卷抵扣总金额
+                givePrice: 0,    //赠送的总金额
             },
         },
-        loadData9:{
-            transferCardList:[], //获取转让列表
-            totalPrice:0, //转让总手续费
-            transferFee:0, //此类型卡的转让手续费
-            createdName:$.cookie('name'), //操作人员
-            addTranferCar:{
-                totalPrice:0, //转让费
-                personnelId:'',// 授权人
-                flag:'',//备注
+        loadData7: {
+            zkNum: 0,     //可添加子卡数
+            zkCyfs: 0, //持有方式
+            zkXffs: 0, //消费方式
+            alreadyNum: 0, //已经存在卡数
+            childCardList: [],//子卡列表
+            cardNo: '',     //子卡的会员卡号
+            cardHandle: 0,  //卡处理
+            shareBenefit: 0,//分享权益
+            outCardNo: '',  //外部卡号
+            userName: '',   //持卡人姓名
+            mobile: '',      //持卡人手机
+            saleManId: '',   //销售人员
+            parentCardId: '',//选中的会员卡号
+            shareNum: 0,  //分享的权益
+        },
+        loadData8: {
+            complementCardList: [],//补余列表
+            complementPrice: 0,   //已经付款金额
+            noPrice: 0,            //欠款金额
+            orderSplitList: [],  //还款选择
+            num: 0,                 //共几期
+            depositTime: 0,        //补余期限，
+            nextTime: '',          //下次补余期限
+            depositMon: 0,         //补余金额，
+            orderSetIdList: [],    //分期补余存放ID
+            orderSetIdListTwo: [], // 存放分期数据
+            addComplement: {
+                splitSetId: '',  //要补余的新购订单ID
+                totalPrice: 0,   //卡销售金额
+                shopId: '',      //业绩归属门店
+                payRemarks: '',  //支付备注
+                type: 0,          // 类型(1、定金补余；2、分期补余)
+                personnelId: '', //销售人员ID
+                allotSetType: 0, //是否设置业绩分配
             },
         },
-        loadData10:{
-            SupplyMoney:parseFloat(0).toFixed(2), //退卡手续费
-            blacekCardList:[], //退卡列表
-            saleStatus:'',  //销售状态
-            saleName:'',   //销售人员姓名
-            createdName:$.cookie('name'), //操作人员
-            addBlackCard:{
-                cardId:'',//会员卡id
-                clientId:'', //会员Id
-                needPrice:parseFloat(0).toFixed(2), //退卡金额
-                procedPrcie:parseFloat(0).toFixed(2), // 退卡手续费
-                totalPrice:parseFloat(0).toFixed(2),  //退款总金额
-                personnelId:'',//销售人员
-                allotSetType:0,//是否扣除当月业绩
-                cardFlag:'',//卡系列
-                cardTypeName:'', //卡名称
-                accountNumber:'',//退款账号
-                refundType:'', //退款类型
+        loadData9: {
+            transferCardList: [], //获取转让列表
+            totalPrice: 0, //转让总手续费
+            transferFee: 0, //此类型卡的转让手续费
+            createdName: $.cookie('name'), //操作人员
+            addTranferCar: {
+                totalPrice: 0, //转让费
+                personnelId: '',// 授权人
+                flag: '',//备注
+            },
+        },
+        loadData10: {
+            SupplyMoney: parseFloat(0).toFixed(2), //退卡手续费
+            blacekCardList: [], //退卡列表
+            saleStatus: '',  //销售状态
+            saleName: '',   //销售人员姓名
+            createdName: $.cookie('name'), //操作人员
+            addBlackCard: {
+                cardId: '',//会员卡id
+                clientId: '', //会员Id
+                needPrice: parseFloat(0).toFixed(2), //退卡金额
+                procedPrcie: parseFloat(0).toFixed(2), // 退卡手续费
+                totalPrice: parseFloat(0).toFixed(2),  //退款总金额
+                personnelId: '',//销售人员
+                allotSetType: 0,//是否扣除当月业绩
+                cardFlag: '',//卡系列
+                cardTypeName: '', //卡名称
+                accountNumber: '',//退款账号
+                refundType: '', //退款类型
             },
         },
     },
     filters: {
-        formatDate: function (time,type,typeT) {
-            if(!time){
+        formatDate: function (time, type, typeT) {
+            if (!time) {
                 return '';
             }
-            var _time = timeFormatDate(time,type,typeT);
+            var _time = timeFormatDate(time, type, typeT);
             return _time;
         },
-        toManey:function (val) {
-            if(!val || 'undefined'== typeof(val)){
-                return parseFloat(0).toFixed(2);;
+        toManey: function (val) {
+            // console.log(parseFloat(val).toFixed(2))
+            if (!val || 'undefined' == typeof (val)) {
+                return parseFloat(0).toFixed(2);
+                ;
             }
             return parseFloat(val).toFixed(2);
         },
-        toMoneySet:function (val,ss,obj) {
-            var that =this;
+        toMoneySet: function (val, ss, obj) {
+            var that = this;
             var splitNum = val;
-            if(obj){
+            if (obj) {
                 var splitType = obj.splitType;
                 // 分期类型（1、比例；2、金额）
-                if(splitType == 2){
+                if (splitType == 2) {
                     return parseFloat(val).toFixed(2);
                 }
-                if(splitType == 1){
+                if (splitType == 1) {
                     var splitPrice = obj.splitPrice;
-                    if(splitPrice && splitNum){
-                        var numMoney = (parseFloat(splitNum)/100)*splitPrice;
+                    if (splitPrice && splitNum) {
+                        var numMoney = (parseFloat(splitNum) / 100) * splitPrice;
                         return parseFloat(numMoney).toFixed(2);
                     }
                 }
             }
             return val;
         },
-        toType:function(val){
+        toType: function (val) {
             var str = '';
-            if(val = 1){str = '时间卡';}
-            if(val = 2){str = '小时卡';}
-            if(val = 3){str = '次卡';}
-            if(val = 4){str = '储值卡';}
-            if(val = 5){str = '充值卡';}
-            if(val = 6){str = '折扣卡';}
+            if (val = 1) {
+                str = '时间卡';
+            }
+            if (val = 2) {
+                str = '小时卡';
+            }
+            if (val = 3) {
+                str = '次卡';
+            }
+            if (val = 4) {
+                str = '储值卡';
+            }
+            if (val = 5) {
+                str = '充值卡';
+            }
+            if (val = 6) {
+                str = '折扣卡';
+            }
             return str;
         }
     },
-    created:function () {
+    created: function () {
         var that = this;
-        var id = document.URL.split("=")[1];
-        if(!id){
+        var id = document.URL.split("=")[1]
+        if (!id) {
             id = $.cookie("cid");
         }
-        that.getCardUserList(1,10,id);
+        that.getCardUserList(1, 10, id);
         that.clientId = id;
     },
     methods: {
@@ -638,7 +755,7 @@ var customerMembershipCard = new Vue({
                     format: "YYYY-MM-DD hh:mm:ss",
                     minDate: getNowTime(),
                     donefun: function (obj) {
-                       that.loadData1.cardInfoMap.bindTime = obj.val;
+                        that.loadData1.cardInfoMap.bindTime = obj.val;
                     }
                 });
             }, 50);
@@ -656,11 +773,11 @@ var customerMembershipCard = new Vue({
         Load3: function () {
             var that = this;
             that.loadData3.Lindex = 0;
-            that.loadData3.type = 0 ;
+            that.loadData3.type = 0;
             that.getCardSupplyList(that.loadData3.Lindex);
             that.initGetOptionsCard();
             that.getMarketShopList();
-            that.getMarketShopPeople($.cookie("shopid"),that);
+            that.getMarketShopPeople($.cookie("shopid"), that);
         },
         // 停卡/冻结
         Load4: function () {
@@ -708,17 +825,17 @@ var customerMembershipCard = new Vue({
             that.getBlackCardList();
         },
 // ======================================
-        initGetClient:function(){
-          var that = this;
-          that.clientUserName = window.parent.document.getElementById("clientUserName").innerText;
-          that.clientPhone = window.parent.document.getElementById("clientPhone").innerText;
-          that.clientSet = window.parent.document.getElementById("clientSet").innerText;
+        initGetClient: function () {
+            var that = this;
+            that.clientUserName = window.parent.document.getElementById("clientUserName").innerText;
+            that.clientPhone = window.parent.document.getElementById("clientPhone").innerText;
+            that.clientSet = window.parent.document.getElementById("clientSet").innerText;
         },
         //初始化选择会员卡
         initGetOptionsCard: function () {
             var that = this;
             if (that.optionCardLis != null && that.optionCardLis.length <= 0) {
-                    that.getOptionsCardList();
+                that.getOptionsCardList();
             }
         },
         //初始化支付金额---小计金额---票劵
@@ -743,7 +860,7 @@ var customerMembershipCard = new Vue({
             that.initDiscountPrice();
         },
         //初始化优惠折扣部分
-        initDiscountPrice:function(){
+        initDiscountPrice: function () {
             var that = this;
             that.discount.num = 0;
             that.discount.changeNum = 0;
@@ -772,7 +889,7 @@ var customerMembershipCard = new Vue({
             that.initGiveDatail();
         },
         //初始化承接人信息
-        initGiveDatail:function(){
+        initGiveDatail: function () {
             var that = this;
             that.catcherClientId = '';
             that.catcherClientCardId = '';   //承接的客户会员卡ID
@@ -793,7 +910,7 @@ var customerMembershipCard = new Vue({
                     $.alert("请输入打几折:1-9");
                 }
                 if (!reg.test(num)) {
-                    num = 0 ;
+                    num = 0;
                     $.alert("请输入正确的格式：1-9 数字");
                 }
             }
@@ -806,7 +923,7 @@ var customerMembershipCard = new Vue({
             that.chageDiscount();
         },
         //重复满减切换
-        switchType:function(){
+        switchType: function () {
             var that = this;
             that.discount.discountFullOne = 0;
             that.discount.discountReduceOne = 0;
@@ -814,7 +931,7 @@ var customerMembershipCard = new Vue({
             that.discount.discountReduceTwo = 0;
             that.chageDiscount();
         },
-        switchFullReduction: function (val, str,valT) {
+        switchFullReduction: function (val, str, valT) {
             var that = this;
             var regt = /^[0-9]+\.?[0-9]*?$/;
             var num = val;
@@ -823,13 +940,13 @@ var customerMembershipCard = new Vue({
             }
             var objStr = parseFloat(num).toFixed(2);
             var fullType = that.discount.fullType;
-            if(valT != fullType){
+            if (valT != fullType) {
                 that.discount.fullType = valT;
-                if(valT == 1){
+                if (valT == 1) {
                     that.discount.discountFullTwo = 0;
                     that.discount.discountReduceTwo = 0;
                 }
-                if(valT == 0){
+                if (valT == 0) {
                     that.discount.discountFullOne = 0;
                     that.discount.discountReduceOne = 0;
                 }
@@ -838,21 +955,21 @@ var customerMembershipCard = new Vue({
             that.chageDiscount();
         },
         //计算折扣优惠
-        chageDiscount:function(){
+        chageDiscount: function () {
             var that = this;
             that.payMentMoney.discount = 0;
             //金额
             var price = that.payMentMoney.price;
             //应付金额大于0 的基础上在开始计算
-            if(price > 0){
+            if (price > 0) {
                 //打几折
                 var num = 0;
-                if(that.discount.num){
-                    var disNum = that.getParemtDate(that.discount.num,0);
-                    num =(1-(disNum/10)) * price;
+                if (that.discount.num) {
+                    var disNum = that.getParemtDate(that.discount.num, 0);
+                    num = (1 - (disNum / 10)) * price;
                 }
                 //整单去零
-                var changeN = parseFloat(that.getParemtDate(that.discount.changeNum,0));
+                var changeN = parseFloat(that.getParemtDate(that.discount.changeNum, 0));
                 //满减类型
                 var t = that.discount.fullType;
                 // 满减折扣
@@ -864,7 +981,7 @@ var customerMembershipCard = new Vue({
                     var Zdismoney = that.discount.discountReduceOne;
                     if (Zmoney && Zdismoney && price >= Zmoney) {
                         var numT = parseInt(price / Zmoney);
-                        if (numT > 0 ) {
+                        if (numT > 0) {
                             fullMoney = numT * Zdismoney;
                         }
                     }
@@ -880,7 +997,7 @@ var customerMembershipCard = new Vue({
                         }
                     }
                 }
-                that.payMentMoney.discount = parseFloat(num)+ parseFloat(changeN)+parseFloat(fullMoney);
+                that.payMentMoney.discount = parseFloat(num) + parseFloat(changeN) + parseFloat(fullMoney);
             }
             that.isCommonMoney();
         },
@@ -890,38 +1007,38 @@ var customerMembershipCard = new Vue({
             var allTotal = 0;
             var diff = 0;
             var len = that.ticketPrice.ticketPriceListOk;
-            if(len.length > 0 ){
-                for(var i = 0 ; i<len.length ;i++){
-                    allTotal = parseFloat(allTotal) + parseFloat(that.getParemtDate(len[i].tickNum,0));
-                    diff =  parseFloat(diff) + parseFloat(that.getParemtDate(len[i].differ,0));
+            if (len.length > 0) {
+                for (var i = 0; i < len.length; i++) {
+                    allTotal = parseFloat(allTotal) + parseFloat(that.getParemtDate(len[i].tickNum, 0));
+                    diff = parseFloat(diff) + parseFloat(that.getParemtDate(len[i].differ, 0));
                 }
             }
             that.ticketPrice.totalPrice = allTotal;
             that.ticketPrice.differencePrice = diff;
 
-            var storage0rderPrice = that.getParemtDate(that.ticketPrice.storage0rderPrice,0);
-            var storagePirc = that.getParemtDate(that.ticketPrice.storagePirc,0);
-            if(storagePirc > storage0rderPrice){
+            var storage0rderPrice = that.getParemtDate(that.ticketPrice.storage0rderPrice, 0);
+            var storagePirc = that.getParemtDate(that.ticketPrice.storagePirc, 0);
+            if (storagePirc > storage0rderPrice) {
                 that.ticketPrice.storagePirc = parseFloat(0).toFixed(2);
                 return $.alert("卡中储值金额不足");
             }
-            that.payMentMoney.discountNum = parseFloat(storagePirc) + parseFloat(that.getParemtDate(that.ticketPrice.totalPrice,0));
+            that.payMentMoney.discountNum = parseFloat(storagePirc) + parseFloat(that.getParemtDate(that.ticketPrice.totalPrice, 0));
             that.isCommonMoney();
         },
         //计算票卷中的储值金额
         changeTicket: function () {
-           var that = this;
-           if(!that.ticketPrice.cardId ){
-               that.ticketPrice.ticketPriceListOk = [];
-               that.ticketPrice.storagePirc = parseFloat(0).toFixed(2);
-               return $.alert("请先选择使用票劵的会员卡信息")
-           }
-            if(!that.ticketPrice.cardNo || that.ticketPrice.cardNo == '未选择会员卡'){
+            var that = this;
+            if (!that.ticketPrice.cardId) {
                 that.ticketPrice.ticketPriceListOk = [];
                 that.ticketPrice.storagePirc = parseFloat(0).toFixed(2);
                 return $.alert("请先选择使用票劵的会员卡信息")
             }
-           that.ticketDeductiont();
+            if (!that.ticketPrice.cardNo || that.ticketPrice.cardNo == '未选择会员卡') {
+                that.ticketPrice.ticketPriceListOk = [];
+                that.ticketPrice.storagePirc = parseFloat(0).toFixed(2);
+                return $.alert("请先选择使用票劵的会员卡信息")
+            }
+            that.ticketDeductiont();
         },
         //判断支付金额是否符合 -------- 公共（改新购的太麻烦了，后期再修改）
         isCommonMoney: function (val, str) {
@@ -938,29 +1055,29 @@ var customerMembershipCard = new Vue({
         //计算小计 -------- 公共
         getCommonMoney: function () {
             var that = this;
-            var L1 = parseFloat(that.getParemtDate(that.payModel.L1,0));
-            var L2 = parseFloat(that.getParemtDate(that.payModel.L2,0));
-            var L3 = parseFloat(that.getParemtDate(that.payModel.L3,0));
-            var L4 = parseFloat(that.getParemtDate(that.payModel.L4,0));
-            var L5 = parseFloat(that.getParemtDate(that.payModel.L5,0));
-            var L6 = parseFloat(that.getParemtDate(that.payModel.L6,0));
+            var L1 = parseFloat(that.getParemtDate(that.payModel.L1, 0));
+            var L2 = parseFloat(that.getParemtDate(that.payModel.L2, 0));
+            var L3 = parseFloat(that.getParemtDate(that.payModel.L3, 0));
+            var L4 = parseFloat(that.getParemtDate(that.payModel.L4, 0));
+            var L5 = parseFloat(that.getParemtDate(that.payModel.L5, 0));
+            var L6 = parseFloat(that.getParemtDate(that.payModel.L6, 0));
             var allMoney = L1 + L2 + L3 + L4 + L5 + L6;
             that.payModelMoney = allMoney;
-            var price = that.getParemtDate(that.payMentMoney.price,0);
-            var diff = that.getParemtDate(that.ticketPrice.differencePrice,0)
+            var price = that.getParemtDate(that.payMentMoney.price, 0);
+            var diff = that.getParemtDate(that.ticketPrice.differencePrice, 0)
             //小计 = 价格+票卷差价
             var totalPrice = parseFloat(price) + parseFloat(diff);
             that.payMentMoney.totalPrice = totalPrice;
             //优惠折扣
-            var discount =  that.getParemtDate(that.payMentMoney.discount,0);
+            var discount = that.getParemtDate(that.payMentMoney.discount, 0);
             //抵扣金额
-            var discountNum = that.getParemtDate(that.payMentMoney.discountNum,0);
+            var discountNum = that.getParemtDate(that.payMentMoney.discountNum, 0);
             // 应付金额 =  小计-抵扣金额-优惠折扣
             that.payMentMoney.needPrice = parseFloat(totalPrice) - parseFloat(discountNum) - parseFloat(discount);
             that.payMentMoney.noPrice = 0;
             that.payMentMoney.retChange = 0;
             // 计算金额
-            var money = parseFloat(that.getParemtDate(that.payMentMoney.needPrice,0)) - parseFloat(allMoney);
+            var money = parseFloat(that.getParemtDate(that.payMentMoney.needPrice, 0)) - parseFloat(allMoney);
             if (money > 0) {
                 //未付金额
                 that.payMentMoney.noPrice = parseFloat(money).toFixed(2);
@@ -1004,20 +1121,20 @@ var customerMembershipCard = new Vue({
         //判断值封装
         getParemtDate: function (obj, def) {
             var par = obj;
-            if (!par || par == '' || 'undefined' == typeof(par)) {
+            if (!par || par == '' || 'undefined' == typeof (par)) {
                 par = def;
             }
             return par;
         },
         //验证凭证信息封装---------员工
-        getPassParemt: function (methName, id,personnelId) {
+        getPassParemt: function (methName, id, personnelId) {
             var that = this;
             var pass = $("#" + id).val();
             if (!pass) {
                 return $.alert("请输入凭证信息");
             }
             var perId = personnelId;
-            if(!perId || perId == ''){
+            if (!perId || perId == '') {
                 perId = $.cookie("id")
             }
             var data = {
@@ -1030,14 +1147,14 @@ var customerMembershipCard = new Vue({
             that.getPassIsFlag(methName, url, data, that);
         },
         //验证凭证信息封装----------------客户
-        getPassUseParemt: function (methName, id,isFlag) {
+        getPassUseParemt: function (methName, id, isFlag) {
             var that = this;
             //验证客户授权凭证
             var pass = that.ticketPrice.userPass;
             var cardId = that.ticketPrice.cardId;
-            if(isFlag){
-               pass = $("#" + id).val();
-               cardId = that.cardId;
+            if (isFlag) {
+                pass = $("#" + id).val();
+                cardId = that.cardId;
             }
             if (!pass) {
                 return $.alert("客户授权凭证不能为空")
@@ -1071,10 +1188,13 @@ var customerMembershipCard = new Vue({
                         }
                         return;
                     } else {
-                        if(methName=='supply34OK'){
-                           $.alert("会员授权"+res.msg)
-                        }else if(methName=='supply34OKTwo'){
-                            $.alert("员工授权"+res.msg)
+                        if (methName == 'supply34OK') {
+                            $.alert("会员授权" + res.msg)
+                        } else if (methName == 'supply34OKTwo') {
+                            $.alert("员工授权" + res.msg)
+                        }
+                        if(methName=='toStopSubtimeOk'){
+                            $.alert("会员授权" + res.msg)
                         }
                         // $.alert(res.msg)
                     }
@@ -1085,12 +1205,14 @@ var customerMembershipCard = new Vue({
         //查看
         toSee: function (note, mess) {
             var that = this;
-            if( that.LiIndex == 3 ){
-                if( 'cardNo' == note){
+            if (that.LiIndex == 3) {
+                if ('cardNo' == note) {
                     note = that.cardNo;
                 }
             }
-            if (!note) {  return ; }
+            if (!note) {
+                return;
+            }
             var m = mess + note;
             return $.alert(m);
         },
@@ -1134,7 +1256,7 @@ var customerMembershipCard = new Vue({
                 function (res) {
                     if (res.code == '200') {
                         that.optionClientList = res.data;
-                        if(that.optionClientList.length > 0){
+                        if (that.optionClientList.length > 0) {
                             $("#clientList").show();
                         }
                     } else {
@@ -1153,7 +1275,7 @@ var customerMembershipCard = new Vue({
             $("#clientList").hide();
             that.catcherClientId = id;
             that.giveName = obj.clientName;
-            if(that.ticketPrice.tickMark){
+            if (that.ticketPrice.tickMark) {
                 that.ticketPrice.cardNo = '此会员的会员卡信息未选择';
                 that.ticketPrice.cardUserName = obj.clientName;
             }
@@ -1166,8 +1288,8 @@ var customerMembershipCard = new Vue({
                 },
                 function (res) {
                     if (res.code == '200') {
-                        that.optionClientCardList =  res.data;
-                        if(that.optionClientCardList.length > 0){
+                        that.optionClientCardList = res.data;
+                        if (that.optionClientCardList.length > 0) {
                             $("#clientCardList").show();
                         }
                     } else {
@@ -1187,11 +1309,11 @@ var customerMembershipCard = new Vue({
             that.catcherClientCardId = obj.id;
             that.giveName = obj.clientName;
             that.givePhone = obj.mobile;
-            if(that.ticketPrice.tickMark){
+            if (that.ticketPrice.tickMark) {
                 that.ticketPrice.cardId = obj.id;
                 that.ticketPrice.cardNo = obj.cardNo;
                 //获取此会员卡的储值信息
-                that.ticketPrice.storage0rderPrice = that.getParemtDate(obj.orderPrice,0);
+                that.ticketPrice.storage0rderPrice = that.getParemtDate(obj.orderPrice, 0);
             }
             $("#clientList").hide();
             $("#clientCardList").hide();
@@ -1233,7 +1355,7 @@ var customerMembershipCard = new Vue({
             var url = $.stringFormat('{0}/personnelInfo/getMarketUserList', $.cookie('url'));
             $.get(url, {
                     shopId: shop_Id,//门店id
-                    code:that.code,
+                    code: that.code,
                 },
                 function (res) {
                     if (res.code == '200') {
@@ -1255,12 +1377,13 @@ var customerMembershipCard = new Vue({
                 page = page.page;
             }
             var url = $.stringFormat('{0}/frCard/queryUserCardList', $.cookie('url'));
-            var data ={
+            var data = {
                 page: page,
                 rows: limit,
                 clientId: id,
                 code: that.code,
             }
+            console.log(data)
             $.get(url, data,
                 function (res) {
                     if (res.code == '200') {
@@ -1290,8 +1413,8 @@ var customerMembershipCard = new Vue({
             var dataOne = obj
             var cardStatus = obj.status;
             //历史卡不允许再设置
-            if(6 == cardStatus){
-                return ;
+            if (6 == cardStatus) {
+                return;
             }
             that.cardId = obj.id;
             $('#MembershipCardlist').hide();
@@ -1300,13 +1423,13 @@ var customerMembershipCard = new Vue({
             that.loadData0.status = dataOne.status;
             that.loadData0.agreementNo = dataOne.agreementNo;
             that.loadData0.b_needPrice = dataOne.needPrice;
-            that.loadData0.balance =  dataOne.cardHavePrice;
+            that.loadData0.balance = dataOne.cardHavePrice;
             that.loadData0.storageValue = dataOne.orderPrice;
             that.loadData0.orderRightsNum = dataOne.orderNum;
             that.loadData0.b_buyRightsNum = dataOne.buyRightsNum;
             that.loadData0.b_giveRightsNum = dataOne.giveRightsNum;
             that.loadData0.availableNum = dataOne.haveRightsNum;
-            that.loadData0.alreadyUsedNum = parseFloat(that.getParemtDate(dataOne.haveRightsNum,0)) - parseFloat(that.getParemtDate(dataOne.orderNum,0)) ;
+            that.loadData0.alreadyUsedNum = parseFloat(that.getParemtDate(dataOne.haveRightsNum, 0)) - parseFloat(that.getParemtDate(dataOne.orderNum, 0));
             that.loadData0.bindTime = dataOne.bindTime;
             if (dataOne.bindTime) {
                 that.loadData0.invalidTime = timeFormatDate(obj.invalidTime);
@@ -1376,7 +1499,7 @@ var customerMembershipCard = new Vue({
         //删除使用限定
         deleteCardLimit: function (id) {
             var that = this;
-            if(that.loadData0.status == 6){
+            if (that.loadData0.status == 6) {
                 return $.alert("历史卡不能操作");
             }
             if (that.randomNumber) {
@@ -1410,7 +1533,7 @@ var customerMembershipCard = new Vue({
             if (!that.loadData0.limitList) {
                 return;
             }
-            if(that.loadData0.status == 6){
+            if (that.loadData0.status == 6) {
                 return $.alert("历史卡不能操作");
             }
             if (that.loadData0.limitList.length >= that.loadData0.userdNum) {
@@ -1421,13 +1544,13 @@ var customerMembershipCard = new Vue({
             }
             that.randomNumber = Math.random().toString(36).substr(2);
             if (!that.loadData0.userName) {
-                return  $.alert("使用者姓名不能为空");
+                return $.alert("使用者姓名不能为空");
             }
             if (!that.loadData0.userPhone) {
-                return  $.alert("使用者联系方式不能为空");
+                return $.alert("使用者联系方式不能为空");
             }
             if (!that.loadData0.userPasswd) {
-                return  $.alert("使用密码不能为空");
+                return $.alert("使用密码不能为空");
             }
             var url = $.stringFormat('{0}/frCardLimit/addCardLimit', $.cookie('url'));
             $.post(url, {
@@ -1439,7 +1562,7 @@ var customerMembershipCard = new Vue({
                     usePasswd: that.loadData0.userPasswd,
                     note: that.loadData0.note,
                     updateUserId: $.cookie("id"),
-                    type:2,
+                    type: 2,
                 },
                 function (res) {
                     if (res.code == '200') {
@@ -1517,10 +1640,10 @@ var customerMembershipCard = new Vue({
             var aNum = that.loadData7.alreadyNum
             var nNum = that.loadData7.zkNum;
             if (aNum >= nNum) {
-                return  $.alert("子卡数量满额");
+                return $.alert("子卡数量满额");
             }
             if (!that.cardId) {
-                return  $.alert("请先选择会员卡");
+                return $.alert("请先选择会员卡");
             }
             that.loadData7.cardNo = $("#cardNo").val();
             if (!that.loadData7.cardNo) {
@@ -1536,16 +1659,16 @@ var customerMembershipCard = new Vue({
             }
             if (that.loadData7.zkXffs == 1) {
                 if (!that.loadData7.shareNum) {
-                    return  $.alert("请设置独立分享的卡权益");
+                    return $.alert("请设置独立分享的卡权益");
                 }
             }
             that.loadData7.userName = that.giveName;
             if (!that.loadData7.userName) {
-                return  $.alert("请填写持卡人姓名");
+                return $.alert("请填写持卡人姓名");
             }
             that.loadData7.mobile = that.givePhone;
             if (!that.loadData7.mobile) {
-                return  $.alert("请填写持卡人手机号");
+                return $.alert("请填写持卡人手机号");
             }
             if (!that.loadData7.saleManId) {
                 return $.alert("请选择销售人员");
@@ -1598,7 +1721,7 @@ var customerMembershipCard = new Vue({
             $.get(url, {
                 CustomerCode: that.code,
                 clientId: clientId,
-                type : 1
+                type: 1
             }, function (res) {
                 if (res.code == '200') {
                     that.loadData5.carDsupplyRecordList = res.data.list;
@@ -1632,7 +1755,7 @@ var customerMembershipCard = new Vue({
                 },
                 function (res) {
                     if (res.code == '200') {
-                        $("#"+id).val(res.data.agreement);
+                        $("#" + id).val(res.data.agreement);
                         that.loadData1.cardInfoMap.agreementId = res.data.agreementId;
                         that.loadData1.cardInfoMap.agreementNo = res.data.agreement;
                         that.checkCardAgreement(id);
@@ -1712,23 +1835,23 @@ var customerMembershipCard = new Vue({
                 return $.alert("请重新填写购卡金额");
             }
             if (!that.loadData1.cardInfoMap.cardTypeName) {
-                return  $.alert("请先选择要购买的会员卡信息");
+                return $.alert("请先选择要购买的会员卡信息");
             }
             if (!that.loadData1.cardInfoMap.buyRightsNum) {
                 return $.alert("该会员卡未设置卡权益，请选择其他卡种");
             }
             if (!that.loadData1.cardInfoMap.serviceLife) {
-               return  $.alert("该会员卡未设置有效时长，请选择其他卡种");
+                return $.alert("该会员卡未设置有效时长，请选择其他卡种");
             }
             that.loadData1.cardInfoMap.cardNo = $("#cardNum").val();
-            if (! that.loadData1.cardInfoMap.cardNo) {
-                return  $.alert("会员卡号不能为空");
+            if (!that.loadData1.cardInfoMap.cardNo) {
+                return $.alert("会员卡号不能为空");
             }
             if (!that.loadData1.cardInfoMap.externalNo) {
                 return $.alert("请输入外部卡号");
             }
             if (!that.loadData1.cardInfoMap.isFlage) {
-                return  $.alert("是否设置自动开卡,需选择");
+                return $.alert("是否设置自动开卡,需选择");
             }
             if (that.loadData1.cardInfoMap.isFlage == 1) {
                 if (!that.loadData1.cardInfoMap.bindTime) {
@@ -1761,17 +1884,17 @@ var customerMembershipCard = new Vue({
             }
             if (t == 8) {
                 var isFlag = true;
-                if(that.payMentMoney.discountNum > 0 ){
-                    if(!that.ticketPrice.cardId){
+                if (that.payMentMoney.discountNum > 0) {
+                    if (!that.ticketPrice.cardId) {
                         return $.alert("未获取到抵扣的会员卡信息");
                     }
-                    if(!that.ticketPrice.userPass){
+                    if (!that.ticketPrice.userPass) {
                         return $.alert("请输入要抵扣的会员卡的凭证");
                     }
                     isFlag = false;
-                    that.getPassUseParemt('toCheckMoenyOK', '',false);
+                    that.getPassUseParemt('toCheckMoenyOK', '', false);
                 }
-                if(isFlag){
+                if (isFlag) {
                     that.toCheckMoenyOK();
                 }
             }
@@ -1802,7 +1925,7 @@ var customerMembershipCard = new Vue({
             that.loadData1.cardInfoMap.externalNo = 0;       //外部卡号
             that.loadData1.cardInfoMap.cardNumId = 0;       //会员卡号规则ID
             that.loadData1.cardInfoMap.cardNo = 0;       //会员卡号
-            if(that.loadData1.cardInfoMap.allotSetType ==1 ){
+            if (that.loadData1.cardInfoMap.allotSetType == 1) {
                 $.confirm({
                     title: '确认',
                     content: '是否需要重置业绩分配信息?',
@@ -1811,7 +1934,7 @@ var customerMembershipCard = new Vue({
                         ok: {
                             text: '是',
                             btnClass: 'btn-primary',
-                            action: function() {
+                            action: function () {
                                 that.initAllotSet();
                             }
                         },
@@ -1822,7 +1945,7 @@ var customerMembershipCard = new Vue({
                     }
                 })
             }
-            return ;
+            return;
         },
         //初始化业绩分配 切换窗口使用
         initAllotSet: function () {
@@ -1963,13 +2086,18 @@ var customerMembershipCard = new Vue({
                 return $.alert("请先随机生成新会员卡号");
             }
             if (!that.loadData5.addSupply1.personnelId) {
-                return $.alert("请先选择销售人员ID");
+                return $.alert("请先选择销售人员");
             }
             //不确定是否需要验证补卡金额
             if (that.randomNumber) {
                 return $.alert("请勿太快重复点击");
             }
             that.loadData5.addSupply1.payPrice = that.payModelMoney;
+            console.log( )
+            if(that.loadData5.addSupply1.payPrice==0||that.loadData5.addSupply1.payPrice==''){
+                return $.alert("支付金额有误");
+            }
+
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
             var addSupply1 = that.loadData5.addSupply1;
@@ -2060,7 +2188,7 @@ var customerMembershipCard = new Vue({
                 if (res.code == '200') {
                     that.loadData10.saleName = res.data.saleName;
                     that.loadData10.saleStatus = res.data.saleStatus;
-                     var allPrice = that.getParemtDate(res.data.allPrice,0);
+                    var allPrice = that.getParemtDate(res.data.allPrice, 0);
                     that.loadData10.addBlackCard.needPrice = parseFloat(allPrice).toFixed(2);
                     that.loadData10.addBlackCard.totalPrice = that.loadData10.addBlackCard.needPrice;
                     that.loadData10.addBlackCard.personnelId = res.data.personnelId;
@@ -2075,7 +2203,7 @@ var customerMembershipCard = new Vue({
             var that = this;
             var needPrice = that.loadData10.addBlackCard.needPrice;
             var procedPrcie = that.loadData10.addBlackCard.procedPrcie;
-            if (!procedPrcie || procedPrcie == '' || 'undefined' == typeof(procedPrcie)) {
+            if (!procedPrcie || procedPrcie == '' || 'undefined' == typeof (procedPrcie)) {
                 procedPrcie = 0;
             }
             var allMoney = parseFloat(needPrice) - parseFloat(procedPrcie);
@@ -2103,7 +2231,7 @@ var customerMembershipCard = new Vue({
                     return $.alert("非现金退款，请填写退款账号")
                 }
             }
-            that.getPassParemt('toBlackSubimt', 'blackPassId','');
+            that.getPassParemt('toBlackSubimt', 'blackPassId', '');
         },
         //退卡保存
         toBlackSubimt: function () {
@@ -2216,6 +2344,7 @@ var customerMembershipCard = new Vue({
         initGetEstEndTime: function () {
             var that = this;
             var nowTime = that.loadData4.addStroData.startTime;
+            console.log(nowTime)
             var end = {
                 trigger: false,
                 format: "YYYY-MM-DD",
@@ -2233,6 +2362,7 @@ var customerMembershipCard = new Vue({
         //计算预计停卡时间 及收费
         computingTime: function () {
             var that = this;
+            console.log(11)
             var s1 = that.loadData4.addStroData.startTime;
             var s2 = that.loadData4.addStroData.estEndTime;
             var time = getTwoBetweenDates(s1, s2);
@@ -2326,7 +2456,8 @@ var customerMembershipCard = new Vue({
                 that.loadData4.imageFiles = [];
                 return $.alert("图片大小不得大于5MB")
             }
-            that.getPassUseParemt('toStopSubtimeOk', 'stopUserVoucher',true);
+            that.getPassUseParemt('toStopSubtimeOk', 'stopUserVoucher', true);
+
         },
         //验证通过后，添加停卡信息
         toStopSubtimeOk: function () {
@@ -2344,7 +2475,7 @@ var customerMembershipCard = new Vue({
             }
             param.append('childPath', 'avatar/'); //通过append向form对象添加数据
             param.append('frStop', JSON.stringify(data));
-            param.append('payModel',JSON.stringify(that.payModel));
+            param.append('payModel', JSON.stringify(that.payModel));
             var url = $.stringFormat('{0}/frCardOrderStop/toAddUpdateLoad', $.cookie('url'));
             $.ajax({
                 type: 'POST',
@@ -2440,6 +2571,7 @@ var customerMembershipCard = new Vue({
                         that.loadData4.addStroData.flag = '';
                         that.getCardStopList();
                         that.initGetOptionsCard();
+                        that.getOptionsCardList();
                     } else {
                         $.alert(res.msg)
                     }
@@ -2447,6 +2579,7 @@ var customerMembershipCard = new Vue({
                     that.randomNumber = '';
                 }
             });
+
         },
         //停卡冲销
         delStop: function (priceStatus, id) {
@@ -2507,7 +2640,9 @@ var customerMembershipCard = new Vue({
         getStorageCardList: function () {
             var that = this;
             var isFlag = that.getMembershipCard('storageCard');
-            if (isFlag) {  return;  }
+            if (isFlag) {
+                return;
+            }
             var url = $.stringFormat('{0}/frCardOrderStorage/getStorageCardList', $.cookie('url'));
             $.get(url, {
                 CustomerCode: that.code,
@@ -2515,10 +2650,10 @@ var customerMembershipCard = new Vue({
                 clientId: that.clientId,
             }, function (res) {
                 if (res.code == '200') {
-                    that.loadData6.orderPrice = that.getParemtDate( res.data.orderPrice, 0);
-                    that.loadData6.countPrice.storePrice = that.getParemtDate( res.data.storePrice, 0);
-                    that.loadData6.countPrice.ticketPrice = that.getParemtDate( res.data.ticketPrice, 0);
-                    that.loadData6.countPrice.givePrice = that.getParemtDate( res.data.givePrice, 0);
+                    that.loadData6.orderPrice = that.getParemtDate(res.data.orderPrice, 0);
+                    that.loadData6.countPrice.storePrice = that.getParemtDate(res.data.storePrice, 0);
+                    that.loadData6.countPrice.ticketPrice = that.getParemtDate(res.data.ticketPrice, 0);
+                    that.loadData6.countPrice.givePrice = that.getParemtDate(res.data.givePrice, 0);
                     that.loadData6.storageCardList = res.data.list;
                 } else {
                     $.alert(res.msg);
@@ -2526,7 +2661,7 @@ var customerMembershipCard = new Vue({
             })
         },
         //添加储值信息
-        storageSubVin:function(){
+        storageSubVin: function () {
             var that = this;
             that.methName = 'storageSubmit';
             that.methPass = 'storagePass';
@@ -2547,45 +2682,45 @@ var customerMembershipCard = new Vue({
             if (!that.payMentMoney.price && that.payMentMoney.price == 0) {
                 return $.alert("金额未设置");
             }
-            var payMoney = that.getParemtDate(that.payModelMoney,0);
+            var payMoney = that.getParemtDate(that.payModelMoney, 0);
             if (that.payMentMoney.needPrice > payMoney) {
                 return $.alert("支付金额不足");
             }
             var isFlag = true;
-            if(that.payMentMoney.discountNum > 0 ){
-                if(!that.ticketPrice.cardId){
+            if (that.payMentMoney.discountNum > 0) {
+                if (!that.ticketPrice.cardId) {
                     return $.alert("未获取到抵扣的会员卡信息");
                 }
-                if(!that.ticketPrice.userPass){
+                if (!that.ticketPrice.userPass) {
                     return $.alert("请输入要抵扣的会员卡的凭证");
                 }
                 isFlag = false;
-                that.getPassUseParemt('getStoragePassOk', '',false);
+                that.getPassUseParemt('getStoragePassOk', '', false);
             }
-            if(isFlag){
-                that.getPassParemt(that.methName, that.methPass,that.perId);
+            if (isFlag) {
+                that.getPassParemt(that.methName, that.methPass, that.perId);
             }
         },
         //验证完客户信息，继续执行验证员工信息
-        getStoragePassOk:function(){
+        getStoragePassOk: function () {
             var that = this;
-            var methName =  that.methName;
+            var methName = that.methName;
             var methPass = that.methPass;
-            if(!methName || !methPass ){
+            if (!methName || !methPass) {
                 return $.alert("未获取到方法名,及标签ID");
             }
             that.randomNumber = '';
-            that.getPassParemt(methName, methPass,'');
+            that.getPassParemt(methName, methPass, '');
         },
         //添加储值信息
         storageSubmit: function () {
             var that = this;
             var storage = {
-                givePrice: that.getParemtDate(that.loadData6.givePrice,0),           //赠送金额
-                storePrice: that.getParemtDate(that.payMentMoney.price,0),           // 储值金额
-                storagePrice:that.getParemtDate(that.ticketPrice.storagePirc,0),    //储值抵扣
-                ticketPrice: that.getParemtDate(that.ticketPrice.totalPrice,0),     //票卷抵扣
-                totalPrice: that.getParemtDate(that.payMentMoney.needPrice,0),      //实际付款金额
+                givePrice: that.getParemtDate(that.loadData6.givePrice, 0),           //赠送金额
+                storePrice: that.getParemtDate(that.payMentMoney.price, 0),           // 储值金额
+                storagePrice: that.getParemtDate(that.ticketPrice.storagePirc, 0),    //储值抵扣
+                ticketPrice: that.getParemtDate(that.ticketPrice.totalPrice, 0),     //票卷抵扣
+                totalPrice: that.getParemtDate(that.payMentMoney.needPrice, 0),      //实际付款金额
                 storageCardId: that.ticketPrice.cardId,                             //抵扣的会员卡id
                 cardId: that.cardId,
                 clientId: that.clientId,
@@ -2687,7 +2822,7 @@ var customerMembershipCard = new Vue({
             if (!that.loadData6.addRefund.refundUserId) {
                 return $.alert("退款需授权");
             }
-            that.getPassParemt('toRefundStorage', 'refundStorage','');
+            that.getPassParemt('toRefundStorage', 'refundStorage', '');
         },
         //储值退款添加
         toRefundStorage: function () {
@@ -2764,7 +2899,7 @@ var customerMembershipCard = new Vue({
                 return $.alert("转让人姓名未填写");
             }
             // that.loadData6.transfersStorage.giveStorageId = that.loadData6.transfersStorageId;
-            that.getPassUseParemt('toGiveUserStorOK', 'giveUserStor',true);
+            that.getPassUseParemt('toGiveUserStorOK', 'giveUserStor', true);
         },
         //储值转让
         toGiveUserStorOK: function () {
@@ -2816,7 +2951,7 @@ var customerMembershipCard = new Vue({
             if (!that.loadData4.termination.flag) {
                 return $.alert("终止原因未获取");
             }
-            that.getPassUseParemt('toStopTerminationOK', 'stopTermination',true);
+            that.getPassUseParemt('toStopTerminationOK', 'stopTermination', true);
         },
         // 验证通过后添加终止信息
         toStopTerminationOK: function () {
@@ -2910,7 +3045,7 @@ var customerMembershipCard = new Vue({
         },
         //检索协议号是否符合规则
         checkCardAgreement: function (id) {
-            var agreement = $("#"+id).val();
+            var agreement = $("#" + id).val();
             var myreg = /^[0-9]*$/;
             if (!myreg.test(agreement)) {
                 $("#spa").html("输入有误，请输入数字").css("color", "red").css("margin-left", "5px");
@@ -2972,16 +3107,16 @@ var customerMembershipCard = new Vue({
                         that.loadData8.addComplement.splitSetId = orderMap.id;
 
                         //已付款金额
-                        var sum = parseFloat(that.getParemtDate(orderMap.payPrice,0));
+                        var sum = parseFloat(that.getParemtDate(orderMap.payPrice, 0));
                         if (payType == 5) {  //支付方式是分期，选择分期的购卡价格
                             that.loadData8.addComplement.totalPrice = orderSetList.totalPrice;
                             that.loadData8.num = res.data.frOrderSetList.length;
                             that.loadData8.orderSplitList = res.data.frOrderSetList;
                             that.loadData8.addComplement.type = 2;
                             that.loadData8.depositTime = 0;
-                            that.loadData8.nextTime =  timeFormatDate(orderSetList.splitDate);
+                            that.loadData8.nextTime = timeFormatDate(orderSetList.splitDate);
                             //分期的按照购买金额计算
-                            sum = parseFloat(that.getParemtDate(orderMap.totalPrice,0));
+                            sum = parseFloat(that.getParemtDate(orderMap.totalPrice, 0));
                         }
                         if (payType == 2) {  //定金支付的话，选择应付金额
                             that.loadData8.addComplement.type = 1;
@@ -2990,11 +3125,11 @@ var customerMembershipCard = new Vue({
                             that.loadData8.depositTime = orderMap.depositTime;
                             //下次补余期限 = 下单时间+补余时间
                             var createTime = timeFormatDate(orderMap.createTime);
-                            var num = that.getParemtDate(orderMap.depositTime,0);
-                            that.loadData8.nextTime =  getNewData(createTime,num,true);
+                            var num = that.getParemtDate(orderMap.depositTime, 0);
+                            that.loadData8.nextTime = getNewData(createTime, num, true);
                         }
                         //补余金额
-                        var comPrice = that.getParemtDate(orderMap.complementPrice,0);
+                        var comPrice = that.getParemtDate(orderMap.complementPrice, 0);
                         if (comPrice) {
                             sum += parseFloat(comPrice);
                         }
@@ -3023,7 +3158,7 @@ var customerMembershipCard = new Vue({
         // 支付补余前验证信息
         toCheckMoeny: function () {
             var that = this;
-            if(!that.loadData8.addComplement.splitSetId){
+            if (!that.loadData8.addComplement.splitSetId) {
                 return $.alert("未获取到要补余的订单ID,操作失败")
             }
             if (!that.loadData8.addComplement.type) {
@@ -3032,13 +3167,13 @@ var customerMembershipCard = new Vue({
             if (!that.loadData8.depositMon) {
                 return $.alert("请先选择需要补余的金额");
             }
-            var tickP = that.getParemtDate(that.ticketPrice.totalPrice,0);
-            var storageP =  that.getParemtDate(that.ticketPrice.storagePirc,0);
-            var disP = that.getParemtDate(that.payMentMoney.discountNum,0);
-            if(disP > (parseFloat(tickP) + parseFloat(storageP))){
+            var tickP = that.getParemtDate(that.ticketPrice.totalPrice, 0);
+            var storageP = that.getParemtDate(that.ticketPrice.storagePirc, 0);
+            var disP = that.getParemtDate(that.payMentMoney.discountNum, 0);
+            if (disP > (parseFloat(tickP) + parseFloat(storageP))) {
                 return $.alert("抵扣金额计算有误");
             }
-            var payMoney = that.getParemtDate(that.payModelMoney,0);
+            var payMoney = that.getParemtDate(that.payModelMoney, 0);
             if (that.payMentMoney.needPrice > payMoney) {
                 return $.alert("支付金额不足");
             }
@@ -3071,7 +3206,7 @@ var customerMembershipCard = new Vue({
             complement.noPrice = that.loadData8.noPrice;              // 总剩余欠款金额
             complement.retChange = that.payMentMoney.retChange;      // 找零
             complement.storagePrice = that.ticketPrice.storagePirc;   //储值抵扣
-            complement.storageCardId = that.ticketPrice.cardId  ;  //抵扣的会员卡id
+            complement.storageCardId = that.ticketPrice.cardId;  //抵扣的会员卡id
             var data = {
                 complement: JSON.stringify(complement),
                 payModel: JSON.stringify(payModel),
@@ -3102,16 +3237,16 @@ var customerMembershipCard = new Vue({
         //计算补余金额(新)
         checkMoeny: function () {
             var that = this;
-            var setList  =  that.loadData8.orderSetIdListTwo;
+            var setList = that.loadData8.orderSetIdListTwo;
             var sum = parseFloat(0);
-            if(setList  && setList.length > 0){
+            if (setList && setList.length > 0) {
                 that.loadData8.orderSetIdList = [];
-                for(var i=0 ; i< setList.length ; i++){
+                for (var i = 0; i < setList.length; i++) {
                     var obj = setList[i];
                     var splitNum = 0;
-                    if(obj){
+                    if (obj) {
                         var splitType = obj.splitType;
-                        splitNum  = that.getParemtDate(obj.splitNum,0);
+                        splitNum = that.getParemtDate(obj.splitNum, 0);
                         // 分期类型（1、比例；2、金额）
                         // if(splitType == 1){
                         //     var splitPrice = obj.splitPrice;
@@ -3174,16 +3309,16 @@ var customerMembershipCard = new Vue({
             if (!that.loadData9.addTranferCar.personnelId) {
                 return $.alert("授权人需选择");
             }
-            if(!that.cardId){
+            if (!that.cardId) {
                 return $.alert("请先选择要转让的会员卡");
             }
             //获取总金额  --- 后期改成动态获取
-            var payModelPrice = that.getParemtDate(that.payModelMoney,0);
+            var payModelPrice = that.getParemtDate(that.payModelMoney, 0);
             var totalPrice = that.getParemtDate(that.loadData9.addTranferCar.totalPrice, 0);
             if (payModelPrice < totalPrice) {
                 return $.alert("支付金额不足转让手续费");
             }
-            that.getPassParemt('toTransferSub', 'transferUserPass','');
+            that.getPassParemt('toTransferSub', 'transferUserPass', '');
         },
         //添加转让卡信息
         toTransferSub: function () {
@@ -3218,11 +3353,11 @@ var customerMembershipCard = new Vue({
                 contentType: "application/json;charset=utf-8",
                 success: function (res) {
                     if (res.code == '200') {
-                       that.getOptionsCardList();
-                       that.initPayModel();
-                       that.initGiveDatail();
-                       that.cardId = '';
-                       that.loadData9.addTranferCar.flag = '';
+                        that.getOptionsCardList();
+                        that.initPayModel();
+                        that.initGiveDatail();
+                        that.cardId = '';
+                        that.loadData9.addTranferCar.flag = '';
                     } else {
                         $.alert(res.msg);
                     }
@@ -3246,19 +3381,19 @@ var customerMembershipCard = new Vue({
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
             var url = $.stringFormat('{0}/frCardOrderTransfer/toDelTransferCard', $.cookie('url'))
-            var data={
+            var data = {
                 id: id,
                 transferStatus: transferStatus,
                 CustomerCode: that.code,
                 cardId: that.cardId,
                 clientId: that.clientId,
-                shopId:$.cookie("shopid"),
-                personnelId:$.cookie("id"),
+                shopId: $.cookie("shopid"),
+                personnelId: $.cookie("id"),
             }
             $.ajax({
                 type: 'POST',
                 url: url,
-                data:JSON.stringify(data),
+                data: JSON.stringify(data),
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 success: function (res) {
@@ -3297,7 +3432,7 @@ var customerMembershipCard = new Vue({
         checkExternalCard: function (strId) {
             var externalCard = $("#" + strId).val();
             if (!externalCard) {
-            	return ;
+                return;
 //              $("#" + strId).next().html('请填写外部卡号');
             } else if (externalCard.length > 32) {
                 $("#" + strId).next().html("外部卡号过长").css("color", "red").css("margin-left", "5px");
@@ -3309,7 +3444,7 @@ var customerMembershipCard = new Vue({
         products: function () {
             var that = this;
             //显示会员弹窗
-            if(that.LiIndex != 3){
+            if (that.LiIndex != 3) {
                 $('#product').show();
             }
             //赋值当前门店名称
@@ -3351,10 +3486,10 @@ var customerMembershipCard = new Vue({
 
         },
         //====把参数传入父级页面
-        newPopup:function(){
-           var that = this;
-           var newPopup = window.parent.document.getElementById("newPopup");
-           $(newPopup).show();
+        newPopup: function () {
+            var that = this;
+            var newPopup = window.parent.document.getElementById("newPopup");
+            $(newPopup).show();
             //要传出去的参数
             var data = that.loadData1.cardInfoMap;
             data.LiIndex = that.LiIndex;
@@ -3364,17 +3499,17 @@ var customerMembershipCard = new Vue({
             data.cardOpening = that.loadData2.cardOpening;
             data.replacementCard = that.loadData2.replacementCard;
             window.parent["shipCard"] = data;
-           $(newPopup).find("iframe").attr("src", 'newCardCustomers.html');
+            $(newPopup).find("iframe").attr("src", 'newCardCustomers.html');
         },
         //根据弹窗返回的数据处理
-        toChildSub:function(){
+        toChildSub: function () {
             var that = this;
             var mess = $("#mess").val();
             var isFlag = $("#toFlag").val();
             //如果失败了
             $.alert(mess);
             that.LI(that.LiIndex);
-            return  that.getOptionsCardList();
+            return that.getOptionsCardList();
         },
         //赋值卡种
         assignment: function (id, flag) {
@@ -3420,7 +3555,9 @@ var customerMembershipCard = new Vue({
         getContinueCardList: function (page, limit, id) {
             var that = this;
             var isFlag = that.getMembershipCard('continueCard');
-            if (isFlag) { return; }
+            if (isFlag) {
+                return;
+            }
             that.loadData2.cardOpening = 0;
             that.loadData2.replacementCard = 0;
             var url = $.stringFormat('{0}/frCardSupplyRecord/getContinueCardList', $.cookie('url'));
@@ -3448,14 +3585,14 @@ var customerMembershipCard = new Vue({
                 }
             })
         },
-        toSubContinueCard:function(){
+        toSubContinueCard: function () {
             var that = this;
-            if(!that.cardId){
+            if (!that.cardId) {
                 return $.alert("请先选择要续卡的会员卡信息");
             }
             var orderState = $("#continueCard").find("option:selected").attr("orderState");
             // 订单状态（1、待付款；2、已付款；3、 已结款 ; 4、审核通过已结款；5、复核通过已结款；）
-            if( orderState >0 ){
+            if (orderState > 0) {
                 return $.alert("此会员卡有未结款，不能操作续卡");
             }
             that.newPopup();
@@ -3471,11 +3608,13 @@ var customerMembershipCard = new Vue({
             that.loadData5.addSupply1.oriCardId = that.cardId;
             that.getMarketShopPeople(that.shopId, that);
         },
-        getProducts:function(id,index){
+        getProducts: function (id, index) {
             var that = this;
             //赋值当前门店名称
             var shopId = id;
-            if(!shopId){ return ;}
+            if (!shopId) {
+                return;
+            }
             that.loadData3.shopId = id;
             var shopList = that.loadData3.shopList;
             //根据门店获取门店下的所有卡种
@@ -3491,15 +3630,15 @@ var customerMembershipCard = new Vue({
                         shopList[index].cardsList = res.data;
                         var cardFlagList = [];
                         var cardF = '';
-                        if(shopList[index].cardsList && shopList[index].cardsList.length >0){
-                            for( var i = 0 ; i < shopList[index].cardsList.length ; i++){
+                        if (shopList[index].cardsList && shopList[index].cardsList.length > 0) {
+                            for (var i = 0; i < shopList[index].cardsList.length; i++) {
                                 var obj = shopList[index].cardsList[i];
                                 var f = obj.cardFlag;
-                                if(cardF.search(f) == -1){
-                                    cardF = cardF+','+f;
+                                if (cardF.search(f) == -1) {
+                                    cardF = cardF + ',' + f;
                                     var data = {
-                                        cardFlag :f,
-                                        cardTypeId:obj.id
+                                        cardFlag: f,
+                                        cardTypeId: obj.id
                                     }
                                     cardFlagList.push(data);
                                 }
@@ -3515,24 +3654,24 @@ var customerMembershipCard = new Vue({
             )
         },
         //选中卡系列
-        checkCardType:function(obj){
+        checkCardType: function (obj) {
             var that = this;
-            if(!obj){
-                return ;
+            if (!obj) {
+                return;
             }
             that.loadData3.cardFlag = obj.cardFlag;
             that.loadData3.cardTypeName = obj.cardTypeName;
-            that.loadData3.originalPrice = that.getParemtDate(obj.originalPrice,0);
-            that.loadData3.salesPrice = that.getParemtDate(obj.salesPrice,0);
+            that.loadData3.originalPrice = that.getParemtDate(obj.originalPrice, 0);
+            that.loadData3.salesPrice = that.getParemtDate(obj.salesPrice, 0);
             that.loadData3.type = obj.type;
-            that.loadData3.totalNum = that.getParemtDate(obj.totalNum,0);
+            that.loadData3.totalNum = that.getParemtDate(obj.totalNum, 0);
             that.loadData3.cardTypeId = obj.id;
             that.getTransferFee();
         },
         // <!-- 转卡/停卡/冻结 切换-->
         transferCardBoxTops: function (t) {
             var that = this;
-            if(that.LiIndex == 4){
+            if (that.LiIndex == 4) {
                 $('.transferCard_box_top a').eq(t).addClass('on').siblings().removeClass('on');
                 that.transferCardBoxTop = t;
                 that.loadData4.addStroData.flag = '';
@@ -3540,14 +3679,14 @@ var customerMembershipCard = new Vue({
                 that.loadData4.imageFiles = [];
                 that.getCardStopList();
             }
-            if(that.LiIndex == 3){
+            if (that.LiIndex == 3) {
                 $('.transferCard-type-list li').eq(t).addClass('active').siblings().removeClass('active');
                 that.transferCardBoxTop = t;
                 that.getMarketShopList();
                 that.loadData3.Lindex = t;
-                if( 0 == that.loadData3.Lindex){
-                   that.loadData3.context = '选择要转卡的类型卡';
-                   return that.Load3();
+                if (0 == that.loadData3.Lindex) {
+                    that.loadData3.context = '选择要转卡的类型卡';
+                    return that.Load3();
                 }
                 that.loadData3.context = '选择要升级的类型卡';
                 that.getCardTypeList();
@@ -3555,14 +3694,16 @@ var customerMembershipCard = new Vue({
             }
         },
         //卡升级
-        getCardTypeList:function(){
+        getCardTypeList: function () {
             var that = this;
-            if(!that.cardId){ return $.alert("请先选择要升级的会员"); }
+            if (!that.cardId) {
+                return $.alert("请先选择要升级的会员");
+            }
             var type = $("#cardSupply2").find("option:selected").attr("type");
             var shopName = $("#cardSupply2").find("option:selected").attr("shopName");
             var shopList = {
-                shopName:shopName,
-                id:that.shopId,
+                shopName: shopName,
+                id: that.shopId,
             };
             //根据门店获取门店下的所有卡种
             var url = $.stringFormat('{0}/frCardType/getByShopIdList', $.cookie('url'));
@@ -3576,15 +3717,15 @@ var customerMembershipCard = new Vue({
                         shopList.cardsList = res.data;
                         var cardFlagList = [];
                         var cardF = '';
-                        if(shopList.cardsList && shopList.cardsList.length >0){
-                            for( var i = 0 ; i < shopList.cardsList.length ; i++){
+                        if (shopList.cardsList && shopList.cardsList.length > 0) {
+                            for (var i = 0; i < shopList.cardsList.length; i++) {
                                 var obj = shopList.cardsList;
                                 var f = obj.cardFlag;
-                                if(cardF.search(f) == -1){
-                                    cardF = cardF+','+f;
+                                if (cardF.search(f) == -1) {
+                                    cardF = cardF + ',' + f;
                                     var data = {
-                                        cardFlag :f,
-                                        cardTypeId:obj.id
+                                        cardFlag: f,
+                                        cardTypeId: obj.id
                                     }
                                     cardFlagList.push(data);
                                 }
@@ -3603,15 +3744,17 @@ var customerMembershipCard = new Vue({
         toCardSupply2: function () {
             var that = this;
             var isFlag = that.getMembershipCard('cardSupply2');
-            if (isFlag) { return;  }
+            if (isFlag) {
+                return;
+            }
             if (that.status == 6) {
                 return $.alert("不能操作历史卡")
             }
             var url = $.stringFormat("{0}/frCardOrderInfo/queryCardAndType", $.cookie('url'));
             $.get(url, {
                     cardId: that.cardId,
-                    code:that.code,
-                    clientId:that.clientId,
+                    code: that.code,
+                    clientId: that.clientId,
                 },
                 function (res) {
                     if (res.code == '200') {
@@ -3624,35 +3767,35 @@ var customerMembershipCard = new Vue({
             );
         },
         //获取会员卡订单信息计算转卡差价
-        toCardSupplyInfo:function(obj){
+        toCardSupplyInfo: function (obj) {
             var that = this;
-            that.loadData3.canChangeType = that.getParemtDate(obj.bcanChangeType,'');
-            if(that.loadData3.Lindex != 1){
-                if(that.loadData3.canChangeType == ''){
+            that.loadData3.canChangeType = that.getParemtDate(obj.bcanChangeType, '');
+            if (that.loadData3.Lindex != 1) {
+                if (that.loadData3.canChangeType == '') {
                     return $.alert("此卡种未设置是否能转卡");
                 }
-                if(!that.loadData3.canChangeType){
+                if (!that.loadData3.canChangeType) {
                     return $.alert("此卡种已设置不能转卡");
                 }
             }
-            var transferFee = that.getParemtDate(obj.btransferFee,0);
-            if(transferFee > 0){
+            var transferFee = that.getParemtDate(obj.btransferFee, 0);
+            if (transferFee > 0) {
                 //如果设置了转卡手续费，禁止修改
                 $("#transferFee").attr("disabled", "disabled");
             }
             //获取剩余权益
             var orderRightsNum = $("#cardSupply2").find("option:selected").attr("orderRightsNum");
             //购买权益
-            var buyRightsNum = that.getParemtDate(obj.buyRightsNum,0);
+            var buyRightsNum = that.getParemtDate(obj.buyRightsNum, 0);
             //赠送权益
-            var giveRightsNum = that.getParemtDate(obj.giveRightsNum,0);
+            var giveRightsNum = that.getParemtDate(obj.giveRightsNum, 0);
             //应付金额（实际购买金额 = 计算后的售价）
-            var needPrice = that.getParemtDate(obj.needPrice,0);
+            var needPrice = that.getParemtDate(obj.needPrice, 0);
             // 剩余金额 = 购卡金额/(购买权益+赠送权益)  * 剩余权益
-            var price = 0 ;
+            var price = 0;
             //剩余权益大于0才有必要计算
-            if(orderRightsNum > 0){
-                price  = (parseFloat(needPrice)/(parseFloat(buyRightsNum)+parseFloat(giveRightsNum)))* parseFloat(orderRightsNum);
+            if (orderRightsNum > 0) {
+                price = (((needPrice*10000) / (buyRightsNum*10000) + (giveRightsNum*10000)) * (orderRightsNum*10000))/10000;
             }
             that.loadData3.cardSupply3.price = price;
             that.loadData3.transferFee = transferFee;
@@ -3660,20 +3803,20 @@ var customerMembershipCard = new Vue({
             that.getTransferFee();
         },
         //计算金额
-        getTransferFee:function(){
+        getTransferFee: function () {
             var that = this;
             //手续费
-            var transferFeeTwo = that.getParemtDate(that.loadData3.cardSupply3.transferFee,0);
+            var transferFeeTwo = that.getParemtDate(that.loadData3.cardSupply3.transferFee, 0);
             var regt = /^[0-9]+\.?[0-9]*?$/;
             if (!regt.test(transferFeeTwo)) {
-                transferFeeTwo = that.getParemtDate(that.loadData3.transferFee,0);
+                transferFeeTwo = that.getParemtDate(that.loadData3.transferFee, 0);
             }
             var transferFee = parseFloat(transferFeeTwo).toFixed(2);
             that.loadData3.cardSupply3.transferFee = transferFee;
             //剩余金额
-            var price = that.getParemtDate(that.loadData3.cardSupply3.price,0);
+            var price = that.getParemtDate(that.loadData3.cardSupply3.price, 0);
             //要转卡/升级的卡类型的售价
-            var salesPrice = that.getParemtDate(that.loadData3.salesPrice,0);
+            var salesPrice = that.getParemtDate(that.loadData3.salesPrice, 0);
             //计算差价 A转B  B卡的购卡金额 - A的剩余金额；
             var allMoney = parseFloat(salesPrice) - parseFloat(price) + parseFloat(transferFee);
             that.payMentMoney.price = parseFloat(allMoney);
@@ -3684,29 +3827,29 @@ var customerMembershipCard = new Vue({
             var that = this;
             //验证下 其他数据
             that.loadData3.cardSupply3.cardNo = $("#cardSupplyId").val();
-            if(!that.loadData3.cardSupply3.cardNo){
+            if (!that.loadData3.cardSupply3.cardNo) {
                 return $.alert("卡号需填写");
             }
-            if(!that.loadData3.cardSupply3.personnelId){
+            if (!that.loadData3.cardSupply3.personnelId) {
                 return $.alert("授权员工信息未获取");
             }
-            if(!that.loadData3.cardTypeId){
+            if (!that.loadData3.cardTypeId) {
                 return $.alert("要转卡的卡类型未选择");
             }
-            if(that.loadData3.Lindex != 1){
-                if(that.loadData3.canChangeType == ''){
+            if (that.loadData3.Lindex != 1) {
+                if (that.loadData3.canChangeType == '') {
                     return $.alert("此卡种未设置是否能转卡");
                 }
-                if(!that.loadData3.canChangeType){
+                if (!that.loadData3.canChangeType) {
                     return $.alert("此卡种已设置不能转卡");
                 }
             }
             that.methName = 'supply34OK';
             that.methPass = 'storagePass';
-            that.getPassUseParemt('supply34OK', 'supplyClientPass',true);
+            that.getPassUseParemt('supply34OK', 'supplyClientPass', true);
         },
         // 转卡/卡升级结算
-        supply34OK:function(){
+        supply34OK: function () {
             var that = this;
             that.methName = 'supply34OKTwo';
             that.methPass = 'supplyPersonnelPass';
@@ -3714,7 +3857,7 @@ var customerMembershipCard = new Vue({
             that.payModelSub();
         },
         // 转卡/卡升级结算
-        supply34OKTwo:function(){
+        supply34OKTwo: function () {
             var that = this;
             //避免多次点击
             if (that.randomNumber) {
@@ -3725,7 +3868,7 @@ var customerMembershipCard = new Vue({
             var LindType = that.loadData3.Lindex;
             //默认是转卡操作，
             var type = 3;
-            if(LindType == 1){
+            if (LindType == 1) {
                 type = 4;
             }
             var transferCard = {
@@ -3733,22 +3876,24 @@ var customerMembershipCard = new Vue({
                 oriCardNo: that.cardNo,           //原先会员卡号
                 newCardNo: that.loadData3.cardSupply3.cardNo, //新会员卡号
                 newCardNumId: that.cardNumId,         //新会员卡的规则ID
-                payPrice:that.getParemtDate(that.payMentMoney.needPrice),  //应付金额（差价）
-                type:type,                           //类型（3、转卡；4、卡升级；）
+                payPrice: that.getParemtDate(that.payMentMoney.needPrice),  //应付金额（差价）
+                type: type,                           //类型（3、转卡；4、卡升级；）
                 clientId: that.clientId,
                 shopId: $.cookie("shopid"),
                 personnelId: that.loadData3.cardSupply3.personnelId,
                 CustomerCode: $.cookie("code"),
-                cardName:that.loadData3.cardFlag,
-                cardFlag:that.loadData3.cardTypeName
+                cardName: that.loadData3.cardFlag,
+                cardFlag: that.loadData3.cardTypeName
             }
             var data = {
                 transferCard: JSON.stringify(transferCard),
                 payModel: JSON.stringify(that.payModel),
                 payMentMoney: JSON.stringify(that.payMentMoney),
-                newCardTypeId:that.loadData3.cardTypeId,
-                shopId:that.loadData3.shopId,
+                newCardTypeId: that.loadData3.cardTypeId,
+                shopId: that.loadData3.shopId,
             };
+            console.log(that.payMentMoney)
+            console.log(JSON.stringify(that.payMentMoney))
             var url = $.stringFormat('{0}/frCardSupplyRecord/addTransferCard', $.cookie('url'));
             $.ajax({
                 type: 'POST',
@@ -3759,11 +3904,12 @@ var customerMembershipCard = new Vue({
                 success: function (res) {
                     if (res.code == '200') {
                         that.getCardSupplyList(that.loadData3.Lindex);
-                        that.loadData3.cardSupply3.personnelId ='';
+                        that.loadData3.cardSupply3.personnelId = '';
                         $("#supplyClientPass").val();
                         $("#supplyPersonnelPass").val();
                         //初始化数据
                         that.initPayModel();
+                        alert("转卡成功")
                     } else {
                         $.alert(res.msg)
                     }
@@ -3772,16 +3918,20 @@ var customerMembershipCard = new Vue({
             });
         },
         //获取转卡或者卡升级列表
-        getCardSupplyList:function(t){
+        getCardSupplyList: function (t) {
             var that = this;
-            if (!that.clientId) {return ;}
+            if (!that.clientId) {
+                return;
+            }
             var type = 3;
-            if(t == 1){  type = 4;  }
+            if (t == 1) {
+                type = 4;
+            }
             var url = $.stringFormat("{0}/frCardSupplyRecord/getCarDsupplyRecordList", $.cookie('url'));
             $.get(url, {
                 CustomerCode: that.code,
                 clientId: that.clientId,
-                type:type
+                type: type
             }, function (res) {
                 if (res.code == '200') {
                     that.loadData3.supplyList = res.data.list;
@@ -3791,17 +3941,17 @@ var customerMembershipCard = new Vue({
             });
         },
         //获取可退的全部储值金额
-        getReturnStorage:function(){
+        getReturnStorage: function () {
             var that = this;
-            if(!that.cardId){
-               return $.alert("请选择要操作的会员卡信息");
+            if (!that.cardId) {
+                return $.alert("请选择要操作的会员卡信息");
             }
             //查询可退的总储值金额
             var url = $.stringFormat('{0}/frCardOrderStorage/getAllBlackStorage', $.cookie('url'));
             $.get(url, {
                     cardId: that.cardId,
-                    CustomerCode:that.code,
-                    clientId:that.clientId,
+                    CustomerCode: that.code,
+                    clientId: that.clientId,
                 },
                 function (res) {
                     if (res.code == '200') {
@@ -3820,7 +3970,7 @@ var customerMembershipCard = new Vue({
             );
         },
         //第一个是确认要调用的方法名称，第二个是取消要调用的方法名称
-        commonConfirm:function(methName, methNameTwo,mess){
+        commonConfirm: function (methName, methNameTwo, mess) {
             var that = this;
             $.confirm({
                 title: '确认',
@@ -3830,15 +3980,15 @@ var customerMembershipCard = new Vue({
                     ok: {
                         text: '确认',
                         btnClass: 'btn-primary',
-                        action: function() {
+                        action: function () {
                             return that[methName]();
                         }
                     },
                     cancel: {
                         text: '取消',
                         btnClass: 'btn-primary',
-                        action: function() {
-                            if(methNameTwo){
+                        action: function () {
+                            if (methNameTwo) {
                                 return that[methNameTwo]();
                             }
                         }
@@ -3847,45 +3997,54 @@ var customerMembershipCard = new Vue({
             })
         },
         //业绩分配的删除
-        deleteFamily:function(t){
+        deleteFamily: function (t) {
             var that = this;
-            if(!t && t != 0){
-                return ;
+            if (!t && t != 0) {
+                return;
             }
-            if(that.loadData1.orderAllotSetListOne == null || that.loadData1.orderAllotSetListOne.length <=0){
-                return ;
+            if (that.loadData1.orderAllotSetListOne == null || that.loadData1.orderAllotSetListOne.length <= 0) {
+                return;
             }
-            var list =  that.loadData1.orderAllotSetListOne;
+            var list = that.loadData1.orderAllotSetListOne;
             that.loadData1.orderAllotSetListOne = [];
-            for(var i = 0; i< list.length ;i++){
-                if(t != i){
+            for (var i = 0; i < list.length; i++) {
+                if (t != i) {
                     that.loadData1.orderAllotSetListOne.push(list[i]);
                 }
             }
         },
         //开卡弹窗
-        openCard:function(obj){
-            if(!obj){return ;}
+        openCard: function (obj) {
+            if (!obj) {
+                return;
+            }
             var that = this;
-            var isFlag = that.getParemtDate(obj.isFlag,true);
-            if(!isFlag || "false" == isFlag){
+            var isFlag = that.getParemtDate(obj.isFlag, true);
+            if (!isFlag || "false" == isFlag) {
                 return $.alert(obj.isMess);
             }
-            that.loadData0.addOpenCard.replacementCard = that.getParemtDate(obj.replacementCard,false);
+            that.loadData0.addOpenCard.replacementCard = that.getParemtDate(obj.replacementCard, false);
             var status = obj.status;
-            if(status != 4){ return ;}
-            var id = that.getParemtDate(obj.id,false);
-            if(!id){ return ; }
+            if (status != 4) {
+                return;
+            }
+            var id = that.getParemtDate(obj.id, false);
+            if (!id) {
+                return;
+            }
             var shopId = obj.shopId;
-            if(!shopId){ return $.alert("未获取到对应的门店信息"); };
-            var stopNum = that.getParemtDate(obj.stopNum,0);
-            var stopDays = that.getParemtDate(obj.stopDays,0);
-            var seviceLife = that.getParemtDate(obj.seviceLife,'') ;
-            var cardTypeName =  that.getParemtDate(obj.cardTypeName,'');
-            var bindTime = that.getParemtDate(obj.bindTime,'');
-            var invalidTime = that.getParemtDate(obj.invalidTime,'');
-            var isMess = that.getParemtDate(obj.isMess,'');
-            that.loadData0.addOpenCard.cardTypeName = cardTypeName+' - 开卡'
+            if (!shopId) {
+                return $.alert("未获取到对应的门店信息");
+            }
+            ;
+            var stopNum = that.getParemtDate(obj.stopNum, 0);
+            var stopDays = that.getParemtDate(obj.stopDays, 0);
+            var seviceLife = that.getParemtDate(obj.seviceLife, '');
+            var cardTypeName = that.getParemtDate(obj.cardTypeName, '');
+            var bindTime = that.getParemtDate(obj.bindTime, '');
+            var invalidTime = that.getParemtDate(obj.invalidTime, '');
+            var isMess = that.getParemtDate(obj.isMess, '');
+            that.loadData0.addOpenCard.cardTypeName = cardTypeName + ' - 开卡'
             that.loadData0.addOpenCard.stopNum = stopNum;
             that.loadData0.addOpenCard.stopDays = stopDays;
             that.loadData0.addOpenCard.seviceLife = seviceLife;
@@ -3902,8 +4061,8 @@ var customerMembershipCard = new Vue({
             var url = $.stringFormat("{0}/personnelInfo/getPersonnelByShopId", $.cookie('url'));
             $.get(url, {
                     CustomerCode: $.cookie("code"),
-                    shopId:shopId,
-                    clientId:that.clientId,
+                    shopId: shopId,
+                    clientId: that.clientId,
                 },
                 function (res) {
                     if (res.code == '200') {
@@ -3911,34 +4070,34 @@ var customerMembershipCard = new Vue({
                         var clientPersonnelList = res.data.clientPersonnelList;
                         var clientPriceList = res.data.frClientPicList;
                         //渲染图片
-                        if(clientPriceList && clientPriceList.length >0){
+                        if (clientPriceList && clientPriceList.length > 0) {
                             var imgList = clientPriceList;
-                            for(var i = 0 ; i< imgList.length ; i++){
+                            for (var i = 0; i < imgList.length; i++) {
                                 var Num = i;
-                                var num = 'price' +(++Num);
+                                var num = 'price' + (++Num);
                                 var oo = imgList[i];
                                 var img = {
-                                    "srcUrl":oo.picLink,
-                                    "id":num,
-                                    "priceId":oo.id,
-                                    "isFlag":false,
+                                    "srcUrl": oo.picLink,
+                                    "id": num,
+                                    "priceId": oo.id,
+                                    "isFlag": false,
                                 }
                                 that.loadData0.imgsList.push(img);
                             }
-                            if(that.loadData0.imgsList.length >= 5 ){
+                            if (that.loadData0.imgsList.length >= 5) {
                                 $("#toPictureSelected").hide();
                             }
                         }
                         //处理人员信息
-                        if(clientPersonnelList && clientPersonnelList.length >0){
+                        if (clientPersonnelList && clientPersonnelList.length > 0) {
                             var clientUserStaff = that.parameterList.clientUserStaff;
-                            for(var i = 0; i< clientUserStaff.length;i++){
-                                for(var j = 0 ; j< clientUserStaff[i].staffList.length ; j++){
-                                    for(var k = 0 ; k < clientPersonnelList.length ; k++){
+                            for (var i = 0; i < clientUserStaff.length; i++) {
+                                for (var j = 0; j < clientUserStaff[i].staffList.length; j++) {
+                                    for (var k = 0; k < clientPersonnelList.length; k++) {
                                         var personalType = clientPersonnelList[k].personalType;
                                         var personalId = clientPersonnelList[k].personalId
-                                        if(personalType == clientUserStaff[i].staffList[j].PersonalType){
-                                            var name = that.getParemtDate(clientUserStaff[i].staffList[j].vModel,'personnelId'+(++k));
+                                        if (personalType == clientUserStaff[i].staffList[j].PersonalType) {
+                                            var name = that.getParemtDate(clientUserStaff[i].staffList[j].vModel, 'personnelId' + (++k));
                                             that.loadData0.clientStaffList[name] = personalId;
                                         }
                                     }
@@ -3952,40 +4111,40 @@ var customerMembershipCard = new Vue({
             )
         },
         //初始开卡弹窗
-        getOpenCardPopup:function(){
-            var that =this;
-            var len  = 13;
-            for(var i = 1;i<len; i++){
-                var name = 'personnelId'+i;
+        getOpenCardPopup: function () {
+            var that = this;
+            var len = 13;
+            for (var i = 1; i < len; i++) {
+                var name = 'personnelId' + i;
                 that.loadData0.clientStaffList[name] = 1;
             }
             that.loadData0.imgsList = [];
-            that.loadData0.addOpenCard.invalidTime = that.getParemtDate(that.loadData0.invalidTime,'');
-            that.loadData0.addOpenCard.bindTime = that.getParemtDate(that.loadData0.bindTime,'');
+            that.loadData0.addOpenCard.invalidTime = that.getParemtDate(that.loadData0.invalidTime, '');
+            that.loadData0.addOpenCard.bindTime = that.getParemtDate(that.loadData0.bindTime, '');
             $("#toPictureSelected").show();
         },
         //打印
-        print:function (index) {
+        print: function (index) {
             var headhtml = "<html><head><title></title></head><body>";
             var foothtml = "</body>";
             // 获取div中的html内容，jquery写法如下
             var newhtml = "<table border='1' rules='none' width='200px'>" +
-                "<tr><td colspan='2' style='text-align: center'>"+"03万达店"+"</td></tr>" +
-                "<tr><td style='text-align: left'>"+"协议编号 : "+"</td><td>1554922648955</td></tr>" +
-                "<tr><td>"+"客户姓名 : "+"</td><td>Klaus</td></tr>" +
-                "<tr><td>"+"客户电话 : "+"</td><td>13645945925</td></tr>" +
-                "<tr><td>"+"付款方式 : "+"</td><td>交全款</td></tr>" +
-                "<tr><td>"+"现金 : "+"</td><td>2000</td></tr>" +
-                "<tr><td>"+"总付款 : "+"</td><td>2000</td></tr>" +
-                "<tr><td>"+"会员卡种 : "+"</td><td>普通年卡</td></tr>" +
-                "<tr><td>"+"有效期 : "+"</td><td>10年</td></tr>" +
-                "<tr><td>"+"服务会稽 : "+"</td><td>Klaus</td></tr>" +
-                "<tr><td>"+"联系电话 : "+"</td><td>13645945925</td></tr>" +
-                "<tr><td>"+"门店地址 : "+"</td><td>湖里万达</td></tr>" +
-                "<tr><td>"+"门店电话 : "+"</td><td>05952152266</td></tr>" +
-                "<tr><td>"+"收银员 : "+"</td><td>Klaus</td></tr>" +
-                "<tr><td>"+"收款日期 : "+"</td><td>2018年10月30号</td></tr>" +
-                "<tr><td colspan='2' style='text-align: center'>"+"谢谢光临"+"</td></tr>" +
+                "<tr><td colspan='2' style='text-align: center'>" + "03万达店" + "</td></tr>" +
+                "<tr><td style='text-align: left'>" + "协议编号 : " + "</td><td>1554922648955</td></tr>" +
+                "<tr><td>" + "客户姓名 : " + "</td><td>Klaus</td></tr>" +
+                "<tr><td>" + "客户电话 : " + "</td><td>13645945925</td></tr>" +
+                "<tr><td>" + "付款方式 : " + "</td><td>交全款</td></tr>" +
+                "<tr><td>" + "现金 : " + "</td><td>2000</td></tr>" +
+                "<tr><td>" + "总付款 : " + "</td><td>2000</td></tr>" +
+                "<tr><td>" + "会员卡种 : " + "</td><td>普通年卡</td></tr>" +
+                "<tr><td>" + "有效期 : " + "</td><td>10年</td></tr>" +
+                "<tr><td>" + "服务会稽 : " + "</td><td>Klaus</td></tr>" +
+                "<tr><td>" + "联系电话 : " + "</td><td>13645945925</td></tr>" +
+                "<tr><td>" + "门店地址 : " + "</td><td>湖里万达</td></tr>" +
+                "<tr><td>" + "门店电话 : " + "</td><td>05952152266</td></tr>" +
+                "<tr><td>" + "收银员 : " + "</td><td>Klaus</td></tr>" +
+                "<tr><td>" + "收款日期 : " + "</td><td>2018年10月30号</td></tr>" +
+                "<tr><td colspan='2' style='text-align: center'>" + "谢谢光临" + "</td></tr>" +
                 "</table>";
             // 获取原来的窗口界面body的html内容，并保存起来
             var oldhtml = document.body.innerHTML;
@@ -4027,16 +4186,16 @@ var customerMembershipCard = new Vue({
             }
         },
         // 开卡弹窗图片
-        toPictureSelected:function(obj){
+        toPictureSelected: function (obj) {
             var that = this;
-            var priceId =  obj.id;
-            if(!priceId){
-                var len =  that.loadData0.imgsList.length;
-                if(len >= 5){
+            var priceId = obj.id;
+            if (!priceId) {
+                var len = that.loadData0.imgsList.length;
+                if (len >= 5) {
                     return $.alert("最多设置5张图片");
                 }
             }
-            var  toPriceId = obj.priceId;
+            var toPriceId = obj.priceId;
             that.loadData0.priceId = priceId;
             that.loadData0.toPriceId = toPriceId;
             $('.file-fr').click();
@@ -4045,15 +4204,15 @@ var customerMembershipCard = new Vue({
         pictureShowList: function (e) {
             var that = this;
             var file = e.srcElement.files.item(0);
-            var priceId = that.getParemtDate(that.loadData0.priceId,false);
+            var priceId = that.getParemtDate(that.loadData0.priceId, false);
             var isFlag = true;
             var num = ''
-            if(!priceId){
-                var len =  that.loadData0.imgsList.length;
-                if(len >= 5){
-                    return ;
+            if (!priceId) {
+                var len = that.loadData0.imgsList.length;
+                if (len >= 5) {
+                    return;
                 }
-                num = 'price' +(++len);
+                num = 'price' + (++len);
                 isFlag = false;
             }
             // 看支持不支持FileReader
@@ -4065,82 +4224,82 @@ var customerMembershipCard = new Vue({
                 reader.readAsDataURL(file);
                 // 读取成功后的回调
                 reader.onloadend = function () {
-                    if(!isFlag){
+                    if (!isFlag) {
                         var img = {
-                            "srcUrl":this.result,
-                            "id":num,
-                            "file":file,
-                            "priceId":that.getParemtDate(that.loadData0.toPriceId,"-1"),
-                            "isFlag":true,
+                            "srcUrl": this.result,
+                            "id": num,
+                            "file": file,
+                            "priceId": that.getParemtDate(that.loadData0.toPriceId, "-1"),
+                            "isFlag": true,
                         }
                         that.loadData0.imgsList.push(img);
                         var getLen = that.loadData0.imgsList.length;
-                        if(getLen >= 5 ){
+                        if (getLen >= 5) {
                             $("#toPictureSelected").hide();
                         }
-                        return ;
+                        return;
                     }
                     var imgList = that.loadData0.imgsList;
                     that.loadData0.imgsList = [];
-                    for(var i = 0 ; i< imgList.length ; i++){
-                        if(imgList[i].id == priceId){
+                    for (var i = 0; i < imgList.length; i++) {
+                        if (imgList[i].id == priceId) {
                             imgList[i].srcUrl = this.result;
                             imgList[i].file = file;
-                            imgList[i].priceId = that.getParemtDate(that.loadData0.toPriceId,"-1");
+                            imgList[i].priceId = that.getParemtDate(that.loadData0.toPriceId, "-1");
                             imgList[i].isFlag = true;
                         }
                         that.loadData0.imgsList.push(imgList[i]);
                     }
-                    return ;
+                    return;
                 }
             }
         },
         //开卡弹窗--获取失效时间
-        getInvalidTime:function(){
-            var  that = this;
+        getInvalidTime: function () {
+            var that = this;
             var bindTime = that.loadData0.addOpenCard.bindTime;
             var nums = 0;
             var interval = '';
-            var seviceLife  =that.getParemtDate(that.loadData0.addOpenCard.seviceLife,false);
-            if(seviceLife){
+            var seviceLife = that.getParemtDate(that.loadData0.addOpenCard.seviceLife, false);
+            if (seviceLife) {
                 var spli = that.loadData0.addOpenCard.seviceLife.split(",");
-                if(spli){
+                if (spli) {
                     nums = spli[0];
                     interval = spli[1];
                 }
             }
-            if(nums <= 0){
+            if (nums <= 0) {
                 alert("此卡种未设置有效期限，请重新选择其他卡种");
                 return that.closeCustomer();
             }
-            var dateS =new Date(bindTime.replace(/-/g, "/"));
-            var d = DateAdd(interval,parseInt(nums),dateS);
+            var dateS = new Date(bindTime.replace(/-/g, "/"));
+            var d = DateAdd(interval, parseInt(nums), dateS);
             that.loadData0.addOpenCard.invalidTime = formatDate(d);
         },
         // 开卡提交验证
-        openCardSubmit:function(){
+        openCardSubmit: function () {
             var that = this;
-            var cardId =  that.getParemtDate(that.loadData0.cardId,false);
-            if(!cardId){
+            var cardId = that.getParemtDate(that.loadData0.cardId, false);
+            if (!cardId) {
                 return $.alert("选择的会员卡信息有误");
             }
-            if(that.loadData0.status != 4){
+            if (that.loadData0.status != 4) {
                 return $.alert("开卡操作仅限未开卡的会员卡");
             }
-            if(!that.loadData0.addOpenCard.bindTime){
+            if (!that.loadData0.addOpenCard.bindTime) {
                 return $.alert("开卡时间未设置");
             }
             var isFlage = true;
             var imgList = that.loadData0.imgsList;
             //验证图片是否过大
             if (imgList.length > 0) {
-               for(var i = 0;i< imgList.length;i++){
-                   if(that.getParemtDate(imgList[i].isFlag,false) && that.getParemtDate(imgList[i].file,false)){
-                       if(imgList[i].file.size > 5242880){
-                           return $.alert("图片大小不得大于5MB")
-                       }
-                   }
-               }
+                for (var i = 0; i < imgList.length; i++) {
+                    if (that.getParemtDate(imgList[i].isFlag, false) && that.getParemtDate(imgList[i].file, false)) {
+                        if (imgList[i].file.size > 5242880) {
+                            return $.alert("图片大小不得大于5MB")
+                        }
+                    }
+                }
             }
             if (that.randomNumber) {
                 return $.alert("请勿太快重复点击");
@@ -4148,14 +4307,14 @@ var customerMembershipCard = new Vue({
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
             var methName = "openSubmit";
-            var isFlag = that.loadData0.addOpenCard.replacementCard+'';
+            var isFlag = that.loadData0.addOpenCard.replacementCard + '';
             var isMess = that.loadData0.addOpenCard.isMess;
-            if("true" == isFlag.trim() && isMess.indexOf("未过期") != -1 ){
+            if ("true" == isFlag.trim() && isMess.indexOf("未过期") != -1) {
                 methName = "openSetIsFlag";
             }
-            that.commonConfirm(methName,"","是否确认开卡？");
+            that.commonConfirm(methName, "", "是否确认开卡？");
         },
-        openSetIsFlag:function(){
+        openSetIsFlag: function () {
             var that = this;
             $.confirm({
                 title: '确认',
@@ -4165,7 +4324,7 @@ var customerMembershipCard = new Vue({
                     ok: {
                         text: '需要',
                         btnClass: 'btn-primary',
-                        action: function() {
+                        action: function () {
                             that.loadData0.addOpenCard.isFlage = true;
                             return that["openSubmit"]();
                         }
@@ -4173,7 +4332,7 @@ var customerMembershipCard = new Vue({
                     cancel: {
                         text: '不需要',
                         btnClass: 'btn-primary',
-                        action: function() {
+                        action: function () {
                             that.loadData0.addOpenCard.isFlage = false;
                             return that["openSubmit"]();
                         }
@@ -4182,19 +4341,19 @@ var customerMembershipCard = new Vue({
             })
         },
         // 开卡提交
-        openSubmit:function(){
+        openSubmit: function () {
             var that = this;
             var param = new FormData();
             var priceListId = [];
-            for(var i =0;i<that.loadData0.imgsList.length;i++){
-                if(that.loadData0.imgsList[i].isFlag){
+            for (var i = 0; i < that.loadData0.imgsList.length; i++) {
+                if (that.loadData0.imgsList[i].isFlag) {
                     param.append('file', that.loadData0.imgsList[i].file); //通过append向form对象添加数据
                     priceListId.push(that.loadData0.imgsList[i].priceId);
                 }
             }
             var leng = Object.keys(that.loadData0.clientStaffList);
             var personalList = [];
-            if(leng.length > 0) {
+            if (leng.length > 0) {
                 //处理人员信息
                 var clientUserStaff = that.parameterList.clientUserStaff;
                 for (var i = 0; i < clientUserStaff.length; i++) {
@@ -4207,7 +4366,7 @@ var customerMembershipCard = new Vue({
                                     roleId: obj.RoleInfoId,
                                     personalType: obj.PersonalType,
                                     flag: obj.name,
-                                    personalId:that.loadData0.clientStaffList[name]
+                                    personalId: that.loadData0.clientStaffList[name]
                                 }
                                 personalList.push(per);
                             }
@@ -4216,14 +4375,14 @@ var customerMembershipCard = new Vue({
                 }
             }
             param.append('childPath', 'avatar/'); //通过append向form对象添加数据
-            param.append('priceListId',JSON.stringify(priceListId));
-            param.append('personalList',JSON.stringify(personalList));
-            param.append('bindTime',that.loadData0.addOpenCard.bindTime);
-            param.append('cardId',that.loadData0.cardId);
-            param.append('clientId',that.getParemtDate($.cookie('cid'),that.clientId));
-            param.append('CustomerCode',that.getParemtDate($.cookie("code"),that.code));
+            param.append('priceListId', JSON.stringify(priceListId));
+            param.append('personalList', JSON.stringify(personalList));
+            param.append('bindTime', that.loadData0.addOpenCard.bindTime);
+            param.append('cardId', that.loadData0.cardId);
+            param.append('clientId', that.getParemtDate($.cookie('cid'), that.clientId));
+            param.append('CustomerCode', that.getParemtDate($.cookie("code"), that.code));
             param.append('cardOpening', that.loadData0.addOpenCard.isFlage);
-            var url = $.stringFormat('{0}/frCard/toAddUpdateLoad',$.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/toAddUpdateLoad', $.cookie('url'));
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -4231,12 +4390,12 @@ var customerMembershipCard = new Vue({
                 dataType: "json",
                 processData: false,
                 contentType: false,
-                cache:false,
-                success: function(res){
-                    if(res.code=='200'){
-                      that.getCardUserList(1, 10, that.clientId);
-                      $(".year2-modal").hide();
-                    }else {
+                cache: false,
+                success: function (res) {
+                    if (res.code == '200') {
+                        that.getCardUserList(1, 10, that.clientId);
+                        $(".year2-modal").hide();
+                    } else {
                         $.alert(res.msg)
                     }
                     Loading.prototype.hide();
@@ -4246,12 +4405,12 @@ var customerMembershipCard = new Vue({
             that.randomNumber = '';
         },
         //检索数据
-        checkNum:function (num,str,t) {
+        checkNum: function (num, str, t) {
             var that = this;
             var mess = '';
             var isFlag = false;
             //检索纯数字
-            if(t == 3){
+            if (t == 3) {
                 var isFlag = checkNum(num);
                 mess = "只能输入纯数字";
             }

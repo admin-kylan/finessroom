@@ -95,9 +95,9 @@ public class FrClientWorkRelateServiceImpl extends BaseServiceImpl<FrClientWorkR
     }
 
     @Override
-    public List<FrClientWorkRelate> getWorks() {
+    public List<FrClientWorkRelate> getWorks(String clientId) {
         List<FrClientWorkRelate> frClientWorkRelates = frClientWorkRelateMapper.selectList(
-                new EntityWrapper<FrClientWorkRelate>().where("is_using={0}", 1));
+                new EntityWrapper<FrClientWorkRelate>().where("is_using=1 and client_id={0}", clientId));
         return frClientWorkRelates;
     }
 }

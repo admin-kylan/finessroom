@@ -13,7 +13,7 @@
 			.out-box{border: 1px dashed #e4e4e4;padding: 16px 18px 0;margin: 12px 16px;}
 			.table-box{margin: 12px 16px;}
 			.row-item{display: inline-block;margin-right: 15px;margin-bottom: 16px;white-space: nowrap;}
-			.row-item .btn{line-height: 25px;padding: 0 8px;height: 25px;font-size: 12px;background-color: #fff;border-radius: 0;color: #999999;border: 1px solid #999;margin-left: 5px;}
+			.row-item .btn{position: relative;line-height: 25px;padding: 0 8px;height: 25px;font-size: 12px;background-color: #fff;border-radius: 0;color: #999999;border: 1px solid #999;margin-left: 5px;}
 			.row-item .btn.btn-primary{background-color: rgba(0, 153, 255, 1);color: #fff;border-color: rgba(0, 153, 255, 1);min-width: 70px;}
 			.row-item .btn.btn-primary.active{background-color: red;border-color: red;}
 			.row-item .btn.btn-info{background-color: #169bd5;color: #fff;border-color: #169bd5;}
@@ -82,6 +82,7 @@
 			.treeview-div .list-group p{padding-left: 30px;}
 			.treeview-div .list-group .list-group-item > p,.treeview-div .list-group .list-group-item > .list-group{display: none;}
 			.treeview-div .list-group .list-group-item.sel-active > p,.treeview-div .list-group .list-group-item.sel-active > .list-group{display: block;}
+			.uploadFile{position: absolute;left: 0;right: 0;top: 0;width: 100%;height: 100%;z-index: 10;opacity: 0;}
 		</style>
 	</head>
 	<body>
@@ -96,7 +97,7 @@
 				<span>会员等级设置</span>
 			</div>
 			<div class="content">
-				<div class="list list1 clearfix noshow">
+				<div class="list list0 clearfix noshow">
 					<ul class="left fl">
 						<li class="on"><a href="#lis1">所在门店</a></li>
 						<li><a href="#lis2">新建客户认领设置</a></li>
@@ -268,7 +269,7 @@
 						</form>
 					</div>
 				</div>
-				<div class="list list2 clearfix noshow">
+				<div class="list list1 clearfix noshow">
 					<ul class="left fl">
 						<li class="on"><a href="#lis10">现有会员信息安全/会员卡管理</a></li>
 						<li><a href="#lis11">潜在客户信息安全管理</a></li>
@@ -579,7 +580,7 @@
 						</form>
 					</div>
 				</div>
-				<div class="list list3 clearfix noshow">
+				<div class="list list2 clearfix noshow">
 					<div class="btn-top-box">
 						<div class="row-item tab-btn-box">
 							<button type="button" class="btn btn-primary active">导出数据</button>
@@ -966,8 +967,8 @@
 							<div class="out-box">
 								<div class="row-item">
 									<span>客户类型:</span>
-									<button class="btn btn-success">现有会员</button>
-									<button class="btn">潜在客户</button>
+									<button class="btn btn-success typeName" data-value='1'>现有会员</button>
+									<button class="btn typeName" data-value='2'>潜在客户</button>
 									<button class="btn btn-info-light">现有会员数据模板下载</button>
 									<button class="btn btn-info-light">潜在客户数据模板下载</button>
 								</div>
@@ -978,8 +979,8 @@
 							<div class="out-box">
 								<div class="row-item">
 									<label><input type="checkbox" />全选/全不选</label>
-									<button class="btn btn-success">导出EXCEL</button>
-									<button class="btn btn-yellow">确认导入</button>
+									<button class="btn btn-success"><input type="file" class="uploadFile excelFile1"/>选择EXCEL导入</button>
+									<button class="btn btn-yellow" onclick="importExp('.excelFile1','.typeName')" >确认导入</button>
 								</div>
 							</div>
 							<div class="table-box">
@@ -2022,21 +2023,21 @@
 			      						<li class="list-group-item sel-active">
 					      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
 					      					<span>软件园店</span>
-					      					<p><label><input type="checkbox" value="1" \>所有会员卡</label></p>
+					      					<p><label><input type="checkbox" value="1">所有会员卡</label></p>
 					      					<ul class="list-group">
 					      						<li class="list-group-item sel-active">
 							      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
-							      					<label><input type="checkbox" value="2" \>年卡</label>
-					      							<p><label><input type="checkbox" value="3" \>一年卡</label></p>
-					      							<p><label><input type="checkbox" value="3" \>二年卡</label></p>
-					      							<p><label><input type="checkbox" value="3" \>三年卡</label></p>
+							      					<label><input type="checkbox" value="2">年卡</label>
+					      							<p><label><input type="checkbox" value="3">一年卡</label></p>
+					      							<p><label><input type="checkbox" value="3">二年卡</label></p>
+					      							<p><label><input type="checkbox" value="3">三年卡</label></p>
 					      						</li>
 					      						<li class="list-group-item sel-active">
 							      					<span class="icon expand-icon glyphicon glyphicon-triangle-bottom"></span>
-							      					<label><input type="checkbox" value="2" \>次卡</label>
-					      							<p><label><input type="checkbox" value="3" \>一年卡</label></p>
-					      							<p><label><input type="checkbox" value="3" \>二年卡</label></p>
-					      							<p><label><input type="checkbox" value="3" \>三年卡</label></p>
+							      					<label><input type="checkbox" value="2">次卡</label>
+					      							<p><label><input type="checkbox" value="3">一年卡</label></p>
+					      							<p><label><input type="checkbox" value="3">二年卡</label></p>
+					      							<p><label><input type="checkbox" value="3">三年卡</label></p>
 					      						</li>
 					      					</ul>
 			      						</li>
@@ -2061,7 +2062,7 @@
 		<script src="../js/axios.min.js"></script>
 		<script src="../js/toZhDigit.js"></script>
 		<script src="../js/loading.js"></script>
-		<!--<script src="individual.js"></script>-->
+		<script src="individual.js"></script>
 		<script type="text/javascript">
 //			门店选项卡切换    40是right的上下padding
 			(function (){
@@ -2137,7 +2138,42 @@
 				$('.mui-switch').on('click',function(){
 					$(this).toggleClass('mui-active')
 				})
+				$('.typeName').click(function(){
+					$(this).addClass('btn-success').siblings('.typeName').removeClass('btn-success')
+				})
+//				$('.uploadFile').on('click',function(){
+//					$(this).val('');
+//				})
 			})();
+			
+			function importExp(iptcls,cls) {//所有上传接口就可以共用 利用type区分或者加变量
+			    var formData = new FormData();
+			    var obj=$(iptcls)[0];
+			    var type=undefined;
+			    if(cls){
+		            type=$(cls+'.btn-success').attr('data-value')
+				    if(type==1){
+				    	formData.append("excel",obj.files[0]);
+				    	formData.append("type",type);
+				    }
+			    }
+			    $.ajax({
+			        url : '/import_excel/prospective_client',
+			        type : 'POST',
+			        async : false,
+			        data : formData,
+			        // 告诉jQuery不要去处理发送的数据
+			        processData : false,
+			        // 告诉jQuery不要去设置Content-Type请求头
+			        contentType : false,
+			        beforeSend:function(){
+			            console.log("正在进行，请稍候");
+			        },
+			        success : function(responseStr) {
+			            console.log(responseStr)
+			        }
+			    });
+			}
 
 
 

@@ -34,8 +34,8 @@ public class FrClientWorkRelateController {
     }
 
     @GetMapping("/getWorks")
-    public JsonResult getWorks(){
-      List<FrClientWorkRelate> frClientWorkRelates= iFrClientWorkRelateService.getWorks();
+    public JsonResult getWorks(String clientId){
+      List<FrClientWorkRelate> frClientWorkRelates= iFrClientWorkRelateService.getWorks(clientId);
         return JsonResult.success(frClientWorkRelates);
     }
 }

@@ -143,7 +143,7 @@ $(function () {
                 that.groupCourseData = {};
                 $("#privatemrkcjh").val("");
                 //刷新列表
-                let selectNodes = $('#course_tree').treeview('getSelected');
+                var selectNodes = $('#course_tree').treeview('getSelected');
                 if (selectNodes[0].id != null)
                     that.getGroupList({curPage: 1, limit: 10, seriesId: selectNodes[0].id});
                 that.addPrivateCourse = false;
@@ -170,7 +170,7 @@ $(function () {
                 that.privateSingleCourse.itemIndex = index;
             },
             getPrivateSetting: function () {
-                let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
+                var url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
                 Loading.prototype.show();
                 this.settingSdaduimList = [];
                 axios.get(url, {params: {type: 2}})
@@ -178,7 +178,7 @@ $(function () {
                         if (res.data.code == 200) {
                             that.settingInfo = res.data.data;
                             if (that.settingInfo.groupLJKFYYTIME && that.settingInfo.groupLJKFYYTIME != "") {
-                                let arr = that.settingInfo.groupLJKFYYTIME.split(",");
+                                var arr = that.settingInfo.groupLJKFYYTIME.split(",");
                                 $("#dateInp").val(arr[0]);
                                 $("#XSInp").val(arr[1]);
                                 $("#FZInp").val(arr[2]);
@@ -196,7 +196,7 @@ $(function () {
                     });
             },
             saveSettingInfo: function () {
-                let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
+                var url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
                 Loading.prototype.show();
                 that.settingInfo.groupLJKFYYTIME = $("#dateInp").val() + "," + $("#XSInp").val() + "," + $("#FZInp").val();
                 axios.get(url, {params: this.settingInfo}).then(function (res) {

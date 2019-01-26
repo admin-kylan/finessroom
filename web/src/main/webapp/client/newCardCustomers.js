@@ -967,10 +967,18 @@ var newCardCustomers = new Vue({
             }
             if (that.LiIndex == 0) {
                 that.cardMap.personnelId = that.loadData2.clitenUser.consultantId;
+
+                var options = $("#consultantSelect option:selected");
+                that.loadData2.clitenUser.consultantName=options.text().replace(/\s/g, "");
+                console.log(that.cardMap.consultantName)
+                if(! that.loadData2.clitenUser.fwhjName){
+                    return $.alert("服务顾问未选择");
+                }
             }
             if (!that.cardMap.personnelId) {
-                return $.alert("销售员工未选择");
+                return $.alert("销售顾问未选择");
             }
+
             if (!that.cardMap.cardNo) {
                 return $.alert("会员卡号未获取");
             }

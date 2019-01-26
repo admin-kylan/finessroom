@@ -161,7 +161,9 @@
             var userName = $.cookie('name');
             $(".form_box_right_reds").html(userName);
             that.url = $.stringFormat("{0}/shop/getStoreList", $.cookie("url"));
+            console.log(window.getParam('type'))
             Loading.prototype.show();
+
             $.get(that.url, {
                     type: 0,//添加操作
                 },
@@ -220,7 +222,7 @@
                     "?cardTypeName=" + name +
                     "&ids=" + Ids + "&type=0&typeSetState=" +
                     that.typeSetState + "&createUserName=" + createUserName +
-                    "&CustomerCode=" + CustomerCode + "&createUserId=" + createUserId, $.cookie("url"));
+                    "&CustomerCode=" + CustomerCode + "&createUserId=" + createUserId+ "&cardType=" + window.getParam('type'), $.cookie("url"));
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -278,7 +280,6 @@
             //市级全选,取消
             check2: function (index) {
                 var thisChecked = $("input[name=" + index + "]").prop('checked');
-                console.log(thisChecked)
                 $("input[name=" + index + '1' + "]").prop("checked", thisChecked);
             },
         },

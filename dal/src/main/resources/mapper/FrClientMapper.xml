@@ -2382,22 +2382,25 @@
     <!--查询是否现有客户  现有客户先暂时存放在type，潜在客户先暂时存放在stature-->
     <select id="queryByClient"  resultType="com.yj.dal.model.FrClient">
         SELECT
-          (SELECT count(1) FROM  fr_client_personal b where b.client_id = a.id  and b.is_using = 1 ) type,
-          (SELECT count(1) FROM  fr_client_latence_personal b where b.client_id = a.id and b.is_using = 1) stature,
-          a.id,
-          a.client_name AS clientName,
-          a.mobile,
-          a.sex,
-          a.level_id AS levelId,
-          a.email,
-          a.CustomerMark
+        (SELECT count(1) FROM  fr_client_personal b where b.client_id = a.id  and b.is_using = 1 ) type,
+        (SELECT count(1) FROM  fr_client_latence_personal b where b.client_id = a.id and b.is_using = 1) stature,
+        a.id,
+        a.client_name AS clientName,
+        a.mobile,
+        a.sex,
+        a.level_id AS levelId,
+        a.email,
+        a.CustomerMark
         FROM  fr_client a
         WHERE a.CustomerCode = #{CustomerCode}
-         AND  a.client_name = #{clientName}
-         AND  a.mobile = #{mobile}
+        AND  a.client_name = #{clientName}
+        AND  a.mobile = #{mobile}
         <if test=" sex !=null" >
             AND  a.sex = #{sex}
         </if>
     </select>
 
+    <select id="selectByMobile"   parameterType="java.lang.String"  resultType="java.lang.Integer">
+        SELECT COUNT (*) FROM fr_client WHERE mobile = #{mobile}
+    </select>
 </mapper>

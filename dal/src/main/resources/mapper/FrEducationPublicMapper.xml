@@ -545,6 +545,562 @@
     </select>
 
 
+    <!-- 教练查询 -->
+    <select id="findEducationCoachList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            (
+            SELECT
+                pi.ID persionCoachId,
+                pi.RelName persionCoachName,
+                pi.Mobile persionCoachMobile,
+                ( CASE WHEN pi.Sex = 1 THEN '女' ELSE '男' END ) persionCoachSex,
+                pi.JobNumber persionCoachJobNumber,
+                pi.EntryTime persionCoachEntryTime
+        FROM
+            PersonnelInfo pi
+            LEFT JOIN PersonlRole pr ON pi.id = pr.PersonnelInfoId
+            LEFT JOIN RoleInfo ri ON pr.RoleInfoId = ri.Id
+        WHERE
+            ri.UserType = 3
+            AND ri.ISTeach = 1
+            AND pi.ShopId= #{shopId}
+            AND pi.CustomerCode = #{CustomerCode}
+            AND pi.IsDel = 0
+            ) coach
+            LEFT JOIN (
+            SELECT
+                <include refid="Base_Column_List_alias"></include>,
+                ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 1 AND eci.is_use = 1 ) eduCurrentCount,
+                ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 0 AND eci.is_use = 1 ) eduCancelCount,
+                ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 2 AND eci.is_use = 1 ) eduToConfirmCount,
+                ec.reserve_time configReserveTime,
+                ec.setting_time configSettingTime,
+                ec.is_start_class configStartClass,
+                ec.is_choose_coach configChooseCoach,
+                ec.is_reserve_confirm configReserveConfirm,
+                ec.admission_time configAdmissionTime,
+                ec.is_online_reserve configOnlineReserve,
+                ec.is_card_settle configCardSettle,
+                ec.is_course_settle configCourseSettle,
+                gc.image_url courseImage,
+                gc.member_price courseMemberPrice,
+                ec.id configId
+            FROM
+                fr_education edu
+                LEFT JOIN fr_education_config ec ON edu.id = ec.education_id
+                LEFT JOIN fr_group_course gc ON gc.id = edu.course_id
+            WHERE
+                edu.execute_date_plan = #{executeDate}
+               /* AND edu.status = 0*/
+                AND edu.is_use = 1
+                AND edu.CustomerCode = #{CustomerCode}
+                AND edu.shop_id = #{shopId}
+                AND edu.type = ${teachType}
+                <if test="sdaduimId != null and sdaduimId != ''">
+                    AND edu.sdaduim_id = #{sdaduimId}
+                </if>
+            ) edu ON edu.coachId = coach.persionCoachId
+        ORDER BY
+            coach.persionCoachEntryTime ASC
+	</select>
 
 
+    <!-- 房间查询 -->
+    <select id="findEducationRoomList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            (
+            SELECT
+                gcr.id roomId,
+                gcrs.id roomSeatId,
+                gcr.name roomName,
+                gcrs.seat_num seatNum,
+                gcrs.cnt_col colNum,
+                gcrs.cnt_row rowNum,
+                shop.id shopId,
+                shop.shopName shopName,
+                sdaduim.id sdaduimId,
+                sdaduim.name sdaduimName
+            FROM
+                fr_group_class_room_seat gcrs
+                LEFT JOIN fr_group_class_room gcr ON gcrs.class_room_id = gcr.id
+                left join Shop shop on shop.id = gcr.shop_id
+                left join Sdaduim sdaduim on sdaduim.id = gcr.sdaduim_id
+            WHERE
+                gcr.shop_id = #{shopId}
+                AND gcr.customer_code = #{CustomerCode}
+                AND gcr.is_using = 1
+                AND gcrs.is_using = 1
+            ) room
+            LEFT JOIN (
+            SELECT
+                pi.ID coachId,
+                pi.RelName coachName,
+                pi.Mobile coachMobile,
+                ( CASE WHEN pi.Sex = 1 THEN '女' ELSE '男' END ) coachSex,
+                pi.JobNumber coachJobNumber,
+                edu.id eduId,
+                edu.begin_date_plan eduBeginDate,
+                edu.end_date_plan eduEndDate,
+                edu.course_id courseId,
+                edu.course_name courseName,
+                edu.room_id eduRoomId,
+                edu.reserve_total_num reserveTotalNum,
+                edu.assistant_name assistantName,
+                edu.assistant_id assistantId
+            FROM
+                fr_education edu
+                LEFT JOIN PersonnelInfo pi ON edu.coach_id = pi.id
+            WHERE
+                edu.shop_id = #{shopId}
+            <if test="sdaduimId != null and sdaduimId != ''">
+                AND edu.sdaduim_id = #{sdaduimId}
+            </if>
+                AND edu.CustomerCode = #{CustomerCode}
+                AND edu.execute_date_plan = #{executeDate}
+                AND edu.type = 0
+               /* AND edu.status = 0*/
+                AND edu.is_use = 1
+            ) edu ON edu.eduRoomId = room.roomId
+    </select>
+
+    <select id="findCoursePublicList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            gssr.shop_id shopId,
+            shop.ShopName shopName,
+            gc.id courseId,
+            gc.name courseName,
+            gc.can_reserve_num reserveTotalNum,
+            gc.class_count classSalesNum,
+            gc.time courseTime
+        FROM
+            fr_group_course gc
+            LEFT JOIN fr_group_series gs ON gc.series_id = gs.id
+            LEFT JOIN fr_group_series_shop_relation gssr ON gssr.series_id = gc.series_id
+            LEFT JOIN Shop shop ON gssr.shop_id = shop.ID
+        WHERE
+            gssr.shop_id = #{shopId}
+            AND gc.customer_code = #{CustomerCode}
+            AND gc.class_status = 1
+            AND gc.is_using = 1
+    </select>
+
+    <select id="findShopSdaduimCourseList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            gssr.shop_id shopId,
+            shop.ShopName shopName,
+            gc.id courseId,
+            gc.name courseName,
+            gc.can_reserve_num reserveTotalNum,
+            gc.class_count classSalesNum
+        FROM
+            fr_group_course gc
+            LEFT JOIN fr_group_series gs ON gc.series_id = gs.id
+            LEFT JOIN fr_group_series_shop_relation gssr ON gssr.series_id = gc.series_id
+            LEFT JOIN Shop shop ON gssr.shop_id = shop.ID
+        WHERE
+            gssr.shop_id = #{shopId}
+            AND gc.customer_code = #{CustomerCode}
+            AND gc.class_status = 1
+            AND gc.is_using = 1
+    </select>
+
+    <select id="searchSettlement" parameterType="java.lang.String" resultType="java.util.Map">
+         SELECT
+            edu.coach_name coachName,
+            edu.course_name courseName,
+            emo.member_card_no memberCardNo,
+            eci.member_name memberName,
+            eci.mobile memberMobile,
+            emo.create_date createDate,
+            emo.begin_date_real beginDate,
+            emo.end_date_real endDate,
+            emo.create_name createName,
+            emo.status status,
+            emo.id id,
+            emo.client_info_id clientInfoId,
+            edu.id eduId,
+            edu.class_sales_num classSalesNum,
+            edu.shop_id shopId
+        FROM
+            fr_education_member_order emo
+            LEFT JOIN fr_education_client_info eci ON eci.id = emo.client_info_id
+            LEFT JOIN fr_education edu ON edu.id = eci.education_id
+        where
+            edu.shop_id = #{shopId}
+        <if test="beginDate != null and beginDate != ''">
+            and emo.create_date <![CDATA[ >= ]]> #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and emo.create_date <![CDATA[ <= ]]> #{endDate}
+        </if>
+        <if test="searchInput != null and searchInput != ''">
+            AND ( emo.member_card_no LIKE '%'+#{searchInput}+'%' OR eci.mobile LIKE '%'+#{searchInput}+'%' )
+        </if>
+            and edu.CustomerCode = #{code}
+            and emo.status in (0,2)
+            and edu.type = ${eduType}
+    </select>
+
+    <select id="findConsumeConditionCardType" parameterType="java.lang.String" resultType="java.util.Map">
+         select DISTINCT card_type cardType from fr_education_member_order
+    </select>
+    <select id="findConsumeConditionCardName" parameterType="java.lang.String" resultType="java.util.Map">
+         select DISTINCT card_name cardName from fr_education_member_order
+    </select>
+
+    <!-- 查找哪些课程是到时间 -->
+    <select id="findEduIdForEndClass" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            edu.id eduId
+        FROM
+            fr_education edu
+            LEFT JOIN fr_education_class_order eco ON edu.id = eco.education_id
+        WHERE
+            edu.status = 1
+            and edu.is_use = 1
+            AND (
+        SELECT
+            DATEDIFF(
+            MINUTE,
+            eco.end_date_real,
+            GETDATE())) >= eco.total_time
+    </select>
+
+    <update id="updateEduStatusToEndClass" parameterType="java.lang.String">
+    UPDATE fr_education
+        SET status = 2
+    WHERE
+        id = #{eduId}
+    </update>
+
+    <select id="findConsumeClass" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            eco.begin_date_real beginDate,
+            eco.end_date_real endDate,
+            edu.course_name courseName,
+            eco.total_time totalTime,
+            eco.total_gain totalGain,
+            eco.total_num totalNum,
+            eco.finish_num finishNum,
+            eco.undone_num undoneNum,
+            edu.coach_name coachName,
+            edu.room_name roomName,
+            eco.create_user createUser,
+            eco.score,
+            edu.execute_date_plan executeDatePlan,
+            edu.begin_date_plan beginDatePlan,
+            edu.end_date_plan endDatePlan,
+            eco.member_assess memberAssess,
+            eco.coach_summary coachSummary,
+            eco.program_better programBetter
+        FROM
+            fr_education_class_order eco
+            LEFT JOIN fr_education edu ON edu.id = eco.education_id
+        WHERE
+            edu.shop_id = #{shopId}
+        <if test="beginDate != null and beginDate != ''">
+            and eco.begin_date_real <![CDATA[ >= ]]> #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and eco.begin_date_real <![CDATA[ <= ]]> #{endDate}
+        </if>
+        <if test="searchCoach != null and searchCoach != ''">
+            AND edu.coach_name LIKE '%'+#{searchCoach}+'%'
+        </if>
+        <if test="searchCourse != null and searchCourse != ''">
+            AND edu.course_name LIKE '%'+#{searchCourse}+'%'
+        </if>
+            and edu.CustomerCode = #{code}
+            and edu.type = ${eduType}
+
+    </select>
+
+    <select id="findConsumeMember" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            emo.create_date createDate,
+            edu.course_name courseName,
+            emo.class_num classNum,
+            emo.price,
+            emo.begin_date_real beginDate,
+            emo.end_date_real endDate,
+            emo.total_time totalTime,
+            emo.member_card_no memberCardNo,
+            eci.member_name memberName,
+            eci.sex sex,
+            eci.mobile,
+            emo.card_type cardType,
+            emo.card_name cardName,
+            emo.use_benefit useBenefit,
+            emo.remain_benefit remainBenefit,
+            edu.coach_name coachName,
+            edu.room_name roomName,
+            emo.create_name createName,
+            emo.score score,
+            emo.description description,
+            edu.execute_date_plan executeDatePlan,
+            edu.begin_date_plan beginDatePlan,
+            edu.end_date_plan endDatePlan,
+            emo.member_assess memberAssess,
+            emo.coach_summary coachSummary,
+            emo.program_better programBetter
+        FROM
+            fr_education_member_order emo
+            LEFT JOIN fr_education_client_info eci ON eci.id = emo.client_info_id
+            LEFT JOIN fr_education edu ON edu.id = eci.education_id
+        WHERE
+            edu.shop_id = #{shopId}
+        <if test="beginDate != null and beginDate != ''">
+            and emo.begin_date_real <![CDATA[ >= ]]> #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and emo.begin_date_real <![CDATA[ <= ]]> #{endDate}
+        </if>
+        <if test="searchCoach != null and searchCoach != ''">
+            AND edu.coach_name LIKE '%'+#{searchCoach}+'%'
+        </if>
+        <if test="searchCourse != null and searchCourse != ''">
+            AND edu.course_name LIKE '%'+#{searchCourse}+'%'
+        </if>
+        <if test="cardType != null and cardType != ''">
+            AND emo.card_type = #{cardType}
+        </if>
+        <if test="cardName != null and cardName != ''">
+            AND emo.card_name = #{cardName}
+        </if>
+            and edu.CustomerCode = #{code}
+            and emo.status = 2
+            and edu.type = ${eduType}
+    </select>
+
+    <select id="findManageCount" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            ( SELECT COUNT ( 1 ) totalNum, SUM ( class_sales_num ) totalClassNum FROM fr_education WHERE is_use = 1 AND status = 2
+            <if test="beginDate != null and beginDate != ''">
+                AND execute_date_plan >= #{beginDate}
+            </if>
+            <if test="shopId != null and shopId != ''">
+                AND shop_id = #{shopId}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND execute_date_plan <![CDATA[ <= ]]> #{endDate}
+            </if>) a,
+            ( SELECT COUNT ( 1 ) totalMemberNum FROM fr_education_member_order emo
+            LEFT JOIN fr_education edu ON edu.id = emo.education_id
+            WHERE emo.is_use = 1 AND emo.status = 2
+            <if test="beginDate != null and beginDate != ''">
+                AND emo.create_date >= #{beginDate}
+            </if>
+            <if test="shopId != null and shopId != ''">
+                AND edu.shop_id = #{shopId}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND emo.create_date <![CDATA[ <= ]]> #{endDate}
+            </if>) b,
+            ( SELECT COUNT ( 1 ) totalCoachNum FROM ( SELECT COUNT ( 1 ) s FROM fr_education WHERE is_use = 1 AND status = 2
+             <if test="beginDate != null and beginDate != ''">
+                AND execute_date_plan >= #{beginDate}
+            </if>
+            <if test="shopId != null and shopId != ''">
+                AND shop_id = #{shopId}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND execute_date_plan <![CDATA[ <= ]]> #{endDate}
+            </if> GROUP BY coach_id ) a ) c,
+            (
+        SELECT MAX
+            ( finish_num ) maxReserveNum
+        FROM
+            fr_education_class_order eco
+            LEFT JOIN fr_education edu ON edu.id = eco.education_id
+        WHERE
+            edu.status = 2
+            AND edu.is_use = 1
+            <if test="beginDate != null and beginDate != ''">
+                AND eco.begin_date_real >= #{beginDate}
+            </if>
+            <if test="shopId != null and shopId != ''">
+                AND edu.shop_id = #{shopId}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND eco.begin_date_real <![CDATA[ <= ]]> #{endDate}
+            </if>
+            ) d,
+            (
+        SELECT MIN
+            ( finish_num ) minReserveNum
+        FROM
+            fr_education_class_order eco
+            LEFT JOIN fr_education edu ON edu.id = eco.education_id
+        WHERE
+            edu.status = 2
+            AND edu.is_use = 1
+            <if test="beginDate != null and beginDate != ''">
+                AND eco.begin_date_real >= #{beginDate}
+            </if>
+            <if test="shopId != null and shopId != ''">
+                AND edu.shop_id = #{shopId}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND eco.begin_date_real <![CDATA[ <= ]]> #{endDate}
+            </if>
+            ) e
+    </select>
+
+    <select id="getGroupRoomByShopId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            sdaduim.ID sdaduimId,
+            sdaduim.Name sdaduimName,
+            gcr.name roomName,
+            gcr.id roomId
+        FROM
+            fr_group_class_room gcr
+            LEFT JOIN Sdaduim sdaduim ON gcr.sdaduim_id = sdaduim.ID
+        WHERE
+            gcr.shop_id = #{shopId}
+            AND gcr.customer_code = #{code}
+            AND gcr.is_using = 1
+            AND sdaduim.Status = 0
+    </select>
+
+    <select id="findEducationToCopy" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            edu.id eduId,
+            ec.id configId,
+            ero.id reserveId,
+            eco.id cardSettleId
+        FROM
+            fr_education edu
+            LEFT JOIN fr_education_config ec ON edu.id = ec.education_id
+            LEFT JOIN fr_education_reserve_object ero ON ec.id = ero.education_config_id
+            LEFT JOIN fr_education_card_object eco ON ec.id = eco.education_config_id
+        where
+            edu.type = ${eduType}
+            and edu.begin_date_plan <![CDATA[ >= ]]> #{beginDate}
+            and edu.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+            and edu.coach_id = #{coachId}
+            and edu.shop_id = #{shopId}
+            and edu.course_id = #{courseId}
+            and edu.status = 0
+            and edu.is_use = 1
+
+    </select>
+
+
+    <select id="findEduListByMonthWeek" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            edu.id eduId,
+            ec.id configId,
+            ero.id reserveId,
+            eco.id cardSettleId,
+            edu.status,
+            edu.coach_name coachName,
+            edu.course_name courseName,
+            edu.begin_date_plan beginDate,
+            edu.end_date_plan endDate,
+            edu.reserve_total_num reserveTotalNum,
+            (SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 1 AND eci.is_use = 1 ) eduCurrentCount,
+            (SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 2 AND eci.is_use = 1 ) eduToConfirmCount
+
+        FROM
+            fr_education edu
+            LEFT JOIN fr_education_config ec ON edu.id = ec.education_id
+            LEFT JOIN fr_education_reserve_object ero ON ec.id = ero.education_config_id
+            LEFT JOIN fr_education_card_object eco ON ec.id = eco.education_config_id
+        WHERE
+            edu.is_use = 1
+            and edu.type = ${eduType}
+            and edu.begin_date_plan <![CDATA[ >= ]]> #{beginDate}
+            and edu.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+            and edu.shop_id = #{shopId}
+        <if test="coachId != null and coachId != ''">
+            and edu.coach_id = #{coachId}
+        </if>
+            and edu.CustomerCode = #{code}
+        <if test="roomId != null and roomId != ''">
+            and edu.room_id = #{roomId}
+        </if>
+        order by
+            edu.begin_date_plan asc
+
+    </select>
+
+    <select id="findEducationToCopyByEduId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            edu.id eduId,
+            ec.id configId,
+            ero.id reserveId,
+            eco.id cardSettleId
+        FROM
+            fr_education edu
+            LEFT JOIN fr_education_config ec ON edu.id = ec.education_id
+            LEFT JOIN fr_education_reserve_object ero ON ec.id = ero.education_config_id
+            LEFT JOIN fr_education_card_object eco ON ec.id = eco.education_config_id
+        where
+            edu.id = #{eduId}
+
+    </select>
+
+    <select id="findAllCourseForShopSdaduim" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            (
+            SELECT
+                pc.id courseId,
+                pc.name courseName,
+                pp.sdaduim_id sdaduimId,
+                pp.shop_id shopId,
+                shop.shopName,
+                sda.name sdaduimName,
+                ( SELECT 1 ) eduType
+            FROM
+                fr_private_cource pc
+                LEFT JOIN fr_private_package_relation pp ON pp.cource_id = pc.id
+                LEFT JOIN Shop shop ON shop.id = pp.shop_id
+                LEFT JOIN Sdaduim sda ON sda.id = pp.sdaduim_id
+            WHERE
+                1 = 1
+            <if test="shopId != null and shopId != ''">
+                and pp.shop_id = #{shopId}
+            </if>
+                and pc.customer_code = #{code}
+            ) a UNION
+        SELECT
+            gc.id courseId,
+            gc.name courseName,
+            gs.sdaduim_id sdaduimId,
+            gssr.shop_id shopId,
+            shop.shopName,
+            sda.name sdaduimName,
+            ( SELECT 0 ) eduType
+        FROM
+            fr_group_course gc
+            LEFT JOIN fr_group_series gs ON gs.id = gc.series_id
+            LEFT JOIN fr_group_series_shop_relation gssr ON gs.id = gssr.series_id
+            LEFT JOIN Shop shop ON shop.id = gssr.shop_id
+            LEFT JOIN Sdaduim sda ON sda.id = gs.sdaduim_id
+        WHERE
+            1 = 1
+        <if test="shopId != null and shopId != ''">
+            and gssr.shop_id = #{shopId}
+        </if>
+            and gc.customer_code = #{code}
+    </select>
+
+    <select id="findSettingCourse" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            si.value
+        FROM
+            fr_setting_info si
+        WHERE
+            key1 = #{key}
+            AND customer_code = #{code}
+            AND type = ${eduType}
+    </select>
 </mapper>

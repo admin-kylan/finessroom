@@ -304,4 +304,8 @@
         SELECT ShopName FROM Shop where ID=(
         SELECT shop_id FROM fr_client_personal WHERE client_id=#{cid})
     </select>
+
+    <select id="selectbyShopName" parameterType="java.lang.String" resultType="com.yj.dal.model.Shop">
+        SELECT * FROM Shop WHERE ShopName = #{shopName}
+    </select>
 </mapper>

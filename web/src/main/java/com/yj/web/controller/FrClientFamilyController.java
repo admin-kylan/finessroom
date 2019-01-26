@@ -27,8 +27,8 @@ public class FrClientFamilyController {
     IFrClientFamilyService iFrClientFamilyService;
 
     @GetMapping("/getFamily")
-    public JsonResult getFamily() throws YJException {
-        List<FrClientFamily> frClientFamilies = iFrClientFamilyService.getFamily();
+    public JsonResult getFamily(String clientId) throws YJException {
+        List<FrClientFamily> frClientFamilies = iFrClientFamilyService.getFamily(clientId);
         return JsonResult.success(frClientFamilies);
     }
 

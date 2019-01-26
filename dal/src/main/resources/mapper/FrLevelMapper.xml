@@ -25,4 +25,8 @@
         level_name AS levelName, low_money AS lowMoney, low_integral AS lowIntegral, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, id
     </sql>
 
+    <select id="" parameterType="com.yj.dal.model.FrLevel" resultType="java.lang.String">
+        SELECT * FROM fr_level WHERE level_name = #{levelName}
+    </select>
+
 </mapper>

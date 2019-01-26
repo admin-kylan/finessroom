@@ -110,9 +110,9 @@ public class ShopController {
      * @throws YJException
      */
     @GetMapping("/getStoreList")
-    public JsonResult getStoreList(HttpServletRequest request, @RequestParam Integer type) throws YJException {
+    public JsonResult getStoreList(HttpServletRequest request, @RequestParam Integer type,String shopId) throws YJException {
         String code = CookieUtils.getCookieValue(request, "code", true);
-        return JsonResult.success(shopService.getStoreList(type, code));
+        return JsonResult.success(shopService.getStoreList(type, code,shopId));
     }
 
     /**
@@ -179,7 +179,19 @@ public class ShopController {
         String code = CookieUtils.getCookieValue(request, "code", true);
         return JsonResult.success(shopService.selectList(new EntityWrapper<Shop>().setSqlSelect("ID", "ShopName").where("CustomerCode = {0}", code)));
     }
-
+//
+//    /**
+//     * 获取门店下所有场馆项目
+//     * @param code
+//     * @param shopId
+//     * @return
+//     */
+//    @GetMapping("/getShopAndCategoryItem")
+//    public JsonResult getShopAndCategoryItem(String code,String shopId){
+//
+//
+//        return shopService.getShopAndCategoryItem(code,shopId);
+//    }
 
 }
 

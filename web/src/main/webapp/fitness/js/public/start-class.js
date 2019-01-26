@@ -111,7 +111,6 @@ Vue.component('edu-start-class-children', {//模版挂载的标签名
     created() {
        // Event.$off(EDU_CONSTANT.listenerEduItem)
         Event.$on(EDU_CONSTANT.listenerEduItem, (eduId, eduItem)=>{
-
             //加载会员卡配置  eduConfigCardObject
             axiosGetParams(EDUCATION_URL.findSettCourseEdu, {eduId: eduId}, (res)=>{
                 this.eduId = eduId;
@@ -126,15 +125,12 @@ Vue.component('edu-start-class-children', {//模版挂载的标签名
             },()=>{
                 $.alert('拉取信息出错，请重试！！')
             })
-
         });
-
-
     },
     mounted() {
         let that = this;
         jeDate('#start-begin-date',{
-            isinitVal: true,
+            //isinitVal: true,
             festival: true,
             format: 'YYYY/MM/DD hh:mm',
             donefun(obj, val){
@@ -142,7 +138,7 @@ Vue.component('edu-start-class-children', {//模版挂载的标签名
             }
         })
         jeDate('#start-end-date',{
-            isinitVal: true,
+           // isinitVal: true,
             festival: true,
             format: 'YYYY/MM/DD hh:mm',
             donefun(obj, val){
@@ -287,8 +283,8 @@ Vue.component('edu-start-class-children', {//模版挂载的标签名
                 sex: val.sex,
             }
             this.reserveClientInfo = reserveClientInfo;
-            console.log(cardObject)
-            console.log(reserveClientInfo)
+           // console.log(cardObject)
+           // console.log(reserveClientInfo)
 
             //卡权益
             if(this.eduItem.configCardSettle == true && this.eduItem.configCourseSettle == false){
@@ -371,12 +367,6 @@ Vue.component('edu-start-class-children', {//模版挂载的标签名
             if(!courseObject){
                 courseObject = this.eduConfigCardObject[0];
                 if(!courseObject){
-                    courseObject = this.eduConfigCardObject[1];
-                    if(!courseObject){
-                        //排课的时候，没有对该课程排课，就不可预约
-                        $.alert("预约失败，不可预约该课程")
-                        return false;
-                    }
                     //排课的时候，没有对该课程排课，就不可预约
                     $.alert("预约失败，不可预约该课程")
                     return false;

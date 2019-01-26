@@ -2,13 +2,11 @@ package com.yj.service.service;
 
 import com.yj.common.result.JsonResult;
 import com.yj.common.exception.YJException;
-import com.yj.common.result.JsonResult;
 import com.yj.dal.dto.ShopListDTO;
 import com.yj.dal.model.Shop;
 import com.yj.service.base.BaseService;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -21,7 +19,7 @@ import java.util.Map;
 public interface IShopService extends BaseService<Shop> {
 	JsonResult getFrCardType(String code);
 
-	JsonResult getStoreList(Integer type,String code);
+	JsonResult getStoreList(Integer type, String code, String shopId);
 
 	JsonResult<List<ShopListDTO>> selectShopList(String customerCode);
 
@@ -35,4 +33,5 @@ public interface IShopService extends BaseService<Shop> {
 
 	JsonResult getByShopIdList(String code,String shopId,Integer type);
 
+//    JsonResult getShopAndCategoryItem(String code,String shopId);
 }

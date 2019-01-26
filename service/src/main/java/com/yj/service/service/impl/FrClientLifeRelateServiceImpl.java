@@ -92,9 +92,9 @@ public class FrClientLifeRelateServiceImpl extends BaseServiceImpl<FrClientLifeR
     }
 
     @Override
-    public List<FrClientLifeRelate> getDetails() {
+    public List<FrClientLifeRelate> getDetails(String clientId) {
         List<FrClientLifeRelate> frClientLifeRelates = frClientLifeRelateMapper.selectList(
-                new EntityWrapper<FrClientLifeRelate>().where("is_using={0}", 1));
+                new EntityWrapper<FrClientLifeRelate>().where("is_using=1 and client_id={0}", clientId));
         return frClientLifeRelates;
     }
 }

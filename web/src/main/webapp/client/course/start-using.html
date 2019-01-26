@@ -1,5 +1,5 @@
 <li class="list4 list on" id="course-start-using" xmlns:v-bind="http://www.w3.org/1999/xhtml">
-    <fieldset class="fieldset1">
+    <fieldset class="fieldset1" style="padding: 10px 30px;">
         <legend>操作项目/产品</legend>
         <select name="" v-model="index">
             <option value="" v-for="(item, index) in result" :value="index">
@@ -19,7 +19,7 @@
             </option>
         </select>
     </fieldset>
-    <fieldset class="fieldset2">
+    <fieldset class="fieldset2" style="padding: 10px 30px;">
         <legend>启用项目操作</legend>
         <p class="date">
             <label>
@@ -35,7 +35,7 @@
         <p>操作人：{{clientName}} 当前操作时间：{{now| formatDate2}}</p>
         <p><span class="useful" @click="save" >启用</span></p>
     </fieldset>
-    <div class="tabTitle">操作记录</div>
+    <div class="tabTitle" style="padding-left: 5px;">操作记录</div>
     <table border="1" bordercolor="#ccc">
         <thead>
         <tr>
@@ -216,6 +216,7 @@
                     if (this.result.length > 0) {
                         this.index = 0;//初始化index
                         clearInterval(interval);
+                        console.log(this.result)
                     }
                 }, 500)
             },

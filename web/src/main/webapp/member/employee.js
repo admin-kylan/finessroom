@@ -1091,7 +1091,14 @@ var right = new Vue({
             } else if (that.cardTypeSet.type == "员工卡") {
                 that.cardTypeSet.type = 7
             }
-
+			if(!that.cardTypeSet.originalPrice){
+				alert("会员卡原价不能为空")
+				return ;
+			}
+			if(!that.cardTypeSet.salesPrice){
+				alert("会员卡销售价不能为空")
+				return ;
+			}
             that.setCardTypePzfs(); //处理凭证方式
             var url = $.stringFormat("{0}/frCard/addMemberCard", $.cookie('url'));
             console.log(that.cardTypeSet)

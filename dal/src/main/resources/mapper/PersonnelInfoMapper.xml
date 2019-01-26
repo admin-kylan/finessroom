@@ -75,7 +75,7 @@
     <!--查询销售人员列表-->
     <select id="getMarketUserList" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
-          <include refid="Base_Column_List_PersonnelInfo" />
+        <include refid="Base_Column_List_PersonnelInfo" />
         FROM
         PersonnelInfo pi
         LEFT JOIN
@@ -95,7 +95,7 @@
     <!--查询销售人员列表-->
     <select id="getPsersonnelListByShopId" resultMap="BaseResultMap">
         select
-          <include refid="Base_Column_List_PersonnelInfo" />
+        <include refid="Base_Column_List_PersonnelInfo" />
         FROM  PersonnelInfo pi
         LEFT JOIN   PersonlRole pr
         ON  pi.ID = pr.PersonnelInfoId
@@ -110,34 +110,38 @@
     <!--查询销售人员列表-->
     <select id="getPersonnelByShopId" resultType="java.util.Map">
         SELECT
-             r.id rId,
-             r.FirstName,
-             r.ParentId,
-             r.RoleType,
-             r.ISTeach,
-             r.ServiceRole,
-             r.BusinessType,
-             r.UserType,
-            rf.RoleInfoId,
-            p.RelName,
-            p.id pId,
-            p.ShopId
-       FROM PersonnelInfo p
-       LEFT JOIN PersonlRole rf ON rf.PersonnelInfoId = p.id
-       LEFT JOIN RoleInfo r ON  r.id = rf.RoleInfoId
-       WHERE  r.IsDel=0
-         AND  rf.IsDel = 0
-         AND  p.IsDel = 0
-         AND  p.Status = 0
-         AND  p.CustomerCode = #{CustomerCode}
-         AND  p.ShopId = #{shopId}
-       <if test="businessTypeList != null and businessTypeList.size >0" >
-         AND (
+        r.id rId,
+        r.FirstName,
+        r.ParentId,
+        r.RoleType,
+        r.ISTeach,
+        r.ServiceRole,
+        r.BusinessType,
+        r.UserType,
+        rf.RoleInfoId,
+        p.RelName,
+        p.id pId,
+        p.ShopId
+        FROM PersonnelInfo p
+        LEFT JOIN PersonlRole rf ON rf.PersonnelInfoId = p.id
+        LEFT JOIN RoleInfo r ON  r.id = rf.RoleInfoId
+        WHERE  r.IsDel=0
+        AND  rf.IsDel = 0
+        AND  p.IsDel = 0
+        AND  p.Status = 0
+        AND  p.CustomerCode = #{CustomerCode}
+        AND  p.ShopId = #{shopId}
+        <if test="businessTypeList != null and businessTypeList.size >0" >
+            AND (
             <foreach collection="businessTypeList" item="BusinessType" index="i" open="" close="" separator="or">
                 r.BusinessType = #{BusinessType}
             </foreach>
             )
-       </if>
+        </if>
+    </select>
+
+    <select id="selectBySalespersonName"  parameterType="java.lang.String" resultType="com.yj.dal.model.PersonnelInfo">
+        SELECT * FROM PersonnelInfo WHERE RelName = #{salespersonName}
     </select>
 
 

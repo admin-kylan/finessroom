@@ -93,8 +93,8 @@
                                 <div><input type="text" placeholder="身份证号码" v-model="loadData2.clitenUser.idNo"  ></div>
                                 <div><input type="text" placeholder="填写推荐人电话"  v-model="loadData2.clitenUser.referenceTel"   @change="getUserDatat(loadData2.clitenUser.referenceTel,'referenceTel',1)" ></div>
                                 <div v-if="LiIndex == 0" id="consultant">
-                                    <select  name="1"  v-model="loadData2.clitenUser.consultantId">
-                                        <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
+                                    <select id="consultantSelect" name="1"  v-model="loadData2.clitenUser.consultantId">
+                                        <option  v-for='(items,index) in maeketUserList' :value="items.id" v-if="index==0" selected>
                                             {{items.relName}}
                                         </option>
                                         <option v-for='(items,index) in maeketUserList' :value="items.id" v-if="index>0">
@@ -121,7 +121,7 @@
                             <div>
                                 <div>居住地址</div>
                                 <div>推荐人姓名</div>
-                                <div>服务顾问</div>
+                                <div><span>*</span>服务顾问</div>
                                 <div>申请日期</div>
                                 <div>业绩分配</div>
                             </div>
@@ -481,10 +481,10 @@
         </div>
         <div class="newTab"  v-if="LiIndex==1 || LiIndex==3 || LiIndex==4">
             <div class="newCustomers_maskLayer_box_top">
-                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="closeCustomer">X</a>
+                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" style="padding-left:0 ;padding-right: 15px;" @click="closeCustomer">X</a>
             </div>
         </div>
-        <div class="customerMembershipCard LiIndexOffer">
+        <div class="customerMembershipCard LiIndexOffer" style="padding: 20px;">
             <fieldset class="customerMembershipCard LiIndexOffer1 section666" v-if="LiIndex==1 || LiIndex==3 || LiIndex==4">
                 <legend class="col-red">消费人员信息</legend>
                 <div id="user">
@@ -508,7 +508,7 @@
                             <div>
                                 <strong style="width:200px;"></strong>
                                 <span style="margin-left: 100px;">单价：<strong style="color: red;">￥{{loadData1.salesPrice}}</strong></span>
-                                <span style="margin-left: -15%;">可用权益：<strong style="color: red;"></strong></span>
+                                <span style="margin-left: -140px;">可用权益：<strong style="color: red;"></strong></span>
                                 <span>总价：<strong style="color: red;">￥{{payMentMoney.price}}</strong></span>
                             </div>
                             <div>
@@ -1419,17 +1419,28 @@
 <script>
 	newCardCustomers.init();
     $(function () {
-    		$('body').on('focus','.TCR-tables-box2 input,.green-head-table2 input',function(){
-				if($(this).val()=='0.00'){
-					$(this).val('')
-				}
-			})
-			$('body').on('blur','.TCR-tables-box2 input,.green-head-table2 input',function(){
-				console.log($(this).val())
-				if(!$(this).val()){
-					$(this).val('0.00')
-				}
-			})
+		$('body').on('focus','.TCR-tables-box2 input,.green-head-table2 input',function(){
+			if($(this).val()=='0.00'){
+				$(this).val('')
+			}
+		})
+		$('body').on('blur','.TCR-tables-box2 input,.green-head-table2 input',function(){
+			console.log($(this).val())
+			if(!$(this).val()){
+				$(this).val('0.00')
+			}
+		})
+		$('body').on('focus','.section2 input',function(){
+			if($(this).val()=='0.00'){
+				$(this).val('')
+			}
+		})
+		$('body').on('blur','.section2 input',function(){
+			console.log($(this).val())
+			if(!$(this).val()){
+				$(this).val('0.00')
+			}
+		})
     	$('.section1 input').focus(function(){
     		var _placeholder=$(this).attr('placeholder');
     		$(this).attr('data-prompt',_placeholder)

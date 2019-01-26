@@ -83,6 +83,7 @@ public class ExportExcel<T>
     {
         // 声明一个工作薄
         HSSFWorkbook workbook = new HSSFWorkbook();
+
         // 生成一个表格
         HSSFSheet sheet = workbook.createSheet(title);
         // 设置表格默认列宽度为15个字节
@@ -210,20 +211,20 @@ public class ExportExcel<T>
                         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
                         textValue = sdf.format(date);
                     }
-                    else if (value instanceof byte[])
-                    {
-                        // 有图片时，设置行高为60px;
-                        row.setHeightInPoints(60);
-                        // 设置图片所在列宽度为80px,注意这里单位的一个换算
-                        sheet.setColumnWidth(i, (short) (35.7 * 80));
-                        // sheet.autoSizeColumn(i);
-                        byte[] bsValue = (byte[]) value;
-                        HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0,
-                                1023, 255, (short) 6, index, (short) 6, index);
-                        anchor.setAnchorType(2);
-                        patriarch.createPicture(anchor, workbook.addPicture(
-                                bsValue, HSSFWorkbook.PICTURE_TYPE_JPEG));
-                    }
+//                    else if (value instanceof byte[])
+//                    {
+//                        // 有图片时，设置行高为60px;
+//                        row.setHeightInPoints(60);
+//                        // 设置图片所在列宽度为80px,注意这里单位的一个换算
+//                        sheet.setColumnWidth(i, (short) (35.7 * 80));
+//                        // sheet.autoSizeColumn(i);
+//                        byte[] bsValue = (byte[]) value;
+//                        HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0,
+//                                1023, 255, (short) 6, index, (short) 6, index);
+//                        anchor.setAnchorType(2);
+//                        patriarch.createPicture(anchor, workbook.addPicture(
+//                                bsValue, HSSFWorkbook.PICTURE_TYPE_JPEG));
+//                    }
                     else
                     {
                         if (value==null){
@@ -288,6 +289,7 @@ public class ExportExcel<T>
             e.printStackTrace();
         }
     }
+
 
 
 }

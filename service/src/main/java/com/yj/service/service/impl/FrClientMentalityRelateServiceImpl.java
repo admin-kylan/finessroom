@@ -95,9 +95,9 @@ public class FrClientMentalityRelateServiceImpl extends BaseServiceImpl<FrClient
     }
 
     @Override
-    public List<FrClientMentalityRelate> getMentality() {
+    public List<FrClientMentalityRelate> getMentality(String clientId) {
         List<FrClientMentalityRelate> frClientMentalityRelates = frClientMentalityRelateMapper.selectList(
-                new EntityWrapper<FrClientMentalityRelate>().where("is_using={0}", 1));
+                new EntityWrapper<FrClientMentalityRelate>().where("is_using=1 and client_id={0}", clientId));
         return frClientMentalityRelates;
     }
 }

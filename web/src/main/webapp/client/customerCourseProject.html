@@ -34,7 +34,7 @@
 			<li :class='{active: index == 6}' @click="index = 6"><img src="../img/car-icon7.png" alt="">转让</li>
 			<li :class='{active: index == 7}' @click="index = 7"><img src="../img/car-icon8.png" alt="">退费</li>
 		</ul>
-		<ul>
+		<ul style="padding: 5px 15px 10px;">
 			<div id="course-show-html">
 				<!-- 动态传入 -->
 			</div>
@@ -117,6 +117,7 @@
                 axiosGetParams(COURSE_URL.fetchOrderListByUserId, {cid: $.cookie('cid')}, (res) => {
                     if (res.code == '200') {
                         this.resultList = res.data;
+
                     }
                 })
 			}

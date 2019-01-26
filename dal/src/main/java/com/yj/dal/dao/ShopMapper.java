@@ -1,5 +1,6 @@
 package com.yj.dal.dao;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.yj.dal.dto.ShopItemDTO;
 import com.yj.dal.model.FrClient;
 import com.yj.dal.model.Shop;
@@ -37,6 +38,7 @@ public interface ShopMapper extends BaseMapper<Shop> {
 
     String getShopName2(@Param("cid") String cid);
 
+    Shop selectbyShopName(String shopName);
 }
 
 

@@ -147,6 +147,7 @@ public class FrEducationMemberOrder extends Model<FrEducationMemberOrder> {
     @TableField("invalid_date")
     private Date invalidDate;
 
+
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 

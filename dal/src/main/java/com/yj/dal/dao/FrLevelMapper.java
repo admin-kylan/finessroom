@@ -13,4 +13,5 @@ import com.yj.dal.model.FrLevel;
  */
 public interface FrLevelMapper extends BaseMapper<FrLevel> {
 
+    FrLevel selectByLevelName(String levelName);
 }

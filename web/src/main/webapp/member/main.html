@@ -161,6 +161,7 @@
             Loading.prototype.show();
             $.get(url, {
                 type:0,//添加操作
+                shopId:window.getParam('shopId'),
                 },
                 function(res) {
                     if(res.code == 200) {
@@ -184,9 +185,13 @@
             add: function () {
                 var that = this;
                 var Ids = new Array();
-                $(".form_box_right_cb input:checked").each(function() {
-                    //将标签的值放入数组中
-                    Ids.push($(this).next().attr("title"));
+                $(".form_box_right_cb input").each(function() {
+                	if($(this).prop('checked')){
+                		//将标签的值放入数组中
+                		var title=$(this).next().attr("title");
+                		if(title)
+                			Ids.push(title);                		
+                	}
                 });
                 if(Ids.length <1){
                     alert("可用门店不能为空");
@@ -204,7 +209,7 @@
                 var url = $.stringFormat(
                     "{0}/frCardType/addFrCardType?cardTypeName="
                     +name+"&ids="+Ids+"&ty=0&typeSetState=2&createUserName="+createUserName
-                    +"&CustomerCode="+CustomerCode+"&createUserId="+createUserId,$.cookie('url'));
+                    +"&CustomerCode="+CustomerCode+"&createUserId="+createUserId+"&cardType="+window.getParam('type'),$.cookie('url'));
                 Loading.prototype.show();
                 $.ajax({
                     type: "POST",

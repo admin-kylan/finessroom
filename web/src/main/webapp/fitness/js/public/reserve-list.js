@@ -37,6 +37,9 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
         toDateyyyyMMddHHmm(val){
            return timeFormatDate(val, true)
         },
+        toDateyyyyMMdd(val){
+            return timeFormatDate(val);
+        },
         reserveStatusFilter(val){
             let str = "";
             if(val == 0){
@@ -101,17 +104,36 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
         })
     },
     mounted() {
+        let that = this;
         let code = $.cookie('code'), shopId = $.cookie('shopid');
         //获取教练
         axiosGetParams(EDUCATION_URL.findCoachList, {code: code, shopId: shopId}, (res) => {
             this.coachList = res;
         });
-        //获取教练
+        //获取场馆
         axiosGetParams(EDUCATION_URL.findSdaduimList, {code: code, shopId: shopId}, (res) => {
             this.sdaduimList = res;
         });
         this.$nextTick(()=> {
             $('#appointmentWorkbench').show().siblings().hide();
+            //上课时间
+            jeDate('#work-bench-begin-date',{
+               // isinitVal: true,
+                festival: true,
+                format: 'YYYY-MM-DD',
+                donefun(obj, val){
+                    that.beginDate = obj.val;
+                }
+            });
+            //上课时间
+            jeDate('#work-bench-end-date',{
+               // isinitVal: true,
+                festival: true,
+                format: 'YYYY-MM-DD',
+                donefun(obj, val){
+                    that.endDate = obj.val;
+                }
+            });
         })
     },
     updated: function () {

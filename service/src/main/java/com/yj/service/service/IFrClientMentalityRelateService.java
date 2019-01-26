@@ -19,5 +19,5 @@ public interface IFrClientMentalityRelateService extends BaseService<FrClientMen
 
     JsonResult saveMentality(String[] frClientMentalityTypeIds, String cid, String familyLife, String emotionalState) throws YJException;
 
-    List<FrClientMentalityRelate> getMentality();
+    List<FrClientMentalityRelate> getMentality(String clientId);
 }

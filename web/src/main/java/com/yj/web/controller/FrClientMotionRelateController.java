@@ -37,8 +37,8 @@ public class FrClientMotionRelateController {
     }
 
     @GetMapping("/getSports")
-    public JsonResult getSports(){
-        List<FrClientMotionRelate> frClientLifeRelates= frClientMotionRelateService.getSports();
+    public JsonResult getSports(String clientId){
+        List<FrClientMotionRelate> frClientLifeRelates= frClientMotionRelateService.getSports(clientId);
         return  JsonResult.success(frClientLifeRelates);
     }
 }

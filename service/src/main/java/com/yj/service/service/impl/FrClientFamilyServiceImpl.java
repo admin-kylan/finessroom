@@ -7,7 +7,6 @@ import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.HttpServletUtils;
 import com.yj.common.util.UUIDUtils;
-import com.yj.dal.model.FrClient;
 import com.yj.dal.model.FrClientFamily;
 import com.yj.dal.dao.FrClientFamilyMapper;
 import com.yj.service.service.IFrClientFamilyService;
@@ -33,18 +32,15 @@ public class FrClientFamilyServiceImpl extends BaseServiceImpl<FrClientFamilyMap
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    FrClientFamilyMapper frClientFamilyMapper;
-
     @Override
-    public List<FrClientFamily> getFamily() throws YJException {
+    public List<FrClientFamily> getFamily(String clientId) throws YJException {
         //获取客户代码
         String customerCode = HttpServletUtils.getCustmerCode();
         if (StringUtils.isEmpty(customerCode)) {
             throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
         }
-        List<FrClientFamily> frClientFamilies = frClientFamilyMapper.selectList(
-                new EntityWrapper<FrClientFamily>().where("is_using={0}", 1).where("CustomerCode={0}", customerCode)
+        List<FrClientFamily> frClientFamilies = selectList(
+                new EntityWrapper<FrClientFamily>().where("is_using={0} and client_id={1}", 1, clientId).where("CustomerCode={0}", customerCode)
         );
         return frClientFamilies;
     }
@@ -60,17 +56,17 @@ public class FrClientFamilyServiceImpl extends BaseServiceImpl<FrClientFamilyMap
             //添加
             frClientFamily.setId(UUIDUtils.generateGUID());
             frClientFamily.setClientId(cid);
-            Integer insert = frClientFamilyMapper.insert(frClientFamily);
-            log.info("修改家庭关系[{}]", SqlHelper.retBool(insert));
-            if (SqlHelper.retBool(insert)) {
+            boolean insert = insert(frClientFamily);
+            log.info("修改家庭关系[{}]", insert);
+            if (insert) {
                 return JsonResult.successMessage("保存成功");
             } else {
                 return JsonResult.failMessage("保存失败");
             }
         } else {
-            Integer update = frClientFamilyMapper.updateById(frClientFamily);
-            log.info("修改家庭关系[{}]", SqlHelper.retBool(update));
-            if (SqlHelper.retBool(update)) {
+            boolean b = updateById(frClientFamily);
+            log.info("修改家庭关系[{}]", b);
+            if (b) {
                 return JsonResult.successMessage("修改成功");
             } else {
 

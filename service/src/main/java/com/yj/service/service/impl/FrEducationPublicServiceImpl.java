@@ -4,20 +4,25 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.yj.common.exception.YJException;
+import com.yj.common.util.DateUtil;
+import com.yj.common.util.PageUtils;
 import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dao.*;
 import com.yj.dal.model.*;
-import com.yj.service.service.IFrCardOrderDatailService;
-import com.yj.service.service.IFrCardOrderPayModeService;
-import com.yj.service.service.IFrCardOrderPriceDatailService;
+import com.yj.service.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * className FrEducationServiceImpl
@@ -91,7 +96,17 @@ public class FrEducationPublicServiceImpl {
     @Autowired
     private FrEducationClassOrderMapper frEducationClassOrderMapper;
 
+    @Autowired
+    private IFrGroupCourseService iFrGroupCourseService;
 
+    @Autowired
+    private IFrCategoryItemService categoryItemService;//场馆项目
+
+    @Autowired
+    private FrSettingInfoMapper frSettingInfoMapper;
+
+    @Autowired
+    private FrEducationFreezeClientMapper frEducationFreezeClientMapper;
     /**
      * 获取教练
      *
@@ -228,17 +243,29 @@ public class FrEducationPublicServiceImpl {
     public void saveEducationItem(Map<String, Object> map) throws Exception {
         String level = "";
         FrEducationClientInfo frEducationClientInfo = JSONObject.parseObject(JSONObject.toJSONString(map), FrEducationClientInfo.class);
+        FrEducation frEducation = frEducationPublicMapper.selectById(frEducationClientInfo.getEducationId());
+        //判断当前用户是否被冻结
+        FrEducationFreezeClient frEducationFreezeClient = new FrEducationFreezeClient();
+        frEducationFreezeClient.setClientId(frEducationClientInfo.getReserveClientId());
+        frEducationFreezeClient.setEduType(frEducation.getType());
+        frEducationFreezeClient = frEducationFreezeClientMapper.selectOne(frEducationFreezeClient);
+        if(frEducationFreezeClient.getUse() == false){
+            //被冻结
+            throw new Exception("抱歉，该用户'"+frEducationClientInfo.getReserveClientName()+"'被冻结");
+        }
+
         FrEducationConfig frEducationConfig = new FrEducationConfig();
         frEducationConfig.setEducationId(frEducationClientInfo.getEducationId());
         frEducationConfig = frEducationConfigMapper.selectOne(frEducationConfig);
-        //判断会员等级预约限制
-        Map<String, Object> mapClient = frEducationPublicMapper.getClientMemberType(frEducationClientInfo.getMemberId());
+
 
         //判断当前用户卡号是否已经预约
         List<FrEducationClientInfo> frEducationClientInfos = frEducationClientInfoMapper.findMemberNotCancel(frEducationClientInfo.getEducationId(), frEducationClientInfo.getMemberId());
         if (frEducationClientInfos.size() > 0) {
             throw new Exception("该会员已经预约");
         }
+        //判断会员等级预约限制
+        Map<String, Object> mapClient = frEducationPublicMapper.getClientMemberType(frEducationClientInfo.getMemberId());
         //判断限制
         //frEducationReserveObject = frEducationReserveObjectMapper.selectOne(frEducationReserveObject);
         FrClient frClient = frClientMapper.selectById(frEducationClientInfo.getMemberId());
@@ -513,20 +540,26 @@ public class FrEducationPublicServiceImpl {
         String condition = "education_id='" + eduId + "'";
         //查询全部的信息用户
         List<FrEducationClientInfo> list = frEducationClientInfoMapper.selectList(new EntityWrapper<FrEducationClientInfo>().where(condition));
+        frEducation = frEducationPublicMapper.selectById(eduId);
         Integer one = 0, two = 0, three = 0;
         double price = 0.0;
         for (FrEducationClientInfo frEducationClientInfo : list) {
             clientInfoId = frEducationClientInfo.getId();
             FrEducationMemberOrder frEducationMemberOrder = new FrEducationMemberOrder();
-            if (frEducationClientInfo.getReserveStatus() == 1) {
-
+            if (frEducationClientInfo.getReserveStatus() == 1) {//预约状态 1/已预约 0/已取消 2/待确认
                 //已预约
+                // 可用/作废/完成   1/0/2
                 one++;
                 frEducationMemberOrder.setClientInfoId(clientInfoId);
                 frEducationMemberOrder.setEducationId(eduId);
                 frEducationMemberOrder.setStatus(1);
                 frEducationMemberOrder = frEducationMemberOrderMapper.selectOne(frEducationMemberOrder);
-                if(null == frEducationMemberOrder){
+                if(null == frEducationMemberOrder){//未消费
+
+                    //已预约，但是没付钱，也没取消，则将冻结
+                    this.freezeEduConfigClient(String.valueOf(frEducation.getType()),
+                            frEducation.getCustomerCode(), frEducationClientInfo, frEducation.getShopId(), frEducation.getShopName());
+                    //frSettingInfoMapper
                     continue;
                 }
                 frEducationMemberOrder.setStatus(2);
@@ -534,7 +567,7 @@ public class FrEducationPublicServiceImpl {
                 frEducationMemberOrderMapper.updateAllColumnById(frEducationMemberOrder);
             }
             if (frEducationClientInfo.getReserveStatus() == 2) {
-                //已预约
+                //待确认
                 one++;
                 frEducationMemberOrder.setClientInfoId(clientInfoId);
                 frEducationMemberOrder.setEducationId(eduId);
@@ -551,8 +584,8 @@ public class FrEducationPublicServiceImpl {
                 two++;
             }
         }
-        frEducation = frEducationPublicMapper.selectById(eduId);
-        frEducation.setStatus(2);
+
+        frEducation.setStatus(1);
         //three
         three = one + two;
         frEducationClassOrder.setTotalNum(three);
@@ -564,6 +597,136 @@ public class FrEducationPublicServiceImpl {
 
 
     }
+
+
+    /**
+     *
+     * 冻结用户
+     */
+    private void freezeEduConfigClient(String eduType, String code, FrEducationClientInfo frEducationClientInfo, String shopId, String shopName){
+        FrEducationFreezeClient frEducationFreezeClient = new FrEducationFreezeClient();
+        FrClient frClient = frClientMapper.selectById(frEducationClientInfo.getReserveClientId());
+        String level = frClient.getLevelId();
+        FrLevel frLevel = frLevelMapper.selectById(level);
+        if(null == frLevel){
+            return ;
+        }
+        String price = "";//
+        Date now = new Date();
+        Map<String, String> map = new HashMap<>();
+
+        switch (frLevel.getLevelName()) {
+            case "普通会员":
+                map = frEducationPublicMapper.findSettingCourse(eduType, code, "groupPTJDJY");
+                if(null != map){
+                    price = map.get("value");
+                }
+                break;
+            case "银卡会员":
+                map = frEducationPublicMapper.findSettingCourse(eduType, code, "groupYKJDJY");
+                if(null != map){
+                    price = map.get("value");
+                }
+                break;
+            case "钻石会员":
+                map = frEducationPublicMapper.findSettingCourse(eduType, code, "groupZKJDJY");
+                if(null != map){
+                    price = map.get("value");
+                }
+                break;
+            case "金卡会员":
+                map = frEducationPublicMapper.findSettingCourse(eduType, code, "groupJKJDJY");
+                if(null != map){
+                    price = map.get("value");
+                }
+                break;
+            default:
+               return ;
+        }
+        //frSettingInfoMapper
+        eduType = StringUtils.equals(eduType, "0")? "2" : "1";
+        //
+        Map<String, String> map1 = frEducationPublicMapper.findSettingCourse(eduType, code, "groupHYN");//多少天
+        Map<String, String> map2 = frEducationPublicMapper.findSettingCourse(eduType, code, "groupHYNType");// 时间单位
+        Map<String, String> map3 = frEducationPublicMapper.findSettingCourse(eduType, code, "groupYYWQX");//多少次预约未取消未消费则
+        Map<String, String> map4 = frEducationPublicMapper.findSettingCourse(eduType, code, "groupJZYY");//禁止预约 时间
+        Map<String, String> map5 = frEducationPublicMapper.findSettingCourse(eduType, code, "groupJZYYType");//禁止预约 时间单位
+
+        if(!(null != map1 && null != map2 && null != map3 && null != map4 && null != map5)){
+            return;
+        }
+        //计算冻结结束时间
+        Integer map4Value = Integer.parseInt(map4.get("value"));
+        String map5Value = map5.get("value");
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(now);
+        if(StringUtils.equals("1", map5Value)){
+            cl.add(Calendar.DATE, +map4Value);
+        }
+        if(StringUtils.equals("2", map5Value)){
+            cl.add(Calendar.DATE, +(map4Value * 7));
+        }
+        if(StringUtils.equals("3", map5Value)){
+            cl.add(Calendar.YEAR, +map4Value);
+        }
+        if(StringUtils.equals("4", map5Value)){
+            cl.add(Calendar.MONTH, +map4Value);
+        }
+
+
+        frEducationFreezeClient = new FrEducationFreezeClient();
+        frEducationFreezeClient.setClientId(frEducationClientInfo.getReserveClientId());
+        frEducationFreezeClient.setEduType(Integer.parseInt(eduType));
+        frEducationFreezeClient = frEducationFreezeClientMapper.selectOne(frEducationFreezeClient);
+        if(null != frEducationFreezeClient){
+            //判断时间内是否包含
+            if(now.getTime() - frEducationFreezeClient.getEndDate().getTime() > 0){
+                frEducationFreezeClientMapper.deleteById(frEducationFreezeClient.getId());
+                return;
+            }
+            frEducationFreezeClient.setCount(frEducationFreezeClient.getCount() + 1);
+            //判断
+            if(frEducationFreezeClient.getTotalCount() <= frEducationFreezeClient.getCount()){
+                frEducationFreezeClient.setFreezeDate(now);//开始时间
+                frEducationFreezeClient.setUnFreezeDate(cl.getTime());
+                frEducationFreezeClient.setUse(false); //不可用
+            }
+            frEducationFreezeClientMapper.updateAllColumnById(frEducationFreezeClient);
+        }
+        //设置开始时间
+        frEducationFreezeClient = new FrEducationFreezeClient();
+        map4Value = Integer.parseInt(map1.get("value"));
+        map5Value = map2.get("value");
+        cl = Calendar.getInstance();
+        cl.setTime(now);
+        if(StringUtils.equals("1", map5Value)){
+            cl.add(Calendar.DATE, +map4Value);
+        }
+        if(StringUtils.equals("2", map5Value)){
+            cl.add(Calendar.DATE, +(map4Value * 7));
+        }
+        if(StringUtils.equals("3", map5Value)){
+            cl.add(Calendar.YEAR, +map4Value);
+        }
+        if(StringUtils.equals("4", map5Value)){
+            cl.add(Calendar.MONTH, +map4Value);
+        }
+        frEducationFreezeClient.setBeginDate(now);
+        frEducationFreezeClient.setEndDate(cl.getTime());
+        frEducationFreezeClient.setCount(1);
+        frEducationFreezeClient.setTotalCount(Integer.parseInt(map3.get("value")));
+        frEducationFreezeClient.setClientId(frEducationClientInfo.getReserveClientId());
+        frEducationFreezeClient.setClientName(frEducationClientInfo.getReserveClientName());
+        frEducationFreezeClient.setMobile(frEducationClientInfo.getMobile());
+        frEducationFreezeClient.setCreateDate(now);
+        frEducationFreezeClient.setEduType(Integer.parseInt(eduType));
+        frEducationFreezeClient.setPrice(Double.parseDouble(price));
+        frEducationFreezeClient.setShopId(shopId);
+        frEducationFreezeClient.setShopName(shopName);
+        frEducationFreezeClient.setId(UUIDUtils.generateGUID());
+        frEducationFreezeClientMapper.insert(frEducationFreezeClient);
+    }
+
 
     /**
      * 冲销
@@ -580,12 +743,450 @@ public class FrEducationPublicServiceImpl {
         FrCardOrderDatail buyEduDetail = JSONObject.parseObject(map.get("buyEduDetail"), FrCardOrderDatail.class);
         Map<String, Object> cardOrder = frEducationPublicMapper.findCardOrderDetailFirst(frEducationMemberOrder.getMemberCardId());
         //
-        buyEduDetail.setClientId((String) cardOrder.get("clientId"));
-        buyEduDetail.setCardId(frEducationMemberOrder.getMemberCardId());
-        buyEduDetail.setOrderRightsNum(eduClassSalesNum);
-        buyEduDetail.setOrderAmt(Double.parseDouble(String.valueOf(cardOrder.get("orderAmt"))) + eduClassSalesNum);
-        buyEduDetail.setId(UUIDUtils.generateGUID());
-        buyEduDetail.setOrderId(frEducationMemberOrder.getId());
-        iFrCardOrderDatailService.insert(buyEduDetail);
+        try {
+            buyEduDetail.setClientId((String) cardOrder.get("clientId"));
+            buyEduDetail.setCardId(frEducationMemberOrder.getMemberCardId());
+            buyEduDetail.setOrderRightsNum(eduClassSalesNum);
+            buyEduDetail.setOrderAmt(Double.parseDouble(String.valueOf(cardOrder.get("orderAmt"))) + eduClassSalesNum);
+            buyEduDetail.setId(UUIDUtils.generateGUID());
+            buyEduDetail.setOrderId(frEducationMemberOrder.getId());
+            iFrCardOrderDatailService.insert(buyEduDetail);
+        } catch (NumberFormatException e) {
+
+        }
     }
+
+    /**
+     * 查询教练的课程
+     */
+    public List<Map<String, Object>> findEducationCoachList(String shopId, String executeDate, String sdaduimId, String CustomerCode, Integer teachType) {
+        if (StringUtils.isBlank(executeDate)) {
+            //获取当天时间
+            executeDate = DateUtil.dateToString(new Date(), "yyyy-MM-dd");
+        }else{
+            executeDate = executeDate.replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date d = null;
+            try {
+                d = format.parse(executeDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            executeDate = DateUtil.dateToString(d, "yyyy-MM-dd");
+        }
+        List<Map<String, Object>> educations = frEducationPublicMapper.findEducationCoachList(shopId, executeDate, sdaduimId, CustomerCode, teachType);
+
+        return educations;
+    }
+
+    /**
+     * 查询教室的课程
+     */
+    public List<Map<String, Object>> findEducationRoomList(String shopId, String executeDate, String sdaduimId, String CustomerCode, Integer teachType) {
+        if (StringUtils.isBlank(executeDate)) {
+            //获取当天时间
+            executeDate = DateUtil.dateToString(new Date(), "yyyy-MM-dd");
+        }else{
+            executeDate = executeDate.replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date d = null;
+            try {
+                d = format.parse(executeDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            executeDate = DateUtil.dateToString(d, "yyyy-MM-dd");
+        }
+        List<Map<String, Object>> educations = frEducationPublicMapper.findEducationRoomList(shopId, executeDate, sdaduimId, CustomerCode, teachType);
+
+        return educations;
+    }
+
+
+    /**
+     * 查询课程列表 下拉框
+     * @param shopId
+     * @param code
+     * @param teachType
+     * @return
+     */
+    public List<Map<String, Object>> findCourseList(String shopId, String code, Integer teachType){
+        List<Map<String, Object>> list = null;
+        if(teachType == 0){
+            list = frEducationPublicMapper.findCoursePublicList(shopId, code);
+        }
+        //私教下拉框
+      //  findCoursePrivateList();
+        return list;
+    }
+
+
+    /**
+     * 排课
+     * @param map
+     * @return
+     */
+    public void saveEducation(Map<String, String> map) throws Exception {
+        FrEducation frEducation = JSONObject.parseObject(map.get("education"), FrEducation.class);
+        if(null == frEducation){
+            throw new Exception("排课失败，请重试");
+        }
+        frEducation.setId(UUIDUtils.generateGUID());
+        //config
+        FrEducationConfig frEducationConfig = JSONObject.parseObject(map.get("eduConfig"), FrEducationConfig.class);
+        if(null == frEducationConfig){
+            throw new Exception("排课失败，请重试");
+        }
+        frEducationConfig.setId(UUIDUtils.generateGUID());
+        frEducationConfig.setEducationId(frEducation.getId());
+        //member object
+        FrEducationReserveObject frEducationReserveObject = JSONObject.parseObject(map.get("eduReserveObject"), FrEducationReserveObject.class);
+//        if(null == frEducationReserveObject){
+//            throw new Exception("排课失败，请重试");
+//        }
+        if(null != frEducationReserveObject){
+            frEducationReserveObject.setId(UUIDUtils.generateGUID());
+            frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
+        }
+        //会员卡设置
+        JSONArray cardObjects = JSONArray.parseArray((String) map.get("cardObject")) ;
+        if(null != cardObjects){
+            for(Object object: cardObjects){
+                FrEducationCardObject frEducationCardObject = JSONObject.parseObject(JSON.toJSONString(object), FrEducationCardObject.class);
+                frEducationCardObject.setId(UUIDUtils.generateGUID());
+                frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
+                frEducationCardObjectMapper.insert(frEducationCardObject);
+            }
+        }
+
+
+
+        //保存
+        frEducationPublicMapper.insert(frEducation);
+        if(null != frEducationReserveObject){
+            frEducationReserveObjectMapper.insert(frEducationReserveObject);
+        }
+
+        frEducationConfigMapper.insert(frEducationConfig);
+
+    }
+
+
+    /**
+     *
+     * @param shopId
+     * @param beginDate
+     * @param endDate
+     * @param code
+     * @return
+     */
+    public List<Map<String, Object>> searchSettlement(String shopId, String searchInput, String beginDate, String endDate, String code, Integer eduType){
+        return frEducationPublicMapper.searchSettlement(shopId, searchInput, beginDate, endDate, code, eduType);
+    }
+
+    /**
+     *查询课程消费明细情况
+     * @param shopId
+     * @param beginDate
+     * @param endDate
+     * @param code
+     * @return
+     */
+    public List<Map<String, Object>> findConsumeClass(String beginDate, String endDate, String shopId, String searchCourse, String  searchCoach, String code, Integer eduType){
+        return frEducationPublicMapper.findConsumeClass(beginDate, endDate, shopId, searchCourse, searchCoach, code, eduType);
+
+    }
+
+    /**
+     *查询个人消费情况
+     * @param shopId
+     * @param beginDate
+     * @param endDate
+     * @param code
+     * @return
+     */
+    public List<Map<String, Object>> findConsumeMember(String beginDate, String endDate, String shopId, String searchCourse, String  searchCoach, String code, String cardType, String cardName, Integer eduType){
+        return frEducationPublicMapper.findConsumeMember(beginDate, endDate, shopId, searchCourse, searchCoach, code, cardType, cardName, eduType);
+    }
+
+    /**
+     *查询个人消费情况
+     * @return
+     */
+    public Map<String, Object> findConsumeCondition(){
+        Map<String, Object> map = new HashMap<>();
+        List<Map<String, String>> list1 = frEducationPublicMapper.findConsumeConditionCardType();
+        List<Map<String, String>> list2 = frEducationPublicMapper.findConsumeConditionCardName();
+        map.put("cardType", list1);
+        map.put("cardName", list2);
+        return map;
+    }
+
+    /**
+     *查询个人消费情况
+     * @return
+     */
+    public List<Map<String, Object>> findMemberFreezeList(String shopId, String code, String beginDate, String endDate,String searchInput){
+        return frEducationPublicMapper.findMemberFreezeList(shopId, code, beginDate, endDate, searchInput);
+    }
+
+
+    /**
+     *查询管理统计
+     * @return
+     */
+    public Map<String, Object> findManageCount(String shopId, String beginDate, String endDate){
+
+        return frEducationPublicMapper.findManageCount(shopId, beginDate, endDate);
+    }
+
+
+    /**
+     *查询管理统计
+     * @return
+     */
+    public List<Map<String, Object>> getGroupRoomByShopId(String shopId, String code){
+        return frEducationPublicMapper.getGroupRoomByShopId(shopId, code);
+
+    }
+
+    /**
+     *复制课程排课
+     * @return
+     */
+    public void findEducationToCopy(Map<String, String> map) throws Exception{
+        String beginDate = map.get("beginDateOld");
+        String endDateOld = map.get("endDateOld");
+        String eduType = map.get("eduType");
+        String coachId = map.get("coachId");
+        String courseId = map.get("courseId");
+        String shopId = map.get("shopId");
+        String selectToCoachId = map.get("selectToCoachId");
+        String selectToCoachName = map.get("selectToCoachName");
+        Integer stepTime = Integer.parseInt(map.get("stepTime"));
+        Date date = new Date();
+        List<Map<String, String>> list = frEducationPublicMapper.findEducationToCopy(beginDate, endDateOld, coachId, courseId, eduType, shopId);
+        String eduId = "";
+        String configId = "";
+        String reserveId = "";
+        String cardSettleId = "";
+        for(Map<String, String> obj: list){
+            eduId = obj.get("eduId");
+            configId = obj.get("configId");
+            reserveId = obj.get("reserveId");
+            cardSettleId = obj.get("cardSettleId");
+            FrEducation frEducation = frEducationPublicMapper.selectById(eduId);
+            frEducation.setExecuteDatePlan(dateToAddDate(frEducation.getExecuteDatePlan(), stepTime));
+            frEducation.setBeginDatePlan(dateToAddDate(frEducation.getBeginDatePlan(), stepTime));
+            frEducation.setEndDatePlan(dateToAddDate(frEducation.getEndDatePlan(), stepTime));
+            frEducation.setCoachId(selectToCoachId);
+            frEducation.setCoachName(selectToCoachName);
+            frEducation.setId(UUIDUtils.generateGUID());
+            frEducation.setCreateTime(date);
+            frEducation.setUpdateTime(null);
+            //
+            FrEducationConfig frEducationConfig = frEducationConfigMapper.selectById(configId);
+            frEducationConfig.setId(UUIDUtils.generateGUID());
+            frEducationConfig.setEducationId(frEducation.getId());
+            //
+            FrEducationReserveObject frEducationReserveObject = null;
+            if(!StringUtils.isBlank(reserveId)){
+                frEducationReserveObject = frEducationReserveObjectMapper.selectById(reserveId);
+                frEducationReserveObject.setId(UUIDUtils.generateGUID());
+                frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
+            }
+            //
+            FrEducationCardObject frEducationCardObject = null;
+            if(!StringUtils.isBlank(cardSettleId)){
+                frEducationCardObject = frEducationCardObjectMapper.selectById(cardSettleId);
+                frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
+                frEducationCardObject.setId(UUIDUtils.generateGUID());
+            }
+            frEducation.setStatus(0);
+
+            frEducationPublicMapper.insert(frEducation);
+            frEducationConfigMapper.insert(frEducationConfig);
+            if(null != frEducationReserveObject){
+                frEducationReserveObjectMapper.insert(frEducationReserveObject);
+            }
+            if(null != frEducationCardObject){
+                frEducationCardObjectMapper.insert(frEducationCardObject);
+            }
+
+        }
+
+    }
+
+    private Date dateToAddDate(Date date, Integer stepTime){
+        //计算结束时间
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        cl.add(Calendar.DATE, +stepTime);
+        return cl.getTime();
+    }
+
+
+    /**
+     * 一周的最后一天
+     * @param date
+     * @param step 加几天就是星期几
+     */
+    private Date getOneDayOfWeek(Date date, Integer step){
+        Calendar c = new GregorianCalendar();
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek() + step);
+        return c.getTime();
+    }
+
+    /**
+     * 查询一周的课程
+     * @param shopId
+     * @param code
+     * @param coachId
+     * @param roomId
+     * @return
+     */
+    public List<Map<String, Object>> findEduListByWeek(String shopId, String code, String coachId, String roomId, String eduType, String beginDate, String endDate){
+        return frEducationPublicMapper.findEduListByMonthWeek(shopId, beginDate, endDate, coachId, code, eduType, roomId);
+    }
+    /**
+     * 查询一月的课程
+     * @param shopId
+     * @param code
+     * @param coachId
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
+    public List<Map<String, Object>> findEduListByMonth(String shopId, String code, String coachId, String beginDate, String endDate, String eduType){
+        return frEducationPublicMapper.findEduListByMonthWeek(shopId, beginDate, endDate, coachId, code, eduType, "");
+    }
+
+
+    /**
+     * 删除 假删除，逻辑删除
+     * @param eduId
+     */
+    public void deleteEdu(String eduId) throws Exception {
+        FrEducation frEducation = frEducationPublicMapper.selectById(eduId);
+//        FrEducationConfig frEducationConfig = new FrEducationConfig();
+//        FrEducationReserveObject frEducationReserveObject = new FrEducationReserveObject();
+//        FrEducationCardObject frEducationCardObject = new FrEducationCardObject();
+//        //config
+//        frEducationConfig.setEducationId(eduId);
+//        frEducationConfig = frEducationConfigMapper.selectOne(frEducationConfig);
+//        //
+//        frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
+//        frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
+//        frEducationReserveObject = frEducationReserveObjectMapper.selectOne(frEducationReserveObject);
+//        frEducationCardObject = frEducationCardObjectMapper.selectOne(frEducationCardObject);
+
+        frEducation.setUse(false);
+       // delete 假删除
+        frEducationPublicMapper.updateById(frEducation);
+//        try {
+//            frEducationPublicMapper.deleteById(eduId);
+//            frEducationConfigMapper.deleteById(frEducationConfig.getId());
+//            if(null != frEducationReserveObject){
+//                frEducationReserveObjectMapper.deleteById(frEducationReserveObject.getId());
+//            }
+//            if(null != frEducationCardObject){
+//                frEducationCardObjectMapper.deleteById(frEducationCardObject.getId());
+//            }
+//        } catch (Exception e) {
+//            throw new Exception("删除失败");
+//        }
+
+    }
+
+
+    /**
+     * 复制课程
+     * @param map
+     */
+    public void copyEducationByEduId(Map<String, String> map){
+        String eduId = map.get("eduId");
+        String beginDate = map.get("beginDate");
+        String endDate = map.get("endDate");
+        String configId = "";
+        String reserveId = "";
+        String cardSettleId = "";
+        Date date = new Date();
+
+        FrEducation frEducation = frEducationPublicMapper.selectById(eduId);
+        Map<String, String> obj = frEducationPublicMapper.findEducationToCopyByEduId(eduId);
+
+        configId = obj.get("configId");
+        reserveId = obj.get("reserveId");
+        cardSettleId = obj.get("cardSettleId");
+
+        frEducation.setExecuteDatePlan(DateUtil.stringToDate(beginDate));
+        frEducation.setBeginDatePlan(DateUtil.stringToDate(beginDate));
+        frEducation.setEndDatePlan(DateUtil.stringToDate(endDate));
+        frEducation.setStatus(0);
+        frEducation.setId(UUIDUtils.generateGUID());
+        frEducation.setCreateTime(date);
+        frEducation.setUpdateTime(null);
+        //
+        FrEducationConfig frEducationConfig = frEducationConfigMapper.selectById(configId);
+        frEducationConfig.setId(UUIDUtils.generateGUID());
+        frEducationConfig.setEducationId(frEducation.getId());
+        //
+        FrEducationReserveObject frEducationReserveObject = null;
+        if(!StringUtils.isBlank(reserveId)){
+            frEducationReserveObject = frEducationReserveObjectMapper.selectById(reserveId);
+            frEducationReserveObject.setId(UUIDUtils.generateGUID());
+            frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
+        }
+        //
+        FrEducationCardObject frEducationCardObject = null;
+        if(!StringUtils.isBlank(cardSettleId)){
+            frEducationCardObject = frEducationCardObjectMapper.selectById(cardSettleId);
+            frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
+            frEducationCardObject.setId(UUIDUtils.generateGUID());
+        }
+
+
+        frEducationPublicMapper.insert(frEducation);
+        frEducationConfigMapper.insert(frEducationConfig);
+        if(null != frEducationReserveObject){
+            frEducationReserveObjectMapper.insert(frEducationReserveObject);
+        }
+        if(null != frEducationCardObject){
+            frEducationCardObjectMapper.insert(frEducationCardObject);
+        }
+
+    }
+
+
+    /**
+     * 查询会所下的门店关联课程
+     * @param code
+     * @return
+     */
+    public List<Map<String, String>> findAllCourseForShopSdaduim(String shopId, String code){
+        List<Map<String, String>> array = frEducationPublicMapper.findAllCourseForShopSdaduim(shopId, code);
+        return array;
+    }
+
+    /**
+     * 查询冻结用户
+     * @param shopId
+     * @param eduType
+     * @return
+     */
+    public List<Map<String, Object>> findFrEducationFreezeClient(String shopId, String beginDate, String endDate, String searchInput, String eduType){
+        return frEducationFreezeClientMapper.findAllByCondition(shopId, beginDate, endDate, searchInput, eduType);
+    }
+
+    /**
+     * 查询冻结用户
+     * @param id
+     * @return
+     */
+    public void deleteFreezeClient(String id){
+        frEducationFreezeClientMapper.deleteById(id);
+    }
+
 }

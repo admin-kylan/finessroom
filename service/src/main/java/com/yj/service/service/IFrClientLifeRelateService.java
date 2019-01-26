@@ -5,7 +5,6 @@ import com.yj.common.result.JsonResult;
 import com.yj.dal.model.FrClientLifeRelate;
 import com.yj.service.base.BaseService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -21,5 +20,5 @@ public interface IFrClientLifeRelateService extends BaseService<FrClientLifeRela
 
     JsonResult saveDetails(String[] frClientLifeTypeIds, String cid, String source,String sid) throws YJException;
 
-    List<FrClientLifeRelate> getDetails();
+    List<FrClientLifeRelate> getDetails(String clientId);
 }

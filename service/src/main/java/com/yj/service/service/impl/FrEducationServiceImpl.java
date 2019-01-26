@@ -10,6 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -222,10 +225,11 @@ public class FrEducationServiceImpl {
                     if (StringUtils.equals(memberType, "潜在客户")) {
                         //不是现有客户
                         isLimit = frEducationReserveObject.getLatenceMember();
-                    } else {
-                        //是现有客户
-                        isLimit = frEducationReserveObject.getNewUser();
                     }
+//                    else {
+//                        //是现有客户
+//                        isLimit = frEducationReserveObject.getNewUser();
+//                    }
             }
         }
 
@@ -262,6 +266,16 @@ public class FrEducationServiceImpl {
         if (StringUtils.isBlank(executeDate)) {
             //获取当天时间
             executeDate = DateUtil.dateToString(new Date(), "yyyy-MM-dd");
+        }else{
+            executeDate = executeDate.replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date d = null;
+            try {
+                d = format.parse(executeDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            executeDate = DateUtil.dateToString(d, "yyyy-MM-dd");
         }
         List<Map<String, Object>> educations = frEducationMapper.findEducationPublicListCoach(shopId, executeDate, sdaduimId, CustomerCode, teachType);
         this.fetchEducationPlan(educations);
@@ -270,12 +284,22 @@ public class FrEducationServiceImpl {
     }
 
     /**
-     * 查询教练的课程
+     * 查询房间的课程
      */
     public List<Map<String, Object>> findEducationPublicListRoom(String shopId, String sdaduimId, String executeDate, String CustomerCode, Integer teachType) {
         if (StringUtils.isBlank(executeDate)) {
             //获取当天时间
             executeDate = DateUtil.dateToString(new Date(), "yyyy-MM-dd");
+        }else{
+            executeDate = executeDate.replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date d = null;
+            try {
+                d = format.parse(executeDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            executeDate = DateUtil.dateToString(d, "yyyy-MM-dd");
         }
         List<Map<String, Object>> educations = frEducationMapper.findEducationPublicListRoom(shopId, sdaduimId, executeDate, CustomerCode, teachType);
         this.fetchEducationPlan(educations);
@@ -313,15 +337,15 @@ public class FrEducationServiceImpl {
             List<FrEducationPlan> frEducationPlans = null;
             Map<String, Object> map = (Map<String, Object>) item;
             eduId = (String) map.get("eduId");
-            condition = "education_id = '" + eduId + "'";
-            //课程计划
-            frEducationPlans = frEducationPlanMapper.selectList(new EntityWrapper<FrEducationPlan>().where(condition));
-            if (null == frEducationPlans) {
-                frEducationPlans = new ArrayList<>();
-            }
+//            condition = "education_id = '" + eduId + "'";
+//            //课程计划
+//            frEducationPlans = frEducationPlanMapper.selectList(new EntityWrapper<FrEducationPlan>().where(condition));
+//            if (null == frEducationPlans) {
+//                frEducationPlans = new ArrayList<>();
+//            }
             //课程设置
             this.fetchEducationConfig(eduId, map);
-            map.put("eduPlan", frEducationPlans);
+           // map.put("eduPlan", frEducationPlans);
         }
 
     }
@@ -333,11 +357,17 @@ public class FrEducationServiceImpl {
      * @param eduId
      */
     private void fetchEducationConfig(String eduId, Map<String, Object> map) {
-        String conditon = "";
-        // Map<String, Object> map = new JSONObject();
         FrEducationConfig frEducationConfig = new FrEducationConfig();
         FrEducationReserveObject frEducationReserveObject = new FrEducationReserveObject();
         List<FrEducationCardObject> frEducationCardObjects = null;
+        if(StringUtils.isBlank(eduId)){
+            map.put("eduConfig", frEducationConfig);
+            map.put("eduConfigReserve", frEducationReserveObject);
+            map.put("eduConfigCard", null == frEducationCardObjects ? new JSONArray() : frEducationCardObjects);
+            return;
+        }
+        String conditon = "";
+        // Map<String, Object> map = new JSONObject();
         //设置
         frEducationConfig.setEducationId(eduId);
         frEducationConfig = frEducationConfigMapper.selectOne(frEducationConfig);
@@ -349,8 +379,8 @@ public class FrEducationServiceImpl {
         frEducationCardObjects = frEducationCardObjectMapper.selectList(new EntityWrapper<FrEducationCardObject>().where(conditon));
 
         map.put("eduConfig", frEducationConfig);
-        map.put("eduConfigReserve", frEducationReserveObject);
-        map.put("eduConfigCard", null == frEducationCardObjects ? new JSONArray() : frEducationCardObjects);
+        map.put("eduConfigReserve", null == frEducationReserveObject? new FrEducationReserveObject(): frEducationReserveObject);
+        map.put("eduConfigCard", null == frEducationCardObjects ? new JSONArray(): frEducationCardObjects);
 
     }
 

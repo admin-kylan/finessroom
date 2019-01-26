@@ -49,4 +49,6 @@ public interface FrClientMapper extends BaseMapper<FrClient> {
     Map getClientEssentialInformation(String cid);
 
     List<FrClient> queryByClient(FrClient frClient);
+
+    int selectByMobile(String mobile);
 }

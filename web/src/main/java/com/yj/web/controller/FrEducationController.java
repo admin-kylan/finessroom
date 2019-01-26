@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -311,6 +312,290 @@ public class FrEducationController {
     }
 
 
+    /**
+     * 查询教练的的课程的接口,团教
+     * @param request
+     * @return
+     * @throws
+     */
+    @GetMapping("/findEducationCoachList")
+    public JsonResult findEducationCoachList(HttpServletRequest request){
+        String shopId = request.getParameter("shopId");
+        String CustomerCode = request.getParameter("CustomerCode");
+        String sdaduimId = request.getParameter("sdaduimId");
+        String executeDate = request.getParameter("executeDate");
+        String eduType = request.getParameter("eduType");
+        List<Map<String, Object>> list = frEducationPublicService.findEducationCoachList(shopId, executeDate, sdaduimId, CustomerCode, Integer.parseInt(eduType));
+
+        return JsonResult.success(list);
+    }
+
+    /**
+     * 查询教练的的课程的接口,团教
+     * @return
+     */
+    @GetMapping("findEducationRoomList")
+    public JsonResult findEducationRoomList(HttpServletRequest request){
+        String shopId = request.getParameter("shopId");
+        String CustomerCode = request.getParameter("CustomerCode");
+        String sdaduimId = request.getParameter("sdaduimId");
+        String executeDate = request.getParameter("executeDate");
+        String eduType = request.getParameter("eduType");
+        List<Map<String, Object>> list = frEducationPublicService.findEducationRoomList(shopId, executeDate, sdaduimId, CustomerCode, Integer.parseInt(eduType));
+        return JsonResult.success(list);
+    }
+
+    /**
+     * 查询课程数组
+     * @return
+     */
+    @GetMapping("findCourseList")
+    public JsonResult findCourseList(HttpServletRequest request){
+        String shopId = request.getParameter("shopId");
+        String CustomerCode = request.getParameter("CustomerCode");
+        String eduType = request.getParameter("eduType");
+        List<Map<String, Object>> list = frEducationPublicService.findCourseList(shopId, CustomerCode, Integer.parseInt(eduType));
+        return JsonResult.success(list);
+    }
+
+
+    /**
+     * 排课
+     * @return
+     */
+    @PostMapping("saveEducation")
+    public JsonResult saveEducation(@RequestBody Map<String, String> map)  {
+
+        try {
+            frEducationPublicService.saveEducation(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
+    /**
+     * 查询结账情况列表
+     * @return
+     */
+    @GetMapping("searchSettlement")
+    public JsonResult searchSettlement(HttpServletRequest request)  {
+        String shopId = request.getParameter("shopId");
+        String searchInput = request.getParameter("searchInput");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String code = request.getParameter("code");
+        String eduType = request.getParameter("eduType");
+        return JsonResult.success(frEducationPublicService.searchSettlement(shopId, searchInput, beginDate, endDate, code, Integer.parseInt(eduType)));
+    }
+
+    /**
+     * 查询课程消费明细情况
+     * @return
+     */
+    @GetMapping("findConsumeClass")
+    public JsonResult findConsumeClass(HttpServletRequest request)  {
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String shopId = request.getParameter("shopId");
+        String searchCourse = request.getParameter("searchCourse");
+        String searchCoach = request.getParameter("searchCoach");
+        String code = request.getParameter("code");
+        String eduType = request.getParameter("eduType");
+        List<Map<String, Object>> list = frEducationPublicService.findConsumeClass(beginDate, endDate, shopId, searchCourse,searchCoach, code, Integer.parseInt(eduType));
+        return JsonResult.success(list);
+    }
+
+    /**
+     * 查询个人消费情况
+     * @return
+     */
+    @GetMapping("findConsumeMember")
+    public JsonResult findConsumeMember(HttpServletRequest request)  {
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String shopId = request.getParameter("shopId");
+        String searchCourse = request.getParameter("searchCourse");
+        String searchCoach = request.getParameter("searchCoach");
+        String cardType = request.getParameter("cardType");
+        String cardName = request.getParameter("cardName");
+        String code = request.getParameter("code");
+        String eduType = request.getParameter("eduType");
+        List<Map<String, Object>> list = frEducationPublicService.findConsumeMember(beginDate, endDate, shopId, searchCourse,searchCoach, code, cardType, cardName, Integer.parseInt(eduType));
+        return JsonResult.success(list);
+    }
+
+    /**
+     * 查询个人消费情况
+     * @return
+     */
+    @GetMapping("findConsumeCondition")
+    public JsonResult findConsumeCondition()  {
+        return JsonResult.success(frEducationPublicService.findConsumeCondition());
+    }
+
+    /**
+     * 查询个人消费情况
+     * @return
+     */
+    @GetMapping("findMemberFreezeList")
+    public JsonResult findMemberFreezeList(HttpServletRequest request)  {
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String searchInput = request.getParameter("searchInput");
+        return JsonResult.success(frEducationPublicService.findMemberFreezeList(shopId, code, beginDate, endDate, searchInput));
+    }
+
+
+
+
+    /**
+     * 查询管理统计
+     * @return
+     */
+    @GetMapping("findManageCount")
+    public JsonResult findManageCount(HttpServletRequest request)  {
+        String shopId = request.getParameter("shopId");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        return JsonResult.success(frEducationPublicService.findManageCount(shopId,beginDate, endDate));
+    }
+
+
+     /**
+     * 查询管理统计
+     * @return
+     */
+    @GetMapping("getGroupRoomByShopId")
+    public JsonResult getGroupRoomByShopId(HttpServletRequest request)  {
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        return JsonResult.success(frEducationPublicService.getGroupRoomByShopId(shopId, code));
+    }
+
+    /**
+     * 复制课程
+     * @return
+     */
+    @PostMapping("copyEducation")
+    public JsonResult copyEducation(@RequestBody Map<String, String> map)  {
+
+        try {
+            frEducationPublicService.findEducationToCopy(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
+    /**
+     * 查询一周的课程
+     * @return
+     */
+    @GetMapping("findEduListByWeek")
+    public JsonResult findEduListByWeek(HttpServletRequest request)  {
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String coachId = request.getParameter("coachId");
+        String roomId = request.getParameter("roomId");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String eduType = request.getParameter("eduType");
+        return JsonResult.success(frEducationPublicService.findEduListByWeek(shopId, code, coachId, roomId, eduType, beginDate, endDate));
+    }
+
+    /**
+     * 查询一个月的课程
+     * @return
+     */
+    @GetMapping("findEduListByMonth")
+    public JsonResult findEduListByMonth(HttpServletRequest request)  {
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String coachId = request.getParameter("coachId");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String eduType = request.getParameter("eduType");
+        return JsonResult.success(frEducationPublicService.findEduListByMonth(shopId, code, coachId, beginDate, endDate, eduType));
+    }
+
+    /**
+     * 查询一个月的课程
+     * @return
+     */
+    @PostMapping("deleteEdu")
+    public JsonResult deleteEdu(@RequestBody Map<String, String> map)  {
+        String eduId = map.get("eduId");
+        try {
+            frEducationPublicService.deleteEdu(eduId);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
+    /**
+     * 复制课程
+     * @return
+     */
+    @PostMapping("copyEducationByEduId")
+    public JsonResult copyEducationByEduId(@RequestBody Map<String, String> map)  {
+
+        try {
+            frEducationPublicService.copyEducationByEduId(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
+    /**
+     * 查询门店下的私教团教的课程
+     * 查看门店，场馆，团教私教课程list
+     * @return
+     */
+    @GetMapping("findAllCourseForShopSdaduim")
+    public JsonResult findAllCourseForShopSdaduim(HttpServletRequest request){
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        return JsonResult.success(frEducationPublicService.findAllCourseForShopSdaduim(shopId, code));
+    }
+
+    /**
+     * 查询冻结用户
+     *
+     * @return
+     */
+    @GetMapping("findFrEducationFreezeClient")
+    public JsonResult findFrEducationFreezeClient(HttpServletRequest request){
+        String shopId = request.getParameter("shopId");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        String searchInput = request.getParameter("searchInput");
+        String eduType = request.getParameter("eduType");
+        return JsonResult.success(frEducationPublicService.findFrEducationFreezeClient(shopId, beginDate, endDate, searchInput, eduType));
+    }
+
+    /**
+     * 删除冻结
+     * @return
+     */
+    @PostMapping("deleteFreezeClient")
+    public JsonResult deleteFreezeClient(@RequestBody Map<String, String> map)  {
+
+        try {
+            frEducationPublicService.deleteFreezeClient(map.get("id"));
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
 
 
 }

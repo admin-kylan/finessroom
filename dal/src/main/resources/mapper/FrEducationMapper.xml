@@ -47,41 +47,65 @@
           edu.reserve_total_num AS reserveTotalNum, edu.create_time AS createTime, edu.update_time AS updateTime, edu.status,
            edu.assistant_name AS assistantName, edu.assistant_id AS assistantId, edu.is_use AS isUse, edu.sdaduim_id AS sdaduimId,
            edu.sdaduim_name AS sdaduimName, edu.create_user_id AS createUserId, edu.CustomerCode, edu.create_user_name AS createUserName,
-           edu.update_user_id AS updateUserId, edu.update_user_name AS updateUserName, edu.reserve_type as reserveType
+           edu.update_user_id AS updateUserId, edu.update_user_name AS updateUserName, edu.reserve_type as reserveType,
+           edu.class_sales_num as classSalesNum
     </sql>
 
     <select id="findEducationPublicListCoach" parameterType="java.lang.String" resultType="java.util.Map">
+
         SELECT
-            pi.ID coachId,
-            pi.RelName coachName,
-            pi.Mobile coachMobile,
-            pi.Sex coachSex,
+            *
+        FROM
+            (
+            SELECT
+                pi.ID coachId,
+                pi.RelName coachName,
+                pi.Mobile coachMobile,
+            ( CASE WHEN pi.Sex = 1 THEN '女' ELSE '男' END ) coachSex,
             pi.JobNumber coachJobNumber,
-            (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
-            edu.id eduId,
-            edu.begin_date_plan eduBeginDate,
-            edu.end_date_plan eduEndDate,
-            edu.shop_name shopName,
-            edu.course_id courseId,
-            edu.course_name courseName,
-           /* edu.coach_id coachId,
-            edu.coach_name coachName,*/
-            edu.reserve_total_num reserveTotalNum,
-            edu.assistant_name assistantName,
-            edu.assistant_id assistantId
+            pi.EntryTime entryTime
         FROM
             PersonnelInfo pi
             LEFT JOIN PersonlRole pr ON pi.id = pr.PersonnelInfoId
             LEFT JOIN RoleInfo ri ON pr.RoleInfoId = ri.Id
-            LEFT JOIN ( SELECT * FROM fr_education edu WHERE edu.execute_date_plan =  #{executeDate} AND edu.type = ${teachType} AND edu.status = 0 AND edu.is_use = 1 AND edu.sdaduim_id = #{sdaduimId}) edu ON edu.coach_id = pi.id
         WHERE
             ri.UserType = 3
             AND ri.ISTeach = 1
-            AND edu.CustomerCode = #{CustomerCode}
             AND pi.ShopId= #{shopId}
+            AND pi.CustomerCode = #{CustomerCode}
             AND pi.IsDel = 0
+            ) coach
+            LEFT JOIN (
+            SELECT
+                ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 1 AND eci.is_use = 1 ) eduCurrentCount,
+                ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 0 AND eci.is_use = 1 ) eduCancelCount,
+                ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 2 AND eci.is_use = 1 ) eduToConfirmCount,
+                edu.id eduId,
+                edu.begin_date_plan eduBeginDate,
+                edu.end_date_plan eduEndDate,
+                edu.shop_name shopName,
+                edu.course_id courseId,
+                edu.course_name courseName,
+                edu.coach_id eduCoachId,
+                edu.coach_name coachName,
+                edu.reserve_total_num reserveTotalNum,
+                edu.assistant_name assistantName,
+                edu.assistant_id assistantId
+            FROM
+                fr_education edu
+            WHERE
+                edu.execute_date_plan = #{executeDate}
+                AND edu.status = 0
+                AND edu.is_use = 1
+                AND edu.CustomerCode = #{CustomerCode}
+                and edu.shop_id = #{shopId}
+                AND edu.type = ${teachType}
+                <if test="sdaduimId != null and sdaduimId != ''">
+                    AND edu.sdaduim_id = #{sdaduimId}
+                </if>
+            ) edu ON edu.eduCoachId = coach.coachId
         ORDER BY
-            edu.execute_date_plan ASC
+            coach.entryTime ASC
     </select>
 
     <select id="findEducationPublicListRoom" parameterType="java.lang.String" resultType="java.util.Map">
@@ -117,7 +141,9 @@
             left join PersonnelInfo pi on edu.coach_id = pi.id
         WHERE
             edu.shop_id = #{shopId}
+        <if test="sdaduimId != null and sdaduimId != ''">
             AND edu.sdaduim_id = #{sdaduimId}
+        </if>
             AND edu.CustomerCode = #{CustomerCode}
             AND gcr.is_using = 1
             AND gcrs.is_using = 1

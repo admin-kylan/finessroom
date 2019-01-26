@@ -7,4 +7,8 @@ const EDU_CONSTANT = {
     listenerListClientList: 'listener-list-client-list', //刷新用户列表详情页
     listenerChooseClientInfo: 'listener-listener-choose-client-info', //刷新用户列表详情页
     listenerChooseClientInfoBack: 'listener-listener-choose-client-info-back', //刷新用户列表详情页
+    listenerShowCoachInfo: 'listener-show-coach-info', //显示教练信息
+    listenerArrangementInfo: 'listener-arrangement-info', //显示教练信息
+    listenerRestCoachRoomInfo: 'listener-rest-coach-room-info', //显示教练信息
+    listenerClassMemberInfo: 'listener-class-member-info', //显示课程，用户详情信息
 };

@@ -112,9 +112,9 @@ public class FrClientPhysiologyRelateServiceImpl extends BaseServiceImpl<FrClien
     }
 
     @Override
-    public List<FrClientPhysiologyRelate> getPsychology() {
+    public List<FrClientPhysiologyRelate> getPsychology(String clientId) {
         List<FrClientPhysiologyRelate> frClientPhysiologyRelates = frClientPhysiologyRelateMapper.selectList(
-                new EntityWrapper<FrClientPhysiologyRelate>().where("is_using={0}", 1));
+                new EntityWrapper<FrClientPhysiologyRelate>().where("is_using=1 and client_id={0}", clientId));
         return frClientPhysiologyRelates;
     }
 }

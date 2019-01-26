@@ -219,5 +219,15 @@ public class FrClientController {
         return JsonResult.success(map);
     }
 
+
+    /**
+     * 根据条件查询所有客户
+     */
+    @GetMapping("getAllClient")
+    public JsonResult getAllClient(){
+
+        return null;
+    }
+
 }
 

@@ -106,8 +106,7 @@ public class FrCardTypeSplitSetServiceImpl extends BaseServiceImpl<FrCardTypeSpl
 
     @Override
     public JsonResult get(String id) throws YJException {
-        FrCardTypeSplitSet frCardTypeSplitSet = selectOne(
-                new EntityWrapper<FrCardTypeSplitSet>().where("id={0}",id));
+        FrCardTypeSplitSet frCardTypeSplitSet = selectOne(new EntityWrapper<FrCardTypeSplitSet>().where("id={0}",id));
         List<Map<String,Object>> splitSetDd  =  frCardTypeSplitSetDdMapper.selectMaps((new EntityWrapper<FrCardTypeSplitSetDd>().where("split_set_id ={0}",id)));
         Map<String,Object> map = new HashMap<>();
         map.put("splitSetDd",splitSetDd);

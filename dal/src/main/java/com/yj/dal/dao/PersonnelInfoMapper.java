@@ -22,4 +22,6 @@ public interface PersonnelInfoMapper extends BaseMapper<PersonnelInfo> {
     List<PersonnelInfo> getPsersonnelListByShopId(Map<String,Object> map);
 
     List<Map<String,Object>> getPersonnelByShopId(Map<String,Object> map);
+
+    PersonnelInfo selectBySalespersonName(String salespersonName);
 }

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,10 +89,10 @@ public class FrClientMotionRelateServiceImpl extends BaseServiceImpl<FrClientMot
     }
 
     @Override
-    public List<FrClientMotionRelate> getSports() {
+    public List<FrClientMotionRelate> getSports(String clientId) {
 
         List<FrClientMotionRelate> frClientMotionRelates = frClientMotionRelateMapper.selectList(
-                new EntityWrapper<FrClientMotionRelate>().where("is_using={0}", 1));
+                new EntityWrapper<FrClientMotionRelate>().where("is_using=1 and client_id={0}", clientId));
         return frClientMotionRelates;
     }
 }

@@ -18,5 +18,5 @@ import java.util.List;
 public interface IFrClientPhysiologyRelateService extends BaseService<FrClientPhysiologyRelate> {
     JsonResult savePsychology(String[] frClientPsychologyTypeIds, String cid, String medicalHistory, String drug, String theHormone, String bloodPressure,String menstruation) throws YJException;
 
-    List<FrClientPhysiologyRelate> getPsychology();
+    List<FrClientPhysiologyRelate> getPsychology(String clientId);
 }

@@ -60,7 +60,7 @@ public class FrCardController {
      * @Date: 2018/9/7 10:01
      */
     @GetMapping("/getInvalidCardNoList")
-    public JsonResult invalidList(@RequestParam Map<String, Object> params, HttpServletRequest request,@RequestParam String code) throws YJException {
+    public JsonResult invalidList(@RequestParam Map<String, Object> params, HttpServletRequest request,String code) throws YJException {
         if(StringUtils.isEmpty(code)){
             code = CookieUtils.getCookieValue(request, "code", true);
             if(StringUtils.isEmpty(code)){

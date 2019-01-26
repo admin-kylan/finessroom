@@ -131,7 +131,7 @@ public class FrEducation extends Model<FrEducation> {
     @TableField("sdaduim_name")
     private String sdaduimName;
     /**
-     * 场馆名字
+     * 私教预约类型，1/2 一对一 /一对多 预约
      */
     @TableField("reserve_type")
     private Integer reserveType;

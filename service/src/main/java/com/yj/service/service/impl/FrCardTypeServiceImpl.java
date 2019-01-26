@@ -47,16 +47,22 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
     /**
      * 加入卡系列、卡种
      *
+     * @param ty       0为卡系列，1为卡种
      * @param frCardType
      * @param ids        关联门店id
-     * @param type       0为卡系列，1为卡种
+     * @param cardType
      * @return
      */
     @Override
     @Transactional
-    public JsonResult addFrCardType(FrCardType frCardType, String[] ids, Integer type) {
+    public JsonResult addFrCardType(FrCardType frCardType, String[] ids, Integer ty, String cardType) {
         frCardType.setCreateTime(new Date());
-        if (type == 1) {
+        if ("2".equals(cardType)) {
+            frCardType.setUsing(false);
+        } else if ("1".equals(cardType)) {
+            frCardType.setUsing(true);
+        }
+        if (ty == 1) {
             //添加UUID
             frCardType.setId(UUIDUtils.generateGUID());
         }
@@ -66,7 +72,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
             for (int i = 0; i < ids.length; i++) {
                 //0为卡系列，1为卡种
                 //添加卡种需要添加销售门店
-                if (type == 0) {
+                if (ty == 0) {
                     //添加UUID
                     frCardType.setId(UUIDUtils.generateGUID());
                     frCardType.setpId("0");
@@ -91,7 +97,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                         return JsonResult.failMessage("添加卡种与门店关系失败");
                     }
                 }
-                if (type == 0) {
+                if (ty == 0) {
                     boolean code = this.insert(frCardType);
                     if (!code) {
                         return JsonResult.failMessage("添加失败");
@@ -101,7 +107,7 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
             }
         }
         //添加卡种
-        if (type == 1) {
+        if (ty == 1) {
             boolean code2 = this.insert(frCardType);
             if (!code2) {
                 return JsonResult.failMessage("添加失败");
@@ -366,14 +372,14 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
                         .where("p_id = '0'")
                         .and("type_set_state = 1")
                         .and("is_using = 1")
-                        .and("CustomerCode = {0}", code)
+                        .and("CustomerCode = {0}", code).orderBy("create_time")
         );
         for (FrCardType frCardType : list) {
             //查询该卡系列下的所以卡种
             List<FrCardType> list1 = frCardTypeMapper.selectList(
                     new EntityWrapper<FrCardType>()
                             .where("p_id = {0}", frCardType.getId())
-                            .and("is_using = 1")
+                            .and("is_using = 1").orderBy("create_time")
             );
             frCardType.setFrCardTypeList(list1);
         }

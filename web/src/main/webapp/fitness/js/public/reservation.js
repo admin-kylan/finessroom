@@ -232,7 +232,7 @@ Vue.component('edu-add-reservation-children', {//模版挂载的标签名
             if(this.isSave == true){
                 return false;
             }
-            console.log(this.clientList.length)
+          //  console.log(this.clientList.length)
             //判断是否约满
             if(this.clientList.length == this.eduItem.reserveTotalNum){
                 $.alert("该课程会员人数已约满")

@@ -2,11 +2,9 @@ package com.yj.service.service;
 
 import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
-import com.yj.dal.model.FrClientLifeRelate;
 import com.yj.dal.model.FrClientMotionRelate;
 import com.yj.service.base.BaseService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -21,5 +19,5 @@ public interface IFrClientMotionRelateService extends BaseService<FrClientMotion
 
     JsonResult saveSports(String[] frClientSportTypeIds, String cid, String sportType)throws YJException;
 
-    List<FrClientMotionRelate> getSports();
+    List<FrClientMotionRelate> getSports(String clientId);
 }

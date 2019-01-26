@@ -22,7 +22,12 @@ html,body{
     border: 0;
     border-bottom: none;
 }
-
+#customerMemberBenefits table thead tr{
+	background: #0cc;
+}
+#customerMemberBenefits table thead td{
+	    border-width: 1px;
+}
 #customerMemberBenefits fieldset legend span{
     color:  #e8bc0c;
 }

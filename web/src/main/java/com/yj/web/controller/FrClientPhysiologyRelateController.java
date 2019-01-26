@@ -35,8 +35,8 @@ public class FrClientPhysiologyRelateController {
     }
 
     @GetMapping("/getPsychology")
-    public JsonResult getPsychology() {
-        List<FrClientPhysiologyRelate> frClientPhysiologyRelates=iFrClientPhysiologyRelateService.getPsychology();
+    public JsonResult getPsychology(String clientId) {
+        List<FrClientPhysiologyRelate> frClientPhysiologyRelates=iFrClientPhysiologyRelateService.getPsychology(clientId);
         return JsonResult.success(frClientPhysiologyRelates);
     }
 }

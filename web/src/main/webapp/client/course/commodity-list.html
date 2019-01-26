@@ -25,7 +25,13 @@
         <div class="clearfix">
             <p class="lef">
                 <span class="title" >销售门店：</span>
-                <input type="text" v-model="shopName"/>
+                <select name="" v-model="shopName">
+                    <!--<option value="" selected="">软件园店</option>-->
+                    <option v-for='(item,index) in shopList' :value="item.id">
+                        {{item.shopName}}
+                    </option>
+                </select>
+                <!--<input type="text" v-model="shopName"/>-->
             </p>
             <p class="rig">
                 <select name="" v-model="timeType">
@@ -146,7 +152,8 @@
 				'本月':[moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')],
 				'本季度':[jdStar.format('YYYY-MM-DD'), jdEnd.format('YYYY-MM-DD')],
 				'本年度':[moment().startOf('year').format('YYYY-MM-DD'), moment().endOf('year').format('YYYY-MM-DD')]
-			}, 
+			},
+            shopList: [],
         },
         filters: {
             stateFilter: function (val) {
@@ -241,7 +248,13 @@
 
         },
         mounted(){// 初始化加载
-            this.loadData()
+            axiosGetParams(COURSE_URL.getMarketShopList, param, (res)=>{
+                if(res.code = '200'){
+                    this.shopList = res.data.data;
+                    // console.log(this.shopList)
+                }
+            })
+            this.loadData();
         },
         created: function () {
 
@@ -270,6 +283,9 @@
                         this.result = res.data;
                     }
                 })
+
+
+
 
 //                let interval = setInterval(()=>{
 //                    this.result = customerCourseProject.resultList;

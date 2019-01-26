@@ -41,13 +41,13 @@ public class FrCardTypeController {
      * @return
      */
     @PostMapping("/addFrCardType")
-    public JsonResult addFrCardType(HttpServletRequest request,FrCardType frCardType, String[] ids,@RequestParam Integer type) throws YJException {
+    public JsonResult addFrCardType(HttpServletRequest request,FrCardType frCardType, String[] ids, Integer ty,String cardType) throws YJException {
         String code = CookieUtils.getCookieValue(request, "code",true);
         frCardType.setCustomerCode(code);
         if(frCardType == null){
             return JsonResult.failMessage("参数错误");
         }
-        return JsonResult.success(frCardTypeService.addFrCardType(frCardType,ids,type));
+        return JsonResult.success(frCardTypeService.addFrCardType(frCardType,ids,ty,cardType));
     }
 
     /**

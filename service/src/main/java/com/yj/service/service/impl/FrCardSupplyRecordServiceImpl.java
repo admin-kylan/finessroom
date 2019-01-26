@@ -614,7 +614,7 @@ public class FrCardSupplyRecordServiceImpl extends BaseServiceImpl<FrCardSupplyR
         //找零
         Double reChange = NumberUtilsTwo.getDoubleNum("retChange",payMentMoney)+frCardOrderInfo.getRetChange();
         //现在的支付金额
-        Double allPrice  = iFrCardOrderPayModeService.getAllPrice(frCardOrderPayModes,frCardOrderInfo.getId());
+         Double allPrice  = iFrCardOrderPayModeService.getAllPrice(frCardOrderPayModes,frCardOrderInfo.getId());
         if(!needPrice.toString().equals(allPrice.toString())){
             throw  new  YJException(YJExceptionEnum.PAY_PRICE_EXISTED);
         }

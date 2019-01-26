@@ -34,8 +34,8 @@ public class FrClientMentalityRelateController {
         return iFrClientMentalityRelateService.saveMentality(frClientMentalityTypeIds, cid, familyLife, emotionalState);
     }
     @GetMapping("/getMentality")
-    public JsonResult getMentality(){
-        List<FrClientMentalityRelate> frClientMentalityRelates = iFrClientMentalityRelateService.getMentality();
+    public JsonResult getMentality(String clientId){
+        List<FrClientMentalityRelate> frClientMentalityRelates = iFrClientMentalityRelateService.getMentality(clientId);
         return JsonResult.success(frClientMentalityRelates);
     }
 }

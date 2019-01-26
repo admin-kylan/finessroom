@@ -270,6 +270,9 @@ public class FrCustomerCourseProjectServiceImpl {
                 conditon += " and StartTime <= " + new Date(startDate) ;
             }
         }
+        if(!StringUtils.isBlank(shopName)){
+            conditon += " and ShopId = '" + shopName + "'";
+        }
         List<AddProject> list = addProjectMapper.selectList(new EntityWrapper<AddProject>()
                 .where(conditon));
 
@@ -441,6 +444,8 @@ public class FrCustomerCourseProjectServiceImpl {
             if(null == sysConsumeOrder){
                 continue;
             }
+
+
             addProject = addProjectMapper.selectOne(addProject);
             shop = shopMapper.selectById(addProject.getShopId());
             sdaduim = sdaduimMapper.selectById(addProject.getSdadiumId());

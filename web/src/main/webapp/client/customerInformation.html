@@ -66,7 +66,7 @@
         </div>
 
     </div>
-    <div id="customerInformationBotton">
+    <div id="customerInformationBotton" style="height: calc(100vh - 195px);">
         <div class="customerInformationBotton">
             <iframe src="customerMembershipCard.html" name="customerrightFrame" id="customerrightFrame"></iframe>
         </div>
@@ -233,10 +233,10 @@
 <script src="../js/common.js"></script>
 <script>
     //修复高度
-    function mainheight() {
-        var mainheight = parseInt($(window).height()) - 206;
-        $('#customerInformationBotton').height(mainheight);
-    }
+//  function mainheight() {
+//      var mainheight = parseInt($(window).height()) - 206;
+//      $('#customerInformationBotton').height(mainheight);
+//  }
 
     // 关闭弹窗
     function newCustomers_maskLayer_X() {
@@ -244,10 +244,10 @@
     }
 
     $(function () {
-        mainheight();
+        // mainheight();
         $('.customerrightFrame_botton li').click(function () {
             $(this).addClass('on').siblings().removeClass('on');
-            mainheight();
+            // mainheight();
         })
         $('#customer_level').mouseenter(function () {
             $('#performance').show();
@@ -256,7 +256,7 @@
             $('#performance').hide();
         })
         $(window).resize(function () {
-            mainheight();
+            // mainheight();
         })
         //渲染用户信息
         getClient();
@@ -268,6 +268,8 @@
 
         var url = $.stringFormat("{0}/frClient/getClient", $.cookie('url'));
         var id = document.URL.split("=")[1];
+        console.log( document.URL)
+        console.log(id)
         $.cookie('cid', id)  //存入值
         $.get(url, {id: id}, function (res) {
                 if (res.code == 200) {
@@ -303,7 +305,7 @@
     }
     function customerrightFrame_botton_li(t) {
         $('.customerrightFrame_botton li').eq(t).addClass('on').siblings().removeClass('on');
-        mainheight();
+        // mainheight();
     }
     function toSubChild(val,mess,type){
         //不是新购、不是续卡返回

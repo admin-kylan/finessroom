@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2018-11-09
  */
 public interface IFrClientFamilyService extends BaseService<FrClientFamily> {
-    List<FrClientFamily> getFamily() throws YJException;
+    List<FrClientFamily> getFamily(String clientId) throws YJException;
 
     JsonResult updateFamily(FrClientFamily frClientFamily, String cid) throws YJException;
 

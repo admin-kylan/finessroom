@@ -1,6 +1,9 @@
 const app = new Vue({
     el: '#app',
     data: {
+        startTime:'',
+        endTime:'',
+        isStatic:'',
         updateBy:'',
         updateTime:'',
         //所在门店

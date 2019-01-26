@@ -28,4 +28,5 @@ const COURSE_URL = {
     frPrivateCourceList: '/frCustomerCourse/getCourseList', //私教,团教
   //  frGroupCourseList: '/frCustomerCourse/list', //团教
     customerCommodityList: 'frCustomerCourse/list', //项目list
+    getMarketShopList: 'shop/getMarketShopList', //查询所有门店
 };

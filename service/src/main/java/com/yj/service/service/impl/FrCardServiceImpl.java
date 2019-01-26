@@ -1104,6 +1104,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             }
             //失效时间
             String invalidTime = StringUtils.getStringObject("invalidTime", map);
+
             Date endData = DateUtils.getDataforString(invalidTime, "yyyy-MM-dd HH:mm:ss");
             isFlag = DateUtil.compareDate(nowDa, endData);
             //现在时间大于结束时间，过期

@@ -463,7 +463,7 @@
 								<span>
 									<span>选择会员卡：</span>
 									<select name="1" id="continueCard" @change="toContinueCardList">
-										<option>请选择</option>
+										<option value="">请选择</option>
                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
                                                 :cardNo="item.cardNo" :status="item.a_status" :orderState="item.orderState">
 											归属门店：{{item.shopName}}；卡系列：{{item.cardFlag}}；卡名称：{{item.cardTypeName}}；卡号：{{item.cardNo}}；剩余权益：{{item.orderNum}}；卡状态：{{item.a_status}}；
@@ -1701,6 +1701,7 @@
                                                                 <!--<strong class="font-bold col-orange">￥{{item.splitNum|toMoneySet(item.splitNum,item,item)}}</strong>-->
                                                                 <strong class="font-bold col-orange">￥{{item.splitNum|toManey}}</strong>
                                                             </span>
+                                                            <span v-show="loadData8.orderSplitList && !loadData8.orderSplitList.length">无</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -1967,12 +1968,12 @@
                                                 <div class="sc_box">
                                                     <div class="sc_box_left">承接人手机：</div>
                                                     <div class="sc_box_right">
-                                                        <input type="text" placeholder="承接人手机" v-model="givePhone" @change="getClientList">
+                                                        <input type="text" style="padding-left: 10px;text-align: left;" placeholder="承接人手机" v-model="givePhone" @change="getClientList">
                                                     </div>
                                                 </div>
                                                 <div class="sc_box">
                                                     <div class="sc_box_left">承接人姓名：</div>
-                                                    <div class="sc_box_right"><input type="text" placeholder="承接人姓名"v-model="giveName">
+                                                    <div class="sc_box_right"><input style="padding-left: 10px;text-align: left;" type="text" placeholder="承接人姓名"v-model="giveName">
                                                     </div>
                                                 </div>
                                                 <div class="sc_box">
@@ -2483,7 +2484,7 @@
 
 <script>
 	$('body').on('focus','.TCR-tables-box2 input,.green-head-table2 input',function(){
-		if($(this).val()=='0.00'){
+		if($(this).val()=='0'){
 			$(this).val('')
 		}
 	})
