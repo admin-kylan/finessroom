@@ -73,6 +73,16 @@ Vue.component('edu-course-date-list-children', {//模版挂载的标签名
     created() {
        // this.loadMonth()
         this.loadWeek();
+        //事件出发加载
+        Event.$off(EDU_CONSTANT.listenerEducationMonthList)
+        Event.$on(EDU_CONSTANT.listenerEducationMonthList, (item)=>{
+            this.loadMonth();
+        });
+        Event.$off(EDU_CONSTANT.listenerEducationWeekList)
+        Event.$on(EDU_CONSTANT.listenerEducationWeekList, (item)=>{
+            this.loadWeekEdu();
+        });
+
     },
     mounted() {
 
@@ -121,6 +131,8 @@ Vue.component('edu-course-date-list-children', {//模版挂载的标签名
                         if(this.roomList){
                             this.selectRoomId = this.roomList[0]['roomId']
                         }
+                        //出发一次选择
+                        this.loadWeekEdu();
                     });
                 }
 
@@ -272,14 +284,19 @@ Vue.component('edu-course-date-list-children', {//模版挂载的标签名
                 this.resultListMonth.forEach(item=>{
                     item.list = [];
                 });
+                //console.log(res)
                 $.each(res, (i,d)=>{
+                   // console.log(d)
                     let date = new Date(d.beginDate).getDate();
+                   // console.log(date)
+                  //  debugger
                     this.resultListMonth.forEach(item=>{
                         if(item.status == true && item.day == date){
                             item.list.push(d);
                         }
                     });
                 })
+               // console.log(this.resultListMonth)
 
             })
         },
@@ -435,6 +452,14 @@ Vue.component('edu-course-date-list-children', {//模版挂载的标签名
                     $.alert('删除失败！')
                 })
             }
+
+        },
+        chooseEduSetting(obj){
+            //如果课程结束，则不被点击
+            if(obj.status == 2 || obj.status == 3){
+                return false;
+            }
+            Event.$emit(EDU_CONSTANT.listenerClassSettingInfo, obj);
 
         }
     },

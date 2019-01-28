@@ -175,8 +175,8 @@ Vue.component('edu-copy-class-children', {//模版挂载的标签名
             }
 
             let param = {
-                beginDateOld: this.beginDate,
-                endDateOld: this.endDate,
+                beginDateOld: this.beginDate + " 00:00:00",
+                endDateOld: this.endDate + " 23:59:59",
                 coachId: this.selectCoachId,
                 courseId: this.selectCourseId,
                 beginDateNew: this.copyBeginDate,

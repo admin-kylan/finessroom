@@ -11,4 +11,7 @@ const EDU_CONSTANT = {
     listenerArrangementInfo: 'listener-arrangement-info', //显示教练信息
     listenerRestCoachRoomInfo: 'listener-rest-coach-room-info', //显示教练信息
     listenerClassMemberInfo: 'listener-class-member-info', //显示课程，用户详情信息
+    listenerClassSettingInfo: 'listener-class-setting-info', //显示课程，用户详情信息
+    listenerEducationMonthList: 'listener-education-month-list', //按月查询
+    listenerEducationWeekList: 'listener-education-week-list', //按周查询
 };

@@ -598,4 +598,32 @@ public class FrEducationController {
     }
 
 
+    /**
+     * 预约详情，根据Id 查询数据 全部的数据，用来更新课程
+     * @param request
+     * @return
+     */
+    @GetMapping("findEduCationInfoById")
+    public JsonResult findEduCationInfoById(HttpServletRequest request){
+        String eduId = request.getParameter("eduId");
+        return JsonResult.success(frEducationPublicService.findEduCationInfoById(eduId));
+    }
+
+    /**
+     * 预约详情，根据Id 查询数据 全部的数据，用来更新课程
+     * @param map
+     * @return
+     */
+    @PostMapping("updateEducationInfo")
+    public JsonResult updateEducationInfo(@RequestBody Map<String, String> map){
+
+        try {
+            frEducationPublicService.updateEducationInfo(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
+    }
+
+
 }

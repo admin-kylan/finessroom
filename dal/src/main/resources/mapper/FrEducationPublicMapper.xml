@@ -971,14 +971,14 @@
     <select id="findEducationToCopy" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
             edu.id eduId,
-            ec.id configId,
-            ero.id reserveId,
-            eco.id cardSettleId
+            ec.id configId
+           /* ero.id reserveId,
+            eco.id cardSettleId*/
         FROM
             fr_education edu
             LEFT JOIN fr_education_config ec ON edu.id = ec.education_id
-            LEFT JOIN fr_education_reserve_object ero ON ec.id = ero.education_config_id
-            LEFT JOIN fr_education_card_object eco ON ec.id = eco.education_config_id
+            /*LEFT JOIN fr_education_reserve_object ero ON ec.id = ero.education_config_id
+            LEFT JOIN fr_education_card_object eco ON ec.id = eco.education_config_id*/
         where
             edu.type = ${eduType}
             and edu.begin_date_plan <![CDATA[ >= ]]> #{beginDate}
@@ -996,8 +996,7 @@
         SELECT
             edu.id eduId,
             ec.id configId,
-            ero.id reserveId,
-            eco.id cardSettleId,
+
             edu.status,
             edu.coach_name coachName,
             edu.course_name courseName,
@@ -1010,8 +1009,6 @@
         FROM
             fr_education edu
             LEFT JOIN fr_education_config ec ON edu.id = ec.education_id
-            LEFT JOIN fr_education_reserve_object ero ON ec.id = ero.education_config_id
-            LEFT JOIN fr_education_card_object eco ON ec.id = eco.education_config_id
         WHERE
             edu.is_use = 1
             and edu.type = ${eduType}

@@ -54,4 +54,6 @@ const EDUCATION_URL = {
     findAllCourseForShopSdaduim: '/frEducation/findAllCourseForShopSdaduim',//查询门店下的私教团教的课程
     findFrEducationFreezeClient: '/frEducation/findFrEducationFreezeClient',//查询冻结用户
     deleteFreezeClient: '/frEducation/deleteFreezeClient',//删除冻结用户 解冻
+    findEduCationInfoById: '/frEducation/findEduCationInfoById',//查询课程信息
+    updateEducationInfo: '/frEducation/updateEducationInfo',//更新课程
 };

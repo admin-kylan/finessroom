@@ -172,6 +172,58 @@ Vue.component('edu-batch-arrangement-children', {//模版挂载的标签名
             }
             this.selectRoomItem = a;
         },
+        //时间更改
+        courseTime(){
+            if(this.w1.begin){
+                let t = '2019-01-01 ' + this.w1.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w1.end = this.toDateHHmm(date);
+            }
+            if(this.w2.begin){
+                let t = '2019-01-01 ' + this.w2.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w2.end = this.toDateHHmm(date);
+            }
+            if(this.w3.begin){
+                let t = '2019-01-01 ' + this.w3.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w3.end = this.toDateHHmm(date);
+            }
+            if(this.w4.begin){
+                let t = '2019-01-01 ' + this.w4.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w4.end = this.toDateHHmm(date);
+            }
+            if(this.w5.begin){
+                let t = '2019-01-01 ' + this.w5.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w5.end = this.toDateHHmm(date);
+            }
+            if(this.w6.begin){
+                let t = '2019-01-01 ' + this.w6.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w6.end = this.toDateHHmm(date);
+            }
+            if(this.w7.begin){
+                let t = '2019-01-01 ' + this.w7.begin + ":00"
+                //courseTime
+                let date = new Date(t);
+                date.setMinutes(date.getMinutes() + parseInt(this.courseTime));
+                this.w7.end = this.toDateHHmm(date);
+            }
+        },
         'w1.begin'(val){
             let t = '2019-01-01 ' + val + ":00"
             //courseTime
@@ -411,6 +463,10 @@ Vue.component('edu-batch-arrangement-children', {//模版挂载的标签名
         },
 
         save(){
+            //
+            // this.LI(5);
+            // Event.$emit(EDU_CONSTANT.listenerEducationWeekList)
+            // return false;
 
             //判断是否选择场地
             if(!this.selectRoomId){
@@ -468,7 +524,6 @@ Vue.component('edu-batch-arrangement-children', {//模版挂载的标签名
 
             //计算预约时间
             for(let i = 0; i < iDays + 1; i++){
-
                 //date 当前的预约时间
                 let date = new Date(this.executeBeginDate);
                 date.setDate(date.getDate() + i);
@@ -688,10 +743,12 @@ Vue.component('edu-batch-arrangement-children', {//模版挂载的标签名
                 param.eduReserveObject = eduReserveObject;
                 axiosPostParams(EDUCATION_URL.saveEducation, param, (res)=>{
                     //重新刷新组建
-                   if((i+1) == (iDays+1)){
-                       this.isSave = false;
-                       $.alert("批量排课成功！！")
-                   }
+                    if(i == iDays){
+                        this.isSave = false;
+                        this.LI(5);
+                        Event.$emit(EDU_CONSTANT.listenerEducationWeekList)
+                        $.alert("批量排课成功！！")
+                    }
 
                 },(res)=>{
                     this.isSave = false;

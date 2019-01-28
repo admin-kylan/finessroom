@@ -968,13 +968,13 @@ public class FrEducationPublicServiceImpl {
         List<Map<String, String>> list = frEducationPublicMapper.findEducationToCopy(beginDate, endDateOld, coachId, courseId, eduType, shopId);
         String eduId = "";
         String configId = "";
-        String reserveId = "";
-        String cardSettleId = "";
+//        String reserveId = "";
+//        String cardSettleId = "";
         for(Map<String, String> obj: list){
             eduId = obj.get("eduId");
             configId = obj.get("configId");
-            reserveId = obj.get("reserveId");
-            cardSettleId = obj.get("cardSettleId");
+//            reserveId = obj.get("reserveId");
+//            cardSettleId = obj.get("cardSettleId");
             FrEducation frEducation = frEducationPublicMapper.selectById(eduId);
             frEducation.setExecuteDatePlan(dateToAddDate(frEducation.getExecuteDatePlan(), stepTime));
             frEducation.setBeginDatePlan(dateToAddDate(frEducation.getBeginDatePlan(), stepTime));
@@ -984,34 +984,37 @@ public class FrEducationPublicServiceImpl {
             frEducation.setId(UUIDUtils.generateGUID());
             frEducation.setCreateTime(date);
             frEducation.setUpdateTime(null);
+            frEducation.setStatus(0);
             //
             FrEducationConfig frEducationConfig = frEducationConfigMapper.selectById(configId);
             frEducationConfig.setId(UUIDUtils.generateGUID());
             frEducationConfig.setEducationId(frEducation.getId());
-            //
-            FrEducationReserveObject frEducationReserveObject = null;
-            if(!StringUtils.isBlank(reserveId)){
-                frEducationReserveObject = frEducationReserveObjectMapper.selectById(reserveId);
+            //reserve
+            FrEducationReserveObject frEducationReserveObject = new FrEducationReserveObject();
+            frEducationReserveObject.setEducationConfigId(configId);
+            frEducationReserveObject = frEducationReserveObjectMapper.selectOne(frEducationReserveObject);
+            if(null != frEducationReserveObject){
                 frEducationReserveObject.setId(UUIDUtils.generateGUID());
                 frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
             }
             //
-            FrEducationCardObject frEducationCardObject = null;
-            if(!StringUtils.isBlank(cardSettleId)){
-                frEducationCardObject = frEducationCardObjectMapper.selectById(cardSettleId);
-                frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
-                frEducationCardObject.setId(UUIDUtils.generateGUID());
+            List<FrEducationCardObject> frEducationCardObjects = null;
+            String condition = "education_config_id={0}";
+            frEducationCardObjects = frEducationCardObjectMapper.selectList(new EntityWrapper<FrEducationCardObject>().where(condition, configId));
+            if(null != frEducationCardObjects){
+                for(FrEducationCardObject frEducationCardObject: frEducationCardObjects){
+                    frEducationCardObject.setId(UUIDUtils.generateGUID());
+                    frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
+                    frEducationCardObjectMapper.insert(frEducationCardObject);
+                }
             }
-            frEducation.setStatus(0);
 
             frEducationPublicMapper.insert(frEducation);
             frEducationConfigMapper.insert(frEducationConfig);
             if(null != frEducationReserveObject){
                 frEducationReserveObjectMapper.insert(frEducationReserveObject);
             }
-            if(null != frEducationCardObject){
-                frEducationCardObjectMapper.insert(frEducationCardObject);
-            }
+
 
         }
 
@@ -1188,5 +1191,90 @@ public class FrEducationPublicServiceImpl {
     public void deleteFreezeClient(String id){
         frEducationFreezeClientMapper.deleteById(id);
     }
+
+
+    /**
+     * 预约详情，根据Id 查询数据 全部的数据，用来更新课程
+     * @param eduId
+     * @return
+     */
+    public Map<String, Object> findEduCationInfoById(String eduId){
+        Map<String, Object> map = new HashMap<>();
+        FrEducation frEducation = frEducationPublicMapper.selectById(eduId);
+        FrEducationConfig frEducationConfig = new FrEducationConfig();
+        FrEducationReserveObject frEducationReserveObject = new FrEducationReserveObject();
+        List<FrEducationCardObject> frEducationCardObjects = null;
+        String condition = "education_config_id={0}";
+
+        frEducationConfig.setEducationId(eduId);
+        frEducationConfig = frEducationConfigMapper.selectOne(frEducationConfig);
+        frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
+        frEducationReserveObject = frEducationReserveObjectMapper.selectOne(frEducationReserveObject);
+        frEducationCardObjects = frEducationCardObjectMapper.selectList(new EntityWrapper<FrEducationCardObject>().where(condition, frEducationConfig.getId()));
+        map.put("education", frEducation);
+        map.put("eduConfig", frEducationConfig);
+        map.put("eduReserveObject", frEducationReserveObject);
+        map.put("eduCardObjects", frEducationCardObjects);
+        return map;
+
+    }
+
+    /**
+     * 更新排课
+     * @param map
+     * @throws Exception
+     */
+    public void updateEducationInfo(Map<String, String> map) throws Exception {
+        FrEducation frEducation = JSONObject.parseObject(map.get("education"), FrEducation.class);
+        if(null == frEducation){
+            throw new Exception("编辑排课失败，请重试");
+        }
+        //frEducation.setId(UUIDUtils.generateGUID());
+        //config
+        FrEducationConfig frEducationConfig = JSONObject.parseObject(map.get("eduConfig"), FrEducationConfig.class);
+        if(null == frEducationConfig){
+            throw new Exception("编辑排课失败，请重试");
+        }
+//        frEducationConfig.setId(UUIDUtils.generateGUID());
+//        frEducationConfig.setEducationId(frEducation.getId());
+        //member object
+        FrEducationReserveObject frEducationReserveObject = JSONObject.parseObject(map.get("eduReserveObject"), FrEducationReserveObject.class);
+//        if(null == frEducationReserveObject){
+//            throw new Exception("排课失败，请重试");
+//        }
+        if(null != frEducationReserveObject){
+            frEducationReserveObject.setId(UUIDUtils.generateGUID());
+            frEducationReserveObject.setEducationConfigId(frEducationConfig.getId());
+        }
+        //会员卡设置
+        JSONArray cardObjects = JSONArray.parseArray(map.get("cardObject")) ;
+        //删除之前设置的card
+        String condition = "education_config_id={0}";
+        frEducationCardObjectMapper.delete(new EntityWrapper<FrEducationCardObject>().where(condition, frEducationConfig.getId()));
+        if(null != cardObjects){
+            for(Object object: cardObjects){
+                FrEducationCardObject frEducationCardObject = JSONObject.parseObject(JSON.toJSONString(object), FrEducationCardObject.class);
+                frEducationCardObject.setId(UUIDUtils.generateGUID());
+                frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
+                frEducationCardObjectMapper.insert(frEducationCardObject);
+            }
+        }
+
+
+
+        //保存
+        frEducation.setUse(true);
+        frEducationPublicMapper.updateAllColumnById(frEducation);
+        //删除旧的，
+        frEducationReserveObjectMapper.delete(new EntityWrapper<FrEducationReserveObject>()
+                .where("education_config_id={0}", frEducationConfig.getId()));
+        if(null != frEducationReserveObject){
+            frEducationReserveObjectMapper.insert(frEducationReserveObject);
+        }
+
+        frEducationConfigMapper.updateAllColumnById(frEducationConfig);
+    }
+
+
 
 }

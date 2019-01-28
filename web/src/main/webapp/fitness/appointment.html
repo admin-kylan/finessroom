@@ -92,230 +92,10 @@
                         <!-- 批量排团课 -->
                         <!-- 复制排课 -->
                         <edu-copy-class-children></edu-copy-class-children>
-                        <!-- 排课弹窗 -->
-                        <div id="classroom" class="newCustomers_maskLayer">
-                            <div class="newCustomers_maskLayer_box">
-                                <div class="newCustomers_maskLayer_box_top">
-                                    <span>临时排课</span><a href="#" class="newCustomers_maskLayer_X"
-                                                        onclick="newCustomers_maskLayer_X()">X</a>
-                                    <a href="#" class="newCustomers_maskLayer_X newCustomers_maskLayer_X2"
-                                       onclick="newCustomers_maskLayer_X2()">X</a>
-                                </div>
-                                <div class="newCustomers_maskLayer_box_shen">
-                                    <div class="bookBody clearfix">
-                                        <form class="form-horizontal">
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label"><span>*</span>教练：</label>
-                                                <div class="col-sm-7">
-                                                    <select name="0" class="form-control">
-                                                        <option value="0">--选择教练--</option>
-                                                        <option value="1">--选择教练--</option>
-                                                        <option value="2">--选择教练--</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label"><span>*</span>课程：</label>
-                                                <div class="col-sm-7">
-                                                    <select name="0" class="form-control">
-                                                        <option value="0">--选择课程--</option>
-                                                        <option value="1">--选择课程--</option>
-                                                        <option value="2">--选择课程--</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
 
-                                    <h4>开放预约时间：</h4>
-                                    <div class="bookBody">
-                                        <div class="bookBody_b">
-                                            <p><label class="fl"><input type="radio"> <span>立即开放预约</span> </label></p>
-                                            <p><label class="fl"><input type="radio"> <span>定时开放预约</span> <input
-                                                    type="text" class="jeinput dataData"
-                                                    placeholder="2018-10-22 00:00:00"></label>
-                                            </p>
-                                            <p>
-                                                <label class="fl"><input type="radio"> <span>课程开始前</span> </label>
-                                                <select name="0">
-                                                    <option value="0">0</option>
-                                                </select>
-                                                <span>小时开放预约</span>
-                                            </p>
-                                            <p><span>预约设置修改，仅限在预约时间发生前</span><input type="text" value="1">
-                                                <span>小时内修改</span></p>
-                                            <p><span>未经允许是否可以上课</span> <label class="fl"><input type="radio">
-                                                <span>是</span> </label><label class="fl"><input
-                                                    type="radio"> <span>否</span> </label> <span class="red">（如果没有预约的课程就无法开课）</span>
-                                            </p>
-                                            <p><span>前台预约是否允许选择教练</span> <label class="fl"><input type="radio">
-                                                <span>允许</span> </label><label class="fl"><input
-                                                    type="radio"> <span>不允许</span> </label> <span class="red">（只允许指定教练上课）</span>
-                                            </p>
-                                            <p><span>团会员APP预约是否需要确认：</span> <label class="fl"><input type="radio">
-                                                <span>是</span> </label><label class="fl"><input
-                                                    type="radio"> <span>否</span> </label></p>
-                                            <p><span>团课开始之前</span><input type="text" value="20"> <span>分钟，团操老师可刷团会员APP二维码入场</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <h4>课程结算：</h4>
-                                    <div class="bookBody">
-                                        <div class="bookBody_b">
-                                            <p><label class="fl"><input type="checkbox"> <span>在线支付</span> </label></p>
-                                            <ul>
-                                                <li>
-                                                    <p><span>每节课</span><input type="text" value="1"> <span>元</span></p>
-                                                    <p><span>限制约课</span> <label class="fl"><input type="radio">
-                                                        <span>是</span> </label><label class="fl"><input
-                                                            type="radio"> <span>否</span> </label></p>
-                                                    <p class="bor">
-                                                        <span>预约对象：</span>
-                                                        <label class="fl"><input type="checkbox"> <span>新注册</span>
-                                                        </label>
-                                                        <label class="fl"><input type="checkbox"> <span>普通会员</span>
-                                                        </label>
-                                                        <label class="fl"><input type="checkbox"> <span>银卡会员</span>
-                                                        </label>
-                                                        <label class="fl"><input type="checkbox"> <span>金卡会员</span>
-                                                        </label>
-                                                        <label class="fl"><input type="checkbox"> <span>钻卡会员</span>
-                                                        </label>
-                                                        <label class="fl"><input type="checkbox"> <span>潜在会员</span>
-                                                        </label>
-                                                    </p>
-                                                </li>
-                                            </ul>
 
-                                            <p><label class="fl"><input type="checkbox"> <span>会员卡结算</span> <span
-                                                    class="red">涉及以下选择的会员卡使用设置</span></label></p>
-                                            <ul>
-                                                <li>
-                                                    <div class="bor">
-                                                        <ul>
-                                                            <li><label><input type="checkbox"> <span>软件园店</span>
-                                                            </label></li>
-                                                            <li>
-                                                                <ul>
-                                                                    <li><label><input type="checkbox"> <span>健身房</span>
-                                                                    </label>
-                                                                        <hr/>
-                                                                    </li>
-                                                                    <li>
-                                                                        <ul>
-                                                                            <li><label><input type="checkbox">
-                                                                                <span>增肌</span> </label>
-                                                                                <hr/>
-                                                                                <span><span>售价：</span><input type="text"
-                                                                                                             value="0.00"><span>元</span></span>
-                                                                            </li>
-                                                                            <li><label><input type="checkbox"> <span>体态调整</span>
-                                                                            </label>
-                                                                                <hr/>
-                                                                                <span><span>售价：</span><input type="text"
-                                                                                                             value="0.00"><span>元</span></span>
-                                                                            </li>
-                                                                        </ul>
-
-                                                                    </li>
-                                                                    <li><label><input type="checkbox"> <span>健身私教</span>
-                                                                    </label>
-                                                                        <hr/>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                            <li><label><input type="checkbox"> <span>集美店</span> </label>
-                                                            </li>
-                                                            <li>
-                                                                <ul>
-                                                                    <li><label><input type="checkbox"> <span>健身房</span>
-                                                                    </label>
-                                                                        <hr/>
-                                                                    </li>
-                                                                    <li>
-                                                                        <ul>
-                                                                            <li><label><input type="checkbox">
-                                                                                <span>增肌</span> </label>
-                                                                                <hr/>
-                                                                                <span><span>售价：</span><input type="text"
-                                                                                                             value="0.00"><span>元</span></span>
-                                                                            </li>
-                                                                            <li><label><input type="checkbox"> <span>体态调整</span>
-                                                                            </label>
-                                                                                <hr/>
-                                                                                <span><span>售价：</span><input type="text"
-                                                                                                             value="0.00"><span>元</span></span>
-                                                                            </li>
-                                                                        </ul>
-
-                                                                    </li>
-                                                                    <li><label><input type="checkbox"> <span>健身私教</span>
-                                                                    </label>
-                                                                        <hr/>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                            <li><label><input type="checkbox"> <span>全选</span>
-                                                            </label><span><span>售价：</span><input type="text"
-                                                                                                 value="0.00"><span>元</span></span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </li>
-                                            </ul>
-
-                                            <p><label class="fl"><input type="checkbox"> <span>课程结算</span> <span
-                                                    class="red">结算费用 扣除客户所购买的课程数</span>
-                                            </label></p>
-                                        </div>
-                                    </div>
-                                    <div class="bookTab">
-                                        <div class="tabFoot clearfix">
-                                            <a class="btn btnBlue">确认</a><a class="btn btnRed">取消</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 排课弹窗 -->
                         <!-- 课程设置 -->
-                        <div id="Curriculum" class="newCustomers_maskLayer">
-                            <div class="newCustomers_maskLayer_box">
-                                <div class="newCustomers_maskLayer_box_top">
-                                    <span>临时排课</span><a href="#" class="newCustomers_maskLayer_X"
-                                                        onclick="newCustomers_maskLayer_X()">X</a>
-                                </div>
-                                <div class="newCustomers_maskLayer_box_shen">
-                                    <div class="bookBody clearfix">
-                                        <div class="lef fl"><img src="../img/u2871.png" alt=""></div>
-                                        <div class="rig fl">
-                                            <div>
-                                                <h3><span class="title">课程名称：</span> <span
-                                                        class="txt"><strong>动感单车</strong></span></h3>
-                                            </div>
-                                            <div><span class="title">门店：</span> <span class="txt"><strong>软件园店</strong></span>
-                                            </div>
-                                            <div><span class="title">教练：</span> <span
-                                                    class="txt"><strong>Nicolas Klaus</strong></span></div>
-                                            <div><span class="title">日期：</span> <span
-                                                    class="txt"><strong>2018-06-26</strong></span></div>
-                                            <div><span class="title">时间：</span> <span
-                                                    class="txt"><strong>20:00~21:00</strong></span></div>
-                                            <div><span class="title">场地：</span> <span
-                                                    class="txt"><strong>动感教室-01A室</strong></span></div>
-                                            <div><span class="title">上课人数：</span> <span
-                                                    class="txt"><strong>1/29</strong></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="newCustomers_maskLayer_box_botton">
-                                    <a href="#" class="btn btn-success" @click="LI(0,1)">预约该课程</a>
-                                    <a href="#" class="btn btn-blue" @click="LI(0,2)">开始上课</a>
-                                    <a href="#" class="btn btn-danger" onclick="CourseModification(1)">课程修改</a>
-                                    <a href="#" class="btn btn-red">删除</a>
-                                </div>
-                            </div>
-                        </div>
+                        <edu-class-setting-children @return-page="LI"></edu-class-setting-children>
                         <!-- 课程设置 -->
                     </li>
                     <li class="list list7" v-if="LiIndex==6">
@@ -2531,7 +2311,7 @@
                                          parseInt(obj.eduToConfirmCount?obj.eduToConfirmCount:0) == parseInt(obj.reserveTotalNum?obj.reserveTotalNum:0))),
                                          'hui': (obj.status == 0 && (parseInt(obj.eduCurrentCount?obj.eduCurrentCount:0) +
                                          parseInt(obj.eduToConfirmCount?obj.eduToConfirmCount:0) == parseInt(obj.reserveTotalNum?obj.reserveTotalNum:0)))? false: obj.status == 0,
-                                          'green': obj.status == 1 }">
+                                          'green': obj.status == 1 }" @click="chooseEduSetting(obj)">
                                             <p>{{obj.courseName}}</p>
                                             <p>{{obj.coachName}} {{obj.beginDate| toDateHHmm}}~{{obj.endDate|
                                                 toDateHHmm}}</p></div>
@@ -2949,9 +2729,9 @@
                     <label class="col-sm-2 control-label"><span class="red">*</span> 复制课程：</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control"
-                               placeholder="2018-06-26" id="copy-start-date" v-model="beginDate" readonly/>~
+                               placeholder="" id="copy-start-date" v-model="beginDate" readonly/>~
                         <input type="text" class="form-control"
-                               placeholder="2018-06-30" id="copy-end-date" v-model="endDate" readonly/><span
+                               placeholder="" id="copy-end-date" v-model="endDate" readonly/><span
                             class="red">所选日期不能超过31天</span>
                     </div>
                 </div>
@@ -2982,7 +2762,7 @@
                     <label class="col-sm-2 control-label"><span>*</span>复制到：</label>
                     <div class="col-sm-9">
                         <input type="text" class="jeinput form-control" v-model="copyBeginDate" id="copy-to-start-date"
-                               placeholder="2018-07-05" readonly/> <span style="margin: 0 15px">
+                               placeholder="" readonly/> <span style="margin: 0 15px">
 													至 </span> <span>{{copyEndDate}}</span>
                     </div>
                 </div>
@@ -3000,7 +2780,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"><span>*</span> 即：</label>
                     <div class="col-sm-9">
-                        <p>将2018-06-27至2018-07-07期间全部教练的全部课程， 复制到2018-07-01至2018-07-11</p>
+                        <p>将{{beginDate}}至{{endDate}}期间全部教练的全部课程， 复制到{{copyBeginDate}}至{{copyEndDate}}</p>
                     </div>
                 </div>
             </form>
@@ -3017,6 +2797,315 @@
 
         </div>
     </div>
+</template>
+
+<!-- 课程设置 -->
+<template id="edu-class-setting-id">
+    <div>
+        <!-- 课程设置 -->
+        <div id="Curriculum" class="newCustomers_maskLayer" v-show="settingStatus" style="display: block;">
+            <div class="newCustomers_maskLayer_box">
+                <div class="newCustomers_maskLayer_box_top">
+                    <span>课程设置</span><a href="#" class="newCustomers_maskLayer_X"
+                                        @click="settingStatus = false">X</a>
+                </div>
+                <div class="newCustomers_maskLayer_box_shen">
+                    <div class="bookBody clearfix">
+                        <div class="lef fl"><img src="../img/u2871.png" alt=""></div>
+                        <div class="rig fl">
+                            <div>
+                                <h3><span class="title">课程名称：</span> <span
+                                        class="txt"><strong>{{eduItem.courseName}}</strong></span></h3>
+                            </div>
+                            <div><span class="title">门店：</span> <span class="txt"><strong>{{eduItem.shopName}}</strong></span>
+                            </div>
+                            <div><span class="title">教练：</span> <span
+                                    class="txt"><strong>{{eduItem.coachName}}</strong></span></div>
+                            <div><span class="title">日期：</span> <span
+                                    class="txt"><strong>{{eduItem.beginDatePlan| toDateyyyyMMdd}}</strong></span></div>
+                            <div><span class="title">时间：</span> <span
+                                    class="txt"><strong>{{eduItem.beginDatePlan| toDateHHmm}}~{{eduItem.endDatePlan| toDateHHmm}}</strong></span></div>
+                            <div><span class="title">场地：</span> <span
+                                    class="txt"><strong>{{eduItem.roomName}}</strong></span></div>
+                            <div><span class="title">上课人数：</span> <span
+                                    class="txt"><strong>{{eduItem.eduCurrentCount + eduItem.eduToConfirmCount}}/{{eduItem.reserveTotalNum}}</strong></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="newCustomers_maskLayer_box_botton">
+                    <a href="#" class="btn btn-success" @click="LI(0,1)">预约该课程</a>
+                    <a href="#" class="btn btn-blue" @click="LI(0,2)">开始上课</a>
+                    <a href="#" class="btn btn-danger" @click="showUpdateClass">课程修改</a>
+                    <a href="#" class="btn btn-red">删除</a>
+                </div>
+            </div>
+        </div>
+        <!-- 课程设置 -->
+        <!-- 排课弹窗 -->
+        <div id="classroom" class="newCustomers_maskLayer" v-show="updateClassStatus" style="display: block;">
+            <div class="newCustomers_maskLayer_box">
+                <div class="newCustomers_maskLayer_box_top">
+                    <span>排课编辑</span>
+                    <a href="javascript:;" class="newCustomers_maskLayer_X"
+                       @click="updateClassStatus = false">X</a>
+                </div>
+                <div class="newCustomers_maskLayer_box_shen">
+                    <div class="bookBody clearfix">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span>教练：</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" v-model="selectCoachId">
+                                        <option v-for='(item,index) in coachList' :value="item.coachId">
+                                            {{item.coachName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span>课程：</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" v-model="selectCourseId">
+                                        <option value="0" v-for="item in courseList" :value="item.courseId">
+                                            {{item.courseName}}
+                                        </option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span>上课时间：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="jeinput form-control"
+                                           placeholder="上课日期" id="setting-execute-date" v-model="executeDate" readonly/>
+                                    <input type="text" class="jeinput form-control"
+                                           id="setting-execute-begin-date" placeholder="开始时间" v-model="executeBeginDate"
+                                           readonly/>
+                                    <span> ~ </span>
+                                    <input type="text" class="jeinput form-control"
+                                           id="setting-execute-end-date" placeholder="结束时间" v-model="executeEndDate"
+                                           readonly/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h4>开放预约时间：</h4>
+                    <div class="bookBody">
+                        <div class="bookBody_b">
+                            <p><label class="fl"><input type="radio" v-model="selectOpenReserveStatus" value="1"> <span>立即开放预约</span>
+                            </label></p>
+                            <p><label class="fl"><input type="radio" v-model="selectOpenReserveStatus" value="2"> <span>定时开放预约</span>
+                                <input type="text" class="jeinput"
+                                       id="setting-execute-reserve-date" v-model="openReserveDateSelect"></label>
+                            </p>
+                            <p>
+                                <label class="fl"><input type="radio" v-model="selectOpenReserveStatus" value="3"> <span>课程开始前</span>
+                                </label>
+                                <!--<select name="0">-->
+                                <!--<option value="0">0</option>-->
+                                <!--</select>-->
+                                <input type="text" v-model="reserveHoursBegin" placeholder="0"
+                                       oninput="value=value.replace(/[^\d]+/g,'')">
+                                <span>小时开放预约</span>
+                            </p>
+                            <p><span>预约设置修改，仅限在预约时间发生前</span>
+                                <input type="text" oninput="value=value.replace(/[^\d]+/g,'')" v-model="configChangeEdu"
+                                       placeholder="0">
+                                <span>小时内修改</span></p>
+                            <p><span>未经允许是否可以上课</span>
+                                <label class="fl">
+                                    <input type="radio" v-model="configStartClass" value="1">
+                                    <span>是</span>
+                                </label>
+                                <label class="fl">
+                                    <input type="radio" v-model="configStartClass" value="0">
+                                    <span>否</span>
+                                </label>
+                                <span class="red">（如果没有预约的课程就无法开课）</span>
+                            </p>
+                            <p><span>前台预约是否允许选择教练</span>
+                                <label class="fl">
+                                    <input type="radio" v-model="configSelectCoach" value="1">
+                                    <span>允许</span>
+                                </label>
+                                <label class="fl">
+                                    <input type="radio" v-model="configSelectCoach" value="0">
+                                    <span>不允许</span>
+                                </label>
+                                <span class="red">（只允许指定教练上课）</span>
+                            </p>
+                            <p><span>团会员APP预约是否需要确认：</span>
+                                <label class="fl">
+                                    <input type="radio" v-model="configConfirmEdu" value="1">
+                                    <span>是</span>
+                                </label>
+                                <label class="fl">
+                                    <input type="radio" v-model="configConfirmEdu" value="0">
+                                    <span>否</span>
+                                </label>
+                            </p>
+                            <p><span>团课开始之前</span>
+                                <input type="text" placeholder="0" v-model="configBeginClass"
+                                       oninput="value=value.replace(/[^\d]+/g,'')">
+                                <span>分钟，团操老师可刷团会员APP二维码入场</span>
+                            </p>
+                        </div>
+                    </div>
+                    <h4>课程结算：</h4>
+                    <div class="bookBody">
+                        <div class="bookBody_b">
+                            <p><label class="fl">
+                                <input type="checkbox" v-model="isOnlinePay">
+                                <span>团会员预约与扣费【PC端不能预约】</span> </label></p>
+                            <ul>
+                                <li>
+                                    <p><span>每节课</span>
+                                        <input type="text" placeholder="0" v-model="price"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                        <span>元</span>
+                                    </p>
+                                    <p><span>限制约课</span>
+                                        <label class="fl">
+                                            <input type="radio" v-model="isLimitReserveClass" value="1">
+                                            <span>是</span>
+                                        </label>
+                                        <label class="fl">
+                                            <input type="radio" v-model="isLimitReserveClass" value="0">
+                                            <span>否</span>
+                                        </label>
+                                    </p>
+                                    <p class="bor">
+                                        <span>预约对象：</span>
+                                        <!--<label class="fl"><input type="checkbox" v-model="p1"> <span>新注册</span>-->
+                                        <!--</label>-->
+                                        <label class="fl"><input type="checkbox" v-model="p2"> <span>普通会员</span>
+                                        </label>
+                                        <label class="fl"><input type="checkbox" v-model="p3"> <span>银卡会员</span>
+                                        </label>
+                                        <label class="fl"><input type="checkbox" v-model="p4"> <span>金卡会员</span>
+                                        </label>
+                                        <label class="fl"><input type="checkbox" v-model="p5"> <span>钻卡会员</span>
+                                        </label>
+                                        <label class="fl"><input type="checkbox" v-model="p6"> <span>潜在会员</span>
+                                        </label>
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <p>
+                                <label class="fl">
+                                    <input type="checkbox" v-model="isMemberCardPay">
+                                    <span>会员卡结算</span> <span
+                                        class="red">涉及以下选择的会员卡使用设置</span>
+                                </label>
+                            </p>
+                            <ul>
+                                <li>
+                                    <div class="bor">
+                                        <ul>
+                                            <template v-for="item in resultCourseList">
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox" v-model="item.status">
+                                                        <span>{{item.shopName}}</span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <ul>
+                                                        <li>
+                                                            <label>
+                                                                <input type="checkbox" v-model="item.groupList.status">
+                                                                <span>{{item.groupList.name}}</span>
+                                                            </label>
+                                                            <hr/>
+                                                        </li>
+
+                                                        <li>
+                                                            <ul>
+                                                                <template v-for="json in item.groupList.courseList">
+                                                                    <li>
+                                                                        <label>
+                                                                            <input type="checkbox" v-model="json.status">
+                                                                            <span>{{json.courseName}}</span>
+                                                                        </label>
+                                                                        <hr/>
+                                                                        <span>
+                                                                        <span>售价：</span>
+                                                                        <input type="text" value="" placeholder="0.00" v-model="json.price"
+                                                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                                                        <span>元</span>
+                                                                    </span>
+                                                                    </li>
+                                                                </template>
+                                                            </ul>
+
+                                                        </li>
+
+                                                        <li>
+                                                            <label>
+                                                                <input type="checkbox" v-model="item.privateList.status">
+                                                                <span>{{item.privateList.name}}</span>
+                                                            </label>
+                                                            <hr/>
+                                                        </li>
+
+                                                        <li>
+                                                            <ul>
+                                                                <template v-for="json in item.privateList.courseList">
+                                                                    <li>
+                                                                        <label>
+                                                                            <input type="checkbox" v-model="json.status">
+                                                                            <span>{{json.courseName}}</span>
+                                                                        </label>
+                                                                        <hr/>
+                                                                        <span>
+                                                                        <span>售价：</span>
+                                                                        <input type="text" value="" placeholder="0.00" v-model="json.price"
+                                                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                                                        <span>元</span>
+                                                                    </span>
+                                                                    </li>
+                                                                </template>
+                                                            </ul>
+
+                                                        </li>
+
+                                                    </ul>
+                                                </li>
+                                            </template>
+
+                                            <!-- // -->
+
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" v-model="selectCourseStatus">
+                                                    <span>全选</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <p><label class="fl"><input type="checkbox" v-model="isCoursePay"> <span>课程结算</span> <span
+                                    class="red">结算费用 扣除客户所购买的课程数</span>
+                            </label></p>
+                        </div>
+                    </div>
+                    <div class="bookTab">
+                        <div class="tabFoot clearfix">
+                            <a class="btn btnBlue" @click="save">确认</a><a class="btn btnRed"
+                                                                          @click="updateClassStatus = false">取消</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="newCustomers_maskLayer_box_botton">
+            </div>
+        </div>
+        <!-- 排课弹窗 -->
+    </div>
+
 </template>
 
 
@@ -3109,6 +3198,7 @@
 <script src="js/public/arrangement/index.js"></script>
 <script src="js/public/arrangement/batch.js"></script>
 <script src="js/public/arrangement/copy.js"></script>
+<script src="js/public/arrangement/setting.js"></script>
 <script src="js/public/manage/index.js"></script>
 <script type="text/javascript">
 
@@ -3189,9 +3279,9 @@
                     }
                     // 团操课程表
                     if (t == 5) {
-                        // appointment.WeekMonthClassScheduling(0);
-                        // // 团操课程表
-                        // $('#groupCourseSchedule').show().siblings().hide();
+                       // appointment.WeekMonthClassScheduling(0);
+                        // 团操课程表
+                        $('#groupCourseSchedule').show().siblings().hide();
                     }
 
                     // 批量排团课
