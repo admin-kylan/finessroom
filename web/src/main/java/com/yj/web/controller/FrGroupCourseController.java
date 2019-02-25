@@ -70,6 +70,7 @@ public class FrGroupCourseController {
             group.setIsUsing(1);
             group.setCreateTime(new Date());
             group.setClassStatus(1);
+            group.setSdaduimId(course.getSdaduimId());
             iFrGroupCourseService.insert(group);
         }
         FrGroupCourceRelation relation = new FrGroupCourceRelation();

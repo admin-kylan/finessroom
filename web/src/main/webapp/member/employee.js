@@ -54,6 +54,7 @@ var right = new Vue({
             changeTransferFee: 0,
 
         },
+        modeWay:"",
 //      分期付款
         fQList:[],
         splitSetDd:[],//分期详情 Map
@@ -683,111 +684,148 @@ var right = new Vue({
         //全选/项目 操作
         categoryItemCheckAll: function () {
             var that = this;
-            if ($("#xmAll").prop("checked")) {
-                for (var i = 0; i < $("#items ul li  .xm").length; i++) {
-                    $("#items ul li .xm").prop("checked", true);
-                }
-            } else {
-                $(".xmAll").prop("checked", false);
-                for (var i = 0; i < $("#items ul li  .xm").length; i++) {
-                    $("#items ul li .xm").prop("checked", false);
-                }
+            var flag=$("#xmAll").prop("checked")
+            var val=flag?1:0;
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].checked=val
+	            	}
+	            }
             }
+            return;
 
         },
         //全选/卡种金额 操作
         jeItemCheckAll: function () {
             var that = this;
-            if ($("#jeAll").prop("checked")) {
-                for (var i = 0; i < $("#items ul li  .kje").length; i++) {
-                    $("#items ul li .kje").prop("checked", true);
-                }
-
-            } else {
-                $(".jeAll").prop("checked", false);
-                for (var i = 0; i < $("#items ul li  .kje").length; i++) {
-                    $("#items ul li .kje").prop("checked", false);
-                }
+            var flag=$("#jeAll").prop("checked")
+            var val=flag?1:0;
+//          $("#items ul li .kje").prop("checked", flag);
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].kzje=val
+	            	}
+	            }
             }
+            return;
 
         },
         //全选/免费通用  操作
         setCheckAll: function () {
             var that = this;
-            if ($("#rdio1").prop("checked")) {
-                for (var i = 0; i < $("#items ul li  .radio1").length; i++) {
-                    $("#items ul li .radio1").prop("checked", true);
-                }
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].usageMode=0
+	            	}
+	            }
             }
+            return
         },
         //按价格 赋值
         setModePrice: function () {
-            var Price = $("#setPrice").val();
-            for (var i = 0; i < $("#items ul li  .mPrice").length; i++) {
-                $(".mPrice").val(Price);
+            var that = this;
+        	var Price = $("#setPrice").val();
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].modePrice=Price
+	            	}
+	            }
             }
         },
         /**********************************/
         //按折扣 赋值
-        setModeWay: function () {
-            var discount = $("#modeWay").val();
-            for (var i = 0; i < $("#items ul li  .discount").length; i++) {
-                $(".discount").val(discount);
-            }
-        },
+//      setModeWay: function () {
+//          var discount = $("#modeWay").val();
+//          $(".discount").val(discount);
+//          return ;
+//          for (var i = 0; i < $("#items ul li  .discount").length; i++) {
+//              $(".discount").val(discount);
+//          }
+//      },
         //按折扣价 赋值
         setmWay: function () {
             var mWay = $("#mWay").val();
-            for (var i = 0; i < $("#items ul li  .mWay").length; i++) {
-                $(".mWay").val(mWay);
+            var that = this;
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].modeWay=mWay
+	            	}
+	            }
             }
+            return
         },
         /**********************************/
 
         /**********************************/
         //按次 赋值
         setModeNum: function () {
+            var that = this;
             var modeNum = $("#ModeNum").val();
-            for (var i = 0; i < $("#items ul li  .modeNum").length; i++) {
-                $(".modeNum").val(modeNum);
+            
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].modeNum=modeNum
+	            	}
+	            }
             }
+            return
         },
         //按小时 赋值
         setModeTime: function () {
-            var modeTime = $("#ModeTime").val();
-            for (var i = 0; i < $("#items ul li  .modeTime").length; i++) {
-                $(".modeTime").val(modeTime);
+            var that = this;
+            var modeTime = $("#modeTime").val();
+            
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].modeTime=modeTime
+	            	}
+	            }
             }
+            return
         },
         /**********************************/
 
         //全选/按价格  操作
         setusageModeCheckAll: function () {
             var that = this;
-            if ($("#rdio2").prop("checked")) {
-                for (var i = 0; i < $("#items ul li  .radio2").length; i++) {
-                    $("#items ul li .radio2").prop("checked", true);
-                }
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].usageMode=1
+	            	}
+	            }
             }
         },
 
         //全选/按折扣  操作
         setmodeWayCheckAll: function () {
             var that = this;
-            if ($("#rdio3").prop("checked")) {
-                for (var i = 0; i < $("#items ul li  .radio3").length; i++) {
-                    $("#items ul li .radio3").prop("checked", true);
-                }
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].usageMode=2;
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].modeDiscount=that.modeWay
+	            	}
+	            }
             }
             //折扣未赋值
         },
         //全选/按扣 次数  操作
         setmodePriceCheckAll: function () {
             var that = this;
-            if ($("#rdio4").prop("checked")) {
-                for (var i = 0; i < $("#items ul li  .radio4").length; i++) {
-                    $("#items ul li .radio4").prop("checked", true);
-                }
+            for(var i in that.shopCardConsume.list){
+            	for(var j in that.shopCardConsume.list[i]){
+	            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+	            		that.shopCardConsume.list[i][j].categoryItemlist[k].usageMode=3
+	            	}
+	            }
             }
             //次数未赋值
         },
@@ -1424,6 +1462,21 @@ var right = new Vue({
             console.log(that.tempInfo)
             // 	 ，使用项目：（1）、增肌，扣卡消费，无使用限制；（2）、体态调整，免费通用，无使用限制；"
         }
+    },
+    watch:{
+    	modeWay:function(val){
+    		var that=this;
+    		if($('#rdio3').prop('checked')){
+	    		for(var i in that.shopCardConsume.list){
+	            	for(var j in that.shopCardConsume.list[i]){
+		            	for(var k in that.shopCardConsume.list[i][j].categoryItemlist){
+		            		that.shopCardConsume.list[i][j].categoryItemlist[k].modeDiscount=val
+		            	}
+		            }
+	            }	
+    		}
+    		console.log(val)
+    	}
     },
     updated: function () {
         // dsada();

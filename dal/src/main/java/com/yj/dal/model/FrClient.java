@@ -301,10 +301,15 @@ public class FrClient extends Model<FrClient> {
     @TableField("caution_question")
     private String cautionQuestion;
     /**
-     * 关注问题
+     * 意向卡类别
      */
     @TableField("willing_card_type")
     private String willingCardType;
+    /**
+     * 意向卡名称
+     */
+    @TableField("willing_card_name")
+    private String willingCardName;
     /**
      * 销售顾问id
      */
@@ -315,6 +320,13 @@ public class FrClient extends Model<FrClient> {
      */
     @TableField("presale_status")
     private String presaleStatus;
+
+    /**
+     * 会员密码
+     */
+    @TableField("client_pass")
+    private String clientPass;
+
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
@@ -331,6 +343,14 @@ public class FrClient extends Model<FrClient> {
     private FrClientPic clientPic;
     @TableField(exist = false)
     private List<CoachDTO> coachs;
+
+    public String getWillingCardName() {
+        return willingCardName;
+    }
+
+    public void setWillingCardName(String willingCardName) {
+        this.willingCardName = willingCardName;
+    }
 
     public String getClientImg() {
         return clientImg;
@@ -856,6 +876,14 @@ public class FrClient extends Model<FrClient> {
 
     public void setCustomerMark(String customerMark) {
         CustomerMark = customerMark;
+    }
+
+    public String getClientPass() {
+        return clientPass;
+    }
+
+    public void setClientPass(String clientPass) {
+        this.clientPass = clientPass;
     }
 
     @Override

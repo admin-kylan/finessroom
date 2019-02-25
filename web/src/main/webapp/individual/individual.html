@@ -83,6 +83,37 @@
 			.treeview-div .list-group .list-group-item > p,.treeview-div .list-group .list-group-item > .list-group{display: none;}
 			.treeview-div .list-group .list-group-item.sel-active > p,.treeview-div .list-group .list-group-item.sel-active > .list-group{display: block;}
 			.uploadFile{position: absolute;left: 0;right: 0;top: 0;width: 100%;height: 100%;z-index: 10;opacity: 0;}
+			.w130{width: 130px;}
+			.zfsz{border-bottom: 1px solid rgba(153, 204, 255, 1);line-height: 35px;margin-top: 10px;padding-left: 25px;}
+			/*流式布局*/
+			.flex-box{display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */         /* OLD - Firefox 19- (buggy but mostly works) */
+				  display: -ms-flexbox;      /* TWEENER - IE 10 */     /* NEW - Chrome */
+				  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+				  -webkit-box-pack: center;
+				  -ms-flex-pack: center;
+				  justify-content: center;
+				  -webkit-box-align: center;
+				  -ms-flex-align: center;
+				  align-items: center;}
+			.flex-box-item{-webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
+				  -moz-box-flex: 1;         /* OLD - Firefox 19- */
+				  -webkit-flex: 1;          /* Chrome */
+				  -ms-flex: 1;              /* IE 10 */
+				  width: 50%;               /* For old syntax, otherwise collapses. */
+				  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+				 position: relative;}
+			.set-item{margin: 20px 30px 0;}
+			.set-item .w130{border: 1px solid rgba(204, 204, 204, 1);line-height: 40px;font-size: 14px;}
+			.set-item .flex-box-item{line-height: 40px;border: 1px solid rgba(204, 204, 204, 1);margin-left: 15px;}
+			.set-item label{font-weight: 500;margin-left: 20px;margin-right: 30px;margin-bottom: 0;}
+			.set-item label input{vertical-align: middle;margin-top: 0;margin-right: 5px;}
+			.set-item .btn{padding: 0 8px;border-radius: 2px;background-color: #169bd5;color: #fff;line-height: 25px;font-size: 12px;}
+			.set-item .btn-red{background-color: #ff0000;font-size: 14px;line-height: 30px;width: 70px;margin-top: 20px;}
+			.w120{width: 120px;}
+			.w200{width: 200px;padding: 10px;}
+			#pzModal input{padding: 0 12px;box-sizing: border-box;height: 25px;line-height: 23px;border-radius: 0;}
+			#pzModal .btn{color: #fff;background-color: #169bd5;line-height: 30px;padding: 0 15px;border-radius: 0;border-width: 0;}
+			#pzModal .btn-success{background-color: rgba(0, 153, 0, 1);line-height: 25px;font-size: 12px;}
 		</style>
 	</head>
 	<body>
@@ -95,6 +126,7 @@
 				<span>私教项目记录导入</span>
 				<span>产品销售记录导入</span>
 				<span>会员等级设置</span>
+				<span>收款界面</span>
 			</div>
 			<div class="content">
 				<div class="list list0 clearfix noshow">
@@ -960,6 +992,7 @@
 											</tr>
 										</tbody>
 									</table>
+
 								</div>
 							</div>
 						</div>
@@ -969,8 +1002,8 @@
 									<span>客户类型:</span>
 									<button class="btn btn-success typeName" data-value='1'>现有会员</button>
 									<button class="btn typeName" data-value='2'>潜在客户</button>
-									<button class="btn btn-info-light">现有会员数据模板下载</button>
-									<button class="btn btn-info-light">潜在客户数据模板下载</button>
+									<button class="btn btn-info-light" onclick="downExcel(1)">现有会员数据模板下载</button>
+									<button class="btn btn-info-light" onclick="downExcel(2)">潜在客户数据模板下载</button>
 								</div>
 								<div class="row-item">									
 									<span class="red">必须为EXCEL格式，导数据的时候第一列可以不用管可以参照数据模板来到数据</span>
@@ -985,7 +1018,7 @@
 							</div>
 							<div class="table-box">
 								<div class="table-responsive">
-									<table class="table table-style table-bordered">
+									<table class="table table-style table-bordered typeTable">
 										<thead>
 											<tr>
 												<td>选择</td>
@@ -1278,6 +1311,52 @@
 											</tr>
 										</tbody>
 									</table>
+									<table class="table table-style table-bordered typeTable" style="display: none;">
+										<thead>
+											<tr>
+												<td>选择</td>
+												<td>序号</td>
+												<td><span style="width: 100px;">门店名称</span></td>
+												<td><span style="width: 100px;">姓名</span></td>
+												<td><span style="width: 100px;">手机号码</span></td>
+												<td><span style="width: 60px;">性别</span></td>
+												<td><span style="width: 100px;">生日</span></td>
+												<td><span style="width: 100px;">意向卡系列</span></td>
+												<td><span style="width: 100px;">意向卡名称</span></td>
+												<td><span style="width: 80px;">意向卡价格</span></td>
+												<td><span style="width: 100px;">推荐人</span></td>
+												<td><span style="width: 100px;">销售员</span></td>
+												<td><span style="width: 80px;">服务会籍</span></td>
+												<td><span style="width: 80px;">有效时长</span></td>
+												<td><span style="width: 200px;">备注</span></td>
+												<td><span style="width: 110px;">操作时间</span></td>
+												<td><span style="width: 80px;">操作人</span></td>
+												<td><span style="width: 80px;">会员等级</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -1419,9 +1498,10 @@
 						<div class="out-box">
 							<div class="row-item">
 								<label><input type="checkbox" />全选/全不选</label>
-								<button class="btn btn-danger">确认导入数据</button>
+								<button class="btn btn-success"><input type="file" class="uploadFile excelFile2"/>选择EXCEL导入</button>
+								<button class="btn btn-danger" onclick="importExp('.excelFile2')">确认导入数据</button>
 								<button class="btn btn-yellow">导入EXCEL</button>
-								<button class="btn btn-info-light">数据模板下载</button>
+								<button class="btn btn-info-light" onclick="downExcel(3)">数据模板下载</button>
 							</div>
 						</div>
 						<div class="table-box">
@@ -2004,6 +2084,134 @@
 						</div>
 					</fieldset>
 				</div>
+				
+				<div class="list list6 clearfix noshow">
+					<p class="zfsz">支付设置</p>
+					<div class="flex-box set-item">
+						<div class="w130 text-center">支付宝</div>
+						<div class="flex-box-item">
+							<label><input type="radio" value="1" name="zfb" />开启</label>
+							<label><input type="radio" value="0" name="zfb" />关闭</label>
+							<button class="btn btn-pz" data-for="zfb-pz-box">配置信息</button>
+						</div>
+					</div>
+					<div class="flex-box set-item">
+						<div class="w130 text-center">支付宝</div>
+						<div class="flex-box-item">
+							<label><input type="radio" value="1" name="weixin" />开启</label>
+							<label><input type="radio" value="0" name="weixin" />关闭</label>
+							<button class="btn btn-pz" data-for="wx-pz-box">配置信息</button>
+						</div>
+					</div>
+					<div class="set-item">
+						<button class="btn btn-red">保存</button>
+					</div>
+				</div>
+			</div>
+			<!--支付宝or微信配置-->
+	    	<div class="modal fade modal-style" tabindex="-1" id="pzModal" role="dialog" data-backdrop="false">
+			  <div class="modal-dialog" role="document" style="width: 545px;">
+			    <div class="modal-content" style="min-height: 250px;overflow-x: auto;">
+			      	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        	<h4 class="modal-title">配置信息</h4>
+			      	</div>
+			      	<div class="modal-body">
+			      		<div class="zfb-pz-box" style="display: none;">
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+				      				账号：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button>
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+				      				PID：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button>
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+				      				KEY：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button>
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right"></div>
+				      			<div class="flex-box-item" style="padding: 10px;">
+			      					<button class="btn">确定</button>
+				      			</div>
+			      			</div>
+			      		</div>
+			      		<div class="wx-pz-box" style="display: none;">
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+			      					Appid：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button> 公众号账号ID
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+				      				Appscret：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button> 公众号账号Appscret
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+				      				微支付商户号：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button> 微支付商户号
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right">
+				      				API密钥：
+				      			</div>
+				      			<div class="w200">
+					      			<input class="form-control" />
+				      			</div>
+				      			<div class="flex-box-item">
+				      				<button class="btn btn-success">显示</button> 商家支付API密钥
+				      			</div>
+			      			</div>
+			      			<div class="flex-box">
+			      				<div class="w120 text-right"></div>
+				      			<div class="flex-box-item" style="padding: 10px;">
+			      					<button class="btn">确定</button>
+				      			</div>
+			      			</div>
+			      		</div>
+			      	</div>
+			    </div>
 			</div>
 			<!--卡种选择-->
 	    	<div class="modal fade modal-style" tabindex="-1" id="kzModal" role="dialog" data-backdrop="false">
@@ -2048,7 +2256,7 @@
 			    	</div>  
 			    </div> 
 			  </div> 
-			</div> 
+			</div>
 		</div>
 		<script src="../js/jquery-3.3.1.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
@@ -2062,10 +2270,15 @@
 		<script src="../js/axios.min.js"></script>
 		<script src="../js/toZhDigit.js"></script>
 		<script src="../js/loading.js"></script>
-		<script src="individual.js"></script>
 		<script type="text/javascript">
+			$('body').on('click','.btn-pz',function(){
+				var cls=$(this).attr('data-for');
+				$('#pzModal').modal('show')
+				$('.'+cls).show().siblings().hide();
+			})
 //			门店选项卡切换    40是right的上下padding
-			(function (){
+			;(function (){
+				console.log('我执行了')
 				$('.treeview-div').on('click','.glyphicon',function(e){
 					e.stopPropagation();
 					var _parent=$(this).parent();
@@ -2075,12 +2288,12 @@
 					}
 				})
 //				$('#kzModal').modal('show')//卡种选择选择调用
-				$('.tab-btn-box button').on('click',function(){
+				$('body').on('click','.tab-btn-box button',function(){
 					$(this).addClass('active').siblings().removeClass('active');
 					$('.table-btn-item').eq($(this).index()).show().siblings().hide();
 				})
 				$('.tab-btn-box button').eq(0).trigger('click');
-				$('.tab span').click(function () {
+				$('body').on('click','.tab span',function(){
 					$(this).addClass('on').siblings().removeClass('on');
 					$('.list').eq($(this).index()).removeClass('noshow').siblings().addClass('noshow');
 					$('.list').eq($(this).index()).find('.left').height($('.list').eq($(this).index()).find('.right').height()+40); 
@@ -2139,26 +2352,60 @@
 					$(this).toggleClass('mui-active')
 				})
 				$('.typeName').click(function(){
-					$(this).addClass('btn-success').siblings('.typeName').removeClass('btn-success')
+					$(this).addClass('btn-success').siblings('.typeName').removeClass('btn-success');
+					$('.typeTable').eq(($(this).index()-1)).show().siblings('table').hide();
 				})
 //				$('.uploadFile').on('click',function(){
 //					$(this).val('');
 //				})
 			})();
-			
+			function downExcel(type){
+				var _url='';
+				if(type==1){
+					_url='/import_excel/client_info'
+				}else if(type==2){
+					_url='/import_excel/prospective_client'
+				}else{
+					_url='/import_excel/personal_trainer'
+				}
+			    var load=new Loading();//导入加载动画
+				load.hide();
+				load.init({
+			    	text:'模板下载中……'
+			   	})
+				load.show();
+				$.ajax({
+			        url : _url,
+			        type : 'POST',
+			        async : false,
+			        success : function(responseStr) {
+						load.hide();
+			        }
+			    })
+			}
 			function importExp(iptcls,cls) {//所有上传接口就可以共用 利用type区分或者加变量
 			    var formData = new FormData();
 			    var obj=$(iptcls)[0];
 			    var type=undefined;
+			    var url='/import_excel/prospective_client';
 			    if(cls){
 		            type=$(cls+'.btn-success').attr('data-value')
-				    if(type==1){
+				    if(type==2){
 				    	formData.append("excel",obj.files[0]);
 				    	formData.append("type",type);
 				    }
+			    }else{
+			    	url="/import_excel/personal_trainer";
+				    formData.append("excel",obj.files[0]);
 			    }
+			    var load=new Loading();//导入加载动画
+				load.hide();
+				load.init({
+			    	text:'导入中……'
+			   	})
+				load.show();
 			    $.ajax({
-			        url : '/import_excel/prospective_client',
+			        url : url,
 			        type : 'POST',
 			        async : false,
 			        data : formData,
@@ -2170,6 +2417,8 @@
 			            console.log("正在进行，请稍候");
 			        },
 			        success : function(responseStr) {
+						load.hide();
+			            alert(responseStr.msg)
 			            console.log(responseStr)
 			        }
 			    });
@@ -2178,5 +2427,6 @@
 
 
 		</script>
+		<script src="individual.js"></script>
 	</body>
 </html>

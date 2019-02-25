@@ -447,7 +447,7 @@
 
 										<div class="xiangMu_list Storeid">{{index}}</div>
 										<ul>
-											<li v-for="(sd,index) in sdaduim">
+											<li v-for="(sd,idx) in sdaduim">
 												<div class="xiangMu_list">{{sd.name}}</div>
 												<div class="table-responsive">
 
@@ -473,23 +473,23 @@
 																	<td><span>{{categoryItem.itemName}}</span></td>
 																	<td>
 																		<label>
-																			<input type="checkbox" class="kje" v-model="categoryItem.kzje">
+																			<input type="checkbox" class="kje" value="1" v-model="categoryItem.kzje">
 																			<span>扣卡消费</span>
 																		</label>
 																	</td>
 																	<td>
 																		<label>
-																			<input type="radio" class="radio1" :name="'usage_mode'+index" value="0" v-model="categoryItem.usageMode" />
+																			<input type="radio" class="radio1"  value="0" v-model="categoryItem.usageMode" />
 																			<span>免费通用</span>
 																		</label>
 																		<label>
-																			<input type="radio" class="radio2" :name="'usage_mode'+index" value="1" v-model="categoryItem.usageMode">
+																			<input type="radio" class="radio2"  value="1" v-model="categoryItem.usageMode">
 																			<span>按</span>
 																			<input type="text" placeholder="价格" class="modePrice mPrice" v-model="categoryItem.modePrice">
 																			<span>元/次消费</span>
 																		</label>
 																		<label>
-																			<input type="radio" class="radio3" :name="'usage_mode'+index" value="2" v-model="categoryItem.usageMode">
+																			<input type="radio" class="radio3"  value="2" v-model="categoryItem.usageMode">
 																			<span>按</span>
 																			<select name="modeWay" class="mWay" v-model="categoryItem.modeWay">
 																				<option value="0">市场价</option>
@@ -500,15 +500,15 @@
 																			<span>折扣费</span>
 																		</label>
 																		<label>
-																			<input type="radio" class="radio4" :name="'usage_mode'+index" value="3" v-model="categoryItem.usageMode">
+																			<input type="radio" class="radio4"  value="3" v-model="categoryItem.usageMode">
 
-																			<select name="modeTime" class="modeTime" v-model="categoryItem.modeNum">
+																			<select name="modeTime" class="modeTime" v-model="categoryItem.modeTime">
 																				<option value="0">每小时</option>
 																				<option value="1">每分钟</option>
 																				<option value="2">每次</option>
 																			</select>
 																			<span>扣</span>
-																			<input type="text" placeholder="次" class="modeNum" name="modeTime" v-model="categoryItem.modeTime">
+																			<input type="text" placeholder="次" class="modeNum" name="modeNum" v-model="categoryItem.modeNum">
 																			<span>次</span>
 																		</label>
 																	</td>
@@ -565,7 +565,7 @@
 													<option value="1">促销价</option>
 													<option value="2">会员价</option>
 												</select>
-												<input type="text" placeholder="折扣" id="modeWay" @change="setModeWay()">
+												<input type="text" placeholder="折扣" id="modeWay" v-model="modeWay">
 												<span>折扣费</span>
 											</label>
 											<label>

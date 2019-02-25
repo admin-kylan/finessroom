@@ -128,11 +128,12 @@ $(function () {
                 id:null,
                 name:null,
             },
+            sdaduimId:'fed61d300684ac6c',
         },
         mounted: function () {
             this.initSelectableTree();
             this.initServerData();//初始化加载服务器数据
-            this.getGroupList({curPage: 1, limit: 10});
+            this.getGroupList({curPage: 1, limit: 10,sdaduimId:this.sdaduimId});
             this.initServerClassRoomSetting();
         },
         methods: {
@@ -143,9 +144,9 @@ $(function () {
                 that.groupCourseData = {};
                 $("#privatemrkcjh").val("");
                 //刷新列表
-                var selectNodes = $('#course_tree').treeview('getSelected');
+                let selectNodes = $('#course_tree').treeview('getSelected');
                 if (selectNodes[0].id != null)
-                    that.getGroupList({curPage: 1, limit: 10, seriesId: selectNodes[0].id});
+                    that.getGroupList({curPage: 1, limit: 10, seriesId: selectNodes[0].id,sdaduimId:that.sdaduimId});
                 that.addPrivateCourse = false;
 
             },
@@ -170,15 +171,15 @@ $(function () {
                 that.privateSingleCourse.itemIndex = index;
             },
             getPrivateSetting: function () {
-                var url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
                 Loading.prototype.show();
                 this.settingSdaduimList = [];
-                axios.get(url, {params: {type: 2}})
+                axios.get(url, {params: {type: 2 ,sdaduimId:this.sdaduimId}})
                     .then(function (res) {
                         if (res.data.code == 200) {
                             that.settingInfo = res.data.data;
                             if (that.settingInfo.groupLJKFYYTIME && that.settingInfo.groupLJKFYYTIME != "") {
-                                var arr = that.settingInfo.groupLJKFYYTIME.split(",");
+                                let arr = that.settingInfo.groupLJKFYYTIME.split(",");
                                 $("#dateInp").val(arr[0]);
                                 $("#XSInp").val(arr[1]);
                                 $("#FZInp").val(arr[2]);
@@ -196,9 +197,10 @@ $(function () {
                     });
             },
             saveSettingInfo: function () {
-                var url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
                 Loading.prototype.show();
                 that.settingInfo.groupLJKFYYTIME = $("#dateInp").val() + "," + $("#XSInp").val() + "," + $("#FZInp").val();
+                this.settingInfo.sdaduimId=this.sdaduimId;
                 axios.get(url, {params: this.settingInfo}).then(function (res) {
                     let resData = eval(res);
                     if (res.data.code != 500) {
@@ -323,6 +325,7 @@ $(function () {
                     if (data.id == that.classRoomData.sdaduimId) {
                         that.sdaduimName = data.name;
                         that.getRoomList({curPage: 1, limit: 10, sdaduimId: data.id});
+                        break;
                     }
                 });
                 that.resRoomData();
@@ -645,7 +648,7 @@ $(function () {
                                 axios.get(url, {params: {id: id, flag: flag}})
                                     .then(function (res) {
                                         if (res.data.code == 200) {
-                                            that.getGroupList({curPage: 1, limit: 10, seriesId: that.parenNode.id});
+                                            that.getGroupList({curPage: 1, limit: 10, seriesId: that.parenNode.id ,sdaduimId:that.sdaduimId});
                                             if (flag != 2 && flag != 3) {
                                                 that.initSelectableTree();
                                             }
@@ -709,7 +712,7 @@ $(function () {
                                 showSkipInputFlag: true, //是否支持跳转
                                 getPage: function (page) {
                                     //获取当前页数
-                                    that.getGroupList({page: page, limit: res.data.data.pageSize});
+                                    that.getGroupList({page: page, limit: res.data.data.pageSize,sdaduimId:that.sdaduimId});
                                 }
                             })
                         } else {
@@ -729,33 +732,34 @@ $(function () {
             saveGroupCourse: function () {
                 var that=this;
 
-                 console.info(this.groupCourseData);
-                 this.groupCourseData.info = this.editor.txt.html();
-                 // let selectNodes = $('#course_tree').treeview('getSelected');
-                 this.groupCourseData.seriesId = this.parenNode.id;
-                 console.info(this.groupCourseData)
-                 var url = $.stringFormat("{0}/frGroupCourse/saveOrUpdate", $.cookie('url'))
-                 axios.post(url, this.groupCourseData).then(function (res) {
-                     var resData = eval(res);
-                     if (res.data.code != 500) {
-                         that.editor.txt.html("");
-                         that.imgUrl = null;
-                         that.groupCourseData = {};
-                         //刷新列表
-                         // let selectNodes = $('#course_tree').treeview('getSelected');
-                         // if(selectNodes[0].id != null)
-                         that.getGroupList({curPage: 1, limit: 10, seriesId: that.parenNode.id});
-                         that.initSelectableTree();
-                     }
-                     Loading.prototype.hide();
-                     that.addPrivateCourse = false;
-                     $.alert(resData['data']['msg']);
-                 }).catch(function (error) {
-                     //隐藏加载中
-                     console.info(error)
-                     Loading.prototype.hide();
-                     $.alert(error)
-                 });
+                console.info(this.groupCourseData);
+                this.groupCourseData.info = this.editor.txt.html();
+                // let selectNodes = $('#course_tree').treeview('getSelected');
+                this.groupCourseData.seriesId = this.parenNode.id;
+                this.groupCourseData.sdaduimId = this.sdaduimId;
+                console.info(this.groupCourseData)
+                var url = $.stringFormat("{0}/frGroupCourse/saveOrUpdate", $.cookie('url'))
+                axios.post(url, this.groupCourseData).then(function (res) {
+                    var resData = eval(res);
+                    if (res.data.code != 500) {
+                        that.editor.txt.html("");
+                        that.imgUrl = null;
+                        that.groupCourseData = {};
+                        //刷新列表
+                        // let selectNodes = $('#course_tree').treeview('getSelected');
+                        // if(selectNodes[0].id != null)
+                        that.getGroupList({curPage: 1, limit: 10, seriesId: that.parenNode.id,sdaduimId:that.sdaduimId});
+                        that.initSelectableTree();
+                    }
+                    Loading.prototype.hide();
+                    that.addPrivateCourse = false;
+                    $.alert(resData['data']['msg']);
+                }).catch(function (error) {
+                    //隐藏加载中
+                    console.info(error)
+                    Loading.prototype.hide();
+                    $.alert(error)
+                });
 
             },
             /**
@@ -829,6 +833,7 @@ $(function () {
                     $.alert("请填写课程名称")
                     return;
                 }
+                this.seriesData.sdaduimId=this.sdaduimId;
                 this.seriesData.parentId = this.parenNode.id;
                 let url = $.stringFormat("{0}/frGroupSeries/saveOrUpdate", $.cookie('url')), that = this;
                 //   Loading.prototype.show();
@@ -915,6 +920,7 @@ $(function () {
                     subData.shopIds = checked.join(",");
                 }
                 subData.parentId = 0;
+                subData.sdaduimId=this.sdaduimId;
                 let url = $.stringFormat("{0}/frGroupSeries/saveOrUpdate", $.cookie('url')), that = this;
                 axios.post(url, subData).then(function (res) {
                     let resData = eval(res);
@@ -1154,7 +1160,7 @@ $(function () {
 //						修改 插件527-529行
                 var url = $.stringFormat("{0}/frGroupSeries/tree", $.cookie('url'));
                 Loading.prototype.show();
-                axios.get(url, {params: {"shopId": shopId}})
+                axios.get(url, {params: {"shopId": shopId,"sdaduimId":that.sdaduimId}})
                     .then(function (res) {
                         if (res.data.code == 200) {
                             that.courseSeriess = res.data.data;
@@ -1181,7 +1187,7 @@ $(function () {
                                     if ((node.id != "" && that.parenNode.id != parent.id) || parent.id == undefined) {
                                         //加载列表
                                         that.parenNode = parent.id == undefined ? node : parent;
-                                        that.getGroupList({curPage: 1, limit: 10, seriesId: that.parenNode.id});
+                                        that.getGroupList({curPage: 1, limit: 10, seriesId: that.parenNode.id,sdaduimId:that.sdaduimId});
                                     }
                                     console.log('节点选中')
                                 },
@@ -1213,7 +1219,7 @@ $(function () {
                 let that = this;
 
                 // let url = "http://localhost:8080/frActionSeries/list";
-                let url = $.stringFormat("{0}/frActionSeries/list?ownType=2", $.cookie('url'));
+                let url = $.stringFormat("{0}/frActionSeries/list?ownType=2&sdaduimId="+this.sdaduimId, $.cookie('url'));
                 Loading.prototype.show();
                 axios.get(url)
                     .then(function (res) {
@@ -1274,10 +1280,10 @@ $(function () {
                     return;
                 }
 
-                if (!this.actionAddData.actionPrinceple || this.actionAddData.actionPrinceple == '') {
-                    $.alert('动作效果原理不能为空');
-                    return;
-                }
+                // if (!this.actionAddData.actionPrinceple || this.actionAddData.actionPrinceple == '') {
+                //     $.alert('动作效果原理不能为空');
+                //     return;
+                // }
                 if (!this.actionAddData.image || this.actionAddData.image == '') {
                     $.alert('动作图片不能为空');
                     return;
@@ -1414,7 +1420,7 @@ $(function () {
                         }
                         that.actionSettingData = {};
                         $('#modifyActionModal').modal('hide')
-                    $("#ActionFlie2").val('')
+                        $("#ActionFlie2").val('')
 
                     })
                     .catch(function (error) {
@@ -1433,11 +1439,12 @@ $(function () {
                 }
                 let that = this;
 
-                // let url = "http://localhost:8080/frTrainingSeries/list";
+                // let url = "http://localhost:8080/ ";
                 let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url'));
                 let data = {
                     type: type,
-                    ownType: 2
+                    ownType: 2,
+                    sdaduimId:this.sdaduimId,
                 };
 
                 axios.get(url, {params: data})
@@ -1473,7 +1480,7 @@ $(function () {
                     name: String(this.addActionSeriesName),
                     isUsing: 1,
                     type: this.addSeriesType,
-
+                    sdaduimId:this.sdaduimId,
                 };
                 let url = '';
                 if (this.addSeriesType == 0) {
@@ -1574,7 +1581,8 @@ $(function () {
                 let data = {
                     type: type,
                     parentId: parentId,
-                    ownType: 2
+                    ownType: 2,
+                    sdaduimId:this.sdaduimId,
                 };
 
                 axios.get(url, {params: data})
@@ -1612,25 +1620,26 @@ $(function () {
                 var data = {
                     type: type,
                     parentId: id,
-                    ownType: 1
+                    ownType: 1,
+                    sdaduimId:this.sdaduimId,
                 };
-                    this.deleteItemId = id,
+                this.deleteItemId = id,
                     this.deletItemType = type,
-                        axios.get(url, {params: data})
-                            .then(function (res) {
-                                let resData = eval(res);
-                                if (resData['data']['code'] === '200') {
-                                    if (type == 1) {
-                                        that.simpleLinkSettingActionSub = resData['data']['data'];
-                                        that.actionEduSettingIndex = index;
-                                    }
-                                } else {
-                                    $.alert(resData['data']['msg']);
+                    axios.get(url, {params: data})
+                        .then(function (res) {
+                            let resData = eval(res);
+                            if (resData['data']['code'] === '200') {
+                                if (type == 1) {
+                                    that.simpleLinkSettingActionSub = resData['data']['data'];
+                                    that.actionEduSettingIndex = index;
                                 }
-                            })
-                            .catch(function (error) {
-                                $.alert(error);
-                            });
+                            } else {
+                                $.alert(resData['data']['msg']);
+                            }
+                        })
+                        .catch(function (error) {
+                            $.alert(error);
+                        });
 
                 $('#deleteItemModal').modal('show');
             },
@@ -1643,13 +1652,14 @@ $(function () {
             deleteTrain: function (id, type) {
                 var that = this;
 
-                   var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
-                   var jsonData = {
-                       id: id,
-                       isUsing: 0,
-                       type: type,
-                       ownType: 2
-                   };
+                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                var jsonData = {
+                    id: id,
+                    isUsing: 0,
+                    type: type,
+                    ownType: 2,
+                    sdaduimId:this.sdaduimId,
+                };
                 // Loading.prototype.show();
                 // ajax提交
                 $.confirm({
@@ -1724,7 +1734,8 @@ $(function () {
                     isUsing: 1,
                     type: this.addTrainType,
                     parentId: this.addTrainParentId,
-                    ownType: 2
+                    ownType: 2,
+                    sdaduimId:this.sdaduimId,
                 };
                 // Loading.prototype.show();
                 // ajax提交
@@ -1776,7 +1787,8 @@ $(function () {
                         name: String(this.updateItemName),
                         isUsing: 1,
                         type: this.updateType,
-                        ownType: 2
+                        ownType: 2,
+                        sdaduimId:this.sdaduimId,
                     };
                 }
 
@@ -1841,6 +1853,7 @@ $(function () {
                         isUsing: 0,
                         type: this.deletItemType,
                         ownType: 2,
+                        sdaduimId:this.sdaduimId,
                     };
                 }
                 // Loading.prototype.show();
@@ -1913,7 +1926,8 @@ $(function () {
                     id: this.deleteTrainId,
                     isUsing: 0,
                     type: this.deletTrainType,
-                    ownType: 2
+                    ownType: 2,
+                    sdaduimId:this.sdaduimId,
                 };
                 // Loading.prototype.show();
                 // ajax提交
@@ -1973,7 +1987,8 @@ $(function () {
                     name: String(this.updateTrainName),
                     isUsing: 1,
                     type: this.updateTrainType,
-                    ownType: 2
+                    ownType: 2,
+                    sdaduimId:this.sdaduimId,
                 };
                 // Loading.prototype.show();
                 // ajax提交

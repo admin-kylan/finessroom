@@ -13,13 +13,13 @@ import com.yj.service.service.IFrLatenceFollowService;
 import com.yj.service.service.IFrFollowPicService;
 import com.yj.service.service.IPersonlRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -173,5 +173,57 @@ public class FrLatenceFollowController {
         return JsonResult.failMessage("添加失败");
     }
 
+
+    @Value("${fitness.uploadPath}")
+    private String filePath;
+
+    /**
+     * 添加潜在跟进记录app
+     * @param files
+     * @param childPath
+     * @param frLatenceFollow
+     * @param request
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("/addFollow")
+    public JsonResult addFollow(@RequestParam("file") MultipartFile[] files,String childPath,@RequestBody FrLatenceFollow frLatenceFollow,
+                               HttpServletRequest request) throws YJException {
+        if (childPath == null || childPath == "") {
+            childPath = "avatar/";
+        }
+        StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true));
+        imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
+        List<String> imagesList = this.getImgUrlList(files, childPath);
+        return service.addFollow(imagesList, request,frLatenceFollow);
+    }
+    //查询潜在跟进记录APP
+    @GetMapping("/getFollow")
+    public JsonResult getFollow(String id){
+        return service.getFollow(id);
+    }
+
+    /**
+     * 获取批量上传的文件路径
+     *
+     * @param files
+     * @param childPath
+     * @return
+     * @throws YJException
+     */
+    public List<String> getImgUrlList(MultipartFile[] files, String childPath) throws YJException {
+        Map<String, String> map = new HashMap<>();
+        List<String> imgUrlList = new ArrayList<>();
+        String imgURL;
+        for (MultipartFile file : files) {
+            fileController.toUpdateLoad(file, childPath, map);
+            String message = map.get("msg");
+            if ("true".equals(message)) {
+                imgUrlList.add(map.get("imgUrl"));
+            }
+            map = new HashMap<>();
+        }
+        return imgUrlList;
+    }
 }
 

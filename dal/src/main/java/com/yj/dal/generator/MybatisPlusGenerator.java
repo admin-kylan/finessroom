@@ -44,8 +44,10 @@ public class MybatisPlusGenerator {
 //                    "fr_education_reserve_object",
 //                    "fr_education_card_object",
 //                    "fr_education_member_order",
-            "fr_education_client_info",
-            "fr_education_member_order"
+            "MoneyReport",
+            "ConsumeAccountOrder",
+            "ConsumeAccountInfo",
+//            "fr_education_member_order"
 
     };
     //table前缀

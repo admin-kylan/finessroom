@@ -71,11 +71,11 @@
                 <div class="shen_top">
                     <span>
                         <span>当前门店：</span>
-                        <strong>软件园店</strong>
+                        <strong>{{shopName}}</strong>
                     </span>
                     <span>
                         <span>当前场馆</span>
-                        <strong>软件园店</strong>
+                        <strong>{{sdaduimName}}</strong>
                     </span>
 
                     <!--<span style="float: right;">-->
@@ -144,24 +144,26 @@
             product: { //选择项目项
                 isShow: false,
                 data: [
-                    {
-                        shop: '1',
-                        shopId: '1',
-                        sdadium: '1',
-                        sdadiumId: '1',
-                        project: '1',
-                        projectId: '1',
-                        price: '1',
-                        sale: '1',
-                        courseId: '1', //课程id
-                        courseSeriesId: '1', //课程系列id
-                    }
+                    // {
+                    //     shop: '1',
+                    //     shopId: '1',
+                    //     sdadium: '1',
+                    //     sdadiumId: '1',
+                    //     project: '1',
+                    //     projectId: '1',
+                    //     price: '1',
+                    //     sale: '1',
+                    //     courseId: '1', //课程id
+                    //     courseSeriesId: '1', //课程系列id
+                    // }
                 ],
             },
             bill: {//结账数据
                 isShow: true, //显示
             },
             selectData: {}, //选择项目的对象
+            shopName: '',
+            sdaduimName: '',
 
         },
         filters: {
@@ -179,6 +181,7 @@
                 }
                 return parseFloat(val).toFixed(2);
             }
+
         },
         computed: {},
         watch: {
@@ -247,6 +250,32 @@
                     this.formData.validityPeriodTime = val;
                 }
 
+            },
+            'product.isShow'(val){
+
+                if(!(val == true)){
+                    return false;
+                }
+                //
+                let shopId = headVue.shopId;
+                let sdaduimId = headVue.sdaduimId;
+                this.shopName = headVue.shopName;
+                this.sdaduimName = headVue.sdaduimName;
+                if(!sdaduimId){
+                    return false;
+                }
+                if(!shopId){
+                    return false;
+                }
+                let code = $.cookie('code');
+                //获取团教私教
+                let param = {
+                    shopId: shopId,
+                    sdaduimId: sdaduimId,
+                    code: code,
+                    eduType: 0,
+                }
+                this.getCourseList(param);
             }
 
             //
@@ -292,8 +321,6 @@
         mounted(){ //初始化
             //test
             // this.billFull();
-            //获取团教私教
-          //  this.getPrivateCourceGroupCourseList();
 
             jeDate("#course-project-begin-time",{
                 isinitVal:true,
@@ -324,6 +351,19 @@
                     alert("请输入购买数量");
                     return false;
                 }
+                if(this.formData.validityPeriod == 'other'){
+                    if(!this.formData.customize){
+                        alert('请输入自定义的月数个数')
+                        return false;
+                    }
+                }
+
+                if(this.formData.validityPeriod == 'all'){
+                    if(!(this.formData.validityPeriodTime >0)){
+                        alert('与会员卡同期无效，或者该会员还未有会员卡')
+                        return false;
+                    }
+                }
 
 
 
@@ -338,42 +378,11 @@
                 this.selectData = item;
             },
             //获取团团教私教
-            getPrivateCourceGroupCourseList(){
-               // this.product.data = [];
-                let GroupCourseParam = {
-                    curPage: 1,
-                    limit: 100,
-                };
-                let privateParam = {
-                    curPage: 1,
-                    limit: 100,
-                    seriesId: "5b59b3553f924fe88f45aa1fb3596ed6"
-                };
-
-                axiosPostParams(COURSE_URL.frPrivateCourceList, privateParam, (res) => {
-                  //  console.log("111")
-                  //  console.log(res)
-//                    shop: '1',
-//                        shopId: '1',
-//                        sdadium: '1',
-//                        sdadiumId: '1',
-//                        project: '1',
-//                        projectId: '1',
-//                        price: '1',
-//                        sale: '1',
-//                        courseId: '1', //课程id
-//                        courseSeriesId: '1', //课程系列id
+            getCourseList(param){
+                axiosGetParams(COURSE_URL.getCourseList, param, (res) => {
                     if (res.code == '200') {
-                        $.each(res.data, (i, d) => {
-                           // this.product.data.push(d)
-                        })
-                    }
-                })
-                axiosPostParams(COURSE_URL.frGroupCourseList, GroupCourseParam, (res) => {
-                    if (res.code == '200') {
-                        $.each(res.data, (i, d) => {
-                           // this.product.data.push(d)
-                        })
+                        this.product.data = res.data;
+                       // console.log(this.product.data)
                     }
                 })
             }

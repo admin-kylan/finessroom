@@ -34,7 +34,7 @@ Vue.component('edu-book-detail-children', {//模版挂载的标签名
             return timeFormatDate(val, true)
         },
         reserveStatusFilter(val) {
-            let str = "";
+            let str = "已取消";
             if(val == 0){
                 str = "已取消"
             }

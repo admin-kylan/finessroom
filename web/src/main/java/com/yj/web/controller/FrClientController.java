@@ -7,21 +7,31 @@ import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.CookieUtils;
+import com.yj.common.util.UUIDUtils;
 import com.yj.dal.dao.FrClientPersonalMapper;
 import com.yj.dal.dao.ShopMapper;
 import com.yj.dal.model.FrClient;
+import com.yj.dal.model.FrClientLatencePersonal;
 import com.yj.dal.model.FrClientPersonal;
 import com.yj.dal.model.FrClientPic;
 import com.yj.dal.param.*;
+import com.yj.service.service.IFrClientLatencePersonalService;
 import com.yj.service.service.IFrClientPersonalService;
 import com.yj.service.service.IFrClientPicService;
 import com.yj.service.service.IFrClientService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p>
@@ -41,6 +51,10 @@ public class FrClientController {
     ShopMapper shopMapper;
     @Autowired
     IFrClientPicService frClientPicService;
+    @Autowired
+    IFrClientLatencePersonalService frClientLatencePersonalService;
+    @Autowired
+    IFrClientPersonalService frClientPersonalService;
 
     /**
      * @Description: 根据筛选条件查询现有客户列表
@@ -53,6 +67,18 @@ public class FrClientController {
     }
 
     /**
+     *  根据筛选条件查询现有客户列表 后台设置导出用
+     * @param request
+     * @param params
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getExistenceListBG")
+    public JsonResult existenceListBg(HttpServletRequest request,@ModelAttribute ExistenceFilterParam params) throws YJException {
+        return JsonResult.success(service.existenceListBG(request,params));
+    }
+
+    /**
      * @Description: 根据筛选条件查询潜在客户列表
      * @Author: 欧俊俊
      * @Date: 2018/9/30 12:01
@@ -62,6 +88,17 @@ public class FrClientController {
         return JsonResult.success(service.selectPotentialList(params));
     }
 
+    /**
+     * 根据筛选条件查询潜在客户列表 后台设置导出用
+     * @param request
+     * @param params
+     * @return
+     * @throws YJException
+     */
+    @GetMapping("/getPotentialListBG")
+    public JsonResult potentialListBG(HttpServletRequest request,@ModelAttribute PotentialFilterParam params) throws YJException {
+        return JsonResult.success(service.potentialListBG(request,params));
+    }
 
     /**
      * @Description: 现有客户统计(会员总数 / 近一周生日会员数 / 本周新增会员数)
@@ -141,7 +178,7 @@ public class FrClientController {
     }
 
     /**
-     * 根据筛选条件查询w我的潜在客户列表
+     * 根据筛选条件查询我的潜在客户列表
      */
     @GetMapping("/getMyPotentialList")
     public JsonResult myPotentialList(@ModelAttribute MyPotentialFilterParam params) throws YJException {
@@ -221,13 +258,170 @@ public class FrClientController {
 
 
     /**
-     * 根据条件查询所有客户
+     * 根据Id查询客户个人详情App
      */
-    @GetMapping("getAllClient")
-    public JsonResult getAllClient(){
+    @GetMapping("getPersonalDetails")
+    public JsonResult getPersonalDetails(String id) {
 
-        return null;
+        return service.getPersonalDetails(id);
     }
 
+    @Value("${fitness.uploadPath}")
+    private String filePath;
+
+    /**
+     * 添加潜在客户app
+     *
+     * @param file
+     * @param
+     * @return
+     * @throws YJException
+     */
+    @PostMapping("/addPotentialClient")
+    public JsonResult addPotentialClient(@RequestParam("file") MultipartFile file, @RequestBody FrClient frClient, String shopId) throws YJException {
+        if (frClient != null) {
+            boolean insert = service.insert(frClient);
+            if (insert) {
+                FrClientLatencePersonal frClientLatencePersonal = new FrClientLatencePersonal();
+                frClientLatencePersonal.setClientId(frClient.getId());
+                frClientLatencePersonal.setId(UUIDUtils.generateGUID());
+                frClientLatencePersonal.setShopId(shopId);
+                frClientLatencePersonal.setPersonalId(frClient.getConsultantId());
+                frClientLatencePersonalService.insert(frClientLatencePersonal);
+                FrClientPic frClientPic = new FrClientPic();
+                Map<String, String> map = new HashMap<>();
+                String childPath = "avatar/";
+                this.toUpdateLoad(file, childPath, map);
+                frClientPic.setClientId(frClient.getId());
+                frClientPic.setPicLink(map.get("imgUrl"));
+                frClientPic.setPicType(1);
+                frClientPic.setId(UUIDUtils.generateGUID());
+                frClientPic.setCreateTime(new Date());
+                boolean insert1 = frClientPicService.insert(frClientPic);
+                if (insert1) {
+                    return JsonResult.success();
+                }
+
+            }
+
+        }
+
+        return JsonResult.fail();
+    }
+
+    /**
+     * //     * 查询现有客户列表App
+     * //
+     */
+    @GetMapping("getEmployeeClientList")
+    public JsonResult getEmployeeClientList() {
+
+        return service.getEmployeeClientList();
+    }
+
+    /**
+     * 查询潜在客户列表App
+     */
+    @GetMapping("getPotentialClientList")
+    public JsonResult getPotentialClientList() {
+
+        return service.getPotentialClientList();
+    }
+
+    @PostMapping("/updateEmployeeClient")
+    public JsonResult updateEmployeeClient(@RequestParam(value = "file", required = false) MultipartFile file, @RequestBody FrClient frClient, String picId, String shopId) throws YJException {
+        if (frClient != null) {
+            boolean b = service.updateById(frClient);
+            if (b) {
+                FrClientPersonal frClientPersonal = frClientPersonalService.selectOne(
+                        new EntityWrapper<FrClientPersonal>().where("client_id={0} and is_using=1", frClient.getId())
+                );
+                if (frClientPersonal != null) {
+                    frClientPersonal.setShopId(shopId);
+                    frClientPersonalService.updateById(frClientPersonal);
+                }
+                if (picId != null) {
+                    savePic(file, frClient, picId);
+
+                }
+                return JsonResult.success();
+            }
+        }
+        return JsonResult.fail();
+    }
+    @PostMapping("/updatePotentialClient")
+    public JsonResult updatePotentialClient(@RequestParam(value = "file", required = false) MultipartFile file, @RequestBody FrClient frClient, String picId, String shopId) throws YJException {
+        if (frClient != null) {
+            boolean b = service.updateById(frClient);
+            if (b) {
+                FrClientLatencePersonal frClientLatencePersonal = frClientLatencePersonalService.selectOne(
+                        new EntityWrapper<FrClientLatencePersonal>().where("client_id={0} and is_using=1", frClient.getId())
+                );
+                if (frClientLatencePersonal != null) {
+                    frClientLatencePersonal.setShopId(shopId);
+                    frClientLatencePersonalService.updateById(frClientLatencePersonal);
+                }
+                if (picId != null) {
+                    savePic(file, frClient, picId);
+
+                }
+                return JsonResult.success();
+            }
+        }
+        return JsonResult.fail();
+    }
+    private void savePic(@RequestParam(value = "file", required = false) MultipartFile file, @RequestBody FrClient frClient, String picId) throws YJException {
+        FrClientPic FrClientPic = frClientPicService.selectById(picId);
+        if (FrClientPic != null) {
+            String path = FrClientPic.getPicLink();
+            path = "/" + path.substring(path.indexOf("avatar"), path.length());
+            File fileDel = new File(filePath + path);
+            boolean del = frClientPicService.deleteById(FrClientPic);
+            if (del) {
+                fileDel.delete();
+            }
+        }
+        FrClientPic frClientPic = new FrClientPic();
+        Map<String, String> map = new HashMap<>();
+        String childPath = "avatar/";
+        this.toUpdateLoad(file, childPath, map);
+        frClientPic.setClientId(frClient.getId());
+        frClientPic.setPicLink(map.get("imgUrl"));
+        frClientPic.setPicType(1);
+        frClientPic.setId(UUIDUtils.generateGUID());
+        frClientPic.setCreateTime(new Date());
+        frClientPicService.insert(frClientPic);
+    }
+
+
+    public Map<String, String> toUpdateLoad(MultipartFile file, String childPath, Map<String, String> map) throws YJException {
+        if (file.isEmpty()) {
+            throw new YJException(YJExceptionEnum.FILE_NOT_FOUND);
+        }
+        // 获取文件名
+        String fileName = file.getOriginalFilename();
+//        log.info("上传的文件名为：" + fileName);
+        // 获取文件的后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        // 解决中文问题，liunx下中文路径，图片显示问题
+        fileName = UUID.randomUUID() + suffixName;
+//        log.info("上传的后缀名为：" + suffixName);
+        // 文件上传后的路径
+        File dest = new File(filePath + childPath + fileName);
+        // 检测是否存在目录
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+        try {
+            file.transferTo(dest);
+            map.put("msg", "true");
+            map.put("imgUrl", childPath.concat(fileName));
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
 }
 

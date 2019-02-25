@@ -7,6 +7,7 @@ import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.*;
+import com.yj.dal.dao.FrCardMapper;
 import com.yj.dal.dao.FrLatenceFollowMapper;
 import com.yj.dal.dao.ShopMapper;
 import com.yj.dal.dto.*;
@@ -23,9 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,8 +62,8 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
     IFrCardService frCardService;
     @Autowired
     IFrClientPersonnelRelateService frClientPersonnelRelateService;
-
-
+    @Autowired
+    FrCardMapper frCardMapper;
     @Resource
     private IFrClientPersonalService iFrClientPersonalService;
     @Resource
@@ -68,7 +71,6 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
 
     @Resource
     private IFrStoreSingleService iFrStoreSingleService;
-
 
 
     @Override
@@ -213,7 +215,7 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
 
     @Override
     public JsonResult getClient(String id) {
-        FrClient client = baseMapper.getClient(id);
+        Map<String, Object> client = baseMapper.getClient(id);
         return JsonResult.success(client);
     }
 
@@ -314,6 +316,7 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
         map.put("limit", params.getLimit());
         Page page = new Query<FrClient>(map).getPage();
         List<MyPotentialClientDTO> list = baseMapper.findPotential(page, params);
+
         page.setRecords(list);
         return new PageUtils(page);
     }
@@ -475,11 +478,42 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
             //服务人员信息
             List<Map<String, String>> service = frClientPersonnelRelateService.getService(cid, "2");
             clientInformationDTO.setServicePersonal(service);
-
         }
         page.setRecords(list);
         return new PageUtils(page);
     }
+
+    @Override
+    public PageUtils existenceListBG(HttpServletRequest request,ExistenceFilterParam params) throws YJException {
+        String code = CookieUtils.getCookieValue(request, "code", true);
+        FrCard frCard = new FrCard();
+        frCard.setCustomerCode(code);
+        Map<String, Object> map = new HashMap<>();
+        map.put("page", params.getPage());
+        map.put("limit", params.getLimit());
+        Page page = new Query<FrCard>(map).getPage();
+        List list = new ArrayList();
+        list = frCardMapper.queryUserCardInfoListBG(page, frCard);
+        page.setRecords(list);
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils potentialListBG(HttpServletRequest request, PotentialFilterParam params) throws YJException {
+        //获取当前登录用户的id
+        String code = CookieUtils.getCookieValue(request, "code", true);
+        String shopId = CookieUtils.getCookieValue(request, "shopid", true);
+        params.setCustomerCode(code);
+        params.setShopId(shopId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("page", params.getPage());
+        map.put("limit", params.getLimit());
+        Page page = new Query<FrClient>(map).getPage();
+        List<PotentialClientDTO> list = baseMapper.selectPotentialList(page, params);
+        page.setRecords(list);
+        return new PageUtils(page);
+    }
+
 
     /**
      * 增加一条现有客户数据
@@ -525,14 +559,14 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
             }
             //查询设置的保护天数
             FrStoreSingle frStoreSingle = iFrStoreSingleService.selectOne(
-                    new EntityWrapper<FrStoreSingle>().where("CustomerCode={0}",frClient.getCustomerCode()).and("is_using={0}",1)
+                    new EntityWrapper<FrStoreSingle>().where("CustomerCode={0}", frClient.getCustomerCode()).and("is_using={0}", 1)
                             .orderBy("update_time DESC"));
             Integer protectDay = 1;
-            if(frStoreSingle != null){
-                Integer  hours = frStoreSingle.getXyGjHour();
-                if(hours != null && hours >0){
-                    hours = hours/24;
-                    if(hours >0 ){
+            if (frStoreSingle != null) {
+                Integer hours = frStoreSingle.getXyGjHour();
+                if (hours != null && hours > 0) {
+                    hours = hours / 24;
+                    if (hours > 0) {
                         protectDay = hours;
                     }
                 }
@@ -591,19 +625,80 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
 
     /**
      * 判断是否已经是现有客户了
+     *
      * @param frClient
      * @return
      */
     @Override
-    public List<FrClient> queryByClient(FrClient frClient)throws YJException {
-        if(frClient == null){
+    public List<FrClient> queryByClient(FrClient frClient) throws YJException {
+        if (frClient == null) {
             throw new YJException(YJExceptionEnum.REQUEST_NULL);
         }
-        if(StringUtils.isEmpty(frClient.getCustomerCode()) || StringUtils.isEmpty(frClient.getMobile())
-                || StringUtils.isEmpty(frClient.getClientName())){
+        if (StringUtils.isEmpty(frClient.getCustomerCode()) || StringUtils.isEmpty(frClient.getMobile())
+                || StringUtils.isEmpty(frClient.getClientName())) {
             throw new YJException(YJExceptionEnum.PARAM_ERROR);
         }
         List<FrClient> frClientList = baseMapper.queryByClient(frClient);
         return frClientList;
     }
+
+    @Override
+    public JsonResult getPersonalDetails(String id) {
+        String shopId = null;
+        String shopName = null;
+        FrClientLatencePersonal frClientLatencePersonal = clientLatencePersonalService.selectOne(
+                new EntityWrapper<FrClientLatencePersonal>().where("is_using=1 and client_id={0}", id)
+        );
+
+        if (frClientLatencePersonal == null) {
+            FrClientPersonal frClientPersonal = clientPersonalService.selectOne(
+                    new EntityWrapper<FrClientPersonal>().where("is_using=1 and client_id={0}", id)
+            );
+            shopId = frClientPersonal.getShopId();
+        } else {
+            shopId = frClientLatencePersonal.getShopId();
+        }
+        if (shopId != null) {
+            Shop shop = shopMapper.selectById(shopId);
+            shopName = shop.getShopName();
+        }
+        Map<String, Object> map = selectMap(
+                new EntityWrapper<FrClient>()
+                        .setSqlSelect("client_name clientName,sex,vip_level vipLevel,mobile," +
+                                "willing_card_type willingCardType,willing_card_name willingCardName,consultant_name consultantName,reference_name referenceName" +
+                                ",reference_tel referenceTel,build_date buildDate,qq,wechat")
+                        .where("is_using=1 and id={0}", id)
+        );
+        if (shopName != null) {
+            map.put("shopName", shopName);
+        }
+
+        return JsonResult.success(map);
+    }
+
+    @Override
+    public JsonResult getPotentialClientList() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        //获取当前登录用户的id
+        String customerCode = CookieUtils.getCookieValue(req, "code", true);
+
+        String shopId = CookieUtils.getCookieValue(req, "shopid", true);
+        List<Map<String, Object>> potentialClientList = baseMapper.selectPotentialClientList(customerCode, shopId);
+
+        return JsonResult.success(potentialClientList);
+    }
+
+    @Override
+    public JsonResult getEmployeeClientList() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        //获取当前登录用户的id
+        String customerCode = CookieUtils.getCookieValue(req, "code", true);
+
+        String shopId = CookieUtils.getCookieValue(req, "shopid", true);
+        List<Map<String, Object>> employeeClientList = baseMapper.selectEmployeeClientList(shopId, customerCode);
+
+        return JsonResult.success(employeeClientList);
+    }
+
+
 }

@@ -241,10 +241,11 @@ Vue.component('edu-start-class-children', {//模版挂载的标签名
                 $.alert("数据正在获取，请稍等")
                 return false;
             }
-            //判断人数是否够
-            if(this.eduItem.reserveTotalNum == this.eduItem.eduCurrentCount){
-                $.alert('预约失败，当前课程预约人数已满！');
-            }
+            // //判断人数是否够
+            // if(this.eduItem.reserveTotalNum == this.eduItem.eduCurrentCount){
+            //     $.alert('预约失败，当前课程预约人数已满！');
+            //     return false;
+            // }
             //判断是否课程付款还是权益付款
             //判断是否选择 会员卡结算
             //configCardSettle configCourseSettle

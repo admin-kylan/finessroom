@@ -40,6 +40,8 @@ public interface FrCardMapper extends BaseMapper<FrCard> {
 
     List<Map<String,Object>> queryUserCardInfoList(Page<FrCard> page,FrCard frCard);
 
+    List<Map<String,Object>> queryUserCardInfoListBG(Page<FrCard> page,FrCard frCard);
+
     List<Map<String,Object>> queryUserCardInfoList(FrCard frCard);
 
     Integer toUpdateStopTime(Map<String,Object> map);
@@ -52,4 +54,6 @@ public interface FrCardMapper extends BaseMapper<FrCard> {
      * @return
      */
     Map<String,Object> queryAndCardSupply(FrCard frCard);
+
+    FrCard selectByCardNo(String cardNo);
 }

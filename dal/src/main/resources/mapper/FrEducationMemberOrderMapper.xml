@@ -89,5 +89,16 @@
 
     </select>
 
+    <!-- 查询待确认数组 -->
+    <select id="findClientMemberCountByEduId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            count(1) value
+        FROM
+            fr_education_member_order
+        WHERE
+            education_id = #{eduId}
+            AND status = ${status}
+            and is_use = 1
+    </select>
 
 </mapper>

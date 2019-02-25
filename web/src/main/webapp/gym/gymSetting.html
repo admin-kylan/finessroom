@@ -33,7 +33,7 @@
     <!-- END 顶部菜单 -->
 
     <!-- 左侧菜单  -->
-    <sidebar-nav></sidebar-nav>
+    <!--<sidebar-nav></sidebar-nav>-->
     <!-- END 左侧菜单 -->
 
     <!-- 右边容器 -->
@@ -82,7 +82,7 @@
                         <tr v-for="(item,index) in ChainStoreInfo">
                             <td v-if="item.shopName!=null &&  item.shopName!=''">{{item.shopName}}</td>
                             <td v-if="item.shopName==null || item.shopName==''">连锁店通用</td>
-                            <td>{{item.venueName}}</td>
+                            <td>健身馆</td>
                             <td><span class="c-0000ff">{{item.projectName}}</span></td>
                             <td><span class="c-ff0000">{{item.company}}</span></td>
                             <td>{{item.marketPrice}}</td>
@@ -117,7 +117,7 @@
                                                 {{tempInfo.shopName==null?'连锁店通用':tempInfo.shopName}}
                                             </div>
                                             <!--<div class="flex-box-item text-left"  v-if="tempInfo.shopName==''||tempInfo.shopName==null">-->
-                                              <!--连锁店通用-->
+                                            <!--连锁店通用-->
                                             <!--</div>-->
                                         </div>
                                         <div class="flex-box">
@@ -125,7 +125,7 @@
                                                 场馆：
                                             </div>
                                             <div class="flex-box-item">
-                                                {{tempInfo.venueName}}
+                                                健身馆
                                             </div>
                                         </div>
                                         <div class="flex-box">
@@ -176,7 +176,7 @@
                                         </div>
                                         <div class="flex-box flex-start">
                                             <div class="w80 text-right">
-                                               备注：
+                                                备注：
                                             </div>
                                             <div class="flex-box-item">
                                                 <textarea class="form-control" rows="4"
@@ -297,7 +297,7 @@
                                         </div>
                                         <div class="flex-box flex-start">
                                             <div class="w80 text-right">
-                                            备注：
+                                                备注：
                                             </div>
                                             <div class="flex-box-item">
                                                 <textarea class="form-control" rows="4"
@@ -363,17 +363,14 @@
                     remarks: '',
                     isCurrency: false,
                     shop: [],
-                    venueName: '健身馆',
-                    venueId: '120012',
-                    venueType: '1',
+                    modelId: 'c7c5af32488caebb',
                     company: '元/次',
                 },
                 tempInfo: [],
                 tempInfo2: [],
-                type: 1,
             },
             mounted: function () {
-                const that = this;
+                var that = this;
                 that.getChainStore();
                 that.getShop();
                 that.getTime();
@@ -394,7 +391,7 @@
                 getTime: function () {
                     var that = this;
                     var url = $.stringFormat('{0}/frSetGym/getTime', $.cookie('url'));
-                    $.get(url, {"type": that.type}, function (res) {
+                    $.get(url, {"modelId": that.params.modelId}, function (res) {
                         if (res.code == "200") {
                             that.timeInfo = res.data;
                             that.timeInfo.updateTime = timeFormatDate(that.timeInfo.updateTime, true, true)
@@ -420,7 +417,7 @@
                 getChainStore: function () {
                     var that = this;
                     var url = $.stringFormat('{0}/frSetGym/getChainStore', $.cookie('url'));
-                    $.get(url, {"type": that.type}, function (res) {
+                    $.get(url, {"modelId": that.params.modelId}, function (res) {
                         if (res.code == "200") {
                             that.ChainStoreInfo = res.data;
                         } else {
@@ -434,7 +431,7 @@
                 getShop: function () {
                     var that = this;
                     var url = $.stringFormat('{0}/frSetGym/getShop', $.cookie('url'));
-                    $.get(url, {"type": that.type}, function (res) {
+                    $.get(url, {"modelId": that.params.modelId}, function (res) {
                         if (res.code == "200") {
                             that.shopInfo = res.data;
                         } else {
@@ -452,7 +449,7 @@
                     $("#temp2").show();
                 },
                 //点击门店
-                shopClick: function (list,e) {
+                shopClick: function (list, e) {
                     var that = this;
                     $(e.target).parents('li').addClass("active").siblings().removeClass('active');
                     $("#temp1").hide();

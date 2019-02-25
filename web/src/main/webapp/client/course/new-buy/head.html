@@ -183,6 +183,7 @@
         data: {
             shopList: [], //门店列表
             shopId: '', //门店Id
+            shopName: '', //门店Id
             agreementError: {
                 msg: '',
                 style: 'ag-general'
@@ -195,6 +196,7 @@
             marketUserId: "", //销售人员ID
             sdaduimArrayList: [], //场馆数组对象
             sdaduimId: '', //场馆ID
+            sdaduimName: '', //场馆ID
             isShowPerformance: false, //是否显示业绩分配的弹窗
             performance: { //销售业绩分配的一个对象obj
                 salesType: '', //比例，金额 类型
@@ -270,7 +272,10 @@
         },
         computed: {},
         watch: {
-            shopId(){//当选择了门店，初始化销售人员, 初始化场馆
+            shopId(val){//当选择了门店，初始化销售人员, 初始化场馆
+                this.shopName = this.shopList.find(item => {
+                    return item.id == val;
+                })['shopName'];
                 this.getMarketUserList();
                 this.getSdaduimByShopId();
             },
@@ -278,6 +283,15 @@
                 this.performance.saleName = this.marketUserList.find(item => item.id === val)['relName'];
             },
             sdaduimId(val){//根据场馆id选择销售id,类型
+
+                if(val == ""){
+                    this.sdaduimName = '';
+                    this.sdaduimTypeResult = this.sdaduimType.other;
+                    return false;
+                }
+                this.sdaduimName = this.sdaduimArrayList.find(item => {
+                    return item.id == val;
+                })['name'];
                 let businessTypeId = this.sdaduimArrayList.find(item => {
                     return item.id == val;
                 })['businessTypeId'];
@@ -291,6 +305,7 @@
                     }
                 };
                 //
+
                 if(this.sdaduimTypeResult.type == "teach"){
                     let userType = 3;// 技师
                     axiosGetParams(COURSE_URL.fetchTechnician, {businessTypeId: businessTypeId, userType: userType}, (response) => {
@@ -407,7 +422,11 @@
             getMarketUserList(){
                 let obj = {}, data = null;
                 this.marketUserList = [];// 清空原来的数组
-                axiosGetParams(COURSE_URL.marketUserList, {shopId: this.shopId}, (response) => {
+                let param = {
+                    shopId: this.shopId,
+                    // code: $.cookie('code')
+                }
+                axiosGetParams(COURSE_URL.marketUserList, param , (response) => {
                     if (response.code === '200') {
                         //marketUserList
                         data = response.data.data;
@@ -428,6 +447,7 @@
             getSdaduimByShopId(){
                 let data = null;
                 this.sdaduimArrayList = []; //门店被选择时，清空原来的场馆数据
+
                 $.ajax({
                     type: "post",
                     url: baseUrl + COURSE_URL.fetchSdaduim,
@@ -436,6 +456,8 @@
                     },
                     success: (res) => {
                         if (res.code == '200') {
+                           // debugger
+                            this.sdaduimId = "";
                             data = res.data[0];// 获取第一个对象
                             if (data) {
                                 let array = data['sdaduimArrayList'], obj = {};
@@ -449,6 +471,7 @@
                                     this.sdaduimArrayList.push(obj);
                                     obj = {};
                                 })
+                               // console.log(this.sdaduimArrayList)
 
                             }
                         }

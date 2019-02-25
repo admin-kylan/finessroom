@@ -58,10 +58,11 @@ Vue.component('edu-consume-detail-children', {//模版挂载的标签名
             return timeFormatDate(val)
         },
         toSex(val){
-            if(val == '1'){
-                return "女"
-            }
-            return '男'
+            // if(val == '1'){
+            //     return "女"
+            // }
+            // return '男'
+            return val
         }
     },
     computed: {},

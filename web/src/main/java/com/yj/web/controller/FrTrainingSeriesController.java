@@ -60,12 +60,12 @@ public class FrTrainingSeriesController {
      * @throws YJException
      */
     @RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
-    public JsonResult list(HttpServletRequest request, @RequestParam(value = "parentId", required = false, defaultValue = "") String parentId, Integer type, Integer ownType) throws YJException {
+    public JsonResult list(HttpServletRequest request, @RequestParam(value = "parentId", required = false, defaultValue = "") String parentId, Integer type, Integer ownType,String sdaduimId) throws YJException {
         EntityWrapper<FrTrainingSeries> wrapper = new EntityWrapper<>();
         if (StringUtils.isNotBlank(parentId)) {
-            wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id = {1} and own_type={2}", type, parentId, ownType);
+            wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id = {1} and own_type={2} and sdaduim_id={3}", type, parentId, ownType,sdaduimId);
         } else {
-            wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id is null and own_type={1}", type, ownType);
+            wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id is null and own_type={1} and sdaduim_id={2}", type, ownType,sdaduimId);
 
         }
         List<FrTrainingSeries> frTrainingSeriess = iFrTrainingSeriesService.selectList(wrapper);
@@ -151,12 +151,12 @@ public class FrTrainingSeriesController {
 
 
     @RequestMapping(value = "/seriesAndActionList", method = {RequestMethod.GET, RequestMethod.POST})
-    public JsonResult list(HttpServletRequest request, Integer type, Integer ownType) throws YJException {
+    public JsonResult list(HttpServletRequest request, Integer type, Integer ownType,String sdaduimId) throws YJException {
 
         FrTrainingSeriesListDTO dto = new FrTrainingSeriesListDTO();
 
         EntityWrapper<FrTrainingSeries> wrapper = new EntityWrapper<>();
-        wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id is null and own_type={1}", type, ownType);
+        wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id is null and own_type={1} and sdaduim_id={2}", type, ownType,sdaduimId);
         // 一级系列列表
         List<FrTrainingSeries> frTrainingSeriess = iFrTrainingSeriesService.selectList(wrapper);
         if (null != frTrainingSeriess && !frTrainingSeriess.isEmpty()) {
@@ -165,7 +165,7 @@ public class FrTrainingSeriesController {
             FrTrainingSeries frTrainingSeries = frTrainingSeriess.get(0);
 
             EntityWrapper<FrTrainingSeries> wrapper2 = new EntityWrapper<>();
-            wrapper2.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id = {1}", type, frTrainingSeries.getId());
+            wrapper2.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id = {1} and sdaduim_id={2}", type, frTrainingSeries.getId(),sdaduimId);
             // 二级系列列表
             List<FrTrainingSeries> seriess2 = iFrTrainingSeriesService.selectList(wrapper2);
             if (null != seriess2 && !seriess2.isEmpty()) {
@@ -184,9 +184,9 @@ public class FrTrainingSeriesController {
     }
 
     @RequestMapping(value = "/getActionList", method = {RequestMethod.GET, RequestMethod.POST})
-    public JsonResult getActionList(HttpServletRequest request, Integer type, Integer ownType) throws YJException {
+    public JsonResult getActionList(HttpServletRequest request, Integer type, Integer ownType,String sdaduimId) throws YJException {
         EntityWrapper<FrTrainingSeries> wrapper = new EntityWrapper<>();
-        wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id is null and own_type={1}", type, ownType);
+        wrapper.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id is null and own_type={1} and sdaduim_id={2}", type, ownType,sdaduimId);
         // 一级系列列表
         List<Map<String, Object>> maps = iFrTrainingSeriesService.selectMaps(wrapper);
         for (Map<String, Object> map : maps) {
@@ -194,7 +194,7 @@ public class FrTrainingSeriesController {
 
                 //一级系列索引第一个对
                 EntityWrapper<FrTrainingSeries> wrapper2 = new EntityWrapper<>();
-                wrapper2.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id = {1}", type, (String) map.get("id"));
+                wrapper2.setSqlSelect(" * ").where("is_using = 1 and type = {0} and parent_id = {1} and sdaduim_id={2}", type, (String) map.get("id"),sdaduimId);
                 // 二级系列列表
                 List<Map<String, Object>> maps1 = iFrTrainingSeriesService.selectMaps(wrapper2);
                 for (Map<String, Object> stringObjectMap : maps1) {

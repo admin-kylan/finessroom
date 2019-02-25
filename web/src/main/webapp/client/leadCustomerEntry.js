@@ -258,6 +258,7 @@ const lcapp = new Vue({
                 Loading.prototype.hide();
                 $.alert(jsonData['data']['data']['msg'])
                 that.customerData.picLink = jsonData['data']['data']['imgUrl'];
+                console.log(that.customerData.picLink)
                 that.imgUrl = $.stringFormat('{0}{1}{2}',$.cookie('url'),$.cookie('imgPath'),jsonData['data']['data']['imgUrl']);
                 if(jsonData['data']['code']==='200'){
                     return true;

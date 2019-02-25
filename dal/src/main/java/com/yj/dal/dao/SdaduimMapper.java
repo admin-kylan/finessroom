@@ -13,5 +13,10 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface SdaduimMapper extends BaseMapper<Sdaduim> {
 
-
+    /**
+     * 根据场馆名称查询
+     * @param sdadiumName
+     * @return
+     */
+    Sdaduim selectBySdadiumName(String sdadiumName);
 }

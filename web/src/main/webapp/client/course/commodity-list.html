@@ -6,27 +6,27 @@
             <p class="lef">
                 <span class="title">类别选择：</span>
                 <span class="category">
-									<span :class='{on: index == 0}' @click="index = 0">全部</span>
-									<span :class='{on: index == 1}' @click="index = 1">项目</span>
-									<span :class='{on: index == 2}' @click="index = 2">产品</span>
-								</span>
+                    <span :class='{on: index == 0}' @click="index = 0">全部</span>
+                    <span :class='{on: index == 1}' @click="index = 1">项目</span>
+                    <span :class='{on: index == 2}' @click="index = 2">产品</span>
+                </span>
             </p>
             <p class="rig">
                 <span class="title">状态选择：</span>
                 <span class="category">
-									<span :class='{on: selectIndex == 0}' @click="selectIndex = 0">全部</span>
-									<span :class='{on: selectIndex == 1}' @click="selectIndex = 1">正常</span>
-									<span :class='{on: selectIndex == 2}' @click="selectIndex = 2">历史</span>
-									<!--<span>挂账</span>-->
-									<!--<span>挂单</span>-->
-								</span>
+                    <span :class='{on: selectIndex == 99}' @click="selectIndex = 99">全部</span>
+                    <span :class='{on: selectIndex == 0}' @click="selectIndex = 0">正常</span>
+                    <span :class='{on: selectIndex == 3}' @click="selectIndex = 3">历史</span>
+                    <!--<span>挂账</span>-->
+                    <!--<span>挂单</span>-->
+                </span>
             </p>
         </div>
         <div class="clearfix">
             <p class="lef">
                 <span class="title" >销售门店：</span>
-                <select name="" v-model="shopName">
-                    <!--<option value="" selected="">软件园店</option>-->
+                <select name="" v-model="shopId">
+                    <option value="" selected="">全部门店</option>
                     <option v-for='(item,index) in shopList' :value="item.id">
                         {{item.shopName}}
                     </option>
@@ -83,33 +83,34 @@
             <tbody>
             <tr v-for="(item, index) in result">
                 <td>{{index+1}}</td>
-                <td><span>打印</span>
+                <td>
+                    <!--<span>打印</span>-->
                     <span class="lightBlue" @click="remnantMethod(item)">补余</span>
                     <span class="red" @click="refundMethod(item)">退费</span>
                     <span class="blue" @click="transferMethod(item)">转让</span>
                     <span class="green" @click="enableMethod(item)">启用</span>
                     <span class="yellow" @click="extensionMethod(item)">延期</span>
                 </td>
-                <td class="deepBlue">{{item.addProject.state |stateFilter}}</td>
+                <td class="deepBlue">{{item.state |stateFilter}}</td>
 
-                <td>{{item.shop.shopName}}</td>
-                <td>{{item.sdaduim.name}}</td>
-                <td class="deepBlue">私教套餐</td>
-                <td>{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
-                <td>{{item.projectOrder.buyCount + item.projectOrder.sendCount - item.addProjectConsumes.length|toNum}}</td>
+                <td>{{item.shopName}}</td>
+                <td>{{item.sdadiumName}}</td>
+                <td class="deepBlue">{{item.courseName}}</td>
+                <td>{{item.buyCount + item.sendCount | toNum}}</td>
+                <td>{{item.buyCount + item.sendCount - item.consumeLength|toNum}}</td>
 
-                <td>{{item.addProjectConsumes.length |toNum}}</td>
-                <td>{{item.projectOrder.price|toMoney}}</td>
-                <td class="yellow">{{item.projectOrder.totalPrice|toMoney}}</td>
-                <td>{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                    * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}</td>
+                <td>{{item.consumeLength |toNum}}</td>
+                <td>{{item.price|toMoney}}</td>
+                <td class="yellow">{{item.totalPrice|toMoney}}</td>
+                <td>{{(item.totalPrice/(item.buyCount + item.sendCount))
+                    * ((item.buyCount + item.sendCount) - item.consumeLength)|toMoney}}</td>
 
-                <td>{{item.addProject.useful}} 个月</td>
-                <td>{{item.addProject.startTime| formatDate2}}</td>
-                <td>{{item.addProject.endTime| formatDate2}}</td>
-                <td>{{item.addProject.contractNumber}}</td>
-                <td>{{item.addProject.saleType| saleType}}</td>
-                <td class="grey">{{item.frClientPersonnelRelates|teachName}}</td>
+                <td>{{item.useful}} 个月</td>
+                <td>{{item.startTime| formatDate2}}</td>
+                <td>{{item.endTime| formatDate2}}</td>
+                <td>{{item.contractNumber}}</td>
+                <td>{{item.saleType| saleType}}</td>
+                <td class="grey">{{item.coachName|teachName}}</td>
             </tr>
             </tbody>
         </table>
@@ -137,8 +138,8 @@
         el: '#course-commodity-list',
         data: {
             index: 0, //全部
-            selectIndex: 0,//全部
-            shopName: '',
+            selectIndex: 99,//全部
+            shopId: '',
             timeType: '1',
             startDate: '',
             endDate: '',
@@ -238,7 +239,7 @@
             },
             teachName(item){
                 if(item){
-                    return item.flag;
+                    return item;
                 }
                 return "无";
             }
@@ -248,7 +249,7 @@
 
         },
         mounted(){// 初始化加载
-            axiosGetParams(COURSE_URL.getMarketShopList, param, (res)=>{
+            axiosGetParams(COURSE_URL.getMarketShopList, {type: 0}, (res)=>{
                 if(res.code = '200'){
                     this.shopList = res.data.data;
                     // console.log(this.shopList)
@@ -271,13 +272,14 @@
                 let param = {};
                 param.type = this.index;
                 param.status = this.selectIndex;
-                param.shopName = this.shopName;
+                param.shopId = this.shopId;
                 param.timeType = this.timeType;
                 param.startDate = this.startDate;
                 param.endDate = this.endDate;
                 param.name = this.name;
                 param.orderType = '1';
                 param.cid = $.cookie('cid');
+                param.code = $.cookie('code');
                 axiosGetParams(COURSE_URL.customerCommodityList, param, (res)=>{
                     if(res.code = '200'){
                         this.result = res.data;
@@ -300,31 +302,31 @@
             },
             //补余
             remnantMethod(item){
-                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                Vue.set(customerCourseProject, 'orderId', item.id);
                 //跳转到补余页面
                 Vue.set(customerCourseProject, 'index', 4);
             },
             //退费
             refundMethod(item){
-                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                Vue.set(customerCourseProject, 'orderId', item.id);
                 //跳转到退费页面
                 Vue.set(customerCourseProject, 'index', 7);
             },
             //转让
             transferMethod(item){
-                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                Vue.set(customerCourseProject, 'orderId', item.id);
                 //跳转到转让页面
                 Vue.set(customerCourseProject, 'index', 6);
             },
             //启用
             enableMethod(item){
-                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                Vue.set(customerCourseProject, 'orderId', item.id);
                 //跳转到启用页面
                 Vue.set(customerCourseProject, 'index', 3);
             },
             //延期
             extensionMethod(item){
-                Vue.set(customerCourseProject, 'orderId', item.projectOrder.id);
+                Vue.set(customerCourseProject, 'orderId', item.id);
                 //跳转到延期页面
                 Vue.set(customerCourseProject, 'index', 5);
             },
@@ -349,7 +351,7 @@
 		        daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
 		        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月','七月', '八月', '九月', '十月', '十一月', '十二月'],
 		        firstDay: 1,
-		
+
 		    },
 			opens: "right",
 			format: "YYYY-MM-DD",

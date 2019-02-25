@@ -85,12 +85,13 @@
                 <div class="shen_top">
                     <span>
                         <span>当前门店：</span>
-                        <strong>软件园店</strong>
+                        <strong>{{shopName}}</strong>
                     </span>
                     <span>
                         <span>当前场馆</span>
-                        <strong>软件园店</strong>
+                        <strong>{{sdaduimName}}</strong>
                     </span>
+
 
                     <!--<span style="float: right;">-->
                         <!--<input style="float: none;">-->
@@ -145,6 +146,7 @@
                 customize: '', //选择自定义
                 cardDate: '', //与会员卡同期
                 validityPeriod: '1', //项目有效期 //按天数来算
+                validityPeriodTime: '1', //有效期时间
                 beginDate: '', //开始时间
                 endDate: '', //失效时间 = 结束时间
                 project: '', //项目名称
@@ -157,35 +159,37 @@
             product: { //选择项目项
                 isShow: false,
                 data: [
-                    {
-                        shop: '1',
-                        shopId: '1',
-                        sdadium: '1',
-                        sdadiumId: '1',
-                        project: '1',
-                        projectId: '1',
-                        price: '1',
-                        sale: '1',
-                        courseId: '1', //课程id
-                        courseSeriesId: '1', //课程系列id
-                    }
+                    // {
+                    //     shop: '1',
+                    //     shopId: '1',
+                    //     sdadium: '1',
+                    //     sdadiumId: '1',
+                    //     project: '1',
+                    //     projectId: '1',
+                    //     price: '1',
+                    //     sale: '1',
+                    //     courseId: '1', //课程id
+                    //     courseSeriesId: '1', //课程系列id
+                    // }
                 ],
             },
             packageProduct: { //套餐产品的列表数据 套餐产品详情
                 data: [
-                    {
-                        shop: '1',
-                        shopId: '1',
-                        sdadium: '1',
-                        sdadiumId: '1',
-                        project: '1', //项目产品
-                        projectId: '1',
-                        num: '1', //指定数量
-                        limitNum: '1' //每天限用数量
-                    }
+                    // {
+                    //     shop: '1',
+                    //     shopId: '1',
+                    //     sdadium: '1',
+                    //     sdadiumId: '1',
+                    //     project: '1', //项目产品
+                    //     projectId: '1',
+                    //     num: '1', //指定数量
+                    //     limitNum: '1' //每天限用数量
+                    // }
                 ]
             },
             selectData: {}, //选择项目的对象
+            shopName: '',
+            sdaduimName: '',
         },
         computed: {},
         filters: {
@@ -278,6 +282,25 @@
                 if(parseInt(val) > totalNum){
                     this.formData.salesNum = oldVal;
                 }
+            },
+            'product.isShow'(val){
+                if(!(val == true)){
+                    return false;
+                }
+                //
+                let shopId = headVue.shopId;
+                let sdaduimId = headVue.sdaduimId;
+                this.shopName = headVue.shopName;
+                this.sdaduimName = headVue.sdaduimName;
+                let code = $.cookie('code');
+                //获取团教私教
+                let param = {
+                    shopId: shopId,
+                    sdaduimId: sdaduimId,
+                    code: code,
+                    eduType: 1,
+                }
+                this.getCourseList(param);
             }
             //
         },
@@ -332,6 +355,10 @@
             billFull(){//结账
                 let saleId = headVue.performance.saleId,
                     salesNum = parseInt(this.formData.salesNum);
+                if (!headVue.agreementId) {
+                    alert("请输入协议编号");
+                    return false;
+                }
                 //结账前判断验证
                 if(!this.formData.projectId){
                     alert("请选择项目");
@@ -350,7 +377,19 @@
                     alert("请输入开始日期");
                     return false;
                 }
+                if(this.formData.validityPeriod == 'other'){
+                    if(!this.formData.customize){
+                        alert('请输入自定义的月数个数')
+                        return false;
+                    }
+                }
 
+                if(this.formData.validityPeriod == 'all'){
+                    if(!(this.formData.validityPeriodTime >0)){
+                        alert('与会员卡同期无效，或者该会员还未有会员卡')
+                        return false;
+                    }
+                }
 
                 Vue.set(newBuyVue, 'billStatus', 'package')
                 $('#customer-new-buy-project-bill').load(this.billHtml)
@@ -361,6 +400,29 @@
                 this.formData.projectId = item.projectId;
                 this.formData.projectPrice = item.sale;
                 this.selectData = item;
+                //加载套餐
+                this.getCoursePackageCourseId(item)
+            },
+            //获取团团教私教
+            getCourseList(param){
+                axiosGetParams(COURSE_URL.getCourseList, param, (res) => {
+                    if (res.code == '200') {
+                        this.product.data = res.data;
+                    }
+                })
+            },//获取套餐
+            getCoursePackageCourseId(item){
+                let param = {
+                    courseId: item.projectId,
+                    sdaduimId: item.sdadiumId,
+                    code: $.cookie('code'),
+                    shopId: $.cookie('shopid')
+                }
+                axiosGetParams(COURSE_URL.getCoursePackageCourseId, param, (res) => {
+                    if (res.code == '200') {
+                        this.packageProduct.data = res.data;
+                    }
+                })
             }
 
         }

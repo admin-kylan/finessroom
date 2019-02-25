@@ -224,8 +224,34 @@ public class ImportExcelUtils {
                         break;
 
                     //fr_card_type
-                    case 6:// 会员卡种
-                        map.put("cardFlag", cellValue);
+                    case 6:// 会员卡种类型
+                        if(cellValue instanceof String){
+                            String cardFlag = (String) cellValue;
+                            switch (cardFlag) {
+                                case "时间卡":
+                                    map.put("cardFlag", 1);
+                                    break;
+                                case "小时卡":
+                                    map.put("cardFlag", 2);
+                                    break;
+                                case "次卡":
+                                    map.put("cardFlag", 3);
+                                    break;
+                                case "储值卡":
+                                    map.put("cardFlag", 4);
+                                    break;
+                                case "充值卡":
+                                    map.put("cardFlag", 5);
+                                    break;
+                                case "折扣卡":
+                                    map.put("cardFlag",6);
+                                    break;
+                                default:
+                                    logger.debug("会员卡种类型错误...");
+                            }
+                        } else {
+                            logger.debug("会员卡种类型错误...");
+                        }
                         break;
                     case 7://会员卡名
                         map.put("cardTypeName",cellValue);
@@ -330,7 +356,8 @@ public class ImportExcelUtils {
                         break;
                 }
                 break;
-            //潜在客户
+
+                // 判断类型2 潜在客户
             case 2:
                 switch (cellNum) {
                     case 0: // 门店名称
@@ -375,8 +402,127 @@ public class ImportExcelUtils {
                         map.put("createUserName", cellValue);
                         break;
                 }
+
+                // 判断类型3 私教项目
+            case 3:
+                switch (cellNum) {
+                    case 0: // 姓名
+                        map.put("clientName", cellValue);
+                        break;
+                    case 1: // 性别
+                        if (cellValue instanceof String) {
+                            String sex = (String) cellValue;
+                            switch (sex) {
+                                case "男":
+                                    map.put("sex", 0);
+                                    break;
+                                case "女":
+                                    map.put("sex", 1);
+                                    break;
+                                default:
+                                    logger.debug("性别错误...");
+                            }
+                        } else {
+                            logger.debug("性别错误...");
+                        }
+                        break;
+                    case 2: // 手机号码
+                        map.put("mobile", cellValue);
+                        break;
+                    case 3: // 卡号
+                        map.put("cardNo", cellValue);
+                        break;
+                    case 4: // 门店名称
+                        map.put("shopName", cellValue);
+                        break;
+                    case 5:// 场馆
+                        map.put("SdadiumId", cellValue);
+                        break;
+                    case 6:// 项目名称
+                        map.put("project", cellValue);
+                        break;
+                    case 7:// 私教课销售员
+                        map.put("SalesName", cellValue);
+                        break;
+                    case 8:// 上课教练
+                        map.put("theInstructor", cellValue);
+                        break;
+                    case 9:// 跟进教练
+                        map.put("followUpInstructor", cellValue);
+                        break;
+                    case 10:// 购买节数
+                        map.put("BuyCount", cellValue);
+                        break;
+                    case 11:// 赠送节数
+                        map.put("SendCount", cellValue);
+                        break;
+                    case 12:// 剩余节数
+                        map.put("AllCount", cellValue);
+                        break;
+                    case 13:// 购课金额
+                        map.put("Price", cellValue);
+                        break;
+                    case 14:// 刷卡
+                        map.put("PayCardPrice", cellValue);
+                        break;
+                    case 15:// 现金
+                        map.put("CashPrice", cellValue);
+                        break;
+                    case 16:// 微信
+                        map.put("WechatPrice", cellValue);
+                        break;
+                    case 17:// 支付宝
+                        map.put("AlipayPrice", cellValue);
+                        break;
+                    case 18:// 欠款金额
+                        map.put("qkje", cellValue);
+                        break;
+                    case 19:// 销售类型
+                        if (cellValue instanceof String) {
+                            String SaleType = (String) cellValue;
+                            switch (SaleType) {
+                                case "POS销售":
+                                    map.put("SaleType", 0);
+                                    break;
+                                case "新会员购买":
+                                    map.put("SaleType", 1);
+                                    break;
+                                case "续课":
+                                    map.put("SaleType", 2);
+                                    break;
+                                case "场地开课":
+                                    map.put("SaleType", 3);
+                                    break;
+                                default:
+                                    logger.debug("销售类型错误...");
+                            }
+                        } else {
+                            logger.debug("销售类型错误...");
+                        }
+                        break;
+                    case 20:// 开始时间
+                        map.put("StartTime", cellValue);
+                        break;
+                    case 21:// 结束时间
+                        map.    put("EndTime", cellValue);
+                        break;
+                    case 22:// 协议编号(合同编号)
+                        map.put("ContractNumber", cellValue);
+                        break;
+                    case 23:// 操作人
+                        map.put("createUserName", cellValue);
+                        break;
+                    case 24:// 操作时间
+                        map.put("createTime", cellValue);
+                        break;
+                }
+
+
+
                 break;
         }
+
+
         return map;
     }
 

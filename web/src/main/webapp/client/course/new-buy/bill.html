@@ -442,17 +442,17 @@
                                 </div>
                                 <div style=" border-bottom: none">
                                     <div class="col-md-12">
-                                        <a href="javascript:;" class="btn btn-success" @click="save">结账</a>
+                                        <a href="javascript:;" class="btn btn-success" @click="save">{{saveName}}</a>
                                     </div>
                                 </div>
-                                <div style=" border-bottom: none">
+                               <!-- <div style=" border-bottom: none">
                                     <div class="col-md-12">
                                         <label>
                                             <input type="checkbox" v-model="InvoiceStatus">
                                             <span>购置发票</span>
                                         </label>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </fieldset>
                     </div>
@@ -545,6 +545,7 @@
     var billVue = new Vue({
         el: '#customer-new-buy-project-bill-body',
         data: {
+            saveName: '结账',
             toDisabled: false,
             billStatus: '',//判断是课程还是套餐
             index: 0, // tab的index
@@ -601,16 +602,16 @@
 
                 },
                 ticketList: [//会员票据列表
-                    {num: '1', name: '1', interest: '22', differ: 20, use: false},
-                    {num: '2', name: '1', interest: '1', "differ": 20, use: false},
-                    {num: '3', name: '1', interest: '43', "differ": 20, use: false},
-                    {num: '4', name: '1', interest: '21', "differ": 20, use: false}
+                    // {num: '1', name: '1', interest: '22', differ: 20, use: false},
+                    // {num: '2', name: '1', interest: '1', "differ": 20, use: false},
+                    // {num: '3', name: '1', interest: '43', "differ": 20, use: false},
+                    // {num: '4', name: '1', interest: '21', "differ": 20, use: false}
                 ],
                 ticketListGeneral: [//普通票据列表
-                    {num: '1', name: '1', interest: '22', "differ": 20, use: false},
-                    {num: '2', name: '1', interest: '1', "differ": 20, use: false},
-                    {num: '3', name: '1', interest: '43', "differ": 20, use: false},
-                    {num: '4', name: '1', interest: '21', "differ": 20, use: false}
+                    // {num: '1', name: '1', interest: '22', "differ": 20, use: false},
+                    // {num: '2', name: '1', interest: '1', "differ": 20, use: false},
+                    // {num: '3', name: '1', interest: '43', "differ": 20, use: false},
+                    // {num: '4', name: '1', interest: '21', "differ": 20, use: false}
                 ],
                 generalCardInfo: { //普通消费的会员卡信息
                     totalPrice: 0,//选中的票卷金额
@@ -923,9 +924,11 @@
                 //this.formData.payType.front.selectTime = val;
             }
         },
+        created(){
+            this.load(); //初始化加载用户信息
+        },
         mounted: function () {
             //初始化加载用户信息
-            this.load(); //初始化加载用户信息
             this.billStatus = newBuyVue.billStatus; //加载状态项
             //加载项目，套餐
             if (this.billStatus === "package") { //套餐选择
@@ -978,6 +981,7 @@
             this.member.payMoney.totalPrice = this.formData.orderInfo.data.totalPrice ? this.formData.orderInfo.data.totalPrice : 0;
             //当前总金额
             this.member.rebate.currentTotalMoney = this.member.payMoney.totalPrice;
+            console.log(this.formData.orderInfo.data)
         },
         methods: {
             //初始化加载
@@ -992,11 +996,16 @@
                         this.formData.orderInfo.orderNo = response.data;
                     }
                 });
+                //debugger
                 //用户信息
                 axiosGetParams(COURSE_URL.fetchUserInfo, {id: this.formData.userInfo.userId}, (response) => {
+                  //  debugger
                     if (response.code === '200') {
                         this.formData.userInfo.data = response.data;
+                        this.formData.userInfo.data.id = this.formData.userInfo.userId;
                     }
+                },(res)=>{
+                    console.log(res)
                 });
             },
             //物理删除的方式删除该弹窗的全部html
@@ -1148,7 +1157,7 @@
                     return false;
 
                 }
-                this.toDisabled = true;
+
                 //判断校验
                 if(parseInt(this.formData.payType.index) == 3 && this.formData.gift.status == false){
                     alert('请输入赠送人校验')
@@ -1168,7 +1177,7 @@
                     alert("正在获取会员信息，或获取失败。")
                     return false;
                 }
-
+                this.toDisabled = true;
                 let param = {};
                 let full = '', less = '', consumeState = '0';//满减
                 if (this.member.rebate.type + "" === '1') {
@@ -1203,6 +1212,32 @@
                 }
                 //结账方式 付款类型
                // let payTypeInt = parseInt(this.formData.payType.index);
+
+                let moneyReport = {
+                    CustomerCode: $.cookie('code'),
+                    CustomerId: $.cookie('cid'),
+                    UseType: 1,
+                    Discount: parseFloat(this.member.rebate.offer?this.member.rebate.offer:0), //优惠折扣
+                    ChangeMoney: parseFloat(this.member.rebate.integer?this.member.rebate.integer:0), //整单去零
+                    FullType: this.member.rebate.type, //满减优惠类型（0、一次；1、可重复）
+                    DiscountFull: full, //满
+                    DiscountReduce: less, //减
+                    TicketPrice: this.member.cardInfo.totalPrice,
+                    ShouldMoney: parseFloat(this.member.payMoney.price?this.member.payMoney.price:0),
+                    OriginalPrice: this.member.payMoney.totalPrice,
+                    CostMoney: parseFloat(this.member.payMoney.price?this.member.payMoney.price:0),
+                    CouponMoney: this.member.payMoney.discountMoney?parseFloat(this.member.payMoney.discountMoney):0 + this.member.payMoney.discount?parseFloat(this.member.payMoney.discount):0,
+                    RemainMoney: this.member.payMoney.retChange,
+                    OtherPayMoney: parseFloat(this.member.payType['p7']? this.member.payType['p7']: 0).toFixed(2),
+                    CardMoney: this.member.payMoney.discount,
+                    PayType: 0,
+                    CreateId: $.cookie('id'),
+                    CreateName: $.cookie('name'),
+                    Name: $.cookie('clientName'),
+                    Phone: this.formData.userInfo.data.mobile,
+                    ShopId: headVue.shopId, //门店
+                    SdadiumId: headVue.sdaduimId, //场馆
+                }
 
                 let projectOrder = { //项目订单表
                     CustomerCode: $.cookie('code'),
@@ -1274,13 +1309,15 @@
                     RemainMoney: this.member.payMoney.retChange,// 找零
                     ConsumeState: consumeState,// 消费状态 0普通消费 1 会员消费 2员工消费 3 挂账 4挂单
                     MemberCardId: this.member.cardInfo.cardId,// 会员卡ID
-//                    AgreeId: this.member.cardInfo.cardId,// 协议单位ID
-//                    AgreeMoney: this.member.cardInfo.AgreeMoney,// 协议单位ID
+                    //AgreeId: this.member.cardInfo.cardId,// 协议单位ID
+                    //AgreeMoney: this.member.cardInfo.AgreeMoney,// 协议金额
                     PayState: this.member.payType.payStatus,// 付款状态0-未付款 1-已付款 2-退款中 3-已退款
                     IfOffset: 0,// 是否冲销 0 否 1 是
                     SalesId: headVue.performance.saleId, //销售员ID
                     SalesName: headVue.performance.saleName, //销售员名字
                     CashPledge: this.formData.payType.front.money ?this.formData.payType.front.money:0, //押金
+                    Name: $.cookie('clientName'),
+                    Phone: this.formData.userInfo.data.mobile,
                 };
                 let saleType = headVue.sdaduimTypeResult.type == 'teach' ? headVue.sdaduimTypeResult.salesTypeId : '';
                 let isTimeOut = '';
@@ -1309,7 +1346,9 @@
                     SaleName: headVue.performance.saleName, //销售员名字
                     ConsumeType: consumeState, //消费类型  0 普通消费 1 会员消费 2 员工消费  3 挂账 4 挂单
                     State: isTimeOut, //状态 0 正常 1欠款 2 过期 3 历史 4 未开始
+                    eduType:OrderType == 1?0:1
                 };
+
 
                 //--------------------
                 let cardOrderPayModeList = []; //订单表
@@ -1667,21 +1706,27 @@
               //  param.cardOrderPriceDetailList = fr_card_order_price_datail_list;
                 param.cardOrderAllotSetList = fr_card_order_allot_set_list;
                 param.clientPersonnelRelate = fr_client_personnel_relate;
+                param.moneyReport = moneyReport;
                // param.cardOrderDetail = cardOrderDetail;
                 //修改储值金额
-
+                param.createUserId = $.cookie('id');
+                param.createUserName = $.cookie('name');
+                param.OrderType = OrderType;
                 console.log(param)
                 console.log(JSON.stringify(param))
-
+                this.saveName = "正在提交..."
                 ajaxPostJsonParams(COURSE_URL.addSaveCustomer, JSON.stringify(param), (response) => {
                     if(response.code == '200'){
                         window.location.reload()
                         alert("新购成功");
+                        this.saveName = '结账';
                     }else{
                         alert('新购失败,请重试');
                         this.toDisabled = false;
+                        this.saveName = '结账';
                     }
                 });
+               // console.log(this.formData.orderInfo.data.validityPeriod)
             }
         }
     });

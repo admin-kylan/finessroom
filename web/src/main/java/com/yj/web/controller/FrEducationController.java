@@ -626,4 +626,19 @@ public class FrEducationController {
     }
 
 
+    /**
+     * 查询这一周的私教课程时间
+     * @param request
+     * @return
+     */
+    @GetMapping("findEduDateByEduId")
+    public JsonResult findEduDateByEduId(HttpServletRequest request){
+        String eduId = request.getParameter("eduId");
+        String courseId = request.getParameter("courseId");
+        String beginDate = request.getParameter("beginDate");
+        String endDate = request.getParameter("endDate");
+        return JsonResult.success(frEducationPublicService.findEduDateByEduId(eduId, courseId, beginDate, endDate));
+    }
+
+
 }

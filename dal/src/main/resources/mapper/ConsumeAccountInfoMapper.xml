@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ConsumeAccountInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.ConsumeAccountInfo">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="ConsumeAccountOrderId" property="ConsumeAccountOrderId" />
+        <result column="TableName" property="TableName" />
+        <result column="CustomerId" property="CustomerId" />
+        <result column="MemberCardId" property="MemberCardId" />
+        <result column="AddprojectId" property="AddprojectId" />
+        <result column="AgreeId" property="AgreeId" />
+        <result column="ProjectId" property="ProjectId" />
+        <result column="CourseId" property="CourseId" />
+        <result column="Unit" property="Unit" />
+        <result column="Price" property="Price" />
+        <result column="Count" property="Count" />
+        <result column="Total" property="Total" />
+        <result column="StartTime" property="StartTime" />
+        <result column="EndTime" property="EndTime" />
+        <result column="State" property="State" />
+        <result column="ConsumeState" property="ConsumeState" />
+        <result column="PaymentMoney" property="PaymentMoney" />
+        <result column="OtherPayMoney" property="OtherPayMoney" />
+        <result column="CardMoney" property="CardMoney" />
+        <result column="CardTime" property="CardTime" />
+        <result column="AgreeMoney" property="AgreeMoney" />
+        <result column="AddProjectTime" property="AddProjectTime" />
+        <result column="PayState" property="PayState" />
+        <result column="Name" property="Name" />
+        <result column="Phone" property="Phone" />
+        <result column="SaleId" property="SaleId" />
+        <result column="CreateId" property="CreateId" />
+        <result column="CreateTime" property="CreateTime" />
+        <result column="OrderNumber" property="OrderNumber" />
+        <result column="CreateName" property="CreateName" />
+        <result column="TableId" property="TableId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CustomerCode, ConsumeAccountOrderId, TableName, CustomerId, MemberCardId, AddprojectId, AgreeId, ProjectId, CourseId, Unit, Price, Count, Total, StartTime, EndTime, State, ConsumeState, PaymentMoney, OtherPayMoney, CardMoney, CardTime, AgreeMoney, AddProjectTime, PayState, Name, Phone, SaleId, CreateId, CreateTime, ID, OrderNumber, CreateName, TableId
+    </sql>
+
+</mapper>

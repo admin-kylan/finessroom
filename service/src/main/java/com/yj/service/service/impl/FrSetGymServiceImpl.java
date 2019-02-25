@@ -18,10 +18,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
 
 /**
  * <p>
@@ -38,7 +36,7 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
     IShopService shopService;
 
     @Override
-    public List<Map<String, Object>> getShop(String code, String type) throws YJException {
+    public List<Map<String, Object>> getShop(String code, String modelId) throws YJException {
         if (code == null || code == "") {
             HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             code = CookieUtils.getCookieValue(req, "code", true);
@@ -49,7 +47,7 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
         for (Map<String, Object> map : list) {
             if (map != null) {
                 List<FrSetGym> frSetGyms = baseMapper.selectList(
-                        new EntityWrapper<FrSetGym>().where("is_using=1 and shop_id={0} and is_currency=0 and venue_type={1}", map.get("ID"), type)
+                        new EntityWrapper<FrSetGym>().where("is_using=1 and shop_id={0} and is_currency=0 and model_id={1}", map.get("ID"), modelId)
                 );
                 map.put("frSetGyms", frSetGyms);
             }
@@ -58,16 +56,16 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
     }
 
     @Override
-    public List<FrSetGym> getChainStore(String type) {
+    public List<FrSetGym> getChainStore(String modelId) {
         List<FrSetGym> frSetGyms = baseMapper.selectList(
-                new EntityWrapper<FrSetGym>().where("is_using=1 and is_currency=1 and venue_type={0}", type)
+                new EntityWrapper<FrSetGym>().where("is_using=1 and is_currency=1 and model_id={0}", modelId)
         );
         return frSetGyms;
     }
 
     @Override
-    public Map<String, Object> getTime(String type) {
-        return baseMapper.getTime(type);
+    public Map<String, Object> getTime(String modelId) {
+        return baseMapper.getTime(modelId);
     }
 
     @Override
@@ -104,11 +102,9 @@ public class FrSetGymServiceImpl extends BaseServiceImpl<FrSetGymMapper, FrSetGy
         frSetGym.setCurrency((Boolean) map.get("isCurrency"));
         frSetGym.setDeposit((Double.parseDouble(map.get("deposit").toString())));
         frSetGym.setProjectName((String) map.get("projectName"));
-        frSetGym.setVenueId((String) map.get("venueId"));
-        frSetGym.setVenueName((String) map.get("venueName"));
+        frSetGym.setModelId((String) map.get("modelId"));
         frSetGym.setCompany((String) map.get("company"));
-        frSetGym.setVenueType(Integer.parseInt(map.get("venueType").toString()));
-        if (frSetGym.getVenueType() == 3) {
+        if ("d93c9fc97f0759bb".equals(frSetGym.getModelId())) {
             frSetGym.setIsTime((String) map.get("isTime"));
             frSetGym.setOvertime((String) map.get("overtime"));
 

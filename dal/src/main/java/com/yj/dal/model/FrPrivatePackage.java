@@ -58,7 +58,17 @@ public class FrPrivatePackage extends Model<FrPrivatePackage> {
     private String updateUser;
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
+    //场馆ID
+    @TableField("sdaduim_id")
+    private String sdaduimId;
 
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
 
     public Double getPromtionPrice() {
         return promtionPrice;

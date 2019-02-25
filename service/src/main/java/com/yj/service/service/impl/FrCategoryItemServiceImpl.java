@@ -48,63 +48,46 @@ public class FrCategoryItemServiceImpl extends BaseServiceImpl<FrCategoryItemMap
  **/
     @Override
     public JsonResult getCategoryItemList(String[] ssids) {
-        Shop shop=new Shop();
+//        Shop shop = new Shop();
         List<List<FrCategoryItem>>categoryItemlist = new ArrayList<>();
         Map<String,List<Sdaduim>> map = new HashMap<String,List<Sdaduim>>();
-
        // List<CategoryItemDTO> categoryItemDTOList;
         Sdaduim sdaduim=new Sdaduim();
-
         for (int i = 0; i < ssids.length; i++) {
             //查场馆
             sdaduim = sdaduimMapper.selectById(ssids[i]);
             //根据场馆id：sdaduim_id 查询项目列表(场馆项目表 =>关联=> 会员卡类型-门店-场馆-项目关系表)
-
-
-            List<CategoryItemDTO> items = categoryItemMapper.selectItemsBySdaduimId(ssids[i]);
-
-            //  sdaduim.setCategoryItemlist(items);
-
-            //查询 获取项目的设置
+            if(sdaduim != null) {
+                List<CategoryItemDTO> items = categoryItemMapper.selectItemsBySdaduimId(ssids[i]);
+                //  sdaduim.setCategoryItemlist(items);
+                //查询 获取项目的设置
 //            for (int j = 0; j < items.size(); j++) {
 //                System.out.println(items.get(j).getSccId());
 //                List<FrShopCtypeConsumePladdset> frShopCtypeConsumePladdsets = ctypeConsumePladdsetMapper.selectCtypeConsumePladdset(items.get(j).getSccId());
 //                System.out.println("frShopCtypeConsumePladdsets=================="+frShopCtypeConsumePladdsets);
-//
 //                List<FrShopCtypeConsumePlset> frShopCtypeConsumePlsets = ctypeConsumePlsetMapper.selectCtypeConsumePlset(items.get(j).getSccId());
-//
-//
 //                System.out.println("frShopCtypeConsumePlsets=====333333============="+frShopCtypeConsumePlsets);
-//
-//
 //                items.get(j).setCardConsumePladdsetDTO(frShopCtypeConsumePladdsets);
-//
-//
 //                items.get(j).setCardConsumePlsetDTO(frShopCtypeConsumePlsets);
 //            }
+                sdaduim.setCategoryItemlist(items);
 
-            sdaduim.setCategoryItemlist(items);
-
-
-            //查场馆项目
-            //sdaduim.setCategoryItemlist(categoryItemMapper.selectList(new EntityWrapper<FrCategoryItem>().where("sdaduim_id = {0}", ssids[i])));
+//查场馆项目
+//sdaduim.setCategoryItemlist(categoryItemMapper.selectList(new EntityWrapper<FrCategoryItem>().where("sdaduim_id = {0}", ssids[i])));
 // 查关系
-          List< FrShopCtypeConsume>  list=   consumeMapper.selectList((new EntityWrapper<FrShopCtypeConsume>().where("sdaduim_id = {0}", ssids[i])));
-
-             sdaduim.setShopCtypeConsumes(list);
-
-            if(map.get(sdaduim.getShopId()) == null){
-                List<Sdaduim> sList=new ArrayList<>();
-                sList.add(sdaduim);
-                map.put(sdaduim.getShopId(),sList);
-            }else{
-                List<Sdaduim> sList= map.get(sdaduim.getShopId());
-                sList.add(sdaduim);
-                map.put(sdaduim.getShopId(),sList);
+                List<FrShopCtypeConsume> list = consumeMapper.selectList((new EntityWrapper<FrShopCtypeConsume>().where("sdaduim_id = {0}", ssids[i])));
+                sdaduim.setShopCtypeConsumes(list);
+                if (map.get(sdaduim.getShopId()) == null) {
+                    List<Sdaduim> sList = new ArrayList<>();
+                    sList.add(sdaduim);
+                    map.put(sdaduim.getShopId(), sList);
+                } else {
+                    List<Sdaduim> sList = map.get(sdaduim.getShopId());
+                    sList.add(sdaduim);
+                    map.put(sdaduim.getShopId(), sList);
+                }
             }
         }
-
-
         return JsonResult.success(map);
     }
 

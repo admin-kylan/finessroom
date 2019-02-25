@@ -32,14 +32,21 @@
 				<p class="line">
 					跟进内容：
 					<!--<textarea name="followContent" v-model="followUpRecordAdd.followContent" v-on:click="getFollwKeyLis"></textarea>-->
-					<textarea name="followContent" v-on:click="getFollwKeyLis" readonly>{{followContentT}}</textarea>
+					<textarea name="followContent" v-on:click="getFollwKeyLis" v-model="followContentT"></textarea>
 				</p>
 
 				<!-- 跟进内容筛选 (动态面板) -->
-				<div id="followKeyword" class="ax_default ax_default_hidden" data-label="跟进内容筛选" style="display: none;position: absolute;background: #fff;width: 32%;left: 8%;top: 144px;padding: 15px 8px 15px 8px;border: 1px solid #ccc">
+				<div id="followKeyword" class="ax_default ax_default_hidden" data-label="跟进内容筛选" style="display: none;
+			    position: absolute;
+			    background: rgb(255, 255, 255);
+			    width: 30%;
+			    left: 140px;
+			    top: 170px;
+			    padding: 15px 8px;
+			    border: 1px solid rgb(204, 204, 204);">
 					<div class="panel_state" data-label="State1" v-for="item in followKeywordList" >
 						<div class="panel_state_content" :value="item.id">
-							<div  class="ax_default box_1">
+							<div  class="ax_default box_1" @click="appendContent(item.content,item.id)">
 								<div  class=""></div>
 								<div class="text" style="visibility: visible;display: inline-block;float: left;margin-left: 10px;margin-right: 10px;margin-bottom:10px;border: 1px solid #ccc;padding: 2px 9px 2px 9px;">
 									<p><span style="font-family:'应用字体 Regular', '应用字体';">{{item.content}}</span></p>

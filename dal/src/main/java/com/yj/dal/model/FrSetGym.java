@@ -1,12 +1,14 @@
 package com.yj.dal.model;
 
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -77,26 +79,15 @@ public class FrSetGym extends Model<FrSetGym> {
     @TableField("is_currency")
     private Boolean isCurrency;
     /**
-     * 场馆名称
-     */
-    @TableField("venue_name")
-    private String venueName;
-    /**
      * 场馆id
      */
-    @TableField("venue_id")
-    private String venueId;
+    @TableField("model_id")
+    private String modelId;
     /**
      * 是否为门店默认项目 0.否 1.是 默认否  为是的时候项目不可删除,新建门店时插入
      */
     @TableField("is_Mel")
     private Boolean isMel;
-    /**
-     * 1.健身馆 2.游泳馆 3.儿童馆 4.瑜伽馆 5.跆拳道馆 区分场馆
-     */
-    @TableField("venue_type")
-    private Integer venueType;
-
     /**
      * 儿童馆才有此设置 是否限时  不限时为空 不为空的值为限时的时间
      */
@@ -141,13 +132,6 @@ public class FrSetGym extends Model<FrSetGym> {
         this.overtime = overtime;
     }
 
-    public Integer getVenueType() {
-        return venueType;
-    }
-
-    public void setVenueType(Integer venueType) {
-        this.venueType = venueType;
-    }
 
     public Boolean getMel() {
         return isMel;
@@ -245,21 +229,6 @@ public class FrSetGym extends Model<FrSetGym> {
         this.isCurrency = isCurrency;
     }
 
-    public String getVenueName() {
-        return venueName;
-    }
-
-    public void setVenueName(String venueName) {
-        this.venueName = venueName;
-    }
-
-    public String getVenueId() {
-        return venueId;
-    }
-
-    public void setVenueId(String venueId) {
-        this.venueId = venueId;
-    }
 
     public String getCreateUserName() {
         return createUserName;
@@ -325,6 +294,14 @@ public class FrSetGym extends Model<FrSetGym> {
         this.updateUserName = updateUserName;
     }
 
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -333,27 +310,25 @@ public class FrSetGym extends Model<FrSetGym> {
     @Override
     public String toString() {
         return "FrSetGym{" +
-        ", projectName=" + projectName +
-        ", shopName=" + shopName +
-        ", shopId=" + shopId +
-        ", company=" + company +
-        ", marketPrice=" + marketPrice +
-        ", promotionPrice=" + promotionPrice +
-        ", memberPrice=" + memberPrice +
-        ", deposit=" + deposit +
-        ", remarks=" + remarks +
-        ", isUsing=" + isUsing +
-        ", isCurrency=" + isCurrency +
-        ", venueName=" + venueName +
-        ", venueId=" + venueId +
-        ", createUserName=" + createUserName +
-        ", createUserId=" + createUserId +
-        ", CustomerCode=" + CustomerCode +
-        ", updateTime=" + updateTime +
-        ", updateUserId=" + updateUserId +
-        ", id=" + id +
-        ", createTime=" + createTime +
-        ", updateUserName=" + updateUserName +
-        "}";
+                ", projectName=" + projectName +
+                ", shopName=" + shopName +
+                ", shopId=" + shopId +
+                ", company=" + company +
+                ", marketPrice=" + marketPrice +
+                ", promotionPrice=" + promotionPrice +
+                ", memberPrice=" + memberPrice +
+                ", deposit=" + deposit +
+                ", remarks=" + remarks +
+                ", isUsing=" + isUsing +
+                ", isCurrency=" + isCurrency +
+                ", createUserName=" + createUserName +
+                ", createUserId=" + createUserId +
+                ", CustomerCode=" + CustomerCode +
+                ", updateTime=" + updateTime +
+                ", updateUserId=" + updateUserId +
+                ", id=" + id +
+                ", createTime=" + createTime +
+                ", updateUserName=" + updateUserName +
+                "}";
     }
 }

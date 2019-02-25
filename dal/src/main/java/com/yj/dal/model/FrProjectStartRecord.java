@@ -33,6 +33,14 @@ public class FrProjectStartRecord extends Model<FrProjectStartRecord> {
     @TableId(value = "ID", type = IdType.UUID)
     private String id;
     /**
+     * 用户id
+     */
+    private String clientId;
+    /**
+     * 用户名字
+     */
+    private String clientName;
+    /**
      * 操作时间
      */
     private Date operateDate;
@@ -48,6 +56,10 @@ public class FrProjectStartRecord extends Model<FrProjectStartRecord> {
      * 项目Id
      */
     private String projectOrderId;
+    /**
+     * 项目Name
+     */
+    private String courseName;
     /**
      * 开始时间
      */
@@ -78,6 +90,13 @@ public class FrProjectStartRecord extends Model<FrProjectStartRecord> {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     public String getCustomerCode() {
         return CustomerCode;
@@ -202,6 +221,22 @@ public class FrProjectStartRecord extends Model<FrProjectStartRecord> {
     @Override
     protected Serializable pkVal() {
         return this.id;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     @Override

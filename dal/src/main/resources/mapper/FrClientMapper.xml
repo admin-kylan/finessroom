@@ -131,16 +131,33 @@
         presale_status AS presaleStatus,source_id AS sourceId,consultant_id AS consultantId,willing_card_type AS willingCardType,client_name AS clientName, english_name AS englishName, mobile, tel, sex, stature, weight, school, major, birthday, speciality, level_id AS levelId, marital_status AS maritalStatus, id_type AS idType, id_no AS idNo, id_address AS idAddress, home_add AS homeAdd, email, native_place AS nativePlace, company_name AS companyName, job_title AS jobTitle, company_address AS companyAddress, business_scope AS businessScope, car_num AS carNum, attention_problem AS attentionProblem, company_tel AS companyTel, income, car_brand AS carBrand, note, reference_name AS referenceName, reference_tel AS referenceTel, consultant_name AS consultantName, consultant_tel AS consultantTel, fwhj_name AS fwhjName, fwhj_tel AS fwhjTel, protect_day AS protectDay, customer_source AS customerSource, apply_time AS applyTime, flag, type, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, status, CustomerMark, id
     </sql>
 
-    <select id="getClient" resultMap="BaseResultMap1" parameterType="java.lang.String">
+    <select id="getClient" resultType="java.util.Map" parameterType="java.lang.String">
         SELECT
-        (SELECT c.pic_link  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) pic_link,
-        (SELECT c.id  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) cp_id,
-        (SELECT c.client_id  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) client_id,
-        cl.*,qq,caution_question,
-        le.level_name c_flag
+        (SELECT c.pic_link  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) picLink,
+        --         (SELECT c.id  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) cp_id,
+        --         (SELECT c.client_id  FROM fr_client_pic c WHERE c.client_id = cl.id AND c.pic_type = 1 AND c.pic_state = 1 ) client_id,
+        build_date buildDate,
+        apply_time applyTime,
+        client_name clientName,
+        wechat,
+        mobile,
+        fwhj_name fwhjName,
+        qq,
+        birthday,
+        sex,
+        --         caution_question cautionQuestion,
+        le.level_name levelName,
+        (
+        SELECT
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.visiting_time in(select max(fcv.visiting_time)from fr_client_visiting fcv group by fcv.client_id ) and fcv.client_id=cl.id
+        )visitingTime
         FROM
         fr_client cl
         LEFT JOIN fr_level le ON le.id = cl.level_id
+
         WHERE cl.id = #{id}
     </select>
     <!--<select id="selectExistenceList" resultType="com.yj.dal.dto.ExistenceClientDTO">-->
@@ -553,7 +570,8 @@
         purchase_will purchaseWill,
         customer_source customerSource,
         presale_status presaleStatus,
-        isReferrer
+        isReferrer,
+        shopName
         from (
         SELECT
         cl.id,
@@ -588,7 +606,8 @@
         cl.wechat,
         cl.vip_level,
         cl.purchase_will,
-        cl.customer_source
+        cl.customer_source,
+        s.ShopName shopName
         FROM
         fr_client cl
         <!--关联潜在客户图片表-->
@@ -604,7 +623,9 @@
         LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
         <!--关联员工表 查询销售顾问-->
         LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        LEFT JOIN Shop s on s.id = fcp.shop_id
         <!--关联潜在客户跟进记录表-->
+
         LEFT JOIN (
         SELECT
         client_id,
@@ -731,6 +752,7 @@
             </if>
         </where>
     </select>
+
     <update id="updateClient" parameterType="com.yj.dal.model.FrClient">
         update fr_client
         <set>
@@ -1206,7 +1228,8 @@
                     <when test="clientType=='3'.toString()">
                         <!--本月未到访 -->
                         <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
-                            AND visiting_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                            AND (visiting_time NOT BETWEEN #{startTime} AND (#{endTime}+' 23:59:59'))or visiting_time = ''
+                            or visiting_time IS NULL)
                         </if>
                     </when>
                     <when test="clientType=='6'.toString()">
@@ -1922,7 +1945,7 @@
                 fcv.client_id
                 FROM
                 fr_client_personnel_relate fcv
-                where fcv.type=1  and fcv.user_type=0) or protectDay &lt; 0) and (type=0 or type is null))
+                where fcv.type=1 and fcv.user_type=0) or protectDay &lt; 0) and (type=0 or type is null))
             </if>
             <!-- 根据性别 -->
             <if test="sex != null ">
@@ -2059,7 +2082,7 @@
         FROM
         fr_client cl
         LEFT JOIN
-        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr  JOIN fr_client_personal fclp ON
+        ( SELECT fpr.client_id, fpr.personal_id FROM fr_client_personnel_relate fpr JOIN fr_client_personal fclp ON
         fclp.client_id= fpr.client_id ) lp on lp.client_id=cl.id
         LEFT JOIN fr_level fl on fl.id=cl.level_id
         WHERE cl.is_using = 1 and fl.is_using = 1 ) lp
@@ -2071,7 +2094,7 @@
         LEFT JOIN PersonnelInfo pi3
         ON pi3.ID = #{personalId}
         AND pi3.Status = 0
-        LEFT JOIN fr_client_personnel_relate fcpr  ON cl.id= fcpr.client_id  and fcpr.user_type=0
+        LEFT JOIN fr_client_personnel_relate fcpr ON cl.id= fcpr.client_id and fcpr.user_type=0
         LEFT JOIN Shop shop ON fcp.shop_id = shop.ID
         LEFT JOIN (
         SELECT DISTINCT
@@ -2159,13 +2182,13 @@
         <!-- 根据门店 -->
         <if test="storeId != null and storeId != ''">
             JOIN(
-            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{storeId}  and user_type=0
+            select client_id,shop_id from fr_client_personnel_relate where shop_id=#{storeId} and user_type=0
             )sd on sd.client_id=cl.id
         </if>
         <!-- 根据教练 -->
         <if test="coachId != null and coachId != ''">
             JOIN (
-            select client_id,personal_id from fr_client_personnel_relate where type=0  and user_type=0
+            select client_id,personal_id from fr_client_personnel_relate where type=0 and user_type=0
             )relate on relate.client_id=cl.id and relate.personal_id in (#{coachId})
         </if>
         ) tt
@@ -2255,7 +2278,7 @@
         cl.customer_source customerSource,
         ISNULL( cc.cardMoneyCount, 0 ) cardMoneyCount,
         ( SELECT COUNT ( 1 ) cardCount FROM (
-        SELECT fc.id FROM fr_card  fc where fc.client_id=cl.id
+        SELECT fc.id FROM fr_card fc where fc.client_id=cl.id
         )fc ) cardCount,
         mop.mostPriceCard,
         mop2.mostCheapCard ,
@@ -2380,10 +2403,10 @@
     </select>
 
     <!--查询是否现有客户  现有客户先暂时存放在type，潜在客户先暂时存放在stature-->
-    <select id="queryByClient"  resultType="com.yj.dal.model.FrClient">
+    <select id="queryByClient" resultType="com.yj.dal.model.FrClient">
         SELECT
-        (SELECT count(1) FROM  fr_client_personal b where b.client_id = a.id  and b.is_using = 1 ) type,
-        (SELECT count(1) FROM  fr_client_latence_personal b where b.client_id = a.id and b.is_using = 1) stature,
+        (SELECT count(1) FROM fr_client_personal b where b.client_id = a.id and b.is_using = 1 ) type,
+        (SELECT count(1) FROM fr_client_latence_personal b where b.client_id = a.id and b.is_using = 1) stature,
         a.id,
         a.client_name AS clientName,
         a.mobile,
@@ -2391,16 +2414,68 @@
         a.level_id AS levelId,
         a.email,
         a.CustomerMark
-        FROM  fr_client a
+        FROM fr_client a
         WHERE a.CustomerCode = #{CustomerCode}
-        AND  a.client_name = #{clientName}
-        AND  a.mobile = #{mobile}
-        <if test=" sex !=null" >
-            AND  a.sex = #{sex}
+        AND a.client_name = #{clientName}
+        AND a.mobile = #{mobile}
+        <if test=" sex !=null">
+            AND a.sex = #{sex}
         </if>
     </select>
 
-    <select id="selectByMobile"   parameterType="java.lang.String"  resultType="java.lang.Integer">
+    <select id="selectByMobile" parameterType="java.lang.String" resultType="com.yj.dal.model.FrClient">
+        SELECT * FROM fr_client WHERE mobile = #{mobile}
+    </select>
+
+    <select id="selectByMobile" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT (*) FROM fr_client WHERE mobile = #{mobile}
+    </select>
+
+    <select id="selectPotentialClientList" resultType="java.util.Map">
+             SELECT
+                fr.id,
+                fr.mobile,
+                fr.vip_level vipLevel,
+                fr.client_name clientName,
+                fr.customer_source customerSource,
+                fr.create_time createTime,
+                fr.consultant_name consultantName,
+                fof.follow_time followTime
+            FROM
+                fr_client fr
+                JOIN fr_client_latence_personal fclp ON fclp.client_id = fr.id and fclp.shop_id=#{shopId} and fclp.CustomerCode = #{customerCode} and fclp.is_using=1  and fr.is_using=1
+                LEFT JOIN (
+            SELECT
+                flf.client_id,
+                flf.follow_time
+            FROM
+                fr_latence_follow flf
+            WHERE
+                flf.follow_time IN ( SELECT max( flf.follow_time ) FROM fr_latence_follow flf GROUP BY flf.client_id )
+                ) fof ON fof.client_id = fr.id
+    </select>
+    <select id="selectEmployeeClientList" resultType="java.util.Map">
+             SELECT
+                fr.id,
+                fr.mobile,
+                fr.vip_level vipLevel,
+                fr.client_name clientName,
+                fr.customer_source customerSource,
+                fr.create_time createTime,
+                fr.fwhj_name fwhjName,
+                fof.follow_time followTime
+            FROM
+                fr_client fr
+                JOIN fr_client_personal fclp ON fclp.client_id = fr.id and fclp.shop_id=#{shopId} and fclp.CustomerCode = #{customerCode}  and fclp.is_using=1 and fr.is_using=1
+                LEFT JOIN (
+            SELECT
+                flf.client_id,
+                flf.follow_time
+            FROM
+                fr_latence_follow flf
+            WHERE
+                flf.follow_time IN ( SELECT max( flf.follow_time ) FROM fr_latence_follow flf GROUP BY flf.client_id )
+                ) fof ON fof.client_id = fr.id
+            	where fr.is_using=1 and fr.level_id is not null
     </select>
 </mapper>

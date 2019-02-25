@@ -40,7 +40,17 @@ public class FrSettingInfo extends Model<FrSettingInfo> {
     private Integer type;
     @TableId(value = "id")
     private String id;
+    //场馆ID
+    @TableField("sdaduim_id")
+    private String sdaduimId;
 
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
 
     public Date getUpdateTime() {
         return updateTime;

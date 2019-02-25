@@ -107,6 +107,9 @@ public class FrEducationPublicServiceImpl {
 
     @Autowired
     private FrEducationFreezeClientMapper frEducationFreezeClientMapper;
+
+    @Autowired
+    private FrConsumeMoneyOrderServiceImpl frConsumeMoneyOrderService;
     /**
      * 获取教练
      *
@@ -144,16 +147,27 @@ public class FrEducationPublicServiceImpl {
      */
     public List findEducationList(String code, String shopId, String coachId, String sdaduimId, String beginDate, String endDate, String eduType, String reserveType) {
         //私教一对一
-        if (StringUtils.equals(eduType, "1")) {
-            if (StringUtils.equals(reserveType, "1")) {
-                return frEducationPublicMapper.findEducationOneToOneList(shopId, code, coachId, sdaduimId, beginDate, endDate, eduType);
+        if (StringUtils.equals(eduType, "1") && StringUtils.equals(reserveType, "1")) {
+            //findEducationOneToOneClientInfo
+            List<Map<String, Object>> list = frEducationPublicMapper.findEducationOneToOneList(shopId, code, coachId, sdaduimId, beginDate, endDate, eduType);
+            String eduId = "";
+            Map<String, Object> mapClientInfo = null;
+            for(Map<String, Object> map: list){
+                eduId = String.valueOf(map.get("id"));
+                mapClientInfo = frEducationPublicMapper.findEducationOneToOneClientInfo(eduId);
+                if(null != mapClientInfo){
+                    map.putAll(mapClientInfo);
+                }
+
             }
-            return frEducationPublicMapper.findEducationOneToManyList(shopId, code, coachId, sdaduimId, beginDate, endDate, eduType);
+            return list;
+
+         //   return frEducationPublicMapper.findEducationOneToManyList(shopId, code, coachId, sdaduimId, beginDate, endDate, eduType);
 
         }
 
         //团教
-        return frEducationPublicMapper.findEducationList(shopId, code, coachId, sdaduimId, beginDate, endDate, eduType);
+        return frEducationPublicMapper.findEducationList(shopId, code, coachId, sdaduimId, beginDate, endDate, eduType, reserveType);
     }
 
     /**
@@ -242,6 +256,8 @@ public class FrEducationPublicServiceImpl {
      */
     public void saveEducationItem(Map<String, Object> map) throws Exception {
         String level = "";
+        String eduType = "0";
+        eduType = String.valueOf(map.get("eduType"));
         FrEducationClientInfo frEducationClientInfo = JSONObject.parseObject(JSONObject.toJSONString(map), FrEducationClientInfo.class);
         FrEducation frEducation = frEducationPublicMapper.selectById(frEducationClientInfo.getEducationId());
         //判断当前用户是否被冻结
@@ -249,11 +265,25 @@ public class FrEducationPublicServiceImpl {
         frEducationFreezeClient.setClientId(frEducationClientInfo.getReserveClientId());
         frEducationFreezeClient.setEduType(frEducation.getType());
         frEducationFreezeClient = frEducationFreezeClientMapper.selectOne(frEducationFreezeClient);
-        if(frEducationFreezeClient.getUse() == false){
+
+        if(null != frEducationFreezeClient && frEducationFreezeClient.getUse() == false){
             //被冻结
             throw new Exception("抱歉，该用户'"+frEducationClientInfo.getReserveClientName()+"'被冻结");
         }
+        //判断该课程是否预约满员
+        //判断当前课程预约人数是否已经满员
 
+        Integer a = 0;
+        Map<String, String> mapValue = frEducationClientInfoMapper.findClientCountByEduId(frEducation.getId(), "1");
+        a += Integer.parseInt(String.valueOf(mapValue.get("value")));
+        mapValue = frEducationClientInfoMapper.findClientCountByEduId(frEducation.getId(), "2");
+        a += Integer.parseInt(String.valueOf(mapValue.get("value")));
+        if(frEducation.getReserveTotalNum() <= a){
+            throw new Exception("抱歉，该预约人数已满！");
+        }
+
+
+        //课程配置
         FrEducationConfig frEducationConfig = new FrEducationConfig();
         frEducationConfig.setEducationId(frEducationClientInfo.getEducationId());
         frEducationConfig = frEducationConfigMapper.selectOne(frEducationConfig);
@@ -275,10 +305,13 @@ public class FrEducationPublicServiceImpl {
         //保存
         frEducationClientInfo.setId(UUIDUtils.generateGUID());
         //查找座位 {replace}
-        FrGroupClassRoomSeat frGroupClassRoomSeat = frGroupClassRoomSeatMapper.selectById(frEducationClientInfo.getSeatId());
-        frGroupClassRoomSeat.setSeatNum(JSONArray.toJSONString(map.get("seatNum")).replace("{replace}", frEducationClientInfo.getId()));
+        if(StringUtils.equals(eduType, "0")){
+            FrGroupClassRoomSeat frGroupClassRoomSeat = frGroupClassRoomSeatMapper.selectById(frEducationClientInfo.getSeatId());
+            frGroupClassRoomSeat.setSeatNum(JSONArray.toJSONString(map.get("seatNum")).replace("{replace}", frEducationClientInfo.getId()));
+            frGroupClassRoomSeatMapper.updateAllColumnById(frGroupClassRoomSeat);
+        }
         frEducationClientInfoMapper.insert(frEducationClientInfo);
-        frGroupClassRoomSeatMapper.updateAllColumnById(frGroupClassRoomSeat);
+
     }
 
 
@@ -387,11 +420,14 @@ public class FrEducationPublicServiceImpl {
                 throw new Exception("提交出错，请重试。");
             }
             frEducationMemberOrder.setId(orderId);
-            projectOrder.setAllCount(Integer.parseInt(endAmt));
+            projectOrder.setAllCount(projectOrder.getAllCount() - Integer.parseInt(endAmt));
+            //并且保存课程现在的值
+            int count = projectOrder.getAllCount();
+            projectOrder.setTotalPrice(projectOrder.getPrice() + count);
 
-            this.insertEducationMemberOrder(frEducationMemberOrder, map);
+            this.insertEducationMemberOrder(frEducationMemberOrder, map, 1);
             //修改课程数
-            projectOrderMapper.updateById(projectOrder);
+            projectOrderMapper.updateAllColumnById(projectOrder);
 
 
         } catch (NumberFormatException e) {
@@ -406,7 +442,7 @@ public class FrEducationPublicServiceImpl {
      * @param frEducationMemberOrder
      * @param map
      */
-    private void insertEducationMemberOrder(FrEducationMemberOrder frEducationMemberOrder, Map<String, String> map) throws Exception {
+    private void insertEducationMemberOrder(FrEducationMemberOrder frEducationMemberOrder, Map<String, String> map, Integer inte) throws Exception {
 
 
         //计算结束时间
@@ -422,24 +458,36 @@ public class FrEducationPublicServiceImpl {
             throw new Exception("预约失败，请重试");
         }
 
-        //关联订单
-        FrEducationClientInfo frEducationClientInfo1 = new FrEducationClientInfo();
-        frEducationClientInfo1.setMemberId(frEducationClientInfo.getMemberId());
-        frEducationClientInfo1.setEducationId(frEducationClientInfo.getEducationId());
-        frEducationClientInfo1.setReserveStatus(1);
-
+        //关联clientInfo
         String clientInfoId = UUIDUtils.generateGUID();
-        frEducationClientInfo1 = frEducationClientInfoMapper.selectOne(frEducationClientInfo1);
+        FrEducationClientInfo frEducationClientInfo1 = null;
+        frEducationClientInfo1 = frEducationClientInfoMapper.findByEduIdForNormal(frEducationClientInfo.getEducationId(), frEducationClientInfo.getMemberId());
+
         //判断是否已经存在
         if (null != frEducationClientInfo1) {
-            //查看当前的memberorder 是否存在
+            //查看当前的memberOrder 是否存在
             FrEducationMemberOrder frEducationMemberOrder1 = frEducationMemberOrderMapper.findMemberOrderNormal(frEducationClientInfo1.getEducationId(), frEducationClientInfo1.getId());
             if (null != frEducationMemberOrder1) {
                 //已经存在 ，则不能重复交钱扣款
                 throw new Exception("该会员已经付款扣费,请勿重复提交");
             }
             clientInfoId = frEducationClientInfo1.getId();
+            frEducationClientInfo1.setReserveStatus(1);
+            frEducationClientInfoMapper.updateAllColumnById(frEducationClientInfo1);
+            //赋值给
+            frEducationClientInfo = frEducationClientInfo1;
         } else {
+
+            //判断当前课程预约人数是否已经满员
+            FrEducation frEducation = frEducationPublicMapper.selectById(frEducationMemberOrder.getEducationId());
+            Integer a = 0;
+            Map<String, String> mapValue = frEducationClientInfoMapper.findClientCountByEduId(frEducationMemberOrder.getEducationId(), "1");
+            a += Integer.parseInt(String.valueOf(mapValue.get("value")));
+            mapValue = frEducationClientInfoMapper.findClientCountByEduId(frEducationMemberOrder.getEducationId(), "2");
+            a += Integer.parseInt(String.valueOf(mapValue.get("value")));
+            if(frEducation.getReserveTotalNum() <= a){
+                throw new Exception("抱歉，该预约人数已满！");
+            }
             frEducationClientInfo.setId(clientInfoId);
             frEducationClientInfoMapper.insert(frEducationClientInfo);
         }
@@ -448,8 +496,82 @@ public class FrEducationPublicServiceImpl {
         frEducationMemberOrder.setClientInfoId(clientInfoId);
         //保存订单
         frEducationMemberOrderMapper.insert(frEducationMemberOrder);
+        //保存订单
+        if(inte == 2){
+            this.saveOrderEntityByDetail(map, frEducationMemberOrder, frEducationClientInfo);
+        }
+        if(inte == 3 || inte == 1){
+            this.saveOrderEntity(frEducationMemberOrder, map, frEducationClientInfo);
+        }
+
+    }
+    /**
+     *
+     * 新增销售订单表
+     * @param frEducationMemberOrder
+     * @param frEducationClientInfo
+     * @param orderObj
+     */
+    private void saveOrderEntity(FrEducationMemberOrder frEducationMemberOrder, Map orderObj, FrEducationClientInfo frEducationClientInfo){
+        Date date = new Date();
+        MoneyReport moneyReport = new MoneyReport();
+        ConsumeAccountOrder consumeAccountOrder = new ConsumeAccountOrder();
+        ConsumeAccountInfo consumeAccountInfo = new ConsumeAccountInfo();
+        String userTypeName = "团教私教管理";
+        String tableName = "fr_education_client_info";
+        FrEducation frEducation = frEducationPublicMapper.selectById(frEducationClientInfo.getEducationId());
+
+        moneyReport.setCustomerCode(frEducation.getCustomerCode());
+        moneyReport.setOrderNumber(frConsumeMoneyOrderService.getOrderIdByTime());
+        moneyReport.setUseType(1);
+        moneyReport.setUseTypeName(userTypeName);
+        moneyReport.setTableId(frEducationMemberOrder.getClientInfoId());
+        moneyReport.setTableName(tableName);
+        moneyReport.setCustomerId(frEducationClientInfo.getMemberId());
+        moneyReport.setMemberCardId(frEducationMemberOrder.getMemberCardId());
+        moneyReport.setName(frEducationClientInfo.getMemberName());
+        moneyReport.setPhone(frEducationClientInfo.getMobile());
+        moneyReport.setCreateName(frEducationMemberOrder.getCreateName());
+        moneyReport.setCreateTime(date);
+        moneyReport.setId(UUIDUtils.generateGUID());
+        moneyReport.setShopId(frEducation.getShopId());
+        moneyReport.setSdadiumId("--");
+
+        //
+        consumeAccountOrder.setCustomerCode(frEducation.getCustomerCode());
+        consumeAccountOrder.setOrderNumber(frConsumeMoneyOrderService.getOrderIdByTime());
+        consumeAccountOrder.setTableId(frEducationMemberOrder.getClientInfoId());
+        consumeAccountOrder.setTableName(tableName);
+        consumeAccountOrder.setName(frEducationClientInfo.getMemberName());
+        consumeAccountOrder.setPhone(frEducationClientInfo.getMobile());
+        consumeAccountOrder.setCreateName(frEducationMemberOrder.getCreateName());
+        consumeAccountOrder.setCreateTime(date);
+        consumeAccountOrder.setId(UUIDUtils.generateGUID());
+        consumeAccountOrder.setShopId(frEducation.getShopId());
+        consumeAccountOrder.setSdadiumId("--");
+        //
+        consumeAccountInfo.setId(UUIDUtils.generateGUID());
+        consumeAccountInfo.setCustomerCode(frEducation.getCustomerCode());
+        consumeAccountInfo.setTableId(frEducationMemberOrder.getClientInfoId());
+        consumeAccountInfo.setConsumeAccountOrderId(consumeAccountOrder.getId());
+        consumeAccountInfo.setOrderNumber(frConsumeMoneyOrderService.getOrderIdByTime());
+        consumeAccountInfo.setTableName(tableName);
+        consumeAccountInfo.setCustomerId(frEducationClientInfo.getMemberId());
+        consumeAccountInfo.setMemberCardId(frEducationMemberOrder.getMemberCardId());
+        consumeAccountInfo.setProjectId(frEducation.getCourseId());
+        consumeAccountInfo.setStartTime(frEducationMemberOrder.getBeginDateReal());
+        consumeAccountInfo.setEndTime(frEducationMemberOrder.getEndDateReal());
+        consumeAccountInfo.setName(frEducationClientInfo.getMemberName());
+        consumeAccountInfo.setPhone(frEducationClientInfo.getMobile());
+        consumeAccountInfo.setCreateName(frEducationMemberOrder.getCreateName());
+        consumeAccountInfo.setCreateTime(date);
+        consumeAccountInfo.setShopId(frEducation.getShopId());
+        consumeAccountInfo.setSdadiumId("--");
 
 
+        frConsumeMoneyOrderService.saveMoneyReport(moneyReport);
+        frConsumeMoneyOrderService.saveConsumeAccountInfo(consumeAccountInfo);
+        frConsumeMoneyOrderService.saveConsumeAccountOrder(consumeAccountOrder);
     }
 
     /**
@@ -466,13 +588,67 @@ public class FrEducationPublicServiceImpl {
             }
             frEducationMemberOrder.setId(orderId);
             //保存订单
-            this.insertEducationMemberOrder(frEducationMemberOrder, map);
+            this.insertEducationMemberOrder(frEducationMemberOrder, map, 3);
         } catch (NumberFormatException e) {
             throw new Exception("预约失败，请重试。。");
         }
 
     }
 
+    private void saveOrderEntityByDetail(Map<String, String> map, FrEducationMemberOrder frEducationMemberOrder, FrEducationClientInfo frEducationClientInfo){
+        MoneyReport moneyReport = JSONObject.parseObject(map.get("moneyReport"), MoneyReport.class);
+        ConsumeAccountOrder consumeAccountOrder = JSONObject.parseObject(map.get("consumeAccountOrder"), ConsumeAccountOrder.class);
+        ConsumeAccountInfo consumeAccountInfo = JSONObject.parseObject(map.get("consumeAccountInfo"), ConsumeAccountInfo.class);
+        FrEducation frEducation = frEducationPublicMapper.selectById(frEducationClientInfo.getEducationId());
+        String userTypeName = "团教私教管理";
+        String tableName = "fr_education_client_info";
+        Date date = new Date();
+        moneyReport.setOrderNumber(frConsumeMoneyOrderService.getOrderIdByTime());
+        moneyReport.setUseTypeName(userTypeName);
+        moneyReport.setTableId(frEducationMemberOrder.getClientInfoId());
+        moneyReport.setTableName(tableName);
+        moneyReport.setCustomerId(frEducationClientInfo.getMemberId());
+        moneyReport.setMemberCardId(frEducationMemberOrder.getMemberCardId());
+        moneyReport.setName(frEducationClientInfo.getMemberName());
+        moneyReport.setPhone(frEducationClientInfo.getMobile());
+        moneyReport.setCreateTime(date);
+        moneyReport.setId(UUIDUtils.generateGUID());
+        moneyReport.setShopId(frEducation.getShopId());
+        moneyReport.setSdadiumId("--");
+        //
+        consumeAccountOrder.setOrderNumber(frConsumeMoneyOrderService.getOrderIdByTime());
+        consumeAccountOrder.setTableId(frEducationMemberOrder.getClientInfoId());
+        consumeAccountOrder.setTableName(tableName);
+        consumeAccountOrder.setName(frEducationClientInfo.getMemberName());
+        consumeAccountOrder.setPhone(frEducationClientInfo.getMobile());
+        consumeAccountOrder.setCreateTime(date);
+        consumeAccountOrder.setCreateName(frEducationMemberOrder.getCreateName());
+        consumeAccountOrder.setId(UUIDUtils.generateGUID());
+        consumeAccountOrder.setShopId(frEducation.getShopId());
+        consumeAccountOrder.setSdadiumId("--");
+        //
+        consumeAccountInfo.setId(UUIDUtils.generateGUID());
+        consumeAccountInfo.setTableId(frEducationMemberOrder.getClientInfoId());
+        consumeAccountInfo.setConsumeAccountOrderId(consumeAccountOrder.getId());
+        consumeAccountInfo.setOrderNumber(frConsumeMoneyOrderService.getOrderIdByTime());
+        consumeAccountInfo.setTableName(tableName);
+        consumeAccountInfo.setCustomerId(frEducationClientInfo.getMemberId());
+        consumeAccountInfo.setMemberCardId(frEducationMemberOrder.getMemberCardId());
+        consumeAccountInfo.setProjectId(frEducation.getCourseId());
+        consumeAccountInfo.setStartTime(frEducationMemberOrder.getBeginDateReal());
+        consumeAccountInfo.setEndTime(frEducationMemberOrder.getEndDateReal());
+        consumeAccountInfo.setName(frEducationClientInfo.getMemberName());
+        consumeAccountInfo.setPhone(frEducationClientInfo.getMobile());
+        consumeAccountInfo.setCreateName(frEducationMemberOrder.getCreateName());
+        consumeAccountInfo.setCreateTime(date);
+        consumeAccountInfo.setShopId(frEducation.getShopId());
+        consumeAccountInfo.setSdadiumId("--");
+
+        frConsumeMoneyOrderService.saveMoneyReport(moneyReport);
+        frConsumeMoneyOrderService.saveConsumeAccountInfo(consumeAccountInfo);
+        frConsumeMoneyOrderService.saveConsumeAccountOrder(consumeAccountOrder);
+
+    }
 
     /**
      * 更新卡的权益
@@ -481,6 +657,8 @@ public class FrEducationPublicServiceImpl {
      */
     public void updateCardDetail(Map<String, String> map) throws Exception {
         String orderId = UUIDUtils.generateGUID();
+        List<String> list = new ArrayList<>();
+        Double price = 0.0;
         //数组
         JSONArray cardOrderPayModeDate = JSONArray.parseArray(map.get("cardOrderPayModeDate"));
         JSONArray cardOrderDetailList = JSONArray.parseArray(map.get("cardOrderDetailList"));
@@ -489,16 +667,28 @@ public class FrEducationPublicServiceImpl {
         if (null == frEducationMemberOrder) {
             throw new Exception("提交出错，请重试。");
         }
+        //修改支付方式
+        FrEducationClientInfo frEducationClientInfo = frEducationClientInfoMapper.selectById(frEducationMemberOrder.getClientInfoId());
+        if(null == frEducationClientInfo){
+            throw new Exception("提交出错，请重试。");
+        }
+
         frEducationMemberOrder.setId(orderId);
         //保存订单
-        this.insertEducationMemberOrder(frEducationMemberOrder, map);
+        this.insertEducationMemberOrder(frEducationMemberOrder, map, 2);
         //订单支付方式及金额
         for (Object object : cardOrderPayModeDate) {
             FrCardOrderPayMode frCardOrderPayMode = JSONObject.parseObject(JSON.toJSONString(object), FrCardOrderPayMode.class);
             frCardOrderPayMode.setId(UUIDUtils.generateGUID());
             frCardOrderPayMode.setOrderId(orderId);
             iFrCardOrderPayModeService.insert(frCardOrderPayMode);
+            list.add(setPayType(String.valueOf(frCardOrderPayMode.getPayMode())));
+            price += frCardOrderPayMode.getPayPrice();
         }
+        //付款方式
+        frEducationClientInfo.setSettleType(StringUtils.join(list,","));
+        frEducationClientInfo.setDeductionBalance(String.valueOf(price));
+        frEducationClientInfoMapper.updateAllColumnById(frEducationClientInfo);
 
         //资金明细表
         for (Object object : cardOrderDetailList) {
@@ -521,6 +711,39 @@ public class FrEducationPublicServiceImpl {
         buyEduDetail.setOrderPriceId(orderId);
         iFrCardOrderDatailService.insert(buyEduDetail);
 
+
+    }
+
+    /**
+     * 设置付款类型
+     */
+    private String setPayType(String type){
+        String back = "";
+        //1、支付宝；2、刷卡；3、微信；4、现金；5、转账；6、花呗；7、其他
+        switch (type){
+            case "1":
+                back = "支付宝";
+                break;
+            case "2":
+                back = "刷卡";
+                break;
+            case "3":
+                back = "微信";
+                break;
+            case "4":
+                back = "现金";
+                break;
+            case "5":
+                back = "转账";
+                break;
+            case "6":
+                back = "花呗";
+                break;
+            default:
+                back = "其他";
+
+        }
+        return back;
 
     }
 
@@ -737,8 +960,15 @@ public class FrEducationPublicServiceImpl {
         String id = map.get("id");
         Double eduClassSalesNum = Double.parseDouble(map.get("eduClassSalesNum"));
         FrEducationMemberOrder frEducationMemberOrder = frEducationMemberOrderMapper.selectById(id);
+        FrEducationClientInfo frEducationClientInfo = frEducationClientInfoMapper.selectById(frEducationMemberOrder.getClientInfoId());
         frEducationMemberOrder.setStatus(0);
+        //frEducationMemberOrder.setUse(false);
         frEducationMemberOrderMapper.updateAllColumnById(frEducationMemberOrder);
+        //更改用户的状态
+        //冲销后，设置成null
+        frEducationClientInfo.setReserveStatus(null);
+        frEducationClientInfoMapper.updateAllColumnById(frEducationClientInfo);
+
         //再添加一条去抵消
         FrCardOrderDatail buyEduDetail = JSONObject.parseObject(map.get("buyEduDetail"), FrCardOrderDatail.class);
         Map<String, Object> cardOrder = frEducationPublicMapper.findCardOrderDetailFirst(frEducationMemberOrder.getMemberCardId());
@@ -917,6 +1147,28 @@ public class FrEducationPublicServiceImpl {
         Map<String, Object> map = new HashMap<>();
         List<Map<String, String>> list1 = frEducationPublicMapper.findConsumeConditionCardType();
         List<Map<String, String>> list2 = frEducationPublicMapper.findConsumeConditionCardName();
+        if(null == list1){
+            list1 = new ArrayList<>();
+        }else{
+            for(int i = 0; i < list1.size(); i++){
+                Map<String, String> m = list1.get(i);
+                if(StringUtils.isBlank(m.get("cardType"))){
+                    list1.remove(i);
+                }
+            }
+
+        }
+        if(null == list2){
+            list2 = new ArrayList<>();
+        }else{
+            for(int i = 0; i < list2.size(); i++){
+                Map<String, String> m = list2.get(i);
+                if(StringUtils.isBlank(m.get("cardName"))){
+                    list2.remove(i);
+                }
+            }
+
+        }
         map.put("cardType", list1);
         map.put("cardName", list2);
         return map;
@@ -1275,6 +1527,21 @@ public class FrEducationPublicServiceImpl {
         frEducationConfigMapper.updateAllColumnById(frEducationConfig);
     }
 
+
+    /**
+     * 查询这一周的私教课程时间
+     * @param eduId
+     * @param courseId
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
+    public List<Map<String, Object>> findEduDateByEduId(String eduId, String courseId, String beginDate, String endDate){
+        FrEducation frEducation = frEducationPublicMapper.selectById(eduId);
+        Integer reserveType = frEducation.getReserveType();
+        return frEducationPublicMapper.findEduDateByEduId(courseId, beginDate, endDate, reserveType);
+
+    }
 
 
 }

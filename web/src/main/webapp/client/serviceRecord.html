@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>服务记录</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />	
+	<link rel="stylesheet" href="../gym/css/common.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+ 	<link rel="stylesheet" href="../css/myPagination.css"/>
+	<link rel="stylesheet" href="../css/combobox.css"/>
+	<link rel="stylesheet" href="../css/existingCustomer.css"/>
+ 
+
+	<style type="text/css">
+		.table-style thead td{white-space: nowrap;}
+		.table-style tbody td:nth-of-type(2){white-space: nowrap;}
+		.table-style tbody td>span{padding: 0 5px;display: inline-block;white-space: nowrap;}
+		.form-inline{margin-bottom: 10px;}
+		.form-inline label{font-weight: 500;}
+		.form-inline label input{position: relative;top: 2px;}
+		.modal{z-index: 2000;}
+		.form-inline > .form-control{border-radius: 0;padding: 2px 10px;height: auto;line-height: 20px;font-size: 12px;}
+		.modal .form-inline>.flex-box>div:first-child{width: 65px;white-space: nowrap;}
+		.SHB-r input{font-size: 13px;}
+		.selectCZR{height: 100%;line-height: 100%;}
+		.selectCZR:focus{outline-color: transparent;}
+		.type-select{padding: 10px 0 15px;font-size: 12px;line-height: 24px;}
+		.type-select > span{display: inline-block;border: 1px solid #ccc;padding: 0 5px;margin-right: 5px;background-color: #fff;}
+		.type-select > span.active{background-color: #009900;color: #fff;border-color: #009900;}
+	</style>
+</head>
+	<body>
+	<div id="serviceRecord">
+	
+
+		<fieldset>
+			<div class="field-content">
+			 <form action="">
+				<div class="flex-box flex-start">
+					<div class="flex-box-item pr30">
+						<div class="form-inline" style="margin-bottom: 14px;" >
+							服务类型：
+							<label>
+								<input type="radio" type="type" value="0"  v-model="serviceRecord.type"/> 投诉	
+							</label>
+							<label>
+								<input type="radio" type="type" value="1"  v-model="serviceRecord.type"/> 建议	
+							</label>
+							<label>
+								<input type="radio" type="type" value="2"  v-model="serviceRecord.type"/> 合作	
+							</label>
+							<label>
+								<input type="radio" type="type" value="3"  v-model="serviceRecord.type"/> 采购	
+							</label>
+							<label>
+								<input type="radio" type="type" value="4"  v-model="serviceRecord.type"/> 租赁	
+							</label>
+							<label>
+								<input type="radio" type="type" value="5"  v-model="serviceRecord.type"/> 生日	
+							</label>
+							<label>
+								<input type="radio" type="type" value="6"  v-model="serviceRecord.type"/> 违规	
+							</label>
+							<label>
+								<input type="radio" type="type" value="7"  v-model="serviceRecord.type"/> 回归	
+							</label>
+						</div>
+						<div class="flex-box flex-start">
+							<div>服务内容：</div>
+							<div class="flex-box-item">
+								<textarea rows="6" class="form-control"  v-model="serviceRecord.context"></textarea>
+							</div>
+						</div>
+					  　<button type="button"  class="btn btn-danger"  @click="addServiceRecord"   style="margin-left: 60px;background-color: red;border-radius: 0;padding: 3px 10px;margin-top: 15px;">新增</button>
+						 
+					
+					</div>
+					<div class="flex-box-item">
+						<div class="form-inline">
+							答复时间：<input class="form-control w160" placeholder="请选择时间" type="text" id="dateInp"  v-model="serviceRecord.replyTime"/>
+						</div>
+						<div class="form-inline">
+							处理方式：
+							<label>
+								<input type="radio" type="type" value="0"  v-model="serviceRecord.processMethod"/> 电话	
+							</label>
+							<label>
+								<input type="radio" type="type" value="1" v-model="serviceRecord.processMethod"/> 邮件	
+							</label>
+							<label>
+								<input type="radio" type="type" value="2" v-model="serviceRecord.processMethod"/> 书面	
+							</label>
+							<label>
+								<input type="radio" type="type" value="3" v-model="serviceRecord.processMethod"/> 赔偿	
+							</label>
+							<label>
+								<input type="radio" type="type" value="4" v-model="serviceRecord.processMethod"/> 延期	
+							</label>
+							<label>
+								<input type="radio" type="type" value="5" v-model="serviceRecord.processMethod"/> 补偿	
+							</label>
+						</div>
+						<div class="flex-box flex-start">
+							<div>处理意见：</div>
+							<div class="flex-box-item">
+								<textarea rows="4" class="form-control" v-model="serviceRecord.opinion"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				</form>
+			</div>
+		</fieldset>
+		<div class="type-select">
+			全部类型：
+			<span v-for="item in typeArr" @click="changetype(item)" :class="{active:(typeSelect==item.value)}">{{item.name}}</span>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-style">
+				<thead>
+					<tr>
+						<td>序号</td>
+						<td>操作</td>
+						<td>状态</td>
+						<td>服务类型</td>
+						<td>服务内容</td>
+						<td>答复日期</td>
+						<td>处理方式</td>
+						<td>意见/备注</td>
+						<td>服务人员1</td>
+						<td>处理日期</td>
+						<td>意见/备注</td>
+						<td>服务人员2</td>
+						<td>处理日期</td>
+						<td>意见/备注</td>
+						<td>授权人</td>
+						<td>授权结果</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr  v-for="(item,index) in serviceRecordTable.list">
+						<td>{{(serviceRecordTable.currPage-1)*10+(index+1)}}</td>
+						<td>
+						<!-- 提交 -->
+							<span id="serviceprocess" class="c-00990"  style="cursor: pointer;" v-if="item.status<=1"   @click="serviceprocess(item.status,item.id)">提交</span>
+							<span  style="color: #CCCCCC"  v-if="item.status>1" >提交</span>
+						<!-- 提交 -->
+						<!-- 提交授权 -->	
+							<span  id="authprocess" class="c-ff0000" style="cursor: pointer;"  v-if="item.status==1 || item.status==2"  @click="authprocess(item.status,item.id)">提交授权</span>
+							<span  style="color: #CCCCCC"  v-if="item.status<1 || item.status>2" >提交授权</span>
+							
+						<!-- 提交授权 -->	
+						<!-- 完成 -->		
+							<span class="c-0000ff" style="cursor: pointer;"  v-if="item.status>0 && item.status<4"  @click="successprocess(item.status,item.id)">完成</span>
+							<span  style="color: #CCCCCC"  v-if="item.status==0 || item.status==4" >完成</span>
+							
+						<!-- 完成 -->	
+						
+						</td>
+						<td>{{convertStatus(item.status)}}</td>
+						<td>  {{convertType(item.type)}}  </td>
+						<td><span class="c-ff0000">{{item.context}}</span></td>
+						<td>{{formatDate(item.replyTime)}}</td>
+						<td>{{convertProcessMethod(item.processMethod)}}</td>
+						<td>{{item.opinion}}</td>
+						<td>{{item.servicePerson1}}</td>
+						<td>{{formatDate(item.processDate1)}}</td>
+						<td>{{item.serviceOpinion1}}</td>
+						<td>{{item.servicePerson2}}</td>
+						<td>{{formatDate(item.processDate2)}}</td>
+						<td>{{item.serviceOpinion2}}</td>
+						<td>{{item.authorizer}}</td>
+						<td>{{item.authorizeResult}}</td>
+					</tr>
+					<!-- <tr>
+						<td>1</td>
+						<td><span class="c-009900">提交</span><span class="c-ff0000">提交授权</span><span class="c-0000ff">完成</span></td>
+						<td><span class="c-009900">服务人员1已处理</span></td>
+						<td>建议</td>
+						<td><span class="c-ff0000">服务内容服务内容服务内容服务内容服务内容服</span></td>
+						<td>2018-10-02</td>
+						<td>书面</td>
+						<td>OK</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td><span class="c-ccc">提交</span><span class="c-ccc">提交授权</span><span class="c-ccc">完成</span></td>
+						<td><span class="c-009900">服务人员1已处理</span></td>
+						<td>建议</td>
+						<td><span class="c-ff0000">服务内容服务内容服务内容服务内容服务内容服</span></td>
+						<td>2018-10-02</td>
+						<td>书面</td>
+						<td>OK</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td><span class="c-ccc">提交</span><span class="c-ccc">提交授权</span><span class="c-ccc">完成</span></td>
+						<td><span class="c-ff9900">授权处理</span></td>
+						<td>建议</td>
+						<td><span class="c-ff0000">服务内容服务内容服务内容服务内容服务内容服</span></td>
+						<td>2018-10-02</td>
+						<td>书面</td>
+						<td>OK</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr> -->
+				</tbody>
+			</table>
+				<div id="pagination" class="pagination"></div>
+		</div>
+	
+		
+		<div class="modal fade modal-style" tabindex="-1" id="submitModal" role="dialog" data-backdrop="false">
+			<div class="modal-dialog" role="document" style="width: 530px;">
+				<div class="modal-content">
+				 <form action="">
+ 					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">服务人员处理意见</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-inline">
+							<div class="flex-box flex-start">
+								<div>
+									服务人员：
+								</div>
+								<div class="flex-box-item">
+									<div class="selectCZR-con">
+										<input placeholder="选择服务人员" readonly="readonly" class="selectCZR" v-model="selectPersonnel" />
+										<div class="selectCZR-hidden-box">
+											<div class="SHB-l">
+												<h4>运营部门</h4>
+												<ul >
+													<li  v-for="(item,index) in departmentList" @click="departmentSelect(item.id)">{{item.departName}}</li>
+													<!-- <li class="active">运营部</li>
+													<li>会籍部</li>
+													<li>教练部</li>
+													<li>销售部</li> -->
+												</ul>
+											</div>
+											<div class="SHB-r">
+												<h4>选择员工</h4>
+												<div class="YGLY-query-box">
+													<input type="text" placeholder="搜索操作人">
+													<strong class="YGLY-query-Btn"></strong>
+												</div>
+												<ul>
+													<li  v-for="(item,index) in personnelInfoList"   >{{item.relName}}</li>
+												 
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div class="form-inline">
+							<div class="flex-box flex-start">
+								<div>
+									处理时间：
+								</div>
+								<div class="flex-box-item">
+									<input class="form-control w160" id="fwTime"  v-model="processDate"  placeholder="请选择时间" type="text">
+								</div>
+							</div>
+						</div>
+						<div class="form-inline">
+							<div class="flex-box flex-start">
+								<div>
+									意见/内容：
+								</div>
+								<div class="flex-box-item">
+									<textarea class="form-control"  v-model="serviceOpinion"  rows="10"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="form-inline">
+							<div class="flex-box flex-start">
+					   			<button  type="button" class="btn btn-danger"  @click="addServiceprocess"    style="margin-left: 60px;background-color: red;border-radius: 0;padding: 3px 10px;margin-top: 15px;">提交</button>
+							</div>
+						</div>
+						
+					</div>
+					</form>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<div class="modal fade modal-style" tabindex="-1" id="submitAutoModal" role="dialog" data-backdrop="false">
+			<div class="modal-dialog" role="document" style="width: 530px;">
+				<div class="modal-content">
+					<form action="">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">授权处理</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-inline">
+								<div class="flex-box flex-start">
+								<div>
+									服务人员：
+								</div>
+								<div class="flex-box-item">
+									<div class="selectCZR-con">
+										<input placeholder="选择服务人员" readonly="readonly" class="selectCZR" />
+										<div class="selectCZR-hidden-box">
+											<div class="SHB-l">
+												<h4>运营部门</h4>
+												<ul >
+													<li  v-for="(item,index) in departmentList" @click="departmentSelect(item.id)">{{item.departName}}</li>
+													<!-- <li class="active">运营部</li>
+													<li>会籍部</li>
+													<li>教练部</li>
+													<li>销售部</li> -->
+												</ul>
+											</div>
+											<div class="SHB-r">
+												<h4>选择员工</h4>
+												<div class="YGLY-query-box">
+													<input type="text" placeholder="搜索操作人">
+													<strong class="YGLY-query-Btn"></strong>
+												</div>
+												<ul>
+													<li  v-for="(item,index) in personnelInfoList"   >{{item.relName}}</li>
+												 
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div class="form-inline">
+							<div class="flex-box flex-start"  >
+								<div>
+									授权结果：
+								</div>
+								<div class="flex-box-item">
+									<textarea class="form-control" v-model="authorProcess.authorizeResult" rows="10"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="form-inline">
+							<div class="flex-box flex-start">
+					   			<button type="button" class="btn btn-danger"  @click="addAuthProcess"    style="margin-left: 60px;background-color: red;border-radius: 0;padding: 3px 10px;margin-top: 15px;">提交</button>
+							</div>
+						</div>
+					</div>
+					</form>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+			</div>
+	</body>
+	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../js/vue.js"></script>
+	<script src="/js/myPagination.js"></script>
+	<script src="../js/axios.min.js"></script>
+	<script src="../js/jquery.cookie.js"></script>
+	<script src="../js/jquery-confirm.js"></script>
+	<script src="../js/extendjQuery.js"></script>
+	<script src="../js/dateUtil.js"></script>
+	<script src="../js/loading.js"></script>
+	<script src="../js/jedate.js"></script>
+	
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="serviceRecord.js"></script>
+	<script type="text/javascript">
+//		  弹出框暂时屏蔽 
+//		  $('#submitModal').modal('show')
+//		$('#submitAutoModal').modal('show')
+		
+		// 点击弹出操作人的下拉框
+		
+ 		 
+		 
+		 
+		
+		$('body').on('click','.selectCZR-con .selectCZR',function () {
+			$(".selectCZR-hidden-box").slideDown();
+			$('body').one('mouseleave','.selectCZR-hidden-box',function () {
+				$('.selectCZR-hidden-box').slideUp();
+	        })
+	        
+	    })
+		// 点击选择部门
+	    $('body').on('click','.SHB-l li',function (e) {
+	    
+	    	e.stopPropagation();
+	        $(this).addClass('active').siblings().removeClass('active');
+	    })
+	    // 点击选择操作人
+	    $('body').on('click','.SHB-r li',function (e) {
+	        $('.selectCZR').val($(this).html());
+	        $('.selectCZR-hidden-box').slideUp();
+	    })
+	    // 点击选择操作人
+	    $('body').on('click','.follow .btn.btn-default',function (e) {
+	    	e.stopPropagation();
+	        $(this).addClass("active").siblings('.btn.btn-default').removeClass('active');
+	    })
+	</script>
+</html>

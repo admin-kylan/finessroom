@@ -38,12 +38,24 @@
         ,member_card_no as memberCardNo, member_card_id as memberCardId
     </sql>
 
+    <sql id="Base_Column_List_a">
+        eci.education_id AS educationId, eci.member_id AS memberId, eci.member_name AS memberName, eci.member_type AS memberType,
+        eci.mobile, eci.reserve_client_id AS reserveClientId, eci.reserve_client_name AS reserveClientName, eci.reserve_date AS reserveDate,
+        eci.seat_id AS seatId, eci.seat_name AS seatName, eci.settle_type AS settleType, eci.deduction_balance AS deductionBalance,
+        eci.reserve_status AS reserveStatus, eci.remarks, eci.create_user_name AS createUserName, eci.create_time AS createTime,
+        eci.sex, eci.is_use AS isUse, eci.update_time AS updateTime, eci.create_user_id AS createUserId, eci.update_user_id AS updateUserId,
+        eci.id, eci.update_user_name AS updateUserName
+        ,eci.member_card_no as memberCardNo, eci.member_card_id as memberCardId
+    </sql>
+
     <!-- 查询待确认数组 -->
     <select id="findMemberReserveStatusList" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
             <include refid="Base_Column_List"></include>
         FROM
             fr_education_client_info
+        /*left join
+            fr_education_member_order emo ON emo.client_info_id = eci.id*/
         WHERE
             education_id = #{eduId}
         <if test="reserveStatus != null and reserveStatus != ''">
@@ -71,6 +83,33 @@
             and member_id = #{memberId}
             AND reserve_status != 0
             and is_use = 1
+
+    </select>
+
+
+    <!-- 查询待确认数组 -->
+    <select id="findClientCountByEduId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            count(1) value
+        FROM
+            fr_education_client_info
+        WHERE
+            education_id = #{eduId}
+            AND reserve_status = ${reserveStatus}
+            AND reserve_status = ${reserveStatus}
+            and is_use = 1
+    </select>
+
+
+    <select id="findByEduIdForNormal" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            fr_education_client_info eci
+        WHERE
+            eci.education_id = #{eduId}
+            and eci.member_id = #{memberId}
+            and eci.reserve_status in (1, 2)
 
     </select>
 </mapper>

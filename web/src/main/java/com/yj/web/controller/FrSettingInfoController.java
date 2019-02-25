@@ -21,7 +21,7 @@ import java.util.*;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author MP自动生成
@@ -35,31 +35,32 @@ public class FrSettingInfoController {
     IFrSettingInfoService iFrSettingInfoService;
 
     @RequestMapping("/get/private/setting")
-    public JsonResult getPrivateSetting(@RequestParam Map<String, Object> params,HttpServletRequest request){
+    public JsonResult getPrivateSetting(@RequestParam Map<String, Object> params, HttpServletRequest request) {
         String code = CookieUtils.getCookieValue(request, "code", true);
         Object type = params.get("type");
+        String sdaduimId = (String) params.get("sdaduimId");
         int typeInt = 1;
-        if(type != null){
+        if (type != null) {
             typeInt = Integer.valueOf(String.valueOf(type));
         }
-        List<FrSettingInfo> settingList = iFrSettingInfoService.selectList(new EntityWrapper<FrSettingInfo>().where("type={0} and customer_code={1}",typeInt,code));
+        List<FrSettingInfo> settingList = iFrSettingInfoService.selectList(new EntityWrapper<FrSettingInfo>().where("type={0} and customer_code={1} and sdaduim_id={2}", typeInt, code, sdaduimId));
         Boolean isNull = false;
-        if(settingList.size() == 0){
+        if (settingList.size() == 0 && sdaduimId != null) {
             isNull = true;
-            settingList = iFrSettingInfoService.selectList(new EntityWrapper<FrSettingInfo>().where("type={0} and (customer_code is null or customer_code='')",typeInt));
+            settingList = iFrSettingInfoService.selectList(new EntityWrapper<FrSettingInfo>().where("type={0} and (customer_code is null or customer_code='')", typeInt));
         }
-        Map<String,Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
 
-        settingList.stream().forEach((setting) ->{
-            result.put(setting.getKey1(),setting.getValue());
+        settingList.stream().forEach((setting) -> {
+            result.put(setting.getKey1(), setting.getValue());
         });
 
-        if(isNull){//插入记录
-            settingList.stream().forEach((setting) ->{
+        if (isNull) {//插入记录
+            settingList.stream().forEach((setting) -> {
                 setting.setId(UUIDUtils.generateGUID());
                 setting.setCustomerCode(code);
                 setting.setCreateTime(new Date());
-
+                setting.setSdaduimId(sdaduimId);
                 iFrSettingInfoService.insert(setting);
             });
         }
@@ -68,16 +69,17 @@ public class FrSettingInfoController {
     }
 
     @RequestMapping("/update/private/setting")
-    public JsonResult updatePrivateSetting(@RequestParam Map<String, Object> params,HttpServletRequest request){
+    public JsonResult updatePrivateSetting(@RequestParam Map<String, Object> params, HttpServletRequest request) {
         String code = CookieUtils.getCookieValue(request, "code", true);
-        params.entrySet().stream().forEach((value)->{
+        String sdaduimId = (String) params.get("sdaduimId");
+        params.entrySet().stream().forEach((value) -> {
             FrSettingInfo setting = new FrSettingInfo();
-            if(StringUtils.isNotEmpty(String.valueOf(value.getValue()))){
+            if (StringUtils.isNotEmpty(String.valueOf(value.getValue()))) {
                 setting.setValue(String.valueOf(value.getValue()));
-            }else{
+            } else {
                 setting.setValue("");
             }
-            iFrSettingInfoService.update(setting,new EntityWrapper<FrSettingInfo>().where("key1={0} and customer_code={1}",value.getKey(),code));
+            iFrSettingInfoService.update(setting, new EntityWrapper<FrSettingInfo>().where("key1={0} and customer_code={1} and sdaduim_id={2}", value.getKey(), code, sdaduimId));
         });
 
         return JsonResult.success("操作成功");

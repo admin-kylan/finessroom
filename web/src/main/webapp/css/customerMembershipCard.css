@@ -996,7 +996,8 @@ body {
     text-align: center;
     line-height: 26px;
 }
-
+.LiIndexOffer .table input[type="checkbox"],.LiIndexOffer .table input[type="radio"] {width: 20px;}
+	
 .LiIndexOffer .payment_method {
     overflow: hidden;
 }
@@ -4848,6 +4849,7 @@ body {
 }
 .XFFS-divs .XFFS-div {
     display: none;
+    padding-right: 5px;
 }
 .XFFS-divs .XFFS-div.active {
     display: block;
@@ -4856,25 +4858,29 @@ body {
     margin-bottom: 5px;
 }
 .XFFS-div .TCR-tables-box1 {
-    width: 45.4%;
-    margin-right: 0.6%;
+    width: 45.5%;
+    margin-right: 5px;
+    box-sizing: border-box;
 }
 .XFFS-div .TCR-tables-box2 {
-    width: 18.84%;
-    margin-right: 0.6%;
+    width: 18.5%;
+    margin-right: 5px;
+    box-sizing: border-box;
 }
 .XFFS-div .TCR-tables-box3 {
-    width: 20%;
-    margin-right: 5px;
+    width: 20.5%;
+    margin-right: -15px;
     float: right;
+    box-sizing: border-box;
 }
 .XFFS-div .TCR-tables-box4 {
-    width: 13.6%;
-    margin-right: 0.6%;
+    width: 19.5%;
+    margin-right: 5px;
     padding-top: 10px;
     border: 1px dashed #e4e4e4;
     border-radius: 5px;
     padding-left: 15px;
+    box-sizing: border-box;
 }
 .XFFS-div .TCR-tables-box4 td {
     padding: 2px 4px;

@@ -1,6 +1,7 @@
 package com.yj.service.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.yj.common.util.DateUtil;
 import com.yj.dal.dao.FrEducationFreezeClientMapper;
 import com.yj.dal.dao.FrEducationPublicMapper;
 import com.yj.dal.model.FrEducationFreezeClient;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -82,9 +84,26 @@ public class FrEducationPublicThreadPool {
                     frEducationFreezeClientMapper.deleteById(frEducationFreezeClient.getId());
                     continue;
                 }
-
             }
+            //修改状态
+            this.changeEducationStatus();
+        }
+
+        /**
+         * 开课时间超过一天，则改成已结束
+         */
+        private void changeEducationStatus(){
+            //当前时间
+            Date now = new Date();
+            String time = "";
+            Calendar cl = Calendar.getInstance();
+            cl.setTime(now);
+            cl.add(Calendar.DATE, -1);
+            now = cl.getTime();
+            time = DateUtil.dateToString(now, "yyyy-MM-dd");
+            frEducationPublicMapper.updateOfTimeOutStatus(time);
         }
     }
+
 
 }

@@ -29,4 +29,323 @@
         CustomerCode, ID, ContractNumber, UseDay, SaleType, ShopId, SdadiumId, CardId, ProjectId, CourseSeriousId, CourseId, Useful, StartTime, EndTime, SaleId, SaleName, ConsumeType, State
     </sql>
 
+
+    <!-- 获取团教 -->
+    <select id="getProjectList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            ap.id,
+            po.id poId,
+            ap.state,
+            shop.ShopName shopName,
+            ap.SdadiumId,
+            sda.Name sdadiumName,
+            gc.name courseName,
+            po.buyCount,
+            po.sendCount,
+            (select count(1) from AddProjectConsume apc where apc.AddProjectId = ap.id) consumeLength,
+            po.price,
+            po.totalPrice,
+            ap.useful,
+            ap.startTime,
+            ap.endTime,
+            ap.contractNumber,
+            ap.saleType,
+            pi.RelName coachName
+        FROM
+            AddProject ap
+            LEFT JOIN Shop shop ON ap.ShopId = shop.id
+            left join Sdaduim sda on sda.id = ap.SdadiumId
+            left join fr_group_course gc on gc.id = ap.CourseId
+            left join projectOrder po on po.ObjectId = ap.id
+            left join fr_client_personnel_relate cpr on cpr.other_table_id = ap.id
+            left join PersonnelInfo pi on pi.id = cpr.personal_id
+        where
+            po.OrderType = 1
+        <if test='status != "99"'>
+            and ap.state = #{status}
+        </if>
+
+        <if test="shopId != null and shopId != ''">
+            and shop.id = #{shopId}
+        </if>
+
+        <if test='timeType == "1"'>
+            <if test="beginDate != null and beginDate != ''">
+                AND ap.StartTime >= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND ap.StartTime <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </if>
+        <if test='timeType == "3"'>
+            <if test="beginDate != null and beginDate != ''">
+                AND ap.StartTime >= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND ap.StartTime <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </if>
+        <if test='timeType == "2"'>
+            <if test="beginDate != null and beginDate != ''">
+                AND ap.EndTime >= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND ap.EndTime <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </if>
+        <if test="courseName != null and courseName != ''">
+            AND gc.name like '%'+#{courseName}+'%'
+        </if>
+            and ap.CustomerCode = #{code}
+            and po.PersonnelId = #{clientId}
+
+
+
+    </select>
+
+
+    <!-- 获取团教 -->
+    <select id="getProjectList2" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+        ap.id,
+        po.id poId,
+        ap.state,
+        shop.ShopName shopName,
+        ap.SdadiumId,
+        sda.Name sdadiumName,
+        gc.name courseName,
+        po.buyCount,
+        po.sendCount,
+        (select count(1) from AddProjectConsume apc where apc.AddProjectId = ap.id) consumeLength,
+        po.price,
+        po.totalPrice,
+        ap.useful,
+        ap.startTime,
+        ap.endTime,
+        ap.contractNumber,
+        ap.saleType,
+        pi.RelName coachName
+        FROM
+        AddProject ap
+        LEFT JOIN Shop shop ON ap.ShopId = shop.id
+        left join Sdaduim sda on sda.id = ap.SdadiumId
+        left join fr_private_cource gc on gc.id = ap.CourseId
+        left join projectOrder po on po.ObjectId = ap.id
+        left join fr_client_personnel_relate cpr on cpr.other_table_id = ap.id
+        left join PersonnelInfo pi on pi.id = cpr.personal_id
+        where
+        po.OrderType = 2
+        <if test='status != "99"'>
+            and ap.state = #{status}
+        </if>
+
+        <if test="shopId != null and shopId != ''">
+            and shop.id = #{shopId}
+        </if>
+
+        <if test='timeType == "1"'>
+            <if test="beginDate != null and beginDate != ''">
+                AND ap.StartTime >= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND ap.StartTime <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </if>
+        <if test='timeType == "3"'>
+            <if test="beginDate != null and beginDate != ''">
+                AND ap.StartTime >= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND ap.StartTime <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </if>
+        <if test='timeType == "2"'>
+            <if test="beginDate != null and beginDate != ''">
+                AND ap.EndTime >= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND ap.EndTime <![CDATA[ <= ]]> #{endDate}
+            </if>
+        </if>
+        <if test="courseName != null and courseName != ''">
+            AND gc.name like '%'+#{courseName}+'%'
+        </if>
+        and ap.CustomerCode = #{code}
+        and po.PersonnelId = #{clientId}
+    </select>
+
+    <!-- 获取下拉框list -->
+    <select id="getProjectListSelect" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+        ap.id,
+        po.id poId,
+        sco.id consumeId,
+        ap.state,
+        ap.startTime,
+        shop.ShopName shopName,
+        shop.id shopId,
+        ap.sdadiumId,
+        sda.Name sdadiumName,
+        ( CASE WHEN ap.eduType = 1 THEN pc.name ELSE gc.name END ) courseName,
+        po.buyCount,
+        po.sendCount,
+        (select count(1) from AddProjectConsume apc where apc.AddProjectId = ap.id) consumeLength,
+        po.price,
+        po.totalPrice,
+        po.noPrice,
+        ap.useful,
+        ap.startTime,
+        ap.endTime,
+        ap.contractNumber,
+        ap.saleType,
+        pi.RelName coachName,
+        sco.cashPledge
+        FROM
+        AddProject ap
+        LEFT JOIN Shop shop ON ap.ShopId = shop.id
+        left join Sdaduim sda on sda.id = ap.SdadiumId
+        left join fr_group_course gc on gc.id = ap.CourseId
+        left join fr_private_cource pc on pc.id = ap.CourseId
+        left join projectOrder po on po.ObjectId = ap.id
+        left join fr_client_personnel_relate cpr on cpr.other_table_id = ap.id
+        left join PersonnelInfo pi on pi.id = cpr.personal_id
+        left join SysConsumeOrder sco on sco.OrderNumber = po.OrderNumber
+        where
+
+        shop.id = #{shopId}
+        and po.PersonnelId = #{clientId}
+        and ap.CustomerCode = #{code}
+
+    </select>
+
+    <!-- 启用记录 -->
+    <select id="findStartProjectRecord" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            psr.operateDate,
+            psr.operatePersonName,
+            psr.create_time createTime,
+            shop.ShopName shopName,
+            sda.Name sdadiumName,
+            psr.courseName,
+            ap.useful,
+            psr.oldStartDate,
+            ap.startTime,
+            ap.endTime
+        FROM
+            fr_project_start_record psr
+            LEFT JOIN AddProject ap ON ap.id = psr.projectOrderId
+            LEFT JOIN Shop shop ON ap.ShopId = shop.id
+            LEFT JOIN Sdaduim sda ON sda.id = ap.SdadiumId
+
+        where
+            shop.id = #{shopId}
+            and psr.clientId = #{clientId}
+            and ap.CustomerCode = #{code}
+    </select>
+
+    <!-- 补余记录 -->
+    <select id="findCustomerRemnantRecord" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            prr.operateDate,
+            prr.operatePersonName,
+            prr.create_time createTime,
+            prr.remnantPrice,
+            shop.ShopName shopName,
+            sda.Name sdadiumName,
+            prr.courseName,
+            ap.useful,
+            ap.startTime,
+            ap.endTime,
+            po.totalPrice
+        FROM
+            fr_project_remnant_record prr
+            LEFT JOIN AddProject ap ON ap.id = prr.projectOrderId
+            LEFT JOIN Shop shop ON ap.ShopId = shop.id
+            LEFT JOIN Sdaduim sda ON sda.id = ap.SdadiumId
+            left join projectOrder po on po.ObjectId = ap.id
+        where
+            shop.id = #{shopId}
+            and prr.clientId = #{clientId}
+            and ap.CustomerCode = #{code}
+    </select>
+
+ <!-- 补余记录 -->
+    <select id="findCustomerExtensionRecord" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            per.operateDate,
+            per.operatePersonName,
+            per.create_time createTime,
+            per.extensionDate extensionDate,
+            per.oldStartDate oldStartDate,
+            shop.ShopName shopName,
+            sda.Name sdadiumName,
+            per.courseName,
+            ap.useful,
+            ap.startTime,
+            ap.endTime,
+            po.totalPrice
+        FROM
+            fr_project_extension_record per
+            LEFT JOIN AddProject ap ON ap.id = per.projectOrderId
+            LEFT JOIN Shop shop ON ap.ShopId = shop.id
+            LEFT JOIN Sdaduim sda ON sda.id = ap.SdadiumId
+            left join projectOrder po on po.ObjectId = ap.id
+        where
+            shop.id = #{shopId}
+            and per.clientId = #{clientId}
+            and ap.CustomerCode = #{code}
+    </select>
+
+    <!-- 转让记录 -->
+    <select id="getListTurnProject" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            tp.createTime,
+            fcold.client_name oldClientName,
+            fcold.mobile oldMobile,
+            fcnew.client_name newClientName,
+            fcnew.mobile newMobile,
+            tp.payType,
+            tp.fee,
+            tp.createName
+        FROM
+            TurnProject tp
+            left join fr_client fcold on fcold.id = tp.OldCustomerId
+            left join fr_client fcnew on fcnew.id = tp.NewCustomerId
+        where
+            tp.OldCustomerId = #{clientId}
+    </select>
+
+
+    <!-- 退费记录 -->
+    <select id="getListReturnAddProject" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            rap.createTime,
+            rap.returnMoney,
+            rap.Cash cash,
+            rap.payType,
+            rap.returnNumber,
+            rap.saleName,
+
+            rap.createName,
+            shop.ShopName shopName,
+            sda.Name sdadiumName,
+            rap.courseName,
+            ap.useful,
+            ap.startTime,
+            ap.endTime,
+            po.totalPrice
+        FROM
+            ReturnAddProject rap
+            LEFT JOIN AddProject ap ON ap.id = rap.AddProjectID
+            LEFT JOIN Shop shop ON ap.ShopId = shop.id
+            LEFT JOIN Sdaduim sda ON sda.id = ap.SdadiumId
+            left join projectOrder po on po.ObjectId = ap.id
+        where
+            shop.id = #{shopId}
+            and rap.clientId = #{clientId}
+            and ap.CustomerCode = #{code}
+    </select>
+
+
+
 </mapper>

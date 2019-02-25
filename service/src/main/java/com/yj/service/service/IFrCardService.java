@@ -148,5 +148,7 @@ public interface IFrCardService extends BaseService<FrCard> {
     void toUpdateCardStop()throws YJException;
 
     Map<String,Object> getNumCard(String clientId,String CustomerCode,Integer num,boolean isFlag)throws YJException;
+
+
 }
 

@@ -17,4 +17,14 @@ import java.util.List;
 public class FrPrivatePackageDTO2 extends FrPrivatePackage {
 
 	private List<PackageCanUsingItemDTO> canUsingItem ;
+
+	public List<PackageCanUsingItemDTO> getCanUsingItem() {
+		return canUsingItem;
+	}
+
+	public void setCanUsingItem(List<PackageCanUsingItemDTO> canUsingItem) {
+		this.canUsingItem = canUsingItem;
+	}
+	
+	
 }

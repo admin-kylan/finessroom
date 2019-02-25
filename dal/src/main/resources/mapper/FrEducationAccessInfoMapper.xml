@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.FrEducationAccessInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.FrEducationAccessInfo">
+        <id column="id" property="id" />
+        <result column="client_name" property="clientName" />
+        <result column="client_id" property="clientId" />
+        <result column="sale_use_name" property="saleUseName" />
+        <result column="type" property="type" />
+        <result column="sale_project" property="saleProject" />
+        <result column="sale_project_id" property="saleProjectId" />
+        <result column="use_people_name" property="usePeopleName" />
+        <result column="use_people_id" property="usePeopleId" />
+        <result column="status" property="status" />
+        <result column="create_date" property="createDate" />
+        <result column="output_date" property="outputDate" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="sex" property="sex" />
+        <result column="hand_num" property="handNum" />
+        <result column="is_done" property="isDone" />
+        <result column="remark" property="remark" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="spread_price" property="spreadPrice" />
+        <result column="account" property="account" />
+        <result column="less_price" property="lessPrice" />
+        <result column="output_user_name" property="outputUserName" />
+        <result column="output_user_id" property="outputUserId" />
+        <result column="shop_id" property="shopId" />
+        <result column="shop_name" property="shopName" />
+        <result column="is_use" property="isUse" />
+        <result column="update_date" property="updateDate" />
+        <result column="CustomerCode" property="CustomerCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        client_name AS clientName, client_id AS clientId, sale_use_name AS saleUseName, type, sale_project AS saleProject, sale_project_id AS saleProjectId, use_people_name AS usePeopleName, use_people_id AS usePeopleId, status, create_date AS createDate, output_date AS outputDate, create_user_name AS createUserName, create_user_id AS createUserId, sex, hand_num AS handNum, is_done AS isDone, remark, error_msg AS errorMsg, spread_price AS spreadPrice, account, less_price AS lessPrice, output_user_name AS outputUserName, output_user_id AS outputUserId, shop_id AS shopId, shop_name AS shopName, is_use AS isUse, id, update_date AS updateDate, CustomerCode
+    </sql>
+
+    <select id="findList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List"></include>
+        FROM
+            fr_education_access_info
+        WHERE
+            shop_id = #{shopId}
+            AND CustomerCode = #{code}
+            /*and is_use = 1*/
+        <if test="searchInput != null and searchInput != ''">
+            AND account = #{searchInput}
+        </if>
+            and create_date <![CDATA[ >= ]]> #{beginDate}
+            and create_date <![CDATA[ <= ]]> #{endDate}
+        ORDER BY
+            create_date DESC
+    </select>
+
+    <select id="findOutputList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            client_name clientName,
+            less_price lessPrice,
+            create_date createDate,
+            output_user_name outputUserName
+        FROM
+            fr_education_access_info
+        WHERE
+            shop_id = #{shopId}
+            AND CustomerCode = #{code}
+            and is_use = 1
+            and status = 1
+            and is_done = 0
+            and create_date <![CDATA[ >= ]]> #{beginDate}
+            and create_date <![CDATA[ <= ]]> #{endDate}
+        ORDER BY
+            create_date DESC
+    </select>
+
+    <select id="findInfoSearch" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List"></include>
+        FROM
+            fr_education_access_info
+        WHERE
+            shop_id = #{shopId}
+            AND CustomerCode = #{code}
+            and is_use = 1
+            and status = 0
+            and is_done = 0
+            and create_date <![CDATA[ >= ]]> #{beginDate}
+            and create_date <![CDATA[ <= ]]> #{endDate}
+            and account = #{outputSearch}
+        ORDER BY
+            create_date DESC
+    </select>
+
+
+    <select id="calcNum" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            ( SELECT COUNT ( 1 ) FROM fr_education_access_info WHERE is_done = 0 and is_use = 1) allCount,
+            ( SELECT COUNT ( 1 ) FROM fr_education_access_info WHERE is_done = 0 AND status = 0
+                    and create_date <![CDATA[ >= ]]> #{beginDate} and create_date <![CDATA[ <= ]]> #{endDate} and is_use = 1 ) nowCount,
+            ( SELECT COUNT ( 1 ) FROM fr_education_access_info WHERE is_done = 0 AND status = 1
+                    and create_date <![CDATA[ >= ]]> #{beginDate} and create_date <![CDATA[ <= ]]> #{endDate} and is_use = 1 ) outputCount,
+            ( SELECT COUNT ( 1 ) FROM fr_education_access_info WHERE is_done = 0 AND sex = 0 and is_use = 1 ) manCount,
+            ( SELECT COUNT ( 1 ) FROM fr_education_access_info WHERE is_done = 0 AND sex = 1 and is_use = 1 ) womenCount,
+            ( SELECT COUNT ( 1 ) FROM fr_education_access_info WHERE is_done = 0 AND status = 1 and is_use = 1 ) outputAllCount
+    </select>
+
+
+    <select id="loadCardList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            c.id clientId,
+            c.client_name clientName,
+            card.card_no cardNo,
+            card.id cardId,
+            c.mobile mobile,
+            card.shop_id shopId,
+            (
+            SELECT
+                shopName
+            FROM
+                Shop
+            WHERE
+                Id = card.shop_id
+            ) shopName,
+            c.sex sex,
+            (
+            SELECT
+                a.card_type_name
+            FROM
+                fr_card_type a
+            WHERE
+                a.is_using = 1
+                AND a.CustomerCode = #{code}
+                AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )
+            ) cardTypeName,
+            (
+            SELECT
+                pi.RelName
+            FROM
+                PersonnelInfo pi
+            LEFT JOIN fr_card_order_info coi ON coi.personnel_id = pi.ID
+            WHERE
+                coi.card_id = card.id
+                AND coi.client_id = c.id
+            ) salesName
+        FROM
+            fr_client c
+            LEFT JOIN fr_card card ON card.client_id = c.id
+        WHERE
+            c.is_using = 1
+        <if test="mobile != null and mobile != ''">
+            AND c.mobile = #{mobile}
+        </if>
+        <if test="cardNo != null and cardNo != ''">
+            AND card.card_no = #{cardNo}
+        </if>
+            AND c.CustomerCode = #{code}
+            AND card.shop_id = #{shopId}
+            AND card.is_using = 1
+            AND card.status = 0
+        ORDER BY
+            card.invalid_time ASC
+    </select>
+
+    <select id="loadInfo" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            c.id clientId,
+            c.client_name clientName,
+            ( CASE WHEN c.sex = 1 THEN '女' ELSE '男' END ) sex,
+            c.birthday birthday,
+            card.card_no cardNo,
+            (
+            SELECT
+                a.card_type_name
+            FROM
+                fr_card_type a
+            WHERE
+                a.is_using = 1
+                AND a.CustomerCode = #{code}
+            AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )) cardTypeName,
+            card.bind_time bindDate,
+            card.invalid_time invalidDate,
+            card.have_rights_num haveRightsNum,
+            (
+            SELECT
+                coi.give_rights_num giftRightNum
+            FROM
+                fr_card_order_info coi
+            WHERE
+                coi.card_id = card.id
+                AND coi.client_id = c.id
+            ) giftRightNum,
+            (
+            SELECT
+                pi.RelName
+            FROM
+                PersonnelInfo pi
+                LEFT JOIN fr_card_order_info coi ON coi.personnel_id = pi.ID
+            WHERE
+                coi.card_id = card.id
+                AND coi.client_id = c.id
+            ) salesName,
+            (
+            SELECT TOP
+                1 order_amt
+            FROM
+                fr_card_order_datail
+            WHERE
+                card_id = card.id
+                AND client_id = c.id
+                AND type = 1
+                AND is_using = 1
+            ORDER BY
+                create_time DESC
+            ) totalAmt,
+            c.consultant_name consultantName,
+        /* 服务顾问*/
+            card.status status,
+            (
+            SELECT
+                (
+                CASE
+
+                        WHEN a.type = 1 THEN
+                        '时间卡'
+                        WHEN a.type = 2 THEN
+                        '小时卡'
+                        WHEN a.type = 3 THEN
+                        '次卡'
+                        WHEN a.type = 4 THEN
+                        '储值卡'
+                        WHEN a.type = 5 THEN
+                        '充值卡'
+                        WHEN a.type = 6 THEN
+                        '折扣卡'
+                        WHEN a.type = 7 THEN
+                        '员工卡'
+                    END
+                    )
+                FROM
+                    fr_card_type a
+                WHERE
+                    a.is_using = 1
+                    AND a.CustomerCode = #{code}
+                AND a.id = ( SELECT b.card_type_id FROM fr_card b WHERE b.id = card.id )) cardType,
+            ( SELECT pic_link FROM fr_client_pic WHERE client_id = c.id AND pic_type = 1 ) clientPic,
+            (
+            SELECT
+                (
+                CASE
+
+                        WHEN ( SELECT id FROM fr_client_personal cp WHERE cp.client_id = cli.id ) IS NULL THEN
+                        ( CASE WHEN ( SELECT id FROM fr_client_latence_personal clp WHERE clp.client_id = cli.id ) IS NULL THEN NULL ELSE '潜在客户' END ) ELSE '现有客户'
+                    END
+                    ) memberType
+                FROM
+                    fr_client cli
+                WHERE
+                    cli.is_using = 1
+                    AND cli.id = c.id
+                ) memberType,
+            (
+            SELECT TOP
+                1 create_date
+            FROM
+                fr_education_access_info
+            ORDER BY
+                create_date DESC
+            )prevDate,
+            c.mobile,
+            card.id cardId,
+            card.card_type_id cardTypeId
+        FROM
+            fr_client c
+            LEFT JOIN fr_card card ON card.client_id = c.id
+        WHERE
+            c.mobile = #{mobile}
+            AND c.is_using = 1
+            AND c.CustomerCode = #{code}
+            AND card.is_using = 1
+            AND card.shop_id = #{shopId}
+            AND card.card_no = #{cardNo}
+            AND card.status = 0
+        ORDER BY
+            card.invalid_time ASC
+    </select>
+
+
+    <select id="findItemByShopId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            item_name itemName,
+            ci.id itemId
+        FROM
+            fr_category_item ci
+            LEFT JOIN Sdaduim sda ON ci.sdaduim_id = sda.id
+        WHERE
+            sda.ShopId = #{shopId}
+            AND ci.is_using = 1
+            AND ci.CustomerCode = #{code}
+    </select>
+
+    <select id="versionClient" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            use_limit1 pass,
+            id
+        FROM
+            fr_card_limit
+        WHERE
+            client_id = #{clientId}
+            AND is_using = 1
+    </select>
+
+
+</mapper>

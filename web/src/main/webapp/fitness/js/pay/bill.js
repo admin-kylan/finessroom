@@ -19,7 +19,7 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             totalPrice: 0, //存储的总额
             memberInfo: {
                 isShow: false,
-                num: '18650808999', //卡号
+                num: '', //卡号  18650808999
                 ticketList: [//会员票据列表
                     {num: '1', name: '1', interest: '22', differ: 20, use: false},
                     {num: '2', name: '1', interest: '1', "differ": 20, use: false},
@@ -520,6 +520,67 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             }
             this.toDisabled = true;
             let param = {};
+            //订单表
+            let full = '', less = '';//满减
+            if (this.rebate.type + "" === '1') {
+                full = this.rebate.repeat.full;
+                less = this.rebate.repeat.less;
+            }
+            if (this.rebate.type + "" === '0') {
+                full = this.rebate.single.full;
+                less = this.rebate.single.less;
+            }
+            full = full ? full :0;
+            less = less ? less :0;
+            let moneyReport = {
+                CustomerCode: $.cookie('code'),
+                UseType: 1,
+                Discount: parseFloat(this.rebate.offer?this.rebate.offer:0),//优惠折扣
+                ChangeMoney: parseFloat(this.rebate.integer?this.rebate.integer:0),//整单去零
+                FullType: this.rebate.type, //满减优惠类型（0、一次；1、可重复）
+                DiscountFull: full, //满
+                DiscountReduce: less, //减
+                TicketPrice: this.memberInfo.cardInfo.totalPrice,
+                ShouldMoney: this.payMoney.price,
+                OriginalPrice: this.payMoney.totalPrice,
+                CostMoney: this.payMoney.price,
+                CouponMoney: this.payMoney.discountMoney?parseFloat(this.payMoney.discountMoney):0 + this.payMoney.discount?parseFloat(this.payMoney.discount):0,
+                RemainMoney: this.payMoney.retChange,
+                OtherPayMoney: parseFloat(this.payType['p7']).toFixed(2),
+                CardMoney: this.payMoney.discount,
+                PayType: 0,
+                CreateId: $.cookie('id'),
+                CreateName: $.cookie('name'),
+            }
+
+            let consumeAccountOrder = {
+                CustomerCode: $.cookie('code'),
+                Discount: parseFloat(this.rebate.offer?this.rebate.offer:0),//优惠折扣
+                ChangeMoney: parseFloat(this.rebate.integer?this.rebate.integer:0),//整单去零
+                FullType: this.rebate.type, //满减优惠类型（0、一次；1、可重复）
+                DiscountFull: full, //满
+                DiscountReduce: less, //减
+                TicketPrice: this.memberInfo.cardInfo.totalPrice,
+                ShouldMoney: this.payMoney.price,
+                OriginalPrice: this.payMoney.totalPrice,
+                CostMoney: this.payMoney.price,
+                CouponMoney: this.payMoney.discountMoney?parseFloat(this.payMoney.discountMoney):0 + this.payMoney.discount?parseFloat(this.payMoney.discount):0,
+                RemainMoney: this.payMoney.retChange,
+                OtherPayMoney: parseFloat(this.payType['p7']).toFixed(2),
+                CardMoney: this.payMoney.discount,
+                PayType: 0,
+                CreateId: $.cookie('id'),
+                CreateName: $.cookie('name'),
+            }
+
+            let consumeAccountInfo = {
+                CustomerCode: $.cookie('code'),
+                State: 1,
+                CardMoney: this.payMoney.discount,
+                PayState: 0,
+                CreateId: $.cookie('id'),
+                CreateName: $.cookie('name'),
+            }
             //--------------------
             let cardOrderPayModeList = []; //订单表
             for (let key in this.payType) {
@@ -639,6 +700,9 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             // param.eduItem = this.eduItem;
             // param.clientInfo = this.clientInfo;
             param.buyEduDetail = buyEduDetail;
+            param.moneyReport = moneyReport;
+            param.consumeAccountOrder = consumeAccountOrder;
+            param.consumeAccountInfo = consumeAccountInfo;
             this.isShowBill = false;
             //付款的反馈
             Event.$emit(EDU_CONSTANT.listenerChooseClientInfoBack, param)

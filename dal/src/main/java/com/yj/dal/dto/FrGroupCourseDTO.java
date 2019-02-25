@@ -14,4 +14,17 @@ import lombok.NoArgsConstructor;
 public class FrGroupCourseDTO extends FrGroupCourse{
     private String trainSeriesIds;
     private String trainSeriesName;
+	public String getTrainSeriesIds() {
+		return trainSeriesIds;
+	}
+	public void setTrainSeriesIds(String trainSeriesIds) {
+		this.trainSeriesIds = trainSeriesIds;
+	}
+	public String getTrainSeriesName() {
+		return trainSeriesName;
+	}
+	public void setTrainSeriesName(String trainSeriesName) {
+		this.trainSeriesName = trainSeriesName;
+	}
+    
 }

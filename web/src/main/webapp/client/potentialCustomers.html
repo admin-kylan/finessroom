@@ -126,7 +126,7 @@
 							<tr v-for="(item,index) in customerTable.list">
 								<td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
 								<td>
-									<img  :src="avatarUrl(item.picLink)">
+									<img  :src="avatarUrl(item.picLink)" onerror="this.src='../img/addImg.png'">
 									<a :href="'LeadCustomerInformation.html?id='+item.id" >
 									<span>{{item.clientName}}</span>
 									</a>

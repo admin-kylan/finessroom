@@ -81,6 +81,15 @@ public class TurnProject extends Model<TurnProject> {
      * 新会员Id
      */
     private String NewCustomerId;
+    private String courseName;
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
 
     public String getCustomerCode() {

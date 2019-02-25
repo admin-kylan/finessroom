@@ -125,12 +125,15 @@
         <if test="endDate != null and endDate != ''">
             AND edu.execute_date_plan <![CDATA[ <= ]]> #{endDate}
         </if>
+        <if test="reserveType != null and reserveType != ''">
+            AND edu.reserve_type = ${reserveType}
+        </if>
             AND edu.type = ${eduType}
         ORDER BY
             edu.execute_date_plan ASC
     </select>
 
-    <!-- 获取私教一对多 -->
+  <!--  &lt;!&ndash; 获取私教一对多 &ndash;&gt;
     <select id="findEducationOneToManyList" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
             <include refid="Base_Column_List_alias"></include>,
@@ -173,7 +176,7 @@
         ORDER BY
             edu.execute_date_plan ASC
     </select>
-
+-->
     <!-- 获取私教一对一 -->
     <select id="findEducationOneToOneList" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
@@ -181,24 +184,23 @@
             (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 1 and eci.is_use = 1) eduCurrentCount,
             (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 0 and eci.is_use = 1) eduCancelCount,
             (select count(1) from fr_education_client_info eci where eci.education_id = edu.id and eci.reserve_status = 2 and eci.is_use = 1) eduToConfirmCount,
-            eci.member_id infoMemberId,
-            eci.member_name infoMemberName,
-            eci.mobile infoMobile,
-            eci.reserve_client_name infoReserveClientName,
-            eci.reserve_client_id infoReserveClientId,
-            eci.reserve_date infoReserveDate,
-            eci.settle_type infoSettleType,
-            eci.deduction_balance infoDeductionBalance,
-            eci.reserve_status infoReserveStatus,
-            eci.remarks infoRemarks,
-            gc.private_image courseImage,
-            gc.member_price courseMemberPrice
+            ec.reserve_time configReserveTime,
+            ec.setting_time configSettingTime,
+            ec.is_start_class configStartClass,
+            ec.is_choose_coach configChooseCoach,
+            ec.is_reserve_confirm configReserveConfirm,
+            ec.admission_time configAdmissionTime,
+            ec.is_online_reserve configOnlineReserve,
+            ec.is_card_settle configCardSettle,
+            ec.is_course_settle configCourseSettle,
+            pc.private_image courseImage,
+            pc.member_price courseMemberPrice
         FROM
             fr_education edu
         left join
-            fr_education_client_info eci on edu.id = eci.education_id
-        left join
             fr_private_cource pc on pc.id = edu.course_id
+        left join
+            fr_education_config ec on edu.id = ec.education_id
         WHERE
             edu.shop_id = #{shopId}
         <if test="coachId != null and coachId != ''">
@@ -216,9 +218,33 @@
         </if>
             AND edu.type = ${eduType}
             and edu.reserve_type = 1
+           /* and eci.reserve_status in (1, 2)*/
         ORDER BY
             edu.execute_date_plan ASC
     </select>
+
+    <select id="findEducationOneToOneClientInfo" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            eci.id infoClientId,
+            eci.member_id infoMemberId,
+            eci.member_name infoMemberName,
+            eci.mobile infoMobile,
+            eci.reserve_client_name infoReserveClientName,
+            eci.reserve_client_id infoReserveClientId,
+            eci.reserve_date infoReserveDate,
+            eci.settle_type infoSettleType,
+            eci.deduction_balance infoDeductionBalance,
+            eci.reserve_status infoReserveStatus,
+            eci.remarks infoRemarks
+        FROM
+            fr_education_client_info eci
+        WHERE
+            eci.education_id = #{eduId}
+            and eci.reserve_status in (1, 2)
+
+    </select>
+
+
 
     <select id="findEducationById" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
@@ -598,6 +624,7 @@
                 AND edu.CustomerCode = #{CustomerCode}
                 AND edu.shop_id = #{shopId}
                 AND edu.type = ${teachType}
+                AND edu.status = 0
                 <if test="sdaduimId != null and sdaduimId != ''">
                     AND edu.sdaduim_id = #{sdaduimId}
                 </if>
@@ -1100,4 +1127,35 @@
             AND customer_code = #{code}
             AND type = ${eduType}
     </select>
+
+
+
+    <select id="findEduDateByEduId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            edu.id eduId,
+            edu.begin_date_plan beginDate,
+            edu.end_date_plan endDate,
+            edu.reserve_total_num reserveTotalNum,
+            ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 1 AND eci.is_use = 1 ) eduCurrentCount,
+            ( SELECT COUNT ( 1 ) FROM fr_education_client_info eci WHERE eci.education_id = edu.id AND eci.reserve_status = 2 AND eci.is_use = 1 ) eduToConfirmCount
+
+        FROM
+            fr_education edu
+        WHERE
+            edu.course_id = #{courseId}
+            AND edu.begin_date_plan <![CDATA[ >= ]]> #{beginDate}
+            AND edu.end_date_plan <![CDATA[ <= ]]> #{endDate}
+            AND edu.type = 1
+            AND edu.status = 0
+            AND edu.is_use = 1
+            AND edu.reserve_type = ${reserveType}
+    </select>
+
+    <update id="updateOfTimeOutStatus" parameterType="java.lang.String">
+        UPDATE fr_education
+            SET status = 2
+        WHERE
+            end_date_plan <![CDATA[ <= ]]> #{time}
+        AND status = 0
+    </update>
 </mapper>

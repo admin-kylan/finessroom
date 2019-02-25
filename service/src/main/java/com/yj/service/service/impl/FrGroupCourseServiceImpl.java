@@ -49,6 +49,7 @@ public class FrGroupCourseServiceImpl extends BaseServiceImpl<FrGroupCourseMappe
     public Object queryPage(Map<String, Object> params) throws YJException {
         String code = String.valueOf(params.get("code")),
           seriesId = String.valueOf(params.get("seriesId"));
+        String sdaduimId = String.valueOf(params.get("sdaduimId"));
         if (StringUtils.isEmpty(code)) {
             return null;
         }
@@ -56,13 +57,13 @@ public class FrGroupCourseServiceImpl extends BaseServiceImpl<FrGroupCourseMappe
         if (seriesId == "null") {
             page = this.selectPage(new Query<FrGroupCourse>(params).getPage(),
                     new EntityWrapper<FrGroupCourse>()
-                            .where("is_using = 1 and customer_code={0} ", code)
+                            .where("is_using = 1 and customer_code={0} and sdaduim_id={1} ", code,sdaduimId)
                             .orderBy("create_time desc")
             );
         } else {
             page = this.selectPage(new Query<FrGroupCourse>(params).getPage(),
                     new EntityWrapper<FrGroupCourse>()
-                            .where("is_using = 1 and customer_code={0} and series_id={1}", code, seriesId)
+                            .where("is_using = 1 and customer_code={0} and series_id={1} and sdaduim_id={2}", code, seriesId,sdaduimId)
                             .orderBy("create_time desc")
             );
         }

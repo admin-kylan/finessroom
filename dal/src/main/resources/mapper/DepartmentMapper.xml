@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.DepartmentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.Department">
+        <id column="ID" property="id" />
+        <result column="CustomerCode" property="CustomerCode" />
+        <result column="ParentId" property="ParentId" />
+        <result column="DepartName" property="DepartName" />
+        <result column="IsShop" property="IsShop" />
+        <result column="Attribute" property="Attribute" />
+        <result column="IsDel" property="IsDel" />
+        <result column="ExtendField1" property="ExtendField1" />
+        <result column="ExtendField2" property="ExtendField2" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, CustomerCode, ParentId, DepartName, IsShop, Attribute, IsDel, ExtendField1, ExtendField2
+    </sql>
+
+</mapper>

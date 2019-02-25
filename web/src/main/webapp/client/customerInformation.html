@@ -45,7 +45,7 @@
                     <li>建档时间：<strong></strong></li>
                     <li>申请时间：<strong></strong></li>
                     <li>客户等级：<strong></strong><img src="../img/u1506.png"  id="customer_level" ></li>
-                    <!--<li>最近来访：<strong></strong> </li>-->
+                    <li>最近来访：<strong></strong> </li>
                 </ul>
             </div>
             <div class="customerrightFrame_botton">
@@ -61,6 +61,7 @@
                     <li><a href="customerPhysicalFitnessTest.html" target="customerrightFrame">体能测试</a></li>
                     <li><a href="customerFollowUpRecord.html" target="customerrightFrame">跟进记录</a></li>
                     <li><a href="customerTrainingPlan.html" target="customerrightFrame">训练计划</a></li>
+                    <li><a href="serviceRecord.html" target="customerrightFrame">服务记录</a></li>
                 </ul>
             </div>
         </div>
@@ -231,6 +232,7 @@
 <script src="../js/jedate.js"></script>
 <script src="../js/vue.js"></script>
 <script src="../js/common.js"></script>
+<script src="../js/dateUtil.js"></script>
 <script>
     //修复高度
 //  function mainheight() {
@@ -268,10 +270,11 @@
 
         var url = $.stringFormat("{0}/frClient/getClient", $.cookie('url'));
         var id = document.URL.split("=")[1];
-        console.log( document.URL)
-        console.log(id)
+        // console.log( document.URL)
+        // console.log(id)
         $.cookie('cid', id)  //存入值
         $.get(url, {id: id}, function (res) {
+                     console.log(res)
                 if (res.code == 200) {
                     $.cookie('clientName', res.data.clientName)  //存入值
                     $(".customerrightFrame_box").find("li").eq(0).find("strong").html(res.data.clientName);
@@ -279,21 +282,34 @@
                     $(".customerrightFrame_box").find("li").eq(2).find("strong").html(res.data.mobile);
                     $(".customerrightFrame_box").find("li").eq(3).find("strong").html(res.data.wechat);
                     $(".customerrightFrame_box").find("li").eq(4).find("strong").html(res.data.fwhjName);
-                    $(".customerrightFrame_box").find("li").eq(5).find("strong").html(res.data.birthday);
-                    $(".customerrightFrame_box").find("li").eq(6).find("strong").html(res.data.buildDate);
-                    $(".customerrightFrame_box").find("li").eq(7).find("strong").html(res.data.applyTime);
-                    $(".customerrightFrame_box").find("li").eq(8).find("strong").html(res.data.flag);
-                    if (res.data.clientPic) {
-                        var clientPrice  = res.data.clientPic;
+                    if (typeof res.data.birthday!='undefined') {
+                        $(".customerrightFrame_box").find("li").eq(5).find("strong").html(timeFormatDate(res.data.birthday, true, true));
+                    }
+                    if (typeof res.data.buildDate!='undefined') {
+                        $(".customerrightFrame_box").find("li").eq(6).find("strong").html(timeFormatDate(res.data.buildDate, true, true));
+                    }
+
+                    if (typeof res.data.applyTime!='undefined') {
+                        $(".customerrightFrame_box").find("li").eq(7).find("strong").html(timeFormatDate(res.data.applyTime, true, true));
+                    }
+                    $(".customerrightFrame_box").find("li").eq(8).find("strong").html(res.data.levelName);
+                    if (typeof res.data.visitingTime!='undefined') {
+                        $(".customerrightFrame_box").find("li").eq(9).find("strong").html(timeFormatDate(res.data.visitingTime, true, true));
+                    }
+
+
+                    // if (res.data.picLink) {
+                        // var clientPrice  = res.data.clientPic;
                         // var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, $.cookie('url'), $.cookie('imgPath'))
-                        var stc = res.data.clientPic.picLink;
+                        var stc = res.data.picLink;
+                    console.log(stc)
                         if(stc === null||stc ===''||typeof stc ==='undefined'){
                             stc =  '../img/addImg.png';
                         }
                         if (stc) {
                             $(".img-responsive").attr("src", stc)
                         }
-                    }
+                    // }
                     $(".customerrightFrame_botton a").eq(0).attr("href", 'customerMemberBenefits.html?id=' + id)
                     $(".customerrightFrame_botton a").eq(1).attr("href", 'customerMembershipCard.html?id=' + id)
                 } else {

@@ -1,7 +1,7 @@
 //创建加载动画 ydlemon Add 2018-07-05 14:04
 
 function Loading(options) {
-    this.config = {
+	this.config = {
         loadingtype: 0,//创建加载样式 0默认数据加载
     };
     this.init(options);
@@ -16,7 +16,7 @@ Loading.prototype = {
     init: function (options) {
         this.config = $.extend(this.config, options || {});
         var self = this,
-            _config = self.config;
+        _config = self.config;
         // 渲染html结构
         self.renderHtml();
     },
@@ -188,6 +188,8 @@ Loading.prototype = {
         $("head").append(style);
         //#endregion
         //#region 创建html代码
+        $('#loading').remove();
+        console.log(this.config)
         var loading = $('<!--加载中动画-->' +
             '<div id="loading">' +
             '    <div id="loading-center">' +
@@ -198,7 +200,7 @@ Loading.prototype = {
             '            <div class="object" id="object_four"></div>' +
             '        </div>' +
             '    </div>' +
-            '    <div id="loading-text">正在努力加载中......</div>' +
+            '    <div id="loading-text">'+(this.config.text || "正在努力加载中......")+'</div>' +
             '</div>');
         $("body").append(loading);
         var maskLayer=$('<!--遮罩层-->' +

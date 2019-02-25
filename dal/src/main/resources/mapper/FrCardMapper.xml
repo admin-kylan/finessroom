@@ -372,6 +372,68 @@
     </select>
 
 
+    <!--查询指定会员会员卡的数据（后台设置导出用）-->
+    <select id="queryUserCardInfoListBG" resultType="java.util.Map">
+        SELECT
+        (SELECT s.ShopName FROM  Shop s WHERE s.id = a.shop_id) shopName,
+        (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = a.card_type_id) cardTypeName,
+        (SELECT t.card_type_name FROM fr_card_type t WHERE t.id = (SELECT c.p_id FROM fr_card_type c WHERE c.id = a.card_type_id)) cardFlag,
+        ISNULL(( SELECT  SUM (b.pay_price)  FROM  fr_card_order_pay_mode b  WHERE b.order_id =
+        ( SELECT  b.id   FROM  fr_card_order_info b  WHERE  b.card_id = a.id  ) AND ( b.order_type = '1' OR b.order_type = '2' )),0)
+        +ISNULL(( SELECT SUM (b.pay_price) FROM  fr_card_order_complement f  LEFT JOIN fr_card_order_pay_mode b ON b.order_id = f.id
+        WHERE  f.card_id = a.id  AND b.order_type = '6'   AND f.order_state = 1 AND f.status = 1 AND f.audit_status = 1 ),0) needPrice,
+        (SELECT b.need_price   FROM  fr_card_order_info b  WHERE  b.card_id = a.id) needPriceTwo,
+        (SELECT b.buy_rights_num FROM fr_card_order_info b WHERE b.card_id = a.id) buyRightsNum,
+        (SELECT b.give_rights_num FROM fr_card_order_info b WHERE b.card_id = a.id) giveRightsNum,
+        (SELECT b.status FROM fr_card_order_info b WHERE b.card_id = a.id) InfoStatus,
+        (SELECT b.audit_status FROM fr_card_order_info b WHERE b.card_id = a.id)auditStatus,
+        (SELECT p.RelName FROM PersonnelInfo p WHERE p.id = (SELECT b.personnel_id FROM fr_card_order_info b WHERE b.card_id = a.id)) saleName,
+        (SELECT t.agreement_no FROM fr_card_agreement t WHERE  t.card_id = a.id) agreementNo,
+        (SELECT t.service_life FROM fr_card_type t WHERE t.id = a.card_type_id) seviceLife,
+        (SELECT t.used_num FROM fr_card_original_set t WHERE t.card_id = a.id) userdNum,
+        (SELECT t.stop_num FROM fr_card_original_set t WHERE t.card_id = a.id) stopNum,
+        (SELECT t.stop_days FROM fr_card_original_set t WHERE t.card_id = a.id) stopDays,
+        (SELECT p.client_name FROM fr_client p WHERE p.id = a.client_id) clientName,
+        (SELECT p.mobile FROM fr_client p WHERE p.id = a.client_id) mobile,
+        (SELECT p.sex FROM fr_client p WHERE p.id = a.client_id) sex,
+        ( CASE
+        WHEN a.status =0 THEN '正常'
+        WHEN a.status =1  THEN '停卡'
+        WHEN a.status =2  THEN '冻结'
+        WHEN a.status =3 THEN '已过期'
+        WHEN a.status =4 THEN '未开卡'
+        WHEN a.status =5 THEN '待补余'
+        WHEN a.status =6 THEN '历史'
+        ELSE '未设置'
+        END) a_status,
+        (SELECT SUM(c.order_price) FROM fr_card_order_datail c WHERE c.client_id = a.client_id  AND c.is_using = 1
+        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 2)orderPrice,
+        (SELECT SUM(c.order_rights_num) FROM fr_card_order_datail c  WHERE c.client_id = a.client_id  AND c.is_using = 1
+        AND c.card_id = a.id  AND c.status !=2 AND c.audit_status !=2 AND c.CustomerCode = a.CustomerCode AND c.type = 1)orderNum,
+        (SELECT b.service_life FROM fr_card_original_set b WHERE a.original_id = b.id ) serviceLife,
+        (SELECT b.card_opening FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2 ) cardOpening,
+        (SELECT b.replacement_card FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2  ) replacementCard,
+        (SELECT COUNT(1) FROM fr_card_supply_record b WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2  ) supplyCount,
+        (SELECT c.status FROM fr_card c WHERE c.id =
+        (SELECT b.ori_card_id FROM fr_card_supply_record b
+        WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldStatus,
+        (SELECT c.invalid_time FROM fr_card c WHERE c.id =
+        (SELECT b.ori_card_id FROM fr_card_supply_record b
+        WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldInvalidTime,
+        (SELECT c.card_no FROM fr_card c WHERE c.id =
+        (SELECT b.ori_card_id FROM fr_card_supply_record b
+        WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldCardNo,
+        <include refid="Base_Column_List_Frcard"/>
+        FROM fr_card a
+        WHERE a.CustomerCode = #{CustomerCode}
+        <include refid="query_where_sql"/>
+        <if test="status == 100">
+            AND  a.status != 6
+        </if>
+        ORDER BY  a.update_time DESC
+    </select>
+
+
     <sql id="Base_Column_List_Update">
         <trim prefix="set" suffixOverrides=",">
             <if test="cardNo!= null and cardNo != '' " >

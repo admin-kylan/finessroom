@@ -20,8 +20,10 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface FrPrivateCourceMapper extends BaseMapper<FrPrivateCource> {
 
-	List<FrPrivateCource> findPrivateCource(Page page,@Param("sdaduimId") String sdaduimId);
-	List<FrPrivateCource> findCource(Page page,@Param("shopId") String shopId);
+	List<FrPrivateCource> findPrivateCource(Page page,@Param("sid") String sid,@Param("sdaduimId") String sdaduimId);
+	List<FrPrivateCource> findCource(Page page,@Param("shopId") String shopId,@Param("sdaduimId")String sdaduimId);
 	List<FrTrainingClassDTO> getActionsByseriesId(@Param("traningSeriesId")String traningSeriesId,@Param("type")Integer type);
 	List<FrTrainingClassDTO> getActionsByseriesId2(@Param("traningSeriesId")String traningSeriesId,@Param("type")Integer type);
+
+	FrPrivateCource selectByProject(String project);
 }

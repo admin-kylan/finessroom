@@ -41,6 +41,7 @@ var myCustomerPotential = new Vue({
         followPersonal: [],
         //服务会稽
         ServicePersonnel: [],
+        pageTemp:"",
     },
     crated: function () {
     },
@@ -135,6 +136,7 @@ var myCustomerPotential = new Vue({
                                     showPageTotalFlag: true, //是否显示数据统计
                                     showSkipInputFlag: true, //是否支持跳转
                                     getPage: function (page) {
+                                        that.pageTemp=page;
                                         //获取当前页数
                                         that.buildFilterDate({page: page, limit: that.customerTable.pageSize});
                                     }
@@ -149,8 +151,7 @@ var myCustomerPotential = new Vue({
                             console.log(error);
                             $.alert(error)
                         });
-                }
-                catch (ex) {
+                } catch (ex) {
                     console.log(ex);
                     $.alert(ex.message);
                 }
@@ -232,7 +233,7 @@ var myCustomerPotential = new Vue({
                     jsonObj['newDate'] = date;
                 }
             }
-            if (typeof(eval(page.page)) == "undefined") {
+            if (typeof (eval(page.page)) == "undefined") {
                 that.queryPotentialList(jsonObj);
             } else {
                 jsonObj.page = eval(page.page);
@@ -360,17 +361,37 @@ var myCustomerPotential = new Vue({
         exportExcel: function () {
             var that = this;
             var url = $.stringFormat('{0}/excel/myPotential', $.cookie('url'));
-            var data=JSON.stringify(that.customerTable.list)
-            $.ajax({
-                url : url,
-                data : data,
-                type : 'POST',
-                dataType : 'json',
-                contentType: "application/json;charset=utf-8",
-                success : function(res) {
-                alert(res.msg)
-                }
-            })
+            // var data = JSON.stringify(that.customerTable.list)
+            var form = $("<form>");//定义一个form表单
+            form.attr("style", "display:none");
+            form.attr("target", "_break");
+            form.attr("method", "post");
+            form.attr("action", url);
+            var input1 = $("<input>");
+            input1.attr("type", "hidden");
+            input1.attr("name", "page");
+            if(that.pageTemp==""){
+                that.pageTemp=1;
+            }
+            input1.attr("value", that.pageTemp);
+            $("body").append(form);//将表单放置在web中
+            form.append(input1);
+            form.submit();//表单提交
+            // var url = $.stringFormat('{0}/excel/myPotential', $.cookie('url'));
+
+            // $.ajax({
+            //     url : url,
+            //     data : data,
+            //     type : 'POST',
+            //     dataType : 'json',
+            //     contentType: "application/json;charset=utf-8",
+            //     success : function(res) {
+            //         console.log(11)
+            //         console.log(res)
+            //     // alert(res.msg)
+            //     }
+            // })
+            // console.log(2233)
         },
     }
 });

@@ -331,7 +331,7 @@
                         <span><input type="checkbox" class="series" :title="''+trea.id"></span>
                         <span>{{trea.cardTypeName}}</span>
                         <span class="span_sd">
-                                <a :href="'main1.html?id='+trea.id+'&storeId='" target="rightFrame" class="success">修改</a>
+                                <a :href="'main1.html?id='+trea.id+'&name='+trea.cardTypeName" target="rightFrame" class="success">修改</a>
                                 <a  class="del" v-on:click="delCurrent(trea.id)">删除</a>
                         </span>
                     </li>
@@ -369,7 +369,7 @@
                                 <span><input type="checkbox" class="series" :title="''+tfers.id"></span>
                                 <span>{{tfers.cardTypeName}}</span>
                                 <span class="span_sd">
-                                <a :href="'main1.html?id='+tfers.id+'&storeId='+nots.id" target="rightFrame" class="success">修改</a>
+                                <a :href="'main1.html?id='+tfers.id+'&storeId='+nots.id+'&name='+tfers.cardTypeName" target="rightFrame" class="success">修改</a>
                                 <a  class="del" v-on:click="del(tfers.id,nots.id)">删除</a>
                         </span>
                             </li>

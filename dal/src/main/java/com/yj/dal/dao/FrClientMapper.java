@@ -26,7 +26,7 @@ public interface FrClientMapper extends BaseMapper<FrClient> {
 
     List<PotentialClientDTO> selectPotentialList(Page page, PotentialFilterParam conditions);
 
-    FrClient getClient(@Param("id") String id);
+    Map<String,Object> getClient(@Param("id") String id);
 
     void updateClient(FrClient frClient);
 
@@ -50,5 +50,9 @@ public interface FrClientMapper extends BaseMapper<FrClient> {
 
     List<FrClient> queryByClient(FrClient frClient);
 
-    int selectByMobile(String mobile);
+    FrClient selectByMobile(String mobile);
+
+    List<Map<String, Object>> selectPotentialClientList(@Param("customerCode")String customerCode, @Param("shopId")String shopId);
+
+    List<Map<String, Object>> selectEmployeeClientList(@Param("shopId")String shopId,@Param("customerCode") String customerCode);
 }

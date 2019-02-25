@@ -13,4 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FrGroupClassRoomSeatDTO extends FrGroupClassRoomSeat{
     private int[][] seatNumArr;
+
+	public int[][] getSeatNumArr() {
+		return seatNumArr;
+	}
+
+	public void setSeatNumArr(int[][] seatNumArr) {
+		this.seatNumArr = seatNumArr;
+	}
+    
 }

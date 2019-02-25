@@ -18,11 +18,11 @@ import java.util.Map;
  */
 public interface IFrSetGymService extends BaseService<FrSetGym> {
 
-    List<Map<String, Object>> getShop(String code,String type) throws YJException;
+    List<Map<String, Object>> getShop(String code,String modelId) throws YJException;
 
-    List<FrSetGym> getChainStore(String type);
+    List<FrSetGym> getChainStore(String modelId);
 
-    Map<String, Object> getTime(String type);
+    Map<String, Object> getTime(String modelId);
 
     List<Map<String, Object>> getCityShop(String code)throws YJException;
 

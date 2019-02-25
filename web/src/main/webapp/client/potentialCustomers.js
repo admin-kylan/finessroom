@@ -98,16 +98,13 @@ const pcapp = new Vue({
                     console.log(error);
                 });
         },
-        /**
-         * 头像url拼接
-         * @param avatarLink
-         * @returns {*}
-         */
+
+        //头像url拼接
         avatarUrl:function (avatarLink) {
             if(avatarLink === null||avatarLink ===''||typeof avatarLink ==='undefined'){
                 return '../img/addImg.png';
             }
-            return $.stringFormat("{0}/{1}/"+avatarLink, $.cookie('url'),$.cookie('imgPath'));
+            return avatarLink
         },
         /**
          * 分页查询潜在客户列表

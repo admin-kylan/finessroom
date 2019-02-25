@@ -31,8 +31,8 @@ public class FrSetGymController {
      * @throws YJException
      */
     @GetMapping("/getTime")
-    public JsonResult getTime(String type) throws YJException{
-        return JsonResult.success(service.getTime(type));
+    public JsonResult getTime(String modelId) throws YJException{
+        return JsonResult.success(service.getTime(modelId));
     }
 
     /**
@@ -42,8 +42,8 @@ public class FrSetGymController {
      * @throws YJException
      */
     @GetMapping("/getShop")
-    public JsonResult getShop(String code,String type) throws YJException{
-        return JsonResult.success(service.getShop(code,type));
+    public JsonResult getShop(String code,String modelId) throws YJException{
+        return JsonResult.success(service.getShop(code,modelId));
     }
 
     /**
@@ -52,8 +52,8 @@ public class FrSetGymController {
      * @throws YJException
      */
     @GetMapping("/getChainStore")
-    public JsonResult getChainStore(String type) throws YJException{
-        return JsonResult.success(service.getChainStore(type));
+    public JsonResult getChainStore(String modelId) throws YJException{
+        return JsonResult.success(service.getChainStore(modelId));
     }
 
     /**

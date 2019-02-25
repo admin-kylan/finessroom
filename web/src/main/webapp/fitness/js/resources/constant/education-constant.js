@@ -14,4 +14,9 @@ const EDU_CONSTANT = {
     listenerClassSettingInfo: 'listener-class-setting-info', //显示课程，用户详情信息
     listenerEducationMonthList: 'listener-education-month-list', //按月查询
     listenerEducationWeekList: 'listener-education-week-list', //按周查询
+    listenerEducationCopyInfo: 'listener-education-copy-info', //复制弹窗
 };
+
+
+
+

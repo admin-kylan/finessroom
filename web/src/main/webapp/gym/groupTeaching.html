@@ -23,7 +23,7 @@
 	<!-- END 顶部菜单 -->
 
 	<!-- 左侧菜单  -->
-	<sidebar-nav></sidebar-nav>
+	<!--<sidebar-nav></sidebar-nav>-->
 	<!-- END 左侧菜单 -->
 
 	<!-- 右边容器 -->
@@ -31,7 +31,7 @@
 		<!-- 主要内容 -->
 		<div class="main-content">
 			<!--真正开始写你的页面-->
-			<div class="ml3 min-height-page bgc-fff ptb13 border1-e4e4e4">
+			<div class="min-height-page bgc-fff ptb13 border1-e4e4e4">
 				<ul class="nav nav-tabs nav-style" role="tablist">
 					<li role="presentation" class="active"><a href="#category" aria-controls="category" role="tab" data-toggle="tab">团课种类</a></li>
 					<li role="presentation"><a href="#settingRoom" aria-controls="settingRoom" role="tab" data-toggle="tab" @click="initServerClassRoomSetting">教室设置</a></li>
@@ -934,7 +934,7 @@
 												<div class="flex-box-item">
 													<div class="flex-box flex-start">
 														<div class="w100 text-right">
-															<span class="c-ff0000">*</span>动作效果原理：
+															动作效果原理：
 														</div>
 														<div class="flex-box-item">
 															<textarea class="form-control br0" rows="9" v-model="actionAddData.actionPrinceple"></textarea>
@@ -1178,7 +1178,7 @@
 											<li v-for="(action , index) in mealLinkSettingAction" :key="action" @click="actionEduClick(index,action.id , 2 )" :class="mealSettingIndex == index ? 'active' :''" >
 												<a>{{action.name}}<span class="pull-right c-ffcc00 ml5"  @click.stop="deleteItem(index,action.id , 2)">删除</span><span class="pull-right c-ff0000" @click.stop="updateItem(action.id , 2)">修改</span></a>
 												<ul class="sub-action-list" v-show="mealSettingIndex == index">
-													<li @click.stop="addTrain(action.id , 2)">+新增训练计划11</li>
+													<li @click.stop="addTrain(action.id , 2)">+新增训练计划</li>
 													<li  :key="train" @click.stop="subTrainClick(train , 2)" v-for="(train, index) in mealLinkSettingActionSub" :class="mealLinkSettingActionSubSelectId == train.id ?'active':''">
 														{{train.name}}
 														<span class="pull-right c-ffcc00 ml5" @click.stop="deleteTrain(train.id , 2)">删除</span>

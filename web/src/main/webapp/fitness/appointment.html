@@ -15,7 +15,11 @@
     <link rel="stylesheet" href="../css/simple-calendar.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../fitness/css/bill.css">
-
+    <style>
+        .edu-setting{
+            display: block!important;
+        }
+    </style>
 </head>
 
 <body>
@@ -91,7 +95,7 @@
 
                         <!-- 批量排团课 -->
                         <!-- 复制排课 -->
-                        <edu-copy-class-children></edu-copy-class-children>
+                        <edu-copy-class-children @return-page="LI"></edu-copy-class-children>
 
 
                         <!-- 课程设置 -->
@@ -211,8 +215,14 @@
                         </template>
 
                         <template v-if="item.status == 0 ">
+                            <template v-if="parseInt(item.reserveTotalNum) <= (parseInt(item.eduCurrentCount) + parseInt(item.eduToConfirmCount))">
+                                <span class="margin">已约满</span>
+                            </template>
+                            <template v-if="parseInt(item.reserveTotalNum) > (parseInt(item.eduCurrentCount) + parseInt(item.eduToConfirmCount))">
                                 <span class="green margin"
                                       @click="addReserve(item.id, item)">添加预约</span>
+                            </template>
+
                             <span class="red margin"
                                   @click="startClass(item.id, item)">开课</span>
                         </template>
@@ -405,7 +415,7 @@
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <div class="bookBody clearfix">
-                    <div class="lef fl"><img src="../img/u2871.png" alt=""></div>
+                    <div class="lef fl"><img :src="eduItem.courseImage" alt=""></div>
                     <div class="rig fl">
                         <div><span class="title">课程名称：</span> <span
                                 class="txt"><strong>{{eduItem.courseName}}</strong></span></div>
@@ -1796,7 +1806,7 @@
                     <td>{{item.totalTime| toCalcNum}}</td>
                     <td>{{item.totalGain| toMoney}}</td>
                     <td>
-                        {{item.totalNum| toCalcNum}}<span class="orange">{{item.finishNum| toCalcNum}}</span>/<span
+                        {{item.totalNum| toCalcNum}}/<span class="orange">{{item.finishNum| toCalcNum}}</span>/<span
                             class="grey">{{item.undoneNum| toCalcNum}}</span> <span
                             class="orange" @click="index = 1">查看</span>
                     </td>
@@ -2801,7 +2811,7 @@
 
 <!-- 课程设置 -->
 <template id="edu-class-setting-id">
-    <div>
+    <div class="edu-setting">
         <!-- 课程设置 -->
         <div id="Curriculum" class="newCustomers_maskLayer" v-show="settingStatus" style="display: block;">
             <div class="newCustomers_maskLayer_box">
@@ -3105,7 +3115,7 @@
         </div>
         <!-- 排课弹窗 -->
     </div>
-
+    </div>
 </template>
 
 
@@ -3168,6 +3178,7 @@
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/jquery.cookie.js"></script>
 <script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
 <script src="../js/dateUtil.js"></script>
 <script src="../js/combobox.js"></script>
 <script src="../js/jedate.js"></script>

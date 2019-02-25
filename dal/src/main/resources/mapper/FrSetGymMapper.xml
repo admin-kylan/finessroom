@@ -38,7 +38,7 @@
             update_user_name updateUserName
             FROM
             fr_set_gym
-            WHERE venue_type=#{type}
+            WHERE model_id=#{modelId}
             ORDER BY
             update_time desc
     </select>

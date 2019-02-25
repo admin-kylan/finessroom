@@ -14,4 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FrGroupClassRoomDTO extends FrGroupClassRoom{
     private FrGroupClassRoomSeatDTO FrGroupClassRoomSeat;
+
+	public FrGroupClassRoomSeatDTO getFrGroupClassRoomSeat() {
+		return FrGroupClassRoomSeat;
+	}
+
+	public void setFrGroupClassRoomSeat(FrGroupClassRoomSeatDTO frGroupClassRoomSeat) {
+		FrGroupClassRoomSeat = frGroupClassRoomSeat;
+	}
+    
 }

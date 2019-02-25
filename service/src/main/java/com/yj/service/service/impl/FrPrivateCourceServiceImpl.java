@@ -44,6 +44,7 @@ public class FrPrivateCourceServiceImpl extends BaseServiceImpl<FrPrivateCourceM
     @Override
     public PageUtils queryPage(Map<String, Object> params) throws YJException {
         String code = String.valueOf(params.get("code"));
+        String sdaduimId = (String) params.get("sdaduimId");
         if (StringUtils.isEmpty(code)) {
             throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
         }
@@ -63,9 +64,9 @@ public class FrPrivateCourceServiceImpl extends BaseServiceImpl<FrPrivateCourceM
 
 
             page = new Query<FrPrivateCource>(map).getPage();
-            List<FrPrivateCource> frPrivateCources = baseMapper.findCource(page, params.get("shopId").toString());
+            List<FrPrivateCource> frPrivateCources = baseMapper.findCource(page, params.get("shopId").toString(),sdaduimId);
             page.setRecords(frPrivateCources);
-        }else  if (params.get("sdaduimId") != null) {
+        }else  if (params.get("sId") != null) {
             Map<String, Object> map = new HashMap<>();
             if (params.get("curPage") == null) {
                 map.put("page", "1");
@@ -79,14 +80,14 @@ public class FrPrivateCourceServiceImpl extends BaseServiceImpl<FrPrivateCourceM
             }
 
             page = new Query<FrPrivateCource>(map).getPage();
-            List<FrPrivateCource> frPrivateCources = baseMapper.findPrivateCource(page, params.get("sdaduimId").toString());
+            List<FrPrivateCource> frPrivateCources = baseMapper.findPrivateCource(page, params.get("sId").toString(),sdaduimId);
             page.setRecords(frPrivateCources);
         } else {
             String queryProperty = " private_image AS privateImage, class_scheduling AS classScheduling, customer_code AS customerCode, update_time AS updateTime, is_show_desk AS isShowDesk, time, create_time AS createTime, valid_time AS validTime, name, update_user AS updateUser, class_info AS classInfo, promotion_price AS promotionPrice, create_user AS createUser, assign_teacher AS assignTeacher, market_price AS marketPrice, class_scheduling_type AS classSchedulingType, valid_time_type AS validTimeType, id, is_account_spending AS isAccountSpending, remain_cource_num AS remainCourceNum, member_price AS memberPrice, is_using AS isUsing, assign_teacher_type AS assignTeacherType";
             page = this.selectPage(
                     new Query<FrPrivateCource>(params).getPage(),
                     new EntityWrapper<FrPrivateCource>()
-                            .where("is_using = 1 ")
+                            .where("is_using = 1 and sdaduim_id={0}",sdaduimId)
                             .orderBy("create_time desc")
                             .setSqlSelect(queryProperty)
             );

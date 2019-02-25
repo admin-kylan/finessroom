@@ -118,7 +118,7 @@ SELECT
 FROM
 	fr_private_cource
 WHERE
-	is_using = 1
+	is_using = 1 and sdaduim_id =#{sdaduimId}
 	AND id IN ( SELECT cource_id FROM fr_private_package_relation WHERE shop_id =#{shopId} AND is_using = 1 )
 
 	</select>
@@ -129,8 +129,13 @@ WHERE
 		FROM
 		fr_private_cource
 		WHERE
-		is_using = 1
-		AND id IN ( SELECT cource_id FROM fr_private_package_relation WHERE sdaduim_id =#{sdaduimId} AND is_using = 1 )
+		is_using = 1 and sdaduim_id =#{sdaduimId}
+		AND id IN ( SELECT cource_id FROM fr_private_package_relation WHERE sdaduim_id =#{sid} AND is_using = 1 )
 
+	</select>
+
+
+	<select id="selectByProject" parameterType="java.lang.String" resultType="com.yj.dal.model.FrPrivateCource">
+		SELECT * FROM fr_private_cource WHERE name =#{project}
 	</select>
 </mapper>

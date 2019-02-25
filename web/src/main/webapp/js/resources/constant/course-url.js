@@ -25,8 +25,13 @@ const COURSE_URL = {
     returnAddProjects: 'frCustomerCourse/returnAddProjects', //项目查询退费
     turnProjects: 'frCustomerCourse/turnProjects', //查询转让记录
     turnProjectsDelete: 'frCustomerCourse/turnProjectsDelete', //冲销
-    frPrivateCourceList: '/frCustomerCourse/getCourseList', //私教,团教
+    getCourseList: '/frCustomerCourse/getCourseList', //私教,团教
   //  frGroupCourseList: '/frCustomerCourse/list', //团教
     customerCommodityList: 'frCustomerCourse/list', //项目list
     getMarketShopList: 'shop/getMarketShopList', //查询所有门店
+    getProjectListSelect: 'frCustomerCourse/getProjectListSelect', //查询选择框列表
+    findStartProjectRecord: 'frCustomerCourse/findStartProjectRecord', //查询启用记录
+    findCustomerRemnantRecord: 'frCustomerCourse/findCustomerRemnantRecord', //查询补余记录
+    findCustomerExtensionRecord: 'frCustomerCourse/findCustomerExtensionRecord', //查询延期记录
+    getCoursePackageCourseId: 'frCustomerCourse/getCoursePackageCourseId', //查询延期记录
 };

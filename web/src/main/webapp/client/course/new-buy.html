@@ -13,79 +13,79 @@
         </div>
 
     </div>
-    <div class="tab">
-        <div class="tabWrap">
-            <table border="1" bordercolor="#ccc" class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <td>操作</td>
-                    <td>状态</td>
-                    <td>套餐详情</td>
-                    <td>订单创建日期</td>
-                    <td>协议编号</td>
-                    <td>所在门店</td>
-                    <td>所在场馆</td>
-                    <td>购买项目/产品</td>
-                    <td>购买数量</td>
-                    <td>赠送数量</td>
-                    <td>可用数量</td>
-                    <td>退费数量</td>
-                    <td>退费金额</td>
-                    <!-- 14 --> <td>剩余数量</td>
-                    <td>已消费数量</td>
-                    <td>单价</td>
-                    <td>购买金额</td>
-                    <td>实际付款金额</td>
-                    <td>剩余金额</td>
-                    <td>欠款金额</td>
-                    <td>付款方式</td>
-                    <td>有效期</td>
-                    <td>启用日期</td>
-                    <td>结束日期</td>
-                    <td>销售类型</td>
-                    <td>教练</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(item, index) in result">
-                    <td><span>打印</span>
-                        <span class="lightBlue" @click="remnantMethod(item)">补余</span>
-                        <span class="red" @click="refundMethod(item)">退费</span>
-                        <span class="blue" @click="transferMethod(item)">转让</span>
-                        <span class="green" @click="enableMethod(item)">启用</span>
-                        <span class="yellow" @click="extensionMethod(item)">延期</span>
-                    </td>
-                    <td class="deepBlue">{{item.addProject.state |stateFilter}}</td>
-                    <td class="deepBlue">查看</td>
-                    <td>{{item.projectOrder.createTime |formatDate}}</td>
-                    <td>{{item.addProject.contractNumber}}</td>
-                    <td>{{item.shop.shopName}}</td>
-                    <td>{{item.sdaduim.name}}</td>
-                    <td class="deepBlue">私教套餐</td>
-                    <td>{{item.projectOrder.buyCount| toNum}}</td>
-                    <td>{{item.projectOrder.sendCount|toNum}}</td>
-                    <td class="green">{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>
-                    <td>{{(item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length}}</td>
-                    <td>{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                        * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)}}</td>
-                    <!-- 14 --><td>{{item.projectOrder.allCount - item.addProjectConsumes.length |toNum}}</td>
-                    <td>{{item.addProjectConsumes.length| toNum}}</td>
-                    <td>{{item.projectOrder.price |toMoney}}</td>
-                    <td>{{item.projectOrder.totalPrice|toMoney}}</td>
-                    <td class="yellow">{{item.projectOrder.needPrice|toMoney}}</td>
-                    <td>{{item.projectOrder.noPrice|toMoney}}</td>
-                    <td>{{item.projectOrder.noPrice|toMoney}}</td>
-                    <td>{{item.projectOrder| payStatus}}</td>
-                    <td>{{item.addProject.useful}} 个月</td>
-                    <td>{{item.addProject.startTime| formatDate2}}</td>
-                    <td>{{item.addProject.endTime| formatDate2}}</td>
-                    <td>{{item.addProject.saleType| saleType}}</td>
-                    <td class="grey">{{item.frClientPersonnelRelates | teachName}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!--<div class="tab">-->
+        <!--<div class="tabWrap">-->
+            <!--<table border="1" bordercolor="#ccc" class="table table-bordered table-hover">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<td>操作</td>-->
+                    <!--<td>状态</td>-->
+                    <!--<td>套餐详情</td>-->
+                    <!--<td>订单创建日期</td>-->
+                    <!--<td>协议编号</td>-->
+                    <!--<td>所在门店</td>-->
+                    <!--<td>所在场馆</td>-->
+                    <!--<td>购买项目/产品</td>-->
+                    <!--<td>购买数量</td>-->
+                    <!--<td>赠送数量</td>-->
+                    <!--<td>可用数量</td>-->
+                    <!--<td>退费数量</td>-->
+                    <!--<td>退费金额</td>-->
+                    <!--&lt;!&ndash; 14 &ndash;&gt; <td>剩余数量</td>-->
+                    <!--<td>已消费数量</td>-->
+                    <!--<td>单价</td>-->
+                    <!--<td>购买金额</td>-->
+                    <!--<td>实际付款金额</td>-->
+                    <!--<td>剩余金额</td>-->
+                    <!--<td>欠款金额</td>-->
+                    <!--<td>付款方式</td>-->
+                    <!--<td>有效期</td>-->
+                    <!--<td>启用日期</td>-->
+                    <!--<td>结束日期</td>-->
+                    <!--<td>销售类型</td>-->
+                    <!--<td>教练</td>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--<tr v-for="(item, index) in result">-->
+                    <!--<td><span>打印</span>-->
+                        <!--<span class="lightBlue" @click="remnantMethod(item)">补余</span>-->
+                        <!--<span class="red" @click="refundMethod(item)">退费</span>-->
+                        <!--<span class="blue" @click="transferMethod(item)">转让</span>-->
+                        <!--<span class="green" @click="enableMethod(item)">启用</span>-->
+                        <!--<span class="yellow" @click="extensionMethod(item)">延期</span>-->
+                    <!--</td>-->
+                    <!--<td class="deepBlue">{{item.addProject.state |stateFilter}}</td>-->
+                    <!--<td class="deepBlue">查看</td>-->
+                    <!--<td>{{item.projectOrder.createTime |formatDate}}</td>-->
+                    <!--<td>{{item.addProject.contractNumber}}</td>-->
+                    <!--<td>{{item.shop.shopName}}</td>-->
+                    <!--<td>{{item.sdaduim.name}}</td>-->
+                    <!--<td class="deepBlue">私教套餐</td>-->
+                    <!--<td>{{item.projectOrder.buyCount| toNum}}</td>-->
+                    <!--<td>{{item.projectOrder.sendCount|toNum}}</td>-->
+                    <!--<td class="green">{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}</td>-->
+                    <!--<td>{{(item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length}}</td>-->
+                    <!--<td>{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))-->
+                        <!--* ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)}}</td>-->
+                    <!--&lt;!&ndash; 14 &ndash;&gt;<td>{{item.projectOrder.allCount - item.addProjectConsumes.length |toNum}}</td>-->
+                    <!--<td>{{item.addProjectConsumes.length| toNum}}</td>-->
+                    <!--<td>{{item.projectOrder.price |toMoney}}</td>-->
+                    <!--<td>{{item.projectOrder.totalPrice|toMoney}}</td>-->
+                    <!--<td class="yellow">{{item.projectOrder.needPrice|toMoney}}</td>-->
+                    <!--<td>{{item.projectOrder.noPrice|toMoney}}</td>-->
+                    <!--<td>{{item.projectOrder.noPrice|toMoney}}</td>-->
+                    <!--<td>{{item.projectOrder| payStatus}}</td>-->
+                    <!--<td>{{item.addProject.useful}} 个月</td>-->
+                    <!--<td>{{item.addProject.startTime| formatDate2}}</td>-->
+                    <!--<td>{{item.addProject.endTime| formatDate2}}</td>-->
+                    <!--<td>{{item.addProject.saleType| saleType}}</td>-->
+                    <!--<td class="grey">{{item.frClientPersonnelRelates | teachName}}</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
 
 
 </li>
@@ -217,7 +217,7 @@
 //                    this.result = res.data;
 //                }
 //            })
-            this.result = customerCourseProject.resultList;
+           // this.result = customerCourseProject.resultList;
 
         },
         methods: {

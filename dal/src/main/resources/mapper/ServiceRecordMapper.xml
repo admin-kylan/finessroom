@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.dal.dao.ServiceRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yj.dal.model.ServiceRecord">
+        <id column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="context" property="context" />
+        <result column="replyTime" property="replyTime" />
+        <result column="processMethod" property="processMethod" />
+        <result column="opinion" property="opinion" />
+        <result column="servicePerson1" property="servicePerson1" />
+        <result column="processDate1" property="processDate1" />
+        <result column="serviceOpinion1" property="serviceOpinion1" />
+        <result column="servicePerson2" property="servicePerson2" />
+        <result column="processDate2" property="processDate2" />
+        <result column="serviceOpinion2" property="serviceOpinion2" />
+        <result column="authorizer" property="authorizer" />
+        <result column="authorizeDate" property="authorizeDate" />
+        <result column="authorizeResult" property="authorizeResult" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        type, context, replyTime, processMethod, opinion, servicePerson1, processDate1, serviceOpinion1, servicePerson2, processDate2, serviceOpinion2, authorizer, authorizeDate, authorizeResult, id
+    </sql>
+    
+    
+    
+
+  <insert id="insertSelective" parameterType="com.yj.dal.model.ServiceRecord">
+    insert into ServiceRecord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="context != null">
+        context,
+      </if>
+      <if test="replyTime != null">
+        replyTime,
+      </if>
+      <if test="processMethod != null">
+        processMethod,
+      </if>
+      <if test="opinion != null">
+        opinion,
+      </if>
+      <if test="servicePerson1 != null">
+        servicePerson1,
+      </if>
+      <if test="processDate1 != null">
+        processDate1,
+      </if>
+      <if test="serviceOpinion1 != null">
+        serviceOpinion1,
+      </if>
+      <if test="servicePerson2 != null">
+        servicePerson2,
+      </if>
+      <if test="processDate2 != null">
+        processDate2,
+      </if>
+      <if test="serviceOpinion2 != null">
+        serviceOpinion2,
+      </if>
+      <if test="authorizer != null">
+        authorizer,
+      </if>
+      <if test="authorizeDate != null">
+        authorizeDate,
+      </if>
+      <if test="authorizeResult != null">
+        authorizeResult,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="context != null">
+        #{context,jdbcType=VARCHAR},
+      </if>
+      <if test="replyTime != null">
+        #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="processMethod != null">
+        #{processMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null">
+        #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePerson1 != null">
+        #{servicePerson1,jdbcType=VARCHAR},
+      </if>
+      <if test="processDate1 != null">
+        #{processDate1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceOpinion1 != null">
+        #{serviceOpinion1,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePerson2 != null">
+        #{servicePerson2,jdbcType=VARCHAR},
+      </if>
+      <if test="processDate2 != null">
+        #{processDate2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceOpinion2 != null">
+        #{serviceOpinion2,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizer != null">
+        #{authorizer,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizeDate != null">
+        #{authorizeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authorizeResult != null">
+        #{authorizeResult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+	 
+	
+
+</mapper>

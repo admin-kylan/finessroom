@@ -4,6 +4,7 @@ import com.yj.common.exception.YJException;
 import com.yj.common.exception.YJExceptionEnum;
 import com.yj.common.result.JsonResult;
 import com.yj.common.result.JsonReturnCode;
+import com.yj.common.util.CookieUtils;
 import com.yj.common.util.FileUtil;
 import com.yj.web.exception.GlobalExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -40,17 +42,21 @@ public class FileController {
      * @Date: 2018/9/6 10:25
      */
     @PostMapping("/upload")
-    public JsonResult upload(@RequestParam("file") MultipartFile file,@RequestParam("childPath")String childPath) throws YJException {
+    public JsonResult upload(@RequestParam("file") MultipartFile file, @RequestParam("childPath") String childPath, HttpServletRequest request) throws YJException {
         Map<String, String> map = new HashMap<>();
-        this.toUpdateLoad(file,childPath, map);
+        this.toUpdateLoad(file, childPath, map);
         String message = map.get("msg");
-        if("true".equals(message)){
-            map.put("msg","上传成功");
+        StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true));
+        imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
+        String path = imagePath.toString();
+        map.put("imgUrl",path+map.get("imgUrl"));
+        if ("true".equals(message)) {
+            map.put("msg", "上传成功");
         }
         return JsonResult.success(map);
     }
 
-    public Map<String, String> toUpdateLoad(MultipartFile file,String childPath,Map<String, String> map)throws YJException{
+    public Map<String, String> toUpdateLoad(MultipartFile file, String childPath, Map<String, String> map) throws YJException {
         if (file.isEmpty()) {
             throw new YJException(YJExceptionEnum.FILE_NOT_FOUND);
         }
@@ -63,15 +69,15 @@ public class FileController {
         fileName = UUID.randomUUID() + suffixName;
         log.info("上传的后缀名为：" + suffixName);
         // 文件上传后的路径
-        File dest = new File(filePath +childPath+ fileName);
+        File dest = new File(filePath + childPath + fileName);
         // 检测是否存在目录
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
         try {
             file.transferTo(dest);
-            map.put("msg","true");
-            map.put("imgUrl",childPath.concat(fileName));
+            map.put("msg", "true");
+            map.put("imgUrl", childPath.concat(fileName));
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -82,20 +88,21 @@ public class FileController {
 
     /**
      * 获取批量上传的文件路径
+     *
      * @param files
      * @param childPath
      * @return
      * @throws YJException
      */
-    public List<String> getImgUrlList(MultipartFile[] files, String childPath)throws YJException{
-        Map<String,String> map = new HashMap<>();
+    public List<String> getImgUrlList(MultipartFile[] files, String childPath) throws YJException {
+        Map<String, String> map = new HashMap<>();
         List<String> imgUrlList = new ArrayList<>();
         String imgURL;
-        if(files != null && files.length > 0){
-            for(MultipartFile file:files){
-                this.toUpdateLoad(file,childPath,map);
+        if (files != null && files.length > 0) {
+            for (MultipartFile file : files) {
+                this.toUpdateLoad(file, childPath, map);
                 String message = map.get("msg");
-                if("true".equals(message)){
+                if ("true".equals(message)) {
                     imgUrlList.add(map.get("imgUrl"));
                 }
                 map = new HashMap<>();
@@ -103,8 +110,6 @@ public class FileController {
         }
         return imgUrlList;
     }
-
-
 
 
 }

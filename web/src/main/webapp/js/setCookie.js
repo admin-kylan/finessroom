@@ -1,5 +1,6 @@
 //域名(ip+端口)
 const domain = window.location.host;
+//const domain = 'www.4006337366.com:8080' || window.location.host;
 /**
  * 联登捷径接口服务器地址
  */

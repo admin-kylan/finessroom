@@ -230,10 +230,12 @@ new Vue({
         shopId: '',
         temp: 0,
         tempInfo:[],
+        sdaduimId:'10c05bec9a74681f',
+        tempImg : '',
     },
     mounted: function () {
         this.initSelectableTree();
-        this.initPrivateCource({curPage: 1, limit: 10});
+        this.initPrivateCource({curPage: 1, limit: 10,sdaduimId:this.sdaduimId});
         this.initServerClassRoomSetting();
         /*jeDate("#datepicker",{
             format:"YYYY-MM-DD",
@@ -295,7 +297,7 @@ new Vue({
                 $("#appointModal").modal('show')
                 return;
             }
-            Loading.prototype.show();
+            // Loading.prototype.show();
             axios.get(url, {params: {}}).then(function (res) {
                 let resData = eval(res);
                 if (res.data.code != 500) {
@@ -315,7 +317,7 @@ new Vue({
         },
         saveSettingInfo: function () {
             let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
-            Loading.prototype.show();
+            // Loading.prototype.show();
             let cks = [], cgs = [];
             $('.settingckCls:checked').each(function () {
                 cks.push(this.value)
@@ -329,7 +331,7 @@ new Vue({
             this.settingInfo.privateHYJZZZCS = cgs.join(",");
             delete this.settingInfo.privateHYXFBMKCK;
             delete this.settingInfo.privateHYJZZZCSCK;
-
+            this.settingInfo.sdaduimId = this.sdaduimId;
             axios.get(url, {params: this.settingInfo}).then(function (res) {
                 let resData = eval(res);
                 if (res.data.code != 500) {
@@ -348,9 +350,9 @@ new Vue({
         },
         getPrivateSetting: function () {
             let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
-            Loading.prototype.show();
+            // Loading.prototype.show();
             this.settingSdaduimList = [];
-            axios.get(url, {params: {}})
+            axios.get(url, {params: {"sdaduimId": this.sdaduimId}})
                 .then(function (res) {
                     if (res.data.code == 200) {
                         that.settingInfo = res.data.data;
@@ -413,7 +415,7 @@ new Vue({
         singleDeleteUsingItem: function (item, index) {
             console.info(item)
             let url = $.stringFormat("{0}/frPrivatePackageRelation/deleteRelation", $.cookie('url')), that = this;
-            Loading.prototype.show();
+            // Loading.prototype.show();
             axios.get(url, {params: {pakageId: that.listViewCanUsingItemPackageId, courceId: item.courseId}})
                 .then(function (res) {
                     if (res.data.code == 200) {
@@ -460,7 +462,7 @@ new Vue({
         },
         getInfo: function (id, type) {
             let url = $.stringFormat("{0}/frPrivatePackage/getById", $.cookie('url')), that = this;
-            Loading.prototype.show();
+            // Loading.prototype.show();
             axios.get(url, {params: {id: id}})
                 .then(function (res) {
                     console.info(res.data.data)
@@ -553,7 +555,7 @@ new Vue({
             return -1;
         },
         savePackage: function () {
-            var that=this;
+            var that = this;
             this.packageData.canUsingItem = this.canUsingItem;
             var errMsg = "";
             if (!this.isNoEmpty(this.packageData.name) || this.packageData.name == "") {
@@ -597,9 +599,10 @@ new Vue({
                 return;
             }
             ;
-            if(that.packageData.classCount!=null &&that.packageData.classCount!=''){
-                that.packageData.classCountDesc="按照"+that.packageData.classCount+"节计算单价，以实际课时数量计费，封顶"+that.packageData.classCount+"节"
+            if (that.packageData.classCount != null && that.packageData.classCount != '') {
+                that.packageData.classCountDesc = "按照" + that.packageData.classCount + "节计算单价，以实际课时数量计费，封顶" + that.packageData.classCount + "节"
             }
+            this.packageData.sdaduimId = this.sdaduimId;
             var url = $.stringFormat("{0}/frPrivatePackage/addOrUpdate", $.cookie('url'))
             axios.post(url, this.packageData).then(function (res) {
                 var resData = eval(res);
@@ -645,15 +648,14 @@ new Vue({
             let that = this;
             that.temp = 1;
             var options = $("#shopSelect option:selected");
-            console.log(options.val())
             if (options.val() != null && options.val() != '') {
-                params.shopId=options.val();
+                params.shopId = options.val();
             }
+            params.sdaduimId = this.sdaduimId;
             let url = $.stringFormat("{0}/frPrivatePackage/list", $.cookie('url'));
-            Loading.prototype.show();
+            // Loading.prototype.show();
             axios.get(url, {params: params})
                 .then(function (res) {
-                    console.info(res.data.data)
                     if (res.data.code == 200) {
                         that.packageCource.list = res.data.data.list;
                         that.packageCource.pageNo = res.data.data.currPage;
@@ -686,7 +688,6 @@ new Vue({
             url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", $.cookie('url'));
             axios.get(url, {params: params})
                 .then(function (res) {
-                    console.info(res.data.data)
                     if (res.data.code == 200) {
                         that.areaTree(res.data.data);
                     } else {
@@ -703,12 +704,12 @@ new Vue({
             url = $.stringFormat("{0}/frPrivateCource/list", $.cookie('url'));
             axios.get(url, {params: params})
                 .then(function (res) {
-                    console.info(res.data.data)
+
                     if (res.data.code == 200) {
-                        $.each(res.data.data.list, function (i, n) {
-                            that.packagePrivateCourse.list.push(n)
-                        })
-                        // that.packagePrivateCourse.list = res.data.data.list;
+                        // $.each(res.data.data.list, function (i, n) {
+                        //     that.packagePrivateCourse.list.push(n)
+                        // })
+                        that.packagePrivateCourse.list = res.data.data.list;
 
                         that.packagePrivateCourse.pageNo = res.data.data.currPage;
                         that.packagePrivateCourse.pageSize = res.data.data.pageSize;
@@ -723,7 +724,11 @@ new Vue({
                             showSkipInputFlag: true, //是否支持跳转
                             getPage: function (page) {
                                 //获取当前页数
-                                that.initPrivateCource({page: page, limit: res.data.data.pageSize}, 1);
+                                that.initPrivateCource({
+                                    page: page,
+                                    limit: res.data.data.pageSize,
+                                    sdaduimId: this.sdaduimId
+                                }, 1);
                             }
                         })
                     } else {
@@ -751,7 +756,7 @@ new Vue({
         },
         getPrivateList: function (id, index) {
             let url = $.stringFormat("{0}/frPrivateCource/getActionsByseriesId", $.cookie('url')), that = this;
-            Loading.prototype.show();
+            // Loading.prototype.show();
             axios.get(url, {params: {type: 1, traningSeriesId: id}})
                 .then(function (res) {
                     let resData = eval(res);
@@ -771,7 +776,7 @@ new Vue({
         findChild: function (parantId, index) {
             let url = $.stringFormat("{0}/frTrainingSeries/list", $.cookie('url')), that = this;
 
-            axios.get(url, {params: {type: 1, parentId: parantId, ownType: 1}})
+            axios.get(url, {params: {type: 1, parentId: parantId, ownType: 1, sdaduimId: this.sdaduimId}})
                 .then(function (res) {
                     let resData = eval(res);
                     if (resData['data']['code'] === '200') {
@@ -804,7 +809,8 @@ new Vue({
                                     if (res.data.code != 500) {
                                         that.initPrivateCource({
                                             curPage: that.privateCourceData.pageNo,
-                                            limit: that.privateCourceData.pageSize
+                                            limit: that.privateCourceData.pageSize,
+                                            sdaduimId: this.sdaduimId
                                         })
                                     }
                                     $.alert(resData['data']['msg']);
@@ -831,6 +837,7 @@ new Vue({
             return $.stringFormat("{0}/{1}/" + avatarLink, $.cookie('url'), $.cookie('imgPath'));
         },
         updateCourse: function (obj) {
+            this.tempImg = 2;
             if (obj.validTimeType != 1) {
                 obj.dayAndMounth = obj.validTimeType;
             }
@@ -890,6 +897,7 @@ new Vue({
             delete this.privateCourceData.assignTeacherJY;
             delete this.privateCourceData.assignTeacherBL;
             delete this.privateCourceData.validTimeType1;
+            this.privateCourceData.sdaduimId = this.sdaduimId
             let url = $.stringFormat("{0}/frPrivateCource/addOrUpdate", $.cookie('url')), that = this;
             axios.post(url, this.privateCourceData).then(function (res) {
                 let resData = eval(res);
@@ -903,7 +911,8 @@ new Vue({
                     that.privateCourceData.dayAndMounth = 2;
                     that.initPrivateCource({
                         curPage: that.privateCourceData.pageNo,
-                        limit: that.privateCourceData.pageSize
+                        limit: that.privateCourceData.pageSize,
+                        sdaduimId: that.sdaduimId
                     });
                     that.editor.txt.html("");
                     that.imgUrl = null
@@ -939,7 +948,7 @@ new Vue({
             if (that.imgFile.size > 1048576) {
                 $.alert("图片大小不得大于1MB");
             }
-            Loading.prototype.show();
+            // Loading.prototype.show();
             var param = new FormData();
             param.append('file', that.imgFile); //通过append向form对象添加数据
             param.append('childPath', 'avatar/'); //通过append向form对象添加数据
@@ -964,8 +973,8 @@ new Vue({
 
             })
         },
-        savePrivateClass:function(){
-          var that=this;
+        savePrivateClass: function () {
+            var that = this;
             var errMsg = "";
             if (!this.isNoEmpty(this.privateCourceData.name) || this.privateCourceData.name == "") {
                 errMsg += "私教名称必填<br/>"
@@ -998,38 +1007,75 @@ new Vue({
             console.info("课程详情:" + this.editor.txt.text());
             var url = $.stringFormat('{0}/file/upload', $.cookie('url'));
             //判断是否有图片
-            if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
-                $.alert("请选择图片");
-            }
-            //判断图片大小是否超过5MB
-            if (that.imgFile.size > 1048576) {
-                $.alert("图片大小不得大于1MB");
-            }
-            Loading.prototype.show();
-            var param = new FormData();
-            param.append('file', that.imgFile); //通过append向form对象添加数据
-            param.append('childPath', 'avatar/'); //通过append向form对象添加数据
-            var config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            if (this.tempImg == 1) {
+                if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
+                    $.alert("请选择图片");
                 }
-            };
-            //上传图片
-            axios.post(url, param, config).then(function (response) {
+                //判断图片大小是否超过5MB
+                if (that.imgFile.size > 1048576) {
+                    $.alert("图片大小不得大于1MB");
+                }
+                // Loading.prototype.show();
+                var param = new FormData();
+                param.append('file', that.imgFile); //通过append向form对象添加数据
+                param.append('childPath', 'avatar/'); //通过append向form对象添加数据
+                var config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                };
+                //上传图片
+                axios.post(url, param, config).then(function (response) {
+                    var jsonData = eval(response);
+                    Loading.prototype.hide();
+                    that.privateCourceData.privateImage = jsonData['data']['data']['imgUrl'];
+                    that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                    if (response.data.code == 200 || response.data.code == '200') {
+                        that.imgFile = null;//清空条件
+                        $("#privateFile").val('')
+                        that.saveOrUpdatePrivateAction();
+                    }
 
-                var jsonData = eval(response);
-                console.log(response)
-                console.log(response.data.code)
-                Loading.prototype.hide();
-                that.privateCourceData.privateImage = jsonData['data']['data']['imgUrl'];
-                that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
-                if (response.data.code == 200 || response.data.code == '200') {
-                    that.imgFile = null;//清空条件
-                    $("#privateFile").val('')
+                })
+
+
+            } else if (this.tempImg == 2) {
+                if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
+                    that.imgUrl = $("#addImg")[0].src;
                     that.saveOrUpdatePrivateAction();
+                }else {
+                    // Loading.prototype.show();
+                    var param = new FormData();
+                    param.append('file', that.imgFile); //通过append向form对象添加数据
+                    param.append('childPath', 'avatar/'); //通过append向form对象添加数据
+                    var config = {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    };
+                    //上传图片
+                    axios.post(url, param, config).then(function (response) {
+
+                        var jsonData = eval(response);
+                        console.log(response)
+                        console.log(response.data.code)
+                        Loading.prototype.hide();
+                        that.privateCourceData.privateImage = jsonData['data']['data']['imgUrl'];
+                        that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                        if (response.data.code == 200 || response.data.code == '200') {
+                            that.imgFile = null;//清空条件
+                            $("#privateFile").val('')
+                            that.saveOrUpdatePrivateAction();
+                        }
+
+                    })
+
                 }
 
-            })
+
+            }
+
+
         },
         /**
          * 选择完成后显示图片
@@ -1056,15 +1102,12 @@ new Vue({
         initPrivateCource: function (params, flag) {
             let that = this;
             let url = $.stringFormat("{0}/frPrivateCource/list", $.cookie('url'));
-            Loading.prototype.show();
+            // Loading.prototype.show();
             axios.get(url, {params: params})
                 .then(function (res) {
-                    console.info(res.data.data)
                     if (res.data.code == 200) {
                         if (flag == 1) {
-
                             that.packagePrivateCourse.list = res.data.data.list;
-                            console.log(that.packagePrivateCourse.list)
                             that.packagePrivateCourse.pageNo = res.data.data.currPage;
                             that.packagePrivateCourse.pageSize = res.data.data.pageSize;
                             that.packagePrivateCourse.totalCount = res.data.data.totalCount;
@@ -1078,11 +1121,13 @@ new Vue({
                                 showSkipInputFlag: true, //是否支持跳转
                                 getPage: function (page) {
                                     //获取当前页数
-                                    that.initPrivateCource({page: page, limit: res.data.data.pageSize}, 1);
+                                    that.initPrivateCource({
+                                        page: page, limit: res.data.data.pageSize,
+                                        sdaduimId: that.sdaduimId
+                                    }, 1);
                                 }
                             })
                         } else {
-                            console.log(that.privateCource.list)
                             that.privateCource.list = res.data.data.list;
                             that.privateCource.pageNo = res.data.data.currPage;
                             that.privateCource.pageSize = res.data.data.pageSize;
@@ -1097,7 +1142,10 @@ new Vue({
                                 showSkipInputFlag: true, //是否支持跳转
                                 getPage: function (page) {
                                     //获取当前页数
-                                    that.initPrivateCource({page: page, limit: res.data.data.pageSize});
+                                    that.initPrivateCource({
+                                        page: page, limit: res.data.data.pageSize,
+                                        sdaduimId: that.sdaduimId
+                                    });
                                 }
                             })
                         }
@@ -1117,8 +1165,8 @@ new Vue({
             let that = this;
 
             // let url = "http://localhost:8080/frActionSeries/list";
-            let url = $.stringFormat("{0}/frActionSeries/list?ownType=1", $.cookie('url'));
-            Loading.prototype.show();
+            let url = $.stringFormat("{0}/frActionSeries/list?ownType=1&sdaduimId=" + this.sdaduimId, $.cookie('url'));
+            // Loading.prototype.show();
             axios.get(url)
                 .then(function (res) {
                     let resData = eval(res);
@@ -1196,7 +1244,7 @@ new Vue({
             let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
             let data = this.actionAddData;
             data.seriesId = that.actions[that.actionSettingIndex].id;
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
 
             data.ownType = 1;
@@ -1211,7 +1259,7 @@ new Vue({
                         that.actions[that.actionSettingIndex].actionList.push(newVar)
                     }
                     $.alert(resData['data']['msg']);
-                   console.log($("#ActionFile").val())
+                    console.log($("#ActionFile").val())
                     $("#ActionFile").val('')
                 })
                 .catch(function (error) {
@@ -1248,7 +1296,7 @@ new Vue({
                 actionIds: this.changeActionIds.join(","),
                 seriesId: this.changeActionSelect,
             }
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.get(url, {params: data})
                 .then(function (res) {
@@ -1430,7 +1478,7 @@ new Vue({
             let data = {
                 type: type,
                 parentId: parentId,
-                ownType: 1
+                ownType: 1, sdaduimId: this.sdaduimId
             };
 
             axios.get(url, {params: data})
@@ -1478,7 +1526,8 @@ new Vue({
                 url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
             }
             jsonData.ownType = 1;
-            // Loading.prototype.show();
+            jsonData.sdaduimId=that.sdaduimId
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -1519,7 +1568,8 @@ new Vue({
             let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url'));
             let data = {
                 type: type,
-                ownType: 1
+                ownType: 1,
+                sdaduimId: this.sdaduimId
             };
 
             axios.get(url, {params: data})
@@ -1567,7 +1617,7 @@ new Vue({
             var data = {
                 type: type,
                 parentId: id,
-                ownType: 1
+                ownType: 1, sdaduimId: this.sdaduimId
             };
             this.deleteItemId = id,
                 this.deletItemType = type,
@@ -1619,7 +1669,7 @@ new Vue({
                 parentId: this.addTrainParentId,
                 ownType: 1
             };
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -1661,7 +1711,7 @@ new Vue({
                 };
             }
 
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -1731,7 +1781,7 @@ new Vue({
                 type: this.deletTrainType,
                 ownType: 1
             };
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -1796,7 +1846,7 @@ new Vue({
                 };
             }
 
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -1853,7 +1903,7 @@ new Vue({
                 type: this.updateTrainType,
                 ownType: 1
             };
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -1942,7 +1992,7 @@ new Vue({
                 type: type,
                 ownType: 1
             };
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
 
             axios.get(url, {params: jsonData})
                 .then(function (res) {
@@ -2006,7 +2056,7 @@ new Vue({
                 };
             }
 
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             //  jsonData.ownType = 1;
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -2030,7 +2080,7 @@ new Vue({
                                     type: type,
                                     ownType: 1
                                 };
-                                // Loading.prototype.show();
+                                //  // Loading.prototype.show();
 
                                 axios.get(url, {params: jsonData2})
                                     .then(function (res) {
@@ -2069,7 +2119,7 @@ new Vue({
                                     type: type,
                                     ownType: 1
                                 };
-                                // Loading.prototype.show();
+                                //  // Loading.prototype.show();
 
                                 axios.get(url, {params: jsonData2})
                                     .then(function (res) {
@@ -2206,7 +2256,7 @@ new Vue({
             }
 
             let jsonData = type == 1 ? this.trainActionChanges : this.mealActionChanges;
-            // Loading.prototype.show();
+            //  // Loading.prototype.show();
             // ajax提交
             axios.post(url, jsonData)
                 .then(function (res) {
@@ -2251,7 +2301,7 @@ new Vue({
         defaultCurriculumPlanModal: function () {
             let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url')), that = this;
             if (that.privateSingleCourse.seriesList.length == 0) {
-                axios.get(url, {params: {type: 1, ownType: 1}})
+                axios.get(url, {params: {type: 1, ownType: 1, sdaduimId: this.sdaduimId}})
                     .then(function (res) {
                         let resData = eval(res);
                         if (resData['data']['code'] === '200') {
@@ -2273,6 +2323,7 @@ new Vue({
         },
         //新增私教课程
         addKcc: function () {
+            this.tempImg = 1;
             this.addPrivateCourse = !this.addPrivateCourse;
             if (this.addPrivateCourse && !this.editor) this.initEdit();
             this.privateCourceData = {
@@ -2392,20 +2443,21 @@ new Vue({
                     //			            	在点击选中节点加删除字眼,不要可删除
                     //							(deleteMode && $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.indexOf(vm.deleteStr)===-1?node.text+=vm.deleteStr:node.text}])) || $("#course_tree").treeview("editNode", [node.nodeId, { text: node.text.replace(vm.deleteStr,'')}]);
                     console.log('节点选中')
-                    console.log(node.sdaduimId)
-                    if(typeof node.sdaduimId!='undefined'){
+                    // console.log(node.sdaduimId)
+                    if (typeof node.sdaduimId != 'undefined') {
                         vm.initPrivateCource({
                             curPage: vm.privateCourceData.pageNo,
                             limit: vm.privateCourceData.pageSize,
-                            sdaduimId: node.sdaduimId,
-                        },1);
+                            sId: node.sdaduimId,
+                            sdaduimId: vm.sdaduimId
+                        }, 1);
+
                     }
 
                     this.courceIds = [];
                     let parent = $('#area_tree').treeview('getParent', node.nodeId);
                     if (!parent) return;
                     let treeNode = {};
-                    console.info(node);
                     vm.treeNode = node;
                     treeNode.id = node.sdaduimId;
                     treeNode.name = node.text;
@@ -2494,33 +2546,37 @@ new Vue({
             var that = this;
             var options = $("#shopSelect option:selected");
             console.log()
-         if(that.temp==0){
-             if (options.val() == '' || options.val() == null) {
-                 that.initPrivateCource({
-                     curPage: that.privateCourceData.pageNo,
-                     limit: that.privateCourceData.pageSize,
-                 });
-             } else {
-                 that.initPrivateCource({
-                     curPage: that.privateCourceData.pageNo,
-                     limit: that.privateCourceData.pageSize,
-                     shopId: options.val(),
-                 });
-             }
-         }else {
-             if (options.val() == '' || options.val() == null) {
-                 that.getPackageList({
-                     curPage: that.privateCourceData.pageNo,
-                     limit: that.privateCourceData.pageSize,
-                 });
-             } else {
-                 that.getPackageList({
-                     curPage: that.privateCourceData.pageNo,
-                     limit: that.privateCourceData.pageSize,
-                     shopId: options.val(),
-                 });
-             }
-         }
+            if (that.temp == 0) {
+                if (options.val() == '' || options.val() == null) {
+                    that.initPrivateCource({
+                        curPage: that.privateCourceData.pageNo,
+                        limit: that.privateCourceData.pageSize,
+                        sdaduimId: this.sdaduimId
+                    });
+                } else {
+                    that.initPrivateCource({
+                        curPage: that.privateCourceData.pageNo,
+                        limit: that.privateCourceData.pageSize,
+                        shopId: options.val(),
+                        sdaduimId: this.sdaduimId
+                    });
+                }
+            } else {
+                if (options.val() == '' || options.val() == null) {
+                    that.getPackageList({
+                        curPage: that.privateCourceData.pageNo,
+                        limit: that.privateCourceData.pageSize,
+                        sdaduimId: this.sdaduimId
+                    });
+                } else {
+                    that.getPackageList({
+                        curPage: that.privateCourceData.pageNo,
+                        limit: that.privateCourceData.pageSize,
+                        shopId: options.val(),
+                        sdaduimId: this.sdaduimId
+                    });
+                }
+            }
 
         },
         temp: function () {

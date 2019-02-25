@@ -216,4 +216,23 @@
         AND b.CustomerCode = #{CustomerCode} AND s.CustomerCode = #{CustomerCode} AND  a.CustomerCode = #{CustomerCode}
     </select>
 
+    <select id="selectByCardTypeName" parameterType="java.util.Map" resultType="com.yj.dal.model.FrCardType">
+    SELECT * FROM fr_card_type
+        <where>
+        <if test="cardTypeName != null">
+            card_type_name =#{cardTypeName}
+        </if>
+        <if test="shopId != null">
+            shop_id =#{shopId}
+        </if>
+    </where>
+
+
+    </select>
+    <select id="selectByShopId" parameterType="java.lang.String" resultType="com.yj.dal.model.FrCardType">
+        SELECT * FROM fr_card_type
+        WHERE  card_type_name =#{cardTypeName} AND shop_id ='0'
+    </select>
+
+
 </mapper>

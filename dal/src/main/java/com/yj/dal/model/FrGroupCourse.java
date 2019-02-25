@@ -62,6 +62,17 @@ public class FrGroupCourse extends Model<FrGroupCourse> {
     //课时数
     @TableField("class_count")
     private String classCount;
+    //场馆ID
+    @TableField("sdaduim_id")
+    private String sdaduimId;
+
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
 
     public String getClassCount() {
         return classCount;

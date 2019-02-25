@@ -2,17 +2,20 @@
     <fieldset class="fieldset1">
         <legend>操作项目/产品</legend>
         <select name="" v-model="index">
-            <option value="" v-for="(item, index) in result"  :value="index">
+            <option value="" v-for="(item, index) in result" :value="index">
 
-                所在门店：{{item.shop.shopName}} 所在场馆：{{item.sdaduim.name}} 项目/产品名称：私教课程30节
-                数量：{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}
-                （{{item.projectOrder.buyCount| toNum}}+ <span class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
-                已消费数量：{{item.addProjectConsumes.length| toNum}} 价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                * (item.addProjectConsumes.length)|toMoney}}
-                剩余价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) - item.addProjectConsumes.length)|toMoney}}
-                有效期：{{item.addProject.useful}} 个月 结束时间：{{item.addProject.endTime| formatDate2}}
-                状态：<span class="blod">{{item.addProject.state |stateFilter}}</span>
+                所在门店：{{item.shopName}} 所在场馆：{{item.sdadiumName}} 项目/产品名称：{{item.courseName}}
+                数量：{{item.buyCount + item.sendCount | toNum}}
+                （{{item.buyCount| toNum}}+ <span
+                    class="yellow">{{item.sendCount|toNum}}</span> ）
+                已消费数量：{{item.consumeLength| toNum}}
+                价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
+                * (item.consumeLength)|toMoney}}
+                剩余价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
+                * ((item.buyCount + item.sendCount) -
+                item.consumeLength)|toMoney}}
+                有效期：{{item.useful}} 个月 结束时间：{{item.endTime| formatDate2}}
+                状态：<span class="blod">{{item.state |stateFilter}}</span>
             </option>
         </select>
     </fieldset>
@@ -55,19 +58,19 @@
         <tbody>
         <tr v-for="(item, index) in tableList">
             <td>{{index + 1}}</td>
-            <td>{{item.frProjectRemnantRecord.createTime| formatDate2}}</td>
-            <td>{{item.shop.shopName}}</td>
-            <td>{{item.sdaduim.name}}</td>
-            <td>私教课程30节</td>
-            <td>{{item.projectOrder.totalPrice|toMoney}}</td>
-            <td>{{item.projectOrder.totalPrice|toMoney}}</td>
-            <td>{{item.frProjectRemnantRecord.remnantPrice|toMoney}}</td>
+            <td>{{item.createTime| formatDate2}}</td>
+            <td>{{item.shopName}}</td>
+            <td>{{item.sdadiumName}}</td>
+            <td>{{item.courseName}}</td>
+            <td>{{item.totalPrice|toMoney}}</td>
+            <td>{{item.totalPrice|toMoney}}</td>
+            <td>{{item.remnantPrice|toMoney}}</td>
             <td>0</td>
-            <td>{{item.addProject.useful}}</td>
-            <td>{{item.addProject.startTime| formatDate2}}</td>
-            <td>{{item.addProject.endTime| formatDate2}}</td>
-            <td>{{item.frProjectRemnantRecord.operateDate| formatDate2}}</td>
-            <td>{{item.personnelInfo.relName}}</td>
+            <td>{{item.useful}}</td>
+            <td>{{item.startTime| formatDate2}}</td>
+            <td>{{item.endTime| formatDate2}}</td>
+            <td>{{item.operateDate| formatDate2}}</td>
+            <td>{{item.operatePersonName}}</td>
         </tr>
 
 
@@ -191,10 +194,13 @@
             },
             'selectData':{
                 handler(val){
-                    this.price = val.projectOrder.totalPrice - val.projectOrder.noPrice + parseFloat(val.sysConsumeOrder.cashPledge);//已付款金额
-                    this.totalPrice = val.projectOrder.totalPrice;//实际付款金额
-                    this.noPrice = val.projectOrder.noPrice;//实际欠款金额
-                    //已付款要加上定金
+                    if(!val){
+                        return false;
+                    }
+                    this.price = val.totalPrice - val.noPrice + parseFloat(val.cashPledge);//已付款金额
+                    this.totalPrice = val.totalPrice;//实际付款金额
+                    this.noPrice = val.noPrice;//实际欠款金额
+                   // 已付款要加上定金
 
                 },
                 deep: true,
@@ -210,22 +216,26 @@
         methods: {
             //查询记录
             search(){
-                let interval = setInterval(()=>{
-                    this.result = customerCourseProject.resultList;
-                  //  this.tableList = this.result; //便利表格
-                    //计算记录
-                    let array = [];
-                    $.each(this.result, (i,d)=>{
-                        if(d.frProjectRemnantRecord){
-                            array.push(d);
+
+                let param = {
+                    cid: $.cookie('cid'),
+                    shopId: $.cookie('shopid'),
+                    code: $.cookie('code'),
+                }
+                axiosGetParams(COURSE_URL.getProjectListSelect, param, (response) => {
+                    if (response.code === '200') {
+                        this.result = response.data;
+                        if(this.result && this.result.length > 0){
+                            this.index = 0
                         }
-                    });
-                    this.tableList = array;
-                    if(this.result.length > 0){
-                        this.index = 0;//初始化index
-                        clearInterval(interval);
                     }
-                },500)
+                });
+
+                axiosGetParams(COURSE_URL.findCustomerRemnantRecord, param, (response) => {
+                    if (response.code === '200') {
+                        this.tableList = response.data;
+                    }
+                });
             },
             //启用
             save(){
@@ -233,27 +243,33 @@
                     return false;
 
                 }
-                this.toDisabled = true;
+
                 //继续操作启用动作
                 //判断当前是否正常
-                if(!this.selectData.addProject){
+                if(!this.selectData.id){
                     alert("请选择项目")
                     return false;
                 }
-                if(this.selectData.addProject['state'] !== 1){
+                if(this.selectData['state'] !== 1){
                     alert("请选择欠款项目");
                     return false;
                 }
+                this.toDisabled = true;
                 let param = {};
-                param.orderId = this.selectData.addProject.id;
+                param.orderId = this.selectData.id;
                 param.cid = $.cookie('cid');
-
+                param.id = $.cookie('id');
+                param.name = $.cookie('name');
+                param.code = $.cookie('code');
+                param.clientName = $.cookie('clientName');
+                param.shopId = this.selectData.shopId;
+                param.sdadiumId = this.selectData.sdadiumId;
+                param.courseName = this.selectData.courseName;
                 axiosPostParams(COURSE_URL.customerRemnant, param, (res)=>{
                     if (res.code === '200') {
-//                        customerCourseProject.$options.methods.loadData();//加载数据
-//                        this.search();
-                        window.location.reload()
+                        this.search();
                         alert("补余成功");
+                        this.toDisabled = false;
 
                     }else{
                         alert('补余失败,请重试');

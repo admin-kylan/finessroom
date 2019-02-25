@@ -48,7 +48,7 @@ public class FrPrivatePackageServiceImpl extends BaseServiceImpl<FrPrivatePackag
     SdaduimMapper sdaduimMapper;
 
     public PageUtils queryPage(Map<String, Object> params) throws YJException{
-
+        String sdaduimId = (String) params.get("sdaduimId");
         String code = String.valueOf(params.get("code"));
         if (StringUtils.isEmpty(code)) {
             throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
@@ -67,7 +67,7 @@ public class FrPrivatePackageServiceImpl extends BaseServiceImpl<FrPrivatePackag
                 map.put("limit", params.get("limit"));
             }
             page = new Query<FrPrivatePackage>(map).getPage();
-            List<FrPrivatePackage> frPrivateCources = baseMapper.findCource(page, params.get("shopId").toString());
+            List<FrPrivatePackage> frPrivateCources = baseMapper.findCource(page, params.get("shopId").toString(),sdaduimId);
             page.setRecords(frPrivateCources);
         }else {
 
@@ -75,7 +75,7 @@ public class FrPrivatePackageServiceImpl extends BaseServiceImpl<FrPrivatePackag
              page = this.selectPage(
                     new Query<FrPrivatePackage>(params).getPage(),
                     new EntityWrapper<FrPrivatePackage>()
-                            .where("is_using = 1 ")
+                            .where("is_using = 1  and sdaduim_id={0}",sdaduimId)
                             .orderBy("create_time desc")
                             .setSqlSelect(queryProperty)
             );

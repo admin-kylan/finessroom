@@ -26,11 +26,12 @@ public interface FrEducationPublicMapper extends BaseMapper<FrEducation> {
     List<Map<String, Object>> findEducationList(@Param("shopId") String shopId, @Param("CustomerCode") String CustomerCode,
                                                 @Param("coachId") String coachId, @Param("sdaduimId") String sdaduimId,
                                                 @Param("beginDate") String beginDate, @Param("endDate") String endDate,
-                                                @Param("eduType") String eduType);
+                                                @Param("eduType") String eduType, @Param("reserveType") String reserveType);
     List<Map<String, Object>> findEducationOneToOneList(@Param("shopId") String shopId, @Param("CustomerCode") String CustomerCode,
                                                 @Param("coachId") String coachId, @Param("sdaduimId") String sdaduimId,
                                                 @Param("beginDate") String beginDate, @Param("endDate") String endDate,
                                                 @Param("eduType") String eduType);
+    Map<String, Object> findEducationOneToOneClientInfo(@Param("eduId") String eduId);
     List<Map<String, Object>> findEducationOneToManyList(@Param("shopId") String shopId, @Param("CustomerCode") String CustomerCode,
                                                         @Param("coachId") String coachId, @Param("sdaduimId") String sdaduimId,
                                                         @Param("beginDate") String beginDate, @Param("endDate") String endDate,
@@ -110,5 +111,11 @@ public interface FrEducationPublicMapper extends BaseMapper<FrEducation> {
     Map<String, String> findEducationToCopyByEduId(@Param("eduId") String eduId);
 
     Map<String, String> findSettingCourse(@Param("eduType") String eduType, @Param("code") String code,@Param("key") String key);
+
+    List<Map<String, Object>> findEduDateByEduId(@Param("courseId") String courseId, @Param("beginDate") String beginDate,
+                                                 @Param("endDate") String endDate, @Param("reserveType") Integer reserveType);
+
+    void updateOfTimeOutStatus(@Param("time") String time);
+
 
 }

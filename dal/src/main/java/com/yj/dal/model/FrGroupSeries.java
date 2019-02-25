@@ -43,7 +43,17 @@ public class FrGroupSeries extends Model<FrGroupSeries> {
     @TableField("customer_code")
     private String customerCode;
 
+    //场馆ID
+    @TableField("sdaduim_id")
+    private String sdaduimId;
 
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
     public Integer getIsUsing() {
         return isUsing;
     }

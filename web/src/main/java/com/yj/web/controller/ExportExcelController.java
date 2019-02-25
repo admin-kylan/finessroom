@@ -3,17 +3,19 @@ package com.yj.web.controller;
 import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
 import com.yj.common.util.ExportExcel;
+import com.yj.common.util.PageUtils;
 import com.yj.common.util.UUIDUtils;
-import com.yj.dal.dto.CollarClientDTO;
-import com.yj.dal.dto.CustomerAllocationDTO;
-import com.yj.dal.dto.MyExistenceClientDTO;
-import com.yj.dal.dto.MyPotentialClientDTO;
+import com.yj.dal.dto.*;
 import com.yj.dal.model.FrClientArchivesRelate;
+import com.yj.dal.param.MyPotentialFilterParam;
+import com.yj.service.service.IFrClientService;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +26,143 @@ import java.util.List;
 @RestController
 @RequestMapping("/excel")
 public class ExportExcelController {
+    @Autowired
+    IFrClientService frClientService;
+
+    /**
+     * 现有会员数据模板
+     *
+     * @return
+     */
+    @GetMapping("client_upload")
+    public JsonResult clientUpload(@RequestBody List<ClientUploadDTO> param) {
+        ExportExcel<ClientUploadDTO> ex = new ExportExcel<>();
+        String[] headers =
+                {"门店名称", "姓名", "性别", "生日", "手机号码", "卡号"
+                        , "会员卡种类型", "会员卡名", "卡价格", "购卡价格", "刷卡"
+                        , "现金", "微信", "支付宝", "销售员", "服务会籍"
+                        , "有效时长", "开卡时间", "失效时间", "卡状态", "购买权益"
+                        , "赠送权益", "可用权益", "剩余次数或小时数", "剩余金额"
+                        , "备注", "操作时间", "操作人", "协议编号", "增购父卡号"
+                        , "储值", "会员等级", "开始停卡时间", "结束停卡时间", "付款类型", "停卡收费", "停卡原因", "外部卡号"
+                };
+        OutputStream out = null;
+        try {
+            String path = "D:/finessroomExcel/clientUpload/" + UUIDUtils.generateGUID() + ".xls";
+            File file = new File("D:/finessroomExcel/clientUpload");
+            if (!file.isDirectory()) {
+                file.mkdirs();
+            }
+            out = new FileOutputStream(path);
+            if (param == null) {
+                List list = new ArrayList();
+                ex.exportExcel(headers, list, out);
+                out.close();
+                return JsonResult.successMessage("导出模板成功,路径为:" + path);
+            }
+            ex.exportExcel(headers, param, out);
+            out.close();
+            return JsonResult.successMessage("导出数据成功,路径为:" + path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return JsonResult.failMessage("导出失败!");
+    }
+
+
+    /**
+     * 潜在客户数据模板
+     *
+     * @return
+     */
+    @GetMapping("prospective_client")
+    public JsonResult prospectiveClient(@RequestBody List<ProspectiveClientDTO> param) {
+        ExportExcel<ProspectiveClientDTO> ex = new ExportExcel<>();
+        String[] headers =
+                {"门店名称", "姓名", "性别", "生日", "手机号码"
+                        , "销售员", "备注", "操作时间", "操作人"
+                };
+        OutputStream out = null;
+        try {
+            String path = "E:/finessroomExcel/prospectiveClient/" + UUIDUtils.generateGUID() + ".xls";
+            File file = new File("E:/finessroomExcel/prospectiveClient");
+            if (!file.isDirectory()) {
+                file.mkdirs();
+            }
+            if (param == null) {
+                List list = new ArrayList();
+                ex.exportExcel(headers, list, out);
+                out.close();
+                return JsonResult.successMessage("导出模板成功,路径为:" + path);
+            }
+            ex.exportExcel(headers, param, out);
+            out.close();
+            return JsonResult.successMessage("导出数据成功,路径为:" + path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return JsonResult.failMessage("导出失败!");
+    }
+
+    /**
+     * 私教项目模板
+     *
+     * @return
+     */
+    @GetMapping("personal_trainer")
+    public JsonResult personalTrainer() {
+        ExportExcel<MyPotentialClientDTO> ex = new ExportExcel<>();
+        String[] headers =
+                {"门店", "场馆", "项目名称", "私教课销售员", "上课教练"
+                        , "跟进教练", "购买节数", "赠送节数", "剩余节数", "购课金额"
+                        , "刷卡", "现金", "微信", "支付宝", "欠款金额"
+                        , "销售类型", "开始时间", "结束时间", "协议编号", "操作人"
+                        , "操作时间"
+                };
+        OutputStream out = null;
+        try {
+            String path = "D:/finessroomExcel/personalTrainer/" + UUIDUtils.generateGUID() + ".xls";
+            File file = new File("D:/finessroomExcel/personalTrainer");
+            if (!file.isDirectory()) {
+                file.mkdirs();
+            }
+
+            List list = new ArrayList();
+            out = new FileOutputStream(path);
+            ex.exportExcel(headers, list, out);
+            out.close();
+            return JsonResult.successMessage("导出模板成功,路径为:" + path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return JsonResult.failMessage("导出失败!");
+    }
+
     /**
      * 导出我的潜在客户
+     *
      * @param param
      * @return
      */
     @PostMapping("/myPotential")
-    public JsonResult myPotential(@RequestBody List<MyPotentialClientDTO> param)  {
+    public void myPotential(String page, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        MyPotentialFilterParam param = new MyPotentialFilterParam();
+        param.setLimit("10");
+        param.setPage(page);
+        PageUtils pageUtils = frClientService.selectmyPotentialList(param);
+        List<MyPotentialClientDTO> list = (List<MyPotentialClientDTO>) pageUtils.getList();
         ExportExcel<MyPotentialClientDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"会员姓名", "性别", "联系方式", "保护天数", "微信"
@@ -39,29 +171,36 @@ public class ExportExcelController {
                         , "最近来访时间", "购买意向", "服务会籍", "跟进人", "首次跟进时间"
                         , "最近跟进时间", "跟进内容", "意向卡类别", "意向卡名称", "意向卡价格"
                 };
-        OutputStream out=null;
+//        OutputStream out=null;
         try {
-            String path = "E:/finessroomExcel/myPotential/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("E:/finessroomExcel/myPotential");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-             out = new FileOutputStream(path);
-            ex.exportExcel(headers, param, out);
+//            List<MyPotentialClientDTO> param = new ArrayList<>();
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+//            String path = "D:/finessroomExcel/myPotential/" + UUIDUtils.generateGUID() + ".xls";
+//            File file = new File("D:/finessroomExcel/myPotential");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+//            if (!file.isDirectory()) {
+//                file.mkdirs();
+//            }
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出成功,路径为:" + path);
+//            return JsonResult.successMessage("导出成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
 
         }
-        return JsonResult.failMessage("导出失败");
+//        return JsonResult.failMessage("导出失败");
     }
 
     /**
      * 导出我的现有客户
+     *
      * @param param
      * @return
      */
@@ -75,8 +214,8 @@ public class ExportExcelController {
                         , "最近跟进时间", "跟进记录"
                 };
         try {
-            String path = "E:/finessroomExcel/myCustomer/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("E:/finessroomExcel/myCustomer");
+            String path = "D:/finessroomExcel/myCustomer/" + UUIDUtils.generateGUID() + ".xls";
+            File file = new File("D:/finessroomExcel/myCustomer");
             if (!file.isDirectory()) {
                 file.mkdirs();
             }
@@ -94,6 +233,7 @@ public class ExportExcelController {
 
     /**
      * 导出可认领客户
+     *
      * @param param
      * @return
      */
@@ -106,8 +246,8 @@ public class ExportExcelController {
                         , "多少天无人跟进", "销售顾问", "服务会籍"
                 };
         try {
-            String path = "E:/finessroomExcel/claimingPotential/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("E:/finessroomExcel/claimingPotential");
+            String path = "D:/finessroomExcel/claimingPotential/" + UUIDUtils.generateGUID() + ".xls";
+            File file = new File("D:/finessroomExcel/claimingPotential");
             if (!file.isDirectory()) {
                 file.mkdirs();
             }
@@ -125,6 +265,7 @@ public class ExportExcelController {
 
     /**
      * 导出客户分配
+     *
      * @param param
      * @return
      */
@@ -137,8 +278,8 @@ public class ExportExcelController {
                         , "多少天无人跟进", "销售顾问", "服务会籍", "操作人"
                 };
         try {
-            String path = "E:/finessroomExcel/customerAllocation/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("E:/finessroomExcel/customerAllocation");
+            String path = "D:/finessroomExcel/customerAllocation/" + UUIDUtils.generateGUID() + ".xls";
+            File file = new File("D:/finessroomExcel/customerAllocation");
             if (!file.isDirectory()) {
                 file.mkdirs();
             }
@@ -156,6 +297,7 @@ public class ExportExcelController {
 
     /**
      * 导出皮肤档案
+     *
      * @param param
      * @return
      * @throws YJException
@@ -474,13 +616,13 @@ public class ExportExcelController {
         sheet.autoSizeColumn((short) 5);
 
 
-        String path = "E:/finessroomExcel/skin/" + UUIDUtils.generateGUID() + ".xls";
+        String path = "D:/finessroomExcel/skin/" + UUIDUtils.generateGUID() + ".xls";
         try {
-            File file = new File("E:/finessroomExcel/skin");
+            File file = new File("D:/finessroomExcel/skin");
             if (!file.isDirectory()) {
                 file.mkdirs();
             }
-            OutputStream   ouputStream = new FileOutputStream(path);
+            OutputStream ouputStream = new FileOutputStream(path);
             workbook.write(ouputStream);
             ouputStream.flush();
             ouputStream.close();
@@ -493,6 +635,7 @@ public class ExportExcelController {
 
     /**
      * 导出头发档案
+     *
      * @param param
      * @return
      * @throws YJException
@@ -540,7 +683,7 @@ public class ExportExcelController {
                 list7.add(clientArchivesRelate);
             } else if (clientArchivesRelate.getType() == 10) {
                 list8.add(clientArchivesRelate);
-            }  else if (clientArchivesRelate.getType() == 11) {
+            } else if (clientArchivesRelate.getType() == 11) {
                 relate1 = clientArchivesRelate;
             } else if (clientArchivesRelate.getType() == 12) {
                 relate2 = clientArchivesRelate;
@@ -691,13 +834,13 @@ public class ExportExcelController {
         sheet.autoSizeColumn((short) 5);
 
 
-        String path = "E:/finessroomExcel/hair/" + UUIDUtils.generateGUID() + ".xls";
+        String path = "D:/finessroomExcel/hair/" + UUIDUtils.generateGUID() + ".xls";
         try {
-            File file = new File("E:/finessroomExcel/hair");
+            File file = new File("D:/finessroomExcel/hair");
             if (!file.isDirectory()) {
                 file.mkdirs();
             }
-            OutputStream   ouputStream = new FileOutputStream(path);
+            OutputStream ouputStream = new FileOutputStream(path);
             workbook.write(ouputStream);
             ouputStream.flush();
             ouputStream.close();
@@ -710,6 +853,7 @@ public class ExportExcelController {
 
     /**
      * 导出塑形抗衰
+     *
      * @param param
      * @return
      * @throws YJException
@@ -880,13 +1024,13 @@ public class ExportExcelController {
         sheet.autoSizeColumn((short) 5);
 
 
-        String path = "E:/finessroomExcel/plasticity/" + UUIDUtils.generateGUID() + ".xls";
+        String path = "D:/finessroomExcel/plasticity/" + UUIDUtils.generateGUID() + ".xls";
         try {
-            File file = new File("E:/finessroomExcel/plasticity");
+            File file = new File("D:/finessroomExcel/plasticity");
             if (!file.isDirectory()) {
                 file.mkdirs();
             }
-            OutputStream   ouputStream = new FileOutputStream(path);
+            OutputStream ouputStream = new FileOutputStream(path);
             workbook.write(ouputStream);
             ouputStream.flush();
             ouputStream.close();

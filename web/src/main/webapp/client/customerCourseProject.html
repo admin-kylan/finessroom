@@ -106,21 +106,26 @@
             this.index = 0; //默认执行 0 代表第一个
         },
         mounted(){// 初始化加载
-           this.loadData(); //加载数据
+          // this.loadData(); //加载数据
 
         },
         methods: {
             loadHtml: function () { //动态加载html
                 $('#course-show-html').load(this.html)
             },
-			loadData(){
-                axiosGetParams(COURSE_URL.fetchOrderListByUserId, {cid: $.cookie('cid')}, (res) => {
-                    if (res.code == '200') {
-                        this.resultList = res.data;
-
-                    }
-                })
-			}
+			// loadData(){
+            // 	let param = {
+			// 		cid: $.cookie('cid'),
+			// 		shopId: $.cookie('shopid'),
+			// 		code: $.cookie('code'),
+			// 	}
+            //     axiosGetParams(COURSE_URL.fetchOrderListByUserId, param, (res) => {
+            //         if (res.code == '200') {
+            //             this.resultList = res.data;
+			//
+            //         }
+            //     })
+			// }
 
 
         }

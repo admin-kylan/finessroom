@@ -56,4 +56,78 @@
             AND pi.CustomerCode = #{code}
     </select>
 
+
+    <select id="getCourseList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            shop.ShopName shop,
+            shop.id shopId,
+            sda.Name sdadium,
+            sda.id sdadiumId,
+            gc.name project,
+            gc.id projectId,
+           	isnull(gc.market_price,0) price,
+	        isnull(gc.member_price,0) sale,
+            gc.id courseId,
+            gs.id courseSeriesId
+        FROM
+            fr_group_course gc
+            LEFT JOIN fr_group_series gs ON gc.series_id = gs.id
+            LEFT JOIN fr_group_series_shop_relation gssr ON gc.series_id = gssr.series_id
+            LEFT JOIN Shop shop ON shop.id = gssr.shop_id
+            LEFT JOIN Sdaduim sda ON sda.id = gs.sdaduim_id
+        WHERE
+            shop.id = #{shopId}
+            AND sda.id = #{sdaduimId}
+            AND gc.customer_code = #{code}
+    </select>
+
+    <select id="getCourseList1" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT DISTINCT
+            pc.id,
+            shop.ShopName shop,
+            shop.id shopId,
+            sda.Name sdadium,
+            sda.id sdadiumId,
+            pc.name project,
+            pc.id projectId,
+            isnull( pc.market_price, 0 ) price,
+            isnull( pc.member_price, 0 ) sale,
+            pc.id courseId,
+            ( SELECT 1 ) courseSeriesId
+        FROM
+            fr_private_cource pc
+            LEFT JOIN fr_private_package_relation ppr ON pc.id = ppr.cource_id
+            LEFT JOIN Shop shop ON shop.id = ppr.shop_id
+            LEFT JOIN Sdaduim sda ON sda.id = ppr.sdaduim_id
+        WHERE
+            shop.id = #{shopId}
+            AND sda.id = #{sdaduimId}
+            AND pc.customer_code = #{code}
+    </select>
+
+    <select id="getCoursePackageCourseId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+
+            shop.ShopName shop,
+            shop.id shopId,
+            sda.Name sdadium,
+            sda.id sdadiumId,
+            pc.name project,
+            ppr.cource_id projectId,
+            isnull(ppr.cource_count ,0) num,
+            isnull(ppr.day_limit_count ,0) limitNum
+        FROM
+            fr_private_package_relation ppr
+            LEFT JOIN Shop shop ON shop.id = ppr.shop_id
+            LEFT JOIN Sdaduim sda ON sda.id = ppr.sdaduim_id
+            LEFT JOIN fr_private_cource pc ON pc.id = ppr.cource_id
+        WHERE
+            shop.id = #{shopId}
+            AND sda.id = #{sdaduimId}
+            AND pc.customer_code = #{code}
+            AND pc.id = #{courseId}
+    </select>
+
+
+
 </mapper>

@@ -204,6 +204,22 @@ Vue.component('edu-class-setting-children', {//模版挂载的标签名
                 }
             },51)
         },
+        deleteEdu(item){
+            let eduId = this.eduItem.id;
+            if(!eduId){
+                return false;
+            }
+            let conf = confirm("确认删除该课程！！！");
+            if(conf == true){
+                axiosPostParams(EDUCATION_URL.deleteEdu, {eduId: eduId}, ()=>{
+                    this.settingStatus = false;
+                    Event.$emit(EDU_CONSTANT.listenerEducationMonthList)
+                },()=>{
+                    $.alert('删除失败！')
+                })
+            }
+            // console.log(item)
+        },
         toDateHHmm(val){
             let date = new Date(val);
             let h = date.getHours();

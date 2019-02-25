@@ -49,7 +49,7 @@ public class FrActionSeriesController{
 	@RequestMapping(value="/list",method={RequestMethod.GET,RequestMethod.POST})
 	public JsonResult list(@RequestParam Map<String,Object> params, HttpServletRequest request) throws YJException {
     	 String code = CookieUtils.getCookieValue(request, "code", true),type="1";
-
+		String sdaduimId = (String) params.get("sdaduimId");
 		Object ownType = params.get("ownType");
     	 if(ownType != null){
 			 type=String.valueOf(ownType);
@@ -57,7 +57,7 @@ public class FrActionSeriesController{
     	 FrActionSeriesListDTO dto = new FrActionSeriesListDTO();
     	 
          EntityWrapper<FrActionSeries> wrapper = new EntityWrapper<>();
-         wrapper.setSqlSelect(" * ").where("is_using = 1 and own_type={0}",type);
+         wrapper.setSqlSelect(" * ").where("is_using = 1 and own_type={0} and sdaduim_id={1}",type,sdaduimId);
          List<FrActionSeries> seriesList = iFrActionSeriesService.selectList(wrapper);
          if(null != seriesList && !seriesList.isEmpty()){
         	 dto.setSeriesList(seriesList);

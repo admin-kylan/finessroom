@@ -32,6 +32,16 @@ public class FrProjectRemnantRecord extends Model<FrProjectRemnantRecord> {
      */
     @TableId(value = "ID", type = IdType.UUID)
     private String id;
+
+    /**
+     * 用户id
+     */
+    private String clientId;
+    /**
+     * 用户名字
+     */
+    private String clientName;
+
     /**
      * 操作时间
      */
@@ -48,6 +58,10 @@ public class FrProjectRemnantRecord extends Model<FrProjectRemnantRecord> {
      * 项目Id
      */
     private String projectOrderId;
+    /**
+     * 项目Name
+     */
+    private String courseName;
     /**
      * 1|可用 0|删除
      */
@@ -69,7 +83,30 @@ public class FrProjectRemnantRecord extends Model<FrProjectRemnantRecord> {
     private Date createTime;
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+    public String getCourseName() {
+        return courseName;
+    }
 
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
 
     public String getCustomerCode() {
         return CustomerCode;

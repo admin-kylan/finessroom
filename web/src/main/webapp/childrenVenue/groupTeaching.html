@@ -1,0 +1,1468 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>儿童团教设置</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<script type="text/javascript" src="js/head_css.js"></script>
+	<script type="text/javascript" src="../js/jedate.js"></script>
+	<link rel="stylesheet" href="css/bootstrap-treeview/bootstrap-treeview.min.css" />
+	<link rel="stylesheet" href="../css/myPagination.css" />
+	<link rel="stylesheet" href="../css/jquery-confirm.css" />
+	<link rel="stylesheet" href="css/fitness-setting.css" />
+	<link rel="stylesheet" href="css/private-edu.css" />
+	<link rel="stylesheet" href="../css/skin/jedate.css" />
+</head>
+
+<body>
+<!-- 整个页面内容 -->
+<div id="wrapper">
+	<!-- 顶部菜单 -->
+	<top-menu-bar></top-menu-bar>
+	<!-- END 顶部菜单 -->
+
+	<!-- 左侧菜单  -->
+	<!--<sidebar-nav></sidebar-nav>-->
+	<!-- END 左侧菜单 -->
+
+	<!-- 右边容器 -->
+	<div class="main">
+		<!-- 主要内容 -->
+		<div class="main-content">
+			<!--真正开始写你的页面-->
+			<div class="min-height-page bgc-fff ptb13 border1-e4e4e4">
+				<ul class="nav nav-tabs nav-style" role="tablist">
+					<li role="presentation" class="active"><a href="#category" aria-controls="category" role="tab" data-toggle="tab">团课种类</a></li>
+					<li role="presentation"><a href="#settingRoom" aria-controls="settingRoom" role="tab" data-toggle="tab" @click="initServerClassRoomSetting">教室设置</a></li>
+					<li role="presentation"><a href="#settingCurse" aria-controls="settingCurse" role="tab" data-toggle="tab" @click="getPrivateSetting">团课设置</a></li>
+					<li role="presentation"><a href="#settingTrain" aria-controls="settingTrain" role="tab" data-toggle="tab" @click="actionSettingMain">训练课程设置</a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane tab-pane-style active" id="category">
+						<div class="main-tabpanel" v-show="!addPrivateCourse">
+							<div class="category-title">
+								课程种类： <span class="c-00cccc">{{groupCource.totalCount}}</span>
+								<!--<button class="btn btn-red add-kc" @click="addKcc" style="margin-left: 8px;height: 20px;line-height: 7px;">添加课程</button>-->
+							</div>
+
+							<div class="flex-box flex-start">
+								<div class="w195 course-tree-box">
+									<div class="p5" style="background-color: #0cc;">
+										<select @change="shopClick()" id="shopSelect" class="form-control br0">
+											<option selected="selected" disabled="disabled">--选择门店--</option>
+											<option  v-for="(shop,index) in shopInfo" :value="shop.id">{{shop.name}}</option>
+										</select>
+									</div>
+									<p class="c-ff0000 pl15 mb0" @click="addCourseSeries">添加课程系列</p>
+									<div id="course_tree"></div>
+								</div>
+								<div class="flex-box-item">
+									<table class="table table-striped table-bordered table-style mlr-1">
+										<thead>
+										<tr>
+											<td>序号</td>
+											<td>团课名称</td>
+											<td>市场价</td>
+											<td>会员价</td>
+											<td>促销价</td>
+											<td>时长（分钟）</td>
+											<td>单节课可预约人数</td>
+											<td>最少上课人数</td>
+											<td>训练课程方案</td>
+											<td>状态</td>
+											<td>操作</td>
+										</tr>
+										</thead>
+										<tbody>
+										<tr v-for="(group ,index) in groupCource.list">
+											<td>{{(groupCource.pageNo-1)*groupCource.pageSize+(index+1)}}</td>
+											<td>
+												<img :src="avatarUrl(group.imageUrl)" onerror="this.src='../img/u2871.png';this.onerror=null" class="course-img">{{group.name}}
+												<!--<img src="img/addImg.png" class="course-img" />动感单车-->
+											</td>
+											<td>{{group.marketPrice}}</td>
+											<td><span class="c-ff9900">{{group.memberPrice}}</span></td>
+											<td><span class="c-ff0000">{{group.promtionPrice}}</span></td>
+											<td>{{group.time}}</td>
+											<td>{{group.canReserveNum}}</td>
+											<td>{{group.leastClassNum}}</td>
+											<td><span class="c-0000ff">{{group.trainSeriesName}}</span></td>
+											<td><span class="c-0000ff">{{group.classStatus==1?'正常':'已停课'}}</span></td>
+											<td>
+												<span class="c-009900" @click="updateCourse(group)">修改</span>
+												<span class="c-ff0000" :class="group.classStatus==0?'yellow':''"  @click="changeStatus(group.id,group.classStatus==1?2:3)">{{group.classStatus==1?'停课':'恢复'}}</span>
+												<span class="c-ccc"  @click="changeStatus(group.id,1)">删除</span>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+									<div id="pagination" class="pagination"></div>
+								</div>
+							</div>
+							<!--新增项目模态框-->
+							<!-- Modal -->
+							<div class="modal fade modal-style" id="modifyModal" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title" id="myModalLabel">添加系列</h4>
+										</div>
+										<div class="modal-body">
+											<div class="checkbox mtb10">
+												可使用门店：
+												<label>
+													<input type="checkbox" v-model="isAuth" value="true">连锁店自动添加（<span class="c-ff0000">该系列各个门店通用，无需重复添加</span>）
+												</label>
+											</div>
+											<fieldset class="fieldset-info ptb0 mtb0 br4">
+												<div class="checkbox-box">
+													<div class="checkbox" v-for="store in storeData">
+														<label>
+															<input type="checkbox" :disabled="isAuth" v-model="store.selected" value="true" @click="ckAll($event,store)">{{store.text}}
+														</label>
+														<div class="checkbox ml15" v-show="store.children && store.children.length">
+															<label v-for="sto in store.children">
+																<input type="checkbox" :disabled="isAuth" v-model="sto.selected" value="true">{{sto.text}}
+															</label>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+											<div class="checkbox all-select">
+												<label>
+													<input type="checkbox" :disabled="isAuth" value="true" v-model="isAll">全选/全不选
+												</label>
+											</div>
+											<div class="fieldset-content plr0">
+												<div class="flex-box">
+													<div class="text-right">
+														系列名称：
+													</div>
+													<div class="flex-box-item">
+														<input type="text" class="form-control w205" V-model="seriesData.name" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-red" @click="saveGropSeries">保存</button>
+											<button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--END 模态框-->
+						<div id="addPrivate" v-show="addPrivateCourse">
+							<div class="p5">
+								<img src="img/goback.png" @click="addKcc" width="30px"><span class="c-999 ml10">团教种类</span>/添加团教课程
+							</div>
+							<div class="add-private-course-box">
+								<div class="flex-box">
+									<div class="w575">
+										<div class="flex-box">
+											<div class="w150 text-right">
+												<span class="c-ff0000">*</span>课程名称：
+											</div>
+											<div class="flex-box-item">
+												<input type="text" class="form-control w425" placeholder="课程名称" v-model="groupCourseData.name"/>
+											</div>
+										</div>
+										<div class="flex-box">
+											<div class="flex-box mb0" style="width: 320px;">
+												<div class="w150 text-right">
+													<span class="c-ff0000">*</span>课程时长：
+												</div>
+												<div class="flex-box-item">
+													<input type="number" class="form-control" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" placeholder="课程时长" v-model="groupCourseData.time"/>
+												</div>
+											</div>
+											<!--这边新增 未对接-->
+											<div class="flex-box-item flex-box mb0">
+												<div class="w70 text-right">
+													<span class="c-ff0000">*</span>课时数：
+												</div>
+												<div class="flex-box-item">
+													<input type="number" v-model="groupCourseData.classCount" style="width: 160px;" class="form-control" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" placeholder="课程时节"  /> 节
+												</div>
+											</div>
+										</div>
+										<div class="flex-box">
+											<div class="flex-box-item flex-box mb0">
+												<div class="w150 text-right">
+													<span class="c-ff0000">*</span>市场价：
+												</div>
+												<div class="flex-box-item">
+													<input type="number" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" class="form-control w95" placeholder="市场价" v-model="groupCourseData.marketPrice" />
+												</div>
+											</div>
+											<div class="flex-box mb0">
+												<div class="w70 text-right">
+													促销价：
+												</div>
+												<div class="flex-box-item">
+													<input type="number" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" class="form-control w95" placeholder="促销价" v-model="groupCourseData.promtionPrice" />
+												</div>
+											</div>
+											<div class="flex-box mb0">
+												<div class="w70 text-right">
+													<span class="c-ff0000">*</span>会员价：
+												</div>
+												<div class="flex-box-item">
+													<input type="number" min="0" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" class="form-control w95" placeholder="会员价" v-model="groupCourseData.memberPrice" />
+												</div>
+											</div>
+										</div>
+										<div class="flex-box">
+											<div class="w150 text-right">
+												<span class="c-ff0000">*</span>单节课可约人数：
+											</div>
+											<div class="flex-box-item">
+												<input type="number" min="1" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" class="form-control w425" placeholder="单节课可约人数" v-model="groupCourseData.canReserveNum"/>
+											</div>
+										</div>
+										<div class="flex-box">
+											<div class="w150 text-right">
+												<span class="c-ff0000">*</span>最少上课人数：
+											</div>
+											<div class="flex-box-item">
+												<input type="number" min="1" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" class="form-control w425" placeholder="最少上课人数" v-model="groupCourseData.leastClassNum"/>
+											</div>
+										</div>
+										<div class="flex-box">
+											<div class="w150 text-right">
+												训练课程筛选：
+											</div>
+											<div class="flex-box-item">
+												<input id="privatemrkcjh" type="text" style="background-color: #fff;" readonly="readonly" @click="defaultCurriculumPlanModal" placeholder="--选择课程计划--" class="form-control w375" />
+											</div>
+										</div>
+									</div>
+									<div class="flex-box-item flex-box flex-column">
+										<div class="file-box">
+											<img :src="imgUrl==null?'img/positive.png':imgUrl" width="300px" />
+											<input type="file" id="groupFlie"  @change="pictureShowVersion($event)"/>
+										</div>
+										<div class="text-center ptb10">
+											<button class="btn btn-primary w200"  >上传团教图片</button>
+										</div>
+										<span class="c-ffcc00">支持JPG,PNG格式，大小不能大于1M</span>
+									</div>
+								</div>
+								<div class="flex-box flex-start">
+									<div class="w150 text-right">
+										<span class="c-ff0000">*</span>课程详情：
+									</div>
+									<div class="flex-box-item">
+										<p class="c-ffcc00">编辑课程详情，可让会员更了解该课程的具体信息，增加约课率</p>
+										<div id="eidt-area"></div>
+									</div>
+								</div>
+								<div class="flex-box pt20 pb10">
+									<div class="w150 text-right">
+									</div>
+									<div class="flex-box-item btn-lg-box">
+										<button class="btn btn-primary" @click="saveClass">保存</button>
+										<button class="btn btn-fff" @click="cancleSaveGroupCourse">取消</button>
+									</div>
+								</div>
+							</div>
+							<!--默认课程计划-->
+							<div class="modal fade modal-style" tabindex="-1" id="defaultCurriculumPlanModal" role="dialog" data-backdrop="false">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title">选择动作</h4>
+										</div>
+										<div class="modal-body">
+											<div class="flex-box flex-stretch">
+												<div class="w200">
+													<ul class="action-tree-list">
+														<li v-for="(item,index) in SeriesInfo" >
+															<a><span class="reduce-icon"></span>{{item.name}}</a>
+															<ul class="action-tree-child" >
+																<li v-for="(subItem,index2) in item.childrenList">
+																	<a @click.stop="getPrivateList(subItem,index2)">
+																		{{subItem.name}}
+																	</a>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</div>
+												<div class="flex-box-item">
+													<div class="p8">
+														<button class="btn btn-primary w140" @click="selectDefault">添加选中</button>
+													</div>
+													<div class=" mlr-1">
+														<table class="table table-bordered table-style">
+															<thead>
+															<tr>
+																<td>序号</td>
+																<td></td>
+																<td>动作类型</td>
+																<td>动作名称</td>
+																<td>时间（分）</td>
+																<td>强度</td>
+																<td>次数</td>
+																<td class="w200">备注</td>
+															</tr>
+															</thead>
+															<tbody>
+															<tr v-for="(item,index) in privateSingleCourse.items">
+																<td>{{index+1}}</td>
+																<!--src="img/addImg.png"-->
+																<td><img :src="item.image" width="80px"/></td>
+																<td><span class="c-ffcc00">{{item.seriesname}}</span></td>
+																<td>{{item.name}}</td>
+																<td><b class="c-0000ff">{{item.time}}</b>分钟</td>
+																<td>{{item.diff}}</td>
+																<td><b class="c-0000ff">{{item.strength}}</b></td>
+																<td>{{item.remark}}</td>
+															</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane tab-pane-style" id="settingRoom">
+						<div class="plr15">
+							<fieldset class="fieldset-info">
+								<legend>教室设置</legend>
+								<div class="field-content">
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>门店：&emsp;</div>
+										<div class="flex-box-item">
+											<select class="form-control w300 br0" v-model="classRoomData.shopId" @change="chooseShop($event)">
+												<option selected="selected" disabled="disabled" >--选择门店--</option>
+												<option v-for="(shop,index) in shopInfo" :value="shop.id">{{shop.name}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>场馆：&emsp;</div>
+										<div class="flex-box-item">
+											<select class="form-control w300 br0"  v-model="classRoomData.sdaduimId"  @change="chooseGW($event)">
+												<option selected="selected" disabled="disabled">--选择场馆--</option>
+												<option v-for="(sdaduim,index) in sdaduimInfo" :value="sdaduim.id">{{sdaduim.name}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>教室名称：&emsp;</div>
+										<div class="flex-box-item">
+											<input type="tel" class="form-control w300" placeholder="教室名称" v-model="classRoomData.name"/>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>容纳人数：&emsp;</div>
+										<div class="flex-box-item">
+											<input type="number" id="premium_Max"  min="1" max="10000" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"  class="form-control w160" placeholder="可容纳人数" v-model="classRoomData.containNum"/>
+											<span class="uint">人</span>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>面积：&emsp;</div>
+										<div class="flex-box-item">
+											<input type="number" min="0" max="10000" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"  class="form-control w160" placeholder="面积" v-model="classRoomData.area" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" />
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>场馆说明：&emsp;</div>
+										<div class="flex-box-item">
+											<input type="text" class="form-control w160" placeholder="场馆说明" v-model="classRoomData.sdaduimUsing"/>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right">市场价：&emsp;</div>
+										<div class="flex-box-item">
+											<input type="number" class="form-control w300" min="0" max="10000" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"  placeholder="市场价" v-model="classRoomData.marketPrice" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"/>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right">会员价：&emsp;</div>
+										<div class="flex-box-item">
+											<input type="number" class="form-control w300" placeholder="会员价" min="0" max="10000" onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" v-model="classRoomData.memberPrice" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"/>
+										</div>
+									</div>
+									<div class="flex-box mb17">
+										<div class="w110 text-right"><span class="c-ff0000">*</span>座位是否必选：&emsp;</div>
+										<div class="flex-box-item">
+											<div class="checkbox">
+												<label class="mr40"><input type="radio" name="isNeedSeat" value="1" v-model="classRoomData.isNeedSeat"/>是</label>
+												<label class="mr20"><input type="radio" name="isNeedSeat" value="0" v-model="classRoomData.isNeedSeat"/>否</label>
+												<button class="btn btn-fff seat-setting" @click="seatSetting">座位设置</button>
+											</div>
+										</div>
+									</div>
+									<div class="flex-box flex-start mb17">
+										<div class="w110 text-right">备注：&emsp;</div>
+										<div class="flex-box-item">
+											<textarea rows="5" class="form-control" v-model="classRoomData.remark"></textarea>
+										</div>
+									</div>
+									<div class="flex-box">
+										<div class="w110"></div>
+										<div class="flex-box-item big-btn-box">
+											<button class="btn btn-primary" @click="saveClassRoom">保存</button>
+											<button class="btn btn-fff ml10" @click="resRoomData">取消</button>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+							<fieldset class="fieldset-info">
+								<legend>教室列表</legend>
+								<div class="fieldset-content">
+									<div class="area-room-box">
+										<div class="area-one">
+											<p>{{shopName}}</p>
+											<div class="area-two">
+												<p>{{sdaduimName}}</p>
+												<div class="area-table">
+													<table class="table table-striped table-bordered table-black">
+														<thead>
+														<tr>
+															<td>序号</td>
+															<td>教室名称</td>
+															<td>容纳人数</td>
+															<td>容纳面积</td>
+															<td>场馆用途</td>
+															<td>市场价</td>
+															<td>会员价</td>
+															<td>座位设置</td>
+															<td class="w160">备注</td>
+															<td>操作</td>
+														</tr>
+														</thead>
+														<tbody>
+														<tr v-for="(room ,index) in roomList.list">
+															<td>{{(groupCource.pageNo-1)*groupCource.pageSize+(index+1)}}</td>
+															<!--<td>动感单车-01A室</td>-->
+															<td>{{room.name}}</td>
+															<td>{{room.containNum}}</td>
+															<td>{{room.area}}㎡</td>
+															<td>{{room.sdaduimUsing}}</td>
+															<td>{{room.marketPrice}}</td>
+															<td>{{room.memberPrice}}</td>
+															<td><span class="c-ff0000 pointer" @click="updateInfo(room,1)">座位设置</span></td>
+															<td class="w160">{{room.remark}}</td>
+															<td><span class="c-00cccc" @click="updateInfo(room,0)">修改</span>  <span class="c-ff0000" @click="deleteRoom(room.id)">删除</span></td>
+														</tr>
+														</tbody>
+													</table>
+													<div id="pagination1" class="pagination"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<!-- 座位设置 -->
+						<div class="modal fade modal-style" id="settingModal" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="myModalLabel">课程座位设置</h4>
+									</div>
+									<div class="modal-body">
+										<div class="main-platform">主教练台</div>
+										<table id="seatTable" class="seat-list" border="1" style="width: 100%;">
+											<tr v-for='(item, index) in classRoomData.FrGroupClassRoomSeat.seatNumArr'>
+												<td v-for='(items,indexs) in item' :class="items==0?'':'td-active'" style="width: 50px;height: 50px;text-align: center" :id="'sel_'+index+'_'+indexs" @click="selectNum(index,indexs)">
+													{{items==0?'':items}}
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="modal-footer">
+										<input type="number" v-model="classRoomData.FrGroupClassRoomSeat.cntRow" style="width: 25px;text-align: center;" @blur ="inputFunc($event,1)"/>X
+										<input type="number" v-model="classRoomData.FrGroupClassRoomSeat.cntCol" style="width: 25px;text-align: center;" @blur ="inputFunc($event,0)"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--END 座位设置-->
+					</div>
+					<div role="tabpanel" class="tab-pane tab-pane-style" id="settingCurse">
+						<div class="p18 pt15">
+							<button class="btn" @click="saveSettingInfo">保存设置</button>
+							<div class="checkbox mt0">
+								预约限制&emsp;前台是否可以修改预约设置：<label class="mr20">
+								<input type="radio" value="1" name="groupQTXG"  v-model="settingInfo.groupQTXG"/>可以</label>
+								<label><input type="radio" value="2" v-model="settingInfo.groupQTXG"/>不可以</label>
+							</div>
+							<fieldset class="fieldset-info border1-e4e4e4 br4 plr30 ptb5">
+								<div class="flex-box">
+									<div class="w320">
+										会员在团课开始前多少分钟不能预约？：
+									</div>
+									<div class="flex-box-item">
+										<input type="number" class="form-control w100"  v-model="settingInfo.groupBNYY" />&emsp;分钟
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w320">
+										会员在团课开始前多少分钟不能取消预约？：
+									</div>
+									<div class="flex-box-item">
+										<input type="number" class="form-control w100" v-model="settingInfo.groupBNQX" />&emsp;分钟
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w320">
+										场馆是否打开了团课签课功能？：
+									</div>
+									<div class="flex-box-item">
+										<div class="checkbox mt0">
+											<label class="mr20">
+												<input type="radio" value="1" name="groupBNQX" v-model="settingInfo.groupDKQD"/>打开</label>
+											<label><input type="radio"  name="groupBNQX" value="2"  v-model="settingInfo.groupDKQD"/>关闭</label>
+										</div>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w320">
+										团课约满后，是否允许会员订阅空位提醒？：
+									</div>
+									<div class="flex-box-item">
+										<div class="checkbox mt0">
+											<label class="mr20"><input type="radio" value="1" name="groupKWDYTT" v-model="settingInfo.groupKWDYTT"/>是</label>
+											<label><input type="radio" value="2" name="groupKWDYTT" v-model="settingInfo.groupKWDYTT"/>否</label>
+										</div>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item input-sm-box">
+										普通会员可以预约
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupKWDYTT" v-model="settingInfo.groupPTYY"/>
+										<select class="form-control w42 br0" v-model="settingInfo.groupPTYYType">
+											<option value="1">天</option>
+											<option value="2">周</option>
+											<option value="3">年</option>
+											<option value="4">月</option>
+										</select>
+										天内的课程，同时可以存在
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupPTCZ" />
+										天预约。会员需缴纳
+										<input type="number" class="form-control br0 w60"  v-model="settingInfo.groupPTJDJY" />
+										元/次  可解除冻结
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item input-sm-box">
+										银卡会员可以预约
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupYKYY" />
+										<select class="form-control w42 br0" v-model="settingInfo.groupYKYYType">
+											<option value="1">天</option>
+											<option value="2">周</option>
+											<option value="3">年</option>
+											<option value="4">月</option>
+										</select>
+										天内的课程，同时可以存在
+										<input type="number" class="form-control br0 w60"  v-model="settingInfo.groupYKCZ" />
+										天预约。会员需缴纳
+										<input type="number" class="form-control br0 w60"  v-model="settingInfo.groupYKJDJY" />
+										元/次  可解除冻结
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item input-sm-box">
+										金卡会员可以预约
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupJKYY" />
+										<select class="form-control w42 br0" v-model="settingInfo.groupJKYYType">
+											<option value="1">天</option>
+											<option value="2">周</option>
+											<option value="3">年</option>
+											<option value="4">月</option>
+										</select>
+										天内的课程，同时可以存在
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupJKCZ" />
+										天预约。会员需缴纳
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupJKJDJY" />
+										元/次  可解除冻结
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item input-sm-box">
+										砖卡会员可以预约
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupZKYY"/>
+										<select class="form-control w42 br0" v-model="settingInfo.groupZKYYType">
+											<option value="1">天</option>
+											<option value="2">周</option>
+											<option value="3">年</option>
+											<option value="4">月</option>
+										</select>
+										天内的课程，同时可以存在
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupZKCZ" />
+										天预约。会员需缴纳
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupZKJDJY" />
+										元/次  可解除冻结
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item input-sm-box">
+										会员
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupHYN" />
+										<select class="form-control w42 br0" v-model="settingInfo.groupHYNType">
+											<option value="1">天</option>
+											<option value="2">周</option>
+											<option value="3">年</option>
+											<option value="4">月</option>
+										</select>
+										天内有
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupYYWQX" />
+										次预约未取消未消费则
+										<input type="number" class="form-control br0 w60" v-model="settingInfo.groupJZYY" />
+										<select class="form-control w42 br0" v-model="settingInfo.groupJZYYType">
+											<option value="1">天</option>
+											<option value="2">周</option>
+											<option value="3">年</option>
+											<option value="4">月</option>
+										</select>
+										内，禁止预约，同时将取消已预约的课程
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										<label>
+											<input type="radio" name="groupLJKFYYTYPE" value="1" v-model="settingInfo.groupLJKFYYTYPE"/>立即开放预约
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										<label>
+											<input type="radio" name="groupLJKFYYTYPE" value="2" v-model="settingInfo.groupLJKFYYTYPE" />定时开放预约
+										</label>
+										<input class="form-control w160" value="2018-11-11" type="date" id="dateInp"/>
+										<span class="relative ml8">
+					    					<input class="form-control w80" value="00" max="59" min="1" step="1" type="number" id="XSInp"/>
+					    					<span class="uint">时</span>
+					    				</span>
+										：
+										<span class="relative">
+						    				<input class="form-control w80" value="00" max="59" min="1" step="1" type="number" id="FZInp"/>
+						    				<span class="uint">分</span>
+					    				</span>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										<label>
+											<input type="radio" name="groupLJKFYYTYPE" value="3" v-model="settingInfo.groupLJKFYYTYPE" />课程开始前
+										</label>
+										<select class="form-control w60" v-model="settingInfo.groupLJKFYYQXS" >
+											<option>1</option>
+											<option>2</option>
+										</select>
+										小时开放预约
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item input-sm-box">
+										预约设置修改，仅限在预约时间发生前 <input type="number" class="form-control w45 br0" v-model="settingInfo.groupYYSKQXG" /> 小时内修改
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										未经允许是否可以上课
+										<label class="mr25 ml3">
+											<input type="radio" name="groupWJYYSFKYSK" value="1" v-model="settingInfo.groupWJYYSFKYSK"/>是
+										</label>
+										<label>
+											<input type="radio" name="groupWJYYSFKYSK" value="2" v-model="settingInfo.groupWJYYSFKYSK"/>否
+										</label>
+										<span class="c-ff0000">（如果没有预约的课程就无法开课）</span>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										前台预约是否允许选择教练
+										<label class="mr25 ml3">
+											<input type="radio"  name="groupQTSFYYJL" value="1" v-model="settingInfo.groupQTSFYYJL"/>允许
+										</label>
+										<label>
+											<input type="radio"  name="groupQTSFYYJL" value="2" v-model="settingInfo.groupQTSFYYJL" />不允许
+										</label>
+										<span class="c-ff0000">（只允许指定教练上课）</span>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										团会员APP预约是否需要确认：
+										<label class="mr25 ml3">
+											<input type="radio" name="groupAPPYYSFQR" value="1" v-model="settingInfo.groupAPPYYSFQR" />是
+										</label>
+										<label>
+											<input type="radio" name="groupAPPYYSFQR" value="2" v-model="settingInfo.groupAPPYYSFQR" />否
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item mtb0 input-sm-box">
+										团课开始之前：
+										<input type="number" class="form-control w45 br0" v-model="settingInfo.groupTKKKQQRC" />
+										分钟，团操老师可刷团会员APP二维码入场
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="flex-box-item checkbox mtb0">
+										教练是否跨店上课：
+										<label class="mr20 ml3">
+											<input type="radio" name="crossShop"  value="1" v-model="settingInfo.groupKD"/>可以
+										</label>
+										<label class="mr20 ml3">
+											<input type="radio"  name="crossShop" value="0" v-model="settingInfo.groupKD" />不可以
+										</label>
+									</div>
+								</div>
+							</fieldset>
+							<fieldset class="fieldset-info border1-e4e4e4 br4 plr30 ptb5">
+								<legend class="c-333">团课通知</legend>
+								<div class="flex-box">
+									<div class="w500">
+										会员预约团课预约后，是否提醒教练？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupTTJL" value="1" v-model="settingInfo.groupTTJL" />打开
+										</label>
+										<label>
+											<input type="radio" name="groupTTJL" value="2" v-model="settingInfo.groupTTJL"  />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										会员预约团课预约后，是否提醒会员？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupTTHY" value="1" v-model="settingInfo.groupTTHY"   />打开
+										</label>
+										<label>
+											<input type="radio" name="groupTTHY" value="2" v-model="settingInfo.groupTTHY"   />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										会员取消团课预约后，是否提醒教练？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupQXTTJL" value="1" v-model="settingInfo.groupQXTTJL"  />打开
+										</label>
+										<label>
+											<input type="radio" name="groupQXTTJL" value="2" v-model="settingInfo.groupQXTTJL"  />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										会员取消团课预约后，是否提醒会员？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupQXTXHY" value="1" v-model="settingInfo.groupQXTXHY"  />打开
+										</label>
+										<label>
+											<input type="radio" name="groupQXTXHY" value="2" v-model="settingInfo.groupQXTXHY"  />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										教练/工作人员为会员代约团课时，是否提醒会员？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupDYTTHY" value="1" v-model="settingInfo.groupDYTTHY"   />打开
+										</label>
+										<label>
+											<input type="radio" name="groupDYTTHY" value="2" v-model="settingInfo.groupDYTTHY"   />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										教练/工作人员为会员代约团课时，是否提醒教练？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupDYTTJL" value="1" v-model="settingInfo.groupDYTTJL"  />打开
+										</label>
+										<label>
+											<input type="radio" name="groupDYTTJL" value="2" v-model="settingInfo.groupDYTTJL"  />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										教练/工作人员为会员取消团课时，是否提醒教练？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupHYQXSJTXJL" value="1" v-model="settingInfo.groupHYQXSJTXJL" />打开
+										</label>
+										<label>
+											<input type="radio" name="groupHYQXSJTXJL" value="2" v-model="settingInfo.groupHYQXSJTXJL" />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										教练/工作人员为会员取消团课时，是否提醒会员？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupHYQXSJTXHY" value="1" v-model="settingInfo.groupHYQXSJTXHY" />打开
+										</label>
+										<label>
+											<input type="radio" name="groupHYQXSJTXHY" value="2" v-model="settingInfo.groupHYQXSJTXHY" />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										会员在团课开始前是否收到通知？：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupSJKSQTZ" value="1" v-model="settingInfo.groupSJKSQTZ"  />打开
+										</label>
+										<label>
+											<input type="radio" name="groupSJKSQTZ" value="2" v-model="settingInfo.groupSJKSQTZ"  />关闭
+										</label>
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										会员在团课开课前多少分钟收到通知：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<input class="form-control w100" type="number" v-model="settingInfo.groupSJKSQFZ"/>&emsp;分钟
+									</div>
+								</div>
+								<div class="flex-box">
+									<div class="w500">
+										团课人数不足时，是否提醒教练：
+									</div>
+									<div class="flex-box-item checkbox mtb0">
+										<label class="mr20 ml3">
+											<input type="radio" name="groupTKRSBZTTJL" value="1" v-model="settingInfo.groupTKRSBZTTJL"/>打开
+										</label>
+										<label>
+											<input type="radio" name="groupTKRSBZTTJL" value="2" v-model="settingInfo.groupTKRSBZTTJL" />关闭
+										</label>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane tab-pane-style" id="settingTrain">
+						<ul class="nav nav-tabs sub-nav-style" role="tablist">
+							<li role="presentation"><a href="#settingAction" aria-controls="settingAction" role="tab" data-toggle="tab">动作设置</a></li>
+							<li role="presentation"><a href="#simpleLinkSetting" aria-controls="simpleLinkSetting" role="tab" data-toggle="tab" @click="simpleLinkSettingMain(1)">单节训练课程设置</a></li>
+							<li role="presentation"><a href="#setMealSetting" aria-controls="setMealSetting" role="tab" data-toggle="tab"  @click="simpleLinkSettingMain(2)" >训练套餐设置</a></li>
+						</ul>
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane tab-pane-style active" id="settingAction">
+								<div class="flex-box flex-start">
+									<div class="w200 min-height-page-sm">
+										<button class="btn btn-red btn-add-action" @click="addAction(0)">新增动作系列</button>
+										<ul class="action-list">
+											<li v-for="(action , index) in actions" :key="index" @click="actionClick(index)" :class="actionSettingIndex == index?'active':'' " >
+												<a>
+						                          	<span class="pull-right c-ff0000" @click.stop="deleteItem(index,action.id ,3)">删除</span>
+													<span class="pull-right c-333" @click.stop="updateItem(action.id , 3)">修改</span>
+													{{action.name}}
+												</a>
+											</li>
+
+										</ul>
+									</div>
+									<div class="flex-box-item p10">
+										<fieldset class="fieldset-info mtb0 br4 pb20">
+											<legend class="c-ffcc00 ml8">新增动作名称</legend>
+											<div class="flex-box flex-start">
+												<div class="flex-box-item">
+													<div class="flex-box">
+														<div class="w100 text-right">
+															<span class="c-ff0000">*</span>动作名称：
+														</div>
+														<div class="flex-box-item">
+															<input class="form-control br0" maxlength="15" placeholder="填写动作名称（限制15个字符）" v-model="actionAddData.name" />
+														</div>
+													</div>
+													<div class="flex-box">
+														<div class="w100 text-right">
+															<span class="c-ff0000">*</span>难度：
+														</div>
+														<div class="flex-box-item">
+															<input class="form-control br0"maxlength="5" placeholder="填写难度（限制5个字符）" v-model="actionAddData.diff" />
+														</div>
+													</div>
+													<div class="flex-box flex-start">
+														<div class="w100 text-right">
+															<span class="c-ff0000">*</span>实例图片/gif图：
+														</div>
+														<div class="flex-box-item">
+															<div class="file-box">
+																<input class="form-control br0" type="file" id="ActionFlie"  @change="pictureShow($event,0 , actionAddData)"/>
+																<!--<b v-if="!hasFile">＋</b>-->
+																<img id="addActionImg0" src="img/addImg.png" width="84px" height="84px" />
+																<!--<img  src="" id="addActionImg" style="width: 75px;height: 75px">-->
+															</div>
+															<span class="file-prompt">上传实例图片/gif图</span>
+														</div>
+													</div>
+												</div>
+												<div class="flex-box-item">
+													<div class="flex-box flex-start">
+														<div class="w100 text-right">
+														动作效果原理：
+														</div>
+														<div class="flex-box-item">
+															<textarea class="form-control br0" rows="9" v-model="actionAddData.actionPrinceple"></textarea>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="flex-box flex-start">
+												<div class="w100 text-right"></div>
+												<div class="flex-box-item">
+													<button class="btn btn-red w60 btn-sm" @click="ActionSettingAddAction(0)" >新增</button>
+												</div>
+											</div>
+										</fieldset>
+										<div class="p5">
+											将选中选项移动到：
+											<select class="form-control w140 br0" style="display: inline-block;" v-model="changeActionSelect">
+												<option disabled value="">请选择</option>
+												<option v-for="(action , index) in actions" :key="index" :value="action.id" >{{action.name}}</option>
+
+											</select>
+											<button class="btn btn-primary w80 remove-item" @click="changeParent">确定</button>
+										</div>
+										<div class="mlr-11">
+											<table class="table table-bordered table-style">
+												<thead>
+												<tr>
+													<td class="w35"><input type="checkbox" v-model='isok'  v-on:click='chooseAll(0)'/></td>
+													<td>序号</td>
+													<td>动作名称</td>
+													<td>实例图片/gif图</td>
+													<td>难度</td>
+													<td>动作效果/原理</td>
+													<td>操作</td>
+												</tr>
+												</thead>
+												<tbody>
+												<div v-if="actions.length > actionSettingIndex">
+													<tr v-for="(actionType ,index) in actions[actionSettingIndex].actionList">
+
+														<td><input type="checkbox" :value="actionType.id" v-model="changeActionIds"/></td>
+														<td>{{index+1}}</td>
+														<td>{{actionType.name}}</td>
+														<td>
+															<img v-if="!actionType.image" src="img/addImg.png" width="84px" height="84px" />
+															<img v-if="actionType.image" :src="actionType.image" width="84px" height="84px" />
+														</td>
+
+														<td>{{actionType.diff}}</td>
+														<td class="mw340">{{actionType.actionPrinceple}}</td>
+														<td>
+															<button class="btn btn-modify" @click="modifyAction(index,actionType)">修改</button>
+															<button class="btn btn-order ml10" @click="delAction(index, actionType)">删除</button>
+														</td>
+
+
+													</tr>
+												</div>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<!--修改动作名称-->
+								<div class="modal fade modal-style" id="modifyActionModal" tabindex="-1" role="dialog" data-backdrop="false">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h4 class="modal-title">修改动作名称</h4>
+											</div>
+											<div class="modal-body">
+												<div class="flex-box">
+													<div class="w120 text-right">
+														<span class="c-ff0000">*</span>动作名称：
+													</div>
+													<div class="flex-box-item">
+														<input type="text" class="form-control w300" v-model="actionSettingData.name"  maxlength="15" />
+													</div>
+												</div>
+												<div class="flex-box">
+													<div class="w120 text-right">
+														<span class="c-ff0000">*</span>难度：
+													</div>
+													<div class="flex-box-item">
+														<input type="text" class="form-control w300" maxlength="5" v-model="actionSettingData.diff" />
+													</div>
+												</div>
+												<div class="flex-box flex-start">
+													<div class="w120 text-right">
+														<span class="c-ff0000">*</span>实例图片/gif图：
+													</div>
+													<div class="flex-box-item">
+														<div class="file-box">
+															<input class="form-control br0" type="file" id="ActionFlie2" @change="pictureShow($event , 1 , actionSettingData)" />
+															<!--<b>＋</b>-->
+															<img id="addActionImg1" :src="actionSettingData.image?actionSettingData.image:'img/addImg.png'" width="84px" height="84px" />
+
+														</div>
+														<span class="file-prompt">上传实例图片/gif图</span>
+													</div>
+												</div>
+												<div class="flex-box flex-start">
+													<div class="w120 text-right">
+														动作效果原理：
+													</div>
+													<div class="flex-box-item">
+														<textarea class="form-control w380" rows="10" v-model="actionSettingData.actionPrinceple">输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原理输入动作效果/原</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-red" @click="modifyActionConfirm">修改</button>
+												<button type="button" class="btn btn-fff" data-dismiss="modal">取消</button>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+							</div>
+							<div role="tabpanel" class="tab-pane tab-pane-style" id="simpleLinkSetting">
+								<div class="flex-box flex-stretch">
+									<div class="w200 min-height-page-sm">
+										<button class="btn btn-red btn-add-action" @click="addAction(1)">新增</button>
+										<ul class="action-list">
+
+											<li v-for="(action , index) in simpleLinkSettingAction" :key="action" @click="actionEduClick(index,action.id , 1 )" :class="actionEduSettingIndex == index ? 'active' :''" >
+												<a>{{action.name}}<span class="pull-right c-ffcc00 ml5" @click.stop="deleteItem(index,action.id , 1)">删除</span><span class="pull-right c-ff0000" @click.stop="updateItem(action.id , 1)">修改</span></a>
+												<ul class="sub-action-list" v-show="actionEduSettingIndex == index">
+													<li @click.stop="addTrain(action.id , 1)">+新增训练计划</li>
+													<li  :key="train" @click.stop="subTrainClick(train , 1)" v-for="(train, index) in simpleLinkSettingActionSub" :class="simpleLinkSettingActionSubSelectId == train.id ?'active':''">
+														{{train.name}}
+														<span class="pull-right c-ffcc00 ml5" @click.stop="deleteTrain(train.id , 1)">删除</span>
+														<span class="pull-right c-ff0000" @click.stop="updateTrain(train.id , 1)">修改</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul>
+									</div>
+									<div class="flex-box-item">
+										<div class="p8">
+											<button class="btn btn-grey w60" @click="saveAction(1)">保存</button>
+											<button class="btn btn-red w140 ml5" @click="addActionTypeOneModal(1)">添加动作类型</button>
+										</div>
+										<table class="table table-bordered table-style mlr-1">
+											<thead>
+											<tr>
+												<td>序号</td>
+												<td>动作图片</td>
+												<td>动作类型</td>
+												<td>动作名称</td>
+												<td>时间（分）</td>
+												<td>强度</td>
+												<td>次数</td>
+												<td class="w160">备注</td>
+												<td>操作</td>
+											</tr>
+											</thead>
+											<tbody>
+											<tr v-for="(action,index) in simpleLinkSettingActionSubTable">
+												<td>{{index+1}}</td>
+												<td><img :src="action.image?action.image:'img/addImg.png'" width="85px"></td>
+												<td><span class="c-ff9900">{{action.seriesname}}</span></td>
+												<td>{{action.name}}</td>
+												<td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 1)" size="10" ></b>分钟</td>
+												<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 1)" size="10" ></b></td>
+												<td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action, 1)" size="10" ></b></td>
+												<td><b class="c-009900">
+								                 <textarea rows="5" cols="20" @change="changeData(action , 1)"  v-model="action.remark" ></textarea>
+												</b></td>
+												<td><button class="btn btn-order delete-action" @click="delEduAction(index,action , 1)">删除</button></td>
+
+											</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<!--添加动作类型-->
+								<div class="modal fade modal-style" tabindex="-1" id="addActionTypeOneModal" role="dialog" data-backdrop="false">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h4 class="modal-title">选择动作</h4>
+											</div>
+											<div class="modal-body">
+												<div class="flex-box flex-stretch">
+													<div class="w180 plr5">
+														<ul class="action-list mt0">
+															<li @click="choiceAction(index)" v-for="(action,index) in actions" :class="trainActionIndex == index?'active':''">
+																<a>{{action.name}}</a>
+															</li>
+														</ul>
+													</div>
+													<div class="flex-box-item">
+														<div class="p8">
+															<button class="btn btn-primary w140" @click="trainAddAction(1)">添加选中</button>
+														</div>
+														<div class=" mlr-1">
+															<table class="table table-bordered table-style">
+																<thead>
+																<tr>
+																	<td class="w35"><input type="checkbox" v-model='isok'  v-on:click='chooseAll(1)'></td>
+																	<td>序号</td>
+																	<td>动作名称</td>
+																	<td>图片/gif动画</td>
+																	<td>难度</td>
+																	<td>动作效果/原理</td>
+																</tr>
+																</thead>
+																<tbody>
+
+																<tr v-for="(action,index) in actions[trainActionIndex].actionList">
+
+																	<td class="w35"><input type="checkbox" :value="action.id"  v-model="trainAddActionIds"></td>
+																	<td>{{index+1}}</td>
+																	<td>{{action.name}}</td>
+
+																	<td><img :src="action.image?action.image:'img/addImg.png'" width="210px"></td>
+																	<!--<td><img :src="http://localhost:8081//files/action/9b289618-ba99-457f-9136-6c1e246b0d45.png" width="210px"></td>-->
+																	<td>{{action.diff}}</td>
+																	<td>{{action.actionPrinceple}}</td>
+																</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+							</div>
+							<div role="tabpanel" class="tab-pane tab-pane-style" id="setMealSetting">
+								<div class="flex-box flex-stretch">
+									<div class="w200 min-height-page-sm">
+										<button class="btn btn-red btn-add-action" @click="addAction(2)">新增训练课程系列</button>
+										<ul class="action-list">
+											<li v-for="(action , index) in mealLinkSettingAction" :key="action" @click="actionEduClick(index,action.id , 2 )" :class="mealSettingIndex == index ? 'active' :''" >
+												<a>{{action.name}}<span class="pull-right c-ffcc00 ml5"  @click.stop="deleteItem(index,action.id , 2)">删除</span><span class="pull-right c-ff0000" @click.stop="updateItem(action.id , 2)">修改</span></a>
+												<ul class="sub-action-list" v-show="mealSettingIndex == index">
+													<li @click.stop="addTrain(action.id , 2)">+新增训练套餐</li>
+													<li  :key="train" @click.stop="subTrainClick(train , 2)" v-for="(train, index) in mealLinkSettingActionSub" :class="mealLinkSettingActionSubSelectId == train.id ?'active':''">
+														{{train.name}}
+														<span class="pull-right c-ffcc00 ml5" @click.stop="deleteTrain(train.id , 2)">删除</span>
+														<span class="pull-right c-ff0000" @click.stop="updateTrain(train.id , 2)">修改</span>
+													</li>
+
+												</ul>
+											</li>
+										</ul>
+									</div>
+									<div class="flex-box-item">
+										<div class="p8">
+											<button class="btn btn-grey w60" @click="saveAction(2)">保存</button>
+											<button class="btn btn-red w140 ml5" @click="addActionTypeModal()">添加动作类型</button>
+										</div>
+										<div class="tabWrap">
+											<table class="table table-bordered table-style mlr-1">
+												<thead>
+												<tr>
+													<td>序号</td>
+													<td>训练时间</td>
+													<td>图片</td>
+													<td>动作类型</td>
+													<td>动作名称</td>
+													<td>时间（分）</td>
+													<td>强度</td>
+													<td>次数</td>
+													<td class="w160">备注</td>
+													<td>操作</td>
+												</tr>
+												</thead>
+												<tbody>
+
+												<tr v-for="(action,index) in mealLinkSettingActionSubTable">
+													<td>{{index+1}}</td>
+													<td><input :id="'pick'+index" v-model="action.traning_time" @change="changeData(action , 2)"  placeholder="请选择时间"  /></td>
+													<!--<td><span class="c-ff0000">2018-06-30 17:29</span></td>-->
+													<td><img :src="action.image?action.image:'img/addImg.png'" width="85px"></td>
+													<td><span class="c-ff9900">{{action.seriesname}}</span></td>
+													<td>{{action.name}}</td>
+													<td><b class="c-009900"><input v-model="action.time" @change="changeData(action , 2)" placeholder="填写分钟数" size="10"></b>分钟</td>
+													<td><b class="c-009900"><input v-model="action.strength" @change="changeData(action , 2)" placeholder="填写强度" size="10" ></b></td>
+													<td><b class="c-0000ff"><input v-model="action.count" @change="changeData(action , 2)" placeholder="填写次数" size="10" ></b></td>
+													<td><b class="c-009900">
+														 <textarea rows="5" cols="20" @change="changeData(action , 2)" placeholder="填写备注"  v-model="action.remark" >
+													  </textarea>
+													</b></td>
+													<td><button class="btn btn-order delete-action" @click="delEduAction(index,action , 2)">删除</button></td>
+
+												</tr>
+
+
+												</tbody>
+											</table>
+											<div id="pagination_meal" class="pagination"></div>
+										</div>
+									</div>
+								</div>
+								<!--添加动作类型-->
+								<div class="modal fade modal-style" tabindex="-1" id="addActionTypeModal" role="dialog" data-backdrop="false">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h4 class="modal-title">选择动作</h4>
+											</div>
+											<div class="modal-body">
+												<div class="flex-box flex-stretch">
+													<div class="w150">
+														<ul class="action-tree-list">
+															<li @click="choiceAction(index)" v-for="(action,index) in actions" :class="trainActionIndex == index?'active':''">
+																<a>{{action.name}}</a>
+
+															</li>
+
+														</ul>
+													</div>
+													<div class="flex-box-item">
+														<div class="p8">
+															<button class="btn btn-primary w140" @click="trainAddAction(2)">添加选中</button>
+														</div>
+														<div class=" mlr-1">
+															<table class="table table-bordered table-style">
+																<thead>
+																<tr>
+																	<td class="w35"><input type="checkbox" v-model='isok'  v-on:click='chooseAll(1)'/></td>
+																	<td>序号</td>
+																	<td>动作名称</td>
+																	<td>图片/gif动画</td>
+																	<td>难度</td>
+																	<td>动作效果/原理</td>
+																</tr>
+																</thead>
+																<tbody>
+																<tr v-for="(action,index) in actions[trainActionIndex].actionList">
+
+
+																	<td class="w35"><input type="checkbox" :value="action.id"  v-model="trainAddActionIds"></td>
+																	<td>{{index+1}}</td>
+																	<td>{{action.name}}</td>
+																	<td><img :src="action.image?action.image:'img/addImg.png'" width="210px"></td>
+																	<td>{{action.diff}}</td>
+																	<td>{{action.actionPrinceple}}</td>
+
+
+																</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--新增动作系列-->
+				<div class="modal fade modal-style" id="addActionModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">{{modalTitle}}</h4>
+							</div>
+							<div class="modal-body">
+								<input type="text" class="form-control" maxlength="15"  :placeholder="placeholderTxt" v-model="addActionSeriesName"/>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="addActionSeries">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelActionSeries">取消</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+
+				<!--新增训练计划-->
+				<div class="modal fade modal-style mModal" id="addTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">新增动作系列</h4>
+							</div>
+							<div class="modal-body">
+								<input type="text" class="form-control" maxlength="15"  placeholder="新增训练计划（限15个字）" v-model="addTrainName"/>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="addTrainConfirm">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelTrainAdd">取消</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+				<!--修改课程计划-->
+				<div class="modal fade modal-style mModal" id="updateItemModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document" style="width: 300px;">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">修改名称1</h4>
+							</div>
+							<div class="modal-body">
+								<input type="text" class="form-control" style="width: 100%;" maxlength="15"  placeholder="修改名称（限15个字）" v-model="updateItemName"/>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="updateItemConfirm">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelItemUpate">取消</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+				<div class="modal fade modal-style mModal" id="deleteItemModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document" style="width: 300px;">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">是否确定删除</h4>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="deleteItemConfirm">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="canceldeleteItem">取消</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div>
+
+				</div>
+				<div class="modal fade modal-style mModal" id="deleteTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document" style="width: 300px;">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">是否确定删除训练计划</h4>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="deleteTrainConfirm">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="canceldeleteTrain">取消</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div>
+
+				</div>
+				<div class="modal fade modal-style mModal" id="updateTrainModal" tabindex="-1" role="dialog"  data-backdrop="false">
+					<div class="modal-dialog" role="document" style="width: 300px;">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">修改训练计划</h4>
+							</div>
+							<div class="modal-body">
+								<input type="text" class="form-control" maxlength="15"  placeholder="修改训练计划（限15个字）" v-model="updateTrainName"/>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" @click="updateTrainConfirm">确定</button>
+								<button type="button" class="btn btn-fff" data-dismiss="modal" @click="cancelupdateTrain">取消</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div>
+				</div>
+			</div><!-- /.modal -->
+			<div class="modal fade modal-style mModal" id="saveSuccessModal" tabindex="-1" role="dialog"  data-backdrop="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h5 class="modal-title">保存成功</h5>
+						</div>
+					</div><!-- /.modal-content -->
+				</div>
+
+			</div>
+			</div>
+		</div>
+		<!-- END 主要内容 -->
+	<div id="addCourseModel" tabindex="-1" role="dialog" data-backdrop="false" class="modal fade modal-style mModal" style="display: none;">
+		<div role="document" class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+					<h4 class="modal-title">新增课程</h4></div>
+				<div class="modal-body">
+					<input type="text" maxlength="15" placeholder="新增课程（限15个字）" class="form-control" v-model="seriesData.name">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" @click="saveSeriesItem">确定</button>
+					<button type="button" data-dismiss="modal" class="btn btn-fff">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- END 右边容器 -->
+
+	<div class="clearfix"></div>
+	<!--<footer>
+        <div class="container-fluid">
+            <p class="copyright">Copyright &copy; 2017-2019xxx版权所有</p>
+        </div>
+    </footer>-->
+</div>
+<!-- END 整个页面内容 -->
+
+<script type="text/javascript" src="js/post_js.js"></script>
+<script type="text/javascript" src="js/bootstrap-treeview/bootstrap-treeview.js"></script>
+<script type="text/javascript" src="js/wangEditor/wangEditor.min.js"></script>
+
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/toZhDigit.js"></script>
+<script src="../js/myPagination.js"></script>
+<!--<script src="potentialCustomers.js"></script>-->
+<script type="text/javascript" src="js/wangEditor/wangEditor.min.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/loading.js"></script>
+<script type="text/javascript" src="js/bootstrap-treeview/bootstrap-treeview.js"></script>
+<script>
+    new Loading();
+</script>
+<script type="text/javascript" src="groupTeaching.js"></script>
+</body>
+
+</html>

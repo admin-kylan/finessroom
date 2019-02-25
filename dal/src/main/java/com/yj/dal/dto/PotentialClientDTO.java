@@ -133,6 +133,19 @@ public class PotentialClientDTO {
      */
     private String updateUserName;
 
+    /**
+     * 门店名称
+     */
+    private String shopName;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
     public String getSourceId() {
         return sourceId;
     }

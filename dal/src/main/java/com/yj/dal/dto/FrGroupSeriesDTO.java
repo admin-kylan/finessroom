@@ -14,4 +14,13 @@ import lombok.NoArgsConstructor;
 public class FrGroupSeriesDTO extends FrGroupSeries {
 
     private String shopIds;
+
+	public String getShopIds() {
+		return shopIds;
+	}
+
+	public void setShopIds(String shopIds) {
+		this.shopIds = shopIds;
+	}
+    
 }

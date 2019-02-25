@@ -8,7 +8,9 @@ import com.yj.dal.model.FrClient;
 import com.yj.dal.param.*;
 import com.yj.service.base.BaseService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -60,4 +62,17 @@ public interface IFrClientService extends BaseService<FrClient> {
     PageUtils selectClientInformation(ClientInformationParam params)throws YJException;
 
     List<FrClient> queryByClient(FrClient frClient)throws YJException;
+
+    JsonResult getPersonalDetails(String id);
+
+    JsonResult getPotentialClientList();
+
+    JsonResult getEmployeeClientList();
+
+
+    PageUtils existenceListBG(HttpServletRequest request,ExistenceFilterParam params) throws YJException;
+
+
+    PageUtils potentialListBG(HttpServletRequest request,PotentialFilterParam params) throws YJException;
+
 }

@@ -77,7 +77,7 @@ body {
 #leadCustomerEntry .section1_box .col_box {
     overflow: hidden;
     border: 1px solid #ccc;
-    margin-bottom: 10px;
+    margin-bottom: 10px;border-bottom: 0;
 }
 #leadCustomerEntry .section1_box .col_box select{
     width: 100%;
@@ -88,7 +88,7 @@ body {
     width: 20%;
 }
 #leadCustomerEntry .section1_box .col_box>div:nth-child(5) {
-    min-height: 185px;
+    min-height: 197px;
     border-bottom: 1px solid #ccc;
 }
 #leadCustomerEntry .section1_box .col_box>div:nth-child(5) .btn{
@@ -104,7 +104,7 @@ body {
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
     line-height: 30px;
-    text-align: center;
+    text-align: center;min-height: 32px;
 }
 
 #leadCustomerEntry .section1_box .col_box #marriage{
@@ -113,7 +113,7 @@ body {
     border: none;
 }
 #leadCustomerEntry .section1_box .col_box>div>div:nth-child(11){
-    min-height: 240px;
+    min-height: 255px;
     
 }
 #leadCustomerEntry .section1_box .col_box .liaojie{
@@ -223,7 +223,7 @@ body {
     width: 100%;
     border: 1px solid #ccc;
     height: 100%;
-    overflow: hidden;
+    overflow: hidden;border-bottom: 0;
 }
 
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_top {
@@ -236,7 +236,7 @@ body {
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_top>div {
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    line-height: 30px;
+    line-height: 30px;min-height: 32px;
 }
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_top>div:nth-child(10) {
     line-height: 97px;
@@ -244,7 +244,7 @@ body {
 
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_top>div:nth-child(11) {
     line-height: 97px;
-    border-bottom: none;
+    /*border-bottom: none;*/
 }
 
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_botton {
@@ -260,12 +260,13 @@ body {
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_botton>div {
     border-bottom: 1px solid #ccc;
     line-height: 30px;
+    height: 32px;
 }
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_botton>div:nth-child(10) {
     height: 97px;
 }
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_botton>div:nth-child(11) {
-    border-bottom: none;
+    /*border-bottom: none;*/
     height: 97px;
 }
 

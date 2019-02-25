@@ -47,6 +47,7 @@ public class FrGroupSeriesController {
     public JsonResult getAllSeries(@RequestParam Map<String, Object> params, HttpServletRequest request) {
         String code = CookieUtils.getCookieValue(request, "code", true);
         String shopId = String.valueOf(params.get("shopId"));
+        String sdaduimId = String.valueOf(params.get("sdaduimId"));
         List<FrGroupSeries> parent = new ArrayList<>();
         if (shopId != "null") {
             List<FrGroupSeriesShopRelation> frGroupSeriesShopRelations = frGroupSeriesShopRelationService.selectList(
@@ -55,7 +56,7 @@ public class FrGroupSeriesController {
             for (FrGroupSeriesShopRelation frGroupSeriesShopRelation : frGroupSeriesShopRelations) {
                 FrGroupSeries frGroupSeries = iFrGroupSeriesService.selectOne(
                         new EntityWrapper<FrGroupSeries>()
-                                .where(" customer_code={0} and is_using=1 and id={1}", code, frGroupSeriesShopRelation.getSeriesId()).orderBy("create_time")
+                                .where(" customer_code={0} and is_using=1 and id={1} and sdaduim_id={2}", code, frGroupSeriesShopRelation.getSeriesId(),sdaduimId).orderBy("create_time")
                 );
                 parent.add(frGroupSeries);
             }
@@ -63,7 +64,7 @@ public class FrGroupSeriesController {
         } else {
             parent = iFrGroupSeriesService.selectList(
                     new EntityWrapper<FrGroupSeries>()
-                            .where("(parent_id is null or parent_id='0') and customer_code={0} and is_using=1", code).orderBy("create_time"));
+                            .where("(parent_id is null or parent_id='0') and customer_code={0} and is_using=1 and sdaduim_id={1}", code,sdaduimId).orderBy("create_time"));
         }
         List<Map<String, Object>> nodes = new ArrayList<>();
 
@@ -131,7 +132,7 @@ public class FrGroupSeriesController {
             value.setCreateTime(new Date());
             value.setIsUsing(1);
             value.setCustomerCode(code);
-
+            value.setSdaduimId(dto.getSdaduimId());
             iFrGroupSeriesService.insert(value);
 
         }

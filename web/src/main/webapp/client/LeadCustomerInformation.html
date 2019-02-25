@@ -34,7 +34,7 @@
                 客户信息
             </div>
             <div class="customerrightFrame_box">
-                <div><img src="../img/u3174.jpg" alt="" class="img-responsive"></div>
+                <div><img src="../img/addImg.png" class="img-responsive" id="clientURL" onerror="this.src='../img/addImg.png'"></div>
                 <ul>
                     <li>客户姓名：<strong id="clientUserName"></strong></li>
                     <li>客户性别：<strong id="clientSet"></strong></li>
@@ -42,6 +42,7 @@
                     <li>微信号：<strong></strong></li>
                     <li>服务会籍：<strong></strong></li>
                     <li>生日：<strong></strong></li>
+                    <li>最近来访时间：<strong></strong></li>
                     <li>建档时间：<strong></strong></li>
                 </ul>
             </div>
@@ -75,6 +76,7 @@
 <script src="../js/jedate.js"></script>
 <script src="../js/vue.js"></script>
 <script src="../js/common.js"></script>
+<script src="../js/dateUtil.js"></script>
 <script>
     //修复高度
     function mainheight() {
@@ -115,13 +117,29 @@
                     $(".customerrightFrame_box").find("li").eq(2).find("strong").html(res.data.mobile);
                     $(".customerrightFrame_box").find("li").eq(3).find("strong").html(res.data.wechat);
                     $(".customerrightFrame_box").find("li").eq(4).find("strong").html(res.data.fwhjName);
-                    $(".customerrightFrame_box").find("li").eq(5).find("strong").html(res.data.birthday);
-                    $(".customerrightFrame_box").find("li").eq(6).find("strong").html(res.data.buildDate);
-                    if (res.data.clientPic) {
-                        var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, $.cookie('url'), $.cookie('imgPath'))
-                        if (res.data.clientPic.picLink) {
-                            $(".img-responsive").attr("src", stc)
-                        }
+                    if (typeof res.data.birthday!='undefined') {
+                        $(".customerrightFrame_box").find("li").eq(5).find("strong").html(timeFormatDate(res.data.birthday, true, true));
+                    }
+                    if (typeof res.data.visitingTime!='undefined') {
+                        $(".customerrightFrame_box").find("li").eq(6).find("strong").html(timeFormatDate(res.data.visitingTime, true, true));
+                    }
+                    if (typeof res.data.buildDate!='undefined') {
+                        console.log(res.data.buildDate)
+                        $(".customerrightFrame_box").find("li").eq(7).find("strong").html(timeFormatDate(res.data.buildDate, true, true));
+                    }
+                    // if (res.data.clientPic) {
+                    //     var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, $.cookie('url'), $.cookie('imgPath'))
+                    //     if (res.data.clientPic.picLink) {
+                    //         $(".img-responsive").attr("src", stc)
+                    //     }
+                    // }
+                    var stc = res.data.picLink;
+                    console.log(stc)
+                    if(stc === null||stc ===''||typeof stc ==='undefined'){
+                        stc =  '../img/addImg.png';
+                    }
+                    if (stc) {
+                        $(".img-responsive").attr("src", stc)
                     }
                 } else {
 

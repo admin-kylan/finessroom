@@ -36,7 +36,8 @@ html,body{
 #customerInformationTop .customerrightFrame_box>div img{
     width: 75px;
     margin: 10px auto;
-    max-width: 75px;
+    height: auto;
+    max-height: 75px;
     border-radius: 50%;
 }
 #customerInformationTop .customerrightFrame_box ul{

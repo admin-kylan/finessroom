@@ -37,4 +37,8 @@
         ID, CustomerCode, NumId, ShopId, Name, Status, IsHand, Num, IsPrivateEducation, IsBackstage, AutomaticEntry, Module, IsShow, IsConsume, AesEncrypt, checkFinger, UseType, StartTime, EndTime, BalanceNum, TotalNum, CreateId, CreateName, BusinessTypeId, ModelCode, CreateTime
     </sql>
 
+    <select id="selectBySdadiumName" parameterType="java.lang.String" resultType="com.yj.dal.model.Sdaduim">
+        SELECT * FROM Sdaduim WHERE Name =#{sdadiumName}
+    </select>
+
 </mapper>

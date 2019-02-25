@@ -34,4 +34,18 @@ public interface FrCardTypeMapper extends BaseMapper<FrCardType> {
     List<FrCardType> getAllShopIdList(Map<String,Object> map);
 
     List<Map<String,Object>> getCardTypeByShopIdList(Map<String,Object> map);
+
+    /**
+     * 根据会员卡名称 门店id查询会员卡类型
+     * @param cardCardTypeMap
+     * @return
+     */
+    FrCardType selectByCardTypeName(Map<String, Object> cardCardTypeMap);
+
+    /**
+     * 根据会员卡名称 门店id为0(门店id值是0为连锁店 )
+     * @param cardTypeName
+     * @return
+     */
+    FrCardType selectByShopId(String cardTypeName);
 }

@@ -4,18 +4,18 @@
         <select name="" v-model="index">
             <option value="" v-for="(item, index) in result" :value="index">
 
-                所在门店：{{item.shop.shopName}} 所在场馆：{{item.sdaduim.name}} 项目/产品名称：私教课程30节
-                数量：{{item.projectOrder.buyCount + item.projectOrder.sendCount | toNum}}
-                （{{item.projectOrder.buyCount| toNum}}+ <span
-                    class="yellow">{{item.projectOrder.sendCount|toNum}}</span> ）
-                已消费数量：{{item.addProjectConsumes.length| toNum}}
-                价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                * (item.addProjectConsumes.length)|toMoney}}
-                剩余价格：{{(item.projectOrder.totalPrice/(item.projectOrder.buyCount + item.projectOrder.sendCount))
-                * ((item.projectOrder.buyCount + item.projectOrder.sendCount) -
-                item.addProjectConsumes.length)|toMoney}}
-                有效期：{{item.addProject.useful}} 个月 结束时间：{{item.addProject.endTime| formatDate2}}
-                状态：<span class="blod">{{item.addProject.state |stateFilter}}</span>
+                所在门店：{{item.shopName}} 所在场馆：{{item.sdadiumName}} 项目/产品名称：{{item.courseName}}
+                数量：{{item.buyCount + item.sendCount | toNum}}
+                （{{item.buyCount| toNum}}+ <span
+                    class="yellow">{{item.sendCount|toNum}}</span> ）
+                已消费数量：{{item.consumeLength| toNum}}
+                价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
+                * (item.consumeLength)|toMoney}}
+                剩余价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
+                * ((item.buyCount + item.sendCount) -
+                item.consumeLength)|toMoney}}
+                有效期：{{item.useful}} 个月 结束时间：{{item.endTime| formatDate2}}
+                状态：<span class="blod">{{item.state |stateFilter}}</span>
             </option>
         </select>
     </fieldset>
@@ -68,7 +68,7 @@
             </label>
             <label>
                 输入凭证：
-                <input type="password" v-model="usepass" @change="verifyUser"/>
+                <input type="password" v-model="usepass" />
             </label>
             <label>
                 操作人：<span class="red">{{clientName}}</span> 当前操作时间:{{now|formatDate2}}
@@ -98,15 +98,15 @@
                 <tbody>
                 <tr v-for="(item, index) in tableList">
                     <td>{{index+1}}</td>
-                    <td>{{item.turnProject.createTime|formatDate}}</td>
-                    <td>{{item.frClientOld.clientName}}</td>
-                    <td>{{item.frClientOld.mobile}}</td>
-                    <td>{{item.frClientNew.clientName}}</td>
-                    <td>{{item.frClientNew.mobile}}</td>
-                    <td>{{item.turnProject.payType| stateFilter1}}</td>
-                    <td>{{item.turnProject.fee| toMoney}}</td>
-                    <td>{{item.frClientOld.clientName}}</td>
-                    <td>{{item.turnProject.createName}}</td>
+                    <td>{{item.createTime|formatDate}}</td>
+                    <td>{{item.oldClientName}}</td>
+                    <td>{{item.oldMobile}}</td>
+                    <td>{{item.newClientName}}</td>
+                    <td>{{item.newMobile}}</td>
+                    <td>{{item.payType| stateFilter1}}</td>
+                    <td>{{item.fee| toMoney}}</td>
+                    <td>{{item.createName}}</td>
+                    <td>{{item.createName}}</td>
                     <td class="red" @click="deleteTurn(item)">冲销</td>
                 </tr>
                 </tbody>
@@ -251,11 +251,15 @@
         watch: {
             index(val){
                 this.selectData = this.result[val];
+                console.log(this.selectData)
             },
             'selectData': {
                 handler(val){
-                    this.startTime = val.addProject.startTime;
-                    this.endTime = val.addProject.endTime;
+                    if(!val){
+                        return false;
+                    }
+                    this.startTime = val.startTime;
+                    this.endTime = val.endTime;
                 },
                 deep: true,
             },
@@ -276,7 +280,9 @@
         methods: {
             fetch(){
                 let param = {
-                    cid: $.cookie('cid')
+                    cid: $.cookie('cid'),
+                    shopId: $.cookie('shopid'),
+                    code: $.cookie('code'),
                 }
                 axiosGetParams(COURSE_URL.turnProjects, param, (res) => {
                     if (res.code == '200') {
@@ -286,15 +292,20 @@
             },
             //查询记录
             search(){
-                let interval = setInterval(() => {
-                    this.result = customerCourseProject.resultList;
-                    if (this.result.length > 0) {
-                        let array = [];
-                        this.index = 0;//初始化index
-                        // this.tableList = customerCourseProject.resultList;
-                        clearInterval(interval);
+
+                let param = {
+                    cid: $.cookie('cid'),
+                    shopId: $.cookie('shopid'),
+                    code: $.cookie('code'),
+                }
+                axiosGetParams(COURSE_URL.getProjectListSelect, param, (response) => {
+                    if (response.code === '200') {
+                        this.result = response.data;
+                        if(this.result && this.result.length > 0){
+                            this.index = 0
+                        }
                     }
-                }, 500)
+                });
             },
             searchUser(){
                 //输入手机号码 this.mobile
@@ -327,6 +338,11 @@
 
             },
             verifyUser(){
+
+            },
+            //转让操作
+            save(){
+
                 this.status = false; //设置为原始状态
                 if (!this.usepass) {
                     alert("请输入密码");
@@ -341,21 +357,21 @@
                 axiosPostParams(COURSE_URL.verifyPersonInfo, param, (response) => {
                     if (response.code === '200') {
                         this.status = true;
+                        this.varSave();
                     } else {
-                        alert(response.msg)
+                        alert("凭证验证失败");
+                        this.toDisabled = false;
                     }
 
                 });
+
             },
-            //转让操作
-            save(){
+            varSave(){
                 if(this.toDisabled !== false){
                     return false;
 
                 }
-                this.toDisabled = true;
-
-                if (!this.selectData.addProject) {
+                if (!this.selectData.id) {
                     alert("请选择项目转让")
                     return false;
                 }
@@ -363,36 +379,47 @@
                     alert("转让的用户不存在，请添加该用户")
                     return false;
                 }
+                if (this.selectData['state'] !== 0) {
+                    alert("请选择状态为正常的项目");
+                    return false;
+                }
                 if (this.status === false) {
                     //输入凭证验证失败
                     alert("输入凭证验证失败")
                     return false;
                 }
-                let param = JSON.parse(JSON.stringify(this.selectData));
+                this.toDisabled = true;
+                // let param = JSON.parse(JSON.stringify(this.selectData));
                 //param.
-                let obj = {
+                let param = {
                     mobile: this.mobile,
-                    name: this.memberInfo.name,
+                    clientName: this.memberInfo.name,
                     sex: this.memberInfo.sex,
                     fee: this.fee ? this.fee : 0,
                     payType: this.payType,
-                    cid: $.cookie('cid')
-
+                    cid: $.cookie('cid'),
+                    operId: $.cookie('id'),
+                    operName: $.cookie('name'),
+                    shopId: $.cookie('shopid'),
+                    code: $.cookie('code'),
+                    projectId: this.selectData.id,
+                    consumeId: this.selectData.consumeId,
+                    sdadiumId: this.selectData.sdadiumId,
+                    courseName: this.selectData.courseName,
+                    poId: this.selectData.poId,
                 };
-                param.insertData = obj;
+                //  param = obj;
                 axiosPostParams(COURSE_URL.customerTransfer, param, (res) => {
                     if (res.code === '200') {
-//                        customerCourseProject.$options.methods.loadData();//加载数据
-//                        this.search();
-                        window.location.reload()
+                        this.search();//
+                        this.fetch()
                         alert("转让成功");
 
                     }else{
-                        alert('转让失败,请重试');
+                        alert('转让失败,或用户不存在');
                         this.toDisabled = false;
                     }
                 });
-
             },
             //删除，冲消除
             deleteTurn(data){
@@ -409,7 +436,8 @@
 //                        customerCourseProject.$options.methods.loadData();//加载数据
 //                        this.search();
 //                        this.fetch();
-                        window.location.reload();
+                        this.search();//
+                        this.fetch()
                         alert("冲销成功");
                     }else{
                         alert('冲销失败,请重试');

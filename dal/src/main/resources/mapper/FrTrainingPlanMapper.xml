@@ -31,4 +31,8 @@
         project, train_date AS trainDate, train_start_date AS trainStartDate, train_end_date AS trainEndDate, improvement_plan AS improvementPlan, client_id AS clientId, is_using AS isUsing, create_time AS createTime, update_time AS updateTime, create_user_name AS createUserName, update_user_name AS updateUserName, CustomerCode, create_user_id AS createUserId, update_user_id AS updateUserId, actual_date AS actualDate, actual_start_date AS actualStartDate, actual_end_date AS actualEndDate, member_feel AS memberFeel, coach_summary AS coachSummary, id
     </sql>
 
+    <select id="selectByProject" parameterType="java.lang.String" resultType="com.yj.dal.model.FrTrainingPlan">
+        SELECT * fr_training_plan WHERE project =#{project}
+    </select>
+
 </mapper>

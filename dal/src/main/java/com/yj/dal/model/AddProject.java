@@ -61,6 +61,11 @@ public class AddProject extends Model<AddProject> {
      * 项目ID
      */
     private String ProjectId;
+
+    /**
+     * 0/1 团教项目/私教套餐
+     */
+    private String eduType;
     /**
      * 课程系列ID
      */
@@ -97,6 +102,14 @@ public class AddProject extends Model<AddProject> {
      * 状态?0?正常?1欠款?2?过期?3?历史?4?未开始
      */
     private Integer State;
+
+    public String getEduType() {
+        return eduType;
+    }
+
+    public void setEduType(String eduType) {
+        this.eduType = eduType;
+    }
 
 
     public String getCustomerCode() {

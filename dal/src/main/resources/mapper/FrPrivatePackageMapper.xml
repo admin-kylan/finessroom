@@ -36,7 +36,7 @@
         FROM
         fr_private_package
         WHERE
-        is_using = 1
+        is_using = 1 and sdaduim_id=#{sdaduimId}
         AND id IN ( SELECT package_id FROM fr_private_package_relation WHERE shop_id =#{shopId} AND is_using = 1 )
 
     </select>

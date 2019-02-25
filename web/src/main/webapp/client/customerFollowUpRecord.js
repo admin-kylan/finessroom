@@ -88,13 +88,6 @@ function closeBox2(){
     customerFollowUpRecord.follwAdivce.id='';
     customerFollowUpRecord.follwAdivce.handleAdvice='';
 };
-$(document).on('click','#followKeyword .panel_state_content',function(){
-    $("#followKeyword").hide();
-    var keyId =  $(this).attr("value");
-    var t = $(this).find("span").text();
-    customerFollowUpRecord.followContentT = t;
-    customerFollowUpRecord.followUpRecordAdd.followContent = keyId;
-});
 
 var customerFollowUpRecord = new Vue({
     el:'#customerFollowUpRecord',
@@ -149,6 +142,10 @@ var customerFollowUpRecord = new Vue({
         that.getFollowUpRecordList(1,10,that.clientId);
     },
     methods: {
+    	appendContent(val,keyId){
+    		this.followContentT += val;
+    		this.followUpRecordAdd.followContent = keyId;
+    	},
         init: function(){
 
         },
@@ -376,9 +373,12 @@ var customerFollowUpRecord = new Vue({
                     if(res.code=='200'){
                         that.followKeywordList = res.data;
                        $('#followKeyword').show();
-                    }else {
-                        alert(res.msg)
+                    }else{
+                       $('#followKeyword').hide();
                     }
+                    $('body').one('click',function(){
+                       $('#followKeyword').hide();
+                    })
                 }
             )
         }

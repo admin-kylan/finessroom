@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface FrTrainingPlanMapper extends BaseMapper<FrTrainingPlan> {
 
+    FrTrainingPlan selectByProject(String project);
 }

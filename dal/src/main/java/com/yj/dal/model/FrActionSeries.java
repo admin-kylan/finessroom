@@ -42,7 +42,17 @@ public class FrActionSeries extends Model<FrActionSeries> {
     @TableField("create_user")
     private Long createUser;
     private String note;
+    //场馆ID
+    @TableField("sdaduim_id")
+    private String sdaduimId;
 
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
     public Integer getOwnType() {
         return ownType;
     }

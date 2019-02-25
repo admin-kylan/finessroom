@@ -60,27 +60,43 @@ public class FrCustomerCourseProjectController {
         if (map == null) {
             throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
-        String id = CookieUtils.getCookieValue(request, "id", true);
-        String name = CookieUtils.getCookieValue(request, "name", true);
-        map.put("createUserId", id);
-        map.put("createUserName", name);
-        JsonResult jsonResult = null;
+//        String id = CookieUtils.getCookieValue(request, "id", true);
+//        String name = CookieUtils.getCookieValue(request, "name", true);
+//        map.put("createUserId", id);
+//        map.put("createUserName", name);
+        //JsonResult jsonResult = null;
         frCustomerCourseProjectService.addSaveCustomer(map);
         return JsonResult.success(map);
 
     }
 
+//    /**
+//     * 用户id查询全部
+//     * @param request
+//     * @return
+//     */
+//    @GetMapping("fetchOrderListByUserId")
+//    public JsonResult fetchOrderListByUserId( HttpServletRequest request){
+//        String cid = request.getParameter("cid");
+//        String code = request.getParameter("code");
+//        String shopId = request.getParameter("shopId");
+//
+//        List list = frCustomerCourseProjectService.getOrderListByCid(shopId, code, cid);
+//        return JsonResult.success(list);
+//    }
+
     /**
-     * 用户id查询全部
+     * 查询启用记录
      * @param request
      * @return
      */
-    @GetMapping("fetchOrderListByUserId")
-    public JsonResult fetchOrderListByUserId( HttpServletRequest request){
+    @GetMapping("findStartProjectRecord")
+    public JsonResult findStartProjectRecord(HttpServletRequest request){
+
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
         String cid = request.getParameter("cid");
-        String code = CookieUtils.getCookieValue(request, "code", true);
-        String shopId = CookieUtils.getCookieValue(request, "shopid", true);
-        List list = frCustomerCourseProjectService.getOrderListByCid(shopId, code, cid);
+        List<Map<String, Object>> list = frCustomerCourseProjectService.findStartProjectRecord(shopId, cid, code);
         return JsonResult.success(list);
     }
 
@@ -91,14 +107,30 @@ public class FrCustomerCourseProjectController {
      */
     @PostMapping("customerStar")
     public JsonResult starCustomer(@RequestBody Map<String, String> map,HttpServletRequest request){
-        String orderId = map.get("orderId");
-        String cid = map.get("cid");
-        String name = CookieUtils.getCookieValue(request, "name", true);
-        String code = CookieUtils.getCookieValue(request, "code", true);
-        AddProject addProject = frCustomerCourseProjectService.starCustomer(orderId, cid, name, code);
-        return JsonResult.success(addProject);
+
+        try {
+            frCustomerCourseProjectService.starCustomer(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+        return JsonResult.success(null);
     }
 
+
+    /**
+     * 查询补余记录
+     * @param request
+     * @return
+     */
+    @GetMapping("findCustomerRemnantRecord")
+    public JsonResult findCustomerRemnantRecord(HttpServletRequest request){
+
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String cid = request.getParameter("cid");
+        List<Map<String, Object>> list = frCustomerCourseProjectService.findCustomerRemnantRecord(shopId, cid, code);
+        return JsonResult.success(list);
+    }
 
     /**
      * 补余
@@ -107,12 +139,29 @@ public class FrCustomerCourseProjectController {
      */
     @PostMapping("customerRemnant")
     public JsonResult customerRemnant(@RequestBody Map<String, String> map, HttpServletRequest request){
-        String orderId = map.get("orderId");
-        String cid = map.get("cid");
-        String name = CookieUtils.getCookieValue(request, "name", true);
-        String code = CookieUtils.getCookieValue(request, "code", true);
-        ProjectOrder projectOrder = frCustomerCourseProjectService.customerRemnant(orderId, cid, name, code);
-        return JsonResult.success(projectOrder);
+
+        try {
+            frCustomerCourseProjectService.customerRemnant(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
+
+        return JsonResult.success(null);
+    }
+
+    /**
+     * 查询补余记录
+     * @param request
+     * @return
+     */
+    @GetMapping("findCustomerExtensionRecord")
+    public JsonResult findCustomerExtensionRecord(HttpServletRequest request){
+
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String cid = request.getParameter("cid");
+        List<Map<String, Object>> list = frCustomerCourseProjectService.findCustomerExtensionRecord(shopId, cid, code);
+        return JsonResult.success(list);
     }
 
     /**
@@ -122,13 +171,8 @@ public class FrCustomerCourseProjectController {
      */
     @PostMapping("customerExtension")
     public JsonResult customerExtension(@RequestBody Map<String, String> map, HttpServletRequest request){
-        String orderId = map.get("orderId");
-        String useful = map.get("useful");
-        String flag = map.get("flag");
-        String cid = map.get("cid");
-        String name = CookieUtils.getCookieValue(request, "name", true);
-        String code = CookieUtils.getCookieValue(request, "code", true);
-        AddProject projectOrder = frCustomerCourseProjectService.customerExtension(orderId, useful, flag, cid, name, code);
+
+        AddProject projectOrder = frCustomerCourseProjectService.customerExtension(map);
         return JsonResult.success(projectOrder);
     }
 
@@ -140,11 +184,12 @@ public class FrCustomerCourseProjectController {
      */
     @PostMapping("customerTransfer")
     public JsonResult setReturnAddProject(@RequestBody Map<String, String> map, HttpServletRequest request){
-        //String cid = map.get("cid");
-        String name = CookieUtils.getCookieValue(request, "name", true);
-        String shopid = CookieUtils.getCookieValue(request, "shopid", true);
-       // String code = CookieUtils.getCookieValue(request, "code", true);
-        frCustomerCourseProjectService.setTurnProject(map, name,shopid);
+
+        try {
+            frCustomerCourseProjectService.setTurnProject(map);
+        } catch (Exception e) {
+            return JsonResult.failMessage(e.getMessage());
+        }
         return JsonResult.success(map);
     }
 
@@ -157,9 +202,9 @@ public class FrCustomerCourseProjectController {
     @PostMapping("customerReturnMoney")
     public JsonResult customerReturnMoney(@RequestBody Map<String, String> map, HttpServletRequest request){
        // String cid = map.get("cid");
-        String name = CookieUtils.getCookieValue(request, "name", true);
+       // String name = CookieUtils.getCookieValue(request, "name", true);
 
-        frCustomerCourseProjectService.setReturnAddProject(map, name);
+        frCustomerCourseProjectService.setReturnAddProject(map);
         return JsonResult.success(map);
     }
 
@@ -171,8 +216,9 @@ public class FrCustomerCourseProjectController {
     @GetMapping("returnAddProjects")
     public JsonResult getListReturnAddProject( HttpServletRequest request){
         String cid = request.getParameter("cid");
-       // String cid = CookieUtils.getCookieValue(request, "cid", true);
-        List<ReturnAddProject> returnAddProjects = frCustomerCourseProjectService.getListReturnAddProject(cid);
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        List<ReturnAddProject> returnAddProjects = frCustomerCourseProjectService.getListReturnAddProject(shopId, cid, code);
         return JsonResult.success(returnAddProjects);
     }
 
@@ -185,7 +231,9 @@ public class FrCustomerCourseProjectController {
     @GetMapping("turnProjects")
     public JsonResult getListTurnProject( HttpServletRequest request){
         String cid = request.getParameter("cid");
-        List<TurnProject> turnProjects = frCustomerCourseProjectService.getListTurnProject(cid);
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        List<TurnProject> turnProjects = frCustomerCourseProjectService.getListTurnProject(shopId, cid, code);
         return JsonResult.success(turnProjects);
     }
 
@@ -208,21 +256,71 @@ public class FrCustomerCourseProjectController {
      * @return
      */
     @GetMapping("list")
-    public JsonResult getCourseList(HttpServletRequest request){
+    public JsonResult getProjectList(HttpServletRequest request){
 
         String cid = request.getParameter("cid");
         String type = request.getParameter("type");
         String status = request.getParameter("status");
-        String shopName = request.getParameter("shopName");
+        String shopId = request.getParameter("shopId");
         String timeType = request.getParameter("timeType");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
         String name = request.getParameter("name");
         String orderType = request.getParameter("orderType");
         String code = CookieUtils.getCookieValue(request, "code", true);
-        List list = frCustomerCourseProjectService.getCourseList(type,status,shopName,timeType,startDate,endDate,name,code,orderType,cid);
+        List list = frCustomerCourseProjectService.getProjectList(type,status,shopId,timeType,startDate,endDate,name,code,orderType,cid);
         return JsonResult.success(list);
     }
+
+    /**
+     * 查询数组
+     * @param request
+     * @return
+     */
+    @GetMapping("getCourseList")
+    public JsonResult getCourseList(HttpServletRequest request){
+
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String sdaduimId = request.getParameter("sdaduimId");
+        String eduType = request.getParameter("eduType");
+        List<Map<String, Object>> list = frCustomerCourseProjectService.getCourseList(shopId, sdaduimId, code, eduType);
+        return JsonResult.success(list);
+    }
+
+    /**
+     * 查询下拉框list
+     * @param request
+     * @return
+     */
+    @GetMapping("getProjectListSelect")
+    public JsonResult getProjectListSelect(HttpServletRequest request){
+
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String cid = request.getParameter("cid");
+        List<Map<String, Object>> list = frCustomerCourseProjectService.getProjectListSelect(shopId, cid, code);
+        return JsonResult.success(list);
+    }
+
+
+  /**
+     * 查询套餐
+     * @param request
+     * @return
+     */
+    @GetMapping("getCoursePackageCourseId")
+    public JsonResult getCoursePackageCourseId(HttpServletRequest request){
+
+        String shopId = request.getParameter("shopId");
+        String code = request.getParameter("code");
+        String sdaduimId = request.getParameter("sdaduimId");
+        String courseId = request.getParameter("courseId");
+        List<Map<String, Object>> list = frCustomerCourseProjectService.getCoursePackageCourseId(shopId, sdaduimId, code, courseId);
+        return JsonResult.success(list);
+    }
+
+
 
 
 

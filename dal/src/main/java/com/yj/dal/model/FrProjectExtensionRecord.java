@@ -32,6 +32,16 @@ public class FrProjectExtensionRecord extends Model<FrProjectExtensionRecord> {
      */
     @TableId(value = "ID", type = IdType.UUID)
     private String id;
+
+    /**
+     * 用户id
+     */
+    private String clientId;
+    /**
+     * 用户名字
+     */
+    private String clientName;
+
     /**
      * 操作时间
      */
@@ -56,6 +66,10 @@ public class FrProjectExtensionRecord extends Model<FrProjectExtensionRecord> {
      * 延期原因
      */
     private String description;
+    /**
+     * 项目Name
+     */
+    private String courseName;
     /**
      * 开始时间
      */
@@ -86,6 +100,13 @@ public class FrProjectExtensionRecord extends Model<FrProjectExtensionRecord> {
     @TableField("create_user")
     private String createUser;
 
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     public String getCustomerCode() {
         return CustomerCode;
@@ -226,6 +247,22 @@ public class FrProjectExtensionRecord extends Model<FrProjectExtensionRecord> {
     @Override
     protected Serializable pkVal() {
         return this.id;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     @Override

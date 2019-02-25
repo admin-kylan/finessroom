@@ -9,7 +9,7 @@ import java.util.Map;
 public interface IImportExcelService {
 
     /**
-     * 客户信息导入
+     * 现有客户信息导入
      * @param list
      * @return
      */
@@ -21,4 +21,11 @@ public interface IImportExcelService {
      * @return
      */
     JsonResult prospectiveClient(List<Map<String, Object>> list);
+
+    /**
+     * 私教项目导入
+     * @param list
+     * @return
+     */
+    JsonResult personalTrainer(List<Map<String, Object>> list);
 }

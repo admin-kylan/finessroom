@@ -103,7 +103,7 @@ body {
     padding: 4px 8px;
     line-height: 20px;
 }
-
+#newCardCustomers .tableWrap table td input[type="checkbox"],#newCardCustomers .tableWrap table td input[type="radio"]{width: 20px;}
 #newCardCustomers .tableWrap table tbody tr:nth-child(odd) {
     background: #ECECFF;
 
@@ -1552,10 +1552,10 @@ body {
 }
 
 .XFFS-div .TCR-tables-box1T {
-    width: 41.4%;
-    margin-right: 0.6%;
+    width: 41.5%;
+    margin-right: 5px;
 }
-
+.XFFS-div .TCR-tables {padding-right: 20px;}
 .TCR-table-con1-queryT {
     width: 58.8%;
 }

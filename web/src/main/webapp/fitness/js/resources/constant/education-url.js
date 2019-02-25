@@ -56,4 +56,19 @@ const EDUCATION_URL = {
     deleteFreezeClient: '/frEducation/deleteFreezeClient',//删除冻结用户 解冻
     findEduCationInfoById: '/frEducation/findEduCationInfoById',//查询课程信息
     updateEducationInfo: '/frEducation/updateEducationInfo',//更新课程
+    findEduDateByEduId: '/frEducation/findEduDateByEduId',//查询这一周的私教课程时间
 };
+
+const ADMISSION_URl = {
+    versionClient: '/accessInfo/versionClient', //验证会员
+    saveAccessInfo: '/accessInfo/saveAccessInfo',
+    loadAccessInfoList: '/accessInfo/loadAccessInfoList',
+    cancelAccessInfo: '/accessInfo/cancelAccessInfo',
+    outputVerification: '/accessInfo/outputVerification', //出场验证
+    loadOutputInfoList: '/accessInfo/loadOutputInfoList', //出场查询
+    changeHandNum: '/accessInfo/changeHandNum', //出场查询
+    calcNum: '/accessInfo/calcNum',
+    loadCardList: '/accessInfo/loadCardList', //查询卡片list
+    loadCardListOfCardNo: '/accessInfo/loadCardListOfCardNo', //查询卡片list
+    loadInfo: '/accessInfo/loadInfo',
+}

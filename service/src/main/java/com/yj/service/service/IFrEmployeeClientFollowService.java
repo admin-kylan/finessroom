@@ -1,10 +1,13 @@
 package com.yj.service.service;
 
 import com.yj.common.exception.YJException;
+import com.yj.common.result.JsonResult;
 import com.yj.common.util.PageUtil;
 import com.yj.common.util.PageUtils;
 import com.yj.dal.model.FrEmployeeClientFollow;
 import com.yj.service.base.BaseService;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -22,4 +25,8 @@ public interface IFrEmployeeClientFollowService extends BaseService<FrEmployeeCl
     boolean toInsertOrUpdate(FrEmployeeClientFollow frEmployeeClientFollow) throws YJException;
 
     boolean toInertAndUpdatImage(FrEmployeeClientFollow frEmployeeClientFollow, List<String> imageList,String imagePath) throws YJException;
+
+    JsonResult addFollow(List<String> imagesList, HttpServletRequest request, FrEmployeeClientFollow frEmployeeClientFollow);
+
+    JsonResult getFollow(String id);
 }

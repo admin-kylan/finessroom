@@ -49,7 +49,17 @@ public class FrTrainingSeries extends Model<FrTrainingSeries> {
     public List<FrTrainingSeries> getFrTrainingSeries() {
         return frTrainingSeries;
     }
+    //场馆ID
+    @TableField("sdaduim_id")
+    private String sdaduimId;
 
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
     public void setFrTrainingSeries(List<FrTrainingSeries> frTrainingSeries) {
         this.frTrainingSeries = frTrainingSeries;
     }
