@@ -14,7 +14,7 @@ import com.yj.common.util.PublicUtils;
 
 public class HttpTest {
 	
-	
+	final static  String key = "3d8a29c49c36cc2f"; 
 	final static String TEL = "13645945925";  //13645945925 
 	final static String CUSTOMERCODE = "003"; //CustomerCode
 	final static String SHOPID="0";  //ShopId
@@ -131,14 +131,49 @@ public class HttpTest {
 		/**
 		 * 接口3： 票券赠送接口--Post
 		 */
-	   postGiveTicketList();
+	  // postGiveTicketList();
 	   
 	   /**
 		 * 接口5：查看票券使用权益--Get
 		 */
 //	   getSelectTicketEquity();
+		
+//		String sql = "[{ \"ID\":5c418c8876696472,\"TicketSendWhy\":消费推荐,\"Num\":1}]";
+//		System.out.println(  sql.replaceAll("\\\\", ""));
+
+	   
+	   PostTicketListParam postTicketListParam = new PostTicketListParam();
+	   postTicketListParam.setCustomerCode("003");
+	   postTicketListParam.setShopId("0");
+	   postTicketListParam.setSdaduimId("11d10a835160cfe3");//1124fdf37cee9191  10c05bec9a74681f
+	   postTicketListParam.setPrice("100");
+	   postTicketListParam.setTel("13645945925");
+	   postTicketListParam.setType("0");;
+	   postTicketList(postTicketListParam);
+
 	}
 
+	
+	
+	public static void postTicketList(PostTicketListParam postTicketListParam) {
+		String  sign = PublicUtils.cryptMD5_Double(key.concat(postTicketListParam.getCustomerCode().concat("&")
+					.concat(postTicketListParam.getShopId())).concat("&").concat(postTicketListParam.getSdaduimId())
+				.concat("&").concat(postTicketListParam.getTel()).concat(key));
+		HashMap<String ,String> mapParams = new HashMap<String ,String>();
+		mapParams.put("Sign", sign);
+		mapParams.put("CustomerCode", postTicketListParam.getCustomerCode());
+		mapParams.put("ShopId", postTicketListParam.getShopId());
+		mapParams.put("SdaduimId", postTicketListParam.getSdaduimId());
+		mapParams.put("Tel", postTicketListParam.getTel());
+		mapParams.put("Type", postTicketListParam.getType());
+		mapParams.put("Price", postTicketListParam.getPrice());
+		uri = "/TicketSale/PostTicketList";
+		System.out.println("mapParams>>>"+mapParams);
+		String resultStr  = HttpUtils.doPost(getUrl(uri), mapParams);
+		System.out.println(resultStr);
+	 ///	return JSONObject.parseObject(resultStr,  Map.class);
+		
+	}
 	
 	
 	/**
@@ -254,8 +289,9 @@ public class HttpTest {
 		mapParams = new HashMap<String ,String>();
 		mapParams.put("Sign", CUSTOMERCODE_TEL_SGIN);
 		mapParams.put("data", JSONObject.toJSONString(dataParams));
+		System.out.println("mapParams>>>"+mapParams);
 		uri = "/TicketSale/PostGiveTicketList";
-		System.out.println(HttpUtils.doPost(getUrl(uri), mapParams));
+		//System.out.println(HttpUtils.doPost(getUrl(uri), mapParams));
 		System.out.println("---------------票券赠送接口--Post----------------------------end"); 
 		// {"Code":"1","Msg":"赠送成功"}
 
@@ -297,13 +333,16 @@ public class HttpTest {
 		HashMap<String ,String> mapParams = new HashMap<String ,String>();
 
 		uri = "/TicketList/GetSelectTicketEquity";
-		String id ="5c418c8876696472";
+		String id ="5c418c88a3560119";
 		String  id_sign = crypt(crypt("3d8a29c49c36cc2f"+id+"3d8a29c49c36cc2f"));
 		mapParams = new HashMap<String ,String>();
 		mapParams.put("ID", id);
 		mapParams.put("Sign", id_sign);
 		System.out.println("---------------- 接口5：查看票券使用权益--Get---------------------------");
 		System.out.println(HttpUtils.doGet(getUrl(uri), mapParams));
+		
+		//JSONObject jsonoObj =  JSONObject.parseObject(HttpUtils.doGet(getUrl(uri), mapParams));
+		//jsonoObj.getJSONArray(data)
 		
 	}
 	

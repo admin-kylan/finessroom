@@ -8,7 +8,7 @@ body {
 #customerMembershipCard {
     padding: 0px
 }
-
+.pointer{cursor: pointer;}
 /* 会员卡列表 */
 #customerMembershipCard .tableWrap table {
     border-collapse: collapse;
@@ -25,7 +25,7 @@ body {
 
 #customerMembershipCard .tableWrap table thead tr td {
     color: #000;
-    border-bottom: none;
+    border: none;
 }
 
 #customerMembershipCard .tableWrap table td img {
@@ -946,7 +946,6 @@ body {
 .LiIndexOffer .newCustomers_maskLayer_box_shen {
     padding: 10px 0;
 }
-
 .LiIndexOffer .maskLayerAlert_box_alert2 .maskLayerAlert {
     padding: 10px;
 }
@@ -2994,7 +2993,8 @@ body {
 }
 
 #TransferOperation .newCustomers_maskLayer_box_shen>div span {
-    float: left;
+    float: left;    width: 90px;
+    text-align: right;
 }
 
 #TransferOperation .newCustomers_maskLayer_box_shen>div strong {
@@ -3938,7 +3938,7 @@ body {
 /*===============================================================================*/
 .performance .newCustomers_maskLayer_box {
     top: 20%;
-    max-width: 600px;
+    max-width: 800px;
     position: relative;
     margin: 0 auto;
     left: 0;
@@ -4754,7 +4754,7 @@ body {
 }
 .JZ-QK-con {
     border: 1px dashed #f2f2f2!important;
-    line-height: 70px;
+    line-height: 35px;
     padding-left: 20px;
 }
 .JZ-DJ-con {
@@ -4762,7 +4762,7 @@ body {
 }
 .JZ-DJ-con label {
     font-weight: 400!important;
-    line-height: 70px!important;
+    line-height: 35px!important;
     margin-right: 15px!important;
     margin-bottom: 0!important;
 }
@@ -4874,7 +4874,7 @@ body {
     box-sizing: border-box;
 }
 .XFFS-div .TCR-tables-box4 {
-    width: 19.5%;
+    width: 17.5%;
     margin-right: 5px;
     padding-top: 10px;
     border: 1px dashed #e4e4e4;

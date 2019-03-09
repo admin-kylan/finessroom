@@ -33,7 +33,7 @@
 								<div>证件地址</div>
 								<div>家庭地址</div>
 								<div>电子邮件</div>
-								<div style="line-height: 25<br />0px;">了解渠道资料来源</div>
+								<div style="line-height: 250px;">了解渠道资料来源</div>
 								<div>公司名称</div>
 								<div>职务名称</div>
 								<div>公司地址</div>
@@ -42,7 +42,7 @@
 							</div>
 							<div>
 								<div><input type="text" placeholder="填写会员姓名" v-model="customerData.base.clientName"> </div>
-								<div><input type="text" placeholder="填写手机号码" v-model="customerData.base.mobile"> </div>
+								<div><input type="text" placeholder="填写手机号码" v-model="customerData.base.mobile" @change="getUserByMobile(customerData.base.mobile)"> </div>
 								<div><input type="text" placeholder="填写微信" v-model="customerData.base.wechat"> </div>
 								<div><input type="text" placeholder="身高" v-model="customerData.base.stature"
 											onkeyup="
@@ -267,8 +267,8 @@
 										</div>
 										<!--<div><input type="date" v-model="customerData.base.buildDate"></div>-->
 										<div><input type="text" class="jeinput buildDate"   v-model="customerData.base.buildDate" readonly/></div>
-										<div><input type="text" placeholder="填写推荐人电话" v-model="customerData.base.referenceTel"></div>
-										<div><input type="text" placeholder="填写推荐人姓名" v-model="customerData.base.referenceName"></div>
+										<div><input type="text" placeholder="填写推荐人电话" v-model="customerData.base.referenceTel" @change="getUserData(customerData.base.referenceTel)"></div>
+										<div><input type="text" placeholder="填写推荐人姓名" id="name" v-model="customerData.base.referenceName"></div>
 										<div><textarea name=""  v-model="customerData.base.cautionQuestion"></textarea></div>
 										<div><textarea name=""  style="    min-height: 32px;
     height: 32px;" v-model="customerData.base.note"></textarea></div>
@@ -289,9 +289,10 @@
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/loading.js"></script>
 <script src="../js/vue.js"></script>
 <script src="../js/jedate.js"></script>
-<script src="../js/loading.js"></script>
+
 <script src="../js/axios.min.js"></script>
 <script src="../js/jquery-confirm.js"></script>
 <script src="../js/jquery.cookie.js"></script>

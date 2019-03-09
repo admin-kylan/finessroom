@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yj.common.util.PageUtil;
 import com.yj.dal.model.FrCard;
+import com.yj.dal.param.ExistenceFilterParam;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -81,6 +81,9 @@ const ncapp = new Vue({
         //选中的卡系列
         storeSelected:[],
     },
+    created:function() {
+        that[queryShopList] ();
+    },
     methods: {
         /**
          * 查询门店列表及包含卡种
@@ -309,3 +312,4 @@ const ncapp = new Vue({
 ncapp.querySalespersonList();
 ncapp.queryShopList();
 ncapp.queryStoreList();
+ncapp.setCookie();

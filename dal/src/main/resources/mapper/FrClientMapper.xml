@@ -753,6 +753,223 @@
         </where>
     </select>
 
+    <!--查询潜在客户列表 后台设置导出用-->
+    <select id="selectPotentialListBG" resultType="com.yj.dal.dto.ProspectiveClientDTO">
+        select
+        id,
+        pic_link picLink,
+        client_name clientName,
+        sex,
+        mobile,
+        source_id sourceId,
+        contactCount,
+        create_time createTime,
+        build_date buildDate,
+        follow_time followTime,
+        next_follow_time nextFollowTime,
+        plan_follow_time planFollowTime,
+        plan_visit_time planVisitTime,
+        visiting_time visitingTime,
+        plan_purchase_time planPurchaseTime,
+        reference_name referenceName,
+        fwhj_name fwhjName,
+        consultant_id consultantId,
+        consultant_name consultantName,
+        personalId,
+        followName ,
+        update_user_id updateUserId,
+        update_user_name updateUserName,
+        willing_price willingPrice,
+        willing_card_type willingCardType,
+        wechat,
+        vip_level vipLevel,
+        purchase_will purchaseWill,
+        customer_source customerSource,
+        presale_status presaleStatus,
+        isReferrer,
+        shopName
+        from (
+        SELECT
+        cl.id,
+        fcpi.pic_link,
+        cl.client_name,
+        cl.sex,
+        cl.mobile,
+        cl.source_id,
+        cl.presale_status,
+        ISNULL(tcc.contactCount,0) contactCount,
+        cl.create_time,
+        cl.build_date,
+        fof.follow_time,
+        fof.next_follow_time,
+        fof.plan_follow_time,
+        fof.plan_visit_time,
+        vi.visiting_time,
+        fof.plan_purchase_time,
+        cl.reference_name,
+        (CASE WHEN isnull(cl.reference_name,0)!='0' THEN 1 ELSE 0 END) isReferrer,
+        cl.fwhj_name,
+        pi2.ID consultant_id,
+        pi2.RelName consultant_name,
+        fof.personalId,
+        fof.personalName followName,
+        cl.update_user_id,
+        cl.update_user_name,
+        pi.id consultantId,
+        pi.RelName,
+        cl.willing_price,
+        cl.willing_card_type,
+        cl.wechat,
+        cl.vip_level,
+        cl.purchase_will,
+        cl.customer_source,
+        s.ShopName shopName
+        FROM
+        fr_client cl
+        <!--关联潜在客户图片表-->
+        LEFT JOIN fr_client_pic fcpi ON fcpi.client_id = cl.id AND fcpi.pic_state = 1 AND fcpi.pic_type = 1
+        <!--关联潜在客户关系表-->
+        JOIN fr_client_latence_personal fcp ON fcp.client_id = cl.id
+        <!--潜在客户是否需要根据门店筛选-->
+        AND fcp.shop_id = #{shopId}
+        AND fcp.CustomerCode = #{customerCode}
+        AND fcp.is_using = 1
+        AND cl.is_using = 1
+        <!--关联员工表-->
+        LEFT JOIN PersonnelInfo pi on pi.ID = fcp.personal_id AND pi.Status = 0
+        <!--关联员工表 查询销售顾问-->
+        LEFT JOIN PersonnelInfo pi2 on pi2.ID = cl.consultant_id AND pi.Status = 0
+        LEFT JOIN Shop s on s.id = fcp.shop_id
+        <!--关联潜在客户跟进记录表-->
+
+        LEFT JOIN (
+        SELECT
+        client_id,
+        COUNT(1) contactCount
+        FROM
+        fr_latence_follow
+        WHERE
+        is_using = 1
+        AND CustomerCode = #{customerCode}
+        AND shop_id = #{shopId}
+        GROUP BY
+        client_id
+        ) tcc on tcc.client_id = cl.id
+        <!--关联最近跟进记录-->
+        LEFT JOIN (
+        SELECT
+        top 1 flf.client_id,
+        flf.follow_time,
+        flf.next_follow_time,
+        flf.plan_visit_time,
+        flf.plan_follow_time,
+        flf.plan_purchase_time,
+        pi.id personalId,
+        pi.RelName personalName
+        FROM
+        fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode}
+        WHERE flf.create_time = (select max(create_time) from fr_latence_follow flf
+        LEFT JOIN PersonnelInfo pi ON flf.personal_id = pi.id
+        AND pi.CustomerCode = #{customerCode})
+        ) fof on fof.client_id = cl.id
+        <!--关联最近访问时间-->
+        LEFT JOIN (
+        SELECT
+        top 1
+        fcv.client_id,
+        fcv.visiting_time
+        FROM
+        fr_client_visiting fcv
+        where fcv.create_time=(select max(create_time) from fr_client_visiting)
+        ) vi on vi.client_id = cl.id) tt
+        <where>
+            <!-- 根据客户等级筛选 -->
+            <if test="customerLevel != null">
+                and vip_level = #{customerLevel}
+            </if>
+            <!-- 根据购买意向筛选 -->
+            <if test="purchaseWill != null">
+                and purchase_will = #{purchaseWill}
+            </if>
+            <!-- 根据来源id筛选 -->
+            <if test="sourceId != null and sourceId != ''">
+                and source_id = #{sourceId}
+            </if>
+            <!-- 根据是否有推荐人筛选 -->
+            <if test="isReferrer != null">
+                and isReferrer = #{isReferrer}
+            </if>
+            <!-- 根据预售筛选 -->
+            <if test="presaleStatus != null and presaleStatus != ''">
+                and presale_status = #{presaleStatus}
+            </if>
+            <!-- 根据销售顾问/教练名字筛选 -->
+            <if test="consultantName != null and consultantName != ''">
+                and consultant_name like '%'+#{consultantName}+'%'
+            </if>
+            <!-- 根据操作人筛选 -->
+            <if test="updateUserName != null and updateUserName != ''">
+                and update_user_name like '%'+#{updateUserName}+'%'
+            </if>
+            <if test="dateType !=null">
+                <!-- 判断日期类型 -->
+                <choose>
+                    <when test="dateType == '0'.toString()">
+                        <!-- 下次根进 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND next_follow_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '1'.toString()">
+                        <!-- 计划来访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND plan_visit_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '2'.toString()">
+                        <!-- 实际来访 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND visiting_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '3'.toString()">
+                        <!-- 计划购买 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND plan_purchase_time BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '4'.toString()">
+                        <!-- 建档日期 -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                            AND build_date BETWEEN #{startTime} AND (#{endTime}+' 23:59:59')
+                        </if>
+                    </when>
+                    <when test="dateType == '5'.toString()">
+                        <!-- 客户认领 todo -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                        </if>
+                    </when>
+                    <when test="dateType == '6'.toString()">
+                        <!-- 客户分配 todo -->
+                        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+
+                        </if>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyword != null ">
+                and client_name LIKE '%'+#{keyword}+'%'
+                OR mobile LIKE '%'+#{keyword}+'%'
+            </if>
+        </where>
+    </select>
+
+
     <update id="updateClient" parameterType="com.yj.dal.model.FrClient">
         update fr_client
         <set>

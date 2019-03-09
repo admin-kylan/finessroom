@@ -332,8 +332,8 @@
         (SELECT t.used_num FROM fr_card_original_set t WHERE t.card_id = a.id) userdNum,
         (SELECT t.stop_num FROM fr_card_original_set t WHERE t.card_id = a.id) stopNum,
         (SELECT t.stop_days FROM fr_card_original_set t WHERE t.card_id = a.id) stopDays,
-        (SELECT p.client_name FROM fr_client p WHERE p.id = a.client_id) clientName,
-        (SELECT p.mobile FROM fr_client p WHERE p.id = a.client_id) mobile,
+       /* (SELECT p.client_name FROM fr_client p WHERE p.id = a.client_id) clientName, */
+       /* (SELECT p.mobile FROM fr_client p WHERE p.id = a.client_id) mobile, */
         ( CASE
         WHEN a.status =0 THEN '正常'
         WHEN a.status =1  THEN '停卡'
@@ -361,13 +361,23 @@
         (SELECT c.card_no FROM fr_card c WHERE c.id =
                (SELECT b.ori_card_id FROM fr_card_supply_record b
                      WHERE a.id = b.new_card_id and b.type = 2 and b.order_state !=2)) oldCardNo,
+    	p.client_name  clientName,
+		p.mobile  mobile,
         <include refid="Base_Column_List_Frcard"/>
         FROM fr_card a
+        left join  fr_client p on   p.id = a.client_id
         WHERE a.CustomerCode = #{CustomerCode}
         <include refid="query_where_sql"/>
         <if test="status == 100">
             AND  a.status != 6
         </if>
+        <if test="clientName != null and clientName != ''">
+            AND  p.client_name =#{clientName}
+        </if>
+         <if test="mobile != null and mobile != ''">
+            AND  p.mobile =#{mobile}
+        </if>
+        
         ORDER BY  a.update_time DESC
     </select>
 

@@ -182,7 +182,7 @@
         el: '#course-new-buy-head',
         data: {
             shopList: [], //门店列表
-            shopId: '', //门店Id
+            shopId: $.cookie('shopid'), //门店Id
             shopName: '', //门店Id
             agreementError: {
                 msg: '',
@@ -284,6 +284,7 @@
             },
             sdaduimId(val){//根据场馆id选择销售id,类型
 
+
                 if(val == ""){
                     this.sdaduimName = '';
                     this.sdaduimTypeResult = this.sdaduimType.other;
@@ -371,9 +372,9 @@
                     if (response.code === '200') {
                         data = response.data.data;
                         $.each(data, (i, d) => {
-                            if (i == 0) {
-                                this.shopId = d.id;
-                            }
+                            // if (i == 0) {
+                            //     this.shopId = d.id;
+                            // }
                             obj.shopName = d.shopName;
                             obj.id = d.id;
                             this.shopList.push(obj);

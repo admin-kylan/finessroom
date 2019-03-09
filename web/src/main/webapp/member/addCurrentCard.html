@@ -282,6 +282,7 @@
                     function(res) {
                         if(res.code == '200') {
                             that.name = res.data.cardTypeName;
+                            res.data.serviceLife=res.data.serviceLife.replace(",","")
                             Loading.prototype.hide();
                         } else {
                             alert(res.msg);

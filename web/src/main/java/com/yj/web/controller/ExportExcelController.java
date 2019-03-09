@@ -1,24 +1,27 @@
 package com.yj.web.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.yj.common.exception.YJException;
 import com.yj.common.result.JsonResult;
-import com.yj.common.util.ExportExcel;
-import com.yj.common.util.PageUtils;
-import com.yj.common.util.UUIDUtils;
+import com.yj.common.util.*;
+import com.yj.dal.dao.FrCardMapper;
+import com.yj.dal.dao.FrClientMapper;
 import com.yj.dal.dto.*;
+import com.yj.dal.model.FrCard;
 import com.yj.dal.model.FrClientArchivesRelate;
-import com.yj.dal.param.MyPotentialFilterParam;
+import com.yj.dal.param.*;
+import com.yj.service.service.IFrClientArchivesRelateService;
 import com.yj.service.service.IFrClientService;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Excel导出
@@ -29,13 +32,33 @@ public class ExportExcelController {
     @Autowired
     IFrClientService frClientService;
 
+    @Autowired
+    IFrClientArchivesRelateService frClientArchivesRelateService;
+
+    @Autowired
+    FrCardMapper frCardMapper;
+
+    @Autowired
+    FrClientMapper frClientMapper;
+
     /**
-     * 现有会员数据模板
-     *
+     * 现有会员数据导出
+     * parmas isNull = 0 导出数据 = 1下载模板
      * @return
      */
     @GetMapping("client_upload")
-    public JsonResult clientUpload(@RequestBody List<ClientUploadDTO> param) {
+    public void clientUpload(String page,String limit,HttpServletResponse response, HttpServletRequest request,Integer isNull) throws YJException {
+        List<ClientUploadDTO> list = new ArrayList<>();
+        if(isNull == 0){
+            String code = CookieUtils.getCookieValue(request, "code", true);
+            FrCard frCard = new FrCard();
+            frCard.setCustomerCode(code);
+            Map<String, Object> map = new HashMap<>();
+            map.put("page", page);
+            map.put("limit", limit);
+            Page pages = new Query<ClientUploadDTO>(map).getPage();
+            list = frCardMapper.queryUserCardInfoListBG(pages, frCard);
+        }
         ExportExcel<ClientUploadDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"门店名称", "姓名", "性别", "生日", "手机号码", "卡号"
@@ -46,70 +69,58 @@ public class ExportExcelController {
                         , "备注", "操作时间", "操作人", "协议编号", "增购父卡号"
                         , "储值", "会员等级", "开始停卡时间", "结束停卡时间", "付款类型", "停卡收费", "停卡原因", "外部卡号"
                 };
-        OutputStream out = null;
         try {
-            String path = "D:/finessroomExcel/clientUpload/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("D:/finessroomExcel/clientUpload");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            out = new FileOutputStream(path);
-            if (param == null) {
-                List list = new ArrayList();
-                ex.exportExcel(headers, list, out);
-                out.close();
-                return JsonResult.successMessage("导出模板成功,路径为:" + path);
-            }
-            ex.exportExcel(headers, param, out);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出数据成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-
         }
-        return JsonResult.failMessage("导出失败!");
     }
 
-
     /**
-     * 潜在客户数据模板
+     * 潜在客户数据导出
      *
      * @return
      */
     @GetMapping("prospective_client")
-    public JsonResult prospectiveClient(@RequestBody List<ProspectiveClientDTO> param) {
+    public void prospectiveClient(String page, String limit, PotentialFilterParam params, HttpServletResponse response, HttpServletRequest request,Integer isNull) throws YJException  {
+        List<ProspectiveClientDTO> list =  new ArrayList<>();
+       if(isNull == 0){
+           Map<String, Object> map = new HashMap<>();
+           map.put("page", page);
+           map.put("limit", limit);
+           Page pages = new Query<ProspectiveClientDTO>(map).getPage();
+           list = frClientMapper.selectPotentialListBG(pages,params);
+       }
         ExportExcel<ProspectiveClientDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"门店名称", "姓名", "性别", "生日", "手机号码"
                         , "销售员", "备注", "操作时间", "操作人"
                 };
-        OutputStream out = null;
         try {
-            String path = "E:/finessroomExcel/prospectiveClient/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("E:/finessroomExcel/prospectiveClient");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            if (param == null) {
-                List list = new ArrayList();
-                ex.exportExcel(headers, list, out);
-                out.close();
-                return JsonResult.successMessage("导出模板成功,路径为:" + path);
-            }
-            ex.exportExcel(headers, param, out);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出数据成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-
         }
-        return JsonResult.failMessage("导出失败!");
     }
 
     /**
@@ -118,7 +129,8 @@ public class ExportExcelController {
      * @return
      */
     @GetMapping("personal_trainer")
-    public JsonResult personalTrainer() {
+    public void personalTrainer(HttpServletResponse response, HttpServletRequest request) {
+        List list = new ArrayList();
         ExportExcel<MyPotentialClientDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"门店", "场馆", "项目名称", "私教课销售员", "上课教练"
@@ -127,33 +139,26 @@ public class ExportExcelController {
                         , "销售类型", "开始时间", "结束时间", "协议编号", "操作人"
                         , "操作时间"
                 };
-        OutputStream out = null;
         try {
-            String path = "D:/finessroomExcel/personalTrainer/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("D:/finessroomExcel/personalTrainer");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-
-            List list = new ArrayList();
-            out = new FileOutputStream(path);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
             ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出模板成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-
         }
-        return JsonResult.failMessage("导出失败!");
     }
-
     /**
      * 导出我的潜在客户
      *
-     * @param param
+     * @param
      * @return
      */
     @PostMapping("/myPotential")
@@ -171,41 +176,37 @@ public class ExportExcelController {
                         , "最近来访时间", "购买意向", "服务会籍", "跟进人", "首次跟进时间"
                         , "最近跟进时间", "跟进内容", "意向卡类别", "意向卡名称", "意向卡价格"
                 };
-//        OutputStream out=null;
         try {
-//            List<MyPotentialClientDTO> param = new ArrayList<>();
             request.setCharacterEncoding("UTF-8");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/x-download");
-//            String path = "D:/finessroomExcel/myPotential/" + UUIDUtils.generateGUID() + ".xls";
-//            File file = new File("D:/finessroomExcel/myPotential");
             String filedisplay = UUIDUtils.generateGUID() + ".xls";
             response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
-//            if (!file.isDirectory()) {
-//                file.mkdirs();
-//            }
             OutputStream out = response.getOutputStream();
             ex.exportExcel(headers, list, out);
             out.close();
-//            return JsonResult.successMessage("导出成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-
         }
-//        return JsonResult.failMessage("导出失败");
     }
 
     /**
      * 导出我的现有客户
      *
-     * @param param
+     * @param page
      * @return
      */
     @PostMapping("/myCustomer")
-    public JsonResult myCustomer(@RequestBody List<MyExistenceClientDTO> param) {
+    public void myCustomer(String page, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        MyExistenceFilterParam param = new MyExistenceFilterParam();
+        param.setLimit("10");
+        param.setPage(page);
+        PageUtils pageUtils = frClientService.selectMyExistenceList(param);
+        List<MyExistenceClientDTO> list = (List<MyExistenceClientDTO>) pageUtils.getList();
+
         ExportExcel<MyExistenceClientDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"会员姓名", "客户等级", "性别", "联系方式", "微信"
@@ -214,31 +215,37 @@ public class ExportExcelController {
                         , "最近跟进时间", "跟进记录"
                 };
         try {
-            String path = "D:/finessroomExcel/myCustomer/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("D:/finessroomExcel/myCustomer");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            OutputStream out = new FileOutputStream(path);
-            ex.exportExcel(headers, param, out);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
         }
-        return JsonResult.failMessage("导出失败");
     }
 
     /**
-     * 导出可认领客户
+     * 导出潜在可认领客户
      *
-     * @param param
+     * @param page
      * @return
      */
     @PostMapping("/claimingPotential")
-    public JsonResult claimingPotential(@RequestBody List<CollarClientDTO> param) {
+    public void claimingPotential(String page, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        CollarClientParam param = new CollarClientParam();
+        param.setLimit("10");
+        param.setPage(page);
+        PageUtils pageUtils = frClientService.selectCollarList(param);
+        List<CollarClientDTO> list = (List<CollarClientDTO>) pageUtils.getList();
+
+
         ExportExcel<CollarClientDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"姓名", "性别", "联系方式", "建档时间", "最近跟进日期"
@@ -246,31 +253,71 @@ public class ExportExcelController {
                         , "多少天无人跟进", "销售顾问", "服务会籍"
                 };
         try {
-            String path = "D:/finessroomExcel/claimingPotential/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("D:/finessroomExcel/claimingPotential");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            OutputStream out = new FileOutputStream(path);
-            ex.exportExcel(headers, param, out);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
         }
-        return JsonResult.failMessage("导出失败");
+    }
+
+    /**
+     * 导出现有可认领客户
+     *
+     * @param page
+     * @return
+     */
+    @PostMapping("/claimingExisting")
+    public void claimingExisting(String page, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        CollarClientParam param = new CollarClientParam();
+        param.setLimit("10");
+        param.setPage(page);
+        PageUtils pageUtils = frClientService.selectExistingList(param);
+        List<CollarClientDTO> list = (List<CollarClientDTO>) pageUtils.getList();
+        ExportExcel<CollarClientDTO> ex = new ExportExcel<>();
+        String[] headers =
+                {"姓名", "性别", "联系方式", "建档时间", "最近跟进日期"
+                        , "手动跟进次数", "自动跟进次数", "跟进内容"
+                        , "多少天无人跟进", "销售顾问", "服务会籍"
+                };
+        try {
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
     }
 
     /**
      * 导出客户分配
      *
-     * @param param
+     * @param page
      * @return
      */
     @PostMapping("/customerAllocation")
-    public JsonResult customerAllocation(@RequestBody List<CustomerAllocationDTO> param) {
+    public void customerAllocation(String page, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        CollarClientParam param = new CollarClientParam();
+        param.setLimit("10");
+        param.setPage(page);
+        PageUtils pageUtils = frClientService.selectClientAllot(param);
+        List<CustomerAllocationDTO> list = (List<CustomerAllocationDTO>) pageUtils.getList();
         ExportExcel<CustomerAllocationDTO> ex = new ExportExcel<>();
         String[] headers =
                 {"客户类型", "姓名", "性别", "联系方式", "建档时间", "最近跟进日期"
@@ -278,33 +325,34 @@ public class ExportExcelController {
                         , "多少天无人跟进", "销售顾问", "服务会籍", "操作人"
                 };
         try {
-            String path = "D:/finessroomExcel/customerAllocation/" + UUIDUtils.generateGUID() + ".xls";
-            File file = new File("D:/finessroomExcel/customerAllocation");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            OutputStream out = new FileOutputStream(path);
-            ex.exportExcel(headers, param, out);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream out = response.getOutputStream();
+            ex.exportExcel(headers, list, out);
             out.close();
-            return JsonResult.successMessage("导出成功,路径为:" + path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
         }
-        return JsonResult.failMessage("导出失败");
     }
 
     /**
      * 导出皮肤档案
      *
-     * @param param
+     * @param
      * @return
      * @throws YJException
      */
     @PostMapping("/getSkin")
-    public JsonResult getSkin(@RequestBody List<FrClientArchivesRelate> param) throws YJException {
-
+    public void getSkin(@DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                              String cid, Integer type, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        ArchivesDTO archivesDTO = frClientArchivesRelateService.getRelate(date, cid, type);
+        List<FrClientArchivesRelate> param = archivesDTO.getFrClientArchivesRelates();
         HSSFWorkbook workbook = new HSSFWorkbook();// 创建一个Excel文件
 
         HSSFSheet sheet = workbook.createSheet("皮肤档案");// 创建一个Excel的Sheet
@@ -497,49 +545,50 @@ public class ExportExcelController {
         HSSFRow row15 = sheet.createRow(14);// 创建第十五行
         HSSFCell column15 = row15.createCell(0);// 创建第一行第一列
         column15.setCellValue(new HSSFRichTextString("面疱原因:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list11.size(); i++) {
             HSSFCell cleN = row15.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list11.get(i).getArchivesTypeContent()));
         }
         HSSFRow row16 = sheet.createRow(15);// 创建第十六行
         HSSFCell column16 = row16.createCell(0);// 创建第一行第一列
         column16.setCellValue(new HSSFRichTextString("黑斑原因:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list12.size(); i++) {
             HSSFCell cleN = row16.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list12.get(i).getArchivesTypeContent()));
         }
         HSSFRow row17 = sheet.createRow(16);// 创建第十七行
         HSSFCell column17 = row17.createCell(0);// 创建第一行第一列
         column17.setCellValue(new HSSFRichTextString("皱纹原因:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list13.size(); i++) {
             HSSFCell cleN = row17.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list13.get(i).getArchivesTypeContent()));
         }
         HSSFRow row18 = sheet.createRow(17);// 创建第十八行
         HSSFCell column18 = row18.createCell(0);// 创建第一行第一列
         column18.setCellValue(new HSSFRichTextString("过敏原因:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list14.size(); i++) {
             HSSFCell cleN = row18.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list14.get(i).getArchivesTypeContent()));
         }
         HSSFRow row19 = sheet.createRow(18);// 创建第十九行
         HSSFCell column19 = row19.createCell(0);// 创建第一行第一列
         column19.setCellValue(new HSSFRichTextString("毛孔粗大原因:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list15.size(); i++) {
             HSSFCell cleN = row19.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list15.get(i).getArchivesTypeContent()));
         }
         HSSFRow row20 = sheet.createRow(19);// 创建第二十行
         HSSFCell column20 = row20.createCell(0);// 创建第一行第一列
         column20.setCellValue(new HSSFRichTextString("维他命需求原因:"));
-        for (int i = 0; i < list10.size(); i++) {
+
+        for (int i = 0; i < list16.size(); i++) {
             HSSFCell cleN = row20.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list16.get(i).getArchivesTypeContent()));
         }
         HSSFRow row21 = sheet.createRow(20);// 创建第二十一行
         HSSFCell column21 = row21.createCell(0);// 创建第一行第一列
         column21.setCellValue(new HSSFRichTextString("过敏史:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list17.size(); i++) {
             HSSFCell cleN = row21.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list17.get(i).getArchivesTypeContent()));
         }
@@ -577,7 +626,7 @@ public class ExportExcelController {
         HSSFRow row27 = sheet.createRow(26);// 创建第二十七行
         HSSFCell column27 = row27.createCell(0);// 创建第一行第一列
         column27.setCellValue(new HSSFRichTextString("皮肤意愿:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list18.size(); i++) {
             HSSFCell cleN = row27.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list18.get(i).getArchivesTypeContent()));
         }
@@ -585,7 +634,7 @@ public class ExportExcelController {
         HSSFRow row28 = sheet.createRow(27);// 创建第二十八行
         HSSFCell column28 = row28.createCell(0);// 创建第一行第一列
         column28.setCellValue(new HSSFRichTextString("身体意愿:"));
-        for (int i = 0; i < list10.size(); i++) {
+        for (int i = 0; i < list19.size(); i++) {
             HSSFCell cleN = row28.createCell(i + 1);
             cleN.setCellValue(new HSSFRichTextString(list19.get(i).getArchivesTypeContent()));
         }
@@ -614,15 +663,13 @@ public class ExportExcelController {
         sheet.autoSizeColumn((short) 2);
         sheet.autoSizeColumn((short) 3);
         sheet.autoSizeColumn((short) 5);
-
-
-        String path = "D:/finessroomExcel/skin/" + UUIDUtils.generateGUID() + ".xls";
         try {
-            File file = new File("D:/finessroomExcel/skin");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            OutputStream ouputStream = new FileOutputStream(path);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream ouputStream = response.getOutputStream();
             workbook.write(ouputStream);
             ouputStream.flush();
             ouputStream.close();
@@ -630,19 +677,21 @@ public class ExportExcelController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return JsonResult.successMessage("导出成功,路径为:" + path);
+
     }
 
     /**
      * 导出头发档案
      *
-     * @param param
+     * @param
      * @return
      * @throws YJException
      */
     @PostMapping("/getHair")
-    public JsonResult getHair(@RequestBody List<FrClientArchivesRelate> param) throws YJException {
-
+    public void getHair(@DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                              String cid, Integer type, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        ArchivesDTO archivesDTO = frClientArchivesRelateService.getRelate(date, cid, type);
+        List<FrClientArchivesRelate> param = archivesDTO.getFrClientArchivesRelates();
         HSSFWorkbook workbook = new HSSFWorkbook();// 创建一个Excel文件
 
         HSSFSheet sheet = workbook.createSheet("头发档案");// 创建一个Excel的Sheet
@@ -832,15 +881,13 @@ public class ExportExcelController {
         sheet.autoSizeColumn((short) 2);
         sheet.autoSizeColumn((short) 3);
         sheet.autoSizeColumn((short) 5);
-
-
-        String path = "D:/finessroomExcel/hair/" + UUIDUtils.generateGUID() + ".xls";
         try {
-            File file = new File("D:/finessroomExcel/hair");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            OutputStream ouputStream = new FileOutputStream(path);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream ouputStream = response.getOutputStream();
             workbook.write(ouputStream);
             ouputStream.flush();
             ouputStream.close();
@@ -848,19 +895,20 @@ public class ExportExcelController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return JsonResult.successMessage("导出成功,路径为:" + path);
     }
 
     /**
      * 导出塑形抗衰
      *
-     * @param param
+     * @param
      * @return
      * @throws YJException
      */
     @PostMapping("/getPlasticity")
-    public JsonResult getPlasticity(@RequestBody List<FrClientArchivesRelate> param) throws YJException {
-
+    public void getPlasticity(@DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                                    String cid, Integer type, HttpServletResponse response, HttpServletRequest request) throws YJException {
+        ArchivesDTO archivesDTO = frClientArchivesRelateService.getRelate(date, cid, type);
+        List<FrClientArchivesRelate> param = archivesDTO.getFrClientArchivesRelates();
         HSSFWorkbook workbook = new HSSFWorkbook();// 创建一个Excel文件
 
         HSSFSheet sheet = workbook.createSheet("塑形抗衰");// 创建一个Excel的Sheet
@@ -1023,14 +1071,13 @@ public class ExportExcelController {
         sheet.autoSizeColumn((short) 3);
         sheet.autoSizeColumn((short) 5);
 
-
-        String path = "D:/finessroomExcel/plasticity/" + UUIDUtils.generateGUID() + ".xls";
         try {
-            File file = new File("D:/finessroomExcel/plasticity");
-            if (!file.isDirectory()) {
-                file.mkdirs();
-            }
-            OutputStream ouputStream = new FileOutputStream(path);
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/x-download");
+            String filedisplay = UUIDUtils.generateGUID() + ".xls";
+            response.setHeader("Content-Disposition", "attachment;filename=" + filedisplay);
+            OutputStream ouputStream = response.getOutputStream();
             workbook.write(ouputStream);
             ouputStream.flush();
             ouputStream.close();
@@ -1038,7 +1085,6 @@ public class ExportExcelController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return JsonResult.successMessage("导出成功,路径为:" + path);
     }
 }
 

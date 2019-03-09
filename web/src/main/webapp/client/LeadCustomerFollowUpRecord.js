@@ -92,7 +92,7 @@ $(document).on('click','#followKeyword .panel_state_content',function(){
     $("#followKeyword").hide();
     var keyId =  $(this).attr("value");
     var t = $(this).find("span").text();
-    LeadCustomerFollowUpRecord.followContentT = t;
+    LeadCustomerFollowUpRecord.followContentT += t;
     LeadCustomerFollowUpRecord.followUpRecordAdd.followContent = keyId;
 });
 
@@ -367,6 +367,10 @@ var LeadCustomerFollowUpRecord = new Vue({
              }
              return isFlage;
         },
+        appendContent(val,keyId){
+    		this.followContentT += val;
+    		this.followUpRecordAdd.followContent = keyId;
+    	},
         //获取关键字列表
         getFollwKeyLis: function () {
             var that = this;
@@ -376,9 +380,12 @@ var LeadCustomerFollowUpRecord = new Vue({
                     if(res.code=='200'){
                         that.followKeywordList = res.data;
                        $('#followKeyword').show();
-                    }else {
-                        alert(res.msg)
+                    }else{
+                       $('#followKeyword').hide();
                     }
+                    $('body').one('click',function(){
+                       $('#followKeyword').hide();
+                    })
                 }
             )
         }

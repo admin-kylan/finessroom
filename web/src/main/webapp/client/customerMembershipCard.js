@@ -91,16 +91,17 @@ var customerMembershipCard = new Vue({
             L7: parseFloat(0).toFixed(2),   //其他
         },
         payModelCount: parseFloat(0).toFixed(0),  //统计支付金额共用
+        ticketPriceList:[],
         ticketPrice: {
             ticketPriceList: [           //选中的会员卡票卷信息    -----------先写死后期动态
-                {"tickNo": 201807246565, "tickName": "抵用券", "tickNum": 10, "differ": 5},
+             /*   {"tickNo": 201807246565, "tickName": "抵用券", "tickNum": 10, "differ": 5},
                 {"tickNo": 201807246158, "tickName": "充值券", "tickNum": 100, "differ": 10},
                 {"tickNo": 201807246158, "tickName": "充值券", "tickNum": 50, "differ": 15},
                 {"tickNo": 201807246158, "tickName": "充值券", "tickNum": 100, "differ": 20},
                 {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 50, "differ": 15},
                 {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 100, "differ": 20},
                 {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 50, "differ": 15},
-                {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 100, "differ": 20},
+                {"tickNo": 201807246158, "tickName": "抵用券", "tickNum": 100, "differ": 20},*/
             ],
             tickMark: '',                 //票劵标记
             ticketPriceListOk: [],        //选中的要使用的票卷信息
@@ -142,7 +143,7 @@ var customerMembershipCard = new Vue({
                 {"vue": 1, "lav": "停卡"},
                 {"vue": 2, "lav": "冻结"},
                 {"vue": 3, "lav": "已过期"},
-                {"vue": 4, "lav": "未开卡"},
+                {"vue": 4, "lav": "开卡"},
                 {"vue": 5, "lav": "待补余"},
                 {"vue": 6, "lav": "历史"}
             ],
@@ -432,7 +433,7 @@ var customerMembershipCard = new Vue({
                 personnelId: '',     //员工Id
                 buyRightsNum: 0,     //购买权益
                 giveRightsNum: 0,    //赠送权益
-                isFlage: '', //是否直接开卡 0，否，1是
+                isFlage: "0", //是否直接开卡 0，否，1是
                 agreementId: '',//编号协议ID
                 agreementNo: '',  //协议编号
                 cardTypeId: '',     //卡类型ID
@@ -635,6 +636,7 @@ var customerMembershipCard = new Vue({
                 refundType: '', //退款类型
             },
         },
+        cardTypeList:[],
     },
     filters: {
         formatDate: function (time, type, typeT) {
@@ -702,10 +704,41 @@ var customerMembershipCard = new Vue({
         }
         that.getCardUserList(1, 10, id);
         that.clientId = id;
+        this.loadData5.addSupply1.personnelId = $.cookie("id")
+        this.loadData6.addRefund.refundUserId = $.cookie("id")
+        this.loadData9.addTranferCar.personnelId = $.cookie("id")
     },
     methods: {
         // 初始函数
         init: function (t) {
+        	//this.loadPostTicketList();
+        },
+        //转让获取票卷
+        loadPostTicketList:function(){
+        	 var that = this;
+        	 console.log("---totalPrice-------------------"+parseFloat(that.payMentMoney.totalPrice).toFixed(2));
+        	 console.log('------------loadPostTicketList----------------');
+        	var params = {
+        			  customerCode:$.cookie("code"),
+        			  shopId:'0', //需要更新
+        			  sdaduimId:'10c05bec9a74681f', //需要根据实际场馆更新
+        			  tel:'13645945925',
+        			  type:'0',//会员不用改
+        			  price:parseFloat(that.payMentMoney.totalPrice).toFixed(2)
+        	}
+        	
+        	  const url = $.stringFormat('{0}/ticket/postTicketList', $.cookie('url'));
+              $.get(url, params, function (res) {
+                  if (res.code === '200') {
+                	  that.ticketPrice.ticketPriceList = res.data.TicketList;
+                	  if(undefined!=this.ticketPrice)
+                	  Vue.set(this.ticketPrice,0,that.ticketPrice);
+                  } else {
+                      //$.alert(jsonData['data']['msg'])
+                  }
+                  //隐藏加载中
+                  Loading.prototype.hide();
+              })
         },
         //会员卡子页面切换
         LI: function (t) {
@@ -739,6 +772,25 @@ var customerMembershipCard = new Vue({
             //初始化支付参数
             that.initPayModel();
             that[methodsName]();
+            that.ticketPrice.ticketPriceList=[];
+        },
+        //获取卡系列
+        getCardType:function(){
+            var that  = this;
+            var url = $.stringFormat('{0}/frCardType/getCardTypeListByCode',$.cookie('url'));
+            axios.get(url)
+                .then(function (res) {
+                    let jsonData = eval(res);
+                    if(jsonData['data']['code']==='200'){
+                        that.cardTypeList = jsonData['data']['data'];
+                    }else {
+                        $.alert(jsonData['data']['msg'])
+                    }
+                })
+                .catch(function (error) {
+                    $.alert("请求发生错误！")
+                    console.log(error);
+                });
         },
         //会员卡列表
         Load0: function () {
@@ -2078,9 +2130,9 @@ var customerMembershipCard = new Vue({
             if (!that.loadData5.addSupply1.oriCardId) {
                 return $.alert("请先选择要补卡的会员卡信息");
             }
-            if (!that.loadData5.addSupply1.externalNo) {
-                return $.alert("外部卡号未填写");
-            }
+            // if (!that.loadData5.addSupply1.externalNo) {
+            //     return $.alert("外部卡号未填写");
+            // }
             that.loadData5.addSupply1.newCardNo = $("#cardSupply").val();
             if (!that.loadData5.addSupply1.newCardNo) {
                 return $.alert("请先随机生成新会员卡号");
@@ -2662,10 +2714,12 @@ var customerMembershipCard = new Vue({
         },
         //添加储值信息
         storageSubVin: function () {
+        	 this.loadPostTicketList();//需根据实际业务流程调用加载票卷
             var that = this;
             that.methName = 'storageSubmit';
             that.methPass = 'storagePass';
             that.payModelSub();
+           
         },
         //验证支付信息是否
         payModelSub: function () {
@@ -3157,6 +3211,7 @@ var customerMembershipCard = new Vue({
         },
         // 支付补余前验证信息
         toCheckMoeny: function () {
+        	this.loadPostTicketList(); //需根据实际业务流程调用加载票卷
             var that = this;
             if (!that.loadData8.addComplement.splitSetId) {
                 return $.alert("未获取到要补余的订单ID,操作失败")
@@ -3443,6 +3498,7 @@ var customerMembershipCard = new Vue({
         //选择会员卡弹窗
         products: function () {
             var that = this;
+            that.getCardType();
             //显示会员弹窗
             if (that.LiIndex != 3) {
                 $('#product').show();
@@ -3462,7 +3518,16 @@ var customerMembershipCard = new Vue({
                 },
                 function (res) {
                     if (res.code == '200') {
+
+                        $.each(res.data,function (i,n) {
+                            if( res.data[i].serviceLife!=null &&  res.data[i].serviceLife!=''&& typeof res.data[i].serviceLife!="undefined"){
+                                res.data[i].serviceLife=res.data[i].serviceLife.replace(",","")
+                            }
+
+                            // console.log(res.data[i].serviceLife)
+                        })
                         that.loadData1.cardsList = res.data;
+
                     } else {
                         $.alert(res.msg)
                     }
@@ -3522,6 +3587,7 @@ var customerMembershipCard = new Vue({
                 },
                 function (res) {
                     if (res.code == '200') {
+                        res.data.serviceLife=res.data.serviceLife.replace(",","").replace("，","")
                         //赋值
                         var cardTypeD = res.data;
                         that.loadData1.cardInfoMap.cardTypeName = cardTypeD.cardTypeName;
@@ -3664,6 +3730,7 @@ var customerMembershipCard = new Vue({
             that.loadData3.originalPrice = that.getParemtDate(obj.originalPrice, 0);
             that.loadData3.salesPrice = that.getParemtDate(obj.salesPrice, 0);
             that.loadData3.type = obj.type;
+            console.log(obj.type)
             that.loadData3.totalNum = that.getParemtDate(obj.totalNum, 0);
             that.loadData3.cardTypeId = obj.id;
             that.getTransferFee();
@@ -3800,6 +3867,8 @@ var customerMembershipCard = new Vue({
             that.loadData3.cardSupply3.price = price;
             that.loadData3.transferFee = transferFee;
             that.loadData3.cardSupply3.transferFee = that.loadData3.transferFee;
+            that.loadData3.type = obj.pId
+            console.log(that.loadData3.type)
             that.getTransferFee();
         },
         //计算金额
@@ -3827,6 +3896,10 @@ var customerMembershipCard = new Vue({
             var that = this;
             //验证下 其他数据
             that.loadData3.cardSupply3.cardNo = $("#cardSupplyId").val();
+           
+            
+            this.loadPostTicketList();
+            
             if (!that.loadData3.cardSupply3.cardNo) {
                 return $.alert("卡号需填写");
             }
@@ -3847,6 +3920,7 @@ var customerMembershipCard = new Vue({
             that.methName = 'supply34OK';
             that.methPass = 'storagePass';
             that.getPassUseParemt('supply34OK', 'supplyClientPass', true);
+         
         },
         // 转卡/卡升级结算
         supply34OK: function () {
@@ -3934,7 +4008,11 @@ var customerMembershipCard = new Vue({
                 type: type
             }, function (res) {
                 if (res.code == '200') {
-                    that.loadData3.supplyList = res.data.list;
+                	var _data=res.data.list;
+                	for(var i in _data){
+                		_data[i].serviceLife=_data[i].serviceLife.replace(",","")
+                	}
+                    that.loadData3.supplyList = _data;
                 } else {
                     $.alert(res.msg)
                 }

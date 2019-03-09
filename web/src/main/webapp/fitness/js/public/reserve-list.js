@@ -24,37 +24,37 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
         }
     },
     filters: {
-        toDateHHmm(val){
+        toDateHHmm(val) {
             let date = new Date(val);
             let h = date.getHours();
             h = h < 10 ? ('0' + h) : h;
             let m = date.getMinutes();
             m = m < 10 ? ('0' + m) : m;
             let _time = "";
-            _time += ' '+h + ':' + m;
+            _time += ' ' + h + ':' + m;
             return _time;
         },
-        toDateyyyyMMddHHmm(val){
-           return timeFormatDate(val, true)
+        toDateyyyyMMddHHmm(val) {
+            return timeFormatDate(val, true)
         },
-        toDateyyyyMMdd(val){
+        toDateyyyyMMdd(val) {
             return timeFormatDate(val);
         },
-        reserveStatusFilter(val){
+        reserveStatusFilter(val) {
             let str = "";
-            if(val == 0){
+            if (val == 0) {
                 str = "已取消"
             }
-            if(val == 1){
+            if (val == 1) {
                 str = "已预约"
             }
-            if(val == 2){
+            if (val == 2) {
                 str = "待确认"
             }
             return str;
         },
-        remarksFilter(val){
-            if(!val){
+        remarksFilter(val) {
+            if (!val) {
                 return "无";
             }
             return val;
@@ -64,8 +64,8 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
     computed: {},
     watch: {
         //限制的改变
-        dateStatus(val){
-            switch(val){
+        dateStatus(val) {
+            switch (val) {
                 case 1:
                     this.beginDate = getYearStartDate();
                     this.endDate = getYearEndDate();
@@ -91,6 +91,7 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
                     this.endDate = getYearEndDate();
                     break;
             }
+            this.save();
         },
     },
     created() {
@@ -99,9 +100,10 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
         this.endDate = getMonthEndDate();
         //搜索
         this.save();
-        Event.$on(EDU_CONSTANT.listenerListItemList, ()=>{
+        Event.$on(EDU_CONSTANT.listenerListItemList, () => {
             this.save();
         })
+
     },
     mounted() {
         let that = this;
@@ -114,46 +116,76 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
         axiosGetParams(EDUCATION_URL.findSdaduimList, {code: code, shopId: shopId}, (res) => {
             this.sdaduimList = res;
         });
-        this.$nextTick(()=> {
+        this.$nextTick(() => {
             $('#appointmentWorkbench').show().siblings().hide();
             //上课时间
-            jeDate('#work-bench-begin-date',{
-               // isinitVal: true,
+            jeDate('#work-bench-begin-date', {
+                // isinitVal: true,
                 festival: true,
                 format: 'YYYY-MM-DD',
-                donefun(obj, val){
+                donefun(obj, val) {
+                    if(obj.val > that.endDate){
+                        $.alert('开始时间不能超过结束时间!!');
+                        $('#work-bench-begin-date').val(that.beginDate);
+                        return;
+                    }
                     that.beginDate = obj.val;
+                    $('.contains .list .screening .btnWrap span').removeClass('grey');
+                    $('.contains .list .search input[type=submit]').click();
+                    this.dateStatus = 0;
                 }
             });
             //上课时间
-            jeDate('#work-bench-end-date',{
-               // isinitVal: true,
+            jeDate('#work-bench-end-date', {
+                // isinitVal: true,
                 festival: true,
                 format: 'YYYY-MM-DD',
-                donefun(obj, val){
+                donefun(obj, val) {
+                    if(obj.val < that.beginDate){
+                        $.alert('结束时间不能小于开始时间!!');
+                        $('#work-bench-end-date').val(that.endDate);
+                        return;
+                    }
                     that.endDate = obj.val;
+                    $('.contains .list .screening .btnWrap span').removeClass('grey');
+                    $('.contains .list .search input[type=submit]').click();
+                    this.dateStatus = 0;
                 }
             });
         })
     },
     updated: function () {
-        this.$nextTick(()=> {
+        this.$nextTick(() => {
             this.ajaxInitFunc();
         })
     },
     methods: {
-        ajaxInitFunc(){
+        ajaxInitFunc() {
             // $('.toBlock').unbind("click")
             // $('.tabBox').unbind("mouseenter")
             // $('.toBlock').unbind("mouseleave")
-
             $('.toBlock').hover(function () {
+                var thisHeight = $('.tabBox').height();
+                var _height = $(document.body).height() - thisHeight;
+                var thisTop = $(this).offset().top;
                 // 滑动滚动条
-                $('.tabBox').css({
-                    'display': 'block',
-                    'top': $('.contains').scrollTop() + $(this).offset().top - 25
-                });
-            } );
+                if(thisTop < _height){
+                    $('.tabBox').css({
+                        'display': 'block',
+                        // 'bottom': $('.contains').scrollTop() + $(this).offset().top - 25
+                        'top':thisTop - 11
+                    });
+                    $("style#tabBoxStyle").text('');
+                }else{
+                    $('.tabBox').css({
+                        'display': 'block',
+                        // 'bottom': $('.contains').scrollTop() + $(this).offset().top - 25
+                        'top':thisTop - thisHeight + 26
+                    });
+                    var arrowTop = thisHeight - 25;
+                    $("style#tabBoxStyle").text(".contains .list .tabBox::before,.contains .list .tabBox::after{top:"+ arrowTop +"px;}").appendTo($("head"));
+                }
+            });
 
             $('.tabBox').mouseenter(function () {
                 $('.tabBox').css({
@@ -168,7 +200,7 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
 
         },
         //选择框
-        checkedOne(clientId){
+        checkedOne(clientId) {
             let idIndex = this.toConfirmCheckbox.indexOf(clientId)
             if (idIndex >= 0) {
                 // 如果已经包含了该id, 则去除(单选按钮由选中变为非选中状态)
@@ -178,7 +210,7 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
                 this.toConfirmCheckbox.push(clientId)
             }
         },
-        checkedAll(){
+        checkedAll() {
             this.isCheckedAll = !this.isCheckedAll;
             if (this.isCheckedAll) {
                 // 全选时
@@ -191,28 +223,27 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
             }
         },
         //鼠标划过，出现的数据
-        selectToConfirmList(eduId, item){
-          //  this.hoverEduId = eduId;
-
-            if(item.status != 0){
+        selectToConfirmList(eduId, item) {
+            //  this.hoverEduId = eduId;
+            if (item.status != 0) {
                 return false;
             }
-            let a = this.toConfirmResultList.find((item)=>{
+            let a = this.toConfirmResultList.find((item) => {
                 return item.eduId == eduId;
             });
             this.toConfirmList = [];
-            if(a){
+            if (a) {
                 this.toConfirmList = a['result']
             }
         },
         //搜索
         save() {
             //判断时间是否存在
-            if(!this.beginDate){
+            if (!this.beginDate) {
                 $.alert("请选择开始时间")
                 return false;
             }
-            if(!this.endDate){
+            if (!this.endDate) {
                 $.alert("请选择结束时间")
                 return false;
             }
@@ -234,15 +265,15 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
             axiosGetParams(EDUCATION_URL.findEducationList, param, (res) => {
                 this.resultList = res;
                 //现实结果 循环遍历得到数据
-                $.each(this.resultList, (i, d) =>{
+                $.each(this.resultList, (i, d) => {
                     //eduClientCount
                     //eduCount
-                    if(d.status == 2){
+                    if (d.status == 2) {
                         this.eduClientCount += d.eduCurrentCount;
                     }
                     this.eduCount = i++;
                     //设置100毫秒后执行查询
-                    setTimeout((eduId)=>{
+                    setTimeout((eduId) => {
                         let param1 = {
                             eduId: eduId,
                             reserveStatus: 2, //待确认
@@ -255,7 +286,7 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
                             obj.result = res;
                             this.toConfirmResultList.push(obj);
                         })
-                    },100, d.id)
+                    }, 100, d.id)
                 })
                 //点击搜索，执行查询前，时间填入
                 let db = new Date(this.beginDate);
@@ -264,32 +295,32 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
                 this.showEndDate = de.getFullYear() + "年" + (de.getMonth() + 1) + "月" + de.getDate() + "日";
 
                 //测试用的
-             //   Event.$emit("inputEduItem", this.resultList[0])
+                //   Event.$emit("inputEduItem", this.resultList[0])
             });
 
         },
-        changeStatusAll(status){
+        changeStatusAll(status) {
             let num = this.toConfirmCheckbox.length;
             let ind = '';
-            this.toConfirmCheckbox.forEach((clientInfoId, index) =>{
-                if(num == (index + 1)){
+            this.toConfirmCheckbox.forEach((clientInfoId, index) => {
+                if (num == (index + 1)) {
                     ind = 'true';
                 }
                 this.changeStatus(clientInfoId, status, ind)
             })
         },
         //确定 //取消
-        changeStatus(id, status, index){
+        changeStatus(id, status, index) {
             let param = {
                 clientInfoId: id,
                 status: 0
             }
-            if(status == 1){
+            if (status == 1) {
                 param.status = 1
             }
             axiosPostParams(EDUCATION_URL.changeEduClientStatus, param, (res) => {
                 //修改成功后，修改状态
-                if(index == 'true'){
+                if (index == 'true') {
                     this.save();
                     $('.tabBox').css({
                         'display': 'none'
@@ -298,25 +329,25 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
 
             })
         },
-        changeEduId(eduId, eduItem){
+        changeEduId(eduId, eduItem) {
             Event.$emit(EDU_CONSTANT.listenerEduItem, eduId, eduItem)
         },
         //添加预约，添加预约限制
-        addReserve(eduId, eduItem){
-           // console.log(eduId)
-          //  console.log(eduItem)
+        addReserve(eduId, eduItem) {
+            // console.log(eduId)
+            //  console.log(eduItem)
             //判断当前预约是否可以在pc端预约
-            if(eduItem.configOnlineReserve == true){
+            if (eduItem.configOnlineReserve == true) {
                 $.alert("该团教课程只能在app上预约")
                 return false;
             }
             //判断当前是否可以预约，时间判断
-            if((new Date().getTime() - eduItem.configReserveTime) < 0){
+            if ((new Date().getTime() - eduItem.configReserveTime) < 0) {
                 let date = new Date(eduItem.configReserveTime);
                 $.alert("该课程还未开放预约,请在" + timeFormatDate(date, true) + "后预约。");
                 return false;
             }
-            if((eduItem.eduCurrentCount + eduItem.eduToConfirmCount) == eduItem.reserveTotalNum){
+            if ((eduItem.eduCurrentCount + eduItem.eduToConfirmCount) == eduItem.reserveTotalNum) {
                 $.alert("该课程会员人数已约满")
                 return false;
             }
@@ -325,7 +356,7 @@ Vue.component('edu-work-bench-children', {//模版挂载的标签名
             reservation();
         },
         //开课
-        startClass(eduId, eduItem){
+        startClass(eduId, eduItem) {
             Event.$emit(EDU_CONSTANT.listenerEduItem, eduId, eduItem);
             startClass();
         }

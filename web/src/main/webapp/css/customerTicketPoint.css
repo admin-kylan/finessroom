@@ -121,7 +121,7 @@
     text-align: center;
     border: 1px solid #ccc;
     min-width: 60px;
-    height: 30px;
+    /*height: 30px;*/
 }
 #customerTicketPoint .tabW_top a#performances{
     background-color: #070;
@@ -245,11 +245,11 @@
     width: 15%;
     float: left;
     background-color: #eff0f3;
-    height: 100%;
+    height: calc(100% - 20px);
     border: 1px solid #ccc;
     overflow-y: auto;
 }
-
+#qyModal .table-style td.cpname{text-align: left;line-height: 2;}
 #ticketGift .section2_boxs1_left .section2_boxs1_top {
     text-align: center;
 }
@@ -261,7 +261,7 @@
 }
 
 #ticketGift .section2_boxs1_left .section2_boxs1_botton ul {
-    padding-left: 30px;
+    padding-left: 15px;
     line-height: 22px;
 }
 
@@ -291,7 +291,8 @@
     width: 84%;
     float: right;
     border: none;
-    height: 100%;
+    height: calc(100% - 20px);
+    overflow-y: auto;
 }
 #ticketGift .section2_boxs1_right .btn-primary{
    width: 100px;

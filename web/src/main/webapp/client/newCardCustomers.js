@@ -49,7 +49,7 @@ var newCardCustomers = new Vue({
         clientPhone: '', //客户手机
         clientSet: '',   //客户性别
         clientURL: '',   //客户性别
-        personnelName: $.cookie("name"),  //系统当前操作人信息
+        personnelName: '',  //系统当前操作人信息
         creatTime: getNowTime(true),  //创建时间
         catcherClientId: '',      //承接的客户Id
         catcherClientCardId: '', //承接的客户会员卡ID
@@ -191,6 +191,57 @@ var newCardCustomers = new Vue({
             userURL: '',
         },
         temp:null,
+        ticketTable:{
+            list: [],
+            currPage: 1,
+            pageSize: 5,
+            totalContentInfo: 0,
+            totalPage: 0,
+            totalCount:0,
+        },
+        ticketSetTable: {
+            list: [],
+            currPage: 1,
+            pageSize: 10,
+            totalContentInfo: 0,
+            totalPage: 0,
+        },
+        cardUserTable: {
+            list: [],
+            currPage: 1,
+            pageSize: 5,
+            totalContentInfo: 0,
+            totalPage: 0,
+        },
+        zrCardUserTable: {
+            list: [],
+            currPage: 1,
+            pageSize: 5,
+            totalContentInfo: 0,
+            totalPage: 0,
+        },
+        customerTicketPointTable: {
+            list: [],
+            currPage: 1,
+            pageSize: 10,
+            totalContentInfo: 0,
+            totalPage: 0,
+        }, customerTicketTable: {
+            list: [],
+            currPage: 1,
+            pageSize: 10,
+            totalContentInfo: 0,
+            totalPage: 0,
+        },
+		ticketEquityDetail:[],
+		ticketSetSelectIds:[],
+		ticketSetCard:[],   //赠送选择会员卡号
+		obtains:["购卡赠送","友情赠送","推荐赠送","消费推荐"],
+		ticketSetList:[], // 存储赠送票卷
+		customerPhone:'', 
+		ticketSelectList:[],
+        cardFlagList:[],
+        numAll:'',
     },
     filters: {
         formatDate: function (time, type, typeT) {
@@ -228,6 +279,12 @@ var newCardCustomers = new Vue({
         },
     },
     created: function () {
+        console.log($.cookie("name"))
+        this.personnelName = $.cookie("name")
+        console.log(this.personnelName)
+        this.loadData2.clitenUser.consultantId = $.cookie("id")
+        this.loadData2.clitenUser.fwhjName = $.cookie("name")
+        this.cardMap.shopId = $.cookie('shopid')
         var that = this;
         that.shipCard = window.parent["shipCard"];
         if (that.shipCard) {
@@ -237,8 +294,524 @@ var newCardCustomers = new Vue({
         that[methodsName]();
     },
     methods: {
-        init: function (t) {
+    	 init: function (t) {
+         	this.queryTicketList();
+         },
+    	   queryTicketList: function () {
+
+    		   const that = this;
+//               var    params = {"tel": this.tel,'code':$.cookie("code")};
+               var    params = {"tel": '13645945925','code':'003'};
+                //    console.log( "params---- >  "+JSON.stringify(params) );
+               //显示加载中
+               Loading.prototype.show();
+               that.$nextTick(function () {
+                   const url = $.stringFormat('{0}/ticket/getTicketList', $.cookie('url'));
+                   $.get(url, params, function (res) {
+                       if (res.code === '200') {
+                           that.customerTicketPointTable = res.data;
+                           that.ticketPageInit();
+                           //console.log("-------"+that.customerTicketPointTable.list);
+                           new myPagination({
+                               id: 'ticketsetPagination',
+                               curPage: that.customerTicketTable.currPage, //初始页码
+                               pageTotal: that.customerTicketTable.totalPage, //总页数
+                               pageAmount: that.customerTicketTable.pageSize,  //每页多少条
+                               dataTotal: that.customerTicketTable.totalCount, //总共多少条数据
+                               showPageTotalFlag: true, //是否显示数据统计
+                               showSkipInputFlag: true, //是否支持跳转
+                               getPage: function (page) {
+                               	  console.log("------getPage-----");
+                                   //获取当前页数
+                                   console.log(page)
+                                   var currPage = page + "";
+                                   that.ticketPageNext(page);
+                                //   that.ticketSetPageNext(0,page);
+                                  // that.queryServiceRecordList({"cid": cid, "currPage": currPage});
+                               }
+                           })
+                       } else {
+                           $.alert(jsonData['data']['msg'])
+                       }
+                       //隐藏加载中
+                       Loading.prototype.hide();
+                   })
+
+               })
+
+           },
+           ticketPageInit:function(){
+           	// console.log("-----------ticketPageInit------------");
+           	const that = this;
+           	  for(var i = 0 ; i<  5 ; i++){
+                 	if("undefined"==that.customerTicketPointTable.list[i]) break;
+                 	  that.customerTicketTable.list[i]=that.customerTicketPointTable.list[i] ;
+           		  
+                 }
+           	  Vue.set(this.customerTicketTable,0,that.customerTicketTable);
+           	 	//计算总页数
+         	  	var    totalPage = that.customerTicketPointTable.list.length/5;
+                 if( totalPage> parseInt(totalPage)){
+                 	totalPage =  parseInt(totalPage)+1;
+                 }else{
+                 	totalPage = parseInt(totalPage);
+                 }
+                 that.customerTicketTable.pageSize =  that.customerTicketTable.list.length;//单页数
+                 that.customerTicketTable.totalCount = that.customerTicketPointTable.list.length; //总记录数
+                 that.customerTicketTable.totalPage = totalPage; //总页数
+           },// 票卷下一页
+           ticketPageNext:function(page){
+           	const that = this;
+           	//  console.log("ticketSetPageNext index>"+index+"  page>>>"+page);
+           	  var pagesize = page*5 
+           	  var i =  (page-1)*5;
+           	  var j = 0 ;
+           	  that.customerTicketTable.list=[];
+           	  //装载数据。 每页限制5条；
+           	  for(i; i< pagesize ; i++){
+                   	if(undefined==that.customerTicketPointTable.list[i])break;
+                   	that.customerTicketTable.list[j]=that.customerTicketPointTable.list[i];
+                   	
+                   	j++;
+                   }
+           	  Vue.set(this.customerTicketTable,0,that.customerTicketTable);
+           	  	//计算总页数
+           		var    totalPage = that.customerTicketPointTable.list.length/5;
+                   if( totalPage> parseInt(totalPage)){
+                   	totalPage =  parseInt(totalPage)+1;
+                   }else{
+                   	totalPage = parseInt(totalPage);
+                   }
+                   that.customerTicketTable.pageSize =  that.customerTicketTable.list.length;//单页数
+                   that.customerTicketTable.totalCount = that.customerTicketPointTable.list.length; //总记录数
+                   that.customerTicketTable.totalPage = totalPage; //总页数
+                   
+           },
+           //赠送票
+           ticketSetPageNext:function(index,page){
+           	const that = this;
+           	//  console.log("ticketSetPageNext index>"+index+"  page>>>"+page);
+           	  var pagesize = page*5 
+           	  var i =  (page-1)*5;
+           	  var j = 0 ;
+           	  that.ticketTable.list=[];
+           	  //装载数据。 每页限制5条；
+           	  for(i; i< pagesize ; i++){
+                   	if(undefined==that.ticketSetTable.list[index].TicketList[i])break;
+                   	that.ticketTable.list[j]=that.ticketSetTable.list[index].TicketList[i] ;
+                   	
+                   	j++;
+                   }
+           	  	//计算总页数
+           	  	var    totalPage = that.ticketSetTable.list[index].TicketList.length/5;
+                  
+                   if( totalPage> parseInt(totalPage)){
+                   	totalPage =  parseInt(totalPage)+1;
+                   }else{
+                   	totalPage = parseInt(totalPage);
+                   }
+                  
+                  
+                   that.ticketTable.pageSize =j;//单页数
+                   that.ticketTable.totalCount =that.ticketSetTable.list[index].TicketList.length; //总记录数
+                   that.ticketTable.totalPage = totalPage; //总页数
+                   //暂时 采用这个方法：需要修改
+                   Vue.set(this.ticketTable,page,that.ticketTable);
+                   
+                   //初始化表格数据， 下拉框、文本框
+             			var trList = $("#titcketSetTable tbody").children("tr");
+   				   var tdArr = trList.eq(i).find("td");
+   				   	 for (var i=0;i<trList.length;i++) {
+   				   		 var tdArr = trList.eq(i).find("td");
+   	    	        
+   	   	    	        tdArr.eq(12).find('input').val("");
+   	   	    	        tdArr.eq(3).find('select').find("option").first().attr("selected", true);
+   	   	    	     console.log("params>>"+tdArr.eq(3).find('select').find("option").first());
+   	   	    	        
+   	    	     }
+                   
+                   
+           },
+    	//赠送票卷提交
+    	ticketSet:function(){
+    	//	const that = this;
+    		
+    		console.log( "ticketSetCard >  "+JSON.stringify(this.ticketSetCard) );
+    		var  memberCardId="";
+    		var shopId="";
+    		// 有选择会员卡才赋值
+    		if(this.ticketSetCard.length >0){
+    			memberCardId =this.ticketSetCard[0]["id"];
+    			shopId = this.ticketSetCard[0]["shopId"] ;
+    		}
+    		if(this.ticketSetSelectIds.length ==0){
+    			alert("请选择要赠送的票卷");
+    			return ;
+    		}
+    		
+    		
+    		this.refreshTicketSetList();
+    		
+    		console.log("------------ticketSet------------");
+    		/*
+    		var trList = $("#titcketSetTable tbody").children("tr");
+    		var i = 0 ;
+    		for(var key in this.ticketSetSelectIds){
+    			console.log("input>>"+key+"="+this.ticketSetSelectIds[key]); 
+	       		 for (var i=0;i<trList.length;i++) {
+	    	        var tdArr = trList.eq(i).find("td");
+	    	        if(this.ticketSetSelectIds[key] ==tdArr.eq(0).find('input').val() ){
+
+	   	    	  this.ticketSetList.push({ "ID":this.ticketSetSelectIds[key],
+	    		 							"TicketSendWhy":tdArr.eq(3).find('select').val(),
+	    		 							"Num":tdArr.eq(12).find('input').val()});
+	   	    	     						break;
+	    	        }
+	   	    	        
+	    	     }
+	       		 i++;
+	    	  }*/
+    	
+    		
+    		var ticketSetParam ={
+    				'customerCode':this.customerCode,
+    				'memberCardId':memberCardId,
+    				'usePeople':'柯宁翔',  //客户姓名 需要动态获取
+    				'contactTel':'13645945925',  //客户手机号  需要动态获取
+    				'operateName':'处理人1',    //操作人
+    				'operateID':'13000000000',  //操作人手机号
+    				'shopId':shopId,
+    				'serviceName':'服务1',  	// 服务人员姓名
+    				'serviceTel':'13000000001', //服务人员手机
+    				'ticketSetList':this.ticketSetList,
+    				'operateType':'0',
+    				'consumeState':'6',
+    				'givingID':''
+    		};
+    		
+    		console.log("ticketSetParam>>"+JSON.stringify(ticketSetParam)); 
+    		//提交至票卷服务
+    		 var url = $.stringFormat('{0}/ticket/postGiveTicketList', $.cookie('url'));
+	      	   axios.post(url, ticketSetParam).then(function (res) {0
+	                 let resData = eval(res);
+	                 if (resData['data']['code'] === '200') {
+	                     alert("赠送成功！")
+	                     location.reload();
+	                 } else {
+	                     alert(resData['data']['msg']);
+	                 }
+	             }).catch(function (error) {
+	                     alert(error);
+	                 }); 
+	      	   
+      	   
+    		
+    	},
+    	refreshTicketSetList:function(){
+    		console.log("-------------------------------refreshTicketSetList"); 
+
+    		//获取当前页赠送数据
+    		this.storageTicketSetList();
+    		//清除已被取消选择的数据
+    		this.removeNoInTicketSetList();
+    		
+    		console.log("-------------------------------refreshTicketSetList"); 
+
+    	},
+    	//加载赠送票卷数据
+        showTicketGift:function (){
+        	const that = this;
+        	console.log("----showTicketGift-----");
+        	//console.log("clientPhone>>>>"+window.parent.document.getElementById("clientPhone").innerText);
+        	$('#ticketGift').show();
+        	
+        	  params = {'shopid': '0', 'customerCode':$.cookie("code")};
+        	   //显示加载中
+            Loading.prototype.show();
+            that.$nextTick(function () {
+                const url = $.stringFormat('{0}/ticket/getTicketSet', $.cookie('url'));
+                $.get(url, params, function (res) {
+                    if (res.code === '200') {
+                        that.ticketSetTable = res.data;
+                        //只存储5条记录 
+                      
+                        that.ticketSetPageInit();
+                        
+                        //分页 
+                        new myPagination({
+                            id: 'pagination',
+                            curPage: that.ticketTable.currPage, //初始页码
+                            pageTotal: that.ticketTable.totalPage, //总页数
+                            pageAmount: that.ticketTable.pageSize,  //每页多少条
+                            dataTotal: that.ticketTable.totalCount, //总共多少条数据
+                            showPageTotalFlag: true, //是否显示数据统计
+                            showSkipInputFlag: true, //是否支持跳转
+                            getPage: function (page) {
+                            	  console.log("------getPage-----");
+                                //获取当前页数
+                                console.log(page)
+                                var currPage = page + "";
+                                that.ticketSetPageNext(0,page);
+                               // that.queryServiceRecordList({"cid": cid, "currPage": currPage});
+                            }
+                        })
+                        
+                        
+                    } else {
+                        $.alert(jsonData['data']['msg'])
+                    }
+                    //隐藏加载中
+                    Loading.prototype.hide();
+                })
+
+            });
+            
+            
+           // that.getCardUserList();
+            
+        }, //分页初始化 默认取第一一个ticketData   赠送票卷
+        ticketSetPageInit:function(){
+        	const that = this;
+        	  for(var i = 0 ; i<  5 ; i++){
+              	if("undefined"==that.ticketSetTable.list[0].TicketList[i]) break;
+              	that.ticketTable.list[i]=that.ticketSetTable.list[0].TicketList[i] ;
+              }
+        	 
+        	 	//计算总页数
+      	  	var    totalPage = that.ticketSetTable.list[0].TicketList.length/5;
+             
+              if( totalPage> parseInt(totalPage)){
+              	totalPage =  parseInt(totalPage)+1;
+              }else{
+              	totalPage = parseInt(totalPage);
+              }
+        	  
+              that.ticketTable.pageSize =  that.ticketTable.list.length;//单页数
+              that.ticketTable.totalCount = that.ticketSetTable.list[0].TicketList.length; //总记录数
+              that.ticketTable.totalPage = totalPage; //总页数
+        	
         },
+        //根据ticketData_id 更新分页数据   赠送票卷
+        ticketSetPageNextById:function(ticketData_id){
+        	this.refreshTicketSetList();// 刷新存储的赠送数据
+        	
+        	const that = this;
+        	
+		        //	 console.log("ticketData_id >"+ticketData_id);
+		        //	 console.log("************"+  $("#titcketSetTable tbody").children("tr").eq(0).find("td").eq(0).find('input').val() );
+		        	 var i=0;
+		        	 for(i ; i<that.ticketSetTable.list.length ; i++){
+		        		if(ticketData_id ==  that.ticketSetTable.list[i].id){
+		        			break;
+		        		}
+		        	 }
+		        	 console.log("ticketSetPageNextById index>>"+  i );
+		        	 that.ticketSetPageNext(i,1);
+		     	
+		        	 var trList = $("#titcketSetTable tbody").children("tr");
+		      	  
+		        	// this.ticketSetSelectIds=[];
+		        	 var obtains_tmp = this.obtains;
+		        	 this.obtains=[];
+		        	 for(var key in obtains_tmp){
+		        		 Vue.set( this.obtains,key,obtains_tmp[key]);
+		        	 }
+		        	
+		        	 
+		        	   new myPagination({
+		                   id: 'pagination',
+		                   curPage: that.ticketTable.currPage, //初始页码
+		                   pageTotal: that.ticketTable.totalPage, //总页数
+		                   pageAmount: that.ticketTable.pageSize,  //每页多少条
+		                   dataTotal: that.ticketTable.totalCount, //总共多少条数据
+		                   showPageTotalFlag: true, //是否显示数据统计
+		                   showSkipInputFlag: true, //是否支持跳转
+		                   getPage: function (page) {
+		                   	  console.log("------getPage-----");
+		                       //获取当前页数
+		                       console.log(page)
+		                       var currPage = page + "";
+		                       that.ticketSetPageNext(i,page);
+		                      // that.queryServiceRecordList({"cid": cid, "currPage": currPage});
+		                   }
+		               })
+		        	   that.$nextTick(function () {
+		        		   	this.refreshTicketSetTable(); //刷新表格、
+		        	   	});
+        },
+        //赠送票卷 下一页
+        ticketSetPageNext:function(index,page){
+        	const that = this;
+        	//  console.log("ticketSetPageNext index>"+index+"  page>>>"+page);
+        	  var pagesize = page*5 
+        	  var i =  (page-1)*5;
+        	  var j = 0 ;
+        	  that.ticketTable.list=[];
+        	  //装载数据。 每页限制5条；
+        	  for(i; i< pagesize ; i++){
+                	if(undefined==that.ticketSetTable.list[index].TicketList[i])break;
+                	that.ticketTable.list[j]=that.ticketSetTable.list[index].TicketList[i] ;
+                	
+                	j++;
+                }
+        	  	//计算总页数
+        	  	var    totalPage = that.ticketSetTable.list[index].TicketList.length/5;
+               
+                if( totalPage> parseInt(totalPage)){
+                	totalPage =  parseInt(totalPage)+1;
+                }else{
+                	totalPage = parseInt(totalPage);
+                }
+               
+               
+                that.ticketTable.pageSize =j;//单页数
+                that.ticketTable.totalCount =that.ticketSetTable.list[index].TicketList.length; //总记录数
+                that.ticketTable.totalPage = totalPage; //总页数
+                //暂时 采用这个方法：需要修改
+                Vue.set(this.ticketTable,page,that.ticketTable);
+                
+                //初始化表格数据， 下拉框、文本框
+          			var trList = $("#titcketSetTable tbody").children("tr");
+				   var tdArr = trList.eq(i).find("td");
+				   	 for (var i=0;i<trList.length;i++) {
+				   		 var tdArr = trList.eq(i).find("td");
+	    	        
+	   	    	        tdArr.eq(12).find('input').val("");
+	   	    	        tdArr.eq(3).find('select').find("option").first().attr("selected", true);
+	   	    	     console.log("params>>"+tdArr.eq(3).find('select').find("option").first());
+	   	    	        
+	    	     }
+                
+                
+        },
+        //   刷新表格数据显示
+    	refreshTicketSetTable(){
+    		
+    		console.log("------------refreshTicketSetTable-----------");
+    		var trList = $("#titcketSetTable tbody").children("tr");
+    		for(var key in this.ticketSetList){
+	       		 for (var i=0;i<trList.length;i++) {
+	       		  var tdArr = trList.eq(i).find("td");
+	       		console.log(this.ticketSetList[key].ID+"-----"+tdArr.eq(0).find('input').val() );
+	       			 if(this.ticketSetList[key].ID == tdArr.eq(0).find('input').val() ){
+	       				tdArr.eq(3).find('select').val(this.ticketSetList[key].TicketSendWhy);
+	       				tdArr.eq(12).find('input').val(this.ticketSetList[key].Num);
+	       			 }
+	       		 }
+	       	}
+    		
+    	},
+    	setNumAll:function(){
+    		console.log("numAll>>>"+this.numAll);
+    		
+    		var trList = $("#titcketSetTable tbody").children("tr");
+    		for(var key in this.ticketSetList){
+	       		 for (var i=0;i<trList.length;i++) {
+	       		  var tdArr = trList.eq(i).find("td");
+	       		console.log(this.ticketSetList[key].ID+"-----"+tdArr.eq(0).find('input').val() );
+	       			 if(this.ticketSetList[key].ID == tdArr.eq(0).find('input').val() ){
+	       				tdArr.eq(12).find('input').val(this.numAll);
+	       			 }
+	       		 }
+	       	}
+    	},
+		//查看权益
+		viewQY:function(id){
+			const that = this;
+			$('#qyModal').modal('show');
+			
+			  const url = $.stringFormat('{0}/ticket/getSelectTicketEquity', $.cookie('url'));
+              $.get(url, {"id":id}, function (res) {
+            	  if (res.code === '200') {
+                      that.ticketEquityDetail = res.data;
+                    } else {
+                      alert(jsonData['data']['msg'])
+                  }
+              });
+              
+             
+			
+		},
+		 //查看权益typeset转换
+    	typesetFormater:function(typeset){
+    		if(typeset==1){
+    			return "项目";
+    		}else if(typeset==2){
+    			return "产品";
+    		}else if (typeset==0){
+    			return "代金券";
+    		}
+    	},
+		// 存储赠送票卷信息
+    	storageTicketSetList:function(){
+    		console.log("-------------------------------存储赠送票卷信息"); 
+    		var trList = $("#titcketSetTable tbody").children("tr");
+    		var i = 0 ;
+    		for(var key in this.ticketSetSelectIds){
+	       		 for (var i=0;i<trList.length;i++) {
+	       			 // 获取获取类型、赠送数量
+	    	        var tdArr = trList.eq(i).find("td");
+	    	        console.log("------/////-------------------------"+this.ticketSetSelectIds[key]  +"----"+tdArr.eq(0).find('input').val() );
+	    	      //  console.log("tdArr------->>"+JSON.stringify(tdArr)); 
+	    	        if(this.ticketSetSelectIds[key] ==tdArr.eq(0).find('input').val() ){
+	    	        	//当前对象已经存在 删除掉  ， 重新保存
+	    	        	var index = this.queryTicketSetList(this.ticketSetSelectIds[key]);
+	    	        	if(index>=0){
+	    	        		console.log("当前对象已经存在 删除掉  ，ticketSetSelectIds>>"+this.ticketSetSelectIds[key]+" input>>"+tdArr.eq(0).find('input').val());
+ 	    	        		this.ticketSetList.splice(index,1);
+	    	        	}
+	    	        	
+	  	   	    	   this.ticketSetList.push({ "ID":this.ticketSetSelectIds[key],
+	  	    		 							"TicketSendWhy":tdArr.eq(3).find('select').val(),
+	  	    		 							"Num":tdArr.eq(12).find('input').val()});
+	   	    	     	break;
+	    	        }
+	   	    	        
+	    	     }
+	       		 i++;
+	    	  }
+    		console.log("storageTicketSetList------->>"+JSON.stringify(this.ticketSetList)); 
+    		console.log("-------------------------------存储赠送票卷信息"); 
+
+    	},
+    	/**
+    	 * 判断已经存储的是否在选择内， 在删除
+    	 */
+    	removeNoInTicketSetList:function(){
+    		console.log("删除之前 >>"+JSON.stringify(this.ticketSetList)); 
+    		for(var i in this.ticketSetList){
+    			var isin=false; //默认不存在
+    			for(var key in this.ticketSetSelectIds){
+    				//判断已经存储的是否在选择内， 不在删除
+    				
+    				if( this.ticketSetList[i].ID==this.ticketSetSelectIds[key]){
+    					isin = true;
+    				}
+    			}
+    			if(!isin){
+    				console.log("-----removeNoInTicketSetList----"+this.ticketSetList[i].ID);
+    				this.ticketSetList.splice(i,1);
+    			}
+    		}
+    		console.log("删除之后 >>"+JSON.stringify(this.ticketSetList)); 
+    	},//查询id 是否存在 赠送TicketSetList
+    	queryTicketSetList:function(id){
+    		console.log('--------------queryTicketSetList-------------------------');
+			console.log(JSON.stringify(this.ticketSetList));
+
+    		for(var i in this.ticketSetList){
+				console.log(this.ticketSetList[i].ID+"==********=="+id);
+
+    			if(this.ticketSetList[i].ID==id){
+    				return i;
+    			}
+    			
+    		}
+    		return -1;
+    		console.log('--------------queryTicketSetList-------------------------');
+
+    	},
+       
         //新增现有客户
         loadL0: function () {
             var that = this;
@@ -475,9 +1048,7 @@ var newCardCustomers = new Vue({
         //检索外部卡号
         checkExternalCard: function (strId) {
             var externalCard = $("#" + strId).val();
-            if (!externalCard) {
-                $("#" + strId).next().html('请填写外部卡号');
-            } else if (externalCard.length > 32) {
+             if (externalCard.length > 32) {
                 that.cardMap.externalNo = '请填写外部卡号';
                 return $.alert("外部卡号过长");
             } else {
@@ -863,6 +1434,8 @@ var newCardCustomers = new Vue({
                 },
                 function (res) {
                     if (res.code == '200') {
+                        that.payMentMoney.price = res.data.salesPrice
+                        res.data.serviceLife=res.data.serviceLife.replace(",","")
                         that.getCardTypeInfo(res.data);
                     } else {
                         alert(res.msg)
@@ -992,9 +1565,9 @@ var newCardCustomers = new Vue({
                     // return $.alert("开卡，请设置开卡日期");
                 }
             }
-            if (!that.cardMap.externalNo) {
-                return $.alert("外部卡号未设置");
-            }
+            // if (!that.cardMap.externalNo) {
+            //     return $.alert("外部卡号未设置");
+            // }
             if (that.cardMap.allotSetType == 1) {
                 // return $.alert("业绩分配信息设置有误");
                 that.loadData1.orderAllotSetSav = that.cardMap.orderAllotSetSav;
@@ -1351,10 +1924,12 @@ var newCardCustomers = new Vue({
                 function (res) {
                     if (res.code == '200') {
                         that.loadData1.cardsList = res.data;
+                        var temp=[]
                         var cardF = [];
                         if (that.loadData1.cardsList && that.loadData1.cardsList.length > 0) {
                             for (var i = 0; i < that.loadData1.cardsList.length; i++) {
                                 var obj = that.loadData1.cardsList[i];
+                                // console.log(obj)
                                 var f = obj.cardFlag;
                                 if (cardF.indexOf(f) == -1) {
                                     cardF.push(f);
@@ -1362,10 +1937,14 @@ var newCardCustomers = new Vue({
                                         cardFlag: f,
                                         cardTypeId: obj.id
                                     }
-                                    that.loadData2.cardFlagList.push(data);
+
+                                    temp.push(data);
+
                                 }
                             }
                         }
+                        that.cardFlagList=temp
+                        console.log(that.cardFlagList)
                         //切换门店卡种信息更新
                         var obj = {};
                         that.checkCardType(obj);
@@ -1798,6 +2377,7 @@ var newCardCustomers = new Vue({
         },
         //显示图片
         pictureShow: function (e) {
+            console.log(e)
             var that = this;
             var file = e.srcElement.files.item(0);
             var num = 'price1'
@@ -1851,6 +2431,7 @@ var newCardCustomers = new Vue({
             const that = this;
             var isSuccess = false;
             var f = that.$refs.avatar;
+            console.log(f)
             //判断是否有图片
             if (!f) {
                 return $.alert("请选择图片");
@@ -1864,6 +2445,7 @@ var newCardCustomers = new Vue({
             param.append('file', f.files[0]); //通过append向form对象添加数据
             param.append('childPath', 'avatar/'); //通过append向form对象添加数据
             const url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+            console.log(param)
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -1910,10 +2492,22 @@ var newCardCustomers = new Vue({
                 var isFlag = isTelAvailable(num);
                 mess = "请输入正确的身份证号";
             }
+            
+
             if (!isFlag) {
                 that.loadData2.clitenUser[str] = '';
                 return $.alert(mess);
             } else {
+                if(str=='referenceTel'){
+                    var url = $.stringFormat('{0}/frClient/getNameByPhone', $.cookie('url'));
+                    console.log(num)
+                    $.get(url, {"phone": num}, function (res) {
+
+                        that.loadData2.clitenUser.referenceName=res.data;
+                        $("#name").val(that.loadData2.clitenUser.referenceName)
+                    })
+                }else {
+
                 var url = $.stringFormat('{0}/frClient/getByPhone', $.cookie('url'));
                 console.log(num)
                 $.get(url, {"phone": num}, function (res) {
@@ -1928,11 +2522,20 @@ var newCardCustomers = new Vue({
                         that.loadData2.clitenUser.birthday=that.formatDate(that.loadData2.clitenUser.birthday)
                         that.loadData2.clitenUser.applyTime=that.formatDate(that.loadData2.clitenUser.applyTime)
                         that.loadData2.clitenUser.buildDate=that.formatDate(that.loadData2.clitenUser.buildDate)
+                        console.log(that.loadData2.clitenUser.buildDate)
                         that.temp=num;
+                    } else if(res.data == false){
+                        var timestamp = Date.parse(new Date())
+                        console.log(res.data)
+                        console.log(timestamp)
+                        console.log(that.formatDate(timestamp))
+                        that.loadData2.clitenUser.buildDate = that.formatDate(timestamp)
+                        console.log(that.loadData2.clitenUser.buildDate)
+
                     }
 
                 })
-
+                }
             }
 
 
@@ -2061,7 +2664,7 @@ var newCardCustomers = new Vue({
                 needPrice: that.payMentMoney.needPrice,//应付金额
                 noPrice: that.payMentMoney.noPrice,//未付金额
                 retChange: that.payMentMoney.retChange,//找零
-                shopId: $.cookie("shopid"),//基础表门店ID
+                shopId: '',//基础表门店ID
                 personnelId: that.cardMap.personnelId,//人员（员工）ID
                 type: 2,//订单类型（1、新购；2、续卡;3、转卡；4、卡升级）
                 CustomerCode: that.code,//客户代码

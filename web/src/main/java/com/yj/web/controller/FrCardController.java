@@ -406,9 +406,9 @@ public class FrCardController {
      * @throws YJException
      */
     public void toVerificationPage(PageUtil<FrCard> pageUtil,HttpServletRequest request)throws YJException{
-        if(StringUtils.isEmpty(pageUtil.getClientId())){
-            throw new YJException(YJExceptionEnum.CLIENTID_NOT_FOUND);
-        }
+//        if(StringUtils.isEmpty(pageUtil.getClientId())){
+//            throw new YJException(YJExceptionEnum.CLIENTID_NOT_FOUND);
+//        }
         String code = pageUtil.getCode();
         if(StringUtils.isEmpty(code)){
             code = CookieUtils.getCookieValue(request, "code", true);

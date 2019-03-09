@@ -77,7 +77,9 @@
             LEFT JOIN Sdaduim sda ON sda.id = gs.sdaduim_id
         WHERE
             shop.id = #{shopId}
+        <if test="sdaduimId != null and sdaduimId != ''">
             AND sda.id = #{sdaduimId}
+        </if>
             AND gc.customer_code = #{code}
     </select>
 
@@ -101,7 +103,9 @@
             LEFT JOIN Sdaduim sda ON sda.id = ppr.sdaduim_id
         WHERE
             shop.id = #{shopId}
+        <if test="sdaduimId != null and sdaduimId != ''">
             AND sda.id = #{sdaduimId}
+        </if>
             AND pc.customer_code = #{code}
     </select>
 

@@ -8,8 +8,13 @@
 	text-indent: -60px;
 }
 #LeadCustomerFollowUpRecord fieldset p{
-	margin:5px 0;
+	margin:10px 0;
 }
+#LeadCustomerFollowUpRecord fieldset p input{padding: 2px;}
+#LeadCustomerFollowUpRecord fieldset p span{
+	display: inline-block;width: 95px;white-space: nowrap;
+}
+#LeadCustomerFollowUpRecord fieldset p span ~ span{width: auto;}
 #LeadCustomerFollowUpRecord fieldset p:nth-child(5){
 	margin:15px 0;
 }

@@ -58,7 +58,16 @@
 
 <!--<script src="../js/common.js"></script>-->
 <script>
-    var customerCourseProject = new Vue({
+	const SYSTEM_SETTING = '716116646a6d0ac7';// 客户管理
+	const EDU_CONSTANT = {
+
+		listenerChooseClientInfo: 'listener-listener-choose-client-info', //刷新用户列表详情页
+		listenerChooseClientInfoBack: 'listener-listener-choose-client-info-back', //刷新用户列表详情页
+
+	};
+	var Event = new Vue();// 事件
+
+	var customerCourseProject = new Vue({
         el: '#customerCourseProject',
         data: {
             html: '', //ul/li显示的html

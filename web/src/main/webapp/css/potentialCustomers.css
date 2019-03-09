@@ -20,6 +20,7 @@ html,body{
 	padding: 0 5px;
 	text-align: center;
 }
+
 .header .follow,.header .search{
 	margin-top:15px;
 }
@@ -30,7 +31,7 @@ html,body{
 	width:300px;
 	height: 28px;
 }
-.header .search input[type=button]{
+.header .search input[type=button],.header .follow input[type=button]{
 	width:80px;
 	height: 30px;
 	background:#00ccff;
@@ -38,6 +39,13 @@ html,body{
 	border:none;
 	color:#fff;
 	cursor: pointer;
+	border: 1px solid #00ccff;
+}
+.header .follow input[type=button].btn-default{
+	background:#fff;
+	border-color: #666;
+	border: 1px solid #666;
+	color: #666;
 }
 .content a.btn{
 	display:block;
@@ -62,7 +70,7 @@ html,body{
 	background:#0cc;
 }
 .content .tab table thead td{
-	color:#fff;
+	color:#333;
 	line-height: 16px;
 }
 .content .tab table td{
@@ -71,9 +79,6 @@ html,body{
 }
 .content .tab table tbody td:nth-child(2){
 	color: #00ccff;
-}
-.content .tab table tbody td:nth-child(4){
-	color: #cfcf07;
 }
 
 .content .tab table tbody td.toblue{
@@ -122,7 +127,25 @@ html,body{
 	margin:0 5px;
 	text-align: center;
 }
-
+.tableWrap table td img{
+	vertical-align: middle;
+	width: 36px;
+    height: 36px;
+	border-radius: 50%;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -18px;
+}
+.tableWrap table td a{
+	display:block;padding-left: 40px;position: relative;text-align: left;
+}
+.tableWrap table td a span{
+    color: #00f;
+    font-weight: 900;
+    font-size: 13px;
+    display: inline-block;
+}
 
 
 

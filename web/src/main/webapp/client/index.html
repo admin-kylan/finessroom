@@ -5,6 +5,11 @@
 <title>客户管理</title>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script>
+   function sa () {
+        var domain = window.location.host;
+        $.cookie('url','http://'+domain+'/')
+        console.log(111)
+    }
     function setParam(val) {
         $("#leftFrame").attr("data-param",val);
     }
@@ -25,7 +30,7 @@
         <frame src="about:blank"></frame>
         </frameset>
         <noframes>
-            <body>
+            <body onload="sa()">
             </body>
         </noframes>
 </html>

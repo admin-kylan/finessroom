@@ -44,6 +44,7 @@ const ecapp = new Vue({
         //分页BoxId
         pageBoxId:'',
     },
+
     computed:{
 
     },
@@ -60,6 +61,11 @@ const ecapp = new Vue({
         },
     },
     methods:{
+        init:function(val){
+            var domain = window.location.host;
+            $.cookie('url','http://'+domain+'/')
+            console.log(111)
+        },
         /**
          * 获取所有会员等级
          */
@@ -111,7 +117,7 @@ const ecapp = new Vue({
             var res = {};
             switch(status) {
                 case 0:
-                    res.class = 'toyellow';
+                    res.class = 'tonormal';
                     res.text = '正常';
                     res.operateClass = '';
                     res.operate = '打印';
@@ -141,7 +147,7 @@ const ecapp = new Vue({
             that.vipCardStatus='';
             that.startTime='';
             that.endTime='';
-            that.keyword='';
+//          that.keyword='';
             that.protectDay=null;
             that.level.selected='';
         },

@@ -360,8 +360,8 @@ var myCustomerPotential = new Vue({
         //导出Excel
         exportExcel: function () {
             var that = this;
+
             var url = $.stringFormat('{0}/excel/myPotential', $.cookie('url'));
-            // var data = JSON.stringify(that.customerTable.list)
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");
             form.attr("target", "_break");
@@ -377,21 +377,6 @@ var myCustomerPotential = new Vue({
             $("body").append(form);//将表单放置在web中
             form.append(input1);
             form.submit();//表单提交
-            // var url = $.stringFormat('{0}/excel/myPotential', $.cookie('url'));
-
-            // $.ajax({
-            //     url : url,
-            //     data : data,
-            //     type : 'POST',
-            //     dataType : 'json',
-            //     contentType: "application/json;charset=utf-8",
-            //     success : function(res) {
-            //         console.log(11)
-            //         console.log(res)
-            //     // alert(res.msg)
-            //     }
-            // })
-            // console.log(2233)
         },
     }
 });

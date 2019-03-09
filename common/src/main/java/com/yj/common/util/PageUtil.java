@@ -13,6 +13,8 @@ public class PageUtil<T> {
     private String phone;
     private String clientId;
     private String code;
+    private String clientName ;  //用户姓名
+    private String  mobile; //用户手机号
     //与code字段一样，之后请尽量使用CustomerCode 字段，与大部分表的字段名称对应
     private String CustomerCode;
 
@@ -145,4 +147,22 @@ public class PageUtil<T> {
     public void setCode(String code) {
         this.code = code;
     }
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+    
+    
 }

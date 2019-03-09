@@ -52,4 +52,6 @@ public interface IFrCardTypeService extends BaseService<FrCardType> {
     FrCardType queryByCardId(String cardId ,String CustomerCode)throws  YJException;
 
     List<Map<String,Object>> getCardTypeByShopIdList(String code) throws YJException;
+
+    List<FrCardType> queryByShopIdList2(String shopId, String code, String type,Integer typeSetState) throws YJException;
 }

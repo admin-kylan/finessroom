@@ -13,11 +13,25 @@
 	<link rel="stylesheet" href="../css/combobox.css" />
 	<link rel="stylesheet" href="../css/myPagination.css" />
 	<style>
+		table td a{display: block;
+    padding-left: 40px;
+    position: relative;
+    text-align: left;}
 		table td img {
 			vertical-align: middle;
-			width: 30px;
-			height: 30px;
-			border-radius: 50%;
+		    width: 36px;
+		    height: 36px;
+		    border-radius: 50%;
+		    position: absolute;
+		    left: 0;
+		    top: 50%;
+		    margin-top: -18px;
+		}
+		.tableWrap table td a span{
+			color: #00f;
+    font-weight: 900;
+    font-size: 13px;
+    display: inline-block;
 		}
 	</style>
 </head>
@@ -77,12 +91,17 @@
 					<option value="5">客户认领</option>
 					<option value="6">客户分配</option>
 				</select>
-				<input type="text" class="jeinput startDate" placeholder="开始日期" v-model="customerFilter.startTime" readonly/>至
-				<input type="text" class="jeinput endDate" placeholder="结束日期" v-model="customerFilter.endTime"  readonly/>
-				<input type="text"  placeholder="销售顾问/教练" v-model="customerFilter.consultantName" @keyup.enter="buildFilterDate"/>
-				<input type="text"  placeholder="操作员" v-model="customerFilter.updateUserName" @keyup.enter="buildFilterDate"/>
+				<input type="text" class="jeinput startDate" placeholder="开始日期" v-model="customerFilter.startTime" readonly style="margin-right: 3px;"/>至<input style="margin-left: 3px;" type="text" class="jeinput endDate" placeholder="结束日期" v-model="customerFilter.endTime"  readonly/>
+				<input type="button" class="btn btn-primary" value="全部"/>
+				<input type="button" class="btn btn-default" value="本天"/>
+				<input type="button" class="btn btn-default" value="本周"/>
+				<input type="button" class="btn btn-default" value="本月"/>
+				<input type="button" class="btn btn-default" value="本季度"/>
+				<input type="button" class="btn btn-default" value="本年度"/>
 			</div>
 			<div class="search">
+				<input type="text"  placeholder="销售顾问/教练" v-model="customerFilter.consultantName" @keyup.enter="buildFilterDate"/>
+				<input type="text"  placeholder="操作员" v-model="customerFilter.updateUserName" @keyup.enter="buildFilterDate"/>
 				<input type="text" placeholder="姓名/手机号码" v-model="customerFilter.keyword" @keyup.enter="buildFilterDate"/>
 				<input type="button" class="btn btn-primary" value="搜索" @click="buildFilterDate"/>
 			</div>
@@ -126,9 +145,9 @@
 							<tr v-for="(item,index) in customerTable.list">
 								<td>{{(customerTable.currPage-1)*10+(index+1)}}</td>
 								<td>
-									<img  :src="avatarUrl(item.picLink)" onerror="this.src='../img/addImg.png'">
 									<a :href="'LeadCustomerInformation.html?id='+item.id" >
-									<span>{{item.clientName}}</span>
+										<img  :src="avatarUrl(item.picLink)" onerror="this.src='../img/addImg.png'">
+										<span>{{item.clientName}}</span>
 									</a>
 								</td>
 								<td class="toblue">{{item.sex==0?'男':'女'}}</td>

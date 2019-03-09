@@ -213,6 +213,7 @@
           (SELECT c.renew_level2_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel2Price,
           (SELECT c.renew_level3_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel3Price,
           (SELECT c.renew_level4_price FROM fr_card_type c WHERE c.id = b.p_id) CrenewLevel4Price,
+          b.p_id pId,
           <include refid="Base_Column_List_Card_Type" />
           <include refid="Base_Column_List" />
         FROM  fr_card_order_info a

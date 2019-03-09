@@ -301,11 +301,16 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
      */
     @Override
     public JsonResult queryUserCardList(PageUtil<FrCard> pageUtil) throws YJException {
+    	System.out.println("FrCardServiceImpl ---- pageUtil>>>>>>>>>>>"+pageUtil);
         Map map = this.getPaginationPage(pageUtil);
         if (pageUtil == null) {
             throw new YJException(YJExceptionEnum.OBJECT_NOT_FOUND);
         }
-        if (StringUtils.isEmpty(pageUtil.getCode()) || StringUtils.isEmpty(pageUtil.getClientId())) {
+         
+//        if (StringUtils.isEmpty(pageUtil.getCode()) || StringUtils.isEmpty(pageUtil.getClientId())) {
+//            throw new YJException(YJExceptionEnum.PARAM_ERROR);
+//        }
+        if (StringUtils.isEmpty(pageUtil.getCode()) ) {
             throw new YJException(YJExceptionEnum.PARAM_ERROR);
         }
         FrCard frCard = pageUtil.getCondition();
@@ -313,6 +318,9 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             frCard = new FrCard();
             frCard.setCustomerCode(pageUtil.getCode());
             frCard.setClientId(pageUtil.getClientId());
+            frCard.setClientName(pageUtil.getClientName());
+            frCard.setMobile(pageUtil.getMobile());
+            //pageUtil.get
             frCard.setUsing(true);
         }
         if (pageUtil.getType() != null) {
@@ -327,14 +335,19 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             Page page = new Query<FrCard>(map).getPage();
             //查询该会员卡列表总数据
             list = baseMapper.queryUserCardInfoList(page, frCard);
+
             this.getCardUserList(list);
             page.setRecords(list);
             map1.put("list", new PageUtils(page));
+        	System.out.println("FrCardServiceImpl ---- map1>>>>>>>>>>>"+map1);
+        	System.out.println("FrCardServiceImpl ---- list>>>>>>>>>>>"+list);
             return JsonResult.success(map1);
         }
         list = baseMapper.queryUserCardInfoList(frCard);
         this.getCardUserList(list);
         map1.put("list", list);
+    
+
         return JsonResult.success(list);
     }
 
@@ -476,7 +489,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         }
         //会员卡号，客户ID，会员卡、会员卡种信息，会员外部卡号，操作店铺ID，客户代码 需提供
         if (StringUtils.isEmpty(frCard.getCardNo()) || StringUtils.isEmpty(frCard.getClientId())
-                || StringUtils.isEmpty(frCard.getCardTypeId()) || StringUtils.isEmpty(frCard.getExternalNo())
+                || StringUtils.isEmpty(frCard.getCardTypeId())
                 || StringUtils.isEmpty(frCard.getShopId()) || StringUtils.isEmpty(frCard.getCustomerCode())) {
             return JsonResult.failMessage("会员卡信息有误，请重新核对购买的会员卡信息");
         }
@@ -932,7 +945,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         }
         //会员卡号，客户ID，会员卡、会员卡种信息，会员外部卡号，操作店铺ID，客户代码 需提供
         if (StringUtils.isEmpty(frCard.getShopId()) || StringUtils.isEmpty(frCard.getCustomerCode())
-                || StringUtils.isEmpty(frCard.getExternalNo()) || StringUtils.isEmpty(frCard.getCardNo()) || StringUtils.isEmpty(frClient.getClientName())
+                || StringUtils.isEmpty(frCard.getCardNo()) || StringUtils.isEmpty(frClient.getClientName())
                 || StringUtils.isEmpty(frClient.getMobile()) || StringUtils.isEmpty(frClient.getConsultantId()) || frClient.getSex() == null) {
             return JsonResult.failMessage("信息设置有误，会员卡，");
         }
@@ -947,7 +960,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
             userURL = mapS.get("userURL");
             shopId = mapS.get("shopId");
         }
-        frClient.setCustomerCode(frCard.getCustomerCode());
+        frClient.setCustomerCode(frClient.getCustomerCode());
         //判断是否现有客户，已经是现有客户了直接返回，
 //        List<FrClient> frClientList = iFrClientService.queryByClient(frClient);
 //        if (frClientList != null && frClientList.size() > 0) {
@@ -959,6 +972,7 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
 //        }
         FrClient frClient1=new FrClient();
         if(temp.getId()==null){
+            frClient.setCustomerCode(frCard.getCustomerCode());
              frClient1 = iFrClientService.addClientPersonal(frClient, true, shopId);
         }else {
              frClient1 = temp;

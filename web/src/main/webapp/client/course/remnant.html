@@ -8,12 +8,9 @@
                 数量：{{item.buyCount + item.sendCount | toNum}}
                 （{{item.buyCount| toNum}}+ <span
                     class="yellow">{{item.sendCount|toNum}}</span> ）
-                已消费数量：{{item.consumeLength| toNum}}
-                价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
-                * (item.consumeLength)|toMoney}}
-                剩余价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
-                * ((item.buyCount + item.sendCount) -
-                item.consumeLength)|toMoney}}
+                已消费数量：{{item.buyCount + item.sendCount - item.allCount| toNum}}
+                价格：{{item.price|toMoney}}
+                剩余价格：{{(item.allCount * item.needPrice)/(item.buyCount + item.sendCount)|toMoney}}
                 有效期：{{item.useful}} 个月 结束时间：{{item.endTime| formatDate2}}
                 状态：<span class="blod">{{item.state |stateFilter}}</span>
             </option>
@@ -76,8 +73,435 @@
 
         </tbody>
     </table>
-
+    <!-- 付款 -->
+    <edu-pay-bill-children></edu-pay-bill-children>
 </li>
+<template id="edu-pay-bill-id">
+    <!-- 付款 -->
+    <div id="offer" class="newCustomers_maskLayer" style="display: block;" v-show="isShowBill">
+        <div class="newCustomers_maskLayer_box">
+            <div class="newCustomers_maskLayer_box_top">
+                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="isShowBill = false">X</a>
+            </div>
+            <div class="newCustomers_maskLayer_box_shen">
+                <fieldset class="section2">
+                    <legend>消费人员信息</legend>
+                    <div>
+
+                        <span>会员姓名：<strong>{{clientInfo.clientName}} </strong></span>
+                        <span>手机号码：<strong>{{clientInfo.mobile}} </strong></span>
+                        <span>性别：<strong v-text="clientInfo.sex == 1 ? '女' : '男'"> </strong></span>
+                    </div>
+                </fieldset>
+                <fieldset class="section3">
+                    <legend>产品信息</legend>
+                    <div class="section3_box">
+                        <div class="section3_box_top">
+                            <span>订单编号：<strong>{{orderNo}} </strong> </span> <span>创建时间：{{createDate}}</span>
+                        </div>
+                        <div class="section3_box_botton">
+                            <div class="section3_box_botton_left">
+                                <img :src="eduItem.courseImage" alt="">
+                            </div>
+                            <div class="section3_box_botton_rigth">
+                                <div style="">
+                                    <strong>{{eduItem.courseName}}</strong>
+                                    <span>单价：<strong>￥{{eduItem.price| toMoney}}</strong></span>
+                                    <span>可用数量：<strong>￥{{eduItem.allCount| toMoney}}</strong></span>
+                                    <span>总价：<strong>￥{{eduItem.totalPrice| toMoney}}</strong></span>
+                                </div>
+                                <div style="">
+                                    <span>有效期：
+                                        <span style="margin-right: 0;">{{eduItem.startTime | toDateyyyyMMdd}}</span>~
+                                        <span>{{eduItem.endTime | toDateyyyyMMdd}}</span>
+                                    </span>
+                                    <span>购买数量：<span>{{eduItem.buyCount| toMoney}}</span></span>
+                                    <span>已付款金额：<strong>￥{{eduItem.payPrice| toMoney}}</strong></span>
+                                </div>
+                                <div style="">
+                                     <span style="margin-left: 0px;">赠送数量：<span>{{eduItem.sendCount| toMoney}}</span></span>
+                                    <span>未付款金额：<strong>￥{{eduItem.noPrice| toMoney}}</strong></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="payment_method">
+                    <div class="payment_method_top">
+                        <ul>
+                            <li :class='{on: index == 0}' @click="index = 0">会员消费</li>
+                            <li :class='{on: index == 1}' @click="index = 1">普通消费</li>
+                        </ul>
+                    </div>
+                    <div class="payment_method_left pull-left">
+                        <ul>
+                            <li class="on li1" v-if="index==0">
+                                <div class="col-md7">
+                                    <div class="col_md7_top">卡号/手机号码：
+                                        <input type="text" v-model="memberInfo.num"
+                                               oninput="value=value.replace(/[^\d]+/g,'')">
+                                        <a href="javascript:;" class="btn btn-success"
+                                           @click="searchByTelAndNo(memberInfo.num)">搜索</a></div>
+                                    <div class="col_md7_botton">
+                                        <table class="table table-bordered text-center table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>票券号码</th>
+                                                <th>票券名称</th>
+                                                <th>可用权益</th>
+                                                <th>使用</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for='(item,index) in memberInfo.ticketList'>
+                                                <td v-text="index + 1"></td>
+                                                <td v-text="item.num"></td>
+                                                <td v-text="item.name"></td>
+                                                <td v-text="item.interest"></td>
+                                                <td><label><input type="checkbox" v-model="item.use"></label></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div>显示更多</div>
+                                    </div>
+                                </div>
+                                <div class="col-md5">
+                                    <div>
+                                        <div>会员卡号： <strong
+                                                class="font-bold">{{memberInfo.cardInfo.cardNo}}</strong></div>
+                                        <div>会员名称：<strong
+                                                class="font-bold">{{memberInfo.cardInfo.cardUserName}}</strong></div>
+                                        <div>票劵差价：
+                                            <strong class="font-bold col-red">{{memberInfo.cardInfo.differencePrice|toMoney}}</strong>
+                                        </div>
+                                        <div>票劵抵扣：
+                                            <strong class="font-bold col-red">{{memberInfo.cardInfo.totalPrice|toMoney}}</strong>
+                                        </div>
+                                        <div>卡中储值金额：
+                                            <strong class="font-bold col-red">{{memberInfo.cardInfo.storageOrderPrice|toMoney}}</strong>
+                                        </div>
+                                        <div>扣储值金额：
+                                            <input type="text" v-model="memberInfo.cardInfo.inputMoney"
+                                                   placeholder="0.00"
+                                                   oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
+                                            ></div>
+                                        <div>输入凭证：
+                                            <input type="password" v-model="memberInfo.cardInfo.userPass"
+                                                   @change="verifyPassword"></div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="on li2" v-if="index==1">
+                                <div class="col-md7">
+                                    <div class="col_md7_top">手机号码：
+                                        <input type="text" v-model="generalInfo.num" oninput="value=value.replace(/[^\d]+/g,'')">
+                                        <a href="javascript:;" class="btn btn-success" @click="searchByTelAndNo(generalInfo.num)"
+                                        >搜索</a>
+                                    </div>
+                                    <div class="col_md7_botton">
+                                        <table class="table table-bordered text-center table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>票券号码</th>
+                                                <th>票券名称</th>
+                                                <th>可用权益</th>
+                                                <th>使用</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for='(item,index) in generalInfo.ticketList'>
+                                                <td v-text="index + 1"></td>
+                                                <td v-text="item.num"></td>
+                                                <td v-text="item.name"></td>
+                                                <td v-text="item.interest"></td>
+                                                <td><label><input type="checkbox" v-model="item.use"></label></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div>显示更多</div>
+                                    </div>
+                                </div>
+                                <div class="col-md5">
+                                    <div>
+                                        <div>票券可用总权益：<strong>{{generalInfo.totalPrice|toMoney}}</strong></div>
+                                        <div>输入使用权益：<input type="text"
+                                                           oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
+                                                           v-model="generalInfo.inputMoney"></div>
+                                        <div>需补差价：<strong>{{generalInfo.differencePrice|toMoney}}</strong></div>
+                                        <fieldset>
+                                            <legend>普通消费说明</legend>
+                                            <div>
+                                                <p>1、本阶段只支持系统存在的潜在客户消费;</p>
+                                                <p>2、如果系统不存在的客户想用票券消费;</p>
+                                                <div>
+                                                    <p>1）新建潜在客户必须要有手机号码、姓名；</p>
+                                                    <p>2）销售/赠送票券;</p>
+                                                    <p>3）在本届面录入手机号码，如果有消费权益就会自动带出 ;</p>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="payment_method_box pull-left">
+                        <fieldset style="border-color:red">
+                            <legend style="color:#FF9900">支付方式</legend>
+                            <div class="section2_boxs1_right">
+                                <div class="section2_boxs1_top">
+                                    <div>支付方式</div>
+                                    <div>支付宝</div>
+                                    <div>刷卡</div>
+                                    <div>微信</div>
+                                    <div>现金</div>
+                                    <div>转账</div>
+                                    <div>花呗</div>
+                                    <div>其他支付</div>
+                                </div>
+                                <div class="section2_boxs1_botton">
+                                    <div>金额</div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p1" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p2" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p3" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p4" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p5" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p6" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                    <div><span>￥</span>
+                                        <input type="text" v-model="payType.p7" placeholder="0.00"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="payment_method_rigth pull-left">
+                        <fieldset>
+                            <legend style="color:#FF9900">折扣优惠</legend>
+                            <table border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr>
+                                    <td colspan="2">整单打折</td>
+                                </tr>
+                                <tr>
+                                    <td>优惠折扣：</td>
+                                    <td><input type="text" v-model="rebate.offer" placeholder="0"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>整单去零：</td>
+                                    <td><input type="text" v-model="rebate.integer" placeholder="0"
+                                               oninput="value=value.replace(/[^\d^]+/g,'')"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <label>
+                                            <input type="radio" name="discount-type-radio" v-model="rebate.type"
+                                                   value="1">
+                                            <span>整单打折(重复使用)</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-align-right">满：</td>
+                                    <td class="text-align-right">
+                                        <input type="text" v-model="rebate.repeat.full" placeholder="0"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-align-right">减：</td>
+                                    <td class="text-align-right">
+                                        <input type="text" v-model="rebate.repeat.less" placeholder="0"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <label>
+                                            <input type="radio" name="discount-type-radio" value="0"
+                                                   v-model="rebate.type">
+                                            <span>整单打折(单次使用)</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-align-right">满：</td>
+                                    <td>
+                                        <input type="text" v-model="rebate.single.full" placeholder="0"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-align-right">减：</td>
+                                    <td>
+                                        <input type="text" v-model="rebate.single.less" placeholder="0"
+                                               oninput="value=value.replace(/[^\d^\.]+/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </div>
+                    <div class="payment_method_rigth2 pull-left">
+                        <fieldset style="border-color:#009900">
+                            <legend style="color:#009900">支付详情</legend>
+                            <div class="rows">
+                                <div>
+                                    <div class="col-md-6">小计：</div>
+                                    <div class="col-md-6"> ￥<strong>{{payMoney.totalPrice | toMoney}}</strong>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-md-6">折扣/优惠：</div>
+                                    <div class="col-md-6">￥<strong>{{payMoney.discount | toMoney}}</strong></div>
+                                </div>
+                                <div>
+                                    <div class="col-md-6">抵扣金额：</div>
+                                    <div class="col-md-6">￥<strong>{{payMoney.discountMoney | toMoney}}</strong>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-md-6">应付金额：</div>
+                                    <div class="col-md-6">￥ <strong><span
+                                            class="tored">{{payMoney.price | toMoney}}</span></strong>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-md-6">未付金额：</div>
+                                    <div class="col-md-6">￥{{payMoney.noPrice | toMoney}}</div>
+                                </div>
+                                <div>
+                                    <div class="col-md-6">找零：</div>
+                                    <div class="col-md-6">￥<strong><span
+                                            class="tored">{{payMoney.retChange | toMoney}}</span></strong>
+                                    </div>
+                                </div>
+                                <div style=" border-bottom: none">
+                                    <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂账</a></div>
+                                    <div class="col-md-6"><a href="javascript:;" class="btn btn-default">挂单</a></div>
+                                </div>
+                                <div style=" border-bottom: none">
+                                    <div class="col-md-12">
+                                        <a href="javascript:;" class="btn btn-success" @click="payBill">结账</a>
+                                    </div>
+                                </div>
+                                <!--<div style=" border-bottom: none">-->
+                                    <!--<div class="col-md-12">-->
+                                        <!--<label>-->
+                                            <!--<input type="checkbox" v-model="invoiceStatus">-->
+                                            <!--<span>购置发票</span>-->
+                                        <!--</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--表格1 输入手机号码显示-->
+        <div class="newCustomers_maskLayer performance" v-show="memberInfo.isShow" style="display:block;">
+            <div class="newCustomers_maskLayer_box" style="top: 55%;">
+                <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span>
+                    <a href="javascript:;" class="newCustomers_maskLayer_X" @click="memberInfo.isShow = false;">X</a>
+                </div>
+                <div class="KHGL-table-box">
+                    <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th style="width: 15%;">选择</th>
+                            <th style="width: 15%;">标识</th>
+                            <th style="width: 25%;">姓名</th>
+                            <th style="width: 15%;">性别</th>
+                            <th>创建时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in memberInfo.optionClientList">
+                            <td><span class="col-green" @click="catcherClientList(item)">选择</span></td>
+                            <td><span class="col-red" v-text="item.CustomerMark"></span></td>
+                            <td v-text="item.clientName"></td>
+                            <td v-text="item.sex == 1 ? '女' : '男'"></td>
+                            <td>{{item.applyTime|formatDate }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 表格1 -->
+
+        <!-- 选择储值会员卡 -->
+        <div class="newCustomers_maskLayer performance" v-show="memberInfo.isShowCardStatus" style="display: block;">
+            <div class="newCustomers_maskLayer_box" style="top: 65%;">
+                <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span>
+                    <a href="javascript:;" @click="memberInfo.isShowCardStatus = false;"
+                       class="newCustomers_maskLayer_X">X</a>
+                </div>
+                <h5 class="KHGL-title">选择要储值的会员卡</h5>
+                <div class="KHGL-table-box">
+                    <table class="KHGL-table2" border="0" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th style="width: 5%;">选择</th>
+                            <th style="width: 10%;">姓名</th>
+                            <th style="width: 12%;">手机号码</th>
+                            <th style="width: 12%;">卡系列</th>
+                            <th style="width: 7%;">卡名称</th>
+                            <th style="width: 15%;">开始日期</th>
+                            <th style="width: 15%;">失效日期</th>
+                            <th style="width: 8%;">剩余权益</th>
+                            <th style="width: 8%;">剩余储值</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in memberInfo.optionClientCardList">
+                            <td class="cursorP" style="color: #090 !important;" @click="catcherCardId(item)">选择</td>
+                            <td class='col-blue'>{{item.clientName}}</td>
+                            <td>{{item.mobile}}</td>
+                            <td>{{item.cardFlag}}</td>
+                            <td class='col-red'>{{item.cardTypeName}}</td>
+                            <td>{{item.bindTime| toDateyyyyMMddHHmm}}</td>
+                            <td>{{item.invalidTime| toDateyyyyMMddHHmm}}</td>
+                            <td>{{item.orderNum}}</td>
+                            <td>{{item.orderPrice}}</td>
+                            <td>{{item.a_status}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- end 选择储值会员卡 -->
+    </div>
+</template>
+<script src="../client/course/pay/bill.js"></script>
 
 <script>
     var remnantVue = new Vue({
@@ -243,8 +667,7 @@
                     return false;
 
                 }
-
-                //继续操作启用动作
+              /*  //继续操作启用动作
                 //判断当前是否正常
                 if(!this.selectData.id){
                     alert("请选择项目")
@@ -253,29 +676,40 @@
                 if(this.selectData['state'] !== 1){
                     alert("请选择欠款项目");
                     return false;
-                }
-                this.toDisabled = true;
-                let param = {};
-                param.orderId = this.selectData.id;
-                param.cid = $.cookie('cid');
-                param.id = $.cookie('id');
-                param.name = $.cookie('name');
-                param.code = $.cookie('code');
-                param.clientName = $.cookie('clientName');
-                param.shopId = this.selectData.shopId;
-                param.sdadiumId = this.selectData.sdadiumId;
-                param.courseName = this.selectData.courseName;
-                axiosPostParams(COURSE_URL.customerRemnant, param, (res)=>{
-                    if (res.code === '200') {
-                        this.search();
-                        alert("补余成功");
-                        this.toDisabled = false;
+                }*/
+                //选择弹窗，并返回结果调用
 
-                    }else{
-                        alert('补余失败,请重试');
-                        this.toDisabled = false;
-                    }
+                Event.$emit(EDU_CONSTANT.listenerChooseClientInfo, true, this.selectData);
+                Event.$off(EDU_CONSTANT.listenerChooseClientInfoBack)
+                Event.$on(EDU_CONSTANT.listenerChooseClientInfoBack, (back)=>{
+                    //该用户付款的钱
+                    console.log(back)
+                  //  this.saveEduOrder(back, val);
+                    this.toDisabled = true;
+                    let param = {};
+                    param.orderId = this.selectData.id;
+                    param.cid = $.cookie('cid');
+                    param.id = $.cookie('id');
+                    param.name = $.cookie('name');
+                    param.code = $.cookie('code');
+                    param.clientName = $.cookie('clientName');
+                    param.shopId = this.selectData.shopId;
+                    param.sdadiumId = this.selectData.sdadiumId;
+                    param.courseName = this.selectData.courseName;
+                    axiosPostParams(COURSE_URL.customerRemnant, param, (res)=>{
+                        if (res.code === '200') {
+                            this.search();
+                            alert("补余成功");
+                            this.toDisabled = false;
+
+                        }else{
+                            alert('补余失败,请重试');
+                            this.toDisabled = false;
+                        }
+                    })
                 })
+               // return false;
+
             }
 
         }

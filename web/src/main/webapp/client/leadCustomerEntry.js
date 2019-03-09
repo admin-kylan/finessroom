@@ -65,7 +65,7 @@ const lcapp = new Vue({
                 vipLevel:'',
                 purchaseWill:'',
                 willingPrice:null,
-                buildDate:null,
+                buildDate:(new Date()).format('yyyy-MM-dd'),
                 cautionQuestion:null,
                 willingCardType:'',
                 willingCardName:'',
@@ -115,6 +115,7 @@ const lcapp = new Vue({
                 let jsonData = eval(res);
                 if(jsonData['data']['code']==='200'){
                     that.shopList = jsonData['data']['data'];
+                    that.customerData.shopId=$.cookie("shopid")
                 }else {
                     $.alert(jsonData['data']['msg'])
                 }
@@ -172,6 +173,7 @@ const lcapp = new Vue({
                     let jsonData = eval(res);
                     if(jsonData['data']['code']==='200'){
                         that.salespersonList = jsonData['data']['data'];
+                       that.customerData.salespersonId=$.cookie("id")
                     }else {
                         $.alert(jsonData['data']['msg'])
                     }
@@ -227,6 +229,49 @@ const lcapp = new Vue({
                 }
             }
         },
+        getUserData:function (referenceTel) {
+            var that = this;
+            var mess = '';
+            var isFlag = false;
+            //检索手机
+            isFlag = isPoneAvailable(referenceTel);
+            mess = "请输入正确的手机号";
+            if (!isFlag) {
+                // that.loadData2.clitenUser[str] = '';
+                return $.alert(mess);
+            } else {
+                var url = $.stringFormat('{0}/frClient/getNameByPhone', $.cookie('url'));
+                console.log(referenceTel)
+                $.get(url, {"phone": referenceTel}, function (res) {
+                         console.log(res.data)
+                    that.customerData.base.referenceName=res.data
+                    $("#name").val( that.customerData.base.referenceName)
+                })
+
+            }
+        },    getUserByMobile:function (mobile) {
+            var that = this;
+            var mess = '';
+            var isFlag = false;
+            //检索手机
+            isFlag = isPoneAvailable(mobile);
+            mess = "请输入正确的手机号";
+            if (!isFlag) {
+                // that.loadData2.clitenUser[str] = '';
+                return $.alert(mess);
+            } else {
+                var url = $.stringFormat('{0}/frClient/getByPhone', $.cookie('url'));
+                console.log(mobile)
+                $.get(url, {"phone": mobile}, function (res) {
+                    console.log(res.data)
+                    if(res.data!=false && res.data!="false"){
+                        that.customerData.base=res.data
+                    }
+
+                })
+
+            }
+        },
         /**
          * 上传图片
          */
@@ -259,7 +304,7 @@ const lcapp = new Vue({
                 $.alert(jsonData['data']['data']['msg'])
                 that.customerData.picLink = jsonData['data']['data']['imgUrl'];
                 console.log(that.customerData.picLink)
-                that.imgUrl = $.stringFormat('{0}{1}{2}',$.cookie('url'),$.cookie('imgPath'),jsonData['data']['data']['imgUrl']);
+                that.imgUrl = jsonData['data']['data']['imgUrl'];
                 if(jsonData['data']['code']==='200'){
                     return true;
                 }
@@ -345,6 +390,8 @@ const lcapp = new Vue({
                 console.log(error);
             });
         },
+
+
     }
 });
 
@@ -374,4 +421,26 @@ jeDate('.buildDate', {
 });
 
 
-
+// 对Date的扩展，将 Date 转化为指定格式的String 
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
+// 例子： 
+// (new Date()).format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
+// (new Date()).format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
+Date.prototype.format = function(fmt) { //author: meizz 
+	var o = {
+		"M+": this.getMonth() + 1, //月份 
+		"d+": this.getDate(), //日 
+		"h+": this.getHours(), //小时 
+		"m+": this.getMinutes(), //分 
+		"s+": this.getSeconds(), //秒 
+		"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+		"S": this.getMilliseconds() //毫秒 
+	};
+	if (/(y+)/.test(fmt))
+		fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	for (var k in o)
+		if (new RegExp("(" + k + ")").test(fmt))
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	return fmt;
+}

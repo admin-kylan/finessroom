@@ -26,6 +26,8 @@ public interface FrClientMapper extends BaseMapper<FrClient> {
 
     List<PotentialClientDTO> selectPotentialList(Page page, PotentialFilterParam conditions);
 
+    List<ProspectiveClientDTO> selectPotentialListBG(Page page, PotentialFilterParam conditions);
+
     Map<String,Object> getClient(@Param("id") String id);
 
     void updateClient(FrClient frClient);

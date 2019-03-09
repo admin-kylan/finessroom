@@ -557,7 +557,24 @@ public class FrCardTypeServiceImpl extends BaseServiceImpl<FrCardTypeMapper, FrC
         return baseMapper.queryByShopIdList(map);
     }
 
-
+    @Override
+    public List<FrCardType> queryByShopIdList2(String shopId, String CustomerCode, String type, Integer typeSetState) throws YJException {
+        if (StringUtils.isEmpty(CustomerCode) || StringUtils.isEmpty(shopId) || type == null) {
+            throw new YJException(YJExceptionEnum.REQUEST_NULL);
+        }
+        List<String> shopIdList = new ArrayList<>();
+        shopIdList.add(shopId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("CustomerCode", CustomerCode);
+        map.put("shopIdList", shopIdList);
+        if (typeSetState != null) {
+            map.put("typeSetState", typeSetState);
+        }
+        if (type != null && type!="") {
+            map.put("type", type);
+        }
+        return baseMapper.queryByShopIdList2(map);
+    }
     @Override
     public FrCardType queryByCardId(String cardId, String CustomerCode) throws YJException {
         if (StringUtils.isEmpty(cardId) || StringUtils.isEmpty(CustomerCode)) {

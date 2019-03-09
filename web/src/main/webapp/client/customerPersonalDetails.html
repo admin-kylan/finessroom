@@ -241,7 +241,7 @@
                     </tbody>
                 </table>
                 <p class="btn">
-                    <input type="button" value="保存" @click="save1"/>
+                    <input type="button save1" value="保存" @click="save1"/>
                 </p>
             </li>
             <li class="on list2" v-if="LiIndex==1">
@@ -910,7 +910,7 @@
                                 <span>头发种类：</span>
                                 <p>
                                     <label  v-for="hairInfo in HairInfo" v-if="hairInfo.archivesType==3">
-                                        <input name="colorReasons" v-bind:value="hairInfo.id" :id="hairInfo.id"
+                                        <input name="hairTy" v-bind:value="hairInfo.id" :id="hairInfo.id"
                                                type="checkbox"/>{{hairInfo.archivesName}}
                                     </label>
                                 </p>

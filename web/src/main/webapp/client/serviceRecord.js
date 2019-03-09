@@ -214,7 +214,7 @@ var serviceRecord = new Vue({
                                 //获取当前页数
                                 console.log(page)
                                 var currPage = page + "";
-                                that.queryServiceRecordList({"cid": cid, "currPage": currPage});
+                                that.queryServiceRecordList({"cid": cid,'status':this.typeSelect, "currPage": currPage});
                             }
                         })
                     } else {

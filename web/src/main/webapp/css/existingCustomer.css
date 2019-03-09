@@ -24,13 +24,15 @@ html,body{
 	border-radius: 5px;
 	border: 1px solid #ccc;
 	padding: 0 10px;
-	text-align: center;
+	text-align: left;
 	min-width: 60px;
 }
 
 #c_rig2>.follow .btn{
 	padding: 0 15px;
 	height: 28px;
+	color: #333;border-color:#333;
+	text-align: center;
 } 
 .tab{
 	margin-top:10px;
@@ -88,9 +90,22 @@ html,body{
 }
 .tableWrap table td img{
 	vertical-align: middle;
-	width: 35px;
-    height: 35px;
+	width: 36px;
+    height: 36px;
 	border-radius: 50%;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -18px;
+}
+.tableWrap table td a{
+	display:block;padding-left: 40px;position: relative;text-align: left;
+}
+.tableWrap table td a span{
+    color: #00f;
+    font-weight: 900;
+    font-size: 13px;
+    display: inline-block;
 }
 .tableWrap table td.tored{
 	color:#FF0000;
@@ -104,14 +119,8 @@ html,body{
 .tableWrap table td.toyen{
 	color:#999999;
 }
-.tableWrap table td a{
-	display:inline-block;
-}
-.tableWrap table td a span{
-    color: #00f;
-    font-weight: 900;
-    font-size: 13px;
-    display: inline-block;
+.tableWrap table td.tonormal{
+	color:#008000;
 }
 fieldset{
 	margin:5px;
@@ -411,7 +420,8 @@ fieldset{
 }
 .follow .btn.btn-default.active {
 	background: #0cc;
-	color: #fff;
+	color: #fff!important;
+	border-color: #0cc!important;
 }
 #c_rig2 .c_rig2Head select,
 #c_rig2 .c_rig2Head input {

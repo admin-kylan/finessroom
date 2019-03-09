@@ -57,6 +57,7 @@ const EDUCATION_URL = {
     findEduCationInfoById: '/frEducation/findEduCationInfoById',//查询课程信息
     updateEducationInfo: '/frEducation/updateEducationInfo',//更新课程
     findEduDateByEduId: '/frEducation/findEduDateByEduId',//查询这一周的私教课程时间
+    findPostTicketList: 'eduTicket/findPostTicketList', // 查询票券
 };
 
 const ADMISSION_URl = {

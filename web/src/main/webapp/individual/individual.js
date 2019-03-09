@@ -118,7 +118,15 @@ const app = new Vue({
             // 尾部
             useTailNum:false
         }
-        ,Span:false
+        ,Span:false,
+        existence:{
+            list:[],
+            currPage:1,
+            pageSize:10,
+            totalCount:0,
+            totalPage:0,
+        },
+        existenceType:0
     },
     computed:{
         //协议号管理计算公式：结束编号 = 开始编号 + 数量 - 去除数字n的数量 - 1
@@ -196,7 +204,116 @@ const app = new Vue({
         // },
 
     },
+    filters: {
+        formatDate: function (time,type,typeT) {
+            if(!time){
+                return '';
+            }
+            var _time = timeFormatDate(time,type,typeT);
+            return _time;
+        },
+    },
     methods:{
+    	/**
+         * @param Intger(传0为导出数据,传1为下载模板)
+         * @returns {*}
+         */ 
+    	clientUpload(type){
+    		var that=this;
+    		var url
+    		if(that.existenceType==0){
+            	url = $.stringFormat("{0}/excel/client_upload",$.cookie('url'));
+            }else{
+            	url = $.stringFormat("{0}/excel/prospective_client",$.cookie('url'));
+            }
+    		axios.get(url,{params:{
+    			Intger:type,
+    			page:that.existence.currPage,
+                limit:that.existence.pageSize
+    		}}).then(function(res){
+    			console.log(res)
+    		})
+    	},
+        /**
+         * 判断等级样式
+         * @param level
+         * @returns {*}
+         */
+        levelClass :function(level) {
+            switch(level) {
+                case '普通会员':
+                    return 'togreen';
+                case '银卡会员':
+                    return 'toyen';
+                case '金卡会员':
+                    return 'toyellow';
+                case '钻石会员':
+                    return 'tored';
+            }
+        },
+    	statusJudge:function (status) {
+            var res = {};
+            switch(status) {
+                case 0:
+                    res.class = 'tonormal';
+                    res.text = '正常';
+                    res.operateClass = '';
+                    res.operate = '打印';
+                    return res;
+                default:
+                    res.class = 'tored';
+                    res.text = '未付款';
+                    res.operateClass = 'tored';
+                    res.operate = '去付款';
+                    return res;
+            }
+        },
+        changeType:function(idx){
+        	if(this.existenceType!=idx){
+        		this.existenceType=idx;
+        		this.getExistenceList(1);
+        	}
+        },
+    	getExistenceList:function(page){
+    		var that=this;
+            Loading.prototype.show();
+            var url,id;
+            if(that.existenceType==0){
+            	url = $.stringFormat("{0}/frClient/getExistenceList",$.cookie('url'));
+            	id='pagination'
+            }else{
+            	url = $.stringFormat("{0}/frClient/getPotentialListBG",$.cookie('url'));
+            	id='pagination1'
+            }
+    		axios.get(url,{params:{
+                	page:page || that.existence.currPage,
+                	limit:that.existence.pageSize
+                }}).then(function(res){
+                //隐藏加载中
+                Loading.prototype.hide();
+            	var jsonData=res.data;
+            	if(jsonData.code==='200'){
+                    that.existence = jsonData.data;
+	            	new myPagination({
+	                    id: id,
+	                    curPage:jsonData.data.currPage, //初始页码
+	                    pageTotal: jsonData.data.totalPage, //总页数
+	                    pageAmount: jsonData.data.pageSize,  //每页多少条
+	                    dataTotal: jsonData.data.totalCount, //总共多少条数据
+	                    showPageTotalFlag:true, //是否显示数据统计
+	                    showSkipInputFlag:true, //是否支持跳转
+	                    getPage: function (page) {
+	                        //获取当前页数
+	                        that.getExistenceList(page);
+	                    }
+	                })
+            	}
+            }).catch(function (error) {
+                //隐藏加载中
+                Loading.prototype.hide();
+                $.alert(error)
+            });
+    	},
         //阿拉伯数字转中文数字
         toChinese:function (i) {
             return toZhDigit(i);

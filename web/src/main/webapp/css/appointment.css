@@ -66,15 +66,16 @@ input[type=checkbox] {
 
 .content {
 	float: left;
-	width: 88%;
+	width: 100%;
 	height: 100%;
 }
 
 .lefNav {
-	padding-left: 1%;
-	width: 8.9%;
+	padding-left: 10px;
+	width: 124px;
 	height: 100%;
 	border-right: 1px solid #ccc;
+	overflow: auto;
 }
 
 .lefNav li {
@@ -89,19 +90,24 @@ input[type=checkbox] {
 	text-align: center;
 }
 
+.lefNav li:hover{
+	background: #e4e4e4;
+}
+
 .lefNav li.on {
 	position: relative;
-	right: -1px;
-	background: #fff;
-	border-right: 1px solid #fff;
+	/*right: -1px;*/
+	color: #fff;
+	background: #0cc;
+	/*border-right: 1px solid #fff;*/
 	z-index: 1;
 }
 
 .contains {
 	position: relative;
-	width: 90%;
+	height: 100%;
+	width: calc(100% - 135px);
 	overflow: hidden;
-	overflow: auto;
 }
 
 .contains::after {
@@ -121,9 +127,20 @@ input[type=checkbox] {
 
 .contains .list.on {
 	display: block;
+	float: left;
+	width: 100%;
+	height: 100%;
+}
+
+.contains .list.on > div{
+	float: left;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
 }
 
 .contains .list .searchWrap {
+	float: left;
 	width: 100%;
 	border-bottom: 1px solid #ccc;
 }
@@ -155,6 +172,8 @@ input[type=checkbox] {
 }
 
 .contains .list .screening {
+	float: left;
+	width: calc(100% - 15px);
 	padding-left: 15px;
 	height: 52px;
 	background: #f2f2f2;
@@ -166,7 +185,7 @@ input[type=checkbox] {
 	margin: 0 5px;
 	height: 28px;
 	border: 1px solid #ccc;
-	width: 15.3%;
+    width: 160px;
 	min-width: 80px;
 	text-indent: 5px;
 }
@@ -178,46 +197,60 @@ input[type=checkbox] {
 .contains .list .screening .btnWrap span {
 	float: left;
 	margin: 0 2px;
-	width: 60px;
-	height: 30px;
-	border-radius: 5px;
+	width: 58px;
+	height: 28px;
+	line-height: 28px;
+	border: 1px #999 solid;
+    border-radius: 2px;
 	cursor: pointer;
-	line-height: 30px;
-	color: #fff;
+	background: #fff;
 	text-align: center;
 }
 
-.contains .list .screening .orange {
-	background: #f90;
-}
-
-.contains .list .screening .blue {
-	background: #00f;
-}
-
-.contains .list .screening .red {
-	background: #f00;
-}
-
-.contains .list .screening .green {
-	background: green;
-}
-
-.contains .list .screening .skyBlue {
-	background: #09f;
-}
-
-.contains .list .screening .grey {
+.contains .list .screening .btnWrap span.grey {
+	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	border: 0;
 	background: #0cc;
+	color: #fff;
 }
+
+/*.contains .list .screening .orange {*/
+	/*background: #f90;*/
+/*}*/
+
+/*.contains .list .screening .blue {*/
+	/*background: #00f;*/
+/*}*/
+
+/*.contains .list .screening .red {*/
+	/*background: #f00;*/
+/*}*/
+
+/*.contains .list .screening .green {*/
+	/*background: green;*/
+/*}*/
+
+/*.contains .list .screening .skyBlue {*/
+	/*background: #09f;*/
+/*}*/
 
 .screening>label {
-	width: 61.5%;
-	font-weight: 500;
+    width: auto;
+    font-weight: 500;
+    margin-right: 5px;
 }
 
 .screening>.btnWrap {
-	width: 38.5%;
+	width: auto;
+}
+
+.contains .list .tab{
+	float: left;
+	width: 100%;
+	height: calc(100% - 105px);
+	overflow: auto;
 }
 
 .contains .list .tab h4 {
@@ -241,8 +274,16 @@ input[type=checkbox] {
 	color: #0cf;
 }
 
+.contains .list .tab .table{
+    width: calc(100% - 16px);
+    margin-left: 8px;
+    margin-right: 8px;
+    max-height: 150px;
+    overflow: auto;
+}
+
 .contains .list .tab table {
-	width: 100%;
+    width: 100%;
 	text-align: center;
 }
 
@@ -252,6 +293,21 @@ input[type=checkbox] {
 
 .contains .list .tab table tr {
 	height: 30px;
+}
+
+.contains .list .tab table tr td {
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
+}
+
+.contains .list .tab table thead tr td{
+	border: 0;
+}
+
+.contains .list .tab table .skyBlue {
+	color: #09f;
 }
 
 .contains .list .tab table .margin {
@@ -274,8 +330,17 @@ input[type=checkbox] {
 	color: #f00;
 }
 
-.contains .list .tab table .skyBlue {
+.contains .list .tab table td.skyBlue {
 	color: #09f;
+	min-width: 115px;
+	max-width: 180px;
+	/* overflow: hidden; */
+	/* text-overflow: ellipsis; */
+	/* white-space: nowrap; */
+}
+
+.contains .list .tab table td.operation{
+	width: 195px;
 }
 
 .contains .list .tab table .orange {
@@ -296,23 +361,37 @@ input[type=checkbox] {
     position: absolute;
     padding: 15px 5px 0;
     background: #f2f2f2;
-    top: 0px;
-    width: 97%;
+    top: 0;
+	width: 72%;
     box-shadow: 0 0 10px 1px #ccc;
-    left: 1%;
+    left: 1.5%;
 }
 
-.contains .list .tabBox::after {
+.contains .list .tabBox::before {
 	position: absolute;
 	content: '';
 	display: block;
-	top: 3px;
-	left: 79%;
-	width: 0;
+	top: 12px;
+	left: calc(100% + 1px);
+	width: 8%;
 	height: 0;
 	border: 15px solid transparent;
-	border-bottom: 15px solid #b9fff1;
-	border-top: none;
+	border-left: 15px solid #dadada;
+	/* border-top: none; */
+	cursor: pointer;
+}
+
+.contains .list .tabBox::after {
+    position: absolute;
+    content: '';
+    display: block;
+    top: 12px;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-left: 15px solid #f2f2f2;
+    /* border-top: none; */
 }
 
 .contains .list .tab .sub {
@@ -359,9 +438,10 @@ input[type=checkbox] {
 
 .contains .list .line {
 	padding-left: 20px;
-	height: 48px;
-	line-height: 48px;
-	background: #e1f9ff;
+	height: 40px;
+	line-height: 40px;
+	/*background: #e1f9ff;*/
+	background: #f8f8f8;
 	border-bottom: 1px dashed #ccc;
 }
 
@@ -377,7 +457,8 @@ input[type=checkbox] {
 .contains .list .line p>span strong {
 	width: 25px;
 	float: left;
-	margin: 12px 0;
+	margin-top: 6px;
+	margin-right: 4px;
 	height: 25px;
 	background-color: #fff;
 	border: 1px solid #ccc;
@@ -409,7 +490,8 @@ input[type=checkbox] {
 	width: 160px;
 	height: 160px;
 	border: 1px solid #ccc;
-	border-radius: 10px;
+	border-radius: 5px;
+	box-shadow: 3px 4px 8px #ccc;
 	text-align: center;
 }
 
@@ -484,8 +566,18 @@ input[type=checkbox] {
 }
 
 .contains .list3 table {
-	width: 100%;
+	width: calc(100% - 16px);
+	margin-left: 8px;
+	margin-right: 8px;
 	text-align: center;
+}
+
+.contains .list3 table td{
+	height: 30px;
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
 }
 
 .contains .list3 table .blue {
@@ -662,7 +754,9 @@ input[type=checkbox] {
 
 .contains .list4 table {
 	margin-top: 10px;
-	width: 100%;
+	width: calc(100% - 16px);
+	margin-left: 8px;
+	margin-right: 8px;
 	text-align: center;
 }
 
@@ -724,6 +818,14 @@ input[type=checkbox] {
 
 .contains .list5 table tr {
 	height: 30px;
+}
+
+.contains .list5 table tr td{
+	height: 30px;
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
 }
 
 .contains .list5 table thead {
@@ -878,23 +980,27 @@ input[type=checkbox] {
 	color: red;
 }
 .contains table tbody tr:nth-child(even){
-	background-color: #ecffff;
+	background-color: #e0fbfb;
 }
 
 
 
 /* //<!-- 课程预约/预约详情 --> */
 .bookDetail {
+	overflow: auto;
 	display: none;
 }
 
 .bookDetail .bookHeader {
-	height: 45px;
+	height: 46px;
 	line-height: 45px;
 	border-bottom: 1px solid #ccc;
+	width: 100%;
+	background: #fff;
 }
 
 .bookDetail .bookHeader img {
+	filter: brightness(80%);
 	margin: 0 10px;
 	cursor: pointer;
 }
@@ -902,6 +1008,12 @@ input[type=checkbox] {
 .bookDetail .bookHeader .grey {
 	margin-right: 5px;
 	color: #ccc;
+}
+
+.bookDetail .bookBox{
+	width: 100%;
+	height: calc(100% - 47px);
+	overflow: auto;
 }
 
 .bookDetail .bookBody {
@@ -988,8 +1100,19 @@ input[type=checkbox] {
 }
 
 .bookDetail .bookTab .table {
+	width: calc(100% - 16px);
+	margin-left: 8px;
+	margin-right: 8px;
 	text-align: center;
 	margin-bottom: 5px;
+}
+
+.bookDetail .bookTab .table td {
+	height: 30px;
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
 }
 
 .bookDetail .bookTab .table td span {
@@ -1053,7 +1176,7 @@ input[type=checkbox] {
 
 #appointment .newCustomers_maskLayer .newCustomers_maskLayer_box_top {
 	line-height: 36px;
-	background-color: rgba(0, 204, 204, 1);
+	background-color: #0066ff;
 	text-align: center;
 }
 
@@ -1063,11 +1186,11 @@ input[type=checkbox] {
 
 #appointment .newCustomers_maskLayer .newCustomers_maskLayer_box_top a {
 	position: absolute;
-	right: 0px;
+	right: 0;
 	color: #000;
 	font-size: 18px;
 	font-weight: 900;
-	padding: 0 10px;
+	padding: 7px 7px 0 0;
 }
 
 /* //弹窗头部 */
@@ -1146,7 +1269,8 @@ input[type=checkbox] {
 }
 
 #reservation .bookBody2 .rig {
-	width: 75%;
+	width: 70%;
+	margin-left: 5%;
 	line-height: 30px;
 }
 
@@ -1252,7 +1376,11 @@ input[type=checkbox] {
 
 
 /* 开课 */
-#startClass {}
+#startClass {
+	overflow: auto;
+	height: calc(100% - 5px);
+	padding-bottom: 5px;
+}
 
 #startClass h4 {
 	text-align: center;
@@ -1473,12 +1601,12 @@ input[type=checkbox] {
 }
 
 #coachInformation .newCustomers_maskLayer_box_shen_left>div {
-	font-size: 16px;
+	font-size: 12px;
 	margin: 10px 0;
 }
 
 #coachInformation .newCustomers_maskLayer_box_shen_left strong {
-	font-size: 16px;
+	font-size: 12px;
 }
 
 #coachInformation .newCustomers_maskLayer_box_shen_right {
@@ -2176,16 +2304,26 @@ input[type=checkbox] {
 .contains .list3 table .blue {
 	min-width: 100px;
 }
+
 #appointmentWorkbench tr td.skyBlue{
 	min-width: 115px;
 }
+
+#consumptionSchedule  td{
+	height: 30px;
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
+}
+
 #consumptionSchedule thead td:nth-child(3){
 	min-width: 170px;
 }
 
 @media screen and (max-width: 960px) {
 	.left li img {
-		margin: 12px 0px 0px 20px;
+		margin: 12px 0 0 20px;
 		float: left;
 	}
 }

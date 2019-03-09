@@ -96,14 +96,14 @@
                 <td>{{item.shopName}}</td>
                 <td>{{item.sdadiumName}}</td>
                 <td class="deepBlue">{{item.courseName}}</td>
-                <td>{{item.buyCount + item.sendCount | toNum}}</td>
-                <td>{{item.buyCount + item.sendCount - item.consumeLength|toNum}}</td>
 
-                <td>{{item.consumeLength |toNum}}</td>
+                <td>{{item.buyCount + item.sendCount| toNum}}</td>
+                <td>{{item.allCount| toNum}}</td>
+                <td>{{item.buyCount + item.sendCount - item.allCount|toNum}}</td>
                 <td>{{item.price|toMoney}}</td>
                 <td class="yellow">{{item.totalPrice|toMoney}}</td>
-                <td>{{(item.totalPrice/(item.buyCount + item.sendCount))
-                    * ((item.buyCount + item.sendCount) - item.consumeLength)|toMoney}}</td>
+                <td>{{(item.allCount * item.needPrice)/(item.buyCount + item.sendCount)|toMoney}}</td>
+
 
                 <td>{{item.useful}} 个月</td>
                 <td>{{item.startTime| formatDate2}}</td>

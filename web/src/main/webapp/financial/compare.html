@@ -31,37 +31,54 @@
 						<h3>软件园店  课程内容比较分析表</h3>
 						<div class="navBar clearfix">
 							<p class="choose fl">
-								<select name="" class="fl">
-									<option value="" selected>软件园店</option>
+								<select name="" v-model="shopId" class="fl" >
+									<!--<option value="" selected="">软件园店</option>-->
+									<option v-for='(item,index) in shopList' :value="item.id">
+										{{item.shopName}}
+									</option>
 								</select>
-								<select name="" class="fl">
-									<option value="" selected>健身团操</option>
+								<select name="" class="fl" v-model="eduType">
+									<option value="0" selected>健身团操</option>
+									<option value="1" selected>健身私教</option>
 								</select>
 								<label  class="fl">
-									<input type="date" /> ~ <input type="date" />
+									<input type="text" id="begin-date" v-model="beginDate" readonly/> ~
+									<input type="text" id="end-date" v-model="endDate" readonly/>
 								</label>
-								<span class="toYellow fl">打印</span>
-								<span class="toLightBlue fl">导出</span>
-								<span class="toDeepBlue fl">帮助</span>	
+								<!--<span class="toYellow fl">打印</span>-->
+								<!--<span class="toLightBlue fl">导出</span>-->
+								<!--<span class="toDeepBlue fl">帮助</span>	-->
 							</p>
 							<p class="search fr">
-								<input type="text" class="txt fl" placeholder="姓名"/>
-								<input type="submit" class="submit fl" value="搜索"/>
+								<input type="text" class="txt fl" placeholder="姓名" v-model="searchInput"/>
+								<input type="submit" class="submit fl" value="搜索" @click="search"/>
 							</p>
 						</div>
 						<p class="choose clearfix">
 							<span class="chooseSpan fl">高级筛选</span>
-							<select name="" class="fl">
+							<select name="" class="fl" v-model="weekId">
 								<option value="" selected>星期</option>
+								<option v-for='(item,index) in weekList' :value="item.id">
+									{{item.week}}
+								</option>
 							</select>
-							<select name="" class="fl">
+							<select name="" class="fl" v-model="timeId">
 								<option value="" selected>时间段</option>
+								<option v-for='(item,index) in timeList' :value="item.id">
+									{{item.time}}
+								</option>
 							</select>
-							<select name="" class="fl">
+							<select name="" class="fl" v-model="courseId">
 								<option value="" selected>筛选课程</option>
+								<option v-for="item in courseList" :value="item.courseId">
+									{{item.courseName}}
+								</option>
 							</select>
-							<select name="" class="fl">
+							<select name="" class="fl" v-model="coachId">
 								<option value="" selected>教练/教师</option>
+								<option v-for='(item,index) in coachList' :value="item.coachId">
+									{{item.coachName}}
+								</option>
 							</select>
 						</p>
 						<div class="tab">
@@ -131,398 +148,7 @@
 										<td class="green">3</td>
 										<td>5</td>
 									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
-										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-									</tr>
+
 								</tbody>
 							</table>
 						</div>
@@ -531,4 +157,187 @@
 			</div>
 		</div>
 	</body>
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../js/jquery.cookie.js"></script>
+	<script src="../js/extendjQuery.js"></script>
+	<!--<script src="../js/setCookie.js"></script>-->
+	<script src="../js/dateUtil.js"></script>
+	<script src="../js/combobox.js"></script>
+	<script src="../js/jedate.js"></script>
+	<script src="../js/vue.js"></script>
+	<script src="../js/simple-calendar.js"></script>
+	<script src="../js/jquery-confirm.js"></script>
+	<script src="../js/jquery.fieldTime.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/axios.min.js"></script>
+	<script src="../fitness/js/resources/api/axios-base.js"></script>
+	<script src="../js/resources/constant/course-url.js"></script>
+	<script src="../fitness/js/resources/constant/education-url.js"></script>
+
+	<script>
+		var wrapVue = new Vue({
+			el: '#wrap',
+			data: {
+				index: 0,
+				mobile: '',
+				beginDate: '',
+				endDate: '',
+				shopId: $.cookie('shopid'),
+				shopList: [],
+				eduType: '0',
+				searchInput: '',
+				result: [],
+				weekId: '',
+				weekList: [],
+				timeList: [],
+				timeId: '',
+				courseList: [],
+				courseId: '',
+				coachList: [],
+				coachId: '',
+			},
+			filters:{
+				toDateyyyyMMddHHmm(val){
+					if(!val){
+						return "";
+					}
+					return timeFormatDate(val, true)
+				},
+				toNum(val){
+					if(!val){
+						return "";
+					}
+					return parseFloat(val).toFixed(2)
+				}
+			},
+			computed: {},
+			watch: {
+
+			},
+			created: function () {
+				this.search()
+				this.loadShopList();
+				//时间区域
+				this.showTimeList();
+				this.showWeekTimeList();
+			},
+			mounted(){// 初始化加载
+
+				let that = this;
+				//上课时间
+				jeDate('#begin-date',{
+					// isinitVal: true,
+					festival: true,
+					format: 'YYYY-MM-DD',
+					donefun(obj, val){
+						that.beginDate = obj.val;
+					}
+				});
+				jeDate('#end-date',{
+					// isinitVal: true,
+					festival: true,
+					format: 'YYYY-MM-DD',
+					donefun(obj, val){
+						that.endDate = obj.val;
+					}
+				});
+
+			},
+			methods: {
+				loadData(){
+					let param = {
+						shopId: $.cookie('shopid'),
+						code: $.cookie('code'),
+					}
+					//获取课程 下拉框
+					axiosGetParams(EDUCATION_URL.findCourseList, {CustomerCode: param.code, shopId: param.shopId, eduType: 0}, (res) => {
+						this.courseList.concat(res)
+					});
+					//获取课程 下拉框
+					axiosGetParams(EDUCATION_URL.findCourseList, {CustomerCode: param.code, shopId: param.shopId, eduType: 0}, (res) => {
+						this.courseList.concat(res)
+					});
+
+					//获取教练
+					axiosGetParams(EDUCATION_URL.findCoachList, {code: code, shopId: shopId}, (res) => {
+						this.coachList = res;
+					});
+				},
+				showTimeList(){
+					this.timeList = [];
+					let timeObj = {};
+					for(let i = 0; i < 24; i++){
+						timeObj = {
+							time: '0' + i + ':00~0' + i + ':59',
+							id: i + "",
+						}
+						this.timeList.push(timeObj);
+					}
+
+				},
+				showWeekTimeList(){
+					this.weekList = [];
+					let timeObj = {};
+					let timeTemp = "";
+					for(let i = 0; i < 7; i++){
+						if(i==1){
+							timeTemp = "一"
+						}if(i==2){
+							timeTemp = "二"
+						}if(i==3){
+							timeTemp = "三"
+						}if(i==4){
+							timeTemp = "四"
+						}if(i==5){
+							timeTemp = "五"
+						}if(i==6){
+							timeTemp = "六"
+						}if(i==0){
+							timeTemp = "七"
+						}
+						timeObj = {
+							week: '星期' + timeTemp,
+							id: i + "",
+						}
+						this.weekList.push(timeObj);
+					}
+				},
+				loadShopList: function () {
+					this.shopList = []; //清空门店
+					let obj = {}, data = null;
+					axiosGetParams(COURSE_URL.marketShop, {type: 0}, (response) => {
+						data = response.data;
+						$.each(data, (i, d) => {
+							obj.shopName = d.shopName;
+							obj.id = d.id;
+							this.shopList.push(obj);
+							obj = {};
+						})
+
+					})
+				},
+				search(){
+					let beginDate = this.beginDate?this.beginDate+" 00:00:00":"";
+					let endDate = this.endDate?this.endDate+" 23:59:59":"";
+					let param = {
+						shopId: this.shopId,
+						eduType: this.eduType,
+						beginDate: beginDate,
+						endDate: endDate,
+						name: this.searchInput,
+						code: $.cookie('code'),
+						weekId: this.weekId,
+						timeId: this.timeId,
+						courseId: this.courseId,
+						coachId: this.coachId,
+					}
+					axiosGetParams('financial/findCourseAnalysisList', param, (response) => {
+						this.result = response;
+						console.log(this.result)
+					})
+				}
+			}
+		});
+	</script>
 </html>

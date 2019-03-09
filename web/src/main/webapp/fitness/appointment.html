@@ -20,12 +20,13 @@
             display: block!important;
         }
     </style>
+    <style id="tabBoxStyle"></style>
 </head>
 
 <body>
 <div class="wrap" id="appointment">
     <div class="cWrap clearfix">
-        <div class="content" style="width: 96%;"> <!-- content -->
+        <div class="content"> <!-- content -->
             <div class="lefNav fl">
                 <ul>
                     <li class="on" v-on:click="LI(0)">预约工作台</li>
@@ -38,7 +39,7 @@
                 </ul>
             </div>
             <div class="contains fl">
-                <ul>
+                <ul style="height: 100%;">
                     <li class="list" v-if="LiIndex==0">
                         <!-- 预约工作台 -->
                         <edu-work-bench-children></edu-work-bench-children>
@@ -54,7 +55,6 @@
                         <!-- 添加预约 -->
                     </li>
                     <li class="list" v-if="LiIndex==1">
-
                         <!-- 教练/教室 -->
                         <edu-coach-children></edu-coach-children>
                         <!-- 教练/教室 -->
@@ -84,7 +84,6 @@
                         <!-- 会员冻结列表 -->
                         <edu-freeze-detail-children></edu-freeze-detail-children>
                         <!-- 会员冻结列表 -->
-
                     </li>
                     <li class="list list6" v-if="LiIndex==5">
                         <!-- 团操课程表 -->
@@ -130,7 +129,7 @@
         <div class="screening clearfix">
             <label class="fl">
                 <span class="title">筛选条件：</span>
-                <select name="" v-model="selectCoachId">
+                <select name="" v-model="selectCoachId" @change="save">
                     <option value="" selected>全部教练</option>
                     <option v-for='(item,index) in coachList' :value="item.coachId">
                         {{item.coachName}}
@@ -139,7 +138,7 @@
                 <!--<select name="">-->
                 <!--<option value="" selected>全部课程类型</option>-->
                 <!--</select>-->
-                <select name="" v-model="selectSdaduimId">
+                <select name="" v-model="selectSdaduimId" @change="save">
                     <option value="" selected>全部场地</option>
                     <option v-for='(item,index) in sdaduimList' :value="item.id">
                         {{item.name}}
@@ -150,12 +149,12 @@
                 <input type="text" class="jeinput " id="work-bench-end-date" placeholder="结束时间" v-model="endDate"/>
             </label>
             <span class="btnWrap fl">
-                    <span class="orange" @click="dateStatus=1">全部</span>
-                    <span class="grey" @click="dateStatus=2">当天</span>
-                    <span class="skyBlue" @click="dateStatus=3">本周</span>
-                    <span class="red" @click="dateStatus=4" style="color: white!important;">本月</span>
-                    <span class="blue" @click="dateStatus=5">本季度</span>
-                    <span class="green" @click="dateStatus=6">本年度</span>
+                    <span @click="dateStatus=1" :class="dateStatus==1?'grey':''">全部</span>
+                    <span @click="dateStatus=2" :class="dateStatus==2?'grey':''">当天</span>
+                    <span @click="dateStatus=3" :class="dateStatus==3?'grey':''">本周</span>
+                    <span @click="dateStatus=4" :class="dateStatus==4?'grey':''">本月</span>
+                    <span @click="dateStatus=5" :class="dateStatus==5?'grey':''">本季度</span>
+                    <span @click="dateStatus=6" :class="dateStatus==6?'grey':''">本年度</span>
                 </span>
         </div>
         <div class="tab">
@@ -203,7 +202,7 @@
                             </span>
                         <span class="orange margin toBlock" @mouseover="selectToConfirmList(item.id, item)">预约确认</span>
                     </td>
-                    <td>
+                    <td class="operation">
                             <span class="skyBlue margin" onclick="checkDetails()"
                                   @click="changeEduId(item.id, item)">查看详情</span>
                         <template v-if=" item.status== 1">
@@ -239,46 +238,47 @@
                 </tbody>
             </table>
             <div class="tabBox">
-                <table border="1" bordercolor="#ccc" class="sub">
-                    <thead>
-                    <tr>
-                        <td></td>
-                        <td>序号</td>
-                        <td>会员姓名</td>
-                        <td>手机号码</td>
-                        <td>预约人</td>
-                        <td>座位</td>
-                        <td>预约时间</td>
-                        <td>结算方式</td>
-                        <td>扣费（余额）</td>
-                        <td>预约状态</td>
-                        <td>备注</td>
-                        <td>操作</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr v-for="(item, index) in toConfirmList">
-                        <td><input type="checkbox" @click='checkedOne(item.id)'
-                                   :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
-                        </td>
-                        <td>{{index+1}}</td>
-                        <td>{{item.memberName}}</td>
-                        <td>{{item.mobile}}</td>
-                        <td>{{item.reserveClientName}}</td>
-                        <td>{{item.seatName}}</td>
-                        <td>{{item.reserveDate| toDateyyyyMMddHHmm}}</td>
-                        <td>{{item.settleType}}</td>
-                        <td>{{item.deductionBalance}}</td>
-                        <td class="green">{{item.reserveStatus| reserveStatusFilter}}</td>
-                        <td class="grey">{{item.remarks| remarksFilter}}</td>
-                        <td>
-                            <span class="blue" @click="changeStatus(item.id, 1, 'true')">确认</span>
-                            <span class="red" @click="changeStatus(item.id, 0, 'true')">取消</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="table">
+                    <table border="1" bordercolor="#ccc" class="sub">
+                        <thead>
+                        <tr>
+                            <td></td>
+                            <td>序号</td>
+                            <td>会员姓名</td>
+                            <td>手机号码</td>
+                            <td>预约人</td>
+                            <td>座位</td>
+                            <td>预约时间</td>
+                            <td>结算方式</td>
+                            <td>扣费（余额）</td>
+                            <td>预约状态</td>
+                            <td>备注</td>
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item, index) in toConfirmList">
+                            <td><input type="checkbox" @click='checkedOne(item.id)'
+                                       :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
+                            </td>
+                            <td>{{index+1}}</td>
+                            <td>{{item.memberName}}</td>
+                            <td>{{item.mobile}}</td>
+                            <td>{{item.reserveClientName}}</td>
+                            <td>{{item.seatName}}</td>
+                            <td>{{item.reserveDate| toDateyyyyMMddHHmm}}</td>
+                            <td>{{item.settleType}}</td>
+                            <td>{{item.deductionBalance}}</td>
+                            <td class="green">{{item.reserveStatus| reserveStatusFilter}}</td>
+                            <td class="grey">{{item.remarks| remarksFilter}}</td>
+                            <td>
+                                <span class="blue" @click="changeStatus(item.id, 1, 'true')">确认</span>
+                                <span class="red" @click="changeStatus(item.id, 0, 'true')">取消</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <p class="tabFoot clearfix">
                     <label class="fl">
                         <input type="checkbox" @click='checkedAll()' :checked="isCheckedAll"/>
@@ -301,104 +301,106 @@
             <img v-on:click="returnPage" src="../img/goback.png" alt=""/>
             <span><span class="grey" v-on:click="returnPage">课程预约/</span>预约详情</span>
         </div>
-        <div class="bookBody clearfix">
-            <div class="lef fl">
-                <img src="../img/u2871.png" alt=""/>
-            </div>
-            <div class="rig fl">
-                <h3>课程名称：{{eduItem.courseName}}</h3>
-                <label>
-                    <span class="title">门店：</span>
-                    <span class="txt"><strong>{{eduItem.shopName}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">教练：</span>
-                    <span class="txt"><strong>{{eduItem.coachName}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">日期：</span>
-                    <span class="txt"><strong>{{eduItem.executeDatePlan |toDateyyyyMMddHHmm}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">时间：</span>
-                    <span class="txt"><strong>{{eduItem.beginDatePlan|toDateHHmm}}~{{eduItem.endDatePlan|toDateHHmm}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">场地：</span>
-                    <span class="txt"><strong>{{eduItem.sdaduimName}}</strong></span>
-                </label>
-                <label>
-                    <span class="title">上课人数：</span>
-                    <span class="txt"><strong>{{reserveNum}}/{{eduItem.reserveTotalNum}}</strong></span>
-                </label>
-                <span class="startBtn" @click="startClass">开始训练</span>
-            </div>
-        </div>
-        <div class="bookTab">
-            <span class="allBook">全部预约</span>
-            <div class="tabLine clearfix">
-                <p class="fl">
+        <div class="bookBox">
+            <div class="bookBody clearfix">
+                <div class="lef fl">
+                    <img src="../img/u2871.png" alt=""/>
+                </div>
+                <div class="rig fl">
+                    <h3>课程名称：{{eduItem.courseName}}</h3>
                     <label>
-                        <span>已预约人数：</span>
-                        <span>{{reserveNum}}</span>
+                        <span class="title">门店：</span>
+                        <span class="txt"><strong>{{eduItem.shopName}}</strong></span>
                     </label>
                     <label>
-                        <span>现有客户：</span>
-                        <span>{{nowMember}}</span>
+                        <span class="title">教练：</span>
+                        <span class="txt"><strong>{{eduItem.coachName}}</strong></span>
                     </label>
                     <label>
-                        <span>潜在客户：</span>
-                        <span>{{unNowMember}}</span>
+                        <span class="title">日期：</span>
+                        <span class="txt"><strong>{{eduItem.executeDatePlan |toDateyyyyMMddHHmm}}</strong></span>
                     </label>
-                </p>
-                <span class="addBook fr" @click="addReserve">添加预约</span>
+                    <label>
+                        <span class="title">时间：</span>
+                        <span class="txt"><strong>{{eduItem.beginDatePlan|toDateHHmm}}~{{eduItem.endDatePlan|toDateHHmm}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">场地：</span>
+                        <span class="txt"><strong>{{eduItem.sdaduimName}}</strong></span>
+                    </label>
+                    <label>
+                        <span class="title">上课人数：</span>
+                        <span class="txt"><strong>{{reserveNum}}/{{eduItem.reserveTotalNum}}</strong></span>
+                    </label>
+                    <span class="startBtn" @click="startClass" v-if="eduItem.status == 0">开始训练</span>
+                </div>
             </div>
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <td v-if="eduItem.status == 0"></td>
-                    <td>序号</td>
-                    <td>会员姓名</td>
-                    <td>客户类型</td>
-                    <td>手机号码</td>
-                    <td>预约人</td>
-                    <td>座位</td>
-                    <td>预约时间</td>
-                    <td>结算方式</td>
-                    <td>扣费（余额）</td>
-                    <td>预约状态</td>
-                    <td>备注</td>
-                    <td v-if="eduItem.status == 0">操作</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(item, index) in eduClientInfoList">
-                    <td v-if="eduItem.status == 0"><input type="checkbox" @click='checkedOne(item.id)'
-                                                          :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
-                    </td>
-                    <td>{{index+1}}</td>
-                    <td>{{item.memberName}}</td>
-                    <td>{{item.memberType}}</td>
-                    <td>{{item.mobile}}</td>
-                    <td>{{item.reserveClientName}}</td>
-                    <td>{{item.seatName}}</td>
-                    <td>{{item.reserveDate| toDateyyyyMMddHHmm}}</td>
-                    <td>{{item.settleType}}</td>
-                    <td>{{item.deductionBalance}}</td>
-                    <td class="green">{{item.reserveStatus| reserveStatusFilter}}</td>
-                    <td class="grey">{{item.remarks| remarksFilter}}</td>
-                    <td v-if="eduItem.status == 0">
-                        <span class="blue" @click="changeStatus(item.id, 1, 'true')">确认</span>
-                        <span class="red" @click="changeStatus(item.id, 0, 'true')">取消</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="tabFoot clearfix" v-if="eduItem.status == 0">
-                <label class="fl"><input type="checkbox" @click='checkedAll()' :checked="isCheckedAll">
-                    <span>全选/全不选</span></label> <span
-                    class="fl"><a class="btn btnBlue fl" @click="changeStatusAll(1)">确认</a>
+            <div class="bookTab">
+                <span class="allBook">全部预约</span>
+                <div class="tabLine clearfix">
+                    <p class="fl">
+                        <label>
+                            <span>已预约人数：</span>
+                            <span>{{reserveNum}}</span>
+                        </label>
+                        <label>
+                            <span>现有客户：</span>
+                            <span>{{nowMember}}</span>
+                        </label>
+                        <label>
+                            <span>潜在客户：</span>
+                            <span>{{unNowMember}}</span>
+                        </label>
+                    </p>
+                    <span class="addBook fr" @click="addReserve" v-if="eduItem.status == 0">添加预约</span>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td v-if="eduItem.status == 0"></td>
+                        <td>序号</td>
+                        <td>会员姓名</td>
+                        <td>客户类型</td>
+                        <td>手机号码</td>
+                        <td>预约人</td>
+                        <td>座位</td>
+                        <td>预约时间</td>
+                        <td>结算方式</td>
+                        <td>扣费（余额）</td>
+                        <td>预约状态</td>
+                        <td>备注</td>
+                        <td v-if="eduItem.status == 0">操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item, index) in eduClientInfoList">
+                        <td v-if="eduItem.status == 0"><input type="checkbox" @click='checkedOne(item.id)'
+                                                              :checked="toConfirmCheckbox.indexOf(item.id)>=0"/>
+                        </td>
+                        <td>{{index+1}}</td>
+                        <td>{{item.memberName}}</td>
+                        <td>{{item.memberType}}</td>
+                        <td>{{item.mobile}}</td>
+                        <td>{{item.reserveClientName}}</td>
+                        <td>{{item.seatName}}</td>
+                        <td>{{item.reserveDate| toDateyyyyMMddHHmm}}</td>
+                        <td>{{item.settleType}}</td>
+                        <td>{{item.deductionBalance}}</td>
+                        <td class="green">{{item.reserveStatus| reserveStatusFilter}}</td>
+                        <td class="grey">{{item.remarks| remarksFilter}}</td>
+                        <td v-if="eduItem.status == 0">
+                            <span class="blue" @click="changeStatus(item.id, 1, 'true')">确认</span>
+                            <span class="red" @click="changeStatus(item.id, 0, 'true')">取消</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="tabFoot clearfix" v-if="eduItem.status == 0">
+                    <label class="fl"><input type="checkbox" @click='checkedAll()' :checked="isCheckedAll">
+                        <span>全选/全不选</span></label> <span
+                        class="fl"><a class="btn btnBlue fl" @click="changeStatusAll(1)">确认</a>
                                                 <a class="btn btnRed fl" @click="changeStatusAll(0)">取消</a></span>
+                </div>
             </div>
         </div>
     </div>
@@ -410,8 +412,8 @@
     <div id="reservation" class="newCustomers_maskLayer">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>添加预约</span><a href="#" class="newCustomers_maskLayer_X"
-                                    onclick="newCustomers_maskLayer_X()">X</a>
+                <span>添加预约</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                    onclick="newCustomers_maskLayer_X()"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <div class="bookBody clearfix">
@@ -906,7 +908,7 @@
     <div id="offer" class="newCustomers_maskLayer" style="display: block;" v-show="isShowBill">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="isShowBill = false">X</a>
+                <span>结账</span><a href="#" class="newCustomers_maskLayer_X fa fa-times" @click="isShowBill = false"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <fieldset class="section2">
@@ -1009,8 +1011,8 @@
                             <li class="on li2" v-if="index==1">
                                 <div class="col-md7">
                                     <div class="col_md7_top">手机号码：
-                                        <input type="text">
-                                        <a href="javascript:;" class="btn btn-success"
+                                        <input type="text" v-model="generalInfo.num" oninput="value=value.replace(/[^\d]+/g,'')">
+                                        <a href="javascript:;" class="btn btn-success" @click="searchByTelAndNo(generalInfo.num)"
                                         >搜索</a>
                                     </div>
                                     <div class="col_md7_botton">
@@ -1221,14 +1223,14 @@
                                         <a href="javascript:;" class="btn btn-success" @click="payBill">结账</a>
                                     </div>
                                 </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-12">
-                                        <label>
-                                            <input type="checkbox" v-model="invoiceStatus">
-                                            <span>购置发票</span>
-                                        </label>
-                                    </div>
-                                </div>
+                                <!--<div style=" border-bottom: none">-->
+                                <!--<div class="col-md-12">-->
+                                <!--<label>-->
+                                <!--<input type="checkbox" v-model="invoiceStatus">-->
+                                <!--<span>购置发票</span>-->
+                                <!--</label>-->
+                                <!--</div>-->
+                                <!--</div>-->
                             </div>
                         </fieldset>
                     </div>
@@ -1240,7 +1242,7 @@
         <div class="newCustomers_maskLayer performance" v-show="memberInfo.isShow" style="display:block;">
             <div class="newCustomers_maskLayer_box" style="top: 55%;">
                 <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span>
-                    <a href="javascript:;" class="newCustomers_maskLayer_X" @click="memberInfo.isShow = false;">X</a>
+                    <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times" @click="memberInfo.isShow = false;"></a>
                 </div>
                 <div class="KHGL-table-box">
                     <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
@@ -1273,7 +1275,7 @@
             <div class="newCustomers_maskLayer_box" style="top: 65%;">
                 <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span>
                     <a href="javascript:;" @click="memberInfo.isShowCardStatus = false;"
-                       class="newCustomers_maskLayer_X">X</a>
+                       class="newCustomers_maskLayer_X fa fa-times"></a>
                 </div>
                 <h5 class="KHGL-title">选择要储值的会员卡</h5>
                 <div class="KHGL-table-box">
@@ -1371,8 +1373,8 @@
     <div id="coachInformation" class="newCustomers_maskLayer">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>开始{{eduItem.persionCoachName}}的课程</span><a href="#" class="newCustomers_maskLayer_X"
-                                                                 onclick="newCustomers_maskLayer_X()">X</a>
+                <span>开始{{eduItem.persionCoachName}}的课程</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                                                 onclick="newCustomers_maskLayer_X()"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <fieldset>
@@ -1408,8 +1410,8 @@
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
                 <span>临时排课</span>
-                <a href="javascript:;" class="newCustomers_maskLayer_X"
-                   onclick="newCustomers_maskLayer_X()">X</a>
+                <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times"
+                   onclick="newCustomers_maskLayer_X()"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <div class="bookBody clearfix">
@@ -1774,8 +1776,8 @@
                 <!--共计：￥<span class="red">5.00 </span> 年卡消费：￥<span class="orange">5.00 </span>-->
                 <!--</p>-->
                 <!--<p class="rig fr">-->
-                    <!--<span class="toOrange">打印</span>-->
-                    <!--<span class="toGreen">导出</span>-->
+                <!--<span class="toOrange">打印</span>-->
+                <!--<span class="toGreen">导出</span>-->
                 <!--</p>-->
             </div>
             <table border="1" bordercolor="#ccc">
@@ -1863,8 +1865,8 @@
                 <!--共计：￥<span class="red">5.00 </span> 年卡消费：￥<span class="orange">5.00 </span>-->
                 <!--</p>-->
                 <!--<p class="rig fr">-->
-                    <!--<span class="toOrange">打印</span>-->
-                    <!--<span class="toGreen">导出</span>-->
+                <!--<span class="toOrange">打印</span>-->
+                <!--<span class="toGreen">导出</span>-->
                 <!--</p>-->
             </div>
             <div class="overflow">
@@ -1935,8 +1937,8 @@
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
                 <span>训练详情</span>
-                <a href="javascript:;" class="newCustomers_maskLayer_X"
-                   @click="isShow=false">X</a>
+                <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times"
+                   @click="isShow=false"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
 
@@ -2056,9 +2058,9 @@
                         </ul>
                     </div>
                     <!-- 室 -->
-                    <div class="sc-body" >
+                    <div class="sc-body" style="width: calc(100% - 16px);margin-left: 8px;">
                         <h4>{{selectRoomName}}</h4>
-                        <div class="sc-week">
+                        <div class="sc-week" style="width: 100%;">
                             <div class="sc-week-item">时间设置</div>
                             <div class="sc-week-item">周一</div>
                             <div class="sc-week-item">周二</div>
@@ -2068,9 +2070,9 @@
                             <div class="sc-week-item">周六</div>
                             <div class="sc-week-item">周日</div>
                         </div>
-                        <div class="sc-days" style="min-height: 42px;">
+                        <div class="sc-days" style="min-height: 42px;width: 100%;">
                             <template v-for="item in resultListWeek">
-                                <div class="sc-days-box">
+                                <div class="sc-days-box" style="border-left: 1px solid #F1EBE4;width: calc(100% - 1px);">
                                     <div class="sc-item on">
                                         {{item.date}}
                                     </div>
@@ -2098,7 +2100,7 @@
                                 </div>
                             </template>
                         </div>
-                        <div class="subjoin" @click="addWeekEdu">+ 新增</div>
+                        <div class="subjoin" @click="addWeekEdu" style="width: calc(100% - 12px);">+ 新增</div>
                     </div>
                     <!-- 室 -->
                 </div>
@@ -2331,10 +2333,10 @@
                                     <div class="sc-bottom" style="display: block;" v-if="item.list.length > 0">
                                         <template v-for="(obj, j) in item.list">
                                             <div><p>{{obj.courseName}}</p>
-                                            <p>{{obj.coachName}} {{obj.beginDate| toDateHHmm}}~{{obj.endDate|
-                                                toDateHHmm}}</p>
+                                                <p>{{obj.coachName}} {{obj.beginDate| toDateHHmm}}~{{obj.endDate|
+                                                    toDateHHmm}}</p>
                                                 <!-- 未开始和已结束可以删除 -->
-                                                <a class="btns" @click="deleteEduMonth(obj,item.list,j)" v-if="obj.status==0 || obj.status==2">X</a>
+                                                <a class="btns fa fa-times" @click="deleteEduMonth(obj,item.list,j)" v-if="obj.status==0 || obj.status==2"></a>
                                             </div>
                                         </template>
                                         <!--<div><p>健身一对一</p>-->
@@ -2359,7 +2361,7 @@
                 <div class="newCustomers_maskLayer_box_top">
                     <span>临时排课</span>
                     <a href="#" @click="dateSetStatus=false"
-                       class="newCustomers_maskLayer_X newCustomers_maskLayer_X2">X</a></div>
+                       class="newCustomers_maskLayer_X newCustomers_maskLayer_X2 fa fa-times"></a></div>
                 <div class="newCustomers_maskLayer_box_shen">
                     <div class="bookBody clearfix">
                         <form class="form-horizontal">
@@ -2816,8 +2818,8 @@
         <div id="Curriculum" class="newCustomers_maskLayer" v-show="settingStatus" style="display: block;">
             <div class="newCustomers_maskLayer_box">
                 <div class="newCustomers_maskLayer_box_top">
-                    <span>课程设置</span><a href="#" class="newCustomers_maskLayer_X"
-                                        @click="settingStatus = false">X</a>
+                    <span>课程设置</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                        @click="settingStatus = false"></a>
                 </div>
                 <div class="newCustomers_maskLayer_box_shen">
                     <div class="bookBody clearfix">
@@ -2856,8 +2858,8 @@
             <div class="newCustomers_maskLayer_box">
                 <div class="newCustomers_maskLayer_box_top">
                     <span>排课编辑</span>
-                    <a href="javascript:;" class="newCustomers_maskLayer_X"
-                       @click="updateClassStatus = false">X</a>
+                    <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times"
+                       @click="updateClassStatus = false"></a>
                 </div>
                 <div class="newCustomers_maskLayer_box_shen">
                     <div class="bookBody clearfix">
@@ -3111,10 +3113,10 @@
                     </div>
                 </div>
                 <div class="newCustomers_maskLayer_box_botton">
+                </div>
             </div>
+            <!-- 排课弹窗 -->
         </div>
-        <!-- 排课弹窗 -->
-    </div>
     </div>
 </template>
 
@@ -3221,20 +3223,20 @@
     });
     var Event = new Vue();// 事件
     //修复高度
-    function mainheight() {
-        var mainheight = $(window).height() - 52;
-        $('.cWrap').height(mainheight);
-        $('.contains').height(mainheight);
-        $('#coachClassroom').height(mainheight);
-        $(window).resize(function () {
-            mainheight = $(window).height() - 52;
-            $('.cWrap').height(mainheight);
-            $('.contains').height(mainheight);
-            $('#coachClassroom').height(mainheight);
-        })
-    }
+    // function mainheight() {
+    //     var mainheight = $(window).height() - 52;
+    //     $('.cWrap').height(mainheight);
+    //     $('.contains').height(mainheight);
+    //     $('#coachClassroom').height(mainheight);
+    //     $(window).resize(function () {
+    //         mainheight = $(window).height() - 52;
+    //         $('.cWrap').height(mainheight);
+    //         $('.contains').height(mainheight);
+    //         $('#coachClassroom').height(mainheight);
+    //     })
+    // }
 
-    mainheight();
+    // mainheight();
 
     var appointment = new Vue({
         el: '#appointment',
@@ -3290,7 +3292,7 @@
                     }
                     // 团操课程表
                     if (t == 5) {
-                       // appointment.WeekMonthClassScheduling(0);
+                        // appointment.WeekMonthClassScheduling(0);
                         // 团操课程表
                         $('#groupCourseSchedule').show().siblings().hide();
                     }
@@ -3305,7 +3307,7 @@
                     }
                     $('.list').addClass('on').siblings().removeClass('on');
                     startDate();
-                    mainheight();
+                    // mainheight();
                 }, 50)
             },
             //课程消费明细表/个人消费明细表切换函数

@@ -88,6 +88,13 @@ function closeBox2(){
     customerFollowUpRecord.follwAdivce.id='';
     customerFollowUpRecord.follwAdivce.handleAdvice='';
 };
+$(document).on('click','#followKeyword .panel_state_content',function(){
+    $("#followKeyword").hide();
+    var keyId =  $(this).attr("value");
+    var t = $(this).find("span").text();
+    LeadCustomerFollowUpRecord.followContentT += t;
+    LeadCustomerFollowUpRecord.followUpRecordAdd.followContent = keyId;
+});
 
 var customerFollowUpRecord = new Vue({
     el:'#customerFollowUpRecord',
@@ -106,7 +113,8 @@ var customerFollowUpRecord = new Vue({
         randomNumberAdd:'',//随机生成
         followTypeList:[
             {"vue":0,"lab":"电话跟进"},
-            {"vue":1,"lab":"微信/短信等文字跟进"}
+            {"vue":1,"lab":"微信/短信等文字跟进"},
+            {"vue":2,"lab":"当面沟通"}
         ], //跟进类型参数
         followUpRecordAdd:{
             createTime: getNowTime(true),

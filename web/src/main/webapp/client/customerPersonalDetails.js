@@ -44,7 +44,8 @@ var customerPersonalDetails = new Vue({
         afterImg: [],
         imgSRC1: '',
         imgInfo1: [],
-        imgInfo2: []
+        imgInfo2: [],
+        dateNow:"",
     },
     computed: {},
     watch: {},
@@ -101,6 +102,7 @@ var customerPersonalDetails = new Vue({
                 var num = that.imgNum;
                 $("#" + num).attr('src', '../img/addImg.png')
             }
+            that.date=formatDate(new Date());
             $(":checkbox").attr('checked', false)
             $("textarea").text('');
             $("p[name='pdate']").html("");
@@ -333,6 +335,7 @@ var customerPersonalDetails = new Vue({
             $(":checkbox").attr('checked', false)
             var type = that.type;
             var cid = $.cookie("cid");
+            that.dateNow=date;
             const url = $.stringFormat('{0}/frClientArchivesRelate/getRelate', $.cookie('url'));
             $.post(url, {"type": type, "date": date, "cid": cid}, function (res) {
                 that.Skinchecked = res.data.frClientArchivesRelates;
@@ -396,6 +399,7 @@ var customerPersonalDetails = new Vue({
             $(":checkbox").attr('checked', false)
             var type = that.type;
             var cid = $.cookie("cid");
+            that.dateNow=date;
             const url = $.stringFormat('{0}/frClientArchivesRelate/getRelate', $.cookie('url'));
             $.post(url, {"type": type, "date": date, "cid": cid}, function (res) {
                 that.Hairchecked = res.data.frClientArchivesRelates;
@@ -456,6 +460,7 @@ var customerPersonalDetails = new Vue({
             $(":checkbox").attr('checked', false)
             var type = that.type;
             var cid = $.cookie("cid");
+            that.dateNow=date;
             const url2 = $.stringFormat('{0}/frClientArchivesRelate/getRelate', $.cookie('url'));
             $.post(url2, {"type": type, "date": date, "cid": cid}, function (res) {
                 that.Plasticitychecked = res.data.frClientArchivesRelates;
@@ -1143,6 +1148,7 @@ var customerPersonalDetails = new Vue({
             //客户ID
             var cid = $.cookie("cid");
             list = JSON.stringify(list).replace("[", "").replace("]", "").replace(/\"/g, "");
+
             var text = {
                 "21": $("#otherReasons").val(),
                 "22": $("#skinCare").val(),
@@ -1208,7 +1214,7 @@ var customerPersonalDetails = new Vue({
             $("input[name='colorReasons']:checked").each(function () {
                 list.push($(this).val());
             });
-            $("input[name='colorReasons']:checked").each(function () {
+            $("input[name='hairTy']:checked").each(function () {
                 list.push($(this).val());
             });
             $("input[name='damage']:checked").each(function () {
@@ -1232,6 +1238,7 @@ var customerPersonalDetails = new Vue({
             //客户ID
             var cid = $.cookie("cid");
             list = JSON.stringify(list).replace("[", "").replace("]", "").replace(/\"/g, "");
+            console.log(list)
             var text = {
                 "11": $("#otherInstructions2").val(),
                 "12": $("#effect").val(),
@@ -1545,24 +1552,37 @@ var customerPersonalDetails = new Vue({
         },
         //导出Excel
         exportExcel: function (num) {
-            console.log(num)
             var that = this;
+            var type = that.type;
+            var cid = $.cookie("cid");
             if (num == 1) {
                 var url = $.stringFormat('{0}/excel/getSkin', $.cookie('url'));
                 var data = JSON.stringify(that.Skinchecked)
                 if (data === '{}' || data === '[]' || that.Skinchecked.length == 0) {
                     alert("未选中内容");
                 } else {
-                    $.ajax({
-                        url: url,
-                        data: data,
-                        type: 'POST',
-                        dataType: 'json',
-                        contentType: "application/json;charset=utf-8",
-                        success: function (res) {
-                            alert(res.msg)
-                        }
-                    })
+                    var form = $("<form>");//定义一个form表单
+                    form.attr("style", "display:none");
+                    form.attr("target", "_break");
+                    form.attr("method", "post");
+                    form.attr("action", url);
+                    var input1 = $("<input>");
+                    input1.attr("type", "hidden");
+                    input1.attr("name", "date");
+                    input1.attr("value", that.dateNow);
+                    var input2 = $("<input>");
+                    input2.attr("type", "hidden");
+                    input2.attr("name", "cid");
+                    input2.attr("value", cid);
+                    var input3 = $("<input>");
+                    input3.attr("type", "hidden");
+                    input3.attr("name", "type");
+                    input3.attr("value",type);
+                    $("body").append(form);//将表单放置在web中
+                    form.append(input1);
+                    form.append(input2);
+                    form.append(input3);
+                    form.submit();//表单提交
                 }
             } else if (num == 2) {
                 var url = $.stringFormat('{0}/excel/getHair', $.cookie('url'));
@@ -1570,16 +1590,28 @@ var customerPersonalDetails = new Vue({
                 if (data === '{}' || data === '[]' || that.Hairchecked.length == 0) {
                     alert("未选中内容");
                 } else {
-                    $.ajax({
-                        url: url,
-                        data: data,
-                        type: 'POST',
-                        dataType: 'json',
-                        contentType: "application/json;charset=utf-8",
-                        success: function (res) {
-                            alert(res.msg)
-                        }
-                    })
+                    var form = $("<form>");//定义一个form表单
+                    form.attr("style", "display:none");
+                    form.attr("target", "_break");
+                    form.attr("method", "post");
+                    form.attr("action", url);
+                    var input1 = $("<input>");
+                    input1.attr("type", "hidden");
+                    input1.attr("name", "date");
+                    input1.attr("value", that.dateNow);
+                    var input2 = $("<input>");
+                    input2.attr("type", "hidden");
+                    input2.attr("name", "cid");
+                    input2.attr("value", cid);
+                    var input3 = $("<input>");
+                    input3.attr("type", "hidden");
+                    input3.attr("name", "type");
+                    input3.attr("value",type);
+                    $("body").append(form);//将表单放置在web中
+                    form.append(input1);
+                    form.append(input2);
+                    form.append(input3);
+                    form.submit();//表单提交
                 }
             } else if (num == 3) {
                 var url = $.stringFormat('{0}/excel/getPlasticity', $.cookie('url'));
@@ -1587,16 +1619,28 @@ var customerPersonalDetails = new Vue({
                 if (data === '{}' || data === '[]' || that.Plasticitychecked.length == 0) {
                     alert("未选中内容");
                 } else {
-                    $.ajax({
-                        url: url,
-                        data: data,
-                        type: 'POST',
-                        dataType: 'json',
-                        contentType: "application/json;charset=utf-8",
-                        success: function (res) {
-                            alert(res.msg)
-                        }
-                    })
+                    var form = $("<form>");//定义一个form表单
+                    form.attr("style", "display:none");
+                    form.attr("target", "_break");
+                    form.attr("method", "post");
+                    form.attr("action", url);
+                    var input1 = $("<input>");
+                    input1.attr("type", "hidden");
+                    input1.attr("name", "date");
+                    input1.attr("value", that.dateNow);
+                    var input2 = $("<input>");
+                    input2.attr("type", "hidden");
+                    input2.attr("name", "cid");
+                    input2.attr("value", cid);
+                    var input3 = $("<input>");
+                    input3.attr("type", "hidden");
+                    input3.attr("name", "type");
+                    input3.attr("value",type);
+                    $("body").append(form);//将表单放置在web中
+                    form.append(input1);
+                    form.append(input2);
+                    form.append(input3);
+                    form.submit();//表单提交
                 }
             }
 

@@ -152,9 +152,33 @@ public class FrCard extends Model<FrCard> {
      */
     @TableField(exist = false)
     private FrCardAgreement frCardAgreement;
+    /**
+     * 查询用
+     */
+    @TableField(exist = false)
+    private String clientName ;  //用户姓名
+    @TableField(exist = false)
+    private String  mobile; //用户手机号
+    
+    
 
+    public String getClientName() {
+		return clientName;
+	}
 
-    public String getCardNo() {
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getCardNo() {
         return cardNo;
     }
 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>健身管理</title>
+    <title>健身私教</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../css/reset.css"/>
     <link rel="stylesheet" href="../css/base.css"/>
@@ -28,7 +28,7 @@
 <body>
 <div class="wrap" id="training">
     <div class="cWrap clearfix">
-        <div class="content" style="width: 98%;">
+        <div class="content">
             <div class="lefNav fl">
                 <ul>
                     <li class="on" @click="LI(0)">预约工作台</li>
@@ -42,7 +42,7 @@
                 </ul>
             </div>
             <div class="contains fl">
-                <ul>
+                <ul  style="height: 100%;">
                     <li class="list" v-if="LiIndex==0">
                         <!-- 预约工作台 -->
                         <edu-work-bench-children @return-page="LI"></edu-work-bench-children>
@@ -156,19 +156,19 @@
                 <input type="text" class="jeinput" placeholder="结束时间" v-model="endDate" id="work-bench-end-date"/>
             </label>
             <span class="btnWrap fl">
-				<span class="orange" @click="dateStatus=1">全部</span>
-                <span class="grey" @click="dateStatus=2">当天</span>
-                <span class="skyBlue" @click="dateStatus=3">本周</span>
-                <span class="red" @click="dateStatus=4">本月</span>
-                <span class="blue" @click="dateStatus=5">本季度</span>
-                <span class="green" @click="dateStatus=6">本年度</span>
-			</span>
+                     <span @click="dateStatus=1" :class="dateStatus==1?'grey':''">全部</span>
+                    <span @click="dateStatus=2" :class="dateStatus==2?'grey':''">当天</span>
+                    <span @click="dateStatus=3" :class="dateStatus==3?'grey':''">本周</span>
+                    <span @click="dateStatus=4" :class="dateStatus==4?'grey':''">本月</span>
+                    <span @click="dateStatus=5" :class="dateStatus==5?'grey':''">本季度</span>
+                    <span @click="dateStatus=6" :class="dateStatus==6?'grey':''">本年度</span>
+                </span>
         </div>
         <div class="tab">
             <div class="titleWrap">
                 <div class="btnWrap fl">
-                    <span class="fl" :class="{on: reserveType== 1}" @click="reserveType = 1">私教一对一预约</span>
-                    <span class="fl" :class="{on: reserveType== 2}" @click="reserveType = 2">私教一对多预约</span>
+                    <span class="fl" :class="{on: reserveType== 1}" @click="reserveType = 1" style="color: #ffffff">私教一对一预约</span>
+                    <span class="fl" :class="{on: reserveType== 2}" @click="reserveType = 2" style="color: #ffffff">私教一对多预约</span>
                 </div>
                 <h4>{{showBeginDate}} ~ {{showEndDate}}</h4>
             </div>
@@ -181,6 +181,7 @@
                         <thead>
                         <tr>
                             <td>序号</td>
+                            <td style="text-align: center">操作</td>
                             <td>门店</td>
                             <td>课程名</td>
                             <td>课程时间</td>
@@ -195,28 +196,11 @@
                             <td>扣费（余额）</td>
                             <td>预约状态</td>
                             <td>备注</td>
-                            <td style="text-align: center">操作</td>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="(item, index) in resultListOneToOne">
                             <td>{{index+1}}</td>
-                            <td>{{item.shopName}}</td>
-                            <td class="skyBlue">{{item.courseName}}</td>
-                            <td><strong
-                                    class="red">{{item.beginDatePlan|toDateHHmm}}~{{item.endDatePlan|toDateHHmm}}</strong>
-                            </td>
-                            <td>私教</td>
-                            <td>{{item.coachName}}</td>
-                            <td>{{item.roomName | remarksFilter}}</td>
-                            <td class="red">{{item.infoMemberName |toNull}}</td>
-                            <td class="orange">{{item.infoMobile| toNull}}</td>
-                            <td>{{item.infoReserveClientName| toNull}}</td>
-                            <td>{{item.infoReserveDate| toDateyyyyMMddHHmm}}</td>
-                            <td>{{item.infoSettleType| toNull}}</td>
-                            <td>{{item.infoDeductionBalance| toNull}}</td>
-                            <td class="green">{{item.infoReserveStatus| reserveStatusFilter1(item)}}</td>
-                            <td>{{item.infoRemarks}}</td>
                             <td class="green">
                                 <span class="skyBlue margin" onclick="checkDetails()" @click="changeEduId(item.id, item)">查看详情</span>
                                 <template v-if="item.status == 0">
@@ -246,6 +230,22 @@
                                 <!--<span class="red margin">拒绝</span>-->
                                 <!--<span class="green margin" onclick="reservation()">添加预约</span>-->
                             </td>
+                            <td>{{item.shopName}}</td>
+                            <td class="skyBlue">{{item.courseName}}</td>
+                            <td><strong
+                                    class="red">{{item.beginDatePlan|toDateHHmm}}~{{item.endDatePlan|toDateHHmm}}</strong>
+                            </td>
+                            <td>私教</td>
+                            <td>{{item.coachName}}</td>
+                            <td>{{item.roomName | remarksFilter}}</td>
+                            <td class="red">{{item.infoMemberName |toNull}}</td>
+                            <td class="orange">{{item.infoMobile| toNull}}</td>
+                            <td>{{item.infoReserveClientName| toNull}}</td>
+                            <td>{{item.infoReserveDate| toDateyyyyMMddHHmm}}</td>
+                            <td>{{item.infoSettleType| toNull}}</td>
+                            <td>{{item.infoDeductionBalance| toNull}}</td>
+                            <td class="green">{{item.infoReserveStatus| reserveStatusFilter1(item)}}</td>
+                            <td>{{item.infoRemarks}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -440,7 +440,7 @@
                     <span class="title">上课人数：</span>
                     <span class="txt"><strong>{{reserveNum}}/{{eduItem.reserveTotalNum}}</strong></span>
                 </label>
-                <span class="startBtn" @click="startClass">开始训练</span>
+                <span class="startBtn" @click="startClass" v-if="eduItem.status == 0">开始训练</span>
             </div>
         </div>
         <div class="bookTab">
@@ -460,7 +460,7 @@
                         <span>{{unNowMember}}</span>
                     </label>
                 </p>
-                <span class="addBook fr" @click="addReserve">添加预约</span>
+                <span class="addBook fr" @click="addReserve" v-if="eduItem.status == 0">添加预约</span>
             </div>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -522,8 +522,8 @@
     <div id="reservation" class="newCustomers_maskLayer">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>添加私教预约</span><a href="#" class="newCustomers_maskLayer_X"
-                                      onclick="newCustomers_maskLayer_X()">X</a>
+                <span>添加私教预约</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                      onclick="newCustomers_maskLayer_X()"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <div class="bookBody clearfix">
@@ -950,7 +950,7 @@
     <div id="offer" class="newCustomers_maskLayer" style="display: block;" v-show="isShowBill">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>结账</span><a href="#" class="newCustomers_maskLayer_X" @click="isShowBill = false">X</a>
+                <span>结账</span><a href="#" class="newCustomers_maskLayer_X fa fa-times" @click="isShowBill = false"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <fieldset class="section2">
@@ -1053,8 +1053,8 @@
                             <li class="on li2" v-if="index==1">
                                 <div class="col-md7">
                                     <div class="col_md7_top">手机号码：
-                                        <input type="text">
-                                        <a href="javascript:;" class="btn btn-success"
+                                        <input type="text" v-model="generalInfo.num" oninput="value=value.replace(/[^\d]+/g,'')">
+                                        <a href="javascript:;" class="btn btn-success" @click="searchByTelAndNo(generalInfo.num)"
                                         >搜索</a>
                                     </div>
                                     <div class="col_md7_botton">
@@ -1265,14 +1265,14 @@
                                         <a href="javascript:;" class="btn btn-success" @click="payBill">结账</a>
                                     </div>
                                 </div>
-                                <div style=" border-bottom: none">
-                                    <div class="col-md-12">
-                                        <label>
-                                            <input type="checkbox" v-model="invoiceStatus">
-                                            <span>购置发票</span>
-                                        </label>
-                                    </div>
-                                </div>
+                                <!--<div style=" border-bottom: none">-->
+                                    <!--<div class="col-md-12">-->
+                                        <!--<label>-->
+                                            <!--<input type="checkbox" v-model="invoiceStatus">-->
+                                            <!--<span>购置发票</span>-->
+                                        <!--</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                             </div>
                         </fieldset>
                     </div>
@@ -1284,7 +1284,7 @@
         <div class="newCustomers_maskLayer performance" v-show="memberInfo.isShow" style="display:block;">
             <div class="newCustomers_maskLayer_box" style="top: 55%;">
                 <div class="newCustomers_maskLayer_box_top"><span>多个客户选择</span>
-                    <a href="javascript:;" class="newCustomers_maskLayer_X" @click="memberInfo.isShow = false;">X</a>
+                    <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times" @click="memberInfo.isShow = false;"></a>
                 </div>
                 <div class="KHGL-table-box">
                     <table class="KHGL-table1" border="0" cellspacing="0" cellpadding="0">
@@ -1317,7 +1317,7 @@
             <div class="newCustomers_maskLayer_box" style="top: 65%;">
                 <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span>
                     <a href="javascript:;" @click="memberInfo.isShowCardStatus = false;"
-                       class="newCustomers_maskLayer_X">X</a>
+                       class="newCustomers_maskLayer_X fa fa-times"></a>
                 </div>
                 <h5 class="KHGL-title">选择要储值的会员卡</h5>
                 <div class="KHGL-table-box">
@@ -1402,8 +1402,8 @@
     <div id="coachInformation" class="newCustomers_maskLayer">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>开始{{eduItem.persionCoachName}}的课程</span><a href="#" class="newCustomers_maskLayer_X"
-                                                                 onclick="newCustomers_maskLayer_X()">X</a>
+                <span>开始{{eduItem.persionCoachName}}的课程</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                                                 onclick="newCustomers_maskLayer_X()"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
                 <fieldset>
@@ -1699,8 +1699,8 @@
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
                 <span>训练详情</span>
-                <a href="javascript:;" class="newCustomers_maskLayer_X"
-                   @click="isShow=false">X</a>
+                <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times"
+                   @click="isShow=false"></a>
             </div>
             <div class="newCustomers_maskLayer_box_shen">
 
@@ -2036,7 +2036,7 @@
                                                 <p>{{obj.coachName}} {{obj.beginDate| toDateHHmm}}~{{obj.endDate|
                                                     toDateHHmm}}</p>
                                                 <!-- 未开始和已结束可以删除 -->
-                                                <a class="btns" @click="deleteEduMonth(obj,item.list,j)" v-if="obj.status==0 || obj.status==2">X</a>
+                                                <a class="btns fa fa-times" @click="deleteEduMonth(obj,item.list,j)" v-if="obj.status==0 || obj.status==2"></a>
                                             </div>
                                         </template>
                                         <!--<div><p>健身一对一</p>-->
@@ -2062,8 +2062,8 @@
     <div id="copyClass" class="copyClass newCustomers_maskLayer" v-show="isShow" style="display: block;">
         <div class="newCustomers_maskLayer_box">
             <div class="newCustomers_maskLayer_box_top">
-                <span>复制课程</span><a href="#" class="newCustomers_maskLayer_X"
-                                    @click="isShow = false">X</a>
+                <span>复制课程</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                    @click="isShow = false"></a>
             </div>
             <div class="bookBody clearfix">
                 <form class="form-horizontal">
@@ -2401,7 +2401,7 @@
                                                 <p>{{obj.coachName}} {{obj.beginDate| toDateHHmm}}~{{obj.endDate|
                                                     toDateHHmm}}</p>
                                                 <!-- 未开始和已结束可以删除 -->
-                                                <a class="btns" @click="deleteEduMonth(obj,item.list,j)" v-if="obj.status==0 || obj.status==2">X</a>
+                                                <a class="btns fa fa-times" @click="deleteEduMonth(obj,item.list,j)" v-if="obj.status==0 || obj.status==2"></a>
                                             </div>
                                         </template>
                                         <!--<div><p>健身一对一</p>-->
@@ -2869,8 +2869,8 @@
         <div id="Curriculum" class="newCustomers_maskLayer" v-show="settingStatus" style="display: block;">
             <div class="newCustomers_maskLayer_box">
                 <div class="newCustomers_maskLayer_box_top">
-                    <span>课程设置</span><a href="#" class="newCustomers_maskLayer_X"
-                                        @click="settingStatus = false">X</a>
+                    <span>课程设置</span><a href="#" class="newCustomers_maskLayer_X fa fa-times"
+                                        @click="settingStatus = false"></a>
                 </div>
                 <div class="newCustomers_maskLayer_box_shen">
                     <div class="bookBody clearfix">
@@ -2909,8 +2909,8 @@
             <div class="newCustomers_maskLayer_box">
                 <div class="newCustomers_maskLayer_box_top">
                     <span>排课编辑</span>
-                    <a href="javascript:;" class="newCustomers_maskLayer_X"
-                       @click="updateClassStatus = false">X</a>
+                    <a href="javascript:;" class="newCustomers_maskLayer_X fa fa-times"
+                       @click="updateClassStatus = false"></a>
                 </div>
                 <div class="newCustomers_maskLayer_box_shen">
                     <div class="bookBody clearfix">
@@ -3274,18 +3274,18 @@
 <!--<script src="../fitness/js/private/book-detail.js"></script>-->
 <script type="text/javascript">
     //修复高度
-    function mainheight() {
-        var mainheight = $(window).height() - 52;
-        $('.cWrap').height(mainheight);
-        $('.contains').height(mainheight);
-        $(window).resize(function () {
-            mainheight = $(window).height() - 52;
-            $('.cWrap').height(mainheight);
-            $('.contains').height(mainheight);
-        })
-    }
+//    function mainheight() {
+//        var mainheight = $(window).height() - 52;
+//        $('.cWrap').height(mainheight);
+//        $('.contains').height(mainheight);
+//        $(window).resize(function () {
+//            mainheight = $(window).height() - 52;
+//            $('.cWrap').height(mainheight);
+//            $('.contains').height(mainheight);
+//        })
+//    }
     var Event = new Vue();// 事件
-    mainheight();
+//    mainheight();
     var training = new Vue({
         el: '#training',
         data: {
@@ -3360,7 +3360,7 @@
                     }
                     $('.list').addClass('on').siblings().removeClass('on');
                     startDate();
-                    mainheight();
+//                    mainheight();
                 }, 50)
                 if (t == 5) {
                     setTimeout(function () {

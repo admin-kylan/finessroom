@@ -8,12 +8,9 @@
                 数量：{{item.buyCount + item.sendCount | toNum}}
                 （{{item.buyCount| toNum}}+ <span
                     class="yellow">{{item.sendCount|toNum}}</span> ）
-                已消费数量：{{item.consumeLength| toNum}}
-                价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
-                * (item.consumeLength)|toMoney}}
-                剩余价格：{{(item.totalPrice/(item.buyCount + item.sendCount))
-                * ((item.buyCount + item.sendCount) -
-                item.consumeLength)|toMoney}}
+                已消费数量：{{item.buyCount + item.sendCount - item.allCount| toNum}}
+                价格：{{item.price|toMoney}}
+                剩余价格：{{(item.allCount * item.needPrice)/(item.buyCount + item.sendCount)|toMoney}}
                 有效期：{{item.useful}} 个月 结束时间：{{item.endTime| formatDate2}}
                 状态：<span class="blod">{{item.state |stateFilter}}</span>
             </option>

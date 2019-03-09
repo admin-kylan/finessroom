@@ -10,7 +10,8 @@
 	<link rel="stylesheet" href="../css/skin/jedate.css" />
 	<link rel="stylesheet" href="../css/combobox.css" />
 	<link rel="stylesheet" href="../css/customerTicketPoint.css" />
-		    <link rel="stylesheet" href="../css/myPagination.css"/>
+	<link rel="stylesheet" href="../css/myPagination.css"/>
+	<link rel="stylesheet" href="../gym/css/common.css"/>
 	
 </head>
 
@@ -47,9 +48,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr  v-for="(item,index) in customerTicketPointTable.list">
+							<tr  v-for="(item,index) in customerTicketTable.list">
 								<td><input type="checkbox"  v-model="ticketSelectList" :value="item.id"  /></td>
-								<td>{{( customerTicketPointTable.currPage-1)*10+(index+1)}}</td>
+								<td>{{( customerTicketTable.currPage-1)*10+(index+1)}}</td>
 								<td class="tored">{{ item.ticketsendwhy}}</td>
 								<td>{{ item.ShopName}}</td>
 								<td class="togreen">{{ item.membercardname}}</td>
@@ -62,149 +63,13 @@
 								<td class="tored"> {{ item.remain}}</td>
 								<td>{{ item.startdate}}</td>
 								<td>{{ item.enddate}}</td>
-								<td><a href="javascript:;">查看</a></td>
+								<td><a @click="viewQY(item.ticketsetid)" style="cursor: pointer;">查看</a></td>
 							</tr>
-					<!-- 		<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td class="tored">购卡赠送</td>
-								<td>软件园店</td>
-								<td class="togreen">一年卡</td>
-								<td>团会员积分</td>
-								<td>10积分</td>
-								<td>电子券</td>
-								<td class="toceng">100060001111111</td>
-								<td>2017-12-01</td>
-								<td>10</td>
-								<td class="tored">10</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td><a href="javascript:;">查看</a></td>
-							</tr> -->
+					
 
 						</tbody>
 					</table>
-					<div class="tabW_div">显示全部</div>
+					<div id="ticketsetPagination" class="pagination"></div>
 				</div>
 				<!-- <div class="page clearfix">
 					<p class="fl">【共5页/总100条】</p>
@@ -231,30 +96,11 @@
 						<legend>转让票券列表</legend>
 						<div>
 							<ul>
-								<li  v-for="(item,index) in ticketSelectListDate">
+								<li  v-for="(item,index) in ticketSelectListData">
 									<div>{{item.ticketname}} 1张 {{item.startno}}</div>
 									<div>有效期：{{item.startdate}}~{{item.enddate}}</div>
 								</li>
-								<!-- <li>
-									<div>健身单次券 1张 2226115648</div>
-									<div>有效期：2018-11-02~2018-12-08</div>
-								</li>
-								<li>
-									<div>健身单次券 1张 2226115648</div>
-									<div>有效期：2018-11-02~2018-12-08</div>
-								</li>
-								<li>
-									<div>健身单次券 1张 2226115648</div>
-									<div>有效期：2018-11-02~2018-12-08</div>
-								</li>
-								<li>
-									<div>健身单次券 1张 2226115648</div>
-									<div>有效期：2018-11-02~2018-12-08</div>
-								</li>
-								<li>
-									<div>健身单次券 1张 2226115648</div>
-									<div>有效期：2018-11-02~2018-12-08</div>
-								</li> -->
+							
 							</ul>
 						</div>
 					</fieldset>
@@ -262,22 +108,22 @@
 						<legend>票券转让</legend>
 						<div class="ticket_transfer">
 							<div>
-									转让会员卡号：<input type="text">
+									转让会员卡号：<input type="text" v-model="cardId">
 							</div>
 							<div>
-									对方姓名：<input type="text">
+									对方姓名：<input type="text"  v-model="clientName">
 							</div>
 							<div>
-									转让手机号码：<input type="text">
+									转让手机号码：<input type="text"  @keyup.enter="openCardUser"   v-model="mobile">
 							</div>
 							<div>
-									会员授权：<input type="text">
+									会员授权：<input type="text"  v-model="clientAuth">
 							</div>
 						</div>
 					</fieldset>
 				</div>
 				<div class="newCustomers_maskLayer_box_botton">
-					<a href="#" class="btn btn-success">确定</a>
+					<a href="#" class="btn btn-success"  @click="zrSubmit" >确定</a>
 					<a href="#" class="btn btn-default">取消</a>
 					<p>注意：任何“员工卡”下票券转让/赠送、承接人的推荐人都不会是员工，销售人为该员工。</p>
 				</div>
@@ -308,49 +154,13 @@
 											<li>
 												<ul>
 													<li  v-for="(tkitem,index_i) in item.TicketList"> 
-														<label><input type="checkbox"  :value="tkitem.ID"  ><span>{{tkitem.TicketName}}</span></label>
+														<label><input type="checkbox"  :value="tkitem.ID"   v-model="ticketSetSelectIds"  @click="refreshTicketSetList"  ><span>{{tkitem.TicketName}}</span></label>
 													</li>
 												
 												</ul>
 											</li>
 										</ul>
-										<!-- <ul>
-											<li><span><img src="../img/u1080_selected.png" alt=""></span> <span>私教免费券</span></li>
-											<li>
-												<ul>
-													<li> <label><input type="checkbox"><span>私教免费券</span></label></li>
-													<li> <label><input type="checkbox"><span>私教一对一免费券</span></label></li>
-												</ul>
-											</li>
-										</ul>
-										<ul>
-											<li><span><img src="../img/u1080.png" alt=""></span> <span>团会员积分</span></li>
-											<li>
-												<ul>
-													<li> <label><input type="checkbox">
-															<span>1元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>5元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>10元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>20元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>50元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>100元积分券</span></label></li>
-												</ul>
-											</li>
-										</ul>
-										<ul>
-											<li><span><img src="../img/u1080.png" alt=""></span> <span>团会员积分</span></li>
-											<li>
-												<ul>
-													<li> <label><input type="checkbox">
-															<span>1元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>5元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>10元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>20元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>50元积分券</span></label></li>
-													<li> <label><input type="checkbox"><span>100元积分券</span></label></li>
-												</ul>
-											</li>
-										</ul> -->
+									
 									</div>
 								</div>
 								<div class="section2_boxs1_right">
@@ -358,7 +168,7 @@
 										<legend>已选择票券赠送票券</legend>
 										<div>
 											<div class="section2_boxs1_right_top"><label><input type="checkbox"><span>全选/全不选</span></label>
-												<label><span>赠送数量</span><input type="text" placeholder="赠送数量"></label>
+												<label><span>赠送数量</span><input type="text" v-model="numAll"  @keyup.enter="setNumAll"  placeholder="赠送数量"></label>
 											</div>
 											<div>
 
@@ -381,15 +191,13 @@
 														</tr>
 													</thead>
 													<tbody>
-														<tr   v-for="(item,index) in ticketTable.list">
-															<td><label><input type="checkbox" :value="index" v-model="ticketSetSelectList"></label></td>
+														<tr v-for="(item,index) in ticketTable.list">
+															<td><label><input type="checkbox" :value="item.ID"  v-model="ticketSetSelectIds"  @click="refreshTicketSetList" ></label></td>
 															<td>{{(ticketTable.currPage-1)*10+(index+1)}}</td>
 															<td>{{item.CreateTime}}</td>
-															<td>	<select  :name="ticketTable.currPage" >
-																			<option value="购卡赠送">购卡赠送</option>
-																			<option value="友情赠送">友情赠送</option>
-																			<option value="推荐赠送">推荐赠送</option>
-																			<option value="消费推荐">消费推荐</option>
+															<td>	<select  :name="ticketTable.currPage"    >
+																			<option v-for="(obtainitem,index) in obtains"  :value="obtainitem"  >{{obtainitem}}</option>
+																			 
 																			 
 																	</select>
 															</td>
@@ -400,88 +208,65 @@
 															<td>{{item.TicketType}}</td>
 															<td>{{item.InputMoney}}</td>
 															<td>{{item.StartNumber}}</td>
-															<td>查看</td>
-															<td><input type="text" placeholder="填写数量" ></td>
+															<td><a @click="viewQY(item.ID)" style="cursor: pointer;">查看</a></td>
+															<td><input type="text" placeholder="填写数量"  ></td>
 														</tr>
-													<!-- <tr>
-															<td><label><input type="checkbox"></label></td>
-															<td>1</td>
-															<td>2018-07-20</td>
-															<td>购卡赠送</td>
-															<td>软件园店</td>
-															<td>团会员积分券</td>
-															<td>100元积分券</td>
-															<td>电子券</td>
-															<td>充值卡</td>
-															<td>100</td>
-															<td>59200300110</td>
-															<td>查看</td>
-															<td><input type="text" placeholder="填写数量"></td>
-														</tr>
-														<tr>
-															<td><label><input type="checkbox"></label></td>
-															<td>1</td>
-															<td>2018-07-20</td>
-															<td>购卡赠送</td>
-															<td>软件园店</td>
-															<td>团会员积分券</td>
-															<td>100元积分券</td>
-															<td>电子券</td>
-															<td>充值卡</td>
-															<td>100</td>
-															<td>59200300110</td>
-															<td>查看</td>
-															<td><input type="text" placeholder="填写数量"></td>
-														</tr>
-														<tr>
-															<td><label><input type="checkbox"></label></td>
-															<td>1</td>
-															<td>2018-07-20</td>
-															<td>购卡赠送</td>
-															<td>软件园店</td>
-															<td>团会员积分券</td>
-															<td>100元积分券</td>
-															<td>电子券</td>
-															<td>充值卡</td>
-															<td>100</td>
-															<td>59200300110</td>
-															<td>查看</td>
-															<td><input type="text" placeholder="填写数量"></td>
-														</tr>
-														<tr>
-															<td><label><input type="checkbox"></label></td>
-															<td>1</td>
-															<td>2018-07-20</td>
-															<td>购卡赠送</td>
-															<td>软件园店</td>
-															<td>团会员积分券</td>
-															<td>100元积分券</td>
-															<td>电子券</td>
-															<td>充值卡</td>
-															<td>100</td>
-															<td>59200300110</td>
-															<td>查看</td>
-															<td><input type="text" placeholder="填写数量"></td>
-														</tr> -->	
+												
 
 													</tbody>
 												</table>
 													<div id="pagination" class="pagination"></div>
 											</div>
-										<!-- 	<div class="page clearfix">
-												<p class="fl">【共5页/总100条】</p>
-												<ul class="fr">
-													<li>首页</li>
-													<li>上一页</li>
-													<li>1</li>
-													<li>下一个</li>
-													<li>尾页</li>
-													<li>第<input type="text">页</li>
-												</ul>
-											</div> -->
+								
 										</div>
 									</fieldset>
-									<div> <a href="javascript:;" class="btn btn-primary" @click="ticketSet">确定</a></div>
+									<fieldset class="fieldset-info border1-ccc br4 pt15 mt5">
+					    				<legend class="c-333">选择所绑定的会员卡</legend>
+					    				<p class="c-ff0000" style="margin-top: -10px;margin-bottom: 10px;">选择票券所绑定的会员卡，可以不选择</p>
+										<table class="table table-striped table-bordered table-style mlr-1 mb0">
+						    				<thead>
+						    					<tr>
+						    						<td class="w35">选择</td>
+						    						<td>序号</td>
+						    						<td>归属门店</td>
+						    						<td>卡系列</td>
+						    						<td>会员卡名称</td>
+						    						<td>会员卡号</td>
+						    						<td>购卡金额</td>
+						    						<td>剩余权益</td>
+						    						<td>建卡时间</td>
+						    						<td>开卡日期</td>
+						    						<td>失效日期</td>
+						    						<td>状态</td>
+						    					</tr>
+						    				</thead>
+						    				<tbody>
+					    						<tr  v-for="(item,index) in cardUserTable.list">
+					    							<td><input type="checkbox" :value="item"  @click="ticketSetCardSelect(item)" v-model="ticketSetCard"/></td>
+						    						<td>{{(ticketTable.currPage-1)*10+(index+1)}}</td>
+						    						<td>{{item.shopName}}</td>
+						    						<td><span class="c-ff0000">{{item.cardFlag}}</span></td>
+						    						<td><span class="c-0000ff">{{item.cardTypeName}}</span></td>
+						    						<td>{{item.cardNo}}</td>
+						    						<td>{{item.needPrice<=0?item.needPriceTwo:item.needPrice}}</td>
+						    						<td>
+						    							<strong v-if="item.status == 6">0</strong>
+                                        				<strong v-else>{{item.orderNum}}</strong>
+                                        				</td>
+						    						<td>{{item.createTime|formatDate}}</td>
+						    						<td>{{item.bindTime}}</td>
+						    						<td>{{item.bindTime== null? '':item.invalidTime}}</td>
+						    						<td>  <span  v-for="items in parameterList.status" v-if="items.vue==item.status" :class="item.status==0?'c-090':(item.status==1?'c-999':item.status==2?'c-f00':item.status==3?'c-666':item.status==4?'c-000':item.status==5?'c-f00':'c-ccc')" @click="openCard(item)">{{items.lav}}</span>
+                                   					</td>
+					    						</tr>
+					    				
+						    				</tbody>
+						    			</table>
+						    			<div id="pagination1" class="pagination"></div>
+						    		</fieldset>
+						    		<div class="modal-footer" style="text-align: left;border-top: 0;">
+						    			<a href="javascript:;" class="btn btn-primary" @click="ticketSet">确定</a>
+								     </div>
 								</div>
 							</div>
 						</div>
@@ -490,6 +275,119 @@
 			</div>
 		</div>
 		<!-- 票券赠送 -->
+		
+		<!-- 查看权益 -->
+		<div class="modal fade modal-style" id="qyModal" tabindex="-1" role="dialog" data-backdrop="false">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title">查看票券权益</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<table class="table table-striped table-bordered table-style mlr-1 mb0">
+    				<thead>
+    					<tr>
+    						<td>使用门店</td>
+    						<td>可使用场馆</td>
+    						<td>类别</td>
+    						<td>产品/项目名称</td>
+    						<td>消费类型</td>
+    					</tr>
+    				</thead>
+    				<tbody>
+    					<tr  v-for="(item,index) in ticketEquityDetail">
+    						<td>{{item.shopname}}</td>
+    						<td>{{item.sdaduimname}}</td>
+    						<td>{{typesetFormater(item.typeset)}}</td>
+    						<td class="cpname">
+    							<p v-for="(item_1,index) in ticketEquityDetail.content">
+								系列:{{item_1.seriesname}} 名称：{{item_1.projectname}}
+								</p>
+    						</td>
+    						<td>{{item.costway}}</td>
+    					</tr>
+    					<!-- <tr>
+    						<td>软件园店</td>
+    						<td>游泳私教</td>
+    						<td>项目</td>
+    						<td class="cpname">
+    							<p>系列：游泳      名称：自由泳</p>
+    							<p>系列：游泳      名称：蝶泳</p>
+    							<p>系列：游泳      名称：蝶泳</p>
+    						</td>
+    						<td>按会员价</td>
+    					</tr>
+    					<tr>
+    						<td>软件园店</td>
+    						<td>商品管理</td>
+    						<td>产品</td>
+    						<td class="cpname">
+    							<p>系列：饮料      名称：盐碘330ml</p>
+    							<p>系列：饮料      名称：盐碘330ml</p>
+    						</td>
+    						<td>按会员价</td>
+    					</tr> -->
+    				</tbody>
+    			</table>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
+		<!-- 选择会员卡 -->
+		<div class="modal fade modal-style" id="xzhyModal" tabindex="-1" role="dialog" data-backdrop="false">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title">选择会员卡</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<table class="table table-striped table-bordered table-style mlr-1 mb0">
+    				<thead>
+    					<tr>
+    						<td class="w45">选择</td>
+    						<td>序号</td>
+    						<td>归属门店</td>
+    						<td>卡系列</td>
+    						<td>会员卡名称</td>
+    						<td>会员卡号</td>
+    						<td>购卡金额</td>
+    						<td>剩余权益</td>
+    						<td>建卡时间</td>
+    						<td>开卡日期</td>
+    						<td>失效日期</td>
+    						<td>状态</td>
+    					</tr>
+    				</thead>
+    				<tbody>
+						<tr  v-for="(item,index) in zrCardUserTable.list">
+					    							<td><span style="cursor: pointer;color: blue" @click="cardSelect(item)">选择</span></td>
+						    						<td>{{(ticketTable.currPage-1)*10+(index+1)}}</td>
+						    						<td>{{item.shopName}}</td>
+						    						<td><span class="c-ff0000">{{item.cardFlag}}</span></td>
+						    						<td><span class="c-0000ff">{{item.cardTypeName}}</span></td>
+						    						<td>{{item.cardNo}}</td>
+						    						<td>{{item.needPrice<=0?item.needPriceTwo:item.needPrice}}</td>
+						    						<td>
+						    							<strong v-if="item.status == 6">0</strong>
+                                        				<strong v-else>{{item.orderNum}}</strong>
+                                        				</td>
+						    						<td>{{item.createTime|formatDate}}</td>
+						    						<td>{{item.bindTime}}</td>
+						    						<td>{{item.bindTime== null? '':item.invalidTime}}</td>
+						    						<td>  <span  v-for="items in parameterList.status" v-if="items.vue==item.status" :class="item.status==0?'c-090':(item.status==1?'c-999':item.status==2?'c-f00':item.status==3?'c-666':item.status==4?'c-000':item.status==5?'c-f00':'c-ccc')" @click="openCard(item)">{{items.lav}}</span>
+                                   					</td>
+					    						</tr>
+				
+    				</tbody>
+    			</table>
+    			<div id="pagination2" class="pagination"></div>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 	</div>
 </body>
 
@@ -518,7 +416,10 @@
 	function newCustomers_maskLayer_X() {
 		$('.newCustomers_maskLayer').hide();
 	}
+	//alert('注意看代码  这是777行弹出')
 	customerTicket.init();
+//	选择会员卡调用显示
+//	$('#xzhyModal').modal('show')
 </script>
 
 </html>

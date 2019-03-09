@@ -19,34 +19,35 @@
 			<fieldset>
 				<legend>添加跟进记录</legend>
 				<p class="line">
-					日期：
+					<span>日期：</span>
 					<span>{{followUpRecordAdd.createTime}}</span>
 				</p>
 				<p class="line">
-					跟进类型：
+					<span>跟进类型：</span>
 					<label v-for="item in followTypeList">
 						<input type="radio"  :value="item.vue" v-model="followUpRecordAdd.followType"  name="followType"/>
 						{{item.lab}} <span v-if="item.vue == 1" class="toRed">如果选择微信短信跟进，跟进图片必填</span>
 					</label>
 				</p>
 				<p class="line">
-					跟进内容：
+					<span>跟进内容：</span>
 					<!--<textarea name="followContent" v-model="followUpRecordAdd.followContent" v-on:click="getFollwKeyLis"></textarea>-->
 					<textarea name="followContent" v-on:click="getFollwKeyLis" readonly>{{followContentT}}</textarea>
 				</p>
 
 				<!-- 跟进内容筛选 (动态面板) -->
-				<!--id="u21592"-->
-				<div id="followKeyword" class="ax_default ax_default_hidden" data-label="跟进内容筛选" style="display: none;position: absolute;background: #fff;width: 32%;left: 8%;top: 144px;padding: 15px 8px 15px 8px;border: 1px solid #ccc">
-					<!--id="u21592_state0"-->
+				<div id="followKeyword" class="ax_default ax_default_hidden" data-label="跟进内容筛选" style="display: none;
+			    position: absolute;
+			    background: rgb(255, 255, 255);
+			    width: 30%;
+			    left: 140px;
+			    top: 144px;
+			    padding: 15px 8px;
+			    border: 1px solid rgb(204, 204, 204);">
 					<div class="panel_state" data-label="State1" v-for="item in followKeywordList" >
-						<!--id="u21592_state0_content"-->
 						<div class="panel_state_content" :value="item.id">
-							<!--id="u21593" -->
-							<div  class="ax_default box_1">
-								<!--id="u21593_div"-->
+							<div  class="ax_default box_1" @click="appendContent(item.content,item.id)">
 								<div  class=""></div>
-								<!--id="u21594"-->
 								<div class="text" style="visibility: visible;display: inline-block;float: left;margin-left: 10px;margin-right: 10px;margin-bottom:10px;border: 1px solid #ccc;padding: 2px 9px 2px 9px;">
 									<p><span style="font-family:'应用字体 Regular', '应用字体';">{{item.content}}</span></p>
 								</div>
@@ -55,7 +56,7 @@
 					</div>
 				</div>
 				<p class="line">
-					跟进记录图片：
+					<span>跟进记录图片：</span>
 					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(1)"  id="price1" />
 					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(2)"  id="price2" />
 					<img src="../img/u2871.png" alt="" class="img-responsive" @click="pictureSelected(3)"  id="price3" />
@@ -64,7 +65,7 @@
 				</p>
 				<p class="line">
 					<label>
-						下次跟进：
+						<span>下次跟进：</span>
 						<input type="text" class="jeinput nextFollowTime" v-model="followUpRecordAdd.nextFollowTime" placeholder="请选择" readonly/>
 					</label>
 					<label>
@@ -103,7 +104,7 @@
 					<tr v-for="(item,index) in followUpRecordList" :value="item.id" :type="item.type" :roId="item.roleInfoId" :suId="item.supperManagmentId" :pId="item.personalId">
 						<td>{{index+1}}</td>
 						<td>{{item.followTime|formatDate(item.followTime,true)}}</td>
-						<td>{{item.content}}</td>
+						<td>手动：{{item.content}}</td>
 						<td>查看</td>
 						<td>{{item.nextFollowTime|formatDate}}</td>
 						<td>{{item.planVisitTime|formatDate}}</td>

@@ -6,7 +6,7 @@ body {
 }
 
 #leadCustomerEntry {
-    min-width: 1366px;
+    /*min-width: 1366px;*/
     position: relative;
 }
 
@@ -53,12 +53,12 @@ body {
 
 /* 客户资料 */
 #leadCustomerEntry .section1 {
-    width: 49%;
+    width: 55%;
     float: left;
 }
 
 #leadCustomerEntry .section2 {
-    width: 49%;
+    width: 45%;
     float: right;
 }
 
@@ -160,7 +160,7 @@ body {
     width: 85%;
     line-height: 22px;
     text-align: center;
-    color: #a3a3a3;
+    color: #333;
 }
 #leadCustomerEntry .section1_box .col_box>div>div label {
     margin: 0;
@@ -239,7 +239,7 @@ body {
     line-height: 30px;min-height: 32px;
 }
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_top>div:nth-child(10) {
-    line-height: 97px;
+    /*line-height: 97px;*/
 }
 
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_top>div:nth-child(11) {
@@ -263,7 +263,7 @@ body {
     height: 32px;
 }
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_botton>div:nth-child(10) {
-    height: 97px;
+    /*height: 97px;*/
 }
 #leadCustomerEntry .section2_boxs1_right .section2_boxs1_botton>div:nth-child(11) {
     /*border-bottom: none;*/

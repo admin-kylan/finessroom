@@ -187,11 +187,13 @@
         ap.sdadiumId,
         sda.Name sdadiumName,
         ( CASE WHEN ap.eduType = 1 THEN pc.name ELSE gc.name END ) courseName,
+        ( CASE WHEN ap.eduType = 1 THEN pc.private_image ELSE gc.image_url END ) courseImage,
         po.buyCount,
         po.sendCount,
-        (select count(1) from AddProjectConsume apc where apc.AddProjectId = ap.id) consumeLength,
+        po.AllCount allCount,
         po.price,
         po.totalPrice,
+        po.NeedPrice needPrice,
         po.noPrice,
         ap.useful,
         ap.startTime,
@@ -199,7 +201,10 @@
         ap.contractNumber,
         ap.saleType,
         pi.RelName coachName,
-        sco.cashPledge
+        sco.cashPledge,
+        client.client_name clientName,
+        client.id clientId,
+        client.mobile mobile
         FROM
         AddProject ap
         LEFT JOIN Shop shop ON ap.ShopId = shop.id
@@ -210,6 +215,7 @@
         left join fr_client_personnel_relate cpr on cpr.other_table_id = ap.id
         left join PersonnelInfo pi on pi.id = cpr.personal_id
         left join SysConsumeOrder sco on sco.OrderNumber = po.OrderNumber
+        left join fr_client client on client.id = po.PersonnelId
         where
 
         shop.id = #{shopId}

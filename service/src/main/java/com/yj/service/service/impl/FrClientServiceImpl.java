@@ -492,8 +492,7 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
         map.put("page", params.getPage());
         map.put("limit", params.getLimit());
         Page page = new Query<FrCard>(map).getPage();
-        List list = new ArrayList();
-        list = frCardMapper.queryUserCardInfoListBG(page, frCard);
+        List<ClientUploadDTO> list = frCardMapper.queryUserCardInfoListBG(page, frCard);
         page.setRecords(list);
         return new PageUtils(page);
     }
@@ -509,7 +508,7 @@ public class FrClientServiceImpl extends BaseServiceImpl<FrClientMapper, FrClien
         map.put("page", params.getPage());
         map.put("limit", params.getLimit());
         Page page = new Query<FrClient>(map).getPage();
-        List<PotentialClientDTO> list = baseMapper.selectPotentialList(page, params);
+        List<ProspectiveClientDTO> list = baseMapper.selectPotentialListBG(page, params);
         page.setRecords(list);
         return new PageUtils(page);
     }

@@ -20,23 +20,48 @@
 					<div>消费历史</div>
 					<div>
 						<div class="mances">
-							<a href="javascript:;" id="performances" class="on">会员消费历史</a><a href="javascript:;" id="history">积分消费历史</a>
+							<a href="javascript:;" :class='{on: index == 0}' @click="index = 0" >会员消费历史</a>
+							<a href="javascript:;" :class='{on: index == 1}' @click="index = 1">积分消费历史</a>
 						</div>
 
-						<a href="javascript:;" id="ticketGifts">导出</a>
+						<!--<a href="javascript:;" id="ticketGifts">导出</a>-->
 					</div>
-					<div class="tabW_top_left">
-						<span>创建日期：</span> <input type="text" class="jeinput startDate" placeholder="开始日期" ><input type="text" class="jeinput endDate" placeholder="结束日期" > <a class="btn btn-default active">全部</a> <a class="btn btn-default">当天</a><a
-						 class="btn btn-default">当月</a><a class="btn btn-default">当年</a>
+
+					<div class="tabW_top_left" v-show="index == 0">
+						<span>创建日期：</span>
+						<input type="text" class="jeinput" id="member-start-date" placeholder="开始日期" v-model="member.beginDate">
+						<input type="text" class="jeinput" id="member-end-date" placeholder="结束日期" v-model="member.endDate">
+						<a class="btn btn-default" :class='{active: member.index == 0}' @click="member.index = 0">全部</a>
+						<a class="btn btn-default" :class='{active: member.index == 1}' @click="member.index = 1">本天</a>
+						<a class="btn btn-default" :class='{active: member.index == 2}' @click="member.index = 2">本周</a>
+						<a class="btn btn-default" :class='{active: member.index == 3}' @click="member.index = 3">本月</a>
+						<a class="btn btn-default" :class='{active: member.index == 4}' @click="member.index = 4">本季度</a>
+						<a class="btn btn-default" :class='{active: member.index == 5}' @click="member.index = 5">本年度</a>
 					</div>
+
+					<div class="tabW_top_left" v-show="index == 1">
+						<span>创建日期：</span>
+						<input type="text" class="jeinput " id="ticket-start-date" placeholder="开始日期" v-model="ticket.beginDate">
+						<input type="text" class="jeinput " id="ticket-end-date" placeholder="结束日期" v-model="ticket.endDate">
+						<a class="btn btn-default" :class='{active: ticket.index == 0}' @click="ticket.index = 0">全部</a>
+						<a class="btn btn-default" :class='{active: ticket.index == 1}' @click="ticket.index = 1">本天</a>
+						<a class="btn btn-default" :class='{active: ticket.index == 2}' @click="ticket.index = 2">本周</a>
+						<a class="btn btn-default" :class='{active: ticket.index == 3}' @click="ticket.index = 3">本月</a>
+						<a class="btn btn-default" :class='{active: ticket.index == 4}' @click="ticket.index = 4">本季度</a>
+						<a class="btn btn-default" :class='{active: ticket.index == 5}' @click="ticket.index = 5">本年度</a>
+					</div>
+
+
 				</div>
-				<div class="tabW on">
+				<div class="tabW" v-show="index == 0" :class='{on: index == 0}'>
 					<table class="table table-bordered table-hover" border="1" bordercolor="#ccc">
 						<thead>
 							<tr>
 								<td>序号</td>
+								<td>订单编号</td>
 								<td>消费时间</td>
 								<td>结束时间</td>
+								<td>时间长度</td>
 								<td>消费门店</td>
 								<td>消费场馆</td>
 								<td>使用人</td>
@@ -50,463 +75,28 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
+							<tr v-for="(item, index) in member.result">
+								<td>{{index + 1}}</td>
+								<td>{{item.orderNumber}}</td>
+								<td>{{item.createDate| toDateHHmmss}}</td>
+								<td>{{item.endDate| toDateHHmmss}}</td>
+								<td>{{item.totalTime}}</td>
+								<td>{{item.shopName}}</td>
+								<td>{{item.sdaduimName}}</td>
+								<td>{{item.useUserName}}</td>
+								<td>{{item.mobile}}</td>
+								<td>{{item.courseName}}</td>
+								<td>{{item.classSaleNum}}</td>
+								<td>{{item.accessType}}</td>
+								<td>{{item.createName}}</td>
+								<td>{{item.settleType}}</td>
+								<td class="tored performances" @click="cancelMember(item)">冲销</td>
 							</tr>
 
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>2017-12-01</td>
-								<td>2017-12-01</td>
-								<td>万达店</td>
-								<td>健身</td>
-								<td>吴改</td>
-								<td>13649545925</td>
-								<td>健身私教</td>
-								<td>1</td>
-								<td>人脸识别</td>
-								<td>Demacia</td>
-								<td> <a>查看</a> </td>
-								<td class="tored performances">冲销</td>
-							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div class="tabW">
+				<div class="tabW" v-show="index == 1" :class='{on: index == 1}'>
 					<table class="table table-bordered" border="1" bordercolor="#ccc">
 						<thead>
 							<tr>
@@ -524,411 +114,52 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
+
+							<tr v-for="(item, index) in ticket.result">
+								<td>{{index + 1}}</td>
+								<td>{{item.eo_ordernumber}}</td>
+								<td>{{item.u_username}}</td>
+								<td>{{item.u_name}}</td>
+								<td>{{item.u_mobile}}</td>
+								<td>{{item.ep_productname}}</td>
+								<td>{{item.esc_exchangescore}}</td>
+								<td>{{item.esc_exchangecount}}</td>
+								<td>{{item.esc_totalscore}}</td>
+								<td>{{item.eo_paytime| toDateyyyyMMddHHmm}}</td>
+								<td>{{item.ep_extend1}}</td>
 							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>188816456456</td>
-								<td>Klaus</td>
-								<td>吴改</td>
-								<td>13645945925</td>
-								<td>皮得很功能饮料 300ml</td>
-								<td>108</td>
-								<td>1</td>
-								<td>108</td>
-								<td>2018-05-24 21:58</td>
-								<td>上门自取</td>
-							</tr>
+
 
 						</tbody>
 					</table>
 				</div>
-				<div class="page clearfix">
-					<p class="fl">【共5页/总100条】</p>
-					<ul class="fr">
-						<li>首页</li>
-						<li>上一页</li>
-						<li>1</li>
-						<li>下一个</li>
-						<li>尾页</li>
-						<li>第<input type="text">页</li>
-					</ul>
-				</div>
+
+				<template v-if="index == 0">
+					<div class="page clearfix">
+						<p class="fl">【共{{member.totalPage}}页】</p>
+						<ul class="fr">
+							<li @click="member.pageIndex = 1">首页</li>
+							<li @click="member.pageIndex -= 1">上一页</li>
+							<li>{{member.pageIndex}}</li>
+							<li @click="member.pageIndex += 1">下一个</li>
+							<li @click="member.pageIndex = member.totalPage">尾页</li>
+							<li>第<input type="text" v-model="member.num" @keyup.enter="submitMember">页</li>
+						</ul>
+					</div>
+				</template>
+				<template v-if="index == 1">
+					<div class="page clearfix">
+						<p class="fl">【共{{ticket.totalPage}}页】</p>
+						<ul class="fr">
+							<li @click="ticket.pageIndex = 1">首页</li>
+							<li @click="ticket.pageIndex -= 1">上一页</li>
+							<li>{{ticket.pageIndex}}</li>
+							<li @click="ticket.pageIndex += 1">下一个</li>
+							<li @click="ticket.pageIndex = ticket.totalPage">尾页</li>
+							<li>第<input type="text" v-model="ticket.num" @keyup.enter="submitTicket">页</li>
+						</ul>
+					</div>
+				</template>
 			</div>
 		</div>
 		<!-- 转让弹窗 -->
@@ -954,26 +185,324 @@
 	</div>
 </body>
 <script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/extendjQuery.js"></script>
+<script src="../js/setCookie.js"></script>
+<script src="../js/dateUtil.js"></script>
 <script src="../js/combobox.js"></script>
 <script src="../js/jedate.js"></script>
 <script src="../js/vue.js"></script>
+<script src="../js/simple-calendar.js"></script>
+<script src="../js/jquery-confirm.js"></script>
+<script src="../js/jquery.fieldTime.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script src="../js/common.js"></script>
+<script src="../js/axios.min.js"></script>
+<script src="../fitness/js/resources/api/axios-base.js"></script>
+
 <script>
-	$('.performances').click(function () {
-		$('#performance').show();
-	})
-	// 关闭弹窗
-	function newCustomers_maskLayer_X() {
-		$('.newCustomers_maskLayer').hide();
-	}
-	$('.mances a').click(function () {
-		$(this).addClass('on').siblings().removeClass('on');
-		$(".tabW").removeClass('on');
-		$(".tabW").eq($(this).index()).addClass('on');
-	})
-	$('body').on('click','#customerConsumptionHistory .tabW_top .tabW_top_left a',function () {
-		$(this).addClass("active").siblings().removeClass('active');
-    })
+
+	var customerCourseProjectHistory = new Vue({
+		el: '#customerConsumptionHistory',
+		data: {
+			index: 0,
+			mobile: '',
+			member:{
+				beginDate: '',
+				endDate: '',
+				index: 0, //选择时间
+				pageIndex: 1,
+				totalPage: 1,
+				num: '',
+				result: [],
+			},
+			ticket:{
+				beginDate: '',
+				endDate: '',
+				index: 0,//选择时间
+				pageIndex: 1,
+				totalPage: 1,
+				num: '',
+			}
+		},
+		filters:{
+			toDateHHmmss(val){
+				let date = new Date(val);
+				let h = date.getHours();
+				h = h < 10 ? ('0' + h) : h;
+				let m = date.getMinutes();
+				m = m < 10 ? ('0' + m) : m;
+				let s = date.getSeconds();
+				s = s < 10 ? ('0' + s) : s;
+				let _time = "";
+				_time += ' '+h + ':' + m + ':' + s;
+				return _time;
+			},
+			toDateyyyyMMddHHmm(val){
+				if(!val){
+					return "";
+				}
+				return timeFormatDate(val, true)
+			},
+		},
+		computed: {},
+		watch: {
+			'member.index'(val){
+				this.selectDate(val, 0);
+				this.member.pageIndex = 1;
+				this.loadDateMember();
+			},
+			'ticket.index'(val){
+				this.selectDate(val, 1);
+				this.ticket.pageIndex = 1;
+				this.loadDateTicket();
+			},
+			'member.pageIndex'(val, old){
+				if(parseInt(val) > parseInt(this.member.totalPage)){
+					this.member.pageIndex = this.member.totalPage;
+				}
+				if(parseInt(val) < 1){
+					this.member.pageIndex = 1;
+				}
+				//触发查询动作
+				this.loadDateMember();
+			},
+			'ticket.pageIndex'(val){
+				if(parseInt(val) > parseInt(this.ticket.totalPage)){
+					this.ticket.pageIndex = this.ticket.totalPage;
+				}
+				if(parseInt(val) < 1){
+					this.ticket.pageIndex = 1;
+				}
+				//触发查询动作
+				this.loadDateTicket();
+			},
+			'member.beginDate'(val){
+
+				if(this.member.endDate && val){
+					this.member.pageIndex = 1;
+					this.loadDateMember();
+				}
+			},
+			'member.endDate'(val){
+
+				if(this.member.beginDate && val){
+					this.member.pageIndex = 1;
+					this.loadDateMember();
+				}
+			},
+			'ticket.beginDate'(val){
+				if(this.ticket.endDate && val){
+					this.ticket.pageIndex = 1;
+					this.loadDateTicket();
+				}
+			},
+			'ticket.endDate'(val){
+				if(this.ticket.beginDate && val){
+					this.ticket.pageIndex = 1;
+					this.loadDateTicket();
+				}
+			},
+		},
+		created: function () {
+			this.index = 0; //默认执行 0 代表第一个
+			//获取用户信息
+			axiosGetParams('frClient/getClient', {id: $.cookie('cid')}, (response) => {
+				this.mobile = response.mobile;
+				this.loadDateTicket();
+			});
+			this.loadDateMember();
+
+		},
+		mounted(){// 初始化加载
+
+			let that = this;
+			//上课时间
+			jeDate('#member-start-date',{
+				// isinitVal: true,
+				festival: true,
+				format: 'YYYY-MM-DD',
+				donefun(obj, val){
+					that.member.beginDate = obj.val;
+				}
+			});
+			jeDate('#member-end-date',{
+				// isinitVal: true,
+				festival: true,
+				format: 'YYYY-MM-DD',
+				donefun(obj, val){
+					that.member.endDate = obj.val;
+				}
+			});
+			jeDate('#ticket-start-date',{
+				// isinitVal: true,
+				festival: true,
+				format: 'YYYY-MM-DD',
+				donefun(obj, val){
+					that.ticket.beginDate = obj.val;
+				}
+			});
+			jeDate('#ticket-end-date',{
+				// isinitVal: true,
+				festival: true,
+				format: 'YYYY-MM-DD',
+				donefun(obj, val){
+					that.ticket.endDate = obj.val;
+				}
+			});
+		},
+		methods: {
+			selectDate(val, flag){
+				let startDate = '';
+				let endDate = '';
+				if(val == 0){
+					startDate = '';
+					endDate = '';
+				}
+				if(val == 1){
+					let date = new Date();
+					startDate =  timeFormatDate(date);
+					endDate = timeFormatDate(date);
+				}
+				if(val == 2){
+					startDate = getWeekStartDate();
+					endDate = getWeekEndDate();
+				}
+				if(val == 3){
+					startDate = getMonthStartDate();
+					endDate = getMonthEndDate();
+				}
+				if(val == 4){
+					startDate = getQuarterStartDate();
+					endDate = getQuarterEndDate();
+				}
+				if(val == 5){
+					startDate = getYearStartDate();
+					endDate = getYearEndDate();
+				}
+				if(flag == 0){
+					this.member.beginDate = startDate;
+					this.member.endDate = endDate;
+				}
+				if(flag == 1){
+					this.ticket.beginDate = startDate;
+					this.ticket.endDate = endDate;
+				}
+			},
+			submitMember(){
+				if(!this.member.num){
+					return false;
+				}
+				if(parseInt(this.member.num) > parseInt(this.member.totalPage)){
+					this.member.num = this.member.totalPage;
+				}
+				this.member.pageIndex = this.member.num;
+				//触发查询动作
+				this.loadDateMember();
+			},
+			submitTicket(){
+				if(!this.ticket.num){
+					return false;
+				}
+				if(parseInt(this.ticket.num) > parseInt(this.ticket.totalPage)){
+					this.ticket.num = this.ticket.totalPage;
+				}
+				this.ticket.pageIndex = this.ticket.num;
+				//触发查询动作
+				this.loadDateTicket();
+			},
+			loadDateMember(){
+				//debugger
+				let end = parseInt(this.member.index) == 0? "": " 23:59:59";
+				let begin = parseInt(this.member.index) == 0? "": " 00:00:00";
+				let param = {
+					code: $.cookie('code'),
+					pageSize: 15,
+				//	clientId: $.cookie('cid'),
+					clientId: '3983654cae3ede11',
+					pageIndex: this.member.pageIndex,
+					beginDate: this.member.beginDate + begin,
+					endDate: this.member.endDate + end,
+				}
+				axiosGetParams("eduTicket/findConsumeList", param, (res)=>{
+					//debugger
+					//console.log(res)
+					this.member.result = res.records;
+					this.member.totalPage = res.pages;
+
+				})
+			},
+			loadDateTicket(){
+				let end = parseInt(this.ticket.index) == 0? "": " 23:59:59";
+				let begin = parseInt(this.ticket.index) == 0? "": " 00:00:00";
+				let param = {
+					code: $.cookie('code'),
+					num: 15,
+				//	mobile: '13649545925',
+					mobile: this.mobile,
+					type: this.ticket.index,
+					pageIndex: this.ticket.pageIndex,
+					beginDate: this.ticket.beginDate + begin,
+					endDate: this.ticket.endDate + end,
+				}
+				axiosGetParams("eduTicket/findGetTicketCoumerList", param, (res)=>{
+					//debugger
+					this.ticket.result = res.records;
+					this.ticket.totalPage = res.total;
+
+				})
+			},
+			cancelMember(item){
+				let param = {id: item.memberId,eduClassSalesNum: item.classSaleNum};
+				//冲销用的
+				let buyEduDetail = {
+					cardId: '', //会员卡ID
+					clientId: '', //客户ID
+					cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+					orderStatus: '1', //支付状态（0：支出 1：收入）
+					orderPrice: 0,//金额（注意正负 支出就是  -0.00）
+					orderRightsNum: 0, //权益 注意正负
+					shopId: item.shopId, //基础表门店ID
+					personnelId: $.cookie('id'), //操作员工id
+					flag: '权益', //消费内容
+					type: 1, //支付类型（1:权益 2:储值 3:其他消费）
+					CustomerCode: $.cookie('code'),
+					status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+					auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+					orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+					orderAmt: 0, //剩余权益\剩余储值金额
+					createUserId: $.cookie('id'),
+					createUserName: $.cookie('name'),
+					createTime: new Date(),
+				};
+				param.buyEduDetail = buyEduDetail;
+				let message = confirm("确认冲销该条记录？")
+				if(message == true){
+					axiosPostParams('frEducation/cancelMemberOrder', param, ()=>{
+						this.loadDateMember();
+						alert("冲销成功")
+					},(res)=>{
+						alert(res.msg)
+					})
+				}
+			}
+		}
+	});
 </script>
 
 </html>
+<!--$('.performances').click(function () {-->
+<!--$('#performance').show();-->
+<!--})-->
+<!--// 关闭弹窗-->
+<!--function newCustomers_maskLayer_X() {-->
+<!--$('.newCustomers_maskLayer').hide();-->
+<!--}-->
+<!--$('.mances a').click(function () {-->
+<!--$(this).addClass('on').siblings().removeClass('on');-->
+<!--$(".tabW").removeClass('on');-->
+<!--$(".tabW").eq($(this).index()).addClass('on');-->
+<!--})-->
+<!--$('body').on('click','#customerConsumptionHistory .tabW_top .tabW_top_left a',function () {-->
+<!--$(this).addClass("active").siblings().removeClass('active');-->
+<!--})-->

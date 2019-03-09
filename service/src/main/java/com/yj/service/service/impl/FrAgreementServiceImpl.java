@@ -81,8 +81,8 @@ public class FrAgreementServiceImpl extends BaseServiceImpl<FrAgreementMapper, F
         String id="";
         for(FrAgreement frAgreement:list){//判断是否属于开始于结束编号的范围
             String n = "";
-            if(!(Integer.valueOf(agreement)>=Integer.valueOf(frAgreement.getStartNo())&&
-                Integer.valueOf(agreement)<=Integer.valueOf(frAgreement.getEndNo())) ){
+            if(!(Long.valueOf(agreement)>=Long.valueOf(frAgreement.getStartNo())&&
+                    Long.valueOf(agreement)<=Long.valueOf(frAgreement.getEndNo())) ){
                 n = "0";
             }
             if(frAgreement.getUseHeadNum()){//是否去除头
@@ -148,13 +148,14 @@ public class FrAgreementServiceImpl extends BaseServiceImpl<FrAgreementMapper, F
         //一直生成符合第一条的协议号，不过还要判断是否已存在
         if(list.size()>0){
             FrAgreement frAgreement = list.get(0);
-            int startNo = Integer.valueOf(frAgreement.getStartNo());//开始编码
-            int endNo = Integer.valueOf(frAgreement.getEndNo());//结束编号
+            Long startNo = Long.valueOf(frAgreement.getStartNo());//开始编码
+            Long endNo = Long.valueOf(frAgreement.getEndNo());//结束编号
             Random random = new Random();
-            Integer n;
+            Long temp=endNo-startNo;
+            Long n;
             while (true){
                 int ce =0;
-                 n = random.nextInt(endNo-startNo)+startNo;
+                 n = nextLong(random,temp)+startNo;
                 if(frAgreement.getUseHeadNum()){//是否去除头
                     if(String.valueOf(n).startsWith(frAgreement.getHeadNum())){//判断是否以去除的数字开头
                         ce = 1;
@@ -243,5 +244,14 @@ public class FrAgreementServiceImpl extends BaseServiceImpl<FrAgreementMapper, F
             }
         }
         return par;
+    }
+    public long nextLong(Random rng, long n) {
+        // error checking and 2^x checking removed for simplicity.
+        long bits, val;
+        do {
+            bits = (rng.nextLong() << 1) >>> 1;
+            val = bits % n;
+        } while (bits-val+(n-1) < 0L);
+        return val;
     }
 }

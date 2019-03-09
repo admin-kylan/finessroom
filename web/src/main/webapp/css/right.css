@@ -17,7 +17,7 @@
     padding: 30px;
     height: 89%;
     border-right: 1px solid #ccc;
-    min-width: 1345px;
+    /*min-width: 1345px;*/
     min-height: 480px;
 }
 #right .form{

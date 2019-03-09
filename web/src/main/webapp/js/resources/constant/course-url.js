@@ -34,4 +34,5 @@ const COURSE_URL = {
     findCustomerRemnantRecord: 'frCustomerCourse/findCustomerRemnantRecord', //查询补余记录
     findCustomerExtensionRecord: 'frCustomerCourse/findCustomerExtensionRecord', //查询延期记录
     getCoursePackageCourseId: 'frCustomerCourse/getCoursePackageCourseId', //查询延期记录
+    findPostTicketList: 'eduTicket/findPostTicketList', // 查询票券
 };

@@ -98,6 +98,9 @@ public class FrCustomerCourseProjectServiceImpl {
     @Autowired
     private FrConsumeMoneyOrderServiceImpl frConsumeMoneyOrderService;
 
+    @Autowired
+    private TicketSaleEducationServiceImpl ticketSaleEducationService;
+
     /**
      * 根据场馆ID查询 并且 userType 是动态的，选择教练还是助教
      *
@@ -128,6 +131,8 @@ public class FrCustomerCourseProjectServiceImpl {
       //  JSONArray cardOrderPriceDetailList = JSONArray.parseArray((String) map.get("cardOrderPriceDetailList"));
         JSONArray cardOrderAllotSetList = JSONArray.parseArray((String) map.get("cardOrderAllotSetList"));
         JSONArray clientPersonnelRelate = JSONArray.parseArray((String) map.get("clientPersonnelRelate"));
+        JSONArray ticketSaleList0 = JSONArray.parseArray((String) map.get("ticketSaleList0"));
+        JSONArray ticketSaleList1 = JSONArray.parseArray((String) map.get("ticketSaleList1"));
        // JSONObject cardOrderDetail = JSONObject.parseObject((String) map.get("cardOrderDetail"));
         Date now = new Date();
 
@@ -221,11 +226,42 @@ public class FrCustomerCourseProjectServiceImpl {
 
         }
 
+        this.saveTicket(ticketSaleList0, addProject, sysConsumeOrder, projectOrder, "0");
+        this.saveTicket(ticketSaleList1, addProject, sysConsumeOrder, projectOrder, "1");
         //新增订单表
         this.saveOrderEntityByNewBuy(map, addProject, sysConsumeOrder);
 
+    }
 
+    private void saveTicket(List ticketSaleList, AddProject addProject, SysConsumeOrder sysConsumeOrder, ProjectOrder projectOrder, String payType){
+        if(ticketSaleList.size() == 0){
+            return;
+        }
+        //票券
+        List jsonArray = new JSONArray();
+        Map jsonMap = new JSONObject();
+        for(Object object: ticketSaleList){
+            Map json = new JSONObject();
+            JSONObject jsonObject = (JSONObject) object;
+            json.put("ID", jsonObject.get("ID"));
+            json.put("TicketName", jsonObject.get("TicketName"));
+            jsonArray.add(json);
+        }
 
+        jsonMap.put("CustomerCode", addProject.getCustomerCode());
+        jsonMap.put("Sign",
+                ticketSaleEducationService.getSignPostConsumeTicket(
+                        addProject.getCustomerCode(), sysConsumeOrder.getShopId(), sysConsumeOrder.getSdadiumId()));
+        jsonMap.put("ShopId", sysConsumeOrder.getShopId());
+        jsonMap.put("SdaduimId", sysConsumeOrder.getSdadiumId());
+        jsonMap.put("TicketList", JSONArray.toJSONString(jsonArray));
+        jsonMap.put("PayWay", payType);
+        jsonMap.put("TotalPrice", projectOrder.getTotalPrice());
+        jsonMap.put("ProductID", addProject.getCustomerCode());
+        jsonMap.put("OrderID", addProject.getCustomerCode());
+        jsonMap.put("TableName", addProject.getCustomerCode());
+        jsonMap.put("CreatePeople", projectOrder.getCreateUserName());
+        ticketSaleEducationService.usePostConsumeTicket(jsonMap);
     }
 
     /**
@@ -388,6 +424,8 @@ public class FrCustomerCourseProjectServiceImpl {
      * @return
      */
     public ProjectOrder customerRemnant(Map<String, String> map){
+        List<String> list = new ArrayList<>();
+        Double price = 0.0;
         String orderId = map.get("orderId");
         String cid = map.get("cid");
         String operId = map.get("id");
@@ -405,15 +443,15 @@ public class FrCustomerCourseProjectServiceImpl {
         projectOrder.setObjectId(orderId);
         projectOrder = projectOrderMapper.selectOne(projectOrder);
         addProject = addProjectMapper.selectById(orderId);
-        //修改成正常
-        addProject.setState(4);
+
         //
-        frProjectRemnantRecord.setProjectOrderId(orderId);
+
         //查询是否存在
-        if(null != frProjectRemnantRecordMapper.selectOne(frProjectRemnantRecord)){
-            return projectOrder;
-        }
+//        if(null != frProjectRemnantRecordMapper.selectOne(frProjectRemnantRecord)){
+//            return projectOrder;
+//        }
         //记录表
+        frProjectRemnantRecord.setProjectOrderId(orderId);
         frProjectRemnantRecord.setId(UUIDUtils.generateGUID());
         frProjectRemnantRecord.setCustomerCode(code);
         frProjectRemnantRecord.setOperateDate(now);
@@ -428,28 +466,99 @@ public class FrCustomerCourseProjectServiceImpl {
         frProjectRemnantRecord.setClientName(clientName);
         frProjectRemnantRecord.setCourseName(courseName);
         //---
-        projectOrder.setNoPrice(0.0);
-        projectOrder.setRetChange(0.0);
+        JSONArray cardOrderPayModeDate = JSONArray.parseArray(map.get("cardOrderPayModeDate"));
+        JSONArray cardOrderDetailList = JSONArray.parseArray(map.get("cardOrderDetailList"));
+
+        //订单支付方式及金额
+        for (Object object : cardOrderPayModeDate) {
+            FrCardOrderPayMode frCardOrderPayMode = JSONObject.parseObject(JSON.toJSONString(object), FrCardOrderPayMode.class);
+            frCardOrderPayMode.setId(UUIDUtils.generateGUID());
+            frCardOrderPayMode.setOrderId(orderId);
+            iFrCardOrderPayModeService.insert(frCardOrderPayMode);
+           // list.add(setPayType(String.valueOf(frCardOrderPayMode.getPayMode())));
+            price += frCardOrderPayMode.getPayPrice();
+        }
+        //资金明细表
+        for (Object object : cardOrderDetailList) {
+            JSONObject jsonObject = (JSONObject) object;
+            FrCardOrderPriceDatail frCardOrderPriceDatail = JSONObject.parseObject(JSON.toJSONString(jsonObject.getJSONObject("orderdetailPrice")), FrCardOrderPriceDatail.class);
+            FrCardOrderDatail frCardOrderDatail = JSONObject.parseObject(JSON.toJSONString(jsonObject.getJSONObject("orderDetail")), FrCardOrderDatail.class);
+            String priceID = UUIDUtils.generateGUID();
+            frCardOrderPriceDatail.setOrderId(orderId);
+            frCardOrderPriceDatail.setId(priceID);
+            iFrCardOrderPriceDatailService.insert(frCardOrderPriceDatail);
+
+            frCardOrderDatail.setId(UUIDUtils.generateGUID());
+            frCardOrderDatail.setOrderId(orderId);
+            frCardOrderDatail.setOrderPriceId(priceID);
+            iFrCardOrderDatailService.insert(frCardOrderDatail);
+        }
+        double a = projectOrder.getTotalPrice() - (projectOrder.getNoPrice() + price);
+
+
+        projectOrder.setNoPrice(a<0?0:a);
+        projectOrder.setRetChange(a<0?-a:0);
+        //判断钱够了就改变成正常的
+        //修改成正常
+        if(projectOrder.getNoPrice() == 0){
+            addProject.setState(4);
+        }
+
 
         projectOrderMapper.updateAllColumnById(projectOrder);
         addProjectMapper.updateAllColumnById(addProject);
         frProjectRemnantRecordMapper.insert(frProjectRemnantRecord);
 
         FrClient frClient = frClientMapper.selectById(cid);
-        this.saveOrderEntityByCustomerRemnant(addProject, frClient, operId, name, shopId, sdadiumId);
+        this.saveOrderEntityByCustomerRemnant(addProject, frClient, map);
         return projectOrder;
+    }
+
+    /**
+     * 设置付款类型
+     */
+    private String setPayType(String type){
+        String back = "";
+        //1、支付宝；2、刷卡；3、微信；4、现金；5、转账；6、花呗；7、其他
+        switch (type){
+            case "1":
+                back = "支付宝";
+                break;
+            case "2":
+                back = "刷卡";
+                break;
+            case "3":
+                back = "微信";
+                break;
+            case "4":
+                back = "现金";
+                break;
+            case "5":
+                back = "转账";
+                break;
+            case "6":
+                back = "花呗";
+                break;
+            default:
+                back = "其他";
+
+        }
+        return back;
+
     }
 
     /**
      * 新购项目补余
      * @param addProject
      * @param frClient
-     * @param id
-     * @param name
+     * @param amp
      */
-    private void saveOrderEntityByCustomerRemnant(AddProject addProject, FrClient frClient, String id, String name, String shopId, String sdadiumId){
+    private void saveOrderEntityByCustomerRemnant(AddProject addProject, FrClient frClient, Map<String, String> map){
 
-        MoneyReport moneyReport = new MoneyReport();
+      //  MoneyReport moneyReport = new MoneyReport();
+        MoneyReport moneyReport = JSONObject.parseObject(map.get("moneyReport"), MoneyReport.class);
+        ConsumeAccountOrder consumeAccountOrder = JSONObject.parseObject(map.get("consumeAccountOrder"), ConsumeAccountOrder.class);
+        ConsumeAccountInfo consumeAccountInfo = JSONObject.parseObject(map.get("consumeAccountInfo"), ConsumeAccountInfo.class);
 
 
         String userTypeName = "新购项目补余";
@@ -465,13 +574,19 @@ public class FrCustomerCourseProjectServiceImpl {
         moneyReport.setMemberCardId(addProject.getCardId());
         moneyReport.setName(frClient.getClientName());
         moneyReport.setPhone(frClient.getMobile());
-        moneyReport.setCreateId(id);
-        moneyReport.setCreateName(name);
+
         moneyReport.setCreateTime(date);
         moneyReport.setId(UUIDUtils.generateGUID());
-        moneyReport.setShopId(shopId);
-        moneyReport.setSdadiumId(sdadiumId);
+
+        consumeAccountOrder.setTableName(tableName);
+        consumeAccountOrder.setId(UUIDUtils.generateGUID());
+
+        consumeAccountInfo.setTableName(tableName);
+        consumeAccountInfo.setId(UUIDUtils.generateGUID());
+
         frConsumeMoneyOrderService.saveMoneyReport(moneyReport);
+        frConsumeMoneyOrderService.saveConsumeAccountInfo(consumeAccountInfo);
+        frConsumeMoneyOrderService.saveConsumeAccountOrder(consumeAccountOrder);
     }
 
     /**

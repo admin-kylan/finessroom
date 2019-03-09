@@ -1062,6 +1062,8 @@ public class FrEducationPublicServiceImpl {
             throw new Exception("排课失败，请重试");
         }
         frEducation.setId(UUIDUtils.generateGUID());
+        //添加场馆
+
         //config
         FrEducationConfig frEducationConfig = JSONObject.parseObject(map.get("eduConfig"), FrEducationConfig.class);
         if(null == frEducationConfig){
@@ -1087,6 +1089,15 @@ public class FrEducationPublicServiceImpl {
                 frEducationCardObject.setEducationConfigId(frEducationConfig.getId());
                 frEducationCardObjectMapper.insert(frEducationCardObject);
             }
+        }
+        //设置场馆
+        if(frEducation.getType() == 0){
+            frEducation.setSdaduimId("fed61d300684ac6c");
+            frEducation.setSdaduimName("健身团教");
+        }
+        if(frEducation.getType() == 1){
+            frEducation.setSdaduimId("10c05bec9a74681f");
+            frEducation.setSdaduimName("健身私教");
         }
 
 

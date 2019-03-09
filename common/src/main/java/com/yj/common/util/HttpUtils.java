@@ -520,7 +520,7 @@ public class HttpUtils {
 	
 	List<NameValuePair> params =new ArrayList<NameValuePair>();
 	for (Map.Entry<String, String> entry : mapParams.entrySet()) {
-		params.add(new BasicNameValuePair(entry.getKey(),entry.getValue()));
+		params.add(new BasicNameValuePair(entry.getKey(),String.valueOf(entry.getValue())));
 	}
 		return params;
 	}

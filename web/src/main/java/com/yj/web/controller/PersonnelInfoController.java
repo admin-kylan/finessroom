@@ -96,7 +96,7 @@ public class PersonnelInfoController {
      * @return
      * @throws YJException
      */
-    @PostMapping("getVerification")
+    @PostMapping("/getVerification")
     public JsonResult getVerification(@RequestBody PersonnelInfo personnelInfo, HttpServletRequest request) throws YJException {
         if (StringUtils.isEmpty(personnelInfo.getPassWord())) {
             return JsonResult.parameterError();

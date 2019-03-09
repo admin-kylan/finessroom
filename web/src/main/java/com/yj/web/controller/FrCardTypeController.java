@@ -243,12 +243,12 @@ public class FrCardTypeController {
     @GetMapping("/getByShopIdList")
     public JsonResult getByShopIdList(@RequestParam("shopId")String shopId,
                                       @RequestParam("CustomerCode")String CustomerCode,
-                                      @RequestParam("type")Integer type, HttpServletRequest request)throws YJException{
+                                      @RequestParam("type")String type, HttpServletRequest request)throws YJException{
 
         if(StringUtils.isEmpty(shopId) || StringUtils.isEmpty(CustomerCode) || type == null){
            throw new YJException(YJExceptionEnum.REQUEST_NULL);
         }
-        return JsonResult.success(frCardTypeService.queryByShopIdList(shopId,CustomerCode,type,2));
+        return JsonResult.success(frCardTypeService.queryByShopIdList2(shopId,CustomerCode,type,2));
     }
 
 

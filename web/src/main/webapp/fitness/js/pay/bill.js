@@ -21,10 +21,10 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
                 isShow: false,
                 num: '', //卡号  18650808999
                 ticketList: [//会员票据列表
-                    {num: '1', name: '1', interest: '22', differ: 20, use: false},
-                    {num: '2', name: '1', interest: '1', "differ": 20, use: false},
-                    {num: '3', name: '1', interest: '43', "differ": 20, use: false},
-                    {num: '4', name: '1', interest: '21', "differ": 20, use: false}
+                    // {num: '1', name: '1', interest: '22', differ: 20, use: false},
+                    // {num: '2', name: '1', interest: '1', "differ": 20, use: false},
+                    // {num: '3', name: '1', interest: '43', "differ": 20, use: false},
+                    // {num: '4', name: '1', interest: '21', "differ": 20, use: false}
                 ],
                 optionClientList:[],
                 optionClientCardList:[],
@@ -47,10 +47,10 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             generalInfo:{
                 num: '', //电话号码
                 ticketList: [//普通票据列表
-                    {num: '1', name: '1', interest: '22', "differ": 20, use: false},
-                    {num: '2', name: '1', interest: '1', "differ": 20, use: false},
-                    {num: '3', name: '1', interest: '43', "differ": 20, use: false},
-                    {num: '4', name: '1', interest: '21', "differ": 20, use: false}
+                    // {num: '1', name: '1', interest: '22', "differ": 20, use: false},
+                    // {num: '2', name: '1', interest: '1', "differ": 20, use: false},
+                    // {num: '3', name: '1', interest: '43', "differ": 20, use: false},
+                    // {num: '4', name: '1', interest: '21', "differ": 20, use: false}
                 ],
                 totalPrice: 0,//选中的票卷金额
                 selectTotalPrice: 0, //选中的金额
@@ -183,11 +183,13 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
                 $.each(this.generalInfo.ticketList, (i, d) => {
                     d.use = false;
                 });
+                this.generalInfo.inputMoney = 0;
             }
             if (val === 1) {
                 $.each(this.memberInfo.ticketList, (i, d) => {
                     d.use = false;
                 });
+                this.memberInfo.cardInfo.inputMoney = 0;
             }
         },
         'memberInfo.cardInfo.inputMoney'(val, oldVal){ //监控输入的储存金额
@@ -198,7 +200,7 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             }
             if(this.memberInfo.cardInfo.userPassStatus === true){
                 //折扣减
-                this.payMoney.discountMoney = parseFloat(val?val:0) + this.memberInfo.cardInfo.selectTotalPrice;
+                this.payMoney.discountMoney = parseFloat(val?val:0) ;//+ this.memberInfo.cardInfo.selectTotalPrice
             }
         },
         'generalInfo.inputMoney'(val, oldVal){ //输入使用权益
@@ -206,8 +208,7 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
                 this.generalInfo.inputMoney = oldVal;
                 return false;
             }
-            this.payMoney.discountMoney = this.generalInfo.totalPrice +
-                parseFloat(val ? val : 0);
+            this.payMoney.discountMoney = parseFloat(val ? val : 0);
         },
         'memberInfo.ticketList': {//计算数组票据列表的变化
             handler: function (value, oldVal) {
@@ -251,7 +252,7 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
                 this.generalInfo.selectTotalPrice = this.generalInfo.totalPrice;
 
                 //再加上使用权益
-                this.payMoney.discountMoney = this.generalInfo.totalPrice +
+                this.payMoney.discountMoney = 0 +
                     parseFloat(this.generalInfo.inputMoney ? this.generalInfo.inputMoney : 0);
             },
             deep: true,
@@ -398,6 +399,10 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             this.payMoney.oldTotalPrice = this.payMoney.totalPrice;
             // //当前总金额
             this.rebate.currentTotalMoney = this.payMoney.totalPrice;
+            //订单编号
+            axiosGetFetch(EDU_CONSTANT.getOrderNo, (response) => {
+                this.orderNo = response;
+            });
             //courseMemberPrice
         })
       //  this.loadInit();
@@ -436,15 +441,15 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
 
         },
         //输入查询
-        searchByTelAndNo(){
+        searchByTelAndNo(num){
 
             //判断手机号码是否有输入
-            if (!this.memberInfo.num) {
+            if (!num) {
                 return false;
             }
             //15345982222
             let param = {
-                mobile: this.memberInfo.num,
+                mobile: num,
                 CustomerCode: $.cookie('code')
             };
             axiosGetParams(COURSE_URL.getClientListByMobile, param, (response) => {
@@ -480,6 +485,48 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
             //隐藏
             this.memberInfo.isShowCardStatus = false;
             this.memberInfo.isShow = false; //显示弹出框
+            this.findTicketList(item.mobile, item.shopId);
+        },
+        findTicketList(mobile, shopId){
+            //13645945925
+            //并且选择票券
+            let param = {
+                code: $.cookie('code'),
+                mobile: mobile,
+                price: this.payMoney.totalPrice,
+                type: this.index,
+                shopId: shopId,
+                sdaduimId: SYSTEM_SETTING,
+            }
+            //console.log(param)
+            //ticketListGeneral
+            axiosGetParams(EDUCATION_URL.findPostTicketList, param, (res) =>{
+                //  console.log(res)
+                let result = res;
+                let obj = {};
+                if(this.index == 0){
+                    this.memberInfo.ticketList = []
+                }else{
+                    this.generalInfo.ticketList = [];
+                }
+                $.each(result, (i,d)=>{
+                    obj = d;
+                    obj.num = d.TicketNum
+                    obj.name = d.TicketName
+                    obj.interest = d.Equity
+                    obj.differ = d.PriceDifference
+                    // obj.differ = 103
+                    obj.use = false;
+                    // obj.payType = this.index;
+                    if(this.index == 0){
+                        this.memberInfo.ticketList.push(obj);
+                    }else{
+                        this.generalInfo.ticketList.push(obj);
+                    }
+                    obj = {};
+
+                })
+            });
         },
         //验证用户密码
         verifyPassword(){
@@ -551,6 +598,7 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
                 PayType: 0,
                 CreateId: $.cookie('id'),
                 CreateName: $.cookie('name'),
+                //TableId: this.eduItem.id,
             }
 
             let consumeAccountOrder = {
@@ -672,37 +720,52 @@ Vue.component('edu-pay-bill-children', {//模版挂载的标签名
                 };
                 fr_card_order_datail_list.push(memberChuzhi)
             }
-            //扣除权益 param
-            let buyEduDetail = {
-                cardId: this.clientInfo.cardId, //会员卡ID
-                clientId: this.clientInfo.clientId, //客户ID
-                cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
-                orderStatus: '0', //支付状态（0：支出 1：收入）
-                orderPrice: 0,//金额（注意正负 支出就是  -0.00）
-                orderRightsNum: -this.eduItem.classSalesNum, //权益 注意正负
-                shopId: this.eduItem.shopId, //基础表门店ID
-                personnelId: $.cookie('id'), //操作员工id
-                flag: '权益', //消费内容
-                type: 1, //支付类型（1:权益 2:储值 3:其他消费）
-                CustomerCode: $.cookie('code'),
-                status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
-                auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
-                orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
-                orderAmt: this.eduItem.amtNum, //剩余权益\剩余储值金额
-                createUserId: $.cookie('id'),
-                createUserName: $.cookie('name'),
-                createTime: new Date(),
-            }
+            // //扣除权益 param
+            // let buyEduDetail = {
+            //     cardId: this.clientInfo.cardId, //会员卡ID
+            //     clientId: this.clientInfo.clientId, //客户ID
+            //     cardType: '1', //卡种类型（1：时间卡 2：小时卡 3：次卡 4：储值卡 5：充值卡 6：折扣卡）
+            //     orderStatus: '0', //支付状态（0：支出 1：收入）
+            //     orderPrice: 0,//金额（注意正负 支出就是  -0.00）
+            //     orderRightsNum: -this.eduItem.classSalesNum, //权益 注意正负
+            //     shopId: this.eduItem.shopId, //基础表门店ID
+            //     personnelId: $.cookie('id'), //操作员工id
+            //     flag: '权益', //消费内容
+            //     type: 1, //支付类型（1:权益 2:储值 3:其他消费）
+            //     CustomerCode: $.cookie('code'),
+            //     status: 0,//财务审核 （0，待审核1，已审核，2，审核不通过）
+            //     auditStatus: 0,//相关复核 （0，待审核1，已审核，2，审核不通过）
+            //     orderType: 1,//订单类型（1、新购；2、续卡；3、转卡；4、补卡（暂无）；5、储值；6、补余；7、退卡, 8、停卡，9，转让，10，卡升级【若有其他的，类型数字请往后添加】）
+            //     orderAmt: this.eduItem.amtNum, //剩余权益\剩余储值金额
+            //     createUserId: $.cookie('id'),
+            //     createUserName: $.cookie('name'),
+            //     createTime: new Date(),
+            // }
+
+            let ticketSaleList0 = [];
+            $.each(this.memberInfo.ticketList, (i,d)=>{
+                if(d.use == true){
+                    ticketSaleList0.push(d)
+                }
+            })
+            let ticketSaleList1 = [];
+            $.each(this.generalInfo.ticketList, (i,d)=>{
+                if(d.use == true){
+                    ticketSaleList1.push(d)
+                }
+            })
 
 
             param.cardOrderPayModeDate = cardOrderPayModeList;
             param.cardOrderDetailList = fr_card_order_datail_list;
             // param.eduItem = this.eduItem;
             // param.clientInfo = this.clientInfo;
-            param.buyEduDetail = buyEduDetail;
+            //param.buyEduDetail = buyEduDetail;
             param.moneyReport = moneyReport;
             param.consumeAccountOrder = consumeAccountOrder;
             param.consumeAccountInfo = consumeAccountInfo;
+            param.ticketSaleList1 = ticketSaleList1;
+            param.ticketSaleList0 = ticketSaleList0;
             this.isShowBill = false;
             //付款的反馈
             Event.$emit(EDU_CONSTANT.listenerChooseClientInfoBack, param)

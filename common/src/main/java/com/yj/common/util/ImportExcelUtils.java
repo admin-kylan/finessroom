@@ -326,7 +326,7 @@ public class ImportExcelUtils {
                         map.put("parentCardNo", cellValue);
                         break;
                     case 30:// 储值
-                        map.put("businessScope", cellValue);
+                        map.put("storedValue", cellValue);
                         break;
                     case 31:// 会员等级
                         map.put("level", cellValue);
@@ -341,7 +341,7 @@ public class ImportExcelUtils {
                         break;
 
                     case 34:// 付款类型
-                        map.put("businessScope", cellValue);
+                        map.put("paymentMethod", cellValue);
                         break;
                     case 35:// 停卡收费
                         map.put("totalPrice", cellValue);
@@ -349,14 +349,12 @@ public class ImportExcelUtils {
                     case 36:// 停卡原因
                         map.put("flag", cellValue);
                         break;
-
                         //子卡表
                     case 37:// 外部卡号
                         map.put("outCardNo", cellValue);
                         break;
                 }
                 break;
-
                 // 判断类型2 潜在客户
             case 2:
                 switch (cellNum) {

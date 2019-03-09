@@ -53,65 +53,67 @@
                                 停卡会员卡:<span>{{loadData0.stopCard}}</span>
                                 历史会员卡:<span>{{loadData0.historyCard}}</span>
                             </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <td>序号</td>
-                                    <td>归属门店</td>
-                                    <td>卡系列</td>
-                                    <td>会员卡名称</td>
-                                    <td>会员卡号</td>
-                                    <td>外部卡号</td>
-                                    <td>购卡金额</td>
-                                    <td>剩余金额</td>
-                                    <td>剩余权益</td>
-                                    <td>建卡时间</td>
-                                    <td>开卡日期</td>
-                                    <td>失效日期</td>
-                                    <td>销售人员</td>
-                                    <td>状态</td>
-                                    <td>财务审核</td>
-                                    <td>相关复核</td>
-                                    <td>入会凭证</td>
-                                    <td>打印合同</td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="(item,index) in  loadData0.cardList">
-                                    <td>{{index+1}}</td>
-                                    <td>{{item.shopName}}</td>
-                                    <td class="tored">{{item.cardFlag}}</td>
-                                    <td class="toblue"><a href="javascript:;" @click="carddetails(item)" class="toblue">{{item.cardTypeName}}</a></td>
-                                    <td class="toceng">{{item.cardNo}}</td>
-                                    <td>{{item.externalNo}}</td>
-                                    <td><strong>{{item.needPrice<=0?item.needPriceTwo:item.needPrice}}</strong></td>
-                                    <td>
-                                        <strong v-if="item.status == 6">0.00</strong>
-                                        <strong v-else>{{item.cardHavePrice|toManey}}</strong>
-                                    </td>
-                                    <td class="tored">
-                                        <strong v-if="item.status == 6">0</strong>
-                                        <strong v-else>{{item.orderNum}}</strong>
-                                    </td>
-                                    <td>{{item.createTime|formatDate}}</td>
-                                    <td> {{item.bindTime}}</td>
-                                    <td> {{item.bindTime== null? '':item.invalidTime}}</td>
-                                    <td><strong>{{item.saleName}}</strong></td>
-                                    <td class="togreen">
-                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status" :class="item.status==0?'c-090':(item.status==1?'c-999':item.status==2?'c-f00':item.status==3?'c-666':item.status==4?'c-000':item.status==5?'c-f00':'c-ccc')" @click="openCard(item)">{{items.lav}}</span>
-                                    </td>
-                                    <td class="toshallow" >
-                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.InfoStatus" :class="item.InfoStatus==1?'c-3cf':'c-666'">{{items.lav}}</span>
-                                    </td>
-                                    <td class="toblue">
-                                        <span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.auditStatus" :class="item.auditStatus==1?'c-09f':'c-666'">{{items.lav}}</span>
-                                    </td>
-                                    <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
-                                    <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div id="pagination0" class="pagination"></div>
+                            <div class="table-responsive" style="display: block;width: 100%;">
+	                            <table class="table table-bordered table-hover">
+	                                <thead>
+	                                <tr>
+	                                    <td>序号</td>
+	                                    <td>归属门店</td>
+	                                    <td>卡系列</td>
+	                                    <td>会员卡名称</td>
+	                                    <td>会员卡号</td>
+	                                    <td>外部卡号</td>
+	                                    <td>购卡金额</td>
+	                                    <td>剩余金额</td>
+	                                    <td>剩余权益</td>
+	                                    <td>建卡时间</td>
+	                                    <td>开卡日期</td>
+	                                    <td>失效日期</td>
+	                                    <td>销售人员</td>
+	                                    <td>状态</td>
+	                                    <td>财务审核</td>
+	                                    <td>相关复核</td>
+	                                    <td>入会凭证</td>
+	                                    <td>打印合同</td>
+	                                </tr>
+	                                </thead>
+	                                <tbody>
+	                                <tr v-for="(item,index) in  loadData0.cardList">
+	                                    <td>{{index+1}}</td>
+	                                    <td>{{item.shopName}}</td>
+	                                    <td class="tored">{{item.cardFlag}}</td>
+	                                    <td class="toblue"><a href="javascript:;" @click="carddetails(item)" class="toblue">{{item.cardTypeName}}</a></td>
+	                                    <td class="toceng">{{item.cardNo}}</td>
+	                                    <td>{{item.externalNo}}</td>
+	                                    <td><strong>{{item.needPrice<=0?item.needPriceTwo:item.needPrice}}</strong></td>
+	                                    <td>
+	                                        <strong v-if="item.status == 6">0.00</strong>
+	                                        <strong v-else>{{item.cardHavePrice|toManey}}</strong>
+	                                    </td>
+	                                    <td class="tored">
+	                                        <strong v-if="item.status == 6">0</strong>
+	                                        <strong v-else>{{item.orderNum}}</strong>
+	                                    </td>
+	                                    <td>{{item.createTime|formatDate}}</td>
+	                                    <td> {{item.bindTime|formatDate}}</td>
+	                                    <td> {{item.invalidTime|formatDate}}</td>
+	                                    <td><strong>{{item.saleName}}</strong></td>
+	                                    <td class="togreen pointer">
+	                                        <span  v-for="items in parameterList.status" v-if="items.vue==item.status" :class="item.status==0?'c-090':(item.status==1?'c-999':item.status==2?'c-f00':item.status==3?'c-666':item.status==4?'c-000':item.status==5?'c-f00':'c-ccc')" @click="openCard(item)">{{items.lav}}</span>
+	                                    </td>
+	                                    <td class="toshallow pointer" >
+	                                        <span v-for="items in parameterList.auditStatus" v-if="items.vue==item.InfoStatus" :class="item.InfoStatus==1?'c-3cf':'c-666'">{{items.lav}}</span>
+	                                    </td>
+	                                    <td class="toblue pointer">
+	                                        <span  v-for="items in parameterList.auditStatus" v-if="items.vue==item.auditStatus" :class="item.auditStatus==1?'c-09f':'c-666'">{{items.lav}}</span>
+	                                    </td>
+	                                    <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
+	                                    <td><a href="#" class="toblue">查看</a><a href="#" class="tored">打印</a></td>
+	                                </tr>
+	                                </tbody>
+	                            </table>
+	                            <div id="pagination0" class="pagination"></div>
+                            </div>
                         </div>
                         <div id="MembershipCardDetails">
                             <fieldset>
@@ -419,8 +421,8 @@
                                         <span>
                                             <span>选择卡系列：</span>
                                             <select name="0" id="cardUser" @change="products">
-                                                <option value="0" selected>选择卡系列</option>
-                                                <option v-for="item in parameterList.type" :value="item.vue">{{item.lav}}</option>
+                                                <option value="" selected>选择卡系列</option>
+                                                <option v-for="item in cardTypeList" :value="item.id">{{item.cardTypeName}}</option>
                                             </select>
                                         </span>
                                     </div>
@@ -439,12 +441,14 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="item in loadData1.cardsList">
-                                            <td class="tored" @click="assignment(item.id,item.cardFlag)">选择</td>
+                                            <td class="tored pointer" @click="assignment(item.id,item.cardFlag)">选择</td>
                                             <td>{{item.shopName}}</td>
                                             <td>{{item.cardFlag}}</td>
                                             <td>{{item.cardTypeName}}</td>
-                                            <td>{{item.originalPrice}}.00</td>
-                                            <td>{{item.salesPrice}}.00</td>
+                                            <td v-if="item.originalPrice!='' && item.originalPrice!=null">{{item.originalPrice}}.00</td>
+                                            <td v-if="item.originalPrice=='' || item.originalPrice==null"></td>
+                                            <td v-if="item.salesPrice!='' && item.salesPrice!=null">{{item.salesPrice}}.00</td>
+                                            <td v-if="item.salesPrice=='' || item.salesPrice==null"></td>
                                             <td>{{item.serviceLife}}</td>
                                             <td>{{item.totalNum}}</td>
                                         </tr>
@@ -668,9 +672,9 @@
                                                                 <tbody>
                                                                 <tr v-for="(item,index) in ticketPrice.ticketPriceList">
                                                                     <td>{{++index}}</td>
-                                                                    <td>{{item.tickNo}}</td>
-                                                                    <td class='col-blue'>{{item.tickName}}</td>
-                                                                    <td class='font-bold'>{{item.tickNum}}</td>
+                                                                    <td>{{item.TicketNum}}</td>
+                                                                    <td class='col-blue'>{{item.TicketName}}</td>
+                                                                    <td class='font-bold'>{{item.Equity}}</td>
                                                                     <td>
                                                                         <input type="checkbox" v-model="ticketPrice.ticketPriceListOk" :value="item" @change="changeTicket">
                                                                     </td>
@@ -2352,7 +2356,7 @@
                     <div class="newCustomers_maskLayer_box_top"><span>选择储值会员卡</span><a href="#" class="newCustomers_maskLayer_X" @click="colseX('clientCardList')">X</a>
                     </div>
                     <h5 class="KHGL-title">选择要储值的会员卡</h5>
-                    <div class="KHGL-table-box">
+                    <div class="KHGL-table-box table-responsive">
                         <table class="KHGL-table2" border="0" cellspacing="0" cellpadding="0">
                             <thead>
                             <tr>
@@ -2472,7 +2476,7 @@
 <script src="../js/jedate.js"></script>
 <script src="../js/common.js"></script>
 <script src="../js/vue.js"></script>
-<script src="../js/setCookie.js"></script>
+<script src="../js/axios.min.js"></script>
 <script src="/js/myPagination.js"></script>
 <script src="../js/loading.js"></script>
 <script src="../js/bootstrap.min.js"></script>
@@ -2484,7 +2488,7 @@
 
 <script>
 	$('body').on('focus','.TCR-tables-box2 input,.green-head-table2 input',function(){
-		if($(this).val()=='0'){
+		if($(this).val()==0){
 			$(this).val('')
 		}
 	})

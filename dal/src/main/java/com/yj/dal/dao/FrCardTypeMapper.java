@@ -48,4 +48,6 @@ public interface FrCardTypeMapper extends BaseMapper<FrCardType> {
      * @return
      */
     FrCardType selectByShopId(String cardTypeName);
+
+    List<FrCardType> queryByShopIdList2(Map<String,Object> map);
 }

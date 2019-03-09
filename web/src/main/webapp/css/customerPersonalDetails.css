@@ -85,8 +85,13 @@
 }
 #customerPersonalDetails .content .right .list1 .btn{
 	text-align: left;
-	width:930px;
-	margin:15px auto;
+    width: 930px;
+    margin: 15px auto;
+    position: fixed;
+    bottom: -17px;
+    left: 127px;
+        background-color: rgba(0,0,0,.8);
+    right: 0;
 }
 #customerPersonalDetails .content .right .list1 input{
     width: 100%;
@@ -95,9 +100,17 @@
     color: #000;
     text-align: center;
 }
+#customerPersonalDetails .content .right .list1 .save1{
+	width: 98px;
+    height: 30px;
+    border: none;
+    color: #000;
+    text-align: center;
+    background-color: red;
+}
 #customerPersonalDetails .content .right .list1 select{
 	width: 100%;
-    height: 38px;
+    height: 30px;
     border: none;
 	color: #000;
 }
@@ -149,8 +162,11 @@
 	width: 160px;
 }
 #customerPersonalDetails .content .right .list3 legend{
-	color:#fc0;
+	color:#7b7b7b;
 }
+.familytr td{padding: 0;}
+.familytr td input{    height: 27px;
+    width: 100%;}
 #customerPersonalDetails .content .right textarea{
 	width: 100%;
 	resize: none;
@@ -260,7 +276,7 @@
 	position: relative;
 	top:2px;
 	float:left;
-	width: 70px;
+	width: 110px;
 	vertical-align: top;
 	text-align: right;
 }
@@ -274,7 +290,7 @@
 	margin-left:70px;
 }
 #customerPersonalDetails .content .right .lis8910 fieldset textarea{
-	width: 910px;
+	width: calc(100% - 120px);
 }
 #customerPersonalDetails .content .right .lis8910 .sec span{
 	width:110px;
@@ -288,10 +304,10 @@
 	height:105px;
 }
 #customerPersonalDetails .content .right .list8 .third span{
-	width:120px;
+	width:110px;
 }
 #customerPersonalDetails .content .right .list9 fieldset span{
-	width: 120px;
+	width: 110px;
 }
 #customerPersonalDetails .content .right .list9 .sec label{
 	width: 100px;

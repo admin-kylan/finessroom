@@ -2,12 +2,14 @@ html,body{
 	overflow: auto;
 }
 .wrap{
-	min-width: 1550px;
-	height: 94%;
+	/*min-width: 1550px;*/
+	/*height: 94%;*/
 }
 .content,.list{
 	height: 100%;
 }
+.tonormal{color: #009900!important;}
+.tored{color: #ff0000!important;}
 .content{
 	width: 100%;
 	/* overflow-y: auto; */

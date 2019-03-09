@@ -6,7 +6,7 @@ body {
 }
 
 #newCardCustomers {
-    min-width: 1366px;
+    /*min-width: 1366px;*/
     position: relative;
 }
 
@@ -149,12 +149,12 @@ body {
 
 /* ä¼šå‘˜ä¿¡æ¯ */
 #newCardCustomers .section1 {
-    width: 49%;
+    width: 55%;
     float: left;
 }
 
 #newCardCustomers .section2 {
-    width: 49%;
+    width: 45%;
     float: right;
 }
 
@@ -350,7 +350,7 @@ body {
     margin: 0;
     padding: 0 12px 0 10px;
     color: #fff;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 40px;
     font-weight: 700;
 }
@@ -432,7 +432,7 @@ body {
 #newCardCustomers .section2_boxs1_right .section2_boxs1_botton input {
     border: none;
     line-height: 20px;
-    width: 55%;
+    width: 42%;
 }
 
 #newCardCustomers .section2_boxs1_right .section2_boxs1_botton a {
@@ -1552,7 +1552,7 @@ body {
 }
 
 .XFFS-div .TCR-tables-box1T {
-    width: 41.5%;
+    width: 43.5%;
     margin-right: 5px;
 }
 .XFFS-div .TCR-tables {padding-right: 20px;}
@@ -1645,6 +1645,8 @@ body {
 
 .load1 div span {
     display: inline-block;
-    min-width: 300px;
-    margin-right:0px;
+    display: inline-block;
+    min-width: 150px;
+    margin-left: 100px;
+    margin-right: 0;
 }

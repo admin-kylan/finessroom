@@ -67,15 +67,16 @@ public class FrClientController {
     }
 
     /**
-     *  根据筛选条件查询现有客户列表 后台设置导出用
+     * 根据筛选条件查询现有客户列表 后台设置导出用
+     *
      * @param request
      * @param params
      * @return
      * @throws YJException
      */
     @GetMapping("/getExistenceListBG")
-    public JsonResult existenceListBg(HttpServletRequest request,@ModelAttribute ExistenceFilterParam params) throws YJException {
-        return JsonResult.success(service.existenceListBG(request,params));
+    public JsonResult existenceListBg(HttpServletRequest request, @ModelAttribute ExistenceFilterParam params) throws YJException {
+        return JsonResult.success(service.existenceListBG(request, params));
     }
 
     /**
@@ -90,14 +91,15 @@ public class FrClientController {
 
     /**
      * 根据筛选条件查询潜在客户列表 后台设置导出用
+     *
      * @param request
      * @param params
      * @return
      * @throws YJException
      */
-    @GetMapping("/getPotentialListBG")
-    public JsonResult potentialListBG(HttpServletRequest request,@ModelAttribute PotentialFilterParam params) throws YJException {
-        return JsonResult.success(service.potentialListBG(request,params));
+        @GetMapping("/getPotentialListBG")
+    public JsonResult potentialListBG(HttpServletRequest request, @ModelAttribute PotentialFilterParam params) throws YJException {
+        return JsonResult.success(service.potentialListBG(request, params));
     }
 
     /**
@@ -236,7 +238,7 @@ public class FrClientController {
     //根据手机号码查询客户信息
     @GetMapping("/getByPhone")
     public JsonResult getByPhone(String phone) throws YJException {
-        Map<String, Object> map = service.selectMap(
+         Map<String, Object> map = service.selectMap(
                 new EntityWrapper<FrClient>().where("is_using=1 and mobile={0}", phone)
         );
         if (map == null || map.size() < 1) {
@@ -349,6 +351,7 @@ public class FrClientController {
         }
         return JsonResult.fail();
     }
+
     @PostMapping("/updatePotentialClient")
     public JsonResult updatePotentialClient(@RequestParam(value = "file", required = false) MultipartFile file, @RequestBody FrClient frClient, String picId, String shopId) throws YJException {
         if (frClient != null) {
@@ -370,6 +373,7 @@ public class FrClientController {
         }
         return JsonResult.fail();
     }
+
     private void savePic(@RequestParam(value = "file", required = false) MultipartFile file, @RequestBody FrClient frClient, String picId) throws YJException {
         FrClientPic FrClientPic = frClientPicService.selectById(picId);
         if (FrClientPic != null) {
@@ -393,6 +397,20 @@ public class FrClientController {
         frClientPicService.insert(frClientPic);
     }
 
+    @GetMapping("/getNameByPhone")
+    public JsonResult getNameByPhone(String phone) {
+        String clientName = null;
+        if (phone != null) {
+            FrClient frClient = service.selectOne(
+                    new EntityWrapper<FrClient>().setSqlSelect("client_name clientName").where("is_using=1 and mobile={0}",phone)
+            );
+            if(frClient!=null){
+                clientName = frClient.getClientName();
+            }
+
+        }
+        return JsonResult.success(clientName);
+    }
 
     public Map<String, String> toUpdateLoad(MultipartFile file, String childPath, Map<String, String> map) throws YJException {
         if (file.isEmpty()) {

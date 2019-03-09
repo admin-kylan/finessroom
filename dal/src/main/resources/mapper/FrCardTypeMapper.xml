@@ -187,7 +187,29 @@
              AND a.type = #{type}
           </if>
     </select>
-
+    <select id="queryByShopIdList2" resultType="java.util.Map">
+        SELECT
+        (SELECT s.ShopName FROM Shop s WHERE s.ID = b.shop_id) shopName,
+        (SELECT c.card_type_name FROM fr_card_type c WHERE a.p_id = c.id) cardFlag,
+        <include refid="Base_Column_List"/>
+        FROM fr_shop_card_type_relate b
+        LEFT JOIN  fr_card_type a
+        ON a.id = b.card_type_id
+        WHERE a.is_using = 1
+        AND b.CustomerCode = #{CustomerCode}
+        <if test="typeSetState != null">
+            AND a.type_set_state =  #{typeSetState}
+        </if>
+        AND b.shop_id in
+        (
+        <foreach collection="shopIdList" item="shopId" separator=",">
+            #{shopId}
+        </foreach>
+        )
+        <if test="type !=null ">
+            AND a.p_id = #{type}
+        </if>
+    </select>
     <select id="queryByCardId" resultType="com.yj.dal.model.FrCardType" >
         SELECT
           <include refid="Base_Column_List" />

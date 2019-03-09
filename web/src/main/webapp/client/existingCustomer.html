@@ -82,7 +82,7 @@
 					<input type="text" placeholder="剩余保护天数" v-model="protectDay" @keyup.enter="searchByProtectDay" />
 				</div>
 				<div class="follow">
-					<select name="" id="" v-model="dateType">
+					<select name="" id="" v-model="dateType" style="width: 120px;">
 						<option value="1">申请时间</option>
 						<option value="2">开卡日期</option>
 						<option value="3">失效日期</option>
@@ -90,10 +90,10 @@
 						<option value="5">客户分配</option>
 						<option value="6">下次跟进日期</option>
 					</select>
-					<input type="text" class="jeinput startDate" placeholder="开始日期" value="" v-model="startTime" readonly/>
+					<input style="margin-right: 0;" type="text" class="jeinput startDate" placeholder="开始日期" value="" v-model="startTime" readonly/>
 					至
 					<input type="text" class="jeinput endDate" placeholder="结束日期" value="" v-model="endTime" readonly/>
-					<input type="button" class="btn btn-default" value="全部" @click="clickTime(3)"/>
+					<input type="button" class="btn btn-default active" value="全部" @click="clickTime(3)"/>
 					<input type="button" class="btn btn-default" value="今天" @click="clickTime(1)"/>
 					<input type="button" class="btn btn-default" value="本月" @click="clickTime(2)"/>
 					<input type="button" class="btn btn-default" value="今年" @click="clickTime(3)"/>
@@ -150,12 +150,12 @@
 							<td :class="levelClass(item.levelName)">{{item.levelName}}</td>
 							<td>{{item.cardCount}}</td>
 							<td :class="{tored:item.protectDay<1}">{{item.protectDay}}</td>
-							<td class="toyellow">{{item.mobile}}</td>
+							<td class="tored">{{item.mobile}}</td>
 							<td>{{item.birthday|formatDate}}</td>
 							<td>{{item.applyTime}}</td>
 							<td>{{item.visitingTime}}</td>
-							<td class="togreen">{{item.fwhjName}}</td>
-							<td class="toyellow">{{item.referenceName}}</td>
+							<td>{{item.fwhjName}}</td>
+							<td>{{item.referenceName}}</td>
 							<td><strong>{{item.createUserName}}</strong></td>
 							<td>{{item.customerSource}}</td>
 							<td :class="statusJudge(item.status).class">{{statusJudge(item.status).text}}</td>
@@ -248,7 +248,7 @@
     $('body').on('click','.follow .btn.btn-default',function () {
         $(this).addClass("active").siblings('.btn.btn-default').removeClass('active');
     })
-
+	ecapp.init();
 </script>
 
 </html>

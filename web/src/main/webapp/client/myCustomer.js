@@ -42,6 +42,7 @@ var myCustomer = new Vue({
         //跟进人
         followPersonal: [],
         coachInfo:[],
+        pageTemp:"",
     },
     crated: function () {
     },
@@ -124,6 +125,7 @@ var myCustomer = new Vue({
                                     showPageTotalFlag: true, //是否显示数据统计
                                     showSkipInputFlag: true, //是否支持跳转
                                     getPage: function (page) {
+                                        that.pageTemp=page
                                         //获取当前页数
                                         that.buildFilterDate({page: page, limit: that.customerTable.pageSize});
                                     }
@@ -326,17 +328,21 @@ var myCustomer = new Vue({
         exportExcel: function () {
             var that = this;
             var url = $.stringFormat('{0}/excel/myCustomer', $.cookie('url'));
-            var data=JSON.stringify(that.customerTable.list)
-            $.ajax({
-                url : url,
-                data : data,
-                type : 'POST',
-                dataType : 'json',
-                contentType: "application/json;charset=utf-8",
-                success : function(res) {
-                    alert(res.msg)
-                }
-            })
+            var form = $("<form>");//定义一个form表单
+            form.attr("style", "display:none");
+            form.attr("target", "_break");
+            form.attr("method", "post");
+            form.attr("action", url);
+            var input1 = $("<input>");
+            input1.attr("type", "hidden");
+            input1.attr("name", "page");
+            if(that.pageTemp==""){
+                that.pageTemp=1;
+            }
+            input1.attr("value", that.pageTemp);
+            $("body").append(form);//将表单放置在web中
+            form.append(input1);
+            form.submit();//表单提交
         },
     }
 });

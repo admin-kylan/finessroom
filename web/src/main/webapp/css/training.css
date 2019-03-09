@@ -7,16 +7,18 @@
 }
 .top {
 	height: 50px;
-    padding-left: 20px;
-    background: #363E48;
-    border-bottom: 1px solid #ccc;
-    color: #fff;
-    line-height: 50px;
-    font-size: 18px;
+	padding-left: 20px;
+	background: #363E48;
+	border-bottom: 1px solid #ccc;
+	color: #fff;
+	line-height: 50px;
+	font-size: 18px;
 }
-.top img{
+
+.top img {
 	margin: 0 5px;
 }
+
 
 input[type=checkbox] {
 	position: relative;
@@ -33,9 +35,9 @@ input[type=checkbox] {
 
 .left li {
 	height: 40px;
-    cursor: pointer;
-    line-height: 40px;
-    color: #999;
+	cursor: pointer;
+	line-height: 40px;
+	color: #999;
 }
 .left li img{
 	margin: 12px 0px 0px 30px;
@@ -43,110 +45,140 @@ input[type=checkbox] {
 }
 .left li a {
 	height: 40px;
-    cursor: pointer;
-    text-indent: 5px;
-    line-height: 40px;
-    color: #999;
-    display: block;
-    float: left;
+	cursor: pointer;
+	text-indent: 5px;
+	line-height: 40px;
+	color: #999;
+	display: block;
+	float: left;
 }
+
 .left li.on{
-	color:#fff;
+	color: #fff;
 }
 .left li a.on{
-	color:#fff;
+	color: #fff;
 }
+
 .content{
-	float:left;
-	width:88%;
+	float: left;
+	width: 100%;
 	height: 100%;
 }
-.lefNav{
-	padding-left: 1%;
-    width: 8.9%;
+
+.lefNav {
+	padding-left: 10px;
+	width: 124px;
 	height: 100%;
-	border-right:1px solid #ccc;
+	border-right: 1px solid #ccc;
+	overflow: auto;
 }
-.lefNav li{
-	margin-top:10px;
-	height:35px;
-	border:1px solid #ccc;
-	border-right:none;
+
+.lefNav li {
+	margin-top: 10px;
+	height: 35px;
+	border: 1px solid #ccc;
+	border-right: none;
 	background: #f9f9f9;
 	border-radius: 5px 0 0 5px;
 	cursor: pointer;
 	line-height: 35px;
 	text-align: center;
 }
-.lefNav li.on{
+
+.lefNav li:hover{
+	background: #e4e4e4;
+}
+
+.lefNav li.on {
 	position: relative;
-	right:-1px;
-	background:#fff;
-	border-right:1px solid #fff;
+	/*right: -1px;*/
+	color: #fff;
+	background: #0cc;
+	/*border-right: 1px solid #fff;*/
 	z-index: 1;
 }
+
 .contains{
 	position: relative;
-	width: 90%;
+	height: 100%;
+	width: calc(100% - 135px);
 	overflow: hidden;
-	overflow: auto;
 }
 .contains::after{
 	display: block;
 	position: absolute;
 	content: "";
-	top:0;
-	left:-1px;
-	width:1px;
-	height:100%;
-	background:#ccc;
+	top: 0;
+	left: -1px;
+	width: 1px;
+	height: 100%;
+	background: #ccc;
 }
 .contains .list{
 	display: none;
 }
 .contains .list.on{
 	display: block;
+	float: left;
+	width: 100%;
+	height: 100%;
 }
-.contains .list .searchWrap{
-	width:100%;
+.contains .list.on > div{
+	float: left;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+.contains .list .searchWrap {
+	float: left;
+	width: 100%;
 	border-bottom: 1px solid #ccc;
 }
+
 .contains .list .search{
-	margin:10px 0 10px 20px;
-	width:620px;
-	height:30px;
+	margin: 10px 0 10px 20px;
+	width: 620px;
+	height: 30px;
 	border-radius: 5px;
 	border: 1px solid #ccc;
 }
+
 .contains .list .search input[type=text]{
-	float:left;
-	width:520px;
-	height:100%;
+	float: left;
+	width: 520px;
+	height: 100%;
 	text-indent: 10px;
 	border: none;
 	background: transparent;
 }
+
 .contains .list .search input[type=submit]{
-	float:left;
-	width:100px;
-	height:100%;
-	background:#09f;
+	float: left;
+	width: 100px;
+	height: 100%;
+	background: #09f;
 	border: none;
 	color: #fff;
 }
+
 .contains .list .screening{
-	padding-left:15px;
-	height:52px;
-	background:#f2f2f2;
+	float: left;
+	width: calc(100% - 15px);
+	padding-left: 15px;
+	height: 52px;
+	background: #f2f2f2;
 	line-height: 52px;
 }
-.contains .list .screening select,.contains .list .screening input[type=text]{
+
+.contains .list .screening select,
+.contains .list .screening input[type=text]{
 	margin: 0 5px;
-    height: 28px;
-    border: 1px solid #ccc;
-    width: 15.3%;
-    min-width: 80px;
-    text-indent: 5px;
+	height: 28px;
+	border: 1px solid #ccc;
+	width: 160px;
+	min-width: 80px;
+	text-indent: 5px;
 }
 .contains .list .screening .btnWrap {
 	margin-top: 10px;
@@ -155,45 +187,63 @@ input[type=checkbox] {
 .contains .list .screening .btnWrap span {
 	float: left;
 	margin: 0 2px;
+	width: 58px;
+	height: 28px;
+	line-height: 28px;
+	border: 1px #999 solid;
+	border-radius: 2px;
+	cursor: pointer;
+	background: #fff;
+	text-align: center;
+}
+
+.contains .list .screening .btnWrap span.grey {
 	width: 60px;
 	height: 30px;
-	border-radius: 5px;
-	cursor: pointer;
 	line-height: 30px;
+	border: 0;
+	background: #0cc;
 	color: #fff;
-	text-align: center;
-	padding: 0;
 }
 
-.contains .list .screening .orange {
-	background: #f90;
-}
+/*.contains .list .screening .orange {*/
+	/*background: #f90;*/
+/*}*/
 
-.contains .list .screening .blue {
-	background: #00f;
-}
+/*.contains .list .screening .blue {*/
+	/*background: #00f;*/
+/*}*/
 
-.contains .list .screening .red {
-	background: #f00;
-}
-.contains .list .screening .green {
-	background: green;
-}
-.contains .list .screening  .skyBlue{
-	background: 	#09f;
-}
-.contains .list .screening  .grey{
-	background: 	#0cc;
-}
+/*.contains .list .screening .red {*/
+	/*background: #f00;*/
+/*}*/
+/*.contains .list .screening .green {*/
+	/*background: green;*/
+/*}*/
+/*.contains .list .screening  .skyBlue{*/
+	/*background: 	#09f;*/
+/*}*/
+/*.contains .list .screening  .grey{*/
+	/*background: 	#0cc;*/
+/*}*/
 
 .screening>label {
-	width: 61.5%;
+	width: auto;
 	font-weight: 500;
+	margin-right: 5px;
 }
 
 .screening>.btnWrap {
-	width: 38.5%;
+	width: auto;
 }
+
+.contains .list .tab{
+	float: left;
+	width: 100%;
+	height: calc(100% - 105px);
+	overflow: auto;
+}
+
 .contains .list .tab h4{
 	margin: 15px auto;
 	width:300px;
@@ -209,19 +259,34 @@ input[type=checkbox] {
 	height:30px;
 	line-height: 30px;
 }
+
 .contains .list .tab .info .cyan{
 	color:#0cf;
 }
-.contains .list .tab table{
-	width:100%;
+
+.contains .list .tab table {
+	width: 100%;
 	text-align: center;
 }
+
 .contains .list .tab table thead{
 	background: #0cc;
 }
 .contains .list .tab table tr{
 	height:30px;
 }
+
+.contains .list .tab table tr td {
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
+}
+
+.contains .list .tab table thead tr td{
+	border: 0;
+}
+
 .contains .list .tab table .margin{
 	margin:0 10px;
 }
@@ -246,16 +311,37 @@ input[type=checkbox] {
 .contains .list .tab .sup tbody td:nth-child(10){
 	text-align: left;
 }
+
+
+.contains .list .tab .sup span {
+	cursor: pointer;
+}
+
 .contains .list .tabBox{
     display: none;
     position: absolute;
     padding: 15px 5px 0;
     background: #f2f2f2;
-    top: 0px;
+    top: 0;
     width: 97%;
     box-shadow: 0 0 10px 1px #ccc;
     left: 1%;
 }
+
+.contains .list .tabBox::before {
+	position: absolute;
+	content: '';
+	display: block;
+	top: 12px;
+	left: calc(100% + 1px);
+	width: 7%;
+	height: 0;
+	border: 15px solid transparent;
+	border-left: 15px solid #dadada;
+	/* border-top: none; */
+	cursor: pointer;
+}
+
 .contains .list .tabBox::after {
 	position: absolute;
 	content: '';
@@ -268,6 +354,8 @@ input[type=checkbox] {
 	border-bottom: 15px solid #b9fff1;
 	border-top: none;
 }
+
+
 .contains .list .tab .sub{
 	background: #fff;
 }
@@ -275,35 +363,52 @@ input[type=checkbox] {
 	background:#b9fff1;
 }
 .contains .list .tab .tabFoot{
-	padding-left: 20px;
-	line-height: 60px;
+	padding: 5px 0;
+	padding-left: 8px;
+	line-height: 30px;
+	margin: 5px 0;
 }
+
+.contains .list .tab .tabFoot .btn {
+	padding: 4px 15px;
+	margin: 0 5px;
+}
+
 .contains .list .tab .tabFoot .btn span{
-	margin:10px 10px;
-	width:70px;
+	margin: 10px 10px;
+	width: 70px;
 	border-radius: 5px;
 	cursor: pointer;
 	text-align: center;
 }
+
+
 .contains .list .tab .tabFoot .btn .btnBlue{
-	background:#0cf;
-	height:28px;
+	background: #0cf;
+	height: 28px;
 	line-height: 28px;
-	color:#fff;
+	color: #fff;
 }
+
+
 .contains .list .tab .tabFoot .btn .btnRed{
 	border: 1px solid #f00;
 	height:26px;
 	line-height: 26px;
 	color:#f00;
 }
+
+
 .contains .list .line{
 	padding-left: 20px;
-	height:48px;
-	line-height: 48px;
-	background:#e1f9ff;
+	height: 40px;
+	line-height: 40px;
+	/*background: #e1f9ff;*/
+	background: #f8f8f8;
 	border-bottom: 1px dashed #ccc;
 }
+
+
 .contains .list .line p{
 	margin-right: 60px;
 }
@@ -314,12 +419,14 @@ input[type=checkbox] {
 }
 .contains .list .line p>span strong{
 	width: 25px;
-    float: left;
-    margin: 12px 0;
-    height: 25px;
+	float: left;
+	margin-top: 6px;
+	margin-right: 4px;
+	height: 25px;
 	background-color: #fff;
 	border: 1px solid #ccc;
 }
+
 .contains .list .line p>span strong.you{
 	
     background-color: #fff;
@@ -338,13 +445,16 @@ input[type=checkbox] {
 .contains .list .liBox li{
 	overflow: hidden;
 	float: left;
-	margin:15px 10px;
-	width:160px;
-	height:160px;
+	margin: 15px 10px;
+	width: 160px;
+	height: 160px;
 	border: 1px solid #ccc;
-	border-radius: 10px;
+	border-radius: 5px;
+	box-shadow: 3px 4px 8px #ccc;
 	text-align: center;
 }
+
+
 .contains .list .liBox li .title{
 	height: 35px;
 	background: #0cc;
@@ -376,6 +486,7 @@ input[type=checkbox] {
 .contains .list .classroom li div.free{
 	background:#f7f7f7;
 }
+
 .contains .list3 p{
 	padding:10px;
 }
@@ -402,10 +513,28 @@ input[type=checkbox] {
 	line-height: 30px;
 	color:#fff;
 }
+
+.contains .list5 table,
+.contains .list4 table,
 .contains .list3 table{
-	width:100%;
+	width: calc(100% - 16px);
+	margin-left: 8px;
+	margin-right: 8px;
+	max-height: 150px;
+	overflow: auto;
+}
+
+.contains .list5 table thead tr td,
+.contains .list4 table thead tr td,
+.contains .list3 table thead tr td{
+	height: 30px;
+	line-height: 30px;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0;
 	text-align: center;
 }
+
 .contains .list3 table .blue{
 	color:#0099ff;
 }
@@ -546,11 +675,6 @@ input[type=checkbox] {
 .contains .list4 .toGreen{
 	background: #090;
 }
-.contains .list4 table{
-	margin-top:10px;
-	width: 100%;
-	text-align: center;
-}
 .contains .list4 table thead{
 	background: #0cc;
 }
@@ -572,9 +696,13 @@ input[type=checkbox] {
 .contains .list4 .overflow table{
 	width:1500px;
 }
+
 .contains .list5 div{
-	padding:10px;
+	float: left;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
+
 .contains .list5 div input{
 	margin:0 10px;
 	width:150px;
@@ -592,10 +720,7 @@ input[type=checkbox] {
 	background: #169bd5;
 	border: none;
 }
-.contains .list5 table{
-	width: 100%;
-	text-align: center;
-}
+
 .contains .list5 table tr{
 	height:30px;
 }
@@ -712,21 +837,18 @@ input[type=checkbox] {
 
 .btnWrap span{
 	margin: 0 10px;
-	height:30px;
-	padding:0 15px;
+	height: 30px;
 	line-height: 30px;
 	background: #ccc;
 	cursor: pointer;
-	border-radius: 5px;
-	color:#fff;
+	border-radius: 3px;
+	width: 100px;
+	text-align: center;
 }
 .btnWrap span.on{
 	background: #199ed8;
 }
-.contains .list .tab{
-    overflow-x: auto;
-    width: 100%;
-}
+
 .contains .list .tab .tabScroll{
 	min-width:1366px;
 }
@@ -745,7 +867,13 @@ input[type=checkbox] {
 .contains .list .tab .on{
 	display: block;
 }
-
+.contains .list .tab .table {
+	width: calc(100% - 16px);
+	margin-left: 8px;
+	margin-right: 8px;
+	max-height: 150px;
+	overflow: auto;
+}
 .contains .list .tab .tabFoot {
 	padding: 5px 0;
 	padding-left: 8px;
@@ -870,6 +998,7 @@ input[type=checkbox] {
 }
 
 .bookDetail .bookHeader img {
+	filter:brightness(80%);
 	margin: 0 10px;
 	cursor: pointer;
 }
@@ -1042,7 +1171,7 @@ input[type=checkbox] {
 	color: #000;
 	font-size: 18px;
 	font-weight: 900;
-	padding: 0 10px;
+	padding: 7px 7px 0  0;
 }
 
 /* //弹窗头部 */

@@ -142,6 +142,17 @@ public class FrEducationAccessInfo extends Model<FrEducationAccessInfo> {
      */
     @TableField("shop_name")
     private String shopName;
+    /**
+     * 场馆id
+     */
+    @TableField("sdaduim_id")
+    private String sdaduimId;
+    /**
+     * 场馆名字
+     */
+    @TableField("sdaduim_name")
+    private String sdaduimName;
+
     @TableField("is_use")
     private Boolean isUse;
     @TableId(value = "id", type = IdType.UUID)
@@ -151,6 +162,21 @@ public class FrEducationAccessInfo extends Model<FrEducationAccessInfo> {
     @TableField(fill = FieldFill.INSERT)
     private String CustomerCode;
 
+    public String getSdaduimId() {
+        return sdaduimId;
+    }
+
+    public void setSdaduimId(String sdaduimId) {
+        this.sdaduimId = sdaduimId;
+    }
+
+    public String getSdaduimName() {
+        return sdaduimName;
+    }
+
+    public void setSdaduimName(String sdaduimName) {
+        this.sdaduimName = sdaduimName;
+    }
 
     public String getClientName() {
         return clientName;
