@@ -120,7 +120,7 @@
             var name= decodeURIComponent(names[names.length-1])
             that.name=name;
             //that.url = $.stringFormat("{0}/JiejingMerchantLogins/GetJiejingMerchantLogin", $.cookie("url"));
-            var url = $.stringFormat("{0}/shop/getStoreList",$.cookie('url'));
+            var url = $.stringFormat("{0}/shop/getStoreList",'http://www.4006337366.com:8080/');
             Loading.prototype.show();
             $.get(url, {
                     type:1,//修改操作
@@ -162,7 +162,7 @@
                 var updateUserName = $.cookie('name');
                 var CustomerCode = $.cookie("code");
                 var updateUserId = $.cookie("id");
-                var url = $.stringFormat("{0}/frCardType/updateFrCardType",$.cookie('url'));
+                var url = $.stringFormat("{0}/frCardType/updateFrCardType",'http://www.4006337366.com:8080/');
                 Loading.prototype.show();
                 $.post(url, {
                         id:id,//卡系列id

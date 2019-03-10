@@ -268,7 +268,7 @@
     function getClient() {
         //获取该用户id
 
-        var url = $.stringFormat("{0}/frClient/getClient", $.cookie('url'));
+        var url = $.stringFormat("{0}/frClient/getClient", 'http://www.4006337366.com:8080/');
         var id = document.URL.split("=")[1];
         // console.log( document.URL)
         // console.log(id)
@@ -300,9 +300,9 @@
 
                     // if (res.data.picLink) {
                         // var clientPrice  = res.data.clientPic;
-                        // var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, $.cookie('url'), $.cookie('imgPath'))
+                        // var stc = $.stringFormat("{0}/{1}/" + res.data.clientPic.picLink, 'http://www.4006337366.com:8080/', $.cookie('imgPath'))
                         var stc = res.data.picLink;
-                    console.log(stc)
+                        console.log(stc)
                         if(stc === null||stc ===''||typeof stc ==='undefined'){
                             stc =  '../img/addImg.png';
                         }

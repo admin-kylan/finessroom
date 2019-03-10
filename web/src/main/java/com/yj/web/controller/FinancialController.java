@@ -50,7 +50,7 @@ public class FinancialController {
      */
     @GetMapping("findCourseAnalysisList")
     public JsonResult findCourseAnalysisList(HttpServletRequest request){
-        Map map = request.getParameterMap();
+        Map<String, String[]> map = request.getParameterMap();
         return JsonResult.success(financialService.findCourseAnalysisList(map));
     }
 

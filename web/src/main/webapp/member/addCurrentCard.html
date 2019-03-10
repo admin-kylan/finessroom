@@ -162,7 +162,7 @@
             var userName = $.cookie('name');
             $("#form_box_right_red").html(userName);
             Loading.prototype.show();
-            var url = $.stringFormat("{0}/frCardType/selectFrCardTypeTime",$.cookie('url'));
+            var url = $.stringFormat("{0}/frCardType/selectFrCardTypeTime",'http://www.4006337366.com:8080/');
             $.get(url, {
                     type:0,
                 },
@@ -243,7 +243,7 @@
                     "{0}/frCardType/addCurrentFrCardType?type=" +type
                     +"&cardTypeName="+name+"&ids="+ids+"&pId="
                     +pId+"&typeSetState=1&createUserName="+createUserName +
-                    "&CustomerCode="+CustomerCode+"&createUserId="+createUserId+"&cardType="+that.type,$.cookie('url'));
+                    "&CustomerCode="+CustomerCode+"&createUserId="+createUserId+"&cardType="+that.type,'http://www.4006337366.com:8080/');
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -275,7 +275,7 @@
                     pId = pId.split("#")[0];
                 }
                 Loading.prototype.show();
-                var url = $.stringFormat("{0}/frCardType/getFrCardTypeDetails",$.cookie('url'));
+                var url = $.stringFormat("{0}/frCardType/getFrCardTypeDetails",'http://www.4006337366.com:8080/');
                 $.get(url, {
                         id:pId,
                     },
@@ -298,7 +298,7 @@
                 var that = this;
                             
                 Loading.prototype.show();
-                var url = $.stringFormat("{0}/shop/getStoreList",$.cookie('url'));
+                var url = $.stringFormat("{0}/shop/getStoreList",'http://www.4006337366.com:8080/');
                 $.get(url, {
                         type:0,//添加操作
                     },

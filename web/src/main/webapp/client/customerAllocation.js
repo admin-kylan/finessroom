@@ -88,7 +88,7 @@ var customerAllocation = new Vue({
          */
         queryService: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', 'http://www.4006337366.com:8080/');
             $.get(url, {"userType": 2}, function (res) {
                 that.ServiceInfo = res.data;
             })
@@ -98,7 +98,7 @@ var customerAllocation = new Vue({
          */
         queryConsultant: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', 'http://www.4006337366.com:8080/');
             $.get(url, {"userType": 1}, function (res) {
                 that.ConsultantInfo = res.data;
             })
@@ -108,7 +108,7 @@ var customerAllocation = new Vue({
          */
         queryCoach: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personlRole/getCoach', $.cookie('url'));
+            const url = $.stringFormat('{0}/personlRole/getCoach', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.CoachInfo = res.data;
             })
@@ -118,7 +118,7 @@ var customerAllocation = new Vue({
          */
         queryShop: function () {
             const that = this;
-            const url = $.stringFormat('{0}/shop/getShopAll', $.cookie('url'));
+            const url = $.stringFormat('{0}/shop/getShopAll', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.ShopInfo = res.data;
             })
@@ -128,7 +128,7 @@ var customerAllocation = new Vue({
          */
         queryRole: function () {
             const that = this;
-            const url = $.stringFormat('{0}/roleInfo/getUnallocatedRole', $.cookie('url'));
+            const url = $.stringFormat('{0}/roleInfo/getUnallocatedRole', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.RoleInfo = res.data;
             })
@@ -138,7 +138,7 @@ var customerAllocation = new Vue({
          */
         queryPersonnel: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getUnallocatedPersonnel', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getUnallocatedPersonnel', 'http://www.4006337366.com:8080/');
             var rid = that.UnallocatedFilter.roleId;
             $.get(url, {"rid": rid}, function (res) {
                 that.PersonalInfo = res.data;
@@ -153,7 +153,7 @@ var customerAllocation = new Vue({
             Loading.prototype.show();
             that.$nextTick(function () {
                 try {
-                    const url = $.stringFormat('{0}/frClient/getClientAllot', $.cookie('url'));
+                    const url = $.stringFormat('{0}/frClient/getClientAllot', 'http://www.4006337366.com:8080/');
                     axios.get(url, {params: params})
                         .then(function (res) {
                             let jsonData = eval(res);
@@ -339,7 +339,7 @@ var customerAllocation = new Vue({
         //分配
         distribution: function () {
             const that = this;
-            let url = $.stringFormat('{0}/frClientPersonnelRelate/clientDistribution', $.cookie('url'));
+            let url = $.stringFormat('{0}/frClientPersonnelRelate/clientDistribution', 'http://www.4006337366.com:8080/');
             axios.post(url, that.UnallocatedFilter).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
@@ -376,7 +376,7 @@ var customerAllocation = new Vue({
         //导出Excel
         exportExcel: function () {
             var that = this;
-            var url = $.stringFormat('{0}/excel/customerAllocation', $.cookie('url'));
+            var url = $.stringFormat('{0}/excel/customerAllocation', 'http://www.4006337366.com:8080/');
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");
             form.attr("target", "_break");

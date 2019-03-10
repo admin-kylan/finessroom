@@ -67,7 +67,7 @@ var myCustomerPotential = new Vue({
          */
         queryLevel: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frStoreCommon/getQzLevel', $.cookie('url'));
+            const url = $.stringFormat('{0}/frStoreCommon/getQzLevel', 'http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -86,7 +86,7 @@ var myCustomerPotential = new Vue({
          */
         queryServicePersonnel: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', 'http://www.4006337366.com:8080/');
             $.get(url, {"userType": 2}, function (res) {
                 that.ServicePersonnel = res.data;
             })
@@ -96,7 +96,7 @@ var myCustomerPotential = new Vue({
          */
         queryFollow: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/findAll', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/findAll', 'http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -119,7 +119,7 @@ var myCustomerPotential = new Vue({
             Loading.prototype.show();
             that.$nextTick(function () {
                 try {
-                    const url = $.stringFormat('{0}/frClient/getMyPotentialList', $.cookie('url'));
+                    const url = $.stringFormat('{0}/frClient/getMyPotentialList', 'http://www.4006337366.com:8080/');
 
                     axios.get(url, {params: params})
                         .then(function (res) {
@@ -361,7 +361,7 @@ var myCustomerPotential = new Vue({
         exportExcel: function () {
             var that = this;
 
-            var url = $.stringFormat('{0}/excel/myPotential', $.cookie('url'));
+            var url = $.stringFormat('{0}/excel/myPotential', 'http://www.4006337366.com:8080/');
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");
             form.attr("target", "_break");

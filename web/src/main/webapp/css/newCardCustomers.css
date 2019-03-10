@@ -221,7 +221,8 @@ body {
 #newCardCustomers .section1_box .col_box>div img {
     width: 100%;
     margin: 1px auto;
-    max-width: 105px;
+    max-height: 150px;
+    /* max-width: 105px; */
 }
 
 #newCardCustomers .section1_box .col_box>div:nth-child(odd) {

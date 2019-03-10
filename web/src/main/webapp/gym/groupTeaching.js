@@ -171,7 +171,7 @@ $(function () {
                 that.privateSingleCourse.itemIndex = index;
             },
             getPrivateSetting: function () {
-                let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", 'http://www.4006337366.com:8080/'), that = this;
                 Loading.prototype.show();
                 this.settingSdaduimList = [];
                 axios.get(url, {params: {type: 2 ,sdaduimId:this.sdaduimId}})
@@ -197,7 +197,7 @@ $(function () {
                     });
             },
             saveSettingInfo: function () {
-                let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", 'http://www.4006337366.com:8080/'), that = this;
                 Loading.prototype.show();
                 that.settingInfo.groupLJKFYYTIME = $("#dateInp").val() + "," + $("#XSInp").val() + "," + $("#FZInp").val();
                 this.settingInfo.sdaduimId=this.sdaduimId;
@@ -237,7 +237,7 @@ $(function () {
                 }
             },
             deleteRoom: function (id) {
-                let url = $.stringFormat("{0}/frGroupClassRoom/delete", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frGroupClassRoom/delete", 'http://www.4006337366.com:8080/'), that = this;
                 Loading.prototype.show();
                 $.confirm({
                     title: '确认',
@@ -332,7 +332,7 @@ $(function () {
             },
             getRoomList: function (params) {
                 let that = this;
-                let url = $.stringFormat("{0}/frGroupClassRoom/list", $.cookie('url'));
+                let url = $.stringFormat("{0}/frGroupClassRoom/list", 'http://www.4006337366.com:8080/');
                 if (!params.sdaduimId) {
                     params.sdaduimId = that.classRoomData.sdaduimId;
                 }
@@ -405,7 +405,7 @@ $(function () {
                     return;
                 }
                 console.info(this.classRoomData);
-                let url = $.stringFormat("{0}/frGroupClassRoom/saveOrUpdate", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frGroupClassRoom/saveOrUpdate", 'http://www.4006337366.com:8080/'), that = this;
                 axios.post(url, this.classRoomData).then(function (res) {
                     console.log(res)
                     if (res.data.code == 200) {
@@ -453,7 +453,7 @@ $(function () {
                     return;
                 }
 
-                var url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+                var url = $.stringFormat('{0}/file/upload', 'http://www.4006337366.com:8080/');
                 var isSuccess = false;
                 //判断是否有图片
                 if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
@@ -481,7 +481,7 @@ $(function () {
                     Loading.prototype.hide();
                     // $.alert(jsonData['data']['data']['msg'])
                     that.groupCourseData.imageUrl = jsonData['data']['data']['imgUrl'];
-                    that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                    that.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
                     if (response.data.code == 200 || response.data.code == '200') {
                         that.imgFile = null;//清空条件
                         that.saveGroupCourse();
@@ -578,7 +578,7 @@ $(function () {
              * 获取门店场馆信息
              */
             initServerClassRoomSetting: function () {
-                let url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", 'http://www.4006337366.com:8080/'), that = this;
                 // Loading.prototype.show();
                 axios.get(url, {params: {}})
                     .then(function (res) {
@@ -635,7 +635,7 @@ $(function () {
              * 课程删除或停课
              */
             changeStatus: function (id, flag) {
-                let url = $.stringFormat("{0}/frGroupCourse/change/staus", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frGroupCourse/change/staus", 'http://www.4006337366.com:8080/'), that = this;
                 $.confirm({
                     title: '确认',
                     content: flag == 2 ? "确认停课?" : flag == 3 ? "确认恢复课程？" : '确认删除?',
@@ -671,7 +671,7 @@ $(function () {
             },
             updateCourse: function (obj) {
                 if (this.isNoEmpty(obj.imageUrl)) {
-                    this.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), obj.imageUrl);
+                    this.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), obj.imageUrl);
                 }
                 $("#privatemrkcjh").val(obj.trainSeriesName);
                 this.groupCourseData = obj;
@@ -684,7 +684,7 @@ $(function () {
                 if (avatarLink === null || avatarLink === '' || typeof avatarLink === 'undefined') {
                     return 'img/addImg.png';  //默认图片
                 }
-                return $.stringFormat("{0}/{1}/" + avatarLink, $.cookie('url'), $.cookie('imgPath'));
+                return $.stringFormat("{0}/{1}/" + avatarLink, 'http://www.4006337366.com:8080/', $.cookie('imgPath'));
             },
             /**
              * 根据点击节点获取课程信息
@@ -692,7 +692,7 @@ $(function () {
              */
             getGroupList: function (params) {
                 let that = this;
-                let url = $.stringFormat("{0}/frGroupCourse/list", $.cookie('url'));
+                let url = $.stringFormat("{0}/frGroupCourse/list", 'http://www.4006337366.com:8080/');
                 // Loading.prototype.show();
                 axios.get(url, {params: params})
                     .then(function (res) {
@@ -738,7 +738,7 @@ $(function () {
                 this.groupCourseData.seriesId = this.parenNode.id;
                 this.groupCourseData.sdaduimId = this.sdaduimId;
                 console.info(this.groupCourseData)
-                var url = $.stringFormat("{0}/frGroupCourse/saveOrUpdate", $.cookie('url'))
+                var url = $.stringFormat("{0}/frGroupCourse/saveOrUpdate", 'http://www.4006337366.com:8080/')
                 axios.post(url, this.groupCourseData).then(function (res) {
                     var resData = eval(res);
                     if (res.data.code != 500) {
@@ -789,7 +789,7 @@ $(function () {
              */
             uploadAvatar: function () {
                 var that = this;
-                var url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+                var url = $.stringFormat('{0}/file/upload', 'http://www.4006337366.com:8080/');
                 var isSuccess = false;
                 //判断是否有图片
                 if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
@@ -817,7 +817,7 @@ $(function () {
                     Loading.prototype.hide();
                     $.alert(jsonData['data']['data']['msg'])
                     that.groupCourseData.imageUrl = jsonData['data']['data']['imgUrl'];
-                    that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                    that.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
                     if (response.data.code == 200 || response.data.code == '200') {
                         that.imgFile = null;//清空条件
                         // that.saveGroupCourse();
@@ -835,7 +835,7 @@ $(function () {
                 }
                 this.seriesData.sdaduimId=this.sdaduimId;
                 this.seriesData.parentId = this.parenNode.id;
-                let url = $.stringFormat("{0}/frGroupSeries/saveOrUpdate", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frGroupSeries/saveOrUpdate", 'http://www.4006337366.com:8080/'), that = this;
                 //   Loading.prototype.show();
                 $('#addCourseModel').modal('hide');
                 axios.post(url, this.seriesData).then(function (res) {
@@ -865,7 +865,7 @@ $(function () {
              * 获取系列信息
              */
             getSeriesInfo: function (id) {
-                let url = $.stringFormat("{0}/frGroupSeries/info", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frGroupSeries/info", 'http://www.4006337366.com:8080/'), that = this;
                 Loading.prototype.show();
                 axios.get(url, {params: {id: id}})
                     .then(function (res) {
@@ -921,7 +921,7 @@ $(function () {
                 }
                 subData.parentId = 0;
                 subData.sdaduimId=this.sdaduimId;
-                let url = $.stringFormat("{0}/frGroupSeries/saveOrUpdate", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frGroupSeries/saveOrUpdate", 'http://www.4006337366.com:8080/'), that = this;
                 axios.post(url, subData).then(function (res) {
                     let resData = eval(res);
                     if (res.data.code != 500) {
@@ -1003,7 +1003,7 @@ $(function () {
              * 初始化加载服务器数据
              */
             initServerData: function () {
-                let url = $.stringFormat("{0}/frPrivatePackageRelation/shopSdaduim", $.cookie('url')), that = this;
+                let url = $.stringFormat("{0}/frPrivatePackageRelation/shopSdaduim", 'http://www.4006337366.com:8080/'), that = this;
                 // Loading.prototype.show();
                 axios.get(url, {params: {}})
                     .then(function (res) {
@@ -1033,7 +1033,7 @@ $(function () {
             defaultCurriculumPlanModal: function () {
                 //123123
                 var that = this;
-                var url = $.stringFormat("{0}/frTrainingSeries/getActionList", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/getActionList", 'http://www.4006337366.com:8080/');
                 var data = {
                     type: 1,
                     ownType: 2
@@ -1050,7 +1050,7 @@ $(function () {
                     .catch(function (error) {
                         $.alert(error);
                     });
-                // let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url')), that = this;
+                // let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", 'http://www.4006337366.com:8080/'), that = this;
                 // if (that.privateSingleCourse.seriesList.length == 0) {
                 //     axios.get(url, {params: {type: 1, ownType: 2}})
                 //         .then(function (res) {
@@ -1158,7 +1158,7 @@ $(function () {
             initSelectableTree: function (shopId) {
                 var vm = this, that = this;
 //						修改 插件527-529行
-                var url = $.stringFormat("{0}/frGroupSeries/tree", $.cookie('url'));
+                var url = $.stringFormat("{0}/frGroupSeries/tree", 'http://www.4006337366.com:8080/');
                 Loading.prototype.show();
                 axios.get(url, {params: {"shopId": shopId,"sdaduimId":that.sdaduimId}})
                     .then(function (res) {
@@ -1219,7 +1219,7 @@ $(function () {
                 let that = this;
 
                 // let url = "http://localhost:8080/frActionSeries/list";
-                let url = $.stringFormat("{0}/frActionSeries/list?ownType=2&sdaduimId="+this.sdaduimId, $.cookie('url'));
+                let url = $.stringFormat("{0}/frActionSeries/list?ownType=2&sdaduimId="+this.sdaduimId, 'http://www.4006337366.com:8080/');
                 Loading.prototype.show();
                 axios.get(url)
                     .then(function (res) {
@@ -1247,7 +1247,7 @@ $(function () {
                 let that = this;
                 that.isok = false;
 
-                let url = $.stringFormat("{0}/frActionSeries/actionList", $.cookie('url'));
+                let url = $.stringFormat("{0}/frActionSeries/actionList", 'http://www.4006337366.com:8080/');
                 let data = {
                     seriesId: seriesId,
                 };
@@ -1293,7 +1293,7 @@ $(function () {
                 let that = this;
                 $("#addActionImg" + index).attr('src', 'img/addImg.png');
 
-                let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frAction/addOrUpdate", 'http://www.4006337366.com:8080/');
                 let data = this.actionAddData;
                 data.seriesId = that.actions[that.actionSettingIndex].id;
                 // Loading.prototype.show();
@@ -1341,7 +1341,7 @@ $(function () {
                 let that = this;
 
 
-                let url = $.stringFormat("{0}/frAction/batchFrAction", $.cookie('url'));
+                let url = $.stringFormat("{0}/frAction/batchFrAction", 'http://www.4006337366.com:8080/');
                 let data = {
                     actionIds: this.changeActionIds.join(","),
                     seriesId: this.changeActionSelect,
@@ -1394,7 +1394,7 @@ $(function () {
                 let that = this;
 
 
-                let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frAction/addOrUpdate", 'http://www.4006337366.com:8080/');
                 let data = this.actionSettingData;
                 data.ownType = 2;
                 console.log(data);
@@ -1440,7 +1440,7 @@ $(function () {
                 let that = this;
 
                 // let url = "http://localhost:8080/ ";
-                let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", 'http://www.4006337366.com:8080/');
                 let data = {
                     type: type,
                     ownType: 2,
@@ -1484,9 +1484,9 @@ $(function () {
                 };
                 let url = '';
                 if (this.addSeriesType == 0) {
-                    url = $.stringFormat("{0}/frActionSeries/addFrActionSeries", $.cookie('url'));
+                    url = $.stringFormat("{0}/frActionSeries/addFrActionSeries", 'http://www.4006337366.com:8080/');
                 } else {
-                    url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                    url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
                 }
                 jsonData.ownType = 2;
                 // Loading.prototype.show();
@@ -1539,7 +1539,7 @@ $(function () {
                 }
                 let that = this;
 
-                let url = $.stringFormat("{0}/frTraningClass/list", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTraningClass/list", 'http://www.4006337366.com:8080/');
 
                 let jsonData = {
                     traningSeriesId: train.id,
@@ -1577,7 +1577,7 @@ $(function () {
                 // $(event.target).addClass('active').siblings().removeClass('active'); 不可用  事件会传递
 
                 let that = this;
-                let url = $.stringFormat("{0}/frTrainingSeries/list", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTrainingSeries/list", 'http://www.4006337366.com:8080/');
                 let data = {
                     type: type,
                     parentId: parentId,
@@ -1616,7 +1616,7 @@ $(function () {
             deleteItem: function (index, id, type) {
 
                 var that = this;
-                var url = $.stringFormat("{0}/frTrainingSeries/list", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/list", 'http://www.4006337366.com:8080/');
                 var data = {
                     type: type,
                     parentId: id,
@@ -1652,7 +1652,7 @@ $(function () {
             deleteTrain: function (id, type) {
                 var that = this;
 
-                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
                 var jsonData = {
                     id: id,
                     isUsing: 0,
@@ -1727,7 +1727,7 @@ $(function () {
 
                 let that = this;
 
-                let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
 
                 let jsonData = {
                     name: String(this.addTrainName),
@@ -1775,13 +1775,13 @@ $(function () {
                 }
                 var that = this;
                 if(that.updateType==3){
-                    var url = $.stringFormat("{0}/frTrainingSeries/updateAction", $.cookie('url'));
+                    var url = $.stringFormat("{0}/frTrainingSeries/updateAction", 'http://www.4006337366.com:8080/');
                     var jsonData = {
                         id: this.updateItemId,
                         name: String(this.updateItemName),
                     };
                 }else {
-                    var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                    var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
                     var jsonData = {
                         id: this.updateItemId,
                         name: String(this.updateItemName),
@@ -1841,13 +1841,13 @@ $(function () {
             deleteItemConfirm: function () {
                 var that = this;
                 if(this.deletItemType==3){
-                    var url = $.stringFormat("{0}/frTrainingSeries/updateAction", $.cookie('url'));
+                    var url = $.stringFormat("{0}/frTrainingSeries/updateAction", 'http://www.4006337366.com:8080/');
                     var jsonData = {
                         id: this.deleteItemId,
                         isUsing: 0,
                     };
                 }else{
-                    var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                    var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
                     var jsonData = {
                         id: this.deleteItemId,
                         isUsing: 0,
@@ -1920,7 +1920,7 @@ $(function () {
             deleteTrainConfirm: function () {
                 let that = this;
 
-                let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
 
                 let jsonData = {
                     id: this.deleteTrainId,
@@ -1980,7 +1980,7 @@ $(function () {
                 }
                 let that = this;
 
-                let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
 
                 let jsonData = {
                     id: this.updateTrainId,
@@ -2047,7 +2047,7 @@ $(function () {
                  */
                 let that = this;
 
-                let url = $.stringFormat("{0}/frTraningClass/batchUpdateFrTraningClass", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTraningClass/batchUpdateFrTraningClass", 'http://www.4006337366.com:8080/');
 
                 let list = this.mealActionChanges || this.trainActionChanges;
                 let count = list.length;
@@ -2114,7 +2114,7 @@ $(function () {
                     return
                 }
 
-                let url = $.stringFormat("{0}/frTraningClass/batchAddFrTraningClass", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTraningClass/batchAddFrTraningClass", 'http://www.4006337366.com:8080/');
                 if (type == 1) {
                     var jsonData = {
                         traningSeriesId: this.simpleLinkSettingActionSubSelectId,
@@ -2148,7 +2148,7 @@ $(function () {
                                     //that.subTrainClick(this.simpleLinkSettingActionSubSelectId,1);
                                     console.log(jsonData);
 
-                                    let url = $.stringFormat("{0}/frTraningClass/list", $.cookie('url'));
+                                    let url = $.stringFormat("{0}/frTraningClass/list", 'http://www.4006337366.com:8080/');
 
                                     let jsonData2 = {
                                         traningSeriesId: jsonData.traningSeriesId,
@@ -2187,7 +2187,7 @@ $(function () {
 
                                     console.log(jsonData);
 
-                                    let url = $.stringFormat("{0}/frTraningClass/list", $.cookie('url'));
+                                    let url = $.stringFormat("{0}/frTraningClass/list", 'http://www.4006337366.com:8080/');
 
                                     let jsonData2 = {
                                         traningSeriesId: jsonData.traningSeriesId,
@@ -2250,7 +2250,7 @@ $(function () {
                         $("#addActionImg" + index).attr('src', this.result);
 
 
-                        let url = $.stringFormat("{0}/file/upload", $.cookie('url'));
+                        let url = $.stringFormat("{0}/file/upload", 'http://www.4006337366.com:8080/');
                         var param = new FormData();
 
                         param.append('file', file); //通过append向form对象添加数据
@@ -2265,7 +2265,7 @@ $(function () {
                             cache: false,
                             success: function (res) {
                                 if (res.code == '200') {
-                                    object.image = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), res.data.imgUrl);
+                                    object.image = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), res.data.imgUrl);
                                     console.info(res)
                                     console.info(that.actionAddData)
                                 } else {
@@ -2281,7 +2281,7 @@ $(function () {
             delEduAction: function (index, action, type) {
                 let that = this;
 
-                let url = $.stringFormat("{0}/frTraningClass/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frTraningClass/addOrUpdate", 'http://www.4006337366.com:8080/');
 
                 let jsonData = {
                     id: action.id,
@@ -2334,7 +2334,7 @@ $(function () {
                 let that = this;
 
 
-                let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
+                let url = $.stringFormat("{0}/frAction/addOrUpdate", 'http://www.4006337366.com:8080/');
                 $.confirm({
                     title: '确认',
                     content: '确认删除?',

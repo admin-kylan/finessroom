@@ -5,6 +5,8 @@
 #------------------------文件上传路路径------------------------#
 fitness:
   uploadPath: D:/Project/Java/static/fitness/upload/
+  url: http://www.4006337366.com:8080/
+  imgPath: files/
 #------------------------数据源配置------------------------#
 spring:
   application:

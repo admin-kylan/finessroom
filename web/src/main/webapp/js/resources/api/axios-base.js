@@ -2,7 +2,7 @@
  * Created by Kylan on 2018/12/15.
  */
 
-var baseUrl = $.cookie('url');
+var baseUrl = 'http://www.4006337366.com:8080/';
 /**
  * axios 传参数的 回调
  * @param url

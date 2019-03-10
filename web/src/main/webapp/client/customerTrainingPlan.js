@@ -55,7 +55,7 @@ var customerTrainingPlan = new Vue({
             //显示加载中
             Loading.prototype.show();
             that.$nextTick(function () {
-                const url = $.stringFormat('{0}/frTrainingPlan/getTrainingPlanList', $.cookie('url'));
+                const url = $.stringFormat('{0}/frTrainingPlan/getTrainingPlanList', 'http://www.4006337366.com:8080/');
                 $.get(url, params, function (res) {
                     if (res.code === '200') {
                         that.customerTable = res.data;
@@ -103,7 +103,7 @@ var customerTrainingPlan = new Vue({
         //查询训练计划
         findTrainingPlan: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frTrainingPlan/getCourse', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTrainingPlan/getCourse', 'http://www.4006337366.com:8080/');
             $.get(url, {"type": "1"}, function (res) {
                 that.PlanInfo = res.data;
 
@@ -113,7 +113,7 @@ var customerTrainingPlan = new Vue({
         //添加训练计划中 点击训练计划
         getContentInfo: function (id) {
             var that = this;
-            var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTraningClass/getPlan', 'http://www.4006337366.com:8080/');
             $.get(url, {"id": id, "type": 1}, function (res) {
                 that.ContentInfo = res.data;
             });
@@ -122,7 +122,7 @@ var customerTrainingPlan = new Vue({
         //添加训练计划中  查询训练套餐
         findSetMeal: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frTrainingPlan/getCourse', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTrainingPlan/getCourse', 'http://www.4006337366.com:8080/');
             $.get(url, {"type": "2"}, function (res) {
                 that.SetMealInfo = res.data;
 
@@ -132,7 +132,7 @@ var customerTrainingPlan = new Vue({
         //点击训练套餐
         getSetMealContentInfo: function (id) {
             var that = this;
-            var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTraningClass/getPlan', 'http://www.4006337366.com:8080/');
             $.get(url, {"id": id, "type": 2}, function (res) {
                 that.SetMealContentInfo = res.data;
                 console.log(that.SetMealContentInfo)
@@ -171,7 +171,7 @@ var customerTrainingPlan = new Vue({
         //导入 type=1 训练计划 type=2 训练计划套餐
         addPlan: function (type) {
             var that = this;
-            var url = $.stringFormat('{0}/frTrainingPlan/getPlanById', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTrainingPlan/getPlanById', 'http://www.4006337366.com:8080/');
             if (that.ids == '' || that.ids == [] || that.ids == null || typeof(that.ids) == 'undefined') {
                 if (type == 1) {
                     alert("未选择训练计划");
@@ -225,7 +225,7 @@ var customerTrainingPlan = new Vue({
             $.each(that.ActionInfo, function (i, n) {
                 that.param.classIds.push(n.id)
             })
-            var url = $.stringFormat('{0}/frTrainingPlan/saveProject', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTrainingPlan/saveProject', 'http://www.4006337366.com:8080/');
             axios.post(url, that.param).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
@@ -264,7 +264,7 @@ var customerTrainingPlan = new Vue({
                 fid: update[9].value,
             }
             console.log(updateParam)
-            var url = $.stringFormat('{0}/frTrainingPlan/updateProject', $.cookie('url'));
+            var url = $.stringFormat('{0}/frTrainingPlan/updateProject', 'http://www.4006337366.com:8080/');
             axios.post(url, updateParam).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
@@ -285,7 +285,7 @@ var customerTrainingPlan = new Vue({
             console.log(id)
             var flag = confirm("确定删除吗?");
             if (flag) {
-                var url = $.stringFormat('{0}/frTrainingPlan/delPlan', $.cookie('url'));
+                var url = $.stringFormat('{0}/frTrainingPlan/delPlan', 'http://www.4006337366.com:8080/');
                 $.get(url, {"id": id}, function (res) {
                     if (res.code == "200") {
                         alert("删除成功")
@@ -319,7 +319,7 @@ var customerTrainingPlan = new Vue({
                     }
                 })
             })
-            var url = $.stringFormat('{0}/frPlanClass/updateAction', $.cookie('url'));
+            var url = $.stringFormat('{0}/frPlanClass/updateAction', 'http://www.4006337366.com:8080/');
             axios.post(url, param).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
@@ -339,7 +339,7 @@ var customerTrainingPlan = new Vue({
             if (flag) {
                 var tid = $('.action').eq(index).find("input")[9].value
                 var id = $('.action').eq(index).find("input")[0].value
-                var url = $.stringFormat('{0}/frPlanClass/delAction', $.cookie('url'));
+                var url = $.stringFormat('{0}/frPlanClass/delAction', 'http://www.4006337366.com:8080/');
                 $.each(that.ActionInfo, function (i, n) {
                     if (n.id = id) {
                         that.ActionInfo.splice(i, 1)
@@ -396,7 +396,7 @@ var customerTrainingPlan = new Vue({
                 var thisChecked = $(".planParent").eq(index).prop('checked');
 
                 if (thisChecked) {
-                    var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frTraningClass/getPlan', 'http://www.4006337366.com:8080/');
                     $.get(url, {"id": id, "type": 1}, function (res) {
                         that.tempInfo = res.data;
                         $(that.tempInfo).each(function (i, n) {
@@ -416,7 +416,7 @@ var customerTrainingPlan = new Vue({
             } else if (type == 4) {
                 var thisChecked = $(".setMealParent").eq(index).prop('checked');
                 if (thisChecked) {
-                    var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frTraningClass/getPlan', 'http://www.4006337366.com:8080/');
                     $.get(url, {"id": id, "type": 2}, function (res) {
                         that.tempInfo = res.data;
                         $(that.tempInfo).each(function (i, n) {
@@ -446,7 +446,7 @@ var customerTrainingPlan = new Vue({
                 })
                $(id).each(function (i,n) {
                    if (thisChecked) {
-                       var url = $.stringFormat('{0}/frTraningClass/getPlan', $.cookie('url'));
+                       var url = $.stringFormat('{0}/frTraningClass/getPlan', 'http://www.4006337366.com:8080/');
                        $.get(url, {"id": n.id, "type": 1}, function (res) {
                            that.tempInfo = res.data;
                            $(that.tempInfo).each(function (j, k) {

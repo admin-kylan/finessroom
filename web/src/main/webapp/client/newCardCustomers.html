@@ -75,7 +75,8 @@
                                      alt="" @click="pictureSelected" onerror="this.src='../img/u2871.png'">
                                 <img v-if="loadData2.clitenUser.image=='undefined'||loadData2.clitenUser.image==null" class="img-responsive" src='../img/u2871.png'
                                      alt="" @click="pictureSelected" id="price1" onerror="this.src='../img/u2871.png'">
-                                <a class="btn btn-primary" @click="uploadAvatar">上传图片</a>
+                                <!-- <a class="btn btn-primary" @click="uploadAvatar">上传图片</a> -->
+                                <!-- <a class="btn btn-primary" @click="pictureSelected">上传图片</a> -->
                                 <input id="file-fr" style="display: none;" ref="avatar" name="file" type="file"
                                                @change="pictureShow($event)" accept="image/png,image/jpeg,image/gif,image/jpg"/>
                             </div>

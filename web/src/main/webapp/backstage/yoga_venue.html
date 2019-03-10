@@ -379,7 +379,7 @@
                 //查询操作人与时间
                 getTime: function () {
                     var that = this;
-                    var url = $.stringFormat('{0}/frSetGym/getTime', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frSetGym/getTime', 'http://www.4006337366.com:8080/');
                     $.get(url, {"type": that.type}, function (res) {
                         if (res.code == "200") {
                             that.timeInfo = res.data;
@@ -392,7 +392,7 @@
                 //查询连锁
                 getChainStore: function () {
                     var that = this;
-                    var url = $.stringFormat('{0}/frSetGym/getChainStore', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frSetGym/getChainStore', 'http://www.4006337366.com:8080/');
                     $.get(url, {"type": that.type}, function (res) {
                         if (res.code == "200") {
                             that.ChainStoreInfo = res.data;
@@ -406,7 +406,7 @@
                 //查询城市门店
                 getCityShop: function () {
                     var that = this;
-                    var url = $.stringFormat('{0}/frSetGym/getCityShop', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frSetGym/getCityShop', 'http://www.4006337366.com:8080/');
                     $.get(url, function (res) {
                         if (res.code == "200") {
                             that.storeData = res.data;
@@ -450,7 +450,7 @@
                             return;
                         }
                     }
-                    var url = $.stringFormat('{0}/frSetGym/saveProject', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frSetGym/saveProject', 'http://www.4006337366.com:8080/');
                     var data = JSON.stringify(that.params)
                     $.ajax({
                         url: url,
@@ -490,7 +490,7 @@
                         alert("押金不能为空")
                         return;
                     }
-                    var url = $.stringFormat('{0}/frSetGym/updateProject', $.cookie('url'));
+                    var url = $.stringFormat('{0}/frSetGym/updateProject', 'http://www.4006337366.com:8080/');
                     var data = JSON.stringify(that.tempInfo)
                     $.ajax({
                         url: url,
@@ -517,7 +517,7 @@
                     } else {
                         var flag = confirm("确定要删除这条记录吗")
                         if (flag) {
-                            var url = $.stringFormat('{0}/frSetGym/delProject', $.cookie('url'));
+                            var url = $.stringFormat('{0}/frSetGym/delProject', 'http://www.4006337366.com:8080/');
                             $.get(url, {"id": id}, function (res) {
                                 if (res.code == "200") {
                                     alert("删除成功")

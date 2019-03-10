@@ -2146,11 +2146,11 @@
 			function downExcel(type){
 				var _url='';
 				if(type==1){
-					_url=$.stringFormat("{0}/import_excel/client_info",$.cookie('url'));
+					_url=$.stringFormat("{0}/import_excel/client_info",'http://www.4006337366.com:8080/');
 				}else if(type==2){
-					_url=$.stringFormat("{0}/import_excel/prospective_client",$.cookie('url'));
+					_url=$.stringFormat("{0}/import_excel/prospective_client",'http://www.4006337366.com:8080/');
 				}else{
-					_url=$.stringFormat("{0}/import_excel/personal_trainer",$.cookie('url'));
+					_url=$.stringFormat("{0}/import_excel/personal_trainer",'http://www.4006337366.com:8080/');
 				}
 			    var load=new Loading();//导入加载动画
 				load.hide();

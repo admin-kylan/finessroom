@@ -29,16 +29,18 @@ public class FinancialServiceImpl {
     }
 
 
-    public List<Map<String, Object>> findCourseAnalysisList(Map<String, String> map){
-        //星期几
-        if(!StringUtils.isBlank(map.get("weekId"))){
-            map.put("weekId", String.valueOf(Integer.parseInt(map.get("weekId")) + 1));
-        }
-        //时间段
-        if(!StringUtils.isBlank(map.get("timeId"))){
-
-        }
-        return financialMapper.findCourseAnalysisList(map);
+    public List<Map<String, Object>> findCourseAnalysisList(Map<String, String[]> map){
+        String eduType = map.get("eduType")[0];
+        String shopId = map.get("shopId")[0];
+        String beginDate = map.get("beginDate")[0];
+        String endDate = map.get("endDate")[0];
+        String weekId = map.get("weekId")[0];
+        String timeId = map.get("timeId")[0];
+        String courseId = map.get("courseId")[0];
+        String coachId = map.get("coachId")[0];
+        String coachName = map.get("coachName")[0];
+        String code = map.get("code")[0];
+        return financialMapper.findCourseAnalysisList(eduType,shopId,beginDate,endDate,weekId,timeId,courseId,coachId,coachName,code);
 
     }
 }

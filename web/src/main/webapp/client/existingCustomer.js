@@ -71,7 +71,7 @@ const ecapp = new Vue({
          */
         initlevels:function () {
             let that = this;
-            let url = $.stringFormat('{0}/frLevel/getListForSelect',$.cookie('url'));
+            let url = $.stringFormat('{0}/frLevel/getListForSelect','http://www.4006337366.com:8080/');
             axios.get(url).then(function (res) {
                 let resData = eval(res);
                 if(resData['data']['code'] === '200'){
@@ -175,7 +175,7 @@ const ecapp = new Vue({
          */
         initExistenceStat:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/frClient/getExistenceStat',$.cookie('url'));
+            const url = $.stringFormat('{0}/frClient/getExistenceStat','http://www.4006337366.com:8080/');
             axios.get(url)
             .then(function (res) {
                 let jsonData = eval(res);
@@ -199,7 +199,7 @@ const ecapp = new Vue({
             Loading.prototype.show();
             that.$nextTick(function () {
                 try {
-                    const url = $.stringFormat('{0}/frClient/getExistenceList',$.cookie('url'));
+                    const url = $.stringFormat('{0}/frClient/getExistenceList','http://www.4006337366.com:8080/');
                     axios.get(url,{params: params})
                         .then(function (res) {
                             console.log(res);
@@ -324,7 +324,7 @@ const ecapp = new Vue({
         //         CustomerCode: "003",
         //     }
         //     var mess = '/frCardType/getCardTypeByShopIdList';
-        //     var url = $.stringFormat('{0}'+mess,$.cookie('url'));
+        //     var url = $.stringFormat('{0}'+mess,'http://www.4006337366.com:8080/');
         //     console.log(url+'?CustomerCode='+code);
         //     console.log(data);
         //     $.get(url,data,function(res){

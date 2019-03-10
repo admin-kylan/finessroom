@@ -222,9 +222,9 @@ const app = new Vue({
     		var that=this;
     		var url
     		if(that.existenceType==0){
-            	url = $.stringFormat("{0}/excel/client_upload",$.cookie('url'));
+            	url = $.stringFormat("{0}/excel/client_upload",'http://www.4006337366.com:8080/');
             }else{
-            	url = $.stringFormat("{0}/excel/prospective_client",$.cookie('url'));
+            	url = $.stringFormat("{0}/excel/prospective_client",'http://www.4006337366.com:8080/');
             }
     		axios.get(url,{params:{
     			Intger:type,
@@ -279,10 +279,10 @@ const app = new Vue({
             Loading.prototype.show();
             var url,id;
             if(that.existenceType==0){
-            	url = $.stringFormat("{0}/frClient/getExistenceList",$.cookie('url'));
+            	url = $.stringFormat("{0}/frClient/getExistenceList",'http://www.4006337366.com:8080/');
             	id='pagination'
             }else{
-            	url = $.stringFormat("{0}/frClient/getPotentialListBG",$.cookie('url'));
+            	url = $.stringFormat("{0}/frClient/getPotentialListBG",'http://www.4006337366.com:8080/');
             	id='pagination1'
             }
     		axios.get(url,{params:{
@@ -322,7 +322,7 @@ const app = new Vue({
         addInvalidProtocolNo:function () {
             //TODO 作废协议号
             // var that = this;
-            // var url = $.stringFormat("{0}/frAgreement/updateInvalid",$.cookie('url'));
+            // var url = $.stringFormat("{0}/frAgreement/updateInvalid",'http://www.4006337366.com:8080/');
             // if(this.invalidProtocolSet.invalidProtocolNo==null){
             //     $.alert("输入框不能为空");
             //     return;
@@ -351,7 +351,7 @@ const app = new Vue({
         deleteProtocolNo:function (value,index) {
             //TODO 删除作废协议号
             // var that = this;
-            // var url = $.stringFormat("{0}/frAgreement/updateInvalid",$.cookie('url'));
+            // var url = $.stringFormat("{0}/frAgreement/updateInvalid",'http://www.4006337366.com:8080/');
             // $.confirm({
             //     title: '确认',
             //     content: '确认删除?',
@@ -395,7 +395,7 @@ const app = new Vue({
         //作废会员号
         addInvalidVIPCardNo:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frCard/postAddInvalidCardNo",$.cookie('url'));
+            let url = $.stringFormat("{0}/frCard/postAddInvalidCardNo",'http://www.4006337366.com:8080/');
             if(this.invalidVIPCardSet.invalidVIPCardNo===null){
                 $.alert("输入框不能为空");
                 return;
@@ -423,7 +423,7 @@ const app = new Vue({
         //删除作废会员号
         deleteInvalidVIPCard:function(value,index){
             let that = this;
-            let url = $.stringFormat("{0}/frCard/postDelInvalidCardNo",$.cookie('url'));
+            let url = $.stringFormat("{0}/frCard/postDelInvalidCardNo",'http://www.4006337366.com:8080/');
             $.confirm({
                 title: '确认',
                 content: '确认删除?',
@@ -467,7 +467,7 @@ const app = new Vue({
         // 增加协议号规则
         addProtocols:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frAgreement/postAdd",$.cookie('url'));
+            let url = $.stringFormat("{0}/frAgreement/postAdd",'http://www.4006337366.com:8080/');
             //检查参数
             if(this.protocolNumMgt.batchNum===null||this.protocolNumMgt.startNo===null||this.protocolNumMgt.endNo===null){
                 $.alert("请输入范围!");
@@ -524,7 +524,7 @@ const app = new Vue({
         // 增加会员号规则
         addVIPCard:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frCardNum/postAdd",$.cookie('url'));
+            let url = $.stringFormat("{0}/frCardNum/postAdd",'http://www.4006337366.com:8080/');
             //检查参数
             if(this.VIPCardMgt.batchNum===null||this.VIPCardMgt.startNo===null||this.VIPCardMgt.endNo===null){
                 $.alert("请输入范围");
@@ -578,7 +578,7 @@ const app = new Vue({
         //保存通用设置
         saveCommonSet:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frStoreCommon/postUpdateSet",$.cookie('url'));
+            let url = $.stringFormat("{0}/frStoreCommon/postUpdateSet",'http://www.4006337366.com:8080/');
             axios.post(url, that.commonSet)
             .then(function (res) {
                 let resData = eval(res);
@@ -592,7 +592,7 @@ const app = new Vue({
         //保存所在门店设置
         updateWhereStore:function () {
             let that = this;
-            let url = $.stringFormat("{0}/shop/postUpdateWhereShop",$.cookie('url'));
+            let url = $.stringFormat("{0}/shop/postUpdateWhereShop",'http://www.4006337366.com:8080/');
             axios.post(url, that.whereShop.list)
             .then(function (res) {
                 let resData = eval(res);
@@ -605,7 +605,7 @@ const app = new Vue({
         //修改单个门店设置
         updateStoreSingleSet:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frStoreSingle/postUpdateSet",$.cookie('url'));
+            let url = $.stringFormat("{0}/frStoreSingle/postUpdateSet",'http://www.4006337366.com:8080/');
             let data = that.storeSingleSet;
             data.newParam = 'operaterId';
             data.newParam = 'operaterName';
@@ -624,7 +624,7 @@ const app = new Vue({
         //修改客户保护天数设置
         updateProtectionDaysSet:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frIndustry/postUpdateSet",$.cookie('url'));
+            let url = $.stringFormat("{0}/frIndustry/postUpdateSet",'http://www.4006337366.com:8080/');
             axios.post(url, this.protectionDaysSet.list)
             .then(function (res) {
                 let resData = eval(res);
@@ -636,7 +636,7 @@ const app = new Vue({
         //修改客户认领设置
         updateClaimSet:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frIndustry/postUpdateSet",$.cookie('url'));
+            let url = $.stringFormat("{0}/frIndustry/postUpdateSet",'http://www.4006337366.com:8080/');
             console.log(this.claimSet.list)
             axios.post(url, this.claimSet.list)
             .then(function (res) {
@@ -649,7 +649,7 @@ const app = new Vue({
         //修改客户跟进设置
         updateFollowSet:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frIndustry/postUpdateSet",$.cookie('url'));
+            let url = $.stringFormat("{0}/frIndustry/postUpdateSet",'http://www.4006337366.com:8080/');
             //现有客户跟进
             axios.post(url, this.xyFollowSet.list)
             .then(function (res) {
@@ -670,7 +670,7 @@ const app = new Vue({
         //删除关键字
         deleteKeyword:function (value,index) {
             let that = this;
-            let url = $.stringFormat("{0}/frFollowKeyword/postDelKeyWord",$.cookie('url'));
+            let url = $.stringFormat("{0}/frFollowKeyword/postDelKeyWord",'http://www.4006337366.com:8080/');
             $.confirm({
                 title: '确认',
                 content: '确认删除?',
@@ -703,7 +703,7 @@ const app = new Vue({
         //增加关键字
         addKeyword:function () {
             let that = this;
-            let url = $.stringFormat("{0}/frFollowKeyword/postAddKeyWord",$.cookie('url'));
+            let url = $.stringFormat("{0}/frFollowKeyword/postAddKeyWord",'http://www.4006337366.com:8080/');
             if(this.keywordList.keyword===''||this.keywordList.keyword===null){
                 $.alert('请输入关键字');
                 return;
@@ -772,7 +772,7 @@ $('.cardPageBox').Paging({
  */
 function initStoreCommon() {
     let that = this;
-    let url = $.stringFormat("{0}/frStoreCommon/getSet",$.cookie('url'));
+    let url = $.stringFormat("{0}/frStoreCommon/getSet",'http://www.4006337366.com:8080/');
     axios.get(url)
     .then(function (res) {
         let resData = eval(res);
@@ -791,7 +791,7 @@ function initStoreCommon() {
  */
 function initAgreementList(params) {
     let that = app.$data;
-    let url = $.stringFormat("{0}/frAgreement/invalidList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frAgreement/invalidList",'http://www.4006337366.com:8080/');
     axios.get(url, {params: params})
     .then(function (res) {
         let resData = eval(res);
@@ -811,7 +811,7 @@ function initAgreementList(params) {
  */
 function initInvalidCardNoList(params) {
     let that = app.$data;
-    let url = $.stringFormat("{0}/frCard/getInvalidCardNoList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frCard/getInvalidCardNoList",'http://www.4006337366.com:8080/');
     axios.get(url, {params: params})
     .then(function (res) {
         let resData = eval(res);
@@ -834,7 +834,7 @@ function initInvalidCardNoList(params) {
  */
 function initProtocolGroupList() {
     let that = this;
-    let url = $.stringFormat("{0}/frAgreement/getList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frAgreement/getList",'http://www.4006337366.com:8080/');
     axios.get(url)
     .then(function (res) {
         let resData = eval(res);
@@ -854,7 +854,7 @@ function initProtocolGroupList() {
  */
 function initCardGroupList() {
     let that = this;
-    let url = $.stringFormat("{0}/frCardNum/getList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frCardNum/getList",'http://www.4006337366.com:8080/');
     axios.get(url)
     .then(function (res) {
         let resData = eval(res);
@@ -874,7 +874,7 @@ function initCardGroupList() {
  */
 function initShopList() {
     let that = this;
-    let url = $.stringFormat("{0}/shop/getShopList",$.cookie('url'));
+    let url = $.stringFormat("{0}/shop/getShopList",'http://www.4006337366.com:8080/');
     axios.get(url)
     .then(function (res) {
         let resData = eval(res);
@@ -894,7 +894,7 @@ function initShopList() {
  */
 function initStoreSingleSet() {
     let that = this;
-    let url = $.stringFormat("{0}/frStoreSingle/getSingleShopSet",$.cookie('url'));
+    let url = $.stringFormat("{0}/frStoreSingle/getSingleShopSet",'http://www.4006337366.com:8080/');
     axios.get(url)
     .then(function (res) {
         let resData = eval(res);
@@ -913,7 +913,7 @@ function initStoreSingleSet() {
  */
 function initProtectionDaysSet() {
     let that = this;
-    let url = $.stringFormat("{0}/frIndustry/getProtectDaysList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frIndustry/getProtectDaysList",'http://www.4006337366.com:8080/');
     axios.get(url,{params:{customerCode:$.cookie('code')}})
     .then(function (res) {
         let resData = eval(res);
@@ -932,7 +932,7 @@ function initProtectionDaysSet() {
  */
 function initClaimSetList() {
     let that = this;
-    let url = $.stringFormat("{0}/frIndustry/getClaimSetList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frIndustry/getClaimSetList",'http://www.4006337366.com:8080/');
     axios.get(url,{params:{customerCode:$.cookie('code')}})
     .then(function (res) {
         let resData = eval(res);
@@ -951,7 +951,7 @@ function initClaimSetList() {
  */
 function initXyFollowSetList() {
     let that = this;
-    let url = $.stringFormat("{0}/frIndustry/getFollowList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frIndustry/getFollowList",'http://www.4006337366.com:8080/');
     axios.get(url,{params:{
         customerType:0,
     }})
@@ -972,7 +972,7 @@ function initXyFollowSetList() {
  */
 function initQzFollowSetList() {
     let that = this;
-    let url = $.stringFormat("{0}/frIndustry/getFollowList",$.cookie('url'));
+    let url = $.stringFormat("{0}/frIndustry/getFollowList",'http://www.4006337366.com:8080/');
     axios.get(url,{params:{
         customerType:1,
         customerCode:$.cookie('code'),
@@ -994,7 +994,7 @@ function initQzFollowSetList() {
  */
 function initKeywordList() {
     let that = this;
-    let url = $.stringFormat('{0}/frFollowKeyword/getKeywordList',$.cookie('url'));
+    let url = $.stringFormat('{0}/frFollowKeyword/getKeywordList','http://www.4006337366.com:8080/');
     axios.get(url,{params:{customerCode:$.cookie('code')}})
     .then(function (res) {
         let resData = eval(res);

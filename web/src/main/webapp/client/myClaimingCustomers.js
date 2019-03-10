@@ -76,7 +76,7 @@ var myClaimingCustomers = new Vue({
          */
         queryClaiming: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frIndustry/getClientCount', $.cookie('url'));
+            const url = $.stringFormat('{0}/frIndustry/getClientCount', 'http://www.4006337366.com:8080/');
             //现有 clientType:0
             $.get(url, {"clientType": 0}, function (res) {
                 that.ClaimingInfo = res.data;
@@ -87,7 +87,7 @@ var myClaimingCustomers = new Vue({
          */
         queryService: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', 'http://www.4006337366.com:8080/');
             $.get(url, {"userType": 2}, function (res) {
                 that.ServiceInfo = res.data;
             })
@@ -97,7 +97,7 @@ var myClaimingCustomers = new Vue({
          */
         queryConsultant: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getServicePersonnel', 'http://www.4006337366.com:8080/');
             $.get(url, {"userType": 1}, function (res) {
                 that.ConsultantInfo = res.data;
             })
@@ -107,7 +107,7 @@ var myClaimingCustomers = new Vue({
          */
         queryCoach: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personlRole/getCoach', $.cookie('url'));
+            const url = $.stringFormat('{0}/personlRole/getCoach', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.CoachInfo = res.data;
             })
@@ -117,7 +117,7 @@ var myClaimingCustomers = new Vue({
          */
         queryShop: function () {
             const that = this;
-            const url = $.stringFormat('{0}/shop/getShopAll', $.cookie('url'));
+            const url = $.stringFormat('{0}/shop/getShopAll', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.ShopInfo = res.data;
             })
@@ -131,7 +131,7 @@ var myClaimingCustomers = new Vue({
             Loading.prototype.show();
             that.$nextTick(function () {
                 try {
-                    const url = $.stringFormat('{0}/frClient/getExistingList', $.cookie('url'));
+                    const url = $.stringFormat('{0}/frClient/getExistingList', 'http://www.4006337366.com:8080/');
                     axios.get(url, {params: params})
                         .then(function (res) {
                             let jsonData = eval(res);
@@ -271,7 +271,7 @@ var myClaimingCustomers = new Vue({
                 alert('未选择客户')
             } else {
                 list = JSON.stringify(list).replace("[", "").replace("]", "").replace(/\"/g, "");
-                const url = $.stringFormat('{0}/frClientPersonnelRelate/claiming', $.cookie('url'));
+                const url = $.stringFormat('{0}/frClientPersonnelRelate/claiming', 'http://www.4006337366.com:8080/');
                 $.get(url, {"cids": list, "type": "2"}, function (res) {
                     if (res.code == '200') {
                         alert('认领成功')
@@ -361,7 +361,7 @@ var myClaimingCustomers = new Vue({
         //导出Excel
         exportExcel: function () {
             var that = this;
-            var url = $.stringFormat('{0}/excel/claimingExisting', $.cookie('url'));
+            var url = $.stringFormat('{0}/excel/claimingExisting', 'http://www.4006337366.com:8080/');
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");
             form.attr("target", "_break");

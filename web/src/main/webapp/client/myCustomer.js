@@ -66,7 +66,7 @@ var myCustomer = new Vue({
          */
         initlevels:function () {
             let that = this;
-            let url = $.stringFormat('{0}/frLevel/getListForSelect',$.cookie('url'));
+            let url = $.stringFormat('{0}/frLevel/getListForSelect','http://www.4006337366.com:8080/');
             axios.get(url).then(function (res) {
                 let resData = eval(res);
                 if(resData['data']['code'] === '200'){
@@ -85,7 +85,7 @@ var myCustomer = new Vue({
          */
         queryFollow: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/findAll', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/findAll', 'http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -108,7 +108,7 @@ var myCustomer = new Vue({
             Loading.prototype.show();
             that.$nextTick(function () {
                 try {
-                    const url = $.stringFormat('{0}/frClient/getMyExistenceList', $.cookie('url'));
+                    const url = $.stringFormat('{0}/frClient/getMyExistenceList', 'http://www.4006337366.com:8080/');
 
                     axios.get(url, {params: params})
                         .then(function (res) {
@@ -327,7 +327,7 @@ var myCustomer = new Vue({
         //导出Excel
         exportExcel: function () {
             var that = this;
-            var url = $.stringFormat('{0}/excel/myCustomer', $.cookie('url'));
+            var url = $.stringFormat('{0}/excel/myCustomer', 'http://www.4006337366.com:8080/');
             var form = $("<form>");//定义一个form表单
             form.attr("style", "display:none");
             form.attr("target", "_break");

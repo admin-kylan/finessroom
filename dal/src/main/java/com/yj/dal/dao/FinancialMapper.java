@@ -18,5 +18,9 @@ public interface FinancialMapper {
                                                          @Param("beginDate")String beginDate, @Param("endDate")String endDate,
                                                          @Param("coachName")String coachName, @Param("code")String code);
 
-    List<Map<String, Object>> findCourseAnalysisList(@Param("params") Map<String, String> map);
+    List<Map<String, Object>> findCourseAnalysisList(@Param("eduType")String eduType, @Param("shopId")String shopId,
+                                                     @Param("beginDate")String beginDate, @Param("endDate")String endDate,
+                                                     @Param("weekId")String weekId, @Param("timeId")String timeId,
+                                                     @Param("courseId")String courseId, @Param("coachId")String coachId,
+                                                     @Param("coachName")String coachName, @Param("code")String code);
 }

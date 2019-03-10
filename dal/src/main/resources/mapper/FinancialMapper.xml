@@ -44,7 +44,376 @@
 
     </select>
 
-    <select id="findCourseAnalysisList" parameterType="java.lang.String" resultType="java.util.Map">
+    <!-- 课程分析表 -->
+    <select id="findCourseAnalysisList" parameterType="Map" resultType="java.util.Map">
+        SELECT
+            edu.coach_id couachId,
+            edu.course_Id courseId,
+            edu.shop_id shopId,
+            edu.shop_name shopName,
+            edu.begin_date_plan beginDate,
+            datepart( weekday, edu.begin_date_plan ) - 1 beginDateWeek,
+            edu.coach_name coachName,
+            edu.course_name courseName,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_member_order emo
+                LEFT JOIN fr_education edu1 ON edu1.id = emo.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+            <if test="weekId != null and weekId != ''">
+                and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+            </if>
+            <if test="timeId != null and timeId != ''">
+                and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and edu1.course_id = #{courseId}
+            </if>
+            <if test="coachId != null and coachId != ''">
+                and edu1.coach_id = #{coachId}
+            </if>
+            <if test="coachName != null and coachName != ''">
+                AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+            </if>
+                and edu1.CustomerCode = #{code}
+            ) allMember,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_class_order eco1
+                LEFT JOIN fr_education edu1 ON edu1.id = eco1.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+            ) allClassNum,
+            ( SELECT isnull(SUM ( emo.score ),0) FROM fr_education_member_order emo WHERE emo.education_id = edu.id ) totalScore,
+            ( SELECT COUNT ( 1 ) FROM fr_education_member_order emo WHERE emo.education_id = edu.id ) totalMemberNum,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_class_order eco1
+                LEFT JOIN fr_education edu1 ON edu1.id = eco1.education_id
+            WHERE
+
+                (
+                    datediff(
+                        MINUTE,
+                        ( edu1.begin_date_plan ),
+                    ( edu.begin_date_plan ))) % ( 24 * 60 ) = 0
+                and edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+            ) totalClassNumTypeTime,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_member_order emo
+                LEFT JOIN fr_education edu1 ON edu1.id = emo.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND (
+                    datediff(
+                        MINUTE,
+                        ( edu1.begin_date_plan ),
+                    ( edu.begin_date_plan ))) % ( 24 * 60 ) = 0
+
+            ) totalFinishNumTypeTime,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_member_order emo
+                LEFT JOIN fr_education edu1 ON edu1.id = emo.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND edu1.course_id = edu.course_id
+
+            ) totalMemberNumTypeCourse,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_class_order eco1
+                LEFT JOIN fr_education edu1 ON edu1.id = eco1.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND edu1.course_id = edu.course_id
+
+            ) totalClassNumTypeCourse,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_class_order eco1
+                LEFT JOIN fr_education edu1 ON edu1.id = eco1.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND edu1.coach_id = edu.coach_id
+
+            ) totalClassNumTypeCoach,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_member_order emo
+                LEFT JOIN fr_education edu1 ON edu1.id = emo.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND edu1.coach_id = edu.coach_id
+            ) totalMemberNumTypeCoach,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_class_order eco1
+                LEFT JOIN fr_education edu1 ON edu1.id = eco1.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND (
+                    datediff(
+                        DAY,
+                        ( CONVERT ( VARCHAR ( 15 ), edu1.begin_date_plan, 23 ) + ' 00:00:00' ),
+                    ( CONVERT ( VARCHAR ( 15 ), edu.begin_date_plan, 23 ) + ' 00:00:00' ))) % 7 = 0
+
+            ) totalClassNumTypeWeek,
+            (
+            SELECT COUNT
+                ( 1 )
+            FROM
+                fr_education_member_order emo
+                LEFT JOIN fr_education edu1 ON edu1.id = emo.education_id
+            WHERE
+                edu1.type = ${eduType}
+                AND edu1.is_use = 1
+                AND edu1.status = 2
+                and edu1.shop_id = #{shopId}
+                AND edu1.begin_date_plan >= #{beginDate}
+                AND edu1.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+                <if test="weekId != null and weekId != ''">
+                    and (datepart(weekday, edu1.begin_date_plan) - 1) = ${weekId}
+                </if>
+                <if test="timeId != null and timeId != ''">
+                    and (DateName(hour, edu1.begin_date_plan)) = #{timeId}
+                </if>
+                <if test="courseId != null and courseId != ''">
+                    and edu1.course_id = #{courseId}
+                </if>
+                <if test="coachId != null and coachId != ''">
+                    and edu1.coach_id = #{coachId}
+                </if>
+                <if test="coachName != null and coachName != ''">
+                    AND edu1.coach_name LIKE '%' +#{coachName}+ '%'
+                </if>
+                and edu1.CustomerCode = #{code}
+                AND (
+                    datediff(
+                        DAY,
+                        ( CONVERT ( VARCHAR ( 15 ), edu1.begin_date_plan, 23 ) + ' 00:00:00' ),
+                    ( CONVERT ( VARCHAR ( 15 ), edu.begin_date_plan, 23 ) + ' 00:00:00' ))) % 7 = 0
+
+            ) totalFinishNumTypeWeek
+        FROM
+            fr_education_class_order eco
+            LEFT JOIN fr_education edu ON edu.id = eco.education_id
+        WHERE
+            edu.type = ${eduType}
+            AND edu.is_use = 1
+            AND edu.status = 2
+            and edu.shop_id = #{shopId}
+            AND edu.begin_date_plan >= #{beginDate}
+            AND edu.begin_date_plan <![CDATA[ <= ]]> #{endDate}
+            <if test="weekId != null and weekId != ''">
+                and (datepart(weekday, edu.begin_date_plan) - 1) = ${weekId}
+            </if>
+            <if test="timeId != null and timeId != ''">
+                and (DateName(hour, edu.begin_date_plan)) = #{timeId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and edu.course_id = #{courseId}
+            </if>
+            <if test="coachId != null and coachId != ''">
+                and edu.coach_id = #{coachId}
+            </if>
+            <if test="coachName != null and coachName != ''">
+                AND edu.coach_name LIKE '%' +#{coachName}+ '%'
+            </if>
+            and edu.CustomerCode = #{code}
     </select>
 
 

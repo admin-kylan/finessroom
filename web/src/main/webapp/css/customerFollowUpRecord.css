@@ -8,7 +8,7 @@
 	text-indent: -60px;
 }
 #customerFollowUpRecord fieldset p{
-	margin:15px 0;
+	/* margin:15px 0; */
 }#customerFollowUpRecord fieldset p input{line-height: 25px;}
 #customerFollowUpRecord fieldset p:nth-child(5){
 	margin:15px 0;

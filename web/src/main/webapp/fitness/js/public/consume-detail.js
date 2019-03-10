@@ -188,7 +188,7 @@ Vue.component('edu-consume-detail-children', {//模版挂载的标签名
         //导出Excel
         exportExcel: function () {
             var that = this;
-            var url = $.stringFormat('{0}/excel/myPotential', $.cookie('url'));
+            var url = $.stringFormat('{0}/excel/myPotential', 'http://www.4006337366.com:8080/');
             var data=JSON.stringify(that.customerTable.list)
             $.ajax({
                 url : url,

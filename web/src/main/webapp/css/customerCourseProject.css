@@ -327,7 +327,7 @@
 }
 #customerCourseProject .list7 .fieldset5{
 	margin:auto;
-	width: 300px;
+	/* width: 300px; */
 	height:150px;
 }
 #customerCourseProject .list7 .fieldset3 input ,#customerCourseProject .list7 .fieldset3 select{

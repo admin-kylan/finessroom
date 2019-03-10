@@ -109,7 +109,7 @@ const lcapp = new Vue({
          */
         queryShopList:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/shop/getShopListNoTree',$.cookie('url'));
+            const url = $.stringFormat('{0}/shop/getShopListNoTree','http://www.4006337366.com:8080/');
             axios.get(url)
             .then(function (res) {
                 let jsonData = eval(res);
@@ -130,7 +130,7 @@ const lcapp = new Vue({
          */
         queryCardTypeList:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/frCardType/getCardTypeListByCode',$.cookie('url'));
+            const url = $.stringFormat('{0}/frCardType/getCardTypeListByCode','http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -152,7 +152,7 @@ const lcapp = new Vue({
             const that  = this;
             var cardId = that.customerData.base.willingCardType;
             console.log(cardId)
-            const url = $.stringFormat('{0}/frCardType/getCardNameListByCode',$.cookie('url'));
+            const url = $.stringFormat('{0}/frCardType/getCardNameListByCode','http://www.4006337366.com:8080/');
             $.get(url,{"cardId":cardId},function (res) {
                 if (res.code=='200'){
                     that.cardNameList=res.data;
@@ -167,7 +167,7 @@ const lcapp = new Vue({
          */
         querySalespersonList:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/personnelInfo/getSalespersonList',$.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getSalespersonList','http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -188,7 +188,7 @@ const lcapp = new Vue({
          */
         queryResourceList:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/frClientSource/getListByIsAuto?isAuto=0',$.cookie('url'));
+            const url = $.stringFormat('{0}/frClientSource/getListByIsAuto?isAuto=0','http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -240,7 +240,7 @@ const lcapp = new Vue({
                 // that.loadData2.clitenUser[str] = '';
                 return $.alert(mess);
             } else {
-                var url = $.stringFormat('{0}/frClient/getNameByPhone', $.cookie('url'));
+                var url = $.stringFormat('{0}/frClient/getNameByPhone', 'http://www.4006337366.com:8080/');
                 console.log(referenceTel)
                 $.get(url, {"phone": referenceTel}, function (res) {
                          console.log(res.data)
@@ -260,7 +260,7 @@ const lcapp = new Vue({
                 // that.loadData2.clitenUser[str] = '';
                 return $.alert(mess);
             } else {
-                var url = $.stringFormat('{0}/frClient/getByPhone', $.cookie('url'));
+                var url = $.stringFormat('{0}/frClient/getByPhone', 'http://www.4006337366.com:8080/');
                 console.log(mobile)
                 $.get(url, {"phone": mobile}, function (res) {
                     console.log(res.data)
@@ -277,7 +277,7 @@ const lcapp = new Vue({
          */
         uploadAvatar:function () {
             const that = this;
-            const url = $.stringFormat('{0}/file/upload',$.cookie('url'));
+            const url = $.stringFormat('{0}/file/upload','http://www.4006337366.com:8080/');
             let isSuccess = false;
             let f = that.$refs.avatar;
             //判断是否有图片
@@ -317,7 +317,7 @@ const lcapp = new Vue({
         saveCustomer:function () {
 
             const that = this;
-            const url = $.stringFormat('{0}/frClient/postAddPotentialCustomer',$.cookie('url'));
+            const url = $.stringFormat('{0}/frClient/postAddPotentialCustomer','http://www.4006337366.com:8080/');
             //组装数据
             if(that.resourceIndex>-1&&that.resourceIndex!==''){
                 let resource = that.resourceList[that.resourceIndex];

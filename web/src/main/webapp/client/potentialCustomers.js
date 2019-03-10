@@ -64,7 +64,7 @@ const pcapp = new Vue({
          */
         queryLevel:function () {
             const that = this;
-            const url = $.stringFormat('{0}/frStoreCommon/getQzLevel',$.cookie('url'));
+            const url = $.stringFormat('{0}/frStoreCommon/getQzLevel','http://www.4006337366.com:8080/');
             axios.get(url)
             .then(function (res) {
                 let jsonData = eval(res);
@@ -83,7 +83,7 @@ const pcapp = new Vue({
          */
         queryResourceList:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/frClientSource/getListByIsAuto',$.cookie('url'));
+            const url = $.stringFormat('{0}/frClientSource/getListByIsAuto','http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -115,7 +115,7 @@ const pcapp = new Vue({
             Loading.prototype.show();
             that.$nextTick(function () {
                 try {
-                    const url = $.stringFormat('{0}/frClient/getPotentialList',$.cookie('url'));
+                    const url = $.stringFormat('{0}/frClient/getPotentialList','http://www.4006337366.com:8080/');
                     axios.get(url,{params: params})
                         .then(function (res) {
                             let jsonData = eval(res);
@@ -280,7 +280,7 @@ const pcapp = new Vue({
                         text: '确认',
                         btnClass: 'btn-primary',
                         action: function() {
-                            const url = $.stringFormat('{0}/frClient/postDelPotentialCustomer',$.cookie('url'));
+                            const url = $.stringFormat('{0}/frClient/postDelPotentialCustomer','http://www.4006337366.com:8080/');
                             let param = new FormData();
                             param.append('id', id);
                             axios.post(url,param)

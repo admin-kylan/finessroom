@@ -5115,6 +5115,7 @@ div.XFFS-gray-btns .XFFS-gray-btn {
     float: left;
     margin-left: 3%;
     margin-bottom: 10%;
+    overflow: hidden;
     position: relative;}
 .upload-list li:nth-of-type(5n){
     /*float: right;*/

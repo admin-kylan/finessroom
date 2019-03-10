@@ -373,11 +373,11 @@ public class FrCardController {
         mapS.put("shopId",shopId);
         //设置头像路径
         if(!StringUtils.isEmpty(userURL)){
-            StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true)) ;
-            imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
-            imagePath.append(userURL);
+//            StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true)) ;
+//            imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
+//            imagePath.append(userURL);
             //客户头像路径
-            mapS.put("userURL",imagePath.toString());
+            mapS.put("userURL",userURL);
         }
         Map<String,Integer> mapI = new HashMap<>();
         mapI.put("infoType",CommonUtils.CARD_ORDRE_INFO_TYPE_1);

@@ -90,7 +90,7 @@ const ncapp = new Vue({
          */
         queryStoreList:function(){
             var that = this;
-            var url = $.stringFormat("{0}/shop/getFrCardTypeList",$.cookie('url'));
+            var url = $.stringFormat("{0}/shop/getFrCardTypeList",'http://www.4006337366.com:8080/');
             $.get(url, {
                 },
                 function(res) {
@@ -110,7 +110,7 @@ const ncapp = new Vue({
          */
         queryShopList:function () {
             const that  = this;
-            const url = $.stringFormat('{0}/shop/getShopListNoTree',$.cookie('url'));
+            const url = $.stringFormat('{0}/shop/getShopListNoTree','http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -156,7 +156,7 @@ const ncapp = new Vue({
          */
         uploadAvatar: function () {
             const that = this;
-            const url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+            const url = $.stringFormat('{0}/file/upload', 'http://www.4006337366.com:8080/');
             let isSuccess = false;
             let f = that.$refs.avatar;
             //判断是否有图片
@@ -184,7 +184,7 @@ const ncapp = new Vue({
                     Loading.prototype.hide();
                     $.alert(jsonData['data']['data']['msg'])
                     that.customerData.picLink = jsonData['data']['data']['imgUrl'];
-                    that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                    that.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
                     if (jsonData['data']['code'] === '200') {
                         return true;
                     }
@@ -195,9 +195,9 @@ const ncapp = new Vue({
          * 查询销售顾问列表
          */
         querySalespersonList: function () {
-            console.log($.cookie('url'))
+            console.log('http://www.4006337366.com:8080/')
             const that = this;
-            const url = $.stringFormat('{0}/personnelInfo/getSalespersonList', $.cookie('url'));
+            const url = $.stringFormat('{0}/personnelInfo/getSalespersonList', 'http://www.4006337366.com:8080/');
             axios.get(url)
                 .then(function (res) {
                     let jsonData = eval(res);
@@ -230,7 +230,7 @@ const ncapp = new Vue({
         saveCustomer:function () {
             const that = this;
             console.log(that.customerData)
-            const url = $.stringFormat('{0}/frClient/postAddCustomer',$.cookie('url'));
+            const url = $.stringFormat('{0}/frClient/postAddCustomer','http://www.4006337366.com:8080/');
             //组装数据
             //校验数据
             if(that.customerData.base.clientName===null){

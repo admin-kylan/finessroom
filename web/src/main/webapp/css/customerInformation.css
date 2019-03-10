@@ -18,7 +18,7 @@ html,body{
 #customerInformationTop .customerInformationTop{
     overflow: hidden;
     border: 1px solid #ccc;
-    height: 174px;
+    height: 190px;
     width: 100%;
     border-bottom: none;
 }
@@ -35,20 +35,21 @@ html,body{
 }
 #customerInformationTop .customerrightFrame_box>div img{
     width: 75px;
-    margin: 10px auto;
+    margin: 4px auto;
     height: auto;
     max-height: 75px;
     border-radius: 50%;
+    border: 2px solid #ccc;
 }
 #customerInformationTop .customerrightFrame_box ul{
     width: 90%;
-    margin: 10px auto;
+    margin: 5px auto;
     overflow: hidden;
     float: left;
 }
 #customerInformationTop .customerrightFrame_box ul li{
     float: left;
-    width: 25%;
+    width: 21%;
     margin: 4px 0;
 }
 

@@ -704,14 +704,16 @@ var customerMembershipCard = new Vue({
         }
         that.getCardUserList(1, 10, id);
         that.clientId = id;
+        this.loadData1.shopList = $.cookie("shopid")
         this.loadData5.addSupply1.personnelId = $.cookie("id")
         this.loadData6.addRefund.refundUserId = $.cookie("id")
         this.loadData9.addTranferCar.personnelId = $.cookie("id")
+        this.loadData1.cardInfoMap.personnelId = $.cookie("id")
     },
     methods: {
         // 初始函数
         init: function (t) {
-        	//this.loadPostTicketList();
+        	// this.loadPostTicketList();
         },
         //转让获取票卷
         loadPostTicketList:function(){
@@ -727,7 +729,7 @@ var customerMembershipCard = new Vue({
         			  price:parseFloat(that.payMentMoney.totalPrice).toFixed(2)
         	}
         	
-        	  const url = $.stringFormat('{0}/ticket/postTicketList', $.cookie('url'));
+        	  const url = $.stringFormat('{0}/ticket/postTicketList', 'http://www.4006337366.com:8080/');
               $.get(url, params, function (res) {
                   if (res.code === '200') {
                 	  that.ticketPrice.ticketPriceList = res.data.TicketList;
@@ -775,17 +777,31 @@ var customerMembershipCard = new Vue({
             that.ticketPrice.ticketPriceList=[];
         },
         //获取卡系列
-        getCardType:function(){
+        getCardType:function(shopId){
             var that  = this;
-            var url = $.stringFormat('{0}/frCardType/getCardTypeListByCode',$.cookie('url'));
-            axios.get(url)
+            var url = $.stringFormat('{0}/frCardType/getCardTypeListByCode','http://www.4006337366.com:8080/');
+            // var params = {
+            //     shopid = $.cookie('shopid')
+            // }
+            $.get(url, {
+                shopId: shopId
+            })
                 .then(function (res) {
-                    let jsonData = eval(res);
-                    if(jsonData['data']['code']==='200'){
-                        that.cardTypeList = jsonData['data']['data'];
-                    }else {
-                        $.alert(jsonData['data']['msg'])
-                    }
+                    // var data = res.data
+                    console.log(res)
+                    // if (res.data.code === '200') {
+                        that.cardTypeList = res.data;
+                        console.log(that.cardTypeList)
+                    // } else {
+                    //     $.alert(res.data.msg)
+
+                    // }
+                    // let jsonData = eval(res);
+                    // if(jsonData['data']['code']==='200'){
+                    //     that.cardTypeList = jsonData['data']['data'];
+                    // }else {
+                    //     $.alert(jsonData['data']['msg'])
+                    // }
                 })
                 .catch(function (error) {
                     $.alert("请求发生错误！")
@@ -1195,7 +1211,7 @@ var customerMembershipCard = new Vue({
                 customerCode: that.code,
                 ShopId: $.cookie("shopid"),
             }
-            var url = $.stringFormat('{0}/personnelInfo/getVerification', $.cookie('url'));
+            var url = $.stringFormat('{0}/personnelInfo/getVerification', 'http://www.4006337366.com:8080/');
             that.getPassIsFlag(methName, url, data, that);
         },
         //验证凭证信息封装----------------客户
@@ -1216,7 +1232,7 @@ var customerMembershipCard = new Vue({
                 CustomerCode: that.code,
                 cardId: cardId,
             }
-            var url = $.stringFormat('{0}/frCardLimit/getVerification', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/getVerification', 'http://www.4006337366.com:8080/');
             that.getPassIsFlag(methName, url, data, that);
         },
         getPassIsFlag: function (methName, url, data, that) {
@@ -1300,7 +1316,7 @@ var customerMembershipCard = new Vue({
                 that.givePhone = '';
                 return $.alert("请输入正确的手机号");
             }
-            var url = $.stringFormat("{0}/frClient/getClientList", $.cookie('url'));
+            var url = $.stringFormat("{0}/frClient/getClientList", 'http://www.4006337366.com:8080/');
             $.get(url, {
                     mobile: that.givePhone,
                     CustomerCode: $.cookie("code"),
@@ -1331,7 +1347,7 @@ var customerMembershipCard = new Vue({
                 that.ticketPrice.cardNo = '此会员的会员卡信息未选择';
                 that.ticketPrice.cardUserName = obj.clientName;
             }
-            var url = $.stringFormat('{0}/frCard/queryByFrCardListByStatus', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/queryByFrCardListByStatus', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     page: -1,
                     rows: -1,
@@ -1381,7 +1397,7 @@ var customerMembershipCard = new Vue({
         //获取销售门店列表
         getMarketShopList: function () {
             var that = this;
-            var url = $.stringFormat('{0}/shop/getMarketShopList', $.cookie('url'));
+            var url = $.stringFormat('{0}/shop/getMarketShopList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     code: that.code,//（0为获取上次添加卡类型时间，在这边无意义）
                 },
@@ -1404,7 +1420,7 @@ var customerMembershipCard = new Vue({
         },
         //获取销售人员列表
         getMarketShopPeople: function (shop_Id, that) {
-            var url = $.stringFormat('{0}/personnelInfo/getMarketUserList', $.cookie('url'));
+            var url = $.stringFormat('{0}/personnelInfo/getMarketUserList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     shopId: shop_Id,//门店id
                     code: that.code,
@@ -1428,7 +1444,7 @@ var customerMembershipCard = new Vue({
                 limit = page.rows;
                 page = page.page;
             }
-            var url = $.stringFormat('{0}/frCard/queryUserCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/queryUserCardList', 'http://www.4006337366.com:8080/');
             var data = {
                 page: page,
                 rows: limit,
@@ -1499,7 +1515,7 @@ var customerMembershipCard = new Vue({
         //获取会员卡使用限定列表
         getCardLimitList: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frCardLimit/getCardLimitList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/getCardLimitList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     cardId: that.cardId,
                     code: that.code
@@ -1529,7 +1545,7 @@ var customerMembershipCard = new Vue({
                 return $.alert("请勿太快重复点击");
             }
             that.randomNumber = Math.random().toString(36).substr(2);
-            var url = $.stringFormat('{0}/frCard/saveInvalidTime', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/saveInvalidTime', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     invalidTime: that.loadData0.invalidTime,//过期时间
                     id: that.cardId,//会员卡id
@@ -1561,7 +1577,7 @@ var customerMembershipCard = new Vue({
             if (!id) {
                 return;
             }
-            var url = $.stringFormat('{0}/frCardLimit/deleteCardLimit', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/deleteCardLimit', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     id: id,
                     code: that.code,
@@ -1604,7 +1620,7 @@ var customerMembershipCard = new Vue({
             if (!that.loadData0.userPasswd) {
                 return $.alert("使用密码不能为空");
             }
-            var url = $.stringFormat('{0}/frCardLimit/addCardLimit', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/addCardLimit', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     cardId: that.cardId,
                     clientId: that.clientId,
@@ -1634,7 +1650,7 @@ var customerMembershipCard = new Vue({
         //获取会员卡信息
         getOptionsCardList: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frCard/queryByFrCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/queryByFrCardList', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     page: -1,
                     rows: -1,
@@ -1660,7 +1676,7 @@ var customerMembershipCard = new Vue({
             }
             that.loadData7.parentCardId = that.cardId;
             that.maeketUserList = [];
-            var url = $.stringFormat('{0}/frChildCard/getChildCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frChildCard/getChildCardList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     cardId: that.cardId,
                     code: that.code,
@@ -1744,7 +1760,7 @@ var customerMembershipCard = new Vue({
                 handlePersonalId: $.cookie('id'),
                 shareNum: that.loadData7.shareNum,
             }
-            var url = $.stringFormat('{0}/frChildCard/insertOrUpdateChildCard', $.cookie('url'));
+            var url = $.stringFormat('{0}/frChildCard/insertOrUpdateChildCard', 'http://www.4006337366.com:8080/');
             $.post(url, param, function (res) {
                 if (res.code == '200') {
                     $.alert("添加成功");
@@ -1769,7 +1785,7 @@ var customerMembershipCard = new Vue({
             that.getMembershipCard('cardSupply1');
             that.loadData5.SupplyMoney = 0;
             that.maeketUserList = [];
-            var url = $.stringFormat('{0}/frCardSupplyRecord/getCarDsupplyRecordList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardSupplyRecord/getCarDsupplyRecordList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 CustomerCode: that.code,
                 clientId: clientId,
@@ -1801,7 +1817,7 @@ var customerMembershipCard = new Vue({
         //随机生成协议号
         addCardAgreement: function (id) {
             var that = this;
-            var url = $.stringFormat('{0}/frAgreement/addCardAgreement', $.cookie('url'));
+            var url = $.stringFormat('{0}/frAgreement/addCardAgreement', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     code: that.code,
                 },
@@ -1826,7 +1842,7 @@ var customerMembershipCard = new Vue({
                 limit = page.rows;
                 page = page.page;
             }
-            var url = $.stringFormat('{0}/frCardOrderInfo/getCardOrederList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderInfo/getCardOrederList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     page: page,
                     clientId: id,
@@ -1837,6 +1853,9 @@ var customerMembershipCard = new Vue({
                     if (res.code == '200') {
                         that.count = res.data.totalCount;
                         that.loadData1.orderList = res.data.list;
+                        for(var i = 0; i< that.loadData1.orderList.length; i++) {
+                            that.loadData1.orderList[i].serviceLife =  that.loadData1.orderList[i].serviceLife.replace(",", "")
+                        }
                         that.PaginationName = "getCardOrederList";
                         that.getPaginationPage(res);
                     } else {
@@ -1899,9 +1918,9 @@ var customerMembershipCard = new Vue({
             if (!that.loadData1.cardInfoMap.cardNo) {
                 return $.alert("会员卡号不能为空");
             }
-            if (!that.loadData1.cardInfoMap.externalNo) {
-                return $.alert("请输入外部卡号");
-            }
+            // if (!that.loadData1.cardInfoMap.externalNo) {
+            //     return $.alert("请输入外部卡号");
+            // }
             if (!that.loadData1.cardInfoMap.isFlage) {
                 return $.alert("是否设置自动开卡,需选择");
             }
@@ -1954,7 +1973,7 @@ var customerMembershipCard = new Vue({
         //随机生成订单编号
         getOrderNo: function () {
             var that = this;
-            var url = $.stringFormat("{0}/frCardOrderInfo/getOrderNo", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCardOrderInfo/getOrderNo", 'http://www.4006337366.com:8080/');
             $.get(url, {},
                 function (res) {
                     if (res.code == '200') {
@@ -1970,13 +1989,13 @@ var customerMembershipCard = new Vue({
             var that = this;
             that.loadData1.cardInfoMap.totalPrice = 0;       //购卡金额
             that.loadData1.cardInfoMap.giveRightsNum = 0;       //赠送权益
-            that.loadData1.cardInfoMap.isFlage = '';       //是否直接开卡 0，否，1是
+            that.loadData1.cardInfoMap.isFlage = 0;       //是否直接开卡 0，否，1是
             that.loadData1.cardInfoMap.agreementId = '';       //编号协议ID
             that.loadData1.cardInfoMap.agreementNo = '';       //协议编号
             that.loadData1.cardInfoMap.bindTime = 0;       //开卡日期
-            that.loadData1.cardInfoMap.externalNo = 0;       //外部卡号
+            that.loadData1.cardInfoMap.externalNo = '';       //外部卡号
             that.loadData1.cardInfoMap.cardNumId = 0;       //会员卡号规则ID
-            that.loadData1.cardInfoMap.cardNo = 0;       //会员卡号
+            that.loadData1.cardInfoMap.cardNo = '';       //会员卡号
             if (that.loadData1.cardInfoMap.allotSetType == 1) {
                 $.confirm({
                     title: '确认',
@@ -2160,7 +2179,7 @@ var customerMembershipCard = new Vue({
                 supply1: JSON.stringify(addSupply1),
                 payModel: JSON.stringify(payModel)
             };
-            var url = $.stringFormat('{0}/frCardSupplyRecord/addSupply1Ok', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardSupplyRecord/addSupply1Ok', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -2203,7 +2222,7 @@ var customerMembershipCard = new Vue({
             var that = this;
             var clientId = that.clientId;
             var code = that.code;
-            var url = $.stringFormat('{0}/frCardOrderBack/getBlackCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderBack/getBlackCardList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 clientId: clientId,
                 CustomerCode: code,
@@ -2231,7 +2250,7 @@ var customerMembershipCard = new Vue({
             if (careType == 6 || careType == 3) {
                 return;
             }
-            var url = $.stringFormat('{0}/frCardOrderInfo/getBlaceCardData', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderInfo/getBlaceCardData', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 cardId: that.cardId,
                 code: that.code,
@@ -2295,7 +2314,7 @@ var customerMembershipCard = new Vue({
             that.randomNumber = Math.random().toString(36).substr(2);
             var data = that.loadData10.addBlackCard;
             data.CustomerCode = $.cookie("code");
-            var url = $.stringFormat('{0}/frCardOrderBack/toBlackSubimt', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderBack/toBlackSubimt', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -2337,7 +2356,7 @@ var customerMembershipCard = new Vue({
                 CustomerCode: that.code,
                 type: type,
             }
-            var url = $.stringFormat('{0}/frCardOrderStop/getStopCardListByType', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStop/getStopCardListByType', 'http://www.4006337366.com:8080/');
             $.get(url, data, function (res) {
                 if (res.code == '200') {
                     var frCard = res.data.frCard;
@@ -2528,7 +2547,7 @@ var customerMembershipCard = new Vue({
             param.append('childPath', 'avatar/'); //通过append向form对象添加数据
             param.append('frStop', JSON.stringify(data));
             param.append('payModel', JSON.stringify(that.payModel));
-            var url = $.stringFormat('{0}/frCardOrderStop/toAddUpdateLoad', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStop/toAddUpdateLoad', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -2611,7 +2630,7 @@ var customerMembershipCard = new Vue({
                 flag: that.loadData4.addStroData.flag,
                 stopStatus: t,
             }
-            var url = $.stringFormat('{0}/frCardOrderStop/toAddStopType', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStop/toAddStopType', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -2648,7 +2667,7 @@ var customerMembershipCard = new Vue({
             }
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
-            var url = $.stringFormat('{0}/frCardOrderStop/getUpdateStop', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStop/getUpdateStop', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 id: id,
                 CustomerCode: that.code,
@@ -2695,7 +2714,7 @@ var customerMembershipCard = new Vue({
             if (isFlag) {
                 return;
             }
-            var url = $.stringFormat('{0}/frCardOrderStorage/getStorageCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStorage/getStorageCardList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 CustomerCode: that.code,
                 cardId: that.cardId,
@@ -2786,7 +2805,7 @@ var customerMembershipCard = new Vue({
                 storage: JSON.stringify(storage),
                 payModel: JSON.stringify(that.payModel)
             };
-            var url = $.stringFormat('{0}/frCardOrderStorage/addStorageCard', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStorage/addStorageCard', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -2822,7 +2841,7 @@ var customerMembershipCard = new Vue({
             }
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
-            var url = $.stringFormat('{0}/frCardOrderStorage/toDelStorageCard', $.cookie('url'))
+            var url = $.stringFormat('{0}/frCardOrderStorage/toDelStorageCard', 'http://www.4006337366.com:8080/')
             $.get(url, {
                 id: id,
                 storageStatus: storageStatus,
@@ -2888,7 +2907,7 @@ var customerMembershipCard = new Vue({
             data.clientId = that.clientId;
             data.shopId = $.cookie("shopid");
             data.personnelId = $.cookie("id");
-            var url = $.stringFormat('{0}/frCardOrderStorage/toRefundSubimt', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStorage/toRefundSubimt', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -2969,7 +2988,7 @@ var customerMembershipCard = new Vue({
             data.clientId = that.clientId;
             data.shopId = $.cookie("shopid");
             data.personnelId = $.cookie("id");
-            var url = $.stringFormat('{0}/frCardOrderStorage/toTransfersStorage', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStorage/toTransfersStorage', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -3018,7 +3037,7 @@ var customerMembershipCard = new Vue({
             data.CustomerCode = that.code;
             data.id = that.loadData4.terminationId;
 
-            var url = $.stringFormat('{0}/frCardOrderStop/toStopTerminationOK', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStop/toStopTerminationOK', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -3048,7 +3067,7 @@ var customerMembershipCard = new Vue({
             if (isFlag) {
                 return;
             }
-            var url = $.stringFormat('{0}/frCardOrderTransfer/getTransferList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderTransfer/getTransferList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 cardId: that.cardId,
                 CustomerCode: that.code,
@@ -3084,7 +3103,7 @@ var customerMembershipCard = new Vue({
                 $("#spa1").html("输入有误,请输入数字").css("color", "red").css("margin-left", "5px");
                 return;
             }
-            var url = $.stringFormat('{0}/frCardNum/checkCardNum', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardNum/checkCardNum', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     cardNum: cardNum,
                 },
@@ -3105,7 +3124,7 @@ var customerMembershipCard = new Vue({
                 $("#spa").html("输入有误，请输入数字").css("color", "red").css("margin-left", "5px");
                 return;
             }
-            var url = $.stringFormat('{0}/frAgreement/checkCardAgreement', $.cookie('url'));
+            var url = $.stringFormat('{0}/frAgreement/checkCardAgreement', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     agreement: agreement,
                     code: $.cookie("code"),
@@ -3142,7 +3161,7 @@ var customerMembershipCard = new Vue({
             that.loadData8.nextTime = '';
             var clientId = that.clientId;
             var id = $.cookie('id');
-            var url = $.stringFormat('{0}/frCardOrderComplement/getComplementList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderComplement/getComplementList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 clientId: clientId,
                 CustomerCode: that.code,
@@ -3269,7 +3288,7 @@ var customerMembershipCard = new Vue({
                 orderAllotSet: JSON.stringify(orderAllotSet),
                 orderSetIdList: JSON.stringify(orderSetIdList),
             };
-            var url = $.stringFormat('{0}/frCardOrderComplement/addComplementList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderComplement/addComplementList', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -3335,7 +3354,7 @@ var customerMembershipCard = new Vue({
                 }
                 //生成字符串
                 that.randomNumber = Math.random().toString(36).substr(2);
-                var url = $.stringFormat('{0}/frCardOrderComplement/toUpdateOrderStart', $.cookie('url'));
+                var url = $.stringFormat('{0}/frCardOrderComplement/toUpdateOrderStart', 'http://www.4006337366.com:8080/');
                 $.get(url, {
                     id: complementId,
                     personnelId: $.cookie("id"),
@@ -3399,7 +3418,7 @@ var customerMembershipCard = new Vue({
                 orderTransfer: JSON.stringify(tranfer),
                 payModel: JSON.stringify(payModel),
             }
-            var url = $.stringFormat('{0}/frCardOrderTransfer/addTransferSub', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderTransfer/addTransferSub', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -3435,7 +3454,7 @@ var customerMembershipCard = new Vue({
             }
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
-            var url = $.stringFormat('{0}/frCardOrderTransfer/toDelTransferCard', $.cookie('url'))
+            var url = $.stringFormat('{0}/frCardOrderTransfer/toDelTransferCard', 'http://www.4006337366.com:8080/')
             var data = {
                 id: id,
                 transferStatus: transferStatus,
@@ -3466,7 +3485,7 @@ var customerMembershipCard = new Vue({
         //随机生成会员卡号
         addCardNumMet: function (label_Id) {
             var that = this;
-            var url = $.stringFormat('{0}/frCardNum/addCardNums', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardNum/addCardNums', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     code: that.code,
                 },
@@ -3498,19 +3517,20 @@ var customerMembershipCard = new Vue({
         //选择会员卡弹窗
         products: function () {
             var that = this;
-            that.getCardType();
-            //显示会员弹窗
-            if (that.LiIndex != 3) {
-                $('#product').show();
-            }
+            
             //赋值当前门店名称
             var shop = $("#marketShop option:selected").text();
             var shopId = $("#marketShop option:selected").attr("value");
+            that.getCardType(shopId);
+//显示会员弹窗
+if (that.LiIndex != 3) {
+    $('#product').show();
+}
             $("#currentStore").html(shop);
             var type = $("#cardUser").val();
             that.loadData1.cardsList = [];
             //根据门店获取门店下的所有卡种
-            var url = $.stringFormat('{0}/frCardType/getByShopIdList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardType/getByShopIdList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     shopId: shopId,//门店id
                     type: type,//卡种类型
@@ -3581,7 +3601,7 @@ var customerMembershipCard = new Vue({
             var that = this;
             that.loadData1.cardInfoMap.cardTypeId = id;
             $('.newCustomers_maskLayer').hide();
-            var url = $.stringFormat('{0}/frCardType/getFrCardTypeDetails', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardType/getFrCardTypeDetails', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     id: id
                 },
@@ -3626,7 +3646,7 @@ var customerMembershipCard = new Vue({
             }
             that.loadData2.cardOpening = 0;
             that.loadData2.replacementCard = 0;
-            var url = $.stringFormat('{0}/frCardSupplyRecord/getContinueCardList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardSupplyRecord/getContinueCardList', 'http://www.4006337366.com:8080/');
             Loading.prototype.show();
             if (!limit || !id) {
                 id = page.id;
@@ -3685,7 +3705,7 @@ var customerMembershipCard = new Vue({
             var shopList = that.loadData3.shopList;
             //根据门店获取门店下的所有卡种
             var type = that.loadData3.type;
-            var url = $.stringFormat('{0}/frCardType/getByShopIdList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardType/getByShopIdList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     shopId: shopId,//门店id
                     type: type,//卡种类型
@@ -3734,6 +3754,7 @@ var customerMembershipCard = new Vue({
             that.loadData3.totalNum = that.getParemtDate(obj.totalNum, 0);
             that.loadData3.cardTypeId = obj.id;
             that.getTransferFee();
+            that.loadPostTicketList();
         },
         // <!-- 转卡/停卡/冻结 切换-->
         transferCardBoxTops: function (t) {
@@ -3773,7 +3794,7 @@ var customerMembershipCard = new Vue({
                 id: that.shopId,
             };
             //根据门店获取门店下的所有卡种
-            var url = $.stringFormat('{0}/frCardType/getByShopIdList', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardType/getByShopIdList', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     shopId: that.shopId,//门店id
                     type: type,//卡种类型
@@ -3817,7 +3838,7 @@ var customerMembershipCard = new Vue({
             if (that.status == 6) {
                 return $.alert("不能操作历史卡")
             }
-            var url = $.stringFormat("{0}/frCardOrderInfo/queryCardAndType", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCardOrderInfo/queryCardAndType", 'http://www.4006337366.com:8080/');
             $.get(url, {
                     cardId: that.cardId,
                     code: that.code,
@@ -3968,7 +3989,7 @@ var customerMembershipCard = new Vue({
             };
             console.log(that.payMentMoney)
             console.log(JSON.stringify(that.payMentMoney))
-            var url = $.stringFormat('{0}/frCardSupplyRecord/addTransferCard', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardSupplyRecord/addTransferCard', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -4001,7 +4022,7 @@ var customerMembershipCard = new Vue({
             if (t == 1) {
                 type = 4;
             }
-            var url = $.stringFormat("{0}/frCardSupplyRecord/getCarDsupplyRecordList", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCardSupplyRecord/getCarDsupplyRecordList", 'http://www.4006337366.com:8080/');
             $.get(url, {
                 CustomerCode: that.code,
                 clientId: that.clientId,
@@ -4025,7 +4046,7 @@ var customerMembershipCard = new Vue({
                 return $.alert("请选择要操作的会员卡信息");
             }
             //查询可退的总储值金额
-            var url = $.stringFormat('{0}/frCardOrderStorage/getAllBlackStorage', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardOrderStorage/getAllBlackStorage', 'http://www.4006337366.com:8080/');
             $.get(url, {
                     cardId: that.cardId,
                     CustomerCode: that.code,
@@ -4136,7 +4157,7 @@ var customerMembershipCard = new Vue({
 
             that.getOpenCardPopup();
             $('.year2-modal').modal('show');
-            var url = $.stringFormat("{0}/personnelInfo/getPersonnelByShopId", $.cookie('url'));
+            var url = $.stringFormat("{0}/personnelInfo/getPersonnelByShopId", 'http://www.4006337366.com:8080/');
             $.get(url, {
                     CustomerCode: $.cookie("code"),
                     shopId: shopId,
@@ -4460,7 +4481,7 @@ var customerMembershipCard = new Vue({
             param.append('clientId', that.getParemtDate($.cookie('cid'), that.clientId));
             param.append('CustomerCode', that.getParemtDate($.cookie("code"), that.code));
             param.append('cardOpening', that.loadData0.addOpenCard.isFlage);
-            var url = $.stringFormat('{0}/frCard/toAddUpdateLoad', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCard/toAddUpdateLoad', 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,

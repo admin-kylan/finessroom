@@ -96,7 +96,7 @@ var customerTicket = new Vue({
 			const that = this;
 			$('#qyModal').modal('show');
 			
-			  const url = $.stringFormat('{0}/ticket/getSelectTicketEquity', $.cookie('url'));
+			  const url = $.stringFormat('{0}/ticket/getSelectTicketEquity', 'http://www.4006337366.com:8080/');
               $.get(url, {"id":id}, function (res) {
             	  if (res.code === '200') {
                       that.ticketEquityDetail = res.data;
@@ -126,7 +126,7 @@ var customerTicket = new Vue({
             //显示加载中
             Loading.prototype.show();
             that.$nextTick(function () {
-                const url = $.stringFormat('{0}/ticket/getTicketList', $.cookie('url'));
+                const url = $.stringFormat('{0}/ticket/getTicketList', 'http://www.4006337366.com:8080/');
                 $.get(url, params, function (res) {
                     if (res.code === '200') {
                         that.customerTicketPointTable = res.data;
@@ -222,7 +222,7 @@ var customerTicket = new Vue({
         	   //显示加载中
             Loading.prototype.show();
             that.$nextTick(function () {
-                const url = $.stringFormat('{0}/ticket/getTicketSet', $.cookie('url'));
+                const url = $.stringFormat('{0}/ticket/getTicketSet', 'http://www.4006337366.com:8080/');
                 $.get(url, params, function (res) {
                     if (res.code === '200') {
                         that.ticketSetTable = res.data;
@@ -415,7 +415,7 @@ var customerTicket = new Vue({
     			}
     		}
     		console.log("params>>"+params);
-              var url = $.stringFormat('{0}/ticket/postDelTicket', $.cookie('url'));
+              var url = $.stringFormat('{0}/ticket/postDelTicket', 'http://www.4006337366.com:8080/');
          	   axios.post(url, params).then(function (res) {
                     let resData = eval(res);
                     if (resData['data']['code'] === '200') {
@@ -487,7 +487,7 @@ var customerTicket = new Vue({
     		
     		console.log("ticketSetParam>>"+JSON.stringify(ticketSetParam)); 
     		/*
-    		 var url = $.stringFormat('{0}/ticket/postGiveTicketList', $.cookie('url'));
+    		 var url = $.stringFormat('{0}/ticket/postGiveTicketList', 'http://www.4006337366.com:8080/');
 	      	   axios.post(url, ticketSetParam).then(function (res) {0
 	                 let resData = eval(res);
 	                 if (resData['data']['code'] === '200') {
@@ -619,7 +619,7 @@ var customerTicket = new Vue({
                 params = {"clientId": that.clientId,'code':that.customerCode,"rows":10};
             }
                  that.$nextTick(function () {
-                const url = $.stringFormat('{0}/frCard/queryUserCardList', $.cookie('url'));
+                const url = $.stringFormat('{0}/frCard/queryUserCardList', 'http://www.4006337366.com:8080/');
                 $.get(url, params, function (res) {
                     if (res.code === '200') {
                          that.cardUserTable = res.data.list;
@@ -672,7 +672,7 @@ var customerTicket = new Vue({
                  params = {"mobile": that.mobile,"clientName": that.clientName,'code':that.code,"rows":5};
              }
                   that.$nextTick(function () {
-                 const url = $.stringFormat('{0}/frCard/queryUserCardList', $.cookie('url'));
+                 const url = $.stringFormat('{0}/frCard/queryUserCardList', 'http://www.4006337366.com:8080/');
                  $.get(url, params, function (res) {
                      if (res.code === '200') {
                           that.zrCardUserTable = res.data.list;
@@ -728,7 +728,7 @@ var customerTicket = new Vue({
 						};
 			console.log("params--->>>"+JSON.stringify( params) );
         		
-        		 var url = $.stringFormat('{0}/ticket/postTransfer', $.cookie('url'));
+        		 var url = $.stringFormat('{0}/ticket/postTransfer', 'http://www.4006337366.com:8080/');
 	          	   axios.post(url, params).then(function (res) {0
 	                     let resData = eval(res);
 	                     if (resData['data']['code'] === '200') {
@@ -768,7 +768,7 @@ var customerTicket = new Vue({
         	    }
         	},getUserInfo:function(){
         		 var that = this; 
-        		const url = $.stringFormat('{0}/frClient/getClient', $.cookie('url'));
+        		const url = $.stringFormat('{0}/frClient/getClient', 'http://www.4006337366.com:8080/');
                  $.get(url, {"id":$.cookie("cid")}, function (res) {
                 	  let resData = eval(res);
                 	//	console.log("getUserInfo res--->>>"+JSON.stringify( res) );

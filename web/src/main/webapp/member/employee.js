@@ -219,7 +219,7 @@ var right = new Vue({
     var data={
         splitSetId: id
     }
-    var url = $.stringFormat("{0}/frCardTypeSplitSetDd/getBySplitSetId", $.cookie('url'));
+    var url = $.stringFormat("{0}/frCardTypeSplitSetDd/getBySplitSetId", 'http://www.4006337366.com:8080/');
     $.ajax({
         type: "get",
         url: url,
@@ -282,7 +282,7 @@ var right = new Vue({
                 cardTypeId:vm.cardTypeSet.id,
                 code:vm.cardTypeSet.customerCode
             }
-            var url = $.stringFormat("{0}/frCardTypeSplitSet/list", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCardTypeSplitSet/list", 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: "get",
                 url: url,
@@ -300,7 +300,7 @@ var right = new Vue({
     		var data={
 				id:id || 1
 			}
-			var url = $.stringFormat("{0}/frCardTypeSplitSet/get", $.cookie('url'));
+			var url = $.stringFormat("{0}/frCardTypeSplitSet/get", 'http://www.4006337366.com:8080/');
 	        $.ajax({
 	            type: "get",
 	            url: url,
@@ -327,7 +327,7 @@ var right = new Vue({
 		    	var data={
 		    		id:id
 		    	}
-		    	var url = $.stringFormat("{0}/frCardTypeSplitSet/delete", $.cookie('url'));
+		    	var url = $.stringFormat("{0}/frCardTypeSplitSet/delete", 'http://www.4006337366.com:8080/');
 		        $.ajax({
 		            type: "get",
 		            url: url,
@@ -510,7 +510,7 @@ var right = new Vue({
 				splitSetDd:vm.splitSetDd
 //				splitSetDd:JSON.stringify(vm.splitSetDd)
 			}
-			var url = $.stringFormat("{0}/frCardTypeSplitSet/insert", $.cookie('url'));
+			var url = $.stringFormat("{0}/frCardTypeSplitSet/insert", 'http://www.4006337366.com:8080/');
 	        $.ajax({
 	            type: "post",
 	            url: url,
@@ -527,7 +527,7 @@ var right = new Vue({
     	},
     	modifyFq:function(){
     		var vm=this;
-			var url = $.stringFormat("{0}/frCardTypeSplitSet/update", $.cookie('url'));
+			var url = $.stringFormat("{0}/frCardTypeSplitSet/update", 'http://www.4006337366.com:8080/');
 			var data={
 				id:vm.oneSplit.id,
 				cardTypeId:vm.oneSplit.cardTypeId,
@@ -562,7 +562,7 @@ var right = new Vue({
 
             var that = this;
             var data = $("#setTimeform").serialize()
-            var url = $.stringFormat("{0}/frShopCtypeConsumePladdset/setsetTimeList", $.cookie('url'));
+            var url = $.stringFormat("{0}/frShopCtypeConsumePladdset/setsetTimeList", 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: "post",
                 url: url,
@@ -600,7 +600,7 @@ var right = new Vue({
             }
             //that.Pladdsets.consumeId:that.Consumeids;
 
-            var url = $.stringFormat("{0}/frShopCtypeConsumePladdset/setConsumePladdset", $.cookie('url'));
+            var url = $.stringFormat("{0}/frShopCtypeConsumePladdset/setConsumePladdset", 'http://www.4006337366.com:8080/');
             // ajax提交
             axios.post(url, Pladdset)
                 .then(function (res) {
@@ -638,7 +638,7 @@ var right = new Vue({
             $("#setTimeform")[0].reset()//清空
             var that = this;
             that.Consumeids = Consumeid
-            var url = $.stringFormat("{0}/frCategoryItem/selectConsume", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCategoryItem/selectConsume", 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: "post",
                 url: url,
@@ -914,7 +914,7 @@ var right = new Vue({
 
             that.sdaduimItems = []
             that.categoryItemlist = []
-            var url = $.stringFormat("{0}/frCategoryItem/getCategoryItem", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCategoryItem/getCategoryItem", 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: "post",
                 url: url,
@@ -1004,7 +1004,7 @@ var right = new Vue({
             var that = this;
             var ids = new Array();
             ids = that.checkboxs;
-            var url = $.stringFormat("{0}/shop/ShopSdaduimList", $.cookie('url'));
+            var url = $.stringFormat("{0}/shop/ShopSdaduimList", 'http://www.4006337366.com:8080/');
             $.ajax({
                 type: "post",
                 url: url,
@@ -1037,7 +1037,7 @@ var right = new Vue({
             //var id = "72ed7aa546b0a9cf"; // window.parent.getParam();
             var id = window.parent.getParam();
 
-            var url = $.stringFormat("{0}/frCard/getMemberCard", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCard/getMemberCard", 'http://www.4006337366.com:8080/');
             $.ajax({
                 "type": "get",
                 "url": url,
@@ -1138,7 +1138,7 @@ var right = new Vue({
 				return ;
 			}
             that.setCardTypePzfs(); //处理凭证方式
-            var url = $.stringFormat("{0}/frCard/addMemberCard", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCard/addMemberCard", 'http://www.4006337366.com:8080/');
             console.log(that.cardTypeSet)
             if(that.cardTypeSet.zkXffs!=0){
                 that.cardTypeSet.zkSjjg="";
@@ -1177,7 +1177,7 @@ var right = new Vue({
         //保存
         saveItems: function () {
             var that = this;
-            var url = $.stringFormat("{0}/frShopCtypeConsume/addShopCtypeConsume/", $.cookie('url'));
+            var url = $.stringFormat("{0}/frShopCtypeConsume/addShopCtypeConsume/", 'http://www.4006337366.com:8080/');
             if (that.shopCardConsume.list.length < 1 || that.shopCardConsume.list == []) {
                 return;
             }
@@ -1196,7 +1196,7 @@ var right = new Vue({
         //保存项目设置
         saveConsumeSet: function () {
             var that = this;
-            var url = $.stringFormat("{0}/frCategoryItem/setConsume", $.cookie('url'));
+            var url = $.stringFormat("{0}/frCategoryItem/setConsume", 'http://www.4006337366.com:8080/');
             var consume = JSON.stringify(that.cardConsumeSetDTO)
             console.log(consume)
             if (consume == null || consume == '' || consume == [] || consume.size() < 1) {

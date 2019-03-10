@@ -119,7 +119,7 @@ var customerPersonalDetails = new Vue({
         //获取用户
         getUserInfo: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frPersonalDetails/getPersonalDetails', $.cookie('url'));
+            const url = $.stringFormat('{0}/frPersonalDetails/getPersonalDetails', 'http://www.4006337366.com:8080/');
             var clientId = $.cookie("cid")//取出值
             $.get(url, {"clientId": clientId}, function (res) {
                 that.ClientInfo = res.data;
@@ -131,11 +131,11 @@ var customerPersonalDetails = new Vue({
         getDetails: function () {
             const that = this;
             var cid = $.cookie("cid");
-            const url2 = $.stringFormat('{0}/frClientLifeRelate/getDetails', $.cookie('url'));
+            const url2 = $.stringFormat('{0}/frClientLifeRelate/getDetails', 'http://www.4006337366.com:8080/');
             $.get(url2,{"clientId":cid}, function (res) {
                 that.UserLifeContent = res.data;
             });
-            const url1 = $.stringFormat('{0}/frClientLifeType/getDetails', $.cookie('url'));
+            const url1 = $.stringFormat('{0}/frClientLifeType/getDetails', 'http://www.4006337366.com:8080/');
             $.get(url1, function (res) {
                 that.UserLifeInfo = res.data;
             });
@@ -154,7 +154,7 @@ var customerPersonalDetails = new Vue({
                 }
             }, 200)
 
-            const url3 = $.stringFormat('{0}/frClientSource/getSource', $.cookie('url'));
+            const url3 = $.stringFormat('{0}/frClientSource/getSource', 'http://www.4006337366.com:8080/');
             $.get(url3, {"cid": cid}, function (res) {
                 that.UserSource = res.data.frClientSources;
                 setTimeout(function () {
@@ -173,11 +173,11 @@ var customerPersonalDetails = new Vue({
         getSports: function () {
             const that = this;
             var cid = $.cookie("cid");
-            const url = $.stringFormat('{0}/frClientMotionType/getSports', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientMotionType/getSports', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.SportInfo = res.data;
             })
-            const ur2 = $.stringFormat('{0}/frClientMotionRelate/getSports', $.cookie('url'));
+            const ur2 = $.stringFormat('{0}/frClientMotionRelate/getSports', 'http://www.4006337366.com:8080/');
             $.get(ur2,{"clientId":cid}, function (res) {
                 that.Sportchecked = res.data;
             })
@@ -204,11 +204,11 @@ var customerPersonalDetails = new Vue({
         getWorks: function () {
             const that = this;
             var cid = $.cookie("cid");
-            const url = $.stringFormat('{0}/frClientWorkType/getWorks', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientWorkType/getWorks', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.WorkInfo = res.data;
             })
-            const ur2 = $.stringFormat('{0}/frClientWorkRelate/getWorks', $.cookie('url'));
+            const ur2 = $.stringFormat('{0}/frClientWorkRelate/getWorks', 'http://www.4006337366.com:8080/');
             $.get(ur2,{"clientId":cid}, function (res) {
                 that.Workchecked = res.data;
             })
@@ -237,12 +237,12 @@ var customerPersonalDetails = new Vue({
         getMentality: function () {
             const that = this;
             var cid = $.cookie("cid");
-            const url = $.stringFormat('{0}/frClientMentalityType/getMentality', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientMentalityType/getMentality', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
 
                 that.MentalityInfo = res.data;
             })
-            const ur2 = $.stringFormat('{0}/frClientMentalityRelate/getMentality', $.cookie('url'));
+            const ur2 = $.stringFormat('{0}/frClientMentalityRelate/getMentality', 'http://www.4006337366.com:8080/');
             $.get(ur2,{"clientId":cid},function (res) {
                 that.Mentalitychecked = res.data;
             })
@@ -272,7 +272,7 @@ var customerPersonalDetails = new Vue({
         getFamily: function () {
             var that = this;
             var cid = $.cookie("cid");
-            var url = $.stringFormat('{0}/frClientFamily/getFamily', $.cookie('url'));
+            var url = $.stringFormat('{0}/frClientFamily/getFamily', 'http://www.4006337366.com:8080/');
             $.get(url, {"clientId": cid}, function (res) {
                 that.FamilyInfo = res.data;
             })
@@ -280,7 +280,7 @@ var customerPersonalDetails = new Vue({
         //获得日期
         getSaveDate: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frClientArchives/getArchives', $.cookie('url'));
+            var url = $.stringFormat('{0}/frClientArchives/getArchives', 'http://www.4006337366.com:8080/');
             var cid = $.cookie("cid");
             var type = that.type;
             $.post(url, {"cid": cid, "type": type}, function (res) {
@@ -290,7 +290,7 @@ var customerPersonalDetails = new Vue({
                 })
             })
 
-            var typeUrl = $.stringFormat('{0}/frClientArchivesType/getTypeAll', $.cookie('url'));
+            var typeUrl = $.stringFormat('{0}/frClientArchivesType/getTypeAll', 'http://www.4006337366.com:8080/');
             $.get(typeUrl, {"type": type}, function (res) {
                 that.date = formatDate(new Date());
                 if (type == 1) {
@@ -336,7 +336,7 @@ var customerPersonalDetails = new Vue({
             var type = that.type;
             var cid = $.cookie("cid");
             that.dateNow=date;
-            const url = $.stringFormat('{0}/frClientArchivesRelate/getRelate', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientArchivesRelate/getRelate', 'http://www.4006337366.com:8080/');
             $.post(url, {"type": type, "date": date, "cid": cid}, function (res) {
                 that.Skinchecked = res.data.frClientArchivesRelates;
                 console.log(res.data.frClientArchivesRelatePics)
@@ -400,7 +400,7 @@ var customerPersonalDetails = new Vue({
             var type = that.type;
             var cid = $.cookie("cid");
             that.dateNow=date;
-            const url = $.stringFormat('{0}/frClientArchivesRelate/getRelate', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientArchivesRelate/getRelate', 'http://www.4006337366.com:8080/');
             $.post(url, {"type": type, "date": date, "cid": cid}, function (res) {
                 that.Hairchecked = res.data.frClientArchivesRelates;
                 if (res.data.frClientArchivesRelatePics.length != 0) {
@@ -461,7 +461,7 @@ var customerPersonalDetails = new Vue({
             var type = that.type;
             var cid = $.cookie("cid");
             that.dateNow=date;
-            const url2 = $.stringFormat('{0}/frClientArchivesRelate/getRelate', $.cookie('url'));
+            const url2 = $.stringFormat('{0}/frClientArchivesRelate/getRelate', 'http://www.4006337366.com:8080/');
             $.post(url2, {"type": type, "date": date, "cid": cid}, function (res) {
                 that.Plasticitychecked = res.data.frClientArchivesRelates;
                 if (res.data.frClientArchivesRelatePics.length != 0) {
@@ -585,7 +585,7 @@ var customerPersonalDetails = new Vue({
                         $('.familytr').eq(index).children('td').eq(i).html(text)
                 }
             }
-            const url = $.stringFormat('{0}/frClientFamily/updateFamily', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientFamily/updateFamily', 'http://www.4006337366.com:8080/');
             var family = JSON.stringify(that.FamilyInfo[index])
             var cid = $.cookie("cid");
             $.get(url, {"frClientFamilystr": family, "cid": cid}, function (res) {
@@ -647,7 +647,7 @@ var customerPersonalDetails = new Vue({
             } else {
                 that.FamilyInfo.push(list)
                 listthis.remove()
-                const url = $.stringFormat('{0}/frClientFamily/updateFamily', $.cookie('url'));
+                const url = $.stringFormat('{0}/frClientFamily/updateFamily', 'http://www.4006337366.com:8080/');
                 var family = JSON.stringify(that.FamilyInfo[index])
                 that.addfamilyunm = 0
                 var cid = $.cookie("cid");
@@ -660,7 +660,7 @@ var customerPersonalDetails = new Vue({
         deleteFamily: function (id, index) {
             var del = confirm('确认删除吗?')
             if (del == true) {
-                const url = $.stringFormat('{0}/frClientFamily/delFamily', $.cookie('url'));
+                const url = $.stringFormat('{0}/frClientFamily/delFamily', 'http://www.4006337366.com:8080/');
                 $.get(url, {"id": id}, function (res) {
                     $('.familytr').eq(index).remove()
                     alert(res.msg)
@@ -674,12 +674,12 @@ var customerPersonalDetails = new Vue({
             const that = this;
             //获取类型
             var cid = $.cookie("cid");
-            const url = $.stringFormat('{0}/frClientPhysiologyType/getPsychology', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientPhysiologyType/getPsychology', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.PsychologyInfo = res.data;
             })
             //获取内容
-            const ur2 = $.stringFormat('{0}/frClientPhysiologyRelate/getPsychology', $.cookie('url'));
+            const ur2 = $.stringFormat('{0}/frClientPhysiologyRelate/getPsychology', 'http://www.4006337366.com:8080/');
             $.get(ur2,{"clientId":cid}, function (res) {
                 that.Psychologychecked = res.data;
             })
@@ -741,7 +741,7 @@ var customerPersonalDetails = new Vue({
             const that = this;
             index;
             console.log(index)
-            const rurl = $.stringFormat('{0}/roleInfo/findAll', $.cookie('url'));
+            const rurl = $.stringFormat('{0}/roleInfo/findAll', 'http://www.4006337366.com:8080/');
             var el = event.currentTarget;
             $.get(rurl, function (res) {
                 var html = '<tr class="' + "tr1" + '">' +
@@ -768,7 +768,7 @@ var customerPersonalDetails = new Vue({
         RoleChange: function (e, index) {
             const that = this;
             console.log(index)
-            const url = $.stringFormat('{0}/roleInfo/getRoleName', $.cookie('url'));
+            const url = $.stringFormat('{0}/roleInfo/getRoleName', 'http://www.4006337366.com:8080/');
             var firstName = $(e).find("option:selected").text();
             $.get(url, {"firstName": firstName}, function (res) {
                 var roleName = JSON.stringify(res.data.firstName);
@@ -780,7 +780,7 @@ var customerPersonalDetails = new Vue({
                 that.upnameid = roleid
             })
             //根据角色修改联系方式
-            const url2 = $.stringFormat('{0}/personlRole/getPersonlByRole', $.cookie('url'));
+            const url2 = $.stringFormat('{0}/personlRole/getPersonlByRole', 'http://www.4006337366.com:8080/');
             var rid = $(e).find("option:selected").val();
             $.get(url2, {"rid": rid}, function (res) {
                 var html = '<select   name="" id="">';
@@ -805,7 +805,7 @@ var customerPersonalDetails = new Vue({
         //教练修改
         coachUpdate: function (index) {
             const that = this;
-            const url = $.stringFormat('{0}/roleInfo/findAll', $.cookie('url'));
+            const url = $.stringFormat('{0}/roleInfo/findAll', 'http://www.4006337366.com:8080/');
             if (that.upnum == 0) {
                 that.upnum = 1
                 var html = '<span class="toRed" onclick="customerPersonalDetails.coachConfirmation(this,' + index + ')">确认</span>'
@@ -870,7 +870,7 @@ var customerPersonalDetails = new Vue({
         //基础档案保存
         save1: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frPersonalDetails/updatePersonalDetails', $.cookie('url'));
+            const url = $.stringFormat('{0}/frPersonalDetails/updatePersonalDetails', 'http://www.4006337366.com:8080/');
             var frClient = JSON.stringify(that.ClientInfo);
             $.ajax({
                 type: 'POST',
@@ -890,7 +890,7 @@ var customerPersonalDetails = new Vue({
         //生活详情保存
         saveDetails: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frClientLifeRelate/saveDetails', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientLifeRelate/saveDetails', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='character']:checked").each(function () {
                 list.push($(this).val());
@@ -929,7 +929,7 @@ var customerPersonalDetails = new Vue({
         //保存运动档案
         saveSports: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frClientMotionRelate/saveSports', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientMotionRelate/saveSports', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='shape']:checked").each(function () {
                 list.push($(this).val());
@@ -970,7 +970,7 @@ var customerPersonalDetails = new Vue({
         //保存工作行业
         saveWork: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frClientWorkRelate/saveWorks', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientWorkRelate/saveWorks', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='industry']:checked").each(function () {
                 list.push($(this).val());
@@ -999,7 +999,7 @@ var customerPersonalDetails = new Vue({
         //保存心理状况
         saveMentality: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frClientMentalityRelate/saveMentality', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientMentalityRelate/saveMentality', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='sleepHabits']:checked").each(function () {
                 list.push($(this).val());
@@ -1028,7 +1028,7 @@ var customerPersonalDetails = new Vue({
         //保存生理状况
         savePsychology: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frClientPhysiologyRelate/savePsychology', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientPhysiologyRelate/savePsychology', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='medical']:checked").each(function () {
                 list.push($(this).val());
@@ -1075,7 +1075,7 @@ var customerPersonalDetails = new Vue({
             const that = this;
             var date = that.date;
             console.log(date)
-            const url = $.stringFormat('{0}/frClientArchivesRelate/saveRelate', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientArchivesRelate/saveRelate', 'http://www.4006337366.com:8080/');
             var list = [];
             var imgList = that.imagesList;
             console.log(imgList)
@@ -1170,7 +1170,7 @@ var customerPersonalDetails = new Vue({
                 alert(JSON.stringify(res.msg));
             });
 
-            const imgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/savePic', $.cookie('url'));
+            const imgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/savePic', 'http://www.4006337366.com:8080/');
             var param = new FormData();
             console.log(that.imageFiles)
             for (var i = 0; i < that.imageFiles.length; i++) {
@@ -1192,7 +1192,7 @@ var customerPersonalDetails = new Vue({
                 cache: false
             })
             console.log(that.delImg)
-            const delImgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/delPic', $.cookie('url'));
+            const delImgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/delPic', 'http://www.4006337366.com:8080/');
             var list = JSON.stringify(that.delImg).replace("[", "").replace("]", "").replace(/\"/g, "");
             if (that.delImg != '' || that.delImg != null || that.delImg != []) {
                 $.get(delImgUrl, {"pids": list}, function (res) {
@@ -1206,7 +1206,7 @@ var customerPersonalDetails = new Vue({
             const that = this;
 
             var date = that.date;
-            const url = $.stringFormat('{0}/frClientArchivesRelate/saveRelate', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientArchivesRelate/saveRelate', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='hairColor']:checked").each(function () {
                 list.push($(this).val());
@@ -1266,7 +1266,7 @@ var customerPersonalDetails = new Vue({
             if (leng.length > 0) {
                 isFlage = that.toImagesIsFlage(leng, isFlage);
             }
-            const imgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/savePic', $.cookie('url'));
+            const imgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/savePic', 'http://www.4006337366.com:8080/');
             var param = new FormData();
             console.log(that.imageFiles)
             for (var i = 0; i < that.imageFiles.length; i++) {
@@ -1288,7 +1288,7 @@ var customerPersonalDetails = new Vue({
                 cache: false
             })
             console.log(that.delImg)
-            const delImgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/delPic', $.cookie('url'));
+            const delImgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/delPic', 'http://www.4006337366.com:8080/');
             var list = JSON.stringify(that.delImg).replace("[", "").replace("]", "").replace(/\"/g, "");
             if (that.delImg != '' || that.delImg != null || that.delImg != []) {
                 $.get(delImgUrl, {"pids": list}, function (res) {
@@ -1301,7 +1301,7 @@ var customerPersonalDetails = new Vue({
         savePlasticity: function () {
             const that = this;
             var date = that.date;
-            const url = $.stringFormat('{0}/frClientArchivesRelate/saveRelate', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientArchivesRelate/saveRelate', 'http://www.4006337366.com:8080/');
             var list = [];
             $("input[name='face']:checked").each(function () {
                 list.push($(this).val());
@@ -1356,7 +1356,7 @@ var customerPersonalDetails = new Vue({
             if (leng.length > 0) {
                 isFlage = that.toImagesIsFlage(leng, isFlage);
             }
-            const imgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/savePic', $.cookie('url'));
+            const imgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/savePic', 'http://www.4006337366.com:8080/');
             var param = new FormData();
             console.log(that.imageFiles)
             for (var i = 0; i < that.imageFiles.length; i++) {
@@ -1407,7 +1407,7 @@ var customerPersonalDetails = new Vue({
 
 
             console.log(that.delImg)
-            const delImgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/delPic', $.cookie('url'));
+            const delImgUrl = $.stringFormat('{0}/frClientArchivesRelatePic/delPic', 'http://www.4006337366.com:8080/');
             var list = JSON.stringify(that.delImg).replace("[", "").replace("]", "").replace(/\"/g, "");
             if (that.delImg != '' || that.delImg != null || that.delImg != []) {
                 $.get(delImgUrl, {"pids": list}, function (res) {
@@ -1556,7 +1556,7 @@ var customerPersonalDetails = new Vue({
             var type = that.type;
             var cid = $.cookie("cid");
             if (num == 1) {
-                var url = $.stringFormat('{0}/excel/getSkin', $.cookie('url'));
+                var url = $.stringFormat('{0}/excel/getSkin', 'http://www.4006337366.com:8080/');
                 var data = JSON.stringify(that.Skinchecked)
                 if (data === '{}' || data === '[]' || that.Skinchecked.length == 0) {
                     alert("未选中内容");
@@ -1585,7 +1585,7 @@ var customerPersonalDetails = new Vue({
                     form.submit();//表单提交
                 }
             } else if (num == 2) {
-                var url = $.stringFormat('{0}/excel/getHair', $.cookie('url'));
+                var url = $.stringFormat('{0}/excel/getHair', 'http://www.4006337366.com:8080/');
                 var data = JSON.stringify(that.Hairchecked)
                 if (data === '{}' || data === '[]' || that.Hairchecked.length == 0) {
                     alert("未选中内容");
@@ -1614,7 +1614,7 @@ var customerPersonalDetails = new Vue({
                     form.submit();//表单提交
                 }
             } else if (num == 3) {
-                var url = $.stringFormat('{0}/excel/getPlasticity', $.cookie('url'));
+                var url = $.stringFormat('{0}/excel/getPlasticity', 'http://www.4006337366.com:8080/');
                 var data = JSON.stringify(that.Plasticitychecked)
                 if (data === '{}' || data === '[]' || that.Plasticitychecked.length == 0) {
                     alert("未选中内容");

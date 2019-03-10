@@ -168,7 +168,7 @@ var serviceRecord = new Vue({
 				   return;
 			   }
 			   
-			   var url = $.stringFormat('{0}/serviceRecord/addServiceRecord', $.cookie('url'));
+			   var url = $.stringFormat('{0}/serviceRecord/addServiceRecord', 'http://www.4006337366.com:8080/');
 	            axios.post(url, that.serviceRecord).then(function (res) {
 	                let resData = eval(res);
 	                if (resData['data']['code'] === '200') {
@@ -197,7 +197,7 @@ var serviceRecord = new Vue({
             //显示加载中
             Loading.prototype.show();
             that.$nextTick(function () {
-                const url = $.stringFormat('{0}/serviceRecord/queryServiceRecordList', $.cookie('url'));
+                const url = $.stringFormat('{0}/serviceRecord/queryServiceRecordList', 'http://www.4006337366.com:8080/');
                 $.get(url, params, function (res) {
                     if (res.code === '200') {
                         that.serviceRecordTable = res.data;
@@ -279,7 +279,7 @@ var serviceRecord = new Vue({
             }
 
          
-            var url = $.stringFormat('{0}/serviceRecord/serviceProcess', $.cookie('url'));
+            var url = $.stringFormat('{0}/serviceRecord/serviceProcess', 'http://www.4006337366.com:8080/');
             axios.post(url, serviceProcessRecord).then(function (res) {
                 let resData = eval(res);
                 if (resData['data']['code'] === '200') {
@@ -321,7 +321,7 @@ var serviceRecord = new Vue({
         	that.authorProcess.id = that.id;
         	that.authorProcess.status = 3;
         	
-            var url = $.stringFormat('{0}/serviceRecord/serviceProcess', $.cookie('url'));
+            var url = $.stringFormat('{0}/serviceRecord/serviceProcess', 'http://www.4006337366.com:8080/');
         	   axios.post(url, that.authorProcess).then(function (res) {
                    let resData = eval(res);
                    if (resData['data']['code'] === '200') {
@@ -347,7 +347,7 @@ var serviceRecord = new Vue({
             if(a){  
                     //alert("继续下一题");  
              	var successProcessRecord={"status":4,"id":id};
-             	 var url = $.stringFormat('{0}/serviceRecord/serviceProcess', $.cookie('url'));
+             	 var url = $.stringFormat('{0}/serviceRecord/serviceProcess', 'http://www.4006337366.com:8080/');
           	   axios.post(url, successProcessRecord).then(function (res) {
                      let resData = eval(res);
                      if (resData['data']['code'] === '200') {
@@ -419,7 +419,7 @@ var serviceRecord = new Vue({
      } , //获取部门信息
      loadDepartment:function(){
     	 const that = this;
-       	 var url = $.stringFormat('{0}/department/queryDepartmentList', $.cookie('url'));
+       	 var url = $.stringFormat('{0}/department/queryDepartmentList', 'http://www.4006337366.com:8080/');
     	   axios.get(url, null).then(function (res) {
                let resData = eval(res);
                if (resData['data']['code'] === '200') {
@@ -445,7 +445,7 @@ var serviceRecord = new Vue({
     	 }
     	 console.log("id>>>"+id);
      	 const that = this;
-       	 var url = $.stringFormat('{0}/personnelInfo/getMarketUserList?shopId='+id, $.cookie('url'));
+       	 var url = $.stringFormat('{0}/personnelInfo/getMarketUserList?shopId='+id, 'http://www.4006337366.com:8080/');
     	   axios.get(url, null).then(function (res) {
                let resData = eval(res);
                //if (resData['data']['code'] === '200') {
@@ -462,7 +462,7 @@ var serviceRecord = new Vue({
      departmentSelect:function (id){
  		console.log("departmentSelect>>>"+id);
  		 const that = this;
-       	 var url = $.stringFormat('{0}/personnelInfo/getMarketUserList?shopId='+id, $.cookie('url'));
+       	 var url = $.stringFormat('{0}/personnelInfo/getMarketUserList?shopId='+id, 'http://www.4006337366.com:8080/');
     	   axios.get(url, null).then(function (res) {
                let resData = eval(res);
             	   that.personnelInfoList = resData['data']['data']['data'] ;

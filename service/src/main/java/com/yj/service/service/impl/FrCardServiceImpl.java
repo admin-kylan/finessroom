@@ -761,6 +761,17 @@ public class FrCardServiceImpl extends BaseServiceImpl<FrCardMapper, FrCard> imp
         if (frCardLimit != null) {
             frCardLimit.setCardId(frCard.getId());
             limitService.insert(frCardLimit);
+        }else{
+            FrCardLimit limit = new FrCardLimit();
+            limit.setId(UUIDUtils.generateGUID());
+            limit.setCustomerCode(frCard.getCustomerCode());
+            limit.setClientId(frCard.getClientId());
+            limit.setCardId(frCard.getId());
+            limit.setUsePasswd("0");
+            limit.setUsing(true);
+            limit.setType(2);
+            limit.setCreateTime(new Date());
+            limitService.insert(limit);
         }
         return JsonResult.success(true);
     }

@@ -57,7 +57,7 @@ var customerPhysicalFitnessTest = new Vue({
         getSaveDate: function () {
             var cid = $.cookie("cid");
             const that = this;
-            const url = $.stringFormat('{0}/frClientPhysicalTest/getSaveDate', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientPhysicalTest/getSaveDate', 'http://www.4006337366.com:8080/');
             $.get(url, {"cid": cid}, function (res) {
                 that.SaveDateInfo = res.data;
                 console.log(res.data)
@@ -69,7 +69,7 @@ var customerPhysicalFitnessTest = new Vue({
         },
         getPic: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frClientPhysicalTestPic/getPic', $.cookie('url'));
+            var url = $.stringFormat('{0}/frClientPhysicalTestPic/getPic', 'http://www.4006337366.com:8080/');
             $.get(url, {"tid": that.PhysicalInfoOne.id}, function (res) {
                 if (res.data.length != 0) {
                     for (var i = 0; i < res.data.length; i++) {
@@ -85,7 +85,7 @@ var customerPhysicalFitnessTest = new Vue({
         //查询体能测试
         getPhysical: function (date) {
             const that = this;
-            const url = $.stringFormat('{0}/frClientPhysicalTest/getPhysical', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientPhysicalTest/getPhysical', 'http://www.4006337366.com:8080/');
             var time = getNowTime(true);
             var param = new FormData();
             var cid = $.cookie("cid");
@@ -123,7 +123,7 @@ var customerPhysicalFitnessTest = new Vue({
         //保存体能测试
         savePhysical: function () {
             const that = this;
-            var url = $.stringFormat('{0}/personnelInfo/getVerification', $.cookie('url'));
+            var url = $.stringFormat('{0}/personnelInfo/getVerification', 'http://www.4006337366.com:8080/');
             var pass = $("#pass").val();
             if (pass == null || pass == '') {
                 alert("请填写会员确认")
@@ -147,7 +147,7 @@ var customerPhysicalFitnessTest = new Vue({
                 contentType: "application/json;charset=utf-8",
                 success: function (res) {
                     if (res.code == '200') {
-                        const url = $.stringFormat('{0}/frClientPhysicalTest/savePhysical', $.cookie('url'));
+                        const url = $.stringFormat('{0}/frClientPhysicalTest/savePhysical', 'http://www.4006337366.com:8080/');
                         var PhysicalInfo = [];
                         that.PhysicalInfoOne.personalId = jQuery("#select1  option:selected").val();
                         that.PhysicalInfoTwo.personalId = jQuery("#select1  option:selected").val();
@@ -179,7 +179,7 @@ var customerPhysicalFitnessTest = new Vue({
                                     if (leng.length > 0) {
                                         isFlage = that.toImagesIsFlage(leng, isFlage);
                                     }
-                                    const imgUrl = $.stringFormat('{0}/frClientPhysicalTestPic/savePic', $.cookie('url'));
+                                    const imgUrl = $.stringFormat('{0}/frClientPhysicalTestPic/savePic', 'http://www.4006337366.com:8080/');
                                     var param = new FormData();
                                     console.log(that.imageFiles)
                                     for (var i = 0; i < that.imageFiles.length; i++) {
@@ -200,7 +200,7 @@ var customerPhysicalFitnessTest = new Vue({
                                         cache: false
                                     })
                                     console.log(that.delImg)
-                                    const delImgUrl = $.stringFormat('{0}/frClientPhysicalTestPic/delPic', $.cookie('url'));
+                                    const delImgUrl = $.stringFormat('{0}/frClientPhysicalTestPic/delPic', 'http://www.4006337366.com:8080/');
                                     var list = JSON.stringify(that.delImg).replace("[", "").replace("]", "").replace(/\"/g, "");
                                     if (that.delImg != '' || that.delImg != null || that.delImg != []) {
                                         $.get(delImgUrl, {"pids": list}, function (res) {
@@ -223,7 +223,7 @@ var customerPhysicalFitnessTest = new Vue({
         //获得所有角色为教练的人员
         getPersonnel: function () {
             const that = this;
-            const url = $.stringFormat('{0}/personlRole/getCoach', $.cookie('url'));
+            const url = $.stringFormat('{0}/personlRole/getCoach', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.PersonnelInfo = res.data;
                 console.log(that.PersonnelInfo)
@@ -241,7 +241,7 @@ var customerPhysicalFitnessTest = new Vue({
         //获得推荐方案
         getClass: function () {
             const that = this;
-            const url = $.stringFormat('{0}/frClientPhysicalTest/getTrainClass', $.cookie('url'));
+            const url = $.stringFormat('{0}/frClientPhysicalTest/getTrainClass', 'http://www.4006337366.com:8080/');
             $.get(url, function (res) {
                 that.ClassInfo = res.data;
                 console.log(that.ClassInfo)

@@ -37,7 +37,6 @@ public class FrCardTypeController {
      * 加入卡系列、卡种
      * @param frCardType
      * @param ids 关联门店id
-     * @param type  0为卡系列，1为卡种
      * @return
      */
     @PostMapping("/addFrCardType")
@@ -221,13 +220,16 @@ public class FrCardTypeController {
      * @Date: 2018-10-09 9:33
      */
     @GetMapping("/getCardTypeListByCode")
-    public JsonResult getCardTypeListByCode(HttpServletRequest request) throws YJException {
+    public JsonResult getCardTypeListByCode(HttpServletRequest request,FrCardType frCardType) throws YJException {
         String code = CookieUtils.getCookieValue(request, "code", true);
         if (StringUtils.isEmpty(code)) {
             throw new YJException(YJExceptionEnum.CUSTOMERCODE_NOT_FOUND);
         }
         EntityWrapper entityWrapper = new EntityWrapper<>();
-        entityWrapper.setSqlSelect("id,card_type_Name cardTypeName").where("p_id = '0' and CustomerCode = {0}",code);
+        entityWrapper.setSqlSelect("id,card_type_Name cardTypeName").where("p_id = '0' and CustomerCode = {0} and (shop_id = {1} or type_set_state = '1') " +
+                "and card_type_name not like '%员工%' and p_id not in (select id from fr_card_type where card_type_name like '%员工%') and is_using =1",code,frCardType.getShopId());
+
+
         return JsonResult.success(frCardTypeService.selectList(entityWrapper));
     }
 

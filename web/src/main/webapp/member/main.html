@@ -157,7 +157,7 @@
             var userName = $.cookie('name');
             $(".form_box_right_red").html(userName);
             //that.url = $.stringFormat("{0}/JiejingMerchantLogins/GetJiejingMerchantLogin", $.cookie("url"));
-            var url = $.stringFormat("{0}/shop/getStoreList",$.cookie('url'));
+            var url = $.stringFormat("{0}/shop/getStoreList",'http://www.4006337366.com:8080/');
             Loading.prototype.show();
             $.get(url, {
                 type:0,//添加操作
@@ -209,7 +209,7 @@
                 var url = $.stringFormat(
                     "{0}/frCardType/addFrCardType?cardTypeName="
                     +name+"&ids="+Ids+"&ty=0&typeSetState=2&createUserName="+createUserName
-                    +"&CustomerCode="+CustomerCode+"&createUserId="+createUserId+"&cardType="+window.getParam('type'),$.cookie('url'));
+                    +"&CustomerCode="+CustomerCode+"&createUserId="+createUserId+"&cardType="+window.getParam('type'),'http://www.4006337366.com:8080/');
                 Loading.prototype.show();
                 $.ajax({
                     type: "POST",

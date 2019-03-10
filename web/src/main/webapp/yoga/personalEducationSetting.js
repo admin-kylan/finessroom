@@ -292,7 +292,7 @@ new Vue({
             this.addPrivateCourse = false;
         },
         getsettingSdaduimList: function () {
-            let url = $.stringFormat("{0}/frPrivatePackageRelation/sdaduimList", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivatePackageRelation/sdaduimList", 'http://www.4006337366.com:8080/'), that = this;
             if (that.settingSdaduimList.length > 0) {
                 $("#appointModal").modal('show')
                 return;
@@ -316,7 +316,7 @@ new Vue({
             });
         },
         saveSettingInfo: function () {
-            let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frSettingInfo/update/private/setting", 'http://www.4006337366.com:8080/'), that = this;
              // Loading.prototype.show();
             let cks = [], cgs = [];
             $('.settingckCls:checked').each(function () {
@@ -349,7 +349,7 @@ new Vue({
             });
         },
         getPrivateSetting: function () {
-            let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frSettingInfo/get/private/setting", 'http://www.4006337366.com:8080/'), that = this;
              // Loading.prototype.show();
             this.settingSdaduimList = [];
             axios.get(url, {params: {"sdaduimId": this.sdaduimId}})
@@ -378,7 +378,7 @@ new Vue({
                 });
         },
         deletePackage: function (id) {
-            let url = $.stringFormat("{0}/frPrivatePackage/delete", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivatePackage/delete", 'http://www.4006337366.com:8080/'), that = this;
             $.confirm({
                 title: '确认',
                 content: '确认删除?',
@@ -414,7 +414,7 @@ new Vue({
         },
         singleDeleteUsingItem: function (item, index) {
             console.info(item)
-            let url = $.stringFormat("{0}/frPrivatePackageRelation/deleteRelation", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivatePackageRelation/deleteRelation", 'http://www.4006337366.com:8080/'), that = this;
              // Loading.prototype.show();
             axios.get(url, {params: {pakageId: that.listViewCanUsingItemPackageId, courceId: item.courseId}})
                 .then(function (res) {
@@ -461,7 +461,7 @@ new Vue({
             this.getInfo(id, type);
         },
         getInfo: function (id, type) {
-            let url = $.stringFormat("{0}/frPrivatePackage/getById", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivatePackage/getById", 'http://www.4006337366.com:8080/'), that = this;
              // Loading.prototype.show();
             axios.get(url, {params: {id: id}})
                 .then(function (res) {
@@ -603,7 +603,7 @@ new Vue({
                 that.packageData.classCountDesc = "按照" + that.packageData.classCount + "节计算单价，以实际课时数量计费，封顶" + that.packageData.classCount + "节"
             }
             this.packageData.sdaduimId = this.sdaduimId;
-            var url = $.stringFormat("{0}/frPrivatePackage/addOrUpdate", $.cookie('url'))
+            var url = $.stringFormat("{0}/frPrivatePackage/addOrUpdate", 'http://www.4006337366.com:8080/')
             axios.post(url, this.packageData).then(function (res) {
                 var resData = eval(res);
                 if (res.data.code != 500) {
@@ -652,7 +652,7 @@ new Vue({
                 params.shopId = options.val();
             }
             params.sdaduimId = this.sdaduimId;
-            let url = $.stringFormat("{0}/frPrivatePackage/list", $.cookie('url'));
+            let url = $.stringFormat("{0}/frPrivatePackage/list", 'http://www.4006337366.com:8080/');
              // Loading.prototype.show();
             axios.get(url, {params: params})
                 .then(function (res) {
@@ -685,7 +685,7 @@ new Vue({
                     $.alert("服务器异常，获取数据失败")
                 });
 
-            url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", $.cookie('url'));
+            url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", 'http://www.4006337366.com:8080/');
             axios.get(url, {params: params})
                 .then(function (res) {
                     if (res.data.code == 200) {
@@ -701,7 +701,7 @@ new Vue({
                     $.alert("服务器异常，获取数据失败")
                 });
 
-            url = $.stringFormat("{0}/frPrivateCource/list", $.cookie('url'));
+            url = $.stringFormat("{0}/frPrivateCource/list", 'http://www.4006337366.com:8080/');
             axios.get(url, {params: params})
                 .then(function (res) {
 
@@ -755,7 +755,7 @@ new Vue({
             }
         },
         getPrivateList: function (id, index) {
-            let url = $.stringFormat("{0}/frPrivateCource/getActionsByseriesId", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivateCource/getActionsByseriesId", 'http://www.4006337366.com:8080/'), that = this;
              // Loading.prototype.show();
             axios.get(url, {params: {type: 1, traningSeriesId: id}})
                 .then(function (res) {
@@ -774,7 +774,7 @@ new Vue({
                 });
         },
         findChild: function (parantId, index) {
-            let url = $.stringFormat("{0}/frTrainingSeries/list", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frTrainingSeries/list", 'http://www.4006337366.com:8080/'), that = this;
 
             axios.get(url, {params: {type: 1, parentId: parantId, ownType: 1, sdaduimId: this.sdaduimId}})
                 .then(function (res) {
@@ -802,7 +802,7 @@ new Vue({
                         text: '确认',
                         btnClass: 'btn-primary',
                         action: function () {
-                            const url = $.stringFormat("{0}/frPrivateCource/deleteAction", $.cookie('url'));
+                            const url = $.stringFormat("{0}/frPrivateCource/deleteAction", 'http://www.4006337366.com:8080/');
                             axios.get(url, {params: {id: id}})
                                 .then(function (res) {
                                     let resData = eval(res);
@@ -834,7 +834,7 @@ new Vue({
             if (avatarLink === null || avatarLink === '' || typeof avatarLink === 'undefined') {
                 return 'img/addImg.png';  //默认图片
             }
-            return $.stringFormat("{0}/{1}/" + avatarLink, $.cookie('url'), $.cookie('imgPath'));
+            return $.stringFormat("{0}/{1}/" + avatarLink, 'http://www.4006337366.com:8080/', $.cookie('imgPath'));
         },
         updateCourse: function (obj) {
             this.tempImg = 2;
@@ -854,7 +854,7 @@ new Vue({
                     obj.assignTeacherJY = obj.assignTeacher
             }
             if (this.isNoEmpty(obj.privateImage)) {
-                this.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), obj.privateImage);
+                this.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), obj.privateImage);
             }
             if (obj.validTimeType != 1) {
                 obj.validTimeType1 = 2;
@@ -898,7 +898,7 @@ new Vue({
             delete this.privateCourceData.assignTeacherBL;
             delete this.privateCourceData.validTimeType1;
             this.privateCourceData.sdaduimId = this.sdaduimId
-            let url = $.stringFormat("{0}/frPrivateCource/addOrUpdate", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivateCource/addOrUpdate", 'http://www.4006337366.com:8080/'), that = this;
             axios.post(url, this.privateCourceData).then(function (res) {
                 let resData = eval(res);
                 if (res.data.code != 500) {
@@ -939,7 +939,7 @@ new Vue({
          */
         uploadAvatar: function () {
             var that = this;
-            var url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+            var url = $.stringFormat('{0}/file/upload', 'http://www.4006337366.com:8080/');
             //判断是否有图片
             if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
                 $.alert("请选择图片");
@@ -966,7 +966,7 @@ new Vue({
                 Loading.prototype.hide();
                 $.alert(jsonData['data']['data']['msg'])
                 that.privateCourceData.privateImage = jsonData['data']['data']['imgUrl'];
-                that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                that.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
                 if (response.data.code == 200 || response.data.code == '200') {
                     that.imgFile = null;//清空条件
                 }
@@ -1005,7 +1005,7 @@ new Vue({
                 return;
             }
             console.info("课程详情:" + this.editor.txt.text());
-            var url = $.stringFormat('{0}/file/upload', $.cookie('url'));
+            var url = $.stringFormat('{0}/file/upload', 'http://www.4006337366.com:8080/');
             //判断是否有图片
             if (this.tempImg == 1) {
                 if (that.imgFile == null || that.imgFile == 'null' || that.imgFile == '') {
@@ -1029,7 +1029,7 @@ new Vue({
                     var jsonData = eval(response);
                     Loading.prototype.hide();
                     that.privateCourceData.privateImage = jsonData['data']['data']['imgUrl'];
-                    that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                    that.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
                     if (response.data.code == 200 || response.data.code == '200') {
                         that.imgFile = null;//清空条件
                         $("#privateFile").val('')
@@ -1061,7 +1061,7 @@ new Vue({
                         console.log(response.data.code)
                         Loading.prototype.hide();
                         that.privateCourceData.privateImage = jsonData['data']['data']['imgUrl'];
-                        that.imgUrl = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
+                        that.imgUrl = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), jsonData['data']['data']['imgUrl']);
                         if (response.data.code == 200 || response.data.code == '200') {
                             that.imgFile = null;//清空条件
                             $("#privateFile").val('')
@@ -1101,7 +1101,7 @@ new Vue({
         },
         initPrivateCource: function (params, flag) {
             let that = this;
-            let url = $.stringFormat("{0}/frPrivateCource/list", $.cookie('url'));
+            let url = $.stringFormat("{0}/frPrivateCource/list", 'http://www.4006337366.com:8080/');
              // Loading.prototype.show();
             axios.get(url, {params: params})
                 .then(function (res) {
@@ -1165,7 +1165,7 @@ new Vue({
             let that = this;
 
             // let url = "http://localhost:8080/frActionSeries/list";
-            let url = $.stringFormat("{0}/frActionSeries/list?ownType=1&sdaduimId=" + this.sdaduimId, $.cookie('url'));
+            let url = $.stringFormat("{0}/frActionSeries/list?ownType=1&sdaduimId=" + this.sdaduimId, 'http://www.4006337366.com:8080/');
              // Loading.prototype.show();
             axios.get(url)
                 .then(function (res) {
@@ -1194,7 +1194,7 @@ new Vue({
             let that = this;
             that.isok = false;
 
-            let url = $.stringFormat("{0}/frActionSeries/actionList", $.cookie('url'));
+            let url = $.stringFormat("{0}/frActionSeries/actionList", 'http://www.4006337366.com:8080/');
             let data = {
                 seriesId: seriesId,
             };
@@ -1241,7 +1241,7 @@ new Vue({
             let that = this;
             $("#addActionImg" + index).attr('src', 'img/addImg.png');
 
-            let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frAction/addOrUpdate", 'http://www.4006337366.com:8080/');
             let data = this.actionAddData;
             data.seriesId = that.actions[that.actionSettingIndex].id;
             //  // Loading.prototype.show();
@@ -1291,7 +1291,7 @@ new Vue({
             let that = this;
 
 
-            let url = $.stringFormat("{0}/frAction/batchFrAction", $.cookie('url'));
+            let url = $.stringFormat("{0}/frAction/batchFrAction", 'http://www.4006337366.com:8080/');
             let data = {
                 actionIds: this.changeActionIds.join(","),
                 seriesId: this.changeActionSelect,
@@ -1325,7 +1325,7 @@ new Vue({
         //删除动作
         delAction: function (index, actionType) {
             let that = this;
-            let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frAction/addOrUpdate", 'http://www.4006337366.com:8080/');
             actionType.isUsing = 0;
             $.confirm({
                 title: '确认',
@@ -1379,7 +1379,7 @@ new Vue({
             let that = this;
 
 
-            let url = $.stringFormat("{0}/frAction/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frAction/addOrUpdate", 'http://www.4006337366.com:8080/');
             let data = this.actionSettingData;
 
             if (!data.name || data.name == '') {
@@ -1438,7 +1438,7 @@ new Vue({
                     $("#addActionImg" + index).attr('src', this.result);
 
 
-                    let url = $.stringFormat("{0}/file/upload", $.cookie('url'));
+                    let url = $.stringFormat("{0}/file/upload", 'http://www.4006337366.com:8080/');
                     var param = new FormData();
 
                     param.append('file', file); //通过append向form对象添加数据
@@ -1453,7 +1453,7 @@ new Vue({
                         cache: false,
                         success: function (res) {
                             if (res.code == '200') {
-                                object.image = $.stringFormat('{0}{1}{2}', $.cookie('url'), $.cookie('imgPath'), res.data.imgUrl);
+                                object.image = $.stringFormat('{0}{1}{2}', 'http://www.4006337366.com:8080/', $.cookie('imgPath'), res.data.imgUrl);
                                 console.info(res)
                                 console.info(that.actionAddData)
                             } else {
@@ -1474,7 +1474,7 @@ new Vue({
             // $(event.target).addClass('active').siblings().removeClass('active'); 不可用  事件会传递
 
             let that = this;
-            let url = $.stringFormat("{0}/frTrainingSeries/list", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTrainingSeries/list", 'http://www.4006337366.com:8080/');
             let data = {
                 type: type,
                 parentId: parentId,
@@ -1521,9 +1521,9 @@ new Vue({
             };
             let url = '';
             if (this.addSeriesType == 0) {
-                url = $.stringFormat("{0}/frActionSeries/addFrActionSeries", $.cookie('url'));
+                url = $.stringFormat("{0}/frActionSeries/addFrActionSeries", 'http://www.4006337366.com:8080/');
             } else {
-                url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
             }
             jsonData.ownType = 1;
             jsonData.sdaduimId=that.sdaduimId
@@ -1565,7 +1565,7 @@ new Vue({
             let that = this;
 
             // let url = "http://localhost:8080/frTrainingSeries/list";
-            let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", 'http://www.4006337366.com:8080/');
             let data = {
                 type: type,
                 ownType: 1,
@@ -1613,7 +1613,7 @@ new Vue({
         },
         deleteItem: function (index, id, type) {
             var that = this;
-            var url = $.stringFormat("{0}/frTrainingSeries/list", $.cookie('url'));
+            var url = $.stringFormat("{0}/frTrainingSeries/list", 'http://www.4006337366.com:8080/');
             var data = {
                 type: type,
                 parentId: id,
@@ -1660,7 +1660,7 @@ new Vue({
 
             let that = this;
 
-            let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
 
             let jsonData = {
                 name: String(this.addTrainName),
@@ -1696,13 +1696,13 @@ new Vue({
         deleteItemConfirm: function () {
             let that = this;
             if (this.deletItemType == 3) {
-                var url = $.stringFormat("{0}/frTrainingSeries/updateAction", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/updateAction", 'http://www.4006337366.com:8080/');
                 var jsonData = {
                     id: this.deleteItemId,
                     isUsing: 0,
                 };
             } else {
-                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
                 var jsonData = {
                     id: this.deleteItemId,
                     isUsing: 0,
@@ -1773,7 +1773,7 @@ new Vue({
         deleteTrainConfirm: function () {
             let that = this;
 
-            let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
 
             let jsonData = {
                 id: this.deleteTrainId,
@@ -1830,13 +1830,13 @@ new Vue({
             }
             var that = this;
             if (that.updateType == 3) {
-                var url = $.stringFormat("{0}/frTrainingSeries/updateAction", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/updateAction", 'http://www.4006337366.com:8080/');
                 var jsonData = {
                     id: this.updateItemId,
                     name: String(this.updateItemName),
                 };
             } else {
-                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+                var url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
                 var jsonData = {
                     id: this.updateItemId,
                     name: String(this.updateItemName),
@@ -1894,7 +1894,7 @@ new Vue({
             }
             let that = this;
 
-            let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTrainingSeries/addOrUpdate", 'http://www.4006337366.com:8080/');
 
             let jsonData = {
                 id: this.updateTrainId,
@@ -1985,7 +1985,7 @@ new Vue({
             }
             let that = this;
 
-            let url = $.stringFormat("{0}/frTraningClass/list", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTraningClass/list", 'http://www.4006337366.com:8080/');
 
             let jsonData = {
                 traningSeriesId: train.id,
@@ -2039,7 +2039,7 @@ new Vue({
                 $.alert('未选中动作')
                 return
             }
-            let url = $.stringFormat("{0}/frTraningClass/batchAddFrTraningClass", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTraningClass/batchAddFrTraningClass", 'http://www.4006337366.com:8080/');
             if (type == 1) {
                 var jsonData = {
                     traningSeriesId: this.simpleLinkSettingActionSubSelectId,
@@ -2073,7 +2073,7 @@ new Vue({
                                 //that.subTrainClick(this.simpleLinkSettingActionSubSelectId,1);
                                 console.log(jsonData);
 
-                                let url = $.stringFormat("{0}/frTraningClass/list", $.cookie('url'));
+                                let url = $.stringFormat("{0}/frTraningClass/list", 'http://www.4006337366.com:8080/');
 
                                 let jsonData2 = {
                                     traningSeriesId: jsonData.traningSeriesId,
@@ -2112,7 +2112,7 @@ new Vue({
 
                                 console.log(jsonData);
 
-                                let url = $.stringFormat("{0}/frTraningClass/list", $.cookie('url'));
+                                let url = $.stringFormat("{0}/frTraningClass/list", 'http://www.4006337366.com:8080/');
 
                                 let jsonData2 = {
                                     traningSeriesId: jsonData.traningSeriesId,
@@ -2156,7 +2156,7 @@ new Vue({
         delEduAction: function (index, action, type) {
             let that = this;
 
-            let url = $.stringFormat("{0}/frTraningClass/addOrUpdate", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTraningClass/addOrUpdate", 'http://www.4006337366.com:8080/');
 
             let jsonData = {
                 id: action.id,
@@ -2245,7 +2245,7 @@ new Vue({
        */
             let that = this;
 
-            let url = $.stringFormat("{0}/frTraningClass/batchUpdateFrTraningClass", $.cookie('url'));
+            let url = $.stringFormat("{0}/frTraningClass/batchUpdateFrTraningClass", 'http://www.4006337366.com:8080/');
 
             let list = this.mealActionChanges || this.trainActionChanges;
             let count = list.length;
@@ -2299,7 +2299,7 @@ new Vue({
         },
 //					默认课程计划
         defaultCurriculumPlanModal: function () {
-            let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frTrainingSeries/seriesAndActionList", 'http://www.4006337366.com:8080/'), that = this;
             if (that.privateSingleCourse.seriesList.length == 0) {
                 axios.get(url, {params: {type: 1, ownType: 1, sdaduimId: this.sdaduimId}})
                     .then(function (res) {
@@ -2588,7 +2588,7 @@ new Vue({
          * 获取门店场馆信息
          */
         initServerClassRoomSetting: function () {
-            let url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", $.cookie('url')), that = this;
+            let url = $.stringFormat("{0}/frPrivatePackageRelation/shopList", 'http://www.4006337366.com:8080/'), that = this;
             axios.get(url, {params: {}})
                 .then(function (res) {
                     if (res.data.code == 200) {

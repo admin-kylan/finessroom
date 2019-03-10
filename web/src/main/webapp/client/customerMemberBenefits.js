@@ -40,7 +40,7 @@ var customerMemberBenefits = new Vue({
             if (!that.clientId || !that.shopId || !that.code) {
                 return ;
             }
-            var url = $.stringFormat("{0}/frClientPic/getClietnPriceList", $.cookie('url'));
+            var url = $.stringFormat("{0}/frClientPic/getClietnPriceList", 'http://www.4006337366.com:8080/');
             $.get(url, {
                 CustomerCode: that.code,
                 clientId: that.clientId,
@@ -72,7 +72,7 @@ var customerMemberBenefits = new Vue({
                 return ;
             }
             that.limitList = [];
-            var url = $.stringFormat('{0}/frCardLimit/getLimtTypeOne', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/getLimtTypeOne', 'http://www.4006337366.com:8080/');
             $.get(url, {
                 CustomerCode: that.code,
                 clientId: that.clientId,
@@ -128,7 +128,7 @@ var customerMemberBenefits = new Vue({
         addLimtTypeOne:function () {
             var that = this;
             that.randomNumber = Math.random().toString(36).substr(2);
-            var url = $.stringFormat('{0}/frCardLimit/addLimtTypeOne', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/addLimtTypeOne', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     clientId: that.clientId,
                     CustomerCode: that.code,
@@ -169,7 +169,7 @@ var customerMemberBenefits = new Vue({
                 return $.alert("请勿太快重复点击");
             }
             that.randomNumber = Math.random().toString(36).substr(2);
-            var url = $.stringFormat('{0}/frCardLimit/deleteCardLimit', $.cookie('url'));
+            var url = $.stringFormat('{0}/frCardLimit/deleteCardLimit', 'http://www.4006337366.com:8080/');
             $.post(url, {
                     id: id,
                     code: that.code,

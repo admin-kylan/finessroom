@@ -12,7 +12,7 @@
 		<link rel="stylesheet" href="../css/combobox.css" />
 	</head>
 	<body>
-		<div class="wrap">
+		<div class="wrap" id="wrap">
 			<div class="top">报表管理</div>
 			<div class="content clearfix">
 				<div class="left">
@@ -120,33 +120,38 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td>软件园店</td>
-										<td class="deepBlue">2018-07-13</td>
-										<td class="red">星期五</td>
-										<td class="green">15:30</td>
-										<td>Nicolas Klaus</td>
-										<td class="blue">动感单车</td>
-										<td class="orange">0</td>
-										<td class="blue">0</td>
+									<tr v-for="(item, index) in result">
+										<td>{{index + 1}}</td>
+										<td>{{item.shopName}}</td>
+										<td class="deepBlue">{{item.beginDate| toDateyyyyMMdd}}</td>
+										<td class="red">{{item.beginDateWeek| toWeek}}</td>
+										<td class="green">{{item.beginDate| toDateHHmm}}</td>
+										<td>{{item.coachName}}</td>
+										<td class="blue">{{item.courseName}}</td>
+										<td class="orange">{{item.totalScore| toNum}}</td>
+										<td class="blue">{{item.totalScore/item.totalMemberNum| toNum}}</td>
 										<td class="green">1</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
-										<td>30</td>
-										<td class="orange">10</td>
-										<td class="green">3</td>
-										<td>5</td>
+
+										<td>{{item.totalMemberNumTypeCoach| toNum}}</td>
+										<td class="orange">{{item.totalClassNumTypeCoach| toNum}}</td>
+										<td class="green">{{item.totalMemberNumTypeCoach/item.totalClassNumTypeCoach| toNum}}</td>
+										<td>{{(item.allMember/item.allClassNum)/(item.totalMemberNumTypeCoach/item.totalClassNumTypeCoach) | toNum}}</td>
+
+										<td>{{item.totalMemberNumTypeCourse| toNum}}</td>
+										<td class="orange">{{item.totalClassNumTypeCourse| toNum}}</td>
+										<td class="green">{{item.totalMemberNumTypeCourse/item.totalClassNumTypeCourse| toNum}}</td>
+										<td>{{(item.allMember/item.allClassNum)/(item.totalMemberNumTypeCourse/item.totalClassNumTypeCourse )| toNum}}</td>
+
+										<td>{{item.totalFinishNumTypeTime| toNum}}</td>
+										<td class="orange">{{item.totalClassNumTypeTime| toNum}}</td>
+										<td class="green">{{item.totalFinishNumTypeTime/item.totalClassNumTypeTime| toNum}}</td>
+										<td>{{(item.allMember/item.allClassNum)/(item.totalFinishNumTypeTime/item.totalClassNumTypeTime)| toNum}}</td>
+
+										<td>{{item.totalFinishNumTypeWeek| toNum}}</td>
+										<td class="orange">{{item.totalClassNumTypeWeek| toNum}}</td>
+										<td class="green">{{item.totalFinishNumTypeWeek/item.totalClassNumTypeWeek| toNum}}</td>
+										<td>{{(item.allMember/item.allClassNum)/(item.totalFinishNumTypeWeek/item.totalClassNumTypeWeek )| toNum}}</td>
+
 									</tr>
 
 								</tbody>
@@ -160,7 +165,7 @@
 	<script src="../js/jquery-3.3.1.min.js"></script>
 	<script src="../js/jquery.cookie.js"></script>
 	<script src="../js/extendjQuery.js"></script>
-	<!--<script src="../js/setCookie.js"></script>-->
+	<script src="../js/setCookie.js"></script>
 	<script src="../js/dateUtil.js"></script>
 	<script src="../js/combobox.js"></script>
 	<script src="../js/jedate.js"></script>
@@ -204,18 +209,57 @@
 					}
 					return timeFormatDate(val, true)
 				},
-				toNum(val){
+				toDateyyyyMMdd(val){
 					if(!val){
 						return "";
 					}
+					return timeFormatDate(val)
+				},
+				toNum(val){
+					if(!val){
+						return "0";
+					}
 					return parseFloat(val).toFixed(2)
-				}
+				},
+				toWeek(i){
+					let timeTemp = '';
+					if(i==1){
+						timeTemp = "一"
+					}if(i==2){
+						timeTemp = "二"
+					}if(i==3){
+						timeTemp = "三"
+					}if(i==4){
+						timeTemp = "四"
+					}if(i==5){
+						timeTemp = "五"
+					}if(i==6){
+						timeTemp = "六"
+					}if(i==0){
+						timeTemp = "日"
+					}
+					return '星期' + timeTemp;
+				},
+				toDateHHmm(val){
+					let date = new Date(val);
+					let h = date.getHours();
+					h = h < 10 ? ('0' + h) : h;
+					let m = date.getMinutes();
+					m = m < 10 ? ('0' + m) : m;
+					let _time = "";
+					_time += ' '+h + ':' + m;
+					return _time;
+				},
 			},
 			computed: {},
 			watch: {
 
 			},
 			created: function () {
+				this.loadData();
+				//默认值
+				this.beginDate = getMonthStartDate();
+				this.endDate = getMonthEndDate();
 				this.search()
 				this.loadShopList();
 				//时间区域
@@ -243,6 +287,7 @@
 					}
 				});
 
+
 			},
 			methods: {
 				loadData(){
@@ -250,26 +295,36 @@
 						shopId: $.cookie('shopid'),
 						code: $.cookie('code'),
 					}
-					//获取课程 下拉框
+					//获取课程 团教下拉框
 					axiosGetParams(EDUCATION_URL.findCourseList, {CustomerCode: param.code, shopId: param.shopId, eduType: 0}, (res) => {
-						this.courseList.concat(res)
+						if(res){
+							this.courseList = this.courseList.concat(res)
+						}
 					});
-					//获取课程 下拉框
-					axiosGetParams(EDUCATION_URL.findCourseList, {CustomerCode: param.code, shopId: param.shopId, eduType: 0}, (res) => {
-						this.courseList.concat(res)
-					});
+					// //获取课程 私教下拉框
+					// axiosGetParams(EDUCATION_URL.findCourseList, {CustomerCode: param.code, shopId: param.shopId, eduType: 1}, (res) => {
+					// 	if(res){
+					// 		this.courseList = this.courseList.concat(res)
+					// 	}
+					//
+					// });
 
 					//获取教练
-					axiosGetParams(EDUCATION_URL.findCoachList, {code: code, shopId: shopId}, (res) => {
+					axiosGetParams(EDUCATION_URL.findCoachList, {code: param.code, shopId: param.shopId}, (res) => {
 						this.coachList = res;
 					});
 				},
 				showTimeList(){
 					this.timeList = [];
 					let timeObj = {};
+					let beginI = '';
 					for(let i = 0; i < 24; i++){
+						beginI = i;
+						if(i<10){
+							beginI = '0' + i;
+						}
 						timeObj = {
-							time: '0' + i + ':00~0' + i + ':59',
+							time: beginI + ':00~' + beginI + ':59',
 							id: i + "",
 						}
 						this.timeList.push(timeObj);
@@ -294,7 +349,7 @@
 						}if(i==6){
 							timeTemp = "六"
 						}if(i==0){
-							timeTemp = "七"
+							timeTemp = "日"
 						}
 						timeObj = {
 							week: '星期' + timeTemp,
@@ -325,7 +380,7 @@
 						eduType: this.eduType,
 						beginDate: beginDate,
 						endDate: endDate,
-						name: this.searchInput,
+						coachName: this.searchInput,
 						code: $.cookie('code'),
 						weekId: this.weekId,
 						timeId: this.timeId,
@@ -334,7 +389,7 @@
 					}
 					axiosGetParams('financial/findCourseAnalysisList', param, (response) => {
 						this.result = response;
-						console.log(this.result)
+						//console.log(this.result)
 					})
 				}
 			}

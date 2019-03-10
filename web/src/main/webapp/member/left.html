@@ -419,7 +419,7 @@
         created:function () {
             var that = this;
             that.getGeneralStoreList();
-            var url = $.stringFormat("{0}/shop/getFrCardTypeList",$.cookie('url'));
+            var url = $.stringFormat("{0}/shop/getFrCardTypeList",'http://www.4006337366.com:8080/');
             $.get(url, {
                 },
                 function(res) {
@@ -438,7 +438,7 @@
             //获取通用门店卡系列列表
             getGeneralStoreList:function () {
                 var that = this;
-                var url = $.stringFormat("{0}/frCardType/getGeneralStoreList",$.cookie('url'));
+                var url = $.stringFormat("{0}/frCardType/getGeneralStoreList",'http://www.4006337366.com:8080/');
                 $.get(url, {
                     },
                     function(res) {
@@ -452,7 +452,7 @@
                     }
                 );
 
-                var url1 = $.stringFormat("{0}/shop/getFrCardTypeList",$.cookie('url'));
+                var url1 = $.stringFormat("{0}/shop/getFrCardTypeList",'http://www.4006337366.com:8080/');
                 $.get(url1, {
             },
                     function(res) {
@@ -497,7 +497,7 @@
                 var that = this;
                 var storeId = storeId;
                 Loading.prototype.show();
-                var url = $.stringFormat("{0}/frCardType/deleteFrCardType",$.cookie('url'));
+                var url = $.stringFormat("{0}/frCardType/deleteFrCardType",'http://www.4006337366.com:8080/');
                 $.get(url, {
                         id:t,//卡系列id
                         storeId:storeId,//门店id
@@ -522,7 +522,7 @@
                 var that = this;
                 var shopId = shopId;
                 Loading.prototype.show();
-                var url = $.stringFormat("{0}/frCardType/deleteCardType",$.cookie('url'));
+                var url = $.stringFormat("{0}/frCardType/deleteCardType",'http://www.4006337366.com:8080/');
                 $.get(url, {
                         id:t,//卡种id
                         shopId:shopId,//门店id
@@ -548,7 +548,7 @@
             }
             var that = this;
             Loading.prototype.show();
-                var url = $.stringFormat("{0}/frCardType/deleteFrCardType",$.cookie('url'));
+                var url = $.stringFormat("{0}/frCardType/deleteFrCardType",'http://www.4006337366.com:8080/');
             $.get(url, {
                     id:t,//卡系列id
                     storeId:'',//门店id
@@ -592,7 +592,7 @@
                 var url = $.stringFormat(
                     "{0}/frCardType/updateIsUsing?"+"Ids="+ids+
                     "&updateUserName="+ updateUserName +
-                    "&CustomerCode="+CustomerCode+"&updateUserId="+updateUserId+"&show="+show,$.cookie('url'));
+                    "&CustomerCode="+CustomerCode+"&updateUserId="+updateUserId+"&show="+show,'http://www.4006337366.com:8080/');
                 $.ajax({
                     type: "get",
                     url: url,
@@ -635,7 +635,7 @@
             getGeneralStoreNotList:function () {
                 var that = this;
                 Loading.prototype.show();
-                var url = $.stringFormat("{0}/shop/getIsUsingIsTrue",$.cookie('url'));
+                var url = $.stringFormat("{0}/shop/getIsUsingIsTrue",'http://www.4006337366.com:8080/');
                 $.get(url, {
                     },
                     function(res) {
@@ -650,7 +650,7 @@
 
                     }
                 );
-                var url = $.stringFormat("{0}/frCardType/getGeneralStoreNotList",$.cookie('url'))
+                var url = $.stringFormat("{0}/frCardType/getGeneralStoreNotList",'http://www.4006337366.com:8080/')
                 $.get(url, {
                     },
                     function(res) {

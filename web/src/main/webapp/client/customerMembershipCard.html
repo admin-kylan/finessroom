@@ -466,7 +466,7 @@
                             <div class="renewalCard_top">
 								<span>
 									<span>选择会员卡：</span>
-									<select name="1" id="continueCard" @change="toContinueCardList">
+									<select name="1" id="continueCard" @change="toContinueCardList" >
 										<option value="">请选择</option>
                                         <option v-for="item in optionCardLis" :value="item.id" :data="item.shopId"
                                                 :cardNo="item.cardNo" :status="item.a_status" :orderState="item.orderState">
@@ -2438,7 +2438,7 @@
                                 <div class="flex-box-item">
                                     <ul class="upload-list clearfix">
                                         <li v-for="(item,index) in loadData0.imgsList" style="height: 100px;width: 100px" >
-                                            <img  :src="item.srcUrl"  @click="toPictureSelected(item)" />
+                                            <img  :src="item.srcUrl"  @click="toPictureSelected(item)" style="height: 100%"/>
                                         </li>
                                         <li id="toPictureSelected">
                                             <img src="../gym/img/addImg.png"  class="img-responsive"  @click="toPictureSelected" />

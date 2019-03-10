@@ -34,6 +34,13 @@ public class FileController {
     @Value("${fitness.uploadPath}")
     private String filePath;
 
+    @Value("${fitness.url}")
+    private String url;
+
+    @Value("${fitness.imgPath}")
+    private String imgPath;
+
+
     private final Logger log = LoggerFactory.getLogger(FileController.class);
 
     /**
@@ -46,10 +53,7 @@ public class FileController {
         Map<String, String> map = new HashMap<>();
         this.toUpdateLoad(file, childPath, map);
         String message = map.get("msg");
-        StringBuffer imagePath = new StringBuffer(CookieUtils.getCookieValue(request, "url", true));
-        imagePath.append(CookieUtils.getCookieValue(request, "imgPath", true));
-        String path = imagePath.toString();
-        map.put("imgUrl",path+map.get("imgUrl"));
+        map.put("imgUrl",url+imgPath+map.get("imgUrl"));
         if ("true".equals(message)) {
             map.put("msg", "上传成功");
         }

@@ -5,7 +5,7 @@ $(document).on('click','.tableList tbody td:nth-child(4)', function () {
     if(!followUpId){
         return;
     }
-    var url = $.stringFormat('{0}/frLatenceFollow/getPricList',$.cookie('url'));
+    var url = $.stringFormat('{0}/frLatenceFollow/getPricList','http://www.4006337366.com:8080/');
     $.get(url,{
             followdId: followUpId,
            },
@@ -51,7 +51,7 @@ $(document).on('click','table tbody td:nth-child(13)', function () {
         alert("抱歉请勿审核自己的数据")
         return;
     }
-    var url = $.stringFormat('{0}/roleInfo/getParentIdList',$.cookie('url'));
+    var url = $.stringFormat('{0}/roleInfo/getParentIdList','http://www.4006337366.com:8080/');
     $.get(url,{
         roleInfoId:roleInfoId,
         personalId:nId
@@ -155,7 +155,7 @@ var LeadCustomerFollowUpRecord = new Vue({
         //获取客户的跟进列表
         getFollowUpRecordList:function (page,limit,id) {
             var that = this;
-            var url = $.stringFormat('{0}/frLatenceFollow/getLatenceClientList',$.cookie('url'));
+            var url = $.stringFormat('{0}/frLatenceFollow/getLatenceClientList','http://www.4006337366.com:8080/');
             Loading.prototype.show();
             if(!limit||!id){
                 id = page.id;
@@ -219,7 +219,7 @@ var LeadCustomerFollowUpRecord = new Vue({
             //生成字符串
             that.randomNumber = Math.random().toString(36).substr(2);
             var data = JSON.stringify(that.follwAdivce);
-            var url = $.stringFormat('{0}/frLatenceFollow/toSaveSubmit',$.cookie('url'));
+            var url = $.stringFormat('{0}/frLatenceFollow/toSaveSubmit','http://www.4006337366.com:8080/');
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -314,7 +314,7 @@ var LeadCustomerFollowUpRecord = new Vue({
                 param.append('planVisitTime',followUpRecordAdd.planVisitTime);
                 param.append('planPurchaseTime',followUpRecordAdd.planPurchaseTime);
                 param.append('clientId',$.cookie('cid'));
-                var url = $.stringFormat('{0}/frLatenceFollow/toAddUpdateLoad',$.cookie('url'));
+                var url = $.stringFormat('{0}/frLatenceFollow/toAddUpdateLoad','http://www.4006337366.com:8080/');
                 $.ajax({
                     type: 'POST',
                     url: url,
@@ -374,7 +374,7 @@ var LeadCustomerFollowUpRecord = new Vue({
         //获取关键字列表
         getFollwKeyLis: function () {
             var that = this;
-            var url = $.stringFormat('{0}/frFollowKeyword/getKeywordList',$.cookie('url'));
+            var url = $.stringFormat('{0}/frFollowKeyword/getKeywordList','http://www.4006337366.com:8080/');
             $.get(url,
                 function (res) {
                     if(res.code=='200'){
